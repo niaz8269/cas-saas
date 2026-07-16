@@ -1,0 +1,96 @@
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * CAS Design System — see CLAUDE.md § Design System.
+ * Navy is the brand; red is a rare accent (destructive/critical only).
+ * Raw brand tokens first, then shadcn/ui semantic tokens mapped onto them.
+ */
+:root {
+  /* Brand palette (from the CAS logo) */
+  --cas-navy: #14357c;
+  --cas-navy-700: #0f2a63;
+  --cas-navy-50: #eaf0fb;
+  --cas-red: #d81f26;
+  --cas-red-50: #fcebec;
+  --ink: #1f2933;
+  --muted-ink: #64748b;
+  --line: #e2e8f0;
+  --bg-subtle: #f6f8fc;
+  --success: #15803d;
+  --warning: #b45309;
+
+  /* shadcn/ui semantic tokens */
+  --background: #ffffff;
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--cas-navy);
+  --primary-foreground: #ffffff;
+  --secondary: var(--bg-subtle);
+  --secondary-foreground: var(--cas-navy);
+  --muted: var(--bg-subtle);
+  --muted-foreground: var(--muted-ink);
+  --accent: var(--cas-navy-50);
+  --accent-foreground: var(--cas-navy);
+  --destructive: var(--cas-red);
+  --destructive-foreground: #ffffff;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--cas-navy);
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --font-sans: "Inter Variable", "Inter", "Segoe UI", system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand utilities: bg-cas-navy, text-cas-red, bg-subtle, ... */
+  --color-cas-navy: var(--cas-navy);
+  --color-cas-navy-700: var(--cas-navy-700);
+  --color-cas-navy-50: var(--cas-navy-50);
+  --color-cas-red: var(--cas-red);
+  --color-cas-red-50: var(--cas-red-50);
+  --color-subtle: var(--bg-subtle);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-subtle text-foreground font-sans antialiased;
+  }
+}
