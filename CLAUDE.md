@@ -15,7 +15,7 @@ Centralized ERP & CRM for **CAS — Consultancy for Abroad Study** (www.cas.moe)
 
 ## Stack (pinned)
 - **Backend:** Laravel 12, PHP 8.3, MySQL 8, Redis, Sanctum (multi-guard: staff/agent/student), `spatie/laravel-permission`, Horizon (queues), Scheduler (SLA/escalations). *(Laravel 12 per ADR-0001 — Laravel 11 security support ended March 2026.)*
-- **Frontend:** React 18 + TypeScript, Vite, **Tailwind CSS 4 + shadcn/ui**, TanStack Query, Zustand, React Router, React Hook Form + Zod, lucide-react icons, Recharts for charts.
+- **Frontend:** React 19 + TypeScript, Vite, **Tailwind CSS 4 + shadcn/ui**, TanStack Query, Zustand, React Router, React Hook Form + Zod, lucide-react icons, Recharts for charts. *(React 19 per ADR-0002.)*
 - **Storage:** S3-compatible (MinIO locally) with pre-signed URLs + access logging.
 - **Local infra:** Docker Compose — services: `app` (php-fpm+nginx), `mysql`, `redis`, `minio`, `mailpit`, `frontend` (Vite). *(Mailpit per ADR-0001 — MailHog is unmaintained.)*
 - **CI:** GitHub Actions — lint, backend tests, frontend build/tests.

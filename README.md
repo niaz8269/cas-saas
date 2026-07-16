@@ -16,7 +16,7 @@ Leads flow in from 100+ university websites, agents and campaigns, and move thro
 ## Stack
 
 - **Backend:** Laravel 12 (PHP 8.3) REST API · MySQL 8 · Redis 7 · Sanctum (staff/agent/student guards) · spatie/laravel-permission · Horizon
-- **Frontend:** React 18 + TypeScript · Vite · Tailwind CSS 4 + shadcn/ui · TanStack Query · Zustand · React Router · RHF + Zod
+- **Frontend:** React 19 + TypeScript · Vite · Tailwind CSS 4 + shadcn/ui · TanStack Query · Zustand · React Router · RHF + Zod
 - **Storage:** S3-compatible (MinIO locally), pre-signed URLs, access-logged
 - **Local infra:** Docker Compose (app, mysql, redis, minio, mailpit, frontend)
 - **CI:** GitHub Actions
