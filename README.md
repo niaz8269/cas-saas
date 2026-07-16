@@ -1,5 +1,7 @@
 # CAS SAAS — CAS Education ERP & CRM Platform
 
+[![CI](https://github.com/niaz8269/cas-saas/actions/workflows/ci.yml/badge.svg)](https://github.com/niaz8269/cas-saas/actions/workflows/ci.yml)
+
 Centralized ERP & CRM for **CAS — Consultancy for Abroad Study** ([www.cas.moe](https://www.cas.moe)), an international education consultancy placing students into universities in China.
 
 Leads flow in from 100+ university websites, agents and campaigns, and move through a controlled lifecycle — **Lead → Admin assignment → Counselor qualification → Admissions → Finance → Visa → Pre-arrival → Arrival + first-year payment** — with one permanent student identity, a full audit trail, and a commission lifecycle (`expected → pending_arrival → eligible → invoiced → received`) distributed down an agent hierarchy.
