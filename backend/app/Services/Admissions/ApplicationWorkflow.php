@@ -8,6 +8,7 @@ use App\Models\Application;
 use App\Models\ApplicationStatusHistory;
 use App\Models\DocumentType;
 use App\Models\User;
+use App\Services\Finance\CommissionEngine;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -113,8 +114,10 @@ class ApplicationWorkflow
             }
 
             if ($to === 'accepted') {
-                // TODO(M5): create the student invoice and the expected
-                // commission from the matching university agreement.
+                // Acceptance opens the money trail: first-year tuition
+                // invoice + expected commission (report §5.4/§5.6).
+                app(CommissionEngine::class)
+                    ->onApplicationAccepted($application, $actor);
             }
 
             return $application->refresh();
