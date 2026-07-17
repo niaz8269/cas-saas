@@ -76,6 +76,8 @@ function stubProfileFetch() {
     vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
       if (url.includes("/timeline")) return Promise.resolve(jsonResponse(TIMELINE))
+      if (url.includes("/document-types")) return Promise.resolve(jsonResponse({ data: [] }))
+      if (url.includes("/documents")) return Promise.resolve(jsonResponse({ data: [] }))
       if (url.includes("/notes") && init?.method === "POST") {
         return Promise.resolve(jsonResponse({ data: { id: 3, type: "note", body: "New note", user: null, created_at: null } }, 201))
       }

@@ -129,6 +129,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('students/{student}', [StudentController::class, 'update']);
         Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);
         Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
+        Route::get('students/{student}/documents', [DocumentController::class, 'forStudent']);
         Route::get('students/{student}/communications', [CommunicationController::class, 'index']);
         Route::post('students/{student}/communications', [CommunicationController::class, 'store']);
         Route::post('students/{student}/guardians', [GuardianController::class, 'store']);

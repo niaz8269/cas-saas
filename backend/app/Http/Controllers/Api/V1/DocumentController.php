@@ -126,6 +126,18 @@ class DocumentController extends Controller
         );
     }
 
+    /**
+     * Documents attached directly to a student (identity docs, etc.).
+     */
+    public function forStudent(Request $request, Student $student): AnonymousResourceCollection
+    {
+        $this->authorize('view', $student);
+
+        return DocumentResource::collection(
+            $student->documents()->with(['type', 'verifier'])->orderByDesc('id')->get(),
+        );
+    }
+
     private function resolveDocumentable(Request $request): Application|Student
     {
         $class = DocumentService::DOCUMENTABLES[$request->string('documentable_type')->toString()];

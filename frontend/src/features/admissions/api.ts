@@ -84,6 +84,9 @@ export const storeOffer = (id: number | string, payload: Record<string, unknown>
 export const listApplicationDocuments = (id: number | string) =>
   api<{ data: DocumentItem[] }>(`/applications/${id}/documents`)
 
+export const listStudentDocuments = (id: number | string) =>
+  api<{ data: DocumentItem[] }>(`/students/${id}/documents`)
+
 export const listDocumentTypes = () => api<{ data: DocumentTypeItem[] }>("/document-types")
 
 // ── Presigned upload flow ──────────────────────────────────────────────
