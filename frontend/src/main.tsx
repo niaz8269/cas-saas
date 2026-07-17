@@ -11,6 +11,8 @@ import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
 import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
+import LeadDetailPage from "@/features/crm/LeadDetailPage"
+import LeadsPage from "@/features/crm/LeadsPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
 
 const queryClient = new QueryClient({
@@ -32,8 +34,10 @@ const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { path: "/", element: <DashboardPage /> },
-          { path: "/leads", element: <ComingSoon module="Leads" milestone="M3" /> },
-          { path: "/students", element: <ComingSoon module="Students" milestone="M3" /> },
+          { path: "/leads", element: <LeadsPage /> },
+          { path: "/leads/:id", element: <LeadDetailPage /> },
+          { path: "/students", element: <ComingSoon module="Students" milestone="M3.6" /> },
+          { path: "/students/:id", element: <ComingSoon module="Student profile" milestone="M3.6" /> },
           { path: "/applications", element: <ComingSoon module="Applications" milestone="M4" /> },
           { path: "/universities", element: <UniversitiesPage /> },
           { path: "/universities/:id", element: <UniversityDetailPage /> },
