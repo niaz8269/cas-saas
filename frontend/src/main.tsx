@@ -40,6 +40,7 @@ import SiteLayout from "@/features/site/SiteLayout"
 import SiteHome from "@/features/site/SiteHome"
 import SiteUniversity from "@/features/site/SiteUniversity"
 import UsersPage from "@/features/admin/UsersPage"
+import SettingsPage from "@/features/admin/SettingsPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -108,7 +109,7 @@ const router = createBrowserRouter([
           { path: "/visa/:id", element: <VisaCaseDetailPage /> },
           { path: "/reports", element: <ReportsPage /> },
           { path: "/users", element: <UsersPage /> },
-          { path: "/settings", element: <ComingSoon module="Settings" milestone="M8" /> },
+          { path: "/settings", element: <SettingsPage /> },
         ],
       },
     ],

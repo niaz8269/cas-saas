@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\MessageTemplateController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
@@ -97,8 +98,10 @@ Route::prefix('v1')->group(function () {
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
 
-        // Automation rules (read-only; admin settings feed)
+        // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
+            ->middleware('permission:settings.manage.global,staff');
+        Route::get('message-templates', [MessageTemplateController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
 
         // Audit trail (admin/compliance)

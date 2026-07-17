@@ -51,3 +51,22 @@ export const listAuditLogs = (params: { action?: string; entity?: string; page?:
     "filter[entity]": params.entity,
     "page": params.page && params.page > 1 ? params.page : undefined,
   })}`)
+
+export interface AutomationRule {
+  id: number
+  name: string
+  trigger_def: { event?: string; to?: string } | null
+  conditions: Record<string, unknown> | null
+  actions: { type?: string; channel?: string; template?: string; target?: string }[] | null
+  is_active: boolean
+}
+
+export interface MessageTemplate {
+  key: string
+  subject: string
+  preview: string
+}
+
+export const listAutomationRules = () => api<{ data: AutomationRule[] }>("/automation-rules")
+
+export const listMessageTemplates = () => api<{ data: MessageTemplate[] }>("/message-templates")
