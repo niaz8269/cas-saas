@@ -151,8 +151,15 @@ export interface Scholarship {
   id: number
   university_id: number
   name: string
+  slug: string | null
   type: string | null
   coverage: string | null
+  amount: string | number | null
+  currency: string | null
+  description: string | null
+  eligibility: string | null
+  how_to_apply: string | null
+  apply_link: string | null
   deadline: string | null
   status: string
 }
@@ -193,6 +200,9 @@ export const createIntake = (payload: Record<string, unknown>) =>
 
 export const createScholarship = (payload: Record<string, unknown>) =>
   api<{ data: Scholarship }>("/scholarships", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateScholarship = (id: number, payload: Record<string, unknown>) =>
+  api<{ data: Scholarship }>(`/scholarships/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 
 export const createAgreement = (payload: Record<string, unknown>) =>
   api<{ data: Agreement }>("/agreements", { method: "POST", body: JSON.stringify(payload) })
