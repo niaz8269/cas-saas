@@ -30,6 +30,7 @@ import {
   listApplicationDocuments,
   listDocumentTypes,
   rejectDocument,
+  respondToOffer,
   storeOffer,
   transitionApplication,
   uploadDocument,
@@ -41,6 +42,7 @@ import {
   APPLICATION_STATUS_BADGE,
   APPLICATION_TRANSITIONS,
   DOCUMENT_STATUS_BADGE,
+  OFFER_STATUS_BADGE,
   statusLabel,
 } from "@/features/admissions/status"
 import { ApiError } from "@/lib/api"
@@ -166,6 +168,17 @@ export default function ApplicationDetailPage() {
     },
     onError: (error) =>
       setActionError(error instanceof ApiError ? error.message : "Could not generate the offer letter."),
+  })
+
+  const offerRespond = useMutation({
+    mutationFn: ({ offerId, decision }: { offerId: number; decision: "accepted" | "declined" }) =>
+      respondToOffer(id, offerId, decision),
+    onSuccess: () => {
+      setActionError(null)
+      invalidate()
+    },
+    onError: (error) =>
+      setActionError(error instanceof ApiError ? error.message : "Could not record the response."),
   })
 
   const documentAction = useMutation({
@@ -388,23 +401,51 @@ export default function ApplicationDetailPage() {
                 <p className="text-sm text-muted-foreground">No offers recorded yet.</p>
               )}
               {app.offers?.map((offer) => (
-                <div key={offer.id} className="flex items-center justify-between gap-2 py-1.5 text-sm">
+                <div key={offer.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
                   <span className="min-w-0">
                     <span className="font-medium capitalize">{offer.offer_type}</span>
+                    <Badge
+                      variant="outline"
+                      className={cn("ml-2 border-transparent capitalize", OFFER_STATUS_BADGE[offer.status] ?? "bg-muted text-muted-foreground")}
+                    >
+                      {offer.status}
+                    </Badge>
                     <span className="ml-2 text-muted-foreground">
                       {offer.reference_no ?? "—"}{offer.expiry_date ? ` · expires ${offer.expiry_date}` : ""}
                     </span>
                   </span>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="shrink-0"
-                    disabled={offerLetter.isPending}
-                    onClick={() => offerLetter.mutate(offer.id)}
-                  >
-                    <FileText className="size-4" />
-                    {offerLetter.isPending && offerLetter.variables === offer.id ? "Preparing…" : "Letter"}
-                  </Button>
+                  <span className="flex shrink-0 items-center gap-1">
+                    {canUpdate && offer.status === "issued" && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          disabled={offerRespond.isPending}
+                          onClick={() => offerRespond.mutate({ offerId: offer.id, decision: "accepted" })}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-cas-red"
+                          disabled={offerRespond.isPending}
+                          onClick={() => offerRespond.mutate({ offerId: offer.id, decision: "declined" })}
+                        >
+                          Decline
+                        </Button>
+                      </>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={offerLetter.isPending}
+                      onClick={() => offerLetter.mutate(offer.id)}
+                    >
+                      <FileText className="size-4" />
+                      {offerLetter.isPending && offerLetter.variables === offer.id ? "Preparing…" : "Letter"}
+                    </Button>
+                  </span>
                 </div>
               ))}
             </div>

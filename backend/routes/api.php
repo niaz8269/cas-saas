@@ -143,6 +143,7 @@ Route::prefix('v1')->group(function () {
         Route::patch('applications/{application}', [ApplicationController::class, 'update']);
         Route::post('applications/{application}/transition', [ApplicationController::class, 'transition']);
         Route::post('applications/{application}/offers', [ApplicationController::class, 'storeOffer']);
+        Route::post('applications/{application}/offers/{offer}/respond', [ApplicationController::class, 'respondToOffer']);
         Route::get('applications/{application}/offers/{offer}/letter', [ApplicationController::class, 'offerLetter']);
         Route::get('applications/{application}/documents', [DocumentController::class, 'forApplication']);
 

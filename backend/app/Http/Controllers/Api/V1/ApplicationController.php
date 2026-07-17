@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admissions\RespondToOfferRequest;
 use App\Http\Requests\Admissions\StoreApplicationRequest;
 use App\Http\Requests\Admissions\StoreOfferRequest;
 use App\Http\Requests\Admissions\TransitionApplicationRequest;
@@ -16,7 +17,9 @@ use App\Support\BrandAssets;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class ApplicationController extends Controller
 {
@@ -124,6 +127,43 @@ class ApplicationController extends Controller
         }
 
         return new OfferResource($offer);
+    }
+
+    /**
+     * Record the applicant's response to an offer. Accepting an offer that the
+     * application is still awaiting advances it through the full acceptance
+     * workflow (money trail + visa case); declining just marks the offer.
+     */
+    public function respondToOffer(
+        RespondToOfferRequest $request,
+        Application $application,
+        Offer $offer,
+        ApplicationWorkflow $workflow,
+    ): OfferResource {
+        $this->authorize('update', $application);
+
+        abort_unless($offer->application_id === $application->id, 404);
+
+        if ($offer->status !== 'issued') {
+            throw new ConflictHttpException("Offer already {$offer->status}.");
+        }
+
+        $decision = (string) $request->input('decision');
+
+        DB::transaction(function () use ($application, $offer, $decision, $request, $workflow) {
+            $offer->update(['status' => $decision]);
+
+            if ($decision === 'accepted' && $application->status === 'offer_received') {
+                $workflow->transition(
+                    $application,
+                    'accepted',
+                    $request->user(),
+                    $request->input('note') ?: 'Offer accepted',
+                );
+            }
+        });
+
+        return new OfferResource($offer->refresh());
     }
 
     /** Render a branded offer letter as a PDF, streamed inline. */

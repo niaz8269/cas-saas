@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
@@ -120,6 +120,53 @@ it("renders stepper, checklist states and history for updaters", async () => {
   expect(screen.getByText("missing")).toBeInTheDocument()
   // History entries
   expect(screen.getByText(/draft →/)).toBeInTheDocument()
+})
+
+it("accepts an offer and hides the response actions after refetch", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["applications.view.global", "applications.update.global", "documents.view.global"]),
+  })
+  const user = userEvent.setup()
+
+  const OFFER = { id: 7, offer_type: "conditional", reference_no: "OFR-2026-0007", issued_date: "2026-07-10", expiry_date: "2026-08-10", status: "issued" }
+  let responded = false
+
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.includes("/respond") && init?.method === "POST") {
+        responded = true
+        return Promise.resolve(jsonResponse({ data: { ...OFFER, status: "accepted" } }))
+      }
+      if (url.includes("/document-types")) return Promise.resolve(jsonResponse(TYPES))
+      if (url.includes("/documents")) return Promise.resolve(jsonResponse(DOCS))
+      if (url.includes("/applications/21")) {
+        return Promise.resolve(jsonResponse({
+          data: {
+            ...APPLICATION,
+            status: "offer_received",
+            offers: [{ ...OFFER, status: responded ? "accepted" : "issued" }],
+          },
+          checklist: { missing: [] },
+        }))
+      }
+      return Promise.resolve(jsonResponse({ data: [APPLICATION], meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 } }))
+    }),
+  )
+
+  renderDetail()
+
+  // Issued offer shows both response actions.
+  const acceptButton = await screen.findByRole("button", { name: "Accept" })
+  expect(screen.getByRole("button", { name: "Decline" })).toBeInTheDocument()
+
+  await user.click(acceptButton)
+
+  // After the response + refetch, the offer is resolved and the actions vanish.
+  await waitFor(() => expect(screen.queryByRole("button", { name: "Accept" })).not.toBeInTheDocument())
+  expect(responded).toBe(true)
 })
 
 it("hides actions from view-only staff", async () => {

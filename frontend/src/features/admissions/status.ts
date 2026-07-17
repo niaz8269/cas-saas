@@ -41,4 +41,11 @@ export const DOCUMENT_STATUS_BADGE: Record<string, string> = {
   missing: "bg-muted text-muted-foreground",
 }
 
+export const OFFER_STATUS_BADGE: Record<string, string> = {
+  issued: "bg-cas-navy-50 text-cas-navy",
+  accepted: "bg-green-100 text-green-800",
+  declined: "bg-cas-red-50 text-cas-red",
+  expired: "bg-muted text-muted-foreground",
+}
+
 export const statusLabel = (status: string) => status.replace(/_/g, " ")

@@ -85,6 +85,17 @@ export const storeOffer = (id: number | string, payload: Record<string, unknown>
 export const getOfferLetter = (applicationId: number | string, offerId: number) =>
   apiBlob(`/applications/${applicationId}/offers/${offerId}/letter`)
 
+/** Record the applicant's response to an offer (accept advances the application). */
+export const respondToOffer = (
+  applicationId: number | string,
+  offerId: number,
+  decision: "accepted" | "declined",
+) =>
+  api<{ data: OfferItem }>(`/applications/${applicationId}/offers/${offerId}/respond`, {
+    method: "POST",
+    body: JSON.stringify({ decision }),
+  })
+
 export const listApplicationDocuments = (id: number | string) =>
   api<{ data: DocumentItem[] }>(`/applications/${id}/documents`)
 
