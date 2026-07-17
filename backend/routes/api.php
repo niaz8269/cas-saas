@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
+use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
+use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -53,6 +55,13 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:student')->group(function () {
             Route::post('auth/logout', [StudentAuthController::class, 'logout']);
             Route::get('auth/me', [StudentAuthController::class, 'me']);
+            Route::get('applications', [StudentPortalController::class, 'applications']);
+            Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
+            Route::get('invoices', [StudentPortalController::class, 'invoices']);
+            Route::get('documents', [StudentPortalController::class, 'documents']);
+            Route::post('documents/presign', [StudentDocumentController::class, 'presign']);
+            Route::post('documents', [StudentDocumentController::class, 'store']);
+            Route::get('documents/{document}/download', [StudentDocumentController::class, 'download']);
         });
     });
 

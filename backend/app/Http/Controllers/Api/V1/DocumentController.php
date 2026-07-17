@@ -61,7 +61,7 @@ class DocumentController extends Controller
             $request->string('file_name'),
             $request->string('mime'),
             $request->integer('size'),
-            $request->user(),
+            $request->user()->id,
             $request->ip(),
         );
 
@@ -77,7 +77,7 @@ class DocumentController extends Controller
         $this->authorize('view', $document);
 
         return response()->json(
-            $this->documents->downloadUrl($document, $request->user(), $request->ip()),
+            $this->documents->downloadUrl($document, $request->user()->id, $request->ip()),
         );
     }
 
@@ -86,7 +86,7 @@ class DocumentController extends Controller
         $this->authorize('verify', $document);
 
         $document->update(['status' => 'verified', 'verified_by' => $request->user()->id]);
-        $this->documents->log($document, $request->user(), 'view', $request->ip());
+        $this->documents->log($document, $request->user()->id, 'view', $request->ip());
 
         return new DocumentResource($document->load(['type', 'verifier']));
     }

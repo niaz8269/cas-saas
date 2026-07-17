@@ -7,7 +7,6 @@ use App\Models\Document;
 use App\Models\DocumentAccessLog;
 use App\Models\DocumentType;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -72,6 +71,9 @@ class DocumentService
 
     /**
      * Register an uploaded object as a Document (next version per type).
+     * $actorId is the staff user id, or null for a portal upload (the
+     * documentable already records ownership; audit columns stay
+     * staff-only, matching the verified_by FK intent).
      */
     public function register(
         Application|Student $documentable,
@@ -80,10 +82,10 @@ class DocumentService
         string $fileName,
         string $mime,
         int $size,
-        User $actor,
+        ?int $actorId,
         ?string $ip,
     ): Document {
-        return DB::transaction(function () use ($documentable, $type, $key, $fileName, $mime, $size, $actor, $ip) {
+        return DB::transaction(function () use ($documentable, $type, $key, $fileName, $mime, $size, $actorId, $ip) {
             $version = (int) $documentable->documents()
                 ->where('document_type_id', $type->id)
                 ->max('version') + 1;
@@ -96,10 +98,10 @@ class DocumentService
                 'size' => $size,
                 'status' => 'pending',
                 'version' => $version,
-                'created_by' => $actor->id,
+                'created_by' => $actorId,
             ]);
 
-            $this->log($document, $actor, 'upload', $ip);
+            $this->log($document, $actorId, 'upload', $ip);
 
             return $document;
         });
@@ -108,22 +110,22 @@ class DocumentService
     /**
      * @return array{url: string, expires_at: string}
      */
-    public function downloadUrl(Document $document, User $actor, ?string $ip): array
+    public function downloadUrl(Document $document, ?int $actorId, ?string $ip): array
     {
         $expiresAt = now()->addMinutes(10);
 
         $url = Storage::disk(self::DISK)->temporaryUrl($document->file_path, $expiresAt);
 
-        $this->log($document, $actor, 'download', $ip);
+        $this->log($document, $actorId, 'download', $ip);
 
         return ['url' => $url, 'expires_at' => $expiresAt->toIso8601String()];
     }
 
-    public function log(Document $document, User $actor, string $action, ?string $ip): void
+    public function log(Document $document, ?int $actorId, string $action, ?string $ip): void
     {
         DocumentAccessLog::create([
             'document_id' => $document->id,
-            'user_id' => $actor->id,
+            'user_id' => $actorId,
             'action' => $action,
             'ip' => $ip,
             'created_at' => now(),
