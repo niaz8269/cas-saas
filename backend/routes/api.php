@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
+use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -27,6 +29,28 @@ Route::prefix('v1')->group(function () {
     // Lead ingestion (per-source API keys; idempotent; rate-limited per key)
     Route::post('ingest/leads', LeadIngestController::class)
         ->middleware('api-source');
+
+    // Agent portal (own records only — report §5.7)
+    Route::prefix('agent')->group(function () {
+        Route::post('auth/login', [AgentAuthController::class, 'login'])
+            ->middleware('throttle:login');
+
+        Route::middleware('auth:agent')->group(function () {
+            Route::post('auth/logout', [AgentAuthController::class, 'logout']);
+            Route::get('auth/me', [AgentAuthController::class, 'me']);
+        });
+    });
+
+    // Student portal (own records only — report §5.11)
+    Route::prefix('student')->group(function () {
+        Route::post('auth/login', [StudentAuthController::class, 'login'])
+            ->middleware('throttle:login');
+
+        Route::middleware('auth:student')->group(function () {
+            Route::post('auth/logout', [StudentAuthController::class, 'logout']);
+            Route::get('auth/me', [StudentAuthController::class, 'me']);
+        });
+    });
 
     // Staff-authenticated
     Route::middleware('auth:staff')->group(function () {

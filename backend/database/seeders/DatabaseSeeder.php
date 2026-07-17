@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AdmissionsSeeder::class,
             FinanceSeeder::class,
             VisaSeeder::class,
+            PortalSeeder::class,
         ]);
     }
 }

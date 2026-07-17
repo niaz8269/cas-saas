@@ -614,4 +614,13 @@ CREATE TABLE audit_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ADDENDUM (ADR-0004): portal credentials for the agent and student Sanctum
+-- guards (report §5.7 / §5.11 / §7.1). NULL password = portal not activated.
+ALTER TABLE agents
+  ADD COLUMN password      VARCHAR(255) NULL AFTER phone,
+  ADD COLUMN last_login_at TIMESTAMP NULL AFTER status;
+ALTER TABLE students
+  ADD COLUMN password      VARCHAR(255) NULL AFTER phone,
+  ADD COLUMN last_login_at TIMESTAMP NULL AFTER status;
 -- =========================== END OF SCHEMA ===========================

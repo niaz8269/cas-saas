@@ -6,20 +6,23 @@ use App\Services\Auth\ScopeResolver;
 use Database\Factories\StudentFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * The permanent student identity. Statuses:
  * active → in_process → enrolled → arrived | withdrawn | inactive.
+ * Also the Authenticatable behind the `student` portal guard (ADR-0004):
+ * NULL password = portal not activated.
  */
-class Student extends Model
+class Student extends Authenticatable
 {
     /** @use HasFactory<StudentFactory> */
-    use HasFactory, SoftDeletes;
+    use HasApiTokens, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'student_code',
@@ -39,10 +42,14 @@ class Student extends Model
         'updated_by',
     ];
 
+    protected $hidden = ['password'];
+
     protected function casts(): array
     {
         return [
             'dob' => 'date',
+            'password' => 'hashed',
+            'last_login_at' => 'datetime',
         ];
     }
 

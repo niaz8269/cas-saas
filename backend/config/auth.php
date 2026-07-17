@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Agent;
+use App\Models\Student;
 use App\Models\User;
 
 return [
@@ -49,7 +51,17 @@ return [
             'provider' => 'users',
         ],
 
-        // 'agent' and 'student' guards are added with their models (M3/M7).
+        // Portal guards (ADR-0004). Sanctum rejects tokens whose tokenable
+        // model does not match the provider, so tokens cannot cross guards.
+        'agent' => [
+            'driver' => 'sanctum',
+            'provider' => 'agents',
+        ],
+
+        'student' => [
+            'driver' => 'sanctum',
+            'provider' => 'students',
+        ],
     ],
 
     /*
@@ -75,10 +87,15 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'agents' => [
+            'driver' => 'eloquent',
+            'model' => Agent::class,
+        ],
+
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => Student::class,
+        ],
     ],
 
     /*
