@@ -41,6 +41,9 @@ it("renders the live KPI cards from the analytics API", async () => {
   expect(screen.getByText("3,400 CNY")).toBeInTheDocument() // commission received
   expect(screen.getByText("57,600 CNY")).toBeInTheDocument() // outstanding
   expect(screen.getByText("44% collected")).toBeInTheDocument()
+  // Visa summary now renders on the executive dashboard.
+  expect(screen.getByText("Visa cases")).toBeInTheDocument()
+  expect(screen.getByText("Travel Ready")).toBeInTheDocument()
 })
 
 it("shows an error state when the dashboard fails", async () => {

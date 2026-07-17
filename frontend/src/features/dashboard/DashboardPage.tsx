@@ -29,6 +29,15 @@ const MUTED = "#94A3B8"
 
 const LEAD_ORDER = ["new", "contacted", "qualified", "converted", "lost", "duplicate"]
 const COMMISSION_ORDER = ["expected", "pending_arrival", "eligible", "invoiced", "received"]
+const VISA_ORDER = [
+  "not_started",
+  "documents_collection",
+  "appointment_booked",
+  "submitted",
+  "approved",
+  "rejected",
+  "travel_ready",
+]
 
 const label = (s: string) => s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 const money = (v: number, currency = "CNY") => `${Number(v).toLocaleString()} ${currency}`
@@ -180,6 +189,26 @@ export default function DashboardPage() {
                 <p className="mt-0.5 font-semibold tabular-nums text-amber-700">{money(d.finance.receivables, d.finance.currency)}</p>
               </div>
             </div>
+          </div>
+
+          {/* Visa cases */}
+          <div className="rounded-xl border bg-card p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[15px] font-semibold">Visa cases</h3>
+              <span className="text-sm text-muted-foreground">{d.visa.total} total</span>
+            </div>
+            {d.visa.total === 0 ? (
+              <p className="mt-3 text-sm text-muted-foreground">No visa cases yet.</p>
+            ) : (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {VISA_ORDER.filter((k) => d.visa.by_status[k]).map((k) => (
+                  <div key={k} className="rounded-lg bg-subtle px-3 py-2">
+                    <p className="text-xs text-muted-foreground">{label(k)}</p>
+                    <p className="text-lg font-semibold text-cas-navy tabular-nums">{d.visa.by_status[k]}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </>
       )}

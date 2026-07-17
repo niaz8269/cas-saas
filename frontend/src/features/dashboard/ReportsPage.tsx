@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { Download } from "lucide-react"
 import {
   Bar,
   BarChart,
@@ -9,6 +10,7 @@ import {
   YAxis,
 } from "recharts"
 
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
@@ -19,11 +21,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getPerformanceReport } from "@/features/dashboard/api"
+import { downloadCsv } from "@/lib/csv"
 
 const NAVY = "#14357C"
 const MUTED = "#94A3B8"
 
 const money = (v: number) => `${Number(v).toLocaleString()} CNY`
+
+function ExportButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <Button variant="secondary" size="sm" onClick={onClick} aria-label={label}>
+      <Download className="size-4" /> Export CSV
+    </Button>
+  )
+}
 
 export default function ReportsPage() {
   const { data, isPending, isError } = useQuery({
@@ -61,7 +72,19 @@ export default function ReportsPage() {
 
       {/* Universities */}
       <div className="rounded-xl border bg-card p-5 shadow-sm">
-        <h3 className="text-[15px] font-semibold">University performance</h3>
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-[15px] font-semibold">University performance</h3>
+          {d.universities.length > 0 && (
+            <ExportButton
+              label="Export university performance"
+              onClick={() => downloadCsv(
+                "university-performance.csv",
+                ["University", "Code", "Applications", "Accepted", "Commission received"],
+                d.universities.map((u) => [u.name, u.code, u.applications, u.accepted, u.commission_received]),
+              )}
+            />
+          )}
+        </div>
         {uniChart.length === 0 ? (
           <p className="py-10 text-center text-sm text-muted-foreground">No application data yet.</p>
         ) : (
@@ -107,7 +130,19 @@ export default function ReportsPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Agents */}
         <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <h3 className="text-[15px] font-semibold">Agent performance</h3>
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-[15px] font-semibold">Agent performance</h3>
+            {d.agents.length > 0 && (
+              <ExportButton
+                label="Export agent performance"
+                onClick={() => downloadCsv(
+                  "agent-performance.csv",
+                  ["Agent", "Code", "Type", "Students", "Commission earned"],
+                  d.agents.map((a) => [a.name, a.agent_code, a.type, a.students, a.commission_earned]),
+                )}
+              />
+            )}
+          </div>
           <div className="mt-4 overflow-x-auto">
             <Table>
               <TableHeader className="bg-subtle">
@@ -138,7 +173,19 @@ export default function ReportsPage() {
 
         {/* Lead sources */}
         <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <h3 className="text-[15px] font-semibold">Lead sources</h3>
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-[15px] font-semibold">Lead sources</h3>
+            {d.lead_sources.length > 0 && (
+              <ExportButton
+                label="Export lead sources"
+                onClick={() => downloadCsv(
+                  "lead-sources.csv",
+                  ["Source", "Leads", "Converted"],
+                  d.lead_sources.map((s) => [s.source, s.leads, s.converted]),
+                )}
+              />
+            )}
+          </div>
           <div className="mt-4 overflow-x-auto">
             <Table>
               <TableHeader className="bg-subtle">

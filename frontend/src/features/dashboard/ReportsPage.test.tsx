@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 
 import { useAuthStore } from "@/stores/auth"
 import { jsonResponse, renderWithProviders } from "@/test/utils"
@@ -41,6 +42,23 @@ it("renders university, agent and lead-source breakdowns", async () => {
   expect(screen.getByText("Global Study Partners")).toBeInTheDocument()
   expect(screen.getByText("Google Ads")).toBeInTheDocument()
   expect(screen.getByText("1,020 CNY")).toBeInTheDocument() // agent earned
+})
+
+it("exports university performance as a CSV download", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ data: REPORT })))
+
+  let captured: Blob | undefined
+  URL.createObjectURL = vi.fn((blob: Blob) => { captured = blob; return "blob:mock-csv" })
+  URL.revokeObjectURL = vi.fn()
+  const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+
+  renderWithProviders(<ReportsPage />)
+
+  await user.click(await screen.findByRole("button", { name: "Export university performance" }))
+
+  expect(clickSpy).toHaveBeenCalled()
+  expect(captured?.type).toContain("text/csv")
 })
 
 it("shows an error state on failure", async () => {
