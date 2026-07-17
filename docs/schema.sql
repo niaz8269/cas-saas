@@ -623,4 +623,19 @@ ALTER TABLE agents
 ALTER TABLE students
   ADD COLUMN password      VARCHAR(255) NULL AFTER phone,
   ADD COLUMN last_login_at TIMESTAMP NULL AFTER status;
+
+-- ADDENDUM (ADR-0005): university website content fields. Catalog is the
+-- public-website content base; these enrich each university record.
+ALTER TABLE universities
+  ADD COLUMN slug                     VARCHAR(190) NULL AFTER code,
+  ADD COLUMN logo_path                VARCHAR(500) NULL AFTER website,
+  ADD COLUMN cover_path               VARCHAR(500) NULL AFTER logo_path,
+  ADD COLUMN address                  VARCHAR(255) NULL AFTER city,
+  ADD COLUMN moe_listed               TINYINT(1) NOT NULL DEFAULT 0,
+  ADD COLUMN nearest_airport          VARCHAR(150) NULL,
+  ADD COLUMN about                    TEXT NULL,
+  ADD COLUMN apply_link               VARCHAR(255) NULL,
+  ADD COLUMN requirements             JSON NULL,
+  ADD COLUMN representative_professor JSON NULL,
+  ADD UNIQUE KEY uq_universities_slug (slug);
 -- =========================== END OF SCHEMA ===========================
