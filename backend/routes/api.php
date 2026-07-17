@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
@@ -73,6 +74,12 @@ Route::prefix('v1')->group(function () {
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+
+        // In-app notifications (own feed)
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::post('notifications/read-all', [NotificationController::class, 'markAllRead']);
+        Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead']);
 
         // CRM (record-scoped via policies + visibleTo query scopes)
         Route::get('leads', [LeadController::class, 'index']);

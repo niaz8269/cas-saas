@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Task;
 use App\Models\User;
+use App\Observers\TaskObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -38,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
                 strtolower((string) $request->input('email')).'|'.$request->ip(),
             );
         });
+
+        // Assigned tasks raise the owner's in-app notification (§5.9).
+        Task::observe(TaskObserver::class);
     }
 }

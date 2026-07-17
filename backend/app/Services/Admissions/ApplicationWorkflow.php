@@ -8,6 +8,7 @@ use App\Models\Application;
 use App\Models\ApplicationStatusHistory;
 use App\Models\DocumentType;
 use App\Models\User;
+use App\Services\Comms\NotificationService;
 use App\Services\Finance\CommissionEngine;
 use App\Services\Visa\VisaWorkflow;
 use Illuminate\Support\Collection;
@@ -112,6 +113,17 @@ class ApplicationWorkflow
                     'meta' => ['application_id' => $application->id],
                     'created_at' => now(),
                 ]);
+            }
+
+            // Milestone results ping the student's counselor's bell (§5.9).
+            if (in_array($to, ['offer_received', 'accepted', 'rejected'], true)) {
+                $application->loadMissing('student:id,first_name,last_name,assigned_counselor_id');
+                app(NotificationService::class)->push(
+                    $application->student?->assigned_counselor_id,
+                    "application.{$to}",
+                    "Application {$to}: {$application->student?->full_name}",
+                    "{$application->application_code} is now {$to}.",
+                );
             }
 
             if ($to === 'accepted') {
