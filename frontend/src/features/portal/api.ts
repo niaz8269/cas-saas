@@ -83,6 +83,9 @@ export const getAgentApplications = (params: { status?: string; page?: number } 
 export const getAgentCommissions = (params: { status?: string; page?: number } = {}) =>
   portalApi<Paginated<AgentPayableRow> & { totals: Record<string, number> }>(`/agent/commissions${query(params)}`)
 
+/** The agent's branded commission statement PDF, as a Blob. */
+export const getAgentStatementPdf = () => portalApiBlob("/agent/commissions/statement")
+
 // ── Student reads ────────────────────────────────────────────────────────
 
 export interface StudentApplicationRow {

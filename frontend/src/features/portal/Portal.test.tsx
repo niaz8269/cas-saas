@@ -112,6 +112,41 @@ it("renders the agent earnings totals from the API", async () => {
   expect(screen.getByText("500")).toBeInTheDocument()
 })
 
+it("downloads the agent commission statement as a brokered PDF", async () => {
+  usePortalAuthStore.setState({
+    token: "t", kind: "agent",
+    profile: { id: 1, name: "Partner", email: null, status: "active", code: "GSP-0001" },
+  })
+  const user = userEvent.setup()
+  const openSpy = vi.fn()
+  vi.stubGlobal("open", openSpy)
+  URL.createObjectURL = vi.fn(() => "blob:mock-statement")
+  URL.revokeObjectURL = vi.fn()
+
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      if (String(input).includes("/statement")) {
+        return Promise.resolve(new Response(new Blob(["%PDF-1.4 test"], { type: "application/pdf" })))
+      }
+      return Promise.resolve(
+        jsonResponse({
+          data: [{ id: 1, amount: "1020.00", currency: "CNY", status: "payable", computed_at: null,
+            student: { student_code: "STU-2026-00005", full_name: "Ali Khan" }, university: "JLMU" }],
+          meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 },
+          totals: { payable: 1020, paid: 500 },
+        }),
+      )
+    }),
+  )
+
+  renderWithProviders(<AgentCommissions />)
+
+  await user.click(await screen.findByRole("button", { name: /Download statement/ }))
+
+  await waitFor(() => expect(openSpy).toHaveBeenCalledWith("blob:mock-statement", "_blank", "noopener"))
+})
+
 it("shows a student application with its offer banner", async () => {
   usePortalAuthStore.setState({
     token: "t", kind: "student",

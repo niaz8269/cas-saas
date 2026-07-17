@@ -9,8 +9,11 @@ use App\Http\Resources\Portal\AgentStudentResource;
 use App\Models\AgentPayable;
 use App\Models\Application;
 use App\Models\Student;
+use App\Support\BrandAssets;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Agent portal reads (report §5.7): strictly the agent's own records.
@@ -89,5 +92,35 @@ class AgentPortalController extends Controller
 
         return AgentPayableResource::collection($payables)
             ->additional(['totals' => $totals]);
+    }
+
+    /** Branded commission statement PDF for the agent's own payables. */
+    public function statement(Request $request): Response
+    {
+        $agent = $request->user();
+
+        $payables = AgentPayable::query()
+            ->where('agent_id', $agent->id)
+            ->with([
+                'commission.application:id,application_code,student_id',
+                'commission.application.student:id,first_name,last_name,student_code',
+                'commission.university:id,name',
+            ])
+            ->orderByDesc('id')
+            ->get();
+
+        $totals = $payables->groupBy('status')->map(fn ($group) => $group->sum(fn ($p) => (float) $p->amount));
+
+        $pdf = Pdf::loadView('pdf.agent-statement', [
+            'agent' => $agent,
+            'payables' => $payables,
+            'totals' => $totals,
+            'currency' => $payables->first()->currency ?? 'USD',
+            'money' => fn ($value) => number_format((float) $value, 2),
+            'logo' => BrandAssets::logoDataUri(),
+            'generatedOn' => now()->format('d M Y'),
+        ]);
+
+        return $pdf->stream('commission-statement-'.$agent->agent_code.'.pdf');
     }
 }

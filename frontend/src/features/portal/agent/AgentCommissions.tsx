@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { Wallet } from "lucide-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { Download, Wallet } from "lucide-react"
 
-import { getAgentCommissions } from "@/features/portal/api"
+import { Button } from "@/components/ui/button"
+import { getAgentCommissions, getAgentStatementPdf } from "@/features/portal/api"
 import {
   EmptyState,
   ListSkeleton,
@@ -16,6 +17,15 @@ export default function AgentCommissions() {
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["agent", "commissions", { page: 1 }],
     queryFn: () => getAgentCommissions(),
+  })
+
+  const statement = useMutation({
+    mutationFn: getAgentStatementPdf,
+    onSuccess: (blob) => {
+      const url = URL.createObjectURL(blob)
+      window.open(url, "_blank", "noopener")
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    },
   })
 
   const payable = data?.totals?.payable ?? 0
@@ -35,6 +45,19 @@ export default function AgentCommissions() {
           <p className="mt-1 text-xl font-semibold tabular-nums text-green-700">{money(paid)}</p>
         </PortalCard>
       </div>
+
+      {data && data.data.length > 0 && (
+        <Button
+          type="button"
+          variant="secondary"
+          className="mb-4 h-11 w-full"
+          disabled={statement.isPending}
+          onClick={() => statement.mutate()}
+        >
+          <Download className="size-4" />
+          {statement.isPending ? "Preparing…" : "Download statement (PDF)"}
+        </Button>
+      )}
 
       {isPending && <ListSkeleton rows={4} />}
       {isError && <LoadError onRetry={refetch} />}

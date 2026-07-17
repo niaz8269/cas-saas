@@ -82,6 +82,24 @@ it('shows only the agents own payables with share totals and no CAS amounts', fu
         ->assertJsonMissingPath('data.0.received_amount');
 });
 
+it('streams a branded commission statement pdf for the agent', function () {
+    $agent = actingAsAgent();
+    $commission = Commission::factory()->create();
+    AgentPayable::create([
+        'commission_id' => $commission->id, 'agent_id' => $agent->id,
+        'amount' => 1020, 'currency' => 'CNY', 'status' => 'payable', 'computed_at' => now(),
+    ]);
+
+    $response = $this->get('/api/v1/agent/commissions/statement');
+
+    $response->assertOk()->assertHeader('content-type', 'application/pdf');
+    expect(substr((string) $response->getContent(), 0, 4))->toBe('%PDF');
+});
+
+it('requires the agent guard for the statement', function () {
+    $this->getJson('/api/v1/agent/commissions/statement')->assertUnauthorized();
+});
+
 it('filters students by status', function () {
     $agent = actingAsAgent();
     Student::factory()->create(['agent_id' => $agent->id, 'status' => 'arrived']);

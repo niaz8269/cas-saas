@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function () {
             Route::get('students', [AgentPortalController::class, 'students']);
             Route::get('applications', [AgentPortalController::class, 'applications']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
+            Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
         });
     });
 
