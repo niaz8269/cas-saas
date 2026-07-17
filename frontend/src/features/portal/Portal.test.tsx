@@ -122,7 +122,7 @@ it("shows a student application with its offer banner", async () => {
       jsonResponse({
         data: [{
           id: 21, application_code: "APP-2026-00021", status: "offer_received", submitted_at: null,
-          university: "Jilin Medical University", course: { name: "MBBS", level: "bachelor" }, intake: "Sept 2026",
+          university: "Jilin Medical University", program: { name: "MBBS", level: "bachelor" }, intake: "Sept 2026",
           offers: [{ offer_type: "unconditional", reference_no: "OFR-1", issued_date: null, expiry_date: null, status: "issued" }],
           progress: [{ status: "submitted", at: null }, { status: "offer_received", at: null }],
         }],

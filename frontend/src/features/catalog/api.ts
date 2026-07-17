@@ -27,7 +27,7 @@ export interface University {
   requirements: string[]
   representative_professor: RepresentativeProfessor | null
   country?: { id: number; name: string; iso2: string }
-  courses_count?: number
+  programs_count?: number
   intakes_count?: number
   scholarships_count?: number
   agreements_count?: number
@@ -122,7 +122,7 @@ export function getUniversity(id: number | string) {
   return api<{ data: UniversityDetail }>(`/universities/${id}`)
 }
 
-export interface Course {
+export interface Program {
   id: number
   university_id: number
   name: string
@@ -130,14 +130,16 @@ export interface Course {
   duration_months: number | null
   tuition_fee: string | number | null
   currency: string | null
+  teaching_language: string | null
+  apply_link: string | null
   status: string
 }
 
 export interface Intake {
   id: number
   university_id: number
-  course_id: number | null
-  course?: { id: number; name: string; level: string } | null
+  program_id: number | null
+  program?: { id: number; name: string; level: string } | null
   name: string
   start_date: string | null
   application_deadline: string | null
@@ -158,8 +160,8 @@ export interface Scholarship {
 export interface Agreement {
   id: number
   university_id: number
-  course_id: number | null
-  course?: { id: number; name: string } | null
+  program_id: number | null
+  program?: { id: number; name: string } | null
   commission_type: "fixed" | "percent" | "tiered"
   commission_value: string | number
   currency: string | null
@@ -171,8 +173,8 @@ export interface Agreement {
 const byUniversity = (resource: string, universityId: number | string) =>
   `/${resource}?filter[university_id]=${universityId}&per_page=100`
 
-export const listCourses = (universityId: number | string) =>
-  api<Paginated<Course>>(byUniversity("courses", universityId))
+export const listPrograms = (universityId: number | string) =>
+  api<Paginated<Program>>(byUniversity("programs", universityId))
 
 export const listIntakes = (universityId: number | string) =>
   api<Paginated<Intake>>(byUniversity("intakes", universityId))
@@ -183,8 +185,8 @@ export const listScholarships = (universityId: number | string) =>
 export const listAgreements = (universityId: number | string) =>
   api<Paginated<Agreement>>(byUniversity("agreements", universityId))
 
-export const createCourse = (payload: Record<string, unknown>) =>
-  api<{ data: Course }>("/courses", { method: "POST", body: JSON.stringify(payload) })
+export const createProgram = (payload: Record<string, unknown>) =>
+  api<{ data: Program }>("/programs", { method: "POST", body: JSON.stringify(payload) })
 
 export const createIntake = (payload: Record<string, unknown>) =>
   api<{ data: Intake }>("/intakes", { method: "POST", body: JSON.stringify(payload) })

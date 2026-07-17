@@ -34,7 +34,7 @@ export default function StudentApplications() {
           <PortalCard key={app.id}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-sm font-medium">{app.course?.name ?? app.application_code}</p>
+                <p className="text-sm font-medium">{app.program?.name ?? app.application_code}</p>
                 <p className="text-sm text-muted-foreground">{app.university}{app.intake ? ` · ${app.intake}` : ""}</p>
                 <p className="mt-0.5 font-mono text-[11px] text-muted-foreground">{app.application_code}</p>
               </div>

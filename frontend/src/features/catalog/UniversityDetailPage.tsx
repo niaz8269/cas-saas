@@ -20,12 +20,12 @@ import { useCan } from "@/features/auth/useCan"
 import {
   getUniversity,
   listAgreements,
-  listCourses,
+  listPrograms,
   listIntakes,
   listScholarships,
 } from "@/features/catalog/api"
 import AddAgreementDialog from "@/features/catalog/dialogs/AddAgreementDialog"
-import AddCourseDialog from "@/features/catalog/dialogs/AddCourseDialog"
+import AddProgramDialog from "@/features/catalog/dialogs/AddProgramDialog"
 import AddIntakeDialog from "@/features/catalog/dialogs/AddIntakeDialog"
 import AddScholarshipDialog from "@/features/catalog/dialogs/AddScholarshipDialog"
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
@@ -75,7 +75,7 @@ export default function UniversityDetailPage() {
   const canManage = can("universities.manage.global")
   const canSeeAgreements = canManage || can("commission.view.global")
 
-  const [dialog, setDialog] = useState<null | "course" | "intake" | "scholarship" | "agreement">(null)
+  const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement">(null)
   const [editOpen, setEditOpen] = useState(false)
 
   const university = useQuery({
@@ -83,9 +83,9 @@ export default function UniversityDetailPage() {
     queryFn: () => getUniversity(id),
   })
 
-  const courses = useQuery({
-    queryKey: ["university-courses", Number(id)],
-    queryFn: () => listCourses(id),
+  const programs = useQuery({
+    queryKey: ["university-programs", Number(id)],
+    queryFn: () => listPrograms(id),
   })
 
   const intakes = useQuery({
@@ -278,25 +278,39 @@ export default function UniversityDetailPage() {
         </div>
       </div>
 
-      {/* Courses */}
-      <Section title="Courses" action={addButton("Add course", "course")}>
-        {courses.data?.data.length ? (
+      {/* Programs */}
+      <Section title="Programs" action={addButton("Add program", "program")}>
+        {programs.data?.data.length ? (
           <ul className="divide-y">
-            {courses.data.data.map((course) => (
-              <li key={course.id} className="flex items-center justify-between py-2.5 text-sm">
-                <div>
-                  <span className="font-medium">{course.name}</span>
-                  <span className="ml-2 text-xs text-muted-foreground capitalize">{course.level}</span>
+            {programs.data.data.map((program) => (
+              <li key={program.id} className="flex items-center justify-between py-2.5 text-sm">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="font-medium">{program.name}</span>
+                  <span className="text-xs text-muted-foreground capitalize">{program.level}</span>
+                  {program.teaching_language && (
+                    <span className="text-xs text-muted-foreground">· {program.teaching_language}</span>
+                  )}
+                  <span className="font-mono text-[11px] text-muted-foreground">#{program.id}</span>
+                  {program.apply_link && (
+                    <a
+                      href={program.apply_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-medium text-cas-navy hover:underline"
+                    >
+                      Apply
+                    </a>
+                  )}
                 </div>
                 <div className="text-right text-muted-foreground tabular-nums">
-                  {course.duration_months ? `${course.duration_months} mo · ` : ""}
-                  {money(course.tuition_fee, course.currency)}/yr
+                  {program.duration_months ? `${program.duration_months} mo · ` : ""}
+                  {money(program.tuition_fee, program.currency)}/yr
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">No courses yet.</p>
+          <p className="text-sm text-muted-foreground">No programs yet.</p>
         )}
       </Section>
 
@@ -309,7 +323,7 @@ export default function UniversityDetailPage() {
                 <div>
                   <span className="font-medium">{intake.name}</span>
                   <span className="ml-2 text-xs text-muted-foreground">
-                    {intake.course ? intake.course.name : "All courses"}
+                    {intake.program ? intake.program.name : "All programs"}
                   </span>
                 </div>
                 <div className="text-right text-muted-foreground">
@@ -362,7 +376,7 @@ export default function UniversityDetailPage() {
                         : money(agreement.commission_value, agreement.currency)}
                     </span>
                     <span className="ml-2 text-xs text-muted-foreground capitalize">
-                      {agreement.commission_type} · {agreement.course ? agreement.course.name : "All courses"}
+                      {agreement.commission_type} · {agreement.program ? agreement.program.name : "All programs"}
                     </span>
                   </div>
                   <span className="text-muted-foreground">
@@ -378,10 +392,10 @@ export default function UniversityDetailPage() {
       )}
 
       {/* Add dialogs (managers only ever see the triggers) */}
-      <AddCourseDialog universityId={Number(id)} open={dialog === "course"} onOpenChange={(open) => !open && setDialog(null)} />
-      <AddIntakeDialog universityId={Number(id)} courses={courses.data?.data ?? []} open={dialog === "intake"} onOpenChange={(open) => !open && setDialog(null)} />
+      <AddProgramDialog universityId={Number(id)} open={dialog === "program"} onOpenChange={(open) => !open && setDialog(null)} />
+      <AddIntakeDialog universityId={Number(id)} programs={programs.data?.data ?? []} open={dialog === "intake"} onOpenChange={(open) => !open && setDialog(null)} />
       <AddScholarshipDialog universityId={Number(id)} open={dialog === "scholarship"} onOpenChange={(open) => !open && setDialog(null)} />
-      <AddAgreementDialog universityId={Number(id)} courses={courses.data?.data ?? []} open={dialog === "agreement"} onOpenChange={(open) => !open && setDialog(null)} />
+      <AddAgreementDialog universityId={Number(id)} programs={programs.data?.data ?? []} open={dialog === "agreement"} onOpenChange={(open) => !open && setDialog(null)} />
       <UniversityFormDialog open={editOpen} onOpenChange={setEditOpen} university={uni} />
     </div>
   )

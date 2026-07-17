@@ -53,11 +53,11 @@ function stubFetchByUrl() {
     vi.fn().mockImplementation((input: RequestInfo | URL) => {
       const url = String(input)
       if (url.includes("/universities/1")) return Promise.resolve(jsonResponse(UNIVERSITY))
-      if (url.includes("/courses")) {
+      if (url.includes("/programs")) {
         return Promise.resolve(
           jsonResponse({
             ...emptyList,
-            data: [{ id: 10, university_id: 1, name: "MBBS", level: "bachelor", duration_months: 72, tuition_fee: "32000.00", currency: "CNY", status: "active" }],
+            data: [{ id: 10, university_id: 1, name: "MBBS", level: "bachelor", duration_months: 72, tuition_fee: "32000.00", currency: "CNY", teaching_language: "English", apply_link: null, status: "active" }],
           }),
         )
       }
@@ -65,7 +65,7 @@ function stubFetchByUrl() {
         return Promise.resolve(
           jsonResponse({
             ...emptyList,
-            data: [{ id: 20, university_id: 1, course_id: null, course: null, commission_type: "percent", commission_value: "12.00", currency: null, eligibility_trigger: "arrival_first_year_paid", valid_from: "2026-01-01", valid_to: "2027-12-31" }],
+            data: [{ id: 20, university_id: 1, program_id: null, program: null, commission_type: "percent", commission_value: "12.00", currency: null, eligibility_trigger: "arrival_first_year_paid", valid_from: "2026-01-01", valid_to: "2027-12-31" }],
           }),
         )
       }
@@ -87,7 +87,7 @@ beforeEach(() => {
   vi.restoreAllMocks()
 })
 
-it("renders the university header, contacts and courses", async () => {
+it("renders the university header, contacts and programs", async () => {
   useAuthStore.setState({ token: "token", user: makeUser(["universities.view.global"]) })
   stubFetchByUrl()
 
@@ -111,7 +111,7 @@ it("hides the agreements section from plain catalog viewers", async () => {
 
   await screen.findByText("Jilin Medical University")
   expect(screen.queryByText("Commission agreements")).not.toBeInTheDocument()
-  expect(screen.queryByRole("button", { name: /Add course/ })).not.toBeInTheDocument()
+  expect(screen.queryByRole("button", { name: /Add program/ })).not.toBeInTheDocument()
 })
 
 it("shows agreements and add actions to catalog managers", async () => {
@@ -125,7 +125,7 @@ it("shows agreements and add actions to catalog managers", async () => {
 
   expect(await screen.findByText("Commission agreements")).toBeInTheDocument()
   expect(await screen.findByText("12%")).toBeInTheDocument()
-  expect(screen.getByRole("button", { name: /Add course/ })).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: /Add program/ })).toBeInTheDocument()
   expect(screen.getByRole("button", { name: /Add agreement/ })).toBeInTheDocument()
 })
 

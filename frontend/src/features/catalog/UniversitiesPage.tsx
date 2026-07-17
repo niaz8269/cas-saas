@@ -113,7 +113,7 @@ export default function UniversitiesPage() {
               <TableHead>Name</TableHead>
               <TableHead>Code</TableHead>
               <TableHead>City</TableHead>
-              <TableHead className="text-right">Courses</TableHead>
+              <TableHead className="text-right">Programs</TableHead>
               <TableHead className="text-right">Intakes</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
@@ -168,7 +168,7 @@ export default function UniversitiesPage() {
                 <TableCell className="font-medium">{university.name}</TableCell>
                 <TableCell className="text-muted-foreground">{university.code}</TableCell>
                 <TableCell className="text-muted-foreground">{university.city ?? "—"}</TableCell>
-                <TableCell className="text-right tabular-nums">{university.courses_count ?? 0}</TableCell>
+                <TableCell className="text-right tabular-nums">{university.programs_count ?? 0}</TableCell>
                 <TableCell className="text-right tabular-nums">{university.intakes_count ?? 0}</TableCell>
                 <TableCell>
                   <Badge

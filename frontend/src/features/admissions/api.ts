@@ -8,7 +8,7 @@ export interface ApplicationListItem {
   submitted_at: string | null
   student?: { id: number; student_code: string; full_name: string }
   university?: { id: number; name: string; code: string }
-  course?: { id: number; name: string; level: string }
+  program?: { id: number; name: string; level: string }
   intake?: { id: number; name: string } | null
   scholarship?: { id: number; name: string } | null
   admissions_officer?: { id: number; name: string } | null

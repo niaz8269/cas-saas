@@ -19,12 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { createIntake, type Course } from "@/features/catalog/api"
+import { createIntake, type Program } from "@/features/catalog/api"
 import { useCatalogCreate } from "@/features/catalog/dialogs/useCatalogCreate"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required").max(80),
-  course_id: z.string().default("all"),
+  program_id: z.string().default("all"),
   start_date: z.string().optional(),
   application_deadline: z.string().optional(),
   seats: z.coerce.number().int().min(0).optional(),
@@ -34,15 +34,15 @@ type Values = z.infer<typeof schema>
 
 interface AddIntakeDialogProps {
   universityId: number
-  courses: Course[]
+  programs: Program[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export default function AddIntakeDialog({ universityId, courses, open, onOpenChange }: AddIntakeDialogProps) {
+export default function AddIntakeDialog({ universityId, programs, open, onOpenChange }: AddIntakeDialogProps) {
   const form = useForm<Values>({
     resolver: zodResolver(schema),
-    defaultValues: { course_id: "all" },
+    defaultValues: { program_id: "all" },
   })
 
   const mutation = useCatalogCreate({
@@ -50,14 +50,14 @@ export default function AddIntakeDialog({ universityId, courses, open, onOpenCha
       createIntake({
         university_id: universityId,
         name: values.name,
-        course_id: values.course_id === "all" ? null : Number(values.course_id),
+        program_id: values.program_id === "all" ? null : Number(values.program_id),
         start_date: values.start_date || null,
         application_deadline: values.application_deadline || null,
         seats: values.seats ?? null,
       }),
     invalidateKey: ["university-intakes", universityId],
     onSuccess: () => {
-      form.reset({ course_id: "all" })
+      form.reset({ program_id: "all" })
       onOpenChange(false)
     },
     onFieldError: (field, message) =>
@@ -65,7 +65,7 @@ export default function AddIntakeDialog({ universityId, courses, open, onOpenCha
     onRootError: (message) => form.setError("root", { type: "server", message }),
   })
 
-  const courseId = form.watch("course_id")
+  const programId = form.watch("program_id")
   const errors = form.formState.errors
 
   return (
@@ -89,13 +89,13 @@ export default function AddIntakeDialog({ universityId, courses, open, onOpenCha
           </div>
 
           <div className="space-y-2">
-            <Label>Course</Label>
-            <Select value={courseId} onValueChange={(value) => form.setValue("course_id", value)}>
-              <SelectTrigger aria-label="Course"><SelectValue /></SelectTrigger>
+            <Label>Program</Label>
+            <Select value={programId} onValueChange={(value) => form.setValue("program_id", value)}>
+              <SelectTrigger aria-label="Program"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All courses (university-wide)</SelectItem>
-                {courses.map((course) => (
-                  <SelectItem key={course.id} value={String(course.id)}>{course.name}</SelectItem>
+                <SelectItem value="all">All programs (university-wide)</SelectItem>
+                {programs.map((program) => (
+                  <SelectItem key={program.id} value={String(program.id)}>{program.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

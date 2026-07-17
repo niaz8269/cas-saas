@@ -20,14 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { createAgreement, type Course } from "@/features/catalog/api"
+import { createAgreement, type Program } from "@/features/catalog/api"
 import { useCatalogCreate } from "@/features/catalog/dialogs/useCatalogCreate"
 
 const schema = z.object({
   commission_type: z.enum(["fixed", "percent", "tiered"]),
   commission_value: z.coerce.number().min(0, "Value must be positive"),
   currency: z.string().optional(),
-  course_id: z.string().default("all"),
+  program_id: z.string().default("all"),
   valid_from: z.string().optional(),
   valid_to: z.string().optional(),
 })
@@ -36,15 +36,15 @@ type Values = z.infer<typeof schema>
 
 interface AddAgreementDialogProps {
   universityId: number
-  courses: Course[]
+  programs: Program[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export default function AddAgreementDialog({ universityId, courses, open, onOpenChange }: AddAgreementDialogProps) {
+export default function AddAgreementDialog({ universityId, programs, open, onOpenChange }: AddAgreementDialogProps) {
   const form = useForm<Values>({
     resolver: zodResolver(schema),
-    defaultValues: { commission_type: "percent", course_id: "all" },
+    defaultValues: { commission_type: "percent", program_id: "all" },
   })
 
   const mutation = useCatalogCreate({
@@ -54,13 +54,13 @@ export default function AddAgreementDialog({ universityId, courses, open, onOpen
         commission_type: values.commission_type,
         commission_value: values.commission_value,
         currency: values.currency ? values.currency.toUpperCase() : null,
-        course_id: values.course_id === "all" ? null : Number(values.course_id),
+        program_id: values.program_id === "all" ? null : Number(values.program_id),
         valid_from: values.valid_from || null,
         valid_to: values.valid_to || null,
       }),
     invalidateKey: ["university-agreements", universityId],
     onSuccess: () => {
-      form.reset({ commission_type: "percent", course_id: "all" })
+      form.reset({ commission_type: "percent", program_id: "all" })
       onOpenChange(false)
     },
     onFieldError: (field, message) =>
@@ -69,7 +69,7 @@ export default function AddAgreementDialog({ universityId, courses, open, onOpen
   })
 
   const type = form.watch("commission_type")
-  const courseId = form.watch("course_id")
+  const programId = form.watch("program_id")
   const errors = form.formState.errors
 
   return (
@@ -123,12 +123,12 @@ export default function AddAgreementDialog({ universityId, courses, open, onOpen
 
           <div className="space-y-2">
             <Label>Applies to</Label>
-            <Select value={courseId} onValueChange={(value) => form.setValue("course_id", value)}>
+            <Select value={programId} onValueChange={(value) => form.setValue("program_id", value)}>
               <SelectTrigger aria-label="Applies to"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All courses</SelectItem>
-                {courses.map((course) => (
-                  <SelectItem key={course.id} value={String(course.id)}>{course.name}</SelectItem>
+                <SelectItem value="all">All programs</SelectItem>
+                {programs.map((program) => (
+                  <SelectItem key={program.id} value={String(program.id)}>{program.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { createCourse } from "@/features/catalog/api"
+import { createProgram } from "@/features/catalog/api"
 import { useCatalogCreate } from "@/features/catalog/dialogs/useCatalogCreate"
 
 const schema = z.object({
@@ -28,25 +28,27 @@ const schema = z.object({
   duration_months: z.coerce.number().int().min(1).max(120).optional(),
   tuition_fee: z.coerce.number().min(0).optional(),
   currency: z.string().length(3).default("CNY"),
+  teaching_language: z.string().optional(),
+  apply_link: z.string().optional(),
 })
 
 type Values = z.infer<typeof schema>
 
-interface AddCourseDialogProps {
+interface AddProgramDialogProps {
   universityId: number
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export default function AddCourseDialog({ universityId, open, onOpenChange }: AddCourseDialogProps) {
+export default function AddProgramDialog({ universityId, open, onOpenChange }: AddProgramDialogProps) {
   const form = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: { level: "bachelor", currency: "CNY" },
   })
 
   const mutation = useCatalogCreate({
-    mutationFn: (values: Values) => createCourse({ ...values, university_id: universityId }),
-    invalidateKey: ["university-courses", universityId],
+    mutationFn: (values: Values) => createProgram({ ...values, university_id: universityId }),
+    invalidateKey: ["university-programs", universityId],
     onSuccess: () => {
       form.reset({ level: "bachelor", currency: "CNY" })
       onOpenChange(false)
@@ -63,7 +65,7 @@ export default function AddCourseDialog({ universityId, open, onOpenChange }: Ad
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add course</DialogTitle>
+          <DialogTitle>Add program</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit((values) => mutation.mutate(values))} noValidate className="space-y-4">
@@ -74,8 +76,8 @@ export default function AddCourseDialog({ universityId, open, onOpenChange }: Ad
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="course-name">Name</Label>
-            <Input id="course-name" placeholder="MBBS" {...form.register("name")} />
+            <Label htmlFor="program-name">Name</Label>
+            <Input id="program-name" placeholder="MBBS" {...form.register("name")} />
             {errors.name && <p role="alert" className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
@@ -92,27 +94,38 @@ export default function AddCourseDialog({ universityId, open, onOpenChange }: Ad
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="course-duration">Duration (months)</Label>
-              <Input id="course-duration" type="number" placeholder="72" {...form.register("duration_months")} />
+              <Label htmlFor="program-duration">Duration (months)</Label>
+              <Input id="program-duration" type="number" placeholder="72" {...form.register("duration_months")} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="course-fee">Tuition / year</Label>
-              <Input id="course-fee" type="number" placeholder="30000" {...form.register("tuition_fee")} />
+              <Label htmlFor="program-fee">Tuition / year</Label>
+              <Input id="program-fee" type="number" placeholder="30000" {...form.register("tuition_fee")} />
               {errors.tuition_fee && <p role="alert" className="text-sm text-destructive">{errors.tuition_fee.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="course-currency">Currency</Label>
-              <Input id="course-currency" maxLength={3} className="uppercase" {...form.register("currency")} />
+              <Label htmlFor="program-currency">Currency</Label>
+              <Input id="program-currency" maxLength={3} className="uppercase" {...form.register("currency")} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label htmlFor="program-language">Teaching language</Label>
+              <Input id="program-language" placeholder="English" {...form.register("teaching_language")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="program-apply-link">Apply link</Label>
+              <Input id="program-apply-link" placeholder="https://…" {...form.register("apply_link")} />
             </div>
           </div>
 
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Adding…" : "Add course"}
+              {mutation.isPending ? "Adding…" : "Add program"}
             </Button>
           </DialogFooter>
         </form>

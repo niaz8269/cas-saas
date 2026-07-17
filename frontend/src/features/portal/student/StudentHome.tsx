@@ -29,7 +29,7 @@ export default function StudentHome() {
             <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Latest application</p>
             <StatusBadge status={latest.status} map={APPLICATION_BADGE} />
           </div>
-          <p className="mt-1 text-sm font-medium">{latest.course?.name ?? latest.application_code}</p>
+          <p className="mt-1 text-sm font-medium">{latest.program?.name ?? latest.application_code}</p>
           <p className="text-sm text-muted-foreground">{latest.university}</p>
         </PortalCard>
       )}

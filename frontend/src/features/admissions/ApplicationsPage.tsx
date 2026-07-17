@@ -99,7 +99,7 @@ export default function ApplicationsPage() {
             <TableRow>
               <TableHead>Code</TableHead>
               <TableHead>Student</TableHead>
-              <TableHead>University / Course</TableHead>
+              <TableHead>University / Program</TableHead>
               <TableHead>Officer</TableHead>
               <TableHead className="text-right">Docs</TableHead>
               <TableHead>Status</TableHead>
@@ -152,7 +152,7 @@ export default function ApplicationsPage() {
                 <TableCell className="font-medium">{application.student?.full_name ?? "—"}</TableCell>
                 <TableCell>
                   <p>{application.university?.name ?? "—"}</p>
-                  <p className="text-xs text-muted-foreground">{application.course?.name ?? ""}</p>
+                  <p className="text-xs text-muted-foreground">{application.program?.name ?? ""}</p>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {application.admissions_officer?.name ?? "—"}

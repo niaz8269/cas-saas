@@ -29,7 +29,7 @@ const APPLICATION = {
   submitted_at: null,
   student: { id: 5, student_code: "STU-2026-00005", full_name: "Ali Khan" },
   university: { id: 1, name: "Jilin Medical University", code: "JLMU" },
-  course: { id: 10, name: "MBBS", level: "bachelor" },
+  program: { id: 10, name: "MBBS", level: "bachelor" },
   intake: { id: 1, name: "September 2026" },
   scholarship: null,
   admissions_officer: { id: 3, name: "Demo Admissions Officer" },

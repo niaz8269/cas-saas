@@ -238,7 +238,7 @@ export default function ApplicationDetailPage() {
                   {app.student.full_name}
                 </Link>
               )}
-              {" · "}{app.course?.name} at {app.university?.name}
+              {" · "}{app.program?.name} at {app.university?.name}
               {app.intake ? ` · ${app.intake.name}` : ""}
             </p>
           </div>

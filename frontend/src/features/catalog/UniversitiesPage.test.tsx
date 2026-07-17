@@ -30,7 +30,7 @@ const PAGE_ONE = {
       city: "Jilin City",
       website: "www.jlmu.cn",
       status: "active",
-      courses_count: 2,
+      programs_count: 2,
       intakes_count: 2,
     },
     {
@@ -40,7 +40,7 @@ const PAGE_ONE = {
       city: "Dalian",
       website: null,
       status: "inactive",
-      courses_count: 1,
+      programs_count: 1,
       intakes_count: 0,
     },
   ],

@@ -60,7 +60,7 @@ export interface AgentApplicationRow {
   submitted_at: string | null
   student?: { id: number; student_code: string; full_name: string }
   university: string | null
-  course: { name: string; level: string } | null
+  program: { name: string; level: string } | null
   intake: string | null
 }
 
@@ -91,7 +91,7 @@ export interface StudentApplicationRow {
   status: string
   submitted_at: string | null
   university: string | null
-  course: { name: string; level: string } | null
+  program: { name: string; level: string } | null
   intake: string | null
   offers?: { offer_type: string; reference_no: string | null; issued_date: string | null; expiry_date: string | null; status: string }[]
   progress?: { status: string; at: string | null }[]
