@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
+use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
@@ -38,6 +39,9 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:agent')->group(function () {
             Route::post('auth/logout', [AgentAuthController::class, 'logout']);
             Route::get('auth/me', [AgentAuthController::class, 'me']);
+            Route::get('students', [AgentPortalController::class, 'students']);
+            Route::get('applications', [AgentPortalController::class, 'applications']);
+            Route::get('commissions', [AgentPortalController::class, 'commissions']);
         });
     });
 

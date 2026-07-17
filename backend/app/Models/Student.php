@@ -98,6 +98,11 @@ class Student extends Authenticatable
         return $this->morphMany(Document::class, 'documentable');
     }
 
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
