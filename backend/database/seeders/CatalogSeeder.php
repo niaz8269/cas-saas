@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Country;
 use App\Models\University;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 /**
  * Demo catalog: real Chinese universities CAS works with, their programs,
@@ -22,6 +23,7 @@ class CatalogSeeder extends Seeder
                 ['code' => $data['code']],
                 [
                     'name' => $data['name'],
+                    'slug' => Str::slug($data['name']),
                     'country_id' => $cn?->id,
                     'city' => $data['city'],
                     'website' => $data['website'] ?? null,

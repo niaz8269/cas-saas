@@ -41,6 +41,11 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        // Public website/catalog endpoints: generous per-IP cap.
+        RateLimiter::for('public', function (Request $request) {
+            return Limit::perMinute(120)->by($request->ip());
+        });
+
         // Assigned tasks raise the owner's in-app notification (§5.9).
         Task::observe(TaskObserver::class);
     }

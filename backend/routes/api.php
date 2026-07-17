@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -38,6 +39,12 @@ Route::prefix('v1')->group(function () {
     // Lead ingestion (per-source API keys; idempotent; rate-limited per key)
     Route::post('ingest/leads', LeadIngestController::class)
         ->middleware('api-source');
+
+    // Public website catalog (unauthenticated, active/published only, throttled)
+    Route::prefix('public')->middleware('throttle:public')->group(function () {
+        Route::get('universities', [PublicCatalogController::class, 'universities']);
+        Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
+    });
 
     // Agent portal (own records only — report §5.7)
     Route::prefix('agent')->group(function () {
