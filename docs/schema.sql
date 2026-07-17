@@ -641,4 +641,15 @@ ALTER TABLE universities
   ADD COLUMN requirements             JSON NULL,
   ADD COLUMN representative_professor JSON NULL,
   ADD UNIQUE KEY uq_universities_slug (slug);
+
+-- ADDENDUM (ADR-0007): scholarship website content fields.
+ALTER TABLE scholarships
+  ADD COLUMN slug         VARCHAR(190) NULL AFTER name,
+  ADD COLUMN description  TEXT NULL,
+  ADD COLUMN amount       DECIMAL(15,2) NULL AFTER coverage,
+  ADD COLUMN currency     CHAR(3) NULL AFTER amount,
+  ADD COLUMN eligibility  TEXT NULL,
+  ADD COLUMN how_to_apply TEXT NULL,
+  ADD COLUMN apply_link   VARCHAR(255) NULL,
+  ADD UNIQUE KEY uq_scholarships_slug (slug);
 -- =========================== END OF SCHEMA ===========================
