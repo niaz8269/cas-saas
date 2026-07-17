@@ -1,5 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useLocation, useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -13,6 +16,9 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { login } from "@/features/auth/api"
+import { ApiError } from "@/lib/api"
+import { useAuthStore } from "@/stores/auth"
 
 const loginSchema = z.object({
   email: z
@@ -25,18 +31,54 @@ const loginSchema = z.object({
 type LoginValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const token = useAuthStore((state) => state.token)
+  const setAuth = useAuthStore((state) => state.setAuth)
+
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/"
+
+  // Already signed in? Skip the form.
+  useEffect(() => {
+    if (token) navigate(from, { replace: true })
+  }, [token, from, navigate])
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    setError,
+    formState: { errors },
   } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   })
 
-  const onSubmit = () => {
-    // TODO(M1): authenticate against POST /api/v1/auth/login (Sanctum, staff guard).
-  }
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: ({ token, user }) => {
+      setAuth(token, user)
+      navigate(from, { replace: true })
+    },
+    onError: (error) => {
+      if (error instanceof ApiError && error.status === 422) {
+        for (const [field, messages] of Object.entries(error.errors)) {
+          if (field === "email" || field === "password") {
+            setError(field, { type: "server", message: messages[0] })
+          }
+        }
+        return
+      }
+      setError("root", {
+        type: "server",
+        message:
+          error instanceof ApiError
+            ? error.message
+            : "Unable to reach the server. Please try again.",
+      })
+    },
+  })
+
+  const onSubmit = (values: LoginValues) => mutation.mutate(values)
 
   return (
     <main className="flex min-h-screen items-center justify-center p-6">
@@ -58,6 +100,15 @@ export default function LoginPage() {
               noValidate
               className="space-y-4"
             >
+              {errors.root && (
+                <p
+                  role="alert"
+                  className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive"
+                >
+                  {errors.root.message}
+                </p>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -91,8 +142,12 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                Sign in
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? "Signing in…" : "Sign in"}
               </Button>
             </form>
           </CardContent>

@@ -16,7 +16,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       // Local API (nginx in docker compose); keeps the SPA same-origin in dev.
-      "/api": "http://localhost:8080",
+      // Inside the compose network the target is http://web:80 (see compose.yml).
+      "/api": process.env.VITE_API_PROXY_TARGET ?? "http://localhost:8080",
     },
   },
   test: {
