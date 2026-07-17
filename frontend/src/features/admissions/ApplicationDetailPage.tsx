@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Check, Download, FileUp, Plus } from "lucide-react"
+import { ArrowLeft, Check, Download, FileText, FileUp, Plus } from "lucide-react"
 import { useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -26,6 +26,7 @@ import { useCan } from "@/features/auth/useCan"
 import {
   downloadDocument,
   getApplication,
+  getOfferLetter,
   listApplicationDocuments,
   listDocumentTypes,
   rejectDocument,
@@ -153,6 +154,18 @@ export default function ApplicationDetailPage() {
     },
     onError: (error) =>
       setActionError(error instanceof ApiError ? error.message : "Could not record the offer."),
+  })
+
+  const offerLetter = useMutation({
+    mutationFn: (offerId: number) => getOfferLetter(id, offerId),
+    onSuccess: (blob) => {
+      const url = URL.createObjectURL(blob)
+      window.open(url, "_blank", "noopener")
+      // Release the object URL once the tab has had a chance to load it.
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    },
+    onError: (error) =>
+      setActionError(error instanceof ApiError ? error.message : "Could not generate the offer letter."),
   })
 
   const documentAction = useMutation({
@@ -375,11 +388,23 @@ export default function ApplicationDetailPage() {
                 <p className="text-sm text-muted-foreground">No offers recorded yet.</p>
               )}
               {app.offers?.map((offer) => (
-                <div key={offer.id} className="flex items-center justify-between py-1.5 text-sm">
-                  <span className="font-medium capitalize">{offer.offer_type}</span>
-                  <span className="text-muted-foreground">
-                    {offer.reference_no ?? "—"}{offer.expiry_date ? ` · expires ${offer.expiry_date}` : ""}
+                <div key={offer.id} className="flex items-center justify-between gap-2 py-1.5 text-sm">
+                  <span className="min-w-0">
+                    <span className="font-medium capitalize">{offer.offer_type}</span>
+                    <span className="ml-2 text-muted-foreground">
+                      {offer.reference_no ?? "—"}{offer.expiry_date ? ` · expires ${offer.expiry_date}` : ""}
+                    </span>
                   </span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="shrink-0"
+                    disabled={offerLetter.isPending}
+                    onClick={() => offerLetter.mutate(offer.id)}
+                  >
+                    <FileText className="size-4" />
+                    {offerLetter.isPending && offerLetter.variables === offer.id ? "Preparing…" : "Letter"}
+                  </Button>
                 </div>
               ))}
             </div>

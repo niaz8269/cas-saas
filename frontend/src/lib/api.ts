@@ -57,3 +57,28 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
 
   return data as T
 }
+
+/**
+ * Fetch a binary response (e.g. a generated PDF) as a Blob, attaching the
+ * bearer token. Errors still speak the JSON envelope when the server returns
+ * one; falls back to a generic message for non-JSON error bodies.
+ */
+export async function apiBlob(path: string, options: RequestInit = {}): Promise<Blob> {
+  const token = useAuthStore.getState().token
+
+  const response = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  })
+
+  if (!response.ok) {
+    if (response.status === 401) useAuthStore.getState().clearAuth()
+    const payload = await response.json().catch(() => null)
+    throw new ApiError(response.status, payload ?? { message: `HTTP ${response.status}` })
+  }
+
+  return response.blob()
+}

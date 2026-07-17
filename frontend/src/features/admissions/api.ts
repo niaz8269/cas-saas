@@ -1,4 +1,4 @@
-import { api } from "@/lib/api"
+import { api, apiBlob } from "@/lib/api"
 import type { Paginated } from "@/features/catalog/api"
 
 export interface ApplicationListItem {
@@ -80,6 +80,10 @@ export const storeOffer = (id: number | string, payload: Record<string, unknown>
     method: "POST",
     body: JSON.stringify(payload),
   })
+
+/** Fetch the branded offer-letter PDF as a Blob (bearer-auth, streamed inline). */
+export const getOfferLetter = (applicationId: number | string, offerId: number) =>
+  apiBlob(`/applications/${applicationId}/offers/${offerId}/letter`)
 
 export const listApplicationDocuments = (id: number | string) =>
   api<{ data: DocumentItem[] }>(`/applications/${id}/documents`)
