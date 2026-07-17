@@ -9,6 +9,7 @@ use App\Models\ApplicationStatusHistory;
 use App\Models\DocumentType;
 use App\Models\User;
 use App\Services\Comms\NotificationService;
+use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use App\Services\Visa\VisaWorkflow;
 use Illuminate\Support\Collection;
@@ -103,6 +104,8 @@ class ApplicationWorkflow
                 'note' => $note,
                 'created_at' => now(),
             ]);
+
+            app(WorkflowLog::class)->record('application', $application->id, $from, $to, $actor->id);
 
             if (in_array($to, ['submitted', 'offer_received', 'accepted', 'rejected'], true)) {
                 Activity::create([

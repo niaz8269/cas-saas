@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\Task;
+use App\Services\Comms\NotificationService;
+use Illuminate\Console\Command;
+
+/**
+ * SLA enforcement (report §5.9): open tasks past their due date are
+ * escalated once — stamped, bumped to high priority, and the assignee is
+ * notified. Scheduled hourly. Idempotent: a task already escalated is
+ * skipped, so it never re-fires.
+ */
+class EscalateOverdueTasks extends Command
+{
+    protected $signature = 'app:escalate-overdue-tasks';
+
+    protected $description = 'Escalate open tasks past their SLA due date';
+
+    public function handle(NotificationService $notifications): int
+    {
+        $overdue = Task::query()
+            ->whereIn('status', ['open', 'in_progress'])
+            ->whereNotNull('due_at')
+            ->where('due_at', '<', now())
+            ->whereNull('escalated_at')
+            ->get();
+
+        foreach ($overdue as $task) {
+            $task->forceFill([
+                'escalated_at' => now(),
+                'priority' => 'high',
+            ])->save();
+
+            $notifications->push(
+                $task->assignee_id,
+                'task.escalated',
+                "Overdue: {$task->title}",
+                'This task passed its due date and has been escalated.',
+            );
+        }
+
+        $this->info("Escalated {$overdue->count()} overdue task(s).");
+
+        return self::SUCCESS;
+    }
+}

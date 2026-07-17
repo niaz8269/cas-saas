@@ -9,6 +9,7 @@ use App\Models\Commission;
 use App\Models\CommissionStatusHistory;
 use App\Models\Invoice;
 use App\Models\User;
+use App\Services\Comms\WorkflowLog;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -161,6 +162,7 @@ class CommissionEngine
             $commission->forceFill(['status' => $to])->save();
 
             $this->writeHistory($commission, $from, $to, $actor, $amount, $options['note'] ?? null, $reference);
+            app(WorkflowLog::class)->record('commission', $commission->id, $from, $to, $actor->id);
 
             if ($to === 'received') {
                 $this->computeAgentShares($commission);

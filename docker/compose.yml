@@ -27,6 +27,34 @@ services:
     depends_on:
       - app
 
+  # Queue worker: sends communications, runs async jobs (report §5.9).
+  worker:
+    build:
+      context: ./php
+    command: php artisan queue:work --sleep=1 --tries=3 --max-time=3600
+    volumes:
+      - ../backend:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Scheduler: SLA sweeps / escalations on a cron-like loop.
+  scheduler:
+    build:
+      context: ./php
+    command: php artisan schedule:work
+    volumes:
+      - ../backend:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
   mysql:
     image: mysql:8.0
     environment:

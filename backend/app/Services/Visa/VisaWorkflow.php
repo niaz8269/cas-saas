@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\VisaCase;
 use App\Models\VisaStatusHistory;
+use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -124,6 +125,7 @@ class VisaWorkflow
             ])->save();
 
             $this->writeHistory($case, $from, $to, $actor, $note);
+            app(WorkflowLog::class)->record('visa', $case->id, $from, $to, $actor->id);
 
             if (in_array($to, ['submitted', 'approved', 'rejected', 'travel_ready'], true)) {
                 Activity::create([
