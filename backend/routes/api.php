@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\CourseController;
+use App\Http\Controllers\Api\V1\IntakeController;
+use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\UniversityAgreementController;
+use App\Http\Controllers\Api\V1\UniversityContactController;
+use App\Http\Controllers\Api\V1\UniversityController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,5 +22,17 @@ Route::prefix('v1')->group(function () {
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+
+        // Catalog (policy-authorized in controllers)
+        Route::apiResource('universities', UniversityController::class);
+        Route::get('universities/{university}/contacts', [UniversityContactController::class, 'index']);
+        Route::post('universities/{university}/contacts', [UniversityContactController::class, 'store']);
+        Route::patch('contacts/{contact}', [UniversityContactController::class, 'update']);
+        Route::delete('contacts/{contact}', [UniversityContactController::class, 'destroy']);
+        Route::apiResource('courses', CourseController::class);
+        Route::apiResource('intakes', IntakeController::class);
+        Route::apiResource('scholarships', ScholarshipController::class);
+        Route::apiResource('agreements', UniversityAgreementController::class)
+            ->parameters(['agreements' => 'agreement']);
     });
 });
