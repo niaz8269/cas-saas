@@ -18,7 +18,12 @@ class CatalogSeeder extends Seeder
     {
         $cn = Country::where('iso2', 'CN')->first();
 
+        $content = $this->universityContent();
+        $scholarshipContent = $this->scholarshipContent();
+
         foreach ($this->catalog() as $data) {
+            $c = $content[$data['code']] ?? [];
+
             $university = University::updateOrCreate(
                 ['code' => $data['code']],
                 [
@@ -28,6 +33,12 @@ class CatalogSeeder extends Seeder
                     'city' => $data['city'],
                     'website' => $data['website'] ?? null,
                     'status' => 'active',
+                    'about' => $c['about'] ?? null,
+                    'requirements' => $c['requirements'] ?? null,
+                    'nearest_airport' => $c['nearest_airport'] ?? null,
+                    'moe_listed' => $c['moe_listed'] ?? false,
+                    'apply_link' => $c['apply_link'] ?? null,
+                    'representative_professor' => $c['professor'] ?? null,
                 ],
             );
 
@@ -41,7 +52,7 @@ class CatalogSeeder extends Seeder
             $programs = [];
             foreach ($data['programs'] as $program) {
                 [$name, $level, $months, $fee] = $program;
-                $programs[$name] = $university->programs()->firstOrCreate(
+                $programs[$name] = $university->programs()->updateOrCreate(
                     ['name' => $name, 'level' => $level],
                     [
                         'teaching_language' => str_contains($name, 'Chinese Language') ? 'Chinese' : 'English',
@@ -63,9 +74,22 @@ class CatalogSeeder extends Seeder
 
             foreach ($data['scholarships'] ?? [] as $scholarship) {
                 [$name, $type, $coverage] = $scholarship;
-                $university->scholarships()->firstOrCreate(
+                $sc = $scholarshipContent[$name] ?? [];
+                $university->scholarships()->updateOrCreate(
                     ['name' => $name],
-                    ['type' => $type, 'coverage' => $coverage, 'criteria' => ['min_gpa' => 3.0], 'deadline' => '2026-06-30', 'status' => 'active'],
+                    [
+                        'slug' => Str::slug($name),
+                        'type' => $type,
+                        'coverage' => $coverage,
+                        'amount' => $sc['amount'] ?? null,
+                        'currency' => isset($sc['amount']) ? 'CNY' : null,
+                        'description' => $sc['description'] ?? null,
+                        'eligibility' => $sc['eligibility'] ?? null,
+                        'how_to_apply' => $sc['how_to_apply'] ?? null,
+                        'criteria' => ['min_gpa' => 3.0],
+                        'deadline' => '2026-06-30',
+                        'status' => 'active',
+                    ],
                 );
             }
 
@@ -180,6 +204,126 @@ class CatalogSeeder extends Seeder
                     ['Chinese Language Program', 'bachelor', 12, 14000],
                 ],
                 'agreements' => [['fixed', 5000, 'CNY', null]],
+            ],
+        ];
+    }
+
+    /**
+     * Website content per university (ADR-0005 fields), keyed by code.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function universityContent(): array
+    {
+        return [
+            'JLMU' => [
+                'about' => 'Jilin Medical University is a public medical university in Jilin City with a strong reputation for its English-taught MBBS. It welcomes international students from across Asia and Africa and is recognised by the WHO and China\'s Ministry of Education.',
+                'requirements' => ['High school diploma with science subjects', 'Minimum 60% in Physics, Chemistry and Biology', 'IELTS 5.5 or equivalent (English-taught tracks)', 'Aged 18–25 at enrolment', 'Medical fitness certificate'],
+                'nearest_airport' => 'Changchun Longjia International Airport (CGQ)',
+                'moe_listed' => true,
+                'apply_link' => 'https://apply.jlmu.cn',
+                'professor' => ['name' => 'Prof. Zhang Wei', 'title' => 'Dean of International Education'],
+            ],
+            'XJMU' => [
+                'about' => 'Xinjiang Medical University in Urumqi is a leading medical institution in north-west China, offering English-medium MBBS and Traditional Chinese Medicine to a diverse international community.',
+                'requirements' => ['High school diploma', 'Strong grades in Biology and Chemistry', 'IELTS 5.5 (English-taught)', 'Aged 18–25', 'Physical examination record'],
+                'nearest_airport' => 'Ürümqi Diwopu International Airport (URC)',
+                'moe_listed' => true,
+                'apply_link' => 'https://apply.xjmu.edu.cn',
+                'professor' => ['name' => 'Prof. Ma Jun', 'title' => 'Director, International Students Office'],
+            ],
+            'DMU' => [
+                'about' => 'Dalian Medical University is a prestigious coastal university known for its MBBS and Stomatology programs and modern teaching hospitals in the port city of Dalian.',
+                'requirements' => ['High school diploma', '65%+ in science subjects', 'IELTS 6.0 (English-taught)', 'Aged 18–25', 'Medical fitness certificate'],
+                'nearest_airport' => 'Dalian Zhoushuizi International Airport (DLC)',
+                'moe_listed' => true,
+                'apply_link' => 'https://apply.dmu.edu.cn',
+                'professor' => ['name' => 'Prof. Li Na', 'title' => 'Dean of International Medical Education'],
+            ],
+            'BIT' => [
+                'about' => 'Beijing Institute of Technology is a top-tier "985" and "211" university renowned for engineering and technology, offering English-taught bachelor\'s and master\'s degrees in the heart of Beijing.',
+                'requirements' => ['High school diploma (bachelor) or bachelor degree (master)', 'Strong mathematics background', 'IELTS 6.0 / TOEFL 80', 'Motivation letter', 'Two references (postgraduate)'],
+                'nearest_airport' => 'Beijing Capital International Airport (PEK)',
+                'moe_listed' => true,
+                'apply_link' => 'https://admission.bit.edu.cn',
+                'professor' => ['name' => 'Dr. Chen Hao', 'title' => 'International Student Center'],
+            ],
+            'ZUST' => [
+                'about' => 'Zhejiang University of Science and Technology in scenic Hangzhou offers practical, industry-focused engineering and business programs with a growing international community.',
+                'requirements' => ['High school diploma', 'IELTS 5.5 or HSK 4', 'Aged 18–30', 'Statement of purpose'],
+                'nearest_airport' => 'Hangzhou Xiaoshan International Airport (HGH)',
+                'moe_listed' => false,
+                'apply_link' => 'https://iso.zust.edu.cn/apply',
+                'professor' => ['name' => 'Prof. Wu Ling', 'title' => 'International College'],
+            ],
+            'NUIST' => [
+                'about' => 'Nanjing University of Information Science and Technology is a national leader in atmospheric sciences and IT, offering English-taught degrees and a well-established Chinese Language Program.',
+                'requirements' => ['High school diploma', 'IELTS 5.5 or HSK 4', 'Aged 18–30', 'Academic transcripts'],
+                'nearest_airport' => 'Nanjing Lukou International Airport (NKG)',
+                'moe_listed' => false,
+                'apply_link' => 'https://sie.nuist.edu.cn/apply',
+                'professor' => ['name' => 'Prof. Sun Qiang', 'title' => 'School of International Education'],
+            ],
+            'WUT' => [
+                'about' => 'Wuhan University of Technology is a "211" university with strengths in materials, civil and automotive engineering, hosting thousands of international students in central China.',
+                'requirements' => ['High school diploma (bachelor) or bachelor degree (master)', 'IELTS 6.0', 'Aged 18–30', 'Study plan'],
+                'nearest_airport' => 'Wuhan Tianhe International Airport (WUH)',
+                'moe_listed' => false,
+                'apply_link' => 'https://sie.whut.edu.cn/apply',
+                'professor' => ['name' => 'Prof. Zhao Lei', 'title' => 'School of International Education'],
+            ],
+            'LPU' => [
+                'about' => 'Liaoning Petrochemical University specialises in petroleum, chemical and process engineering, with affordable tuition and a supportive environment for international students in Fushun.',
+                'requirements' => ['High school diploma', 'IELTS 5.5 or HSK 3', 'Aged 18–30', 'Passport copy'],
+                'nearest_airport' => 'Shenyang Taoxian International Airport (SHE)',
+                'moe_listed' => false,
+                'apply_link' => 'https://en.lnpu.edu.cn/apply',
+                'professor' => ['name' => 'Prof. Han Mei', 'title' => 'International Education College'],
+            ],
+        ];
+    }
+
+    /**
+     * Scholarship copy keyed by name (amount in CNY where concrete).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    private function scholarshipContent(): array
+    {
+        return [
+            'First-Year Merit Award' => [
+                'amount' => 16000,
+                'description' => 'A first-year award recognising strong academic entry results for MBBS and Nursing applicants.',
+                'eligibility' => 'Awarded on admission grades; no separate application required.',
+                'how_to_apply' => 'Automatically considered at admission — your CAS counselor confirms eligibility.',
+            ],
+            'Belt & Road Scholarship' => [
+                'amount' => 30000,
+                'description' => 'Full-tuition scholarship for students from Belt & Road partner countries.',
+                'eligibility' => 'Nationals of Belt & Road countries with strong academic records.',
+                'how_to_apply' => 'Apply through CAS with your admission letter and passport.',
+            ],
+            'Presidential Scholarship' => [
+                'amount' => 42000,
+                'description' => 'Covers tuition and on-campus accommodation for outstanding applicants.',
+                'eligibility' => 'Top-decile academic performance; an interview may be required.',
+                'how_to_apply' => 'Nominated by the admissions committee; CAS submits supporting documents.',
+            ],
+            'Chinese Government Scholarship (CSC)' => [
+                'description' => 'Full scholarship (tuition, accommodation and a monthly stipend) funded by the Chinese government.',
+                'eligibility' => 'High-achieving international applicants; competitive national selection.',
+                'how_to_apply' => 'Apply via the CSC portal with CAS guidance before the annual deadline.',
+            ],
+            'Provincial Government Scholarship' => [
+                'amount' => 20000,
+                'description' => 'A provincial award of 20,000 CNY per year toward tuition.',
+                'eligibility' => 'Enrolled degree students in good standing.',
+                'how_to_apply' => 'Apply each year through the international office.',
+            ],
+            'WUT Excellence Scholarship' => [
+                'description' => 'Merit award covering 30% of tuition for high performers.',
+                'eligibility' => 'Maintain a GPA above 3.3.',
+                'how_to_apply' => 'Apply after first-semester results are published.',
             ],
         ];
     }
