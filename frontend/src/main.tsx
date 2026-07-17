@@ -9,6 +9,7 @@ import AppShell from "@/components/layout/AppShell"
 import ComingSoon from "@/components/layout/ComingSoon"
 import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
+import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
 
 const queryClient = new QueryClient({
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
           { path: "/leads", element: <ComingSoon module="Leads" milestone="M3" /> },
           { path: "/students", element: <ComingSoon module="Students" milestone="M3" /> },
           { path: "/applications", element: <ComingSoon module="Applications" milestone="M4" /> },
-          { path: "/universities", element: <ComingSoon module="Universities" milestone="M2" /> },
+          { path: "/universities", element: <UniversitiesPage /> },
           { path: "/scholarships", element: <ComingSoon module="Scholarships" milestone="M2" /> },
           { path: "/finance", element: <ComingSoon module="Finance" milestone="M5" /> },
           { path: "/commissions", element: <ComingSoon module="Commissions" milestone="M5" /> },
