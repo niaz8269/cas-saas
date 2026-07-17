@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
@@ -41,6 +42,14 @@ Route::prefix('v1')->group(function () {
         Route::patch('students/{student}', [StudentController::class, 'update']);
         Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);
         Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
+
+        // Admissions
+        Route::get('applications', [ApplicationController::class, 'index']);
+        Route::post('applications', [ApplicationController::class, 'store']);
+        Route::get('applications/{application}', [ApplicationController::class, 'show']);
+        Route::patch('applications/{application}', [ApplicationController::class, 'update']);
+        Route::post('applications/{application}/transition', [ApplicationController::class, 'transition']);
+        Route::post('applications/{application}/offers', [ApplicationController::class, 'storeOffer']);
 
         // Catalog (policy-authorized in controllers)
         Route::apiResource('universities', UniversityController::class);

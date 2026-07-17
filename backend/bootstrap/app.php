@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\ChecklistIncompleteException;
 use App\Http\Middleware\AuthenticateApiSource;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -58,6 +59,16 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'This action is unauthorized.',
                     'code' => 'FORBIDDEN',
                 ], 403);
+            }
+        });
+
+        $exceptions->render(function (ChecklistIncompleteException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                    'code' => 'CHECKLIST_INCOMPLETE',
+                    'missing' => $e->missing,
+                ], 409);
             }
         });
 
