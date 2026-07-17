@@ -82,7 +82,9 @@ class Application extends Model
 
     public function statusHistory(): HasMany
     {
-        return $this->hasMany(ApplicationStatusHistory::class)->latest('created_at');
+        return $this->hasMany(ApplicationStatusHistory::class)
+            ->latest('created_at')
+            ->latest('id'); // deterministic within same-second writes
     }
 
     public function documents(): MorphMany

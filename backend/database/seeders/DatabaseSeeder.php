@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             StaffUserSeeder::class,
             CatalogSeeder::class,
             CrmSeeder::class,
+            AdmissionsSeeder::class,
         ]);
     }
 }

@@ -3,16 +3,21 @@
 use App\Models\Activity;
 use App\Models\Agent;
 use App\Models\ApiKey;
+use App\Models\Application;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\Course;
 use App\Models\Department;
+use App\Models\Document;
+use App\Models\DocumentType;
 use App\Models\Intake;
 use App\Models\Lead;
+use App\Models\Offer;
 use App\Models\Student;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use App\Models\User;
+use Database\Seeders\AdmissionsSeeder;
 use Database\Seeders\CatalogSeeder;
 use Database\Seeders\CrmSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -98,6 +103,26 @@ it('seeds a realistic CRM pipeline', function () {
     $leadsBefore = Lead::count();
     $this->seed(CrmSeeder::class);
     expect(Lead::count())->toBe($leadsBefore);
+});
+
+it('seeds an admissions pipeline with authentic history chains', function () {
+    expect(DocumentType::count())->toBeGreaterThanOrEqual(7)
+        ->and(DocumentType::requiredFor('application')->count())->toBe(4)
+        ->and(Application::count())->toBeGreaterThanOrEqual(12)
+        ->and(Offer::count())->toBeGreaterThanOrEqual(3)
+        ->and(Document::count())->toBeGreaterThanOrEqual(10);
+
+    // The accepted application walked the full ladder through the workflow.
+    $accepted = Application::where('status', 'accepted')->firstOrFail();
+    expect($accepted->statusHistory()->pluck('to_status')->reverse()->values()->all())
+        ->toBe(['draft', 'under_review', 'submitted', 'offer_received', 'accepted'])
+        ->and($accepted->offers()->count())->toBeGreaterThanOrEqual(1)
+        ->and($accepted->documents()->where('status', 'verified')->count())->toBe(4);
+
+    // Reseeding must not duplicate the pipeline.
+    $before = Application::count();
+    $this->seed(AdmissionsSeeder::class);
+    expect(Application::count())->toBe($before);
 });
 
 it('seeds reference data: countries, departments, branches', function () {
