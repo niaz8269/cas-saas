@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ApiKey extends Model
 {
+    /**
+     * Hash a plain-text key for storage/lookup (plain keys are never stored).
+     */
+    public static function hashKey(string $plainKey): string
+    {
+        return hash('sha256', $plainKey);
+    }
+
     protected $fillable = [
         'api_source_id',
         'key_hash',

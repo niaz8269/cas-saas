@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AuthenticateApiSource;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'api-source' => AuthenticateApiSource::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
