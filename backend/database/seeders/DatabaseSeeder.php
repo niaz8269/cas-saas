@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
             CrmSeeder::class,
             AdmissionsSeeder::class,
+            FinanceSeeder::class,
         ]);
     }
 }

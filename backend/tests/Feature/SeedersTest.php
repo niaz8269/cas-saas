@@ -2,15 +2,18 @@
 
 use App\Models\Activity;
 use App\Models\Agent;
+use App\Models\AgentPayable;
 use App\Models\ApiKey;
 use App\Models\Application;
 use App\Models\Branch;
+use App\Models\Commission;
 use App\Models\Country;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Intake;
+use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Offer;
 use App\Models\Student;
@@ -20,6 +23,7 @@ use App\Models\User;
 use Database\Seeders\AdmissionsSeeder;
 use Database\Seeders\CatalogSeeder;
 use Database\Seeders\CrmSeeder;
+use Database\Seeders\FinanceSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
@@ -123,6 +127,34 @@ it('seeds an admissions pipeline with authentic history chains', function () {
     $before = Application::count();
     $this->seed(AdmissionsSeeder::class);
     expect(Application::count())->toBe($before);
+});
+
+it('seeds a received commission with authentic money trail and payables', function () {
+    $received = Commission::where('status', 'received')->firstOrFail();
+
+    // Full immutable ladder.
+    expect($received->statusHistory()->pluck('to_status')->reverse()->values()->all())
+        ->toBe(['expected', 'pending_arrival', 'eligible', 'invoiced', 'received'])
+        ->and((float) $received->received_amount)->toBeGreaterThan(0);
+
+    // University commission invoice exists and is paid.
+    $uniInvoice = Invoice::where('application_id', $received->application_id)
+        ->where('party_type', 'university')->firstOrFail();
+    expect($uniInvoice->status)->toBe('paid');
+
+    // Cascade produced payables for the seeded hierarchy, within bounds.
+    $payables = $received->payables;
+    expect($payables->count())->toBeGreaterThanOrEqual(2)
+        ->and((float) $payables->sum('amount'))->toBeLessThanOrEqual((float) $received->received_amount)
+        ->and($payables->pluck('agent.agent_code'))->toContain('GSP-0001', 'LEL-0002');
+
+    // Receivables realism: a partially paid tuition invoice exists.
+    expect(Invoice::where('party_type', 'student')->where('status', 'partially_paid')->exists())->toBeTrue();
+
+    // Reseeding must not duplicate payables.
+    $before = AgentPayable::count();
+    $this->seed(FinanceSeeder::class);
+    expect(AgentPayable::count())->toBe($before);
 });
 
 it('seeds reference data: countries, departments, branches', function () {
