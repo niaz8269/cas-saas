@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Plus, X } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { z } from "zod"
+
+import ImageUpload from "@/features/catalog/ImageUpload"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -114,9 +116,19 @@ export default function UniversityFormDialog({
 
   const { fields, append, remove } = useFieldArray({ control, name: "requirements" })
 
+  // Preview URLs (resolved) sit alongside the stored path/URL in the form.
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [coverPreview, setCoverPreview] = useState<string | null>(null)
+  const [repPhotoPreview, setRepPhotoPreview] = useState<string | null>(null)
+
   // Reset the form whenever the dialog opens (so edit loads fresh values).
   useEffect(() => {
-    if (open) reset(toValues(university))
+    if (open) {
+      reset(toValues(university))
+      setLogoPreview(university?.logo_url ?? null)
+      setCoverPreview(university?.cover_url ?? null)
+      setRepPhotoPreview(university?.representative_professor?.photo_url ?? null)
+    }
   }, [open, university, reset])
 
   const mutation = useMutation({
@@ -191,12 +203,25 @@ export default function UniversityFormDialog({
             <Field label="Address" className="sm:col-span-2"><Input placeholder="No. 5 Jilin Ave…" {...register("address")} /></Field>
           </div>
 
-          {/* Web + images */}
+          {/* Web */}
           <div className="grid gap-3 sm:grid-cols-2">
             <Field label="Website"><Input placeholder="www.jlmu.cn" {...register("website")} /></Field>
             <Field label="Apply link"><Input placeholder="https://apply.jlmu.cn" {...register("apply_link")} /></Field>
-            <Field label="Logo URL" hint="Upload support coming soon"><Input placeholder="https://…/logo.webp" {...register("logo_path")} /></Field>
-            <Field label="Cover image URL" hint="Upload support coming soon"><Input placeholder="https://…/cover.webp" {...register("cover_path")} /></Field>
+          </div>
+
+          {/* Images (upload → WebP, or paste a URL) */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <ImageUpload
+              label="Logo"
+              previewUrl={logoPreview}
+              onChange={(path, url) => { setValue("logo_path", path); setLogoPreview(url) }}
+            />
+            <ImageUpload
+              label="Cover image"
+              aspect="wide"
+              previewUrl={coverPreview}
+              onChange={(path, url) => { setValue("cover_path", path); setCoverPreview(url) }}
+            />
           </div>
 
           {/* About */}
@@ -228,10 +253,16 @@ export default function UniversityFormDialog({
           {/* Representative professor */}
           <div>
             <Label>Representative professor</Label>
-            <div className="mt-2 grid gap-3 sm:grid-cols-3">
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
               <Input placeholder="Name" {...register("rep_name")} aria-label="Professor name" />
               <Input placeholder="Title" {...register("rep_title")} aria-label="Professor title" />
-              <Input placeholder="Photo URL" {...register("rep_photo")} aria-label="Professor photo" />
+            </div>
+            <div className="mt-3">
+              <ImageUpload
+                label="Photo"
+                previewUrl={repPhotoPreview}
+                onChange={(path, url) => { setValue("rep_photo", path); setRepPhotoPreview(url) }}
+              />
             </div>
           </div>
 

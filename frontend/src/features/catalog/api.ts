@@ -4,6 +4,7 @@ export interface RepresentativeProfessor {
   name?: string | null
   title?: string | null
   photo?: string | null
+  photo_url?: string | null
 }
 
 export interface University {
@@ -17,6 +18,8 @@ export interface University {
   apply_link: string | null
   logo_path: string | null
   cover_path: string | null
+  logo_url: string | null
+  cover_url: string | null
   status: "active" | "inactive"
   moe_listed: boolean
   nearest_airport: string | null
@@ -90,6 +93,15 @@ export function updateUniversity(id: number | string, payload: Partial<Universit
     method: "PATCH",
     body: JSON.stringify(payload),
   })
+}
+
+/** Upload a catalog image; the server converts it to WebP and stores it. */
+export async function uploadImage(file: File): Promise<{ path: string; url: string | null }> {
+  const form = new FormData()
+  form.append("image", file)
+
+  // FormData sets its own multipart boundary — do not pass a JSON body.
+  return api<{ path: string; url: string | null }>("/uploads/images", { method: "POST", body: form })
 }
 
 // ── Detail page resources ──────────────────────────────────────────────

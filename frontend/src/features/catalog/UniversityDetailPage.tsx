@@ -147,17 +147,17 @@ export default function UniversityDetailPage() {
         </Link>
 
         {/* Cover */}
-        {uni.cover_path && (
+        {uni.cover_url && (
           <div className="mt-3 h-40 w-full bg-subtle">
-            <img src={uni.cover_path} alt="" className="h-full w-full object-cover" />
+            <img src={uni.cover_url} alt="" className="h-full w-full object-cover" />
           </div>
         )}
 
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {uni.logo_path && (
-                <img src={uni.logo_path} alt={`${uni.name} logo`} className="size-14 shrink-0 rounded-lg border bg-white object-contain p-1" />
+              {uni.logo_url && (
+                <img src={uni.logo_url} alt={`${uni.name} logo`} className="size-14 shrink-0 rounded-lg border bg-white object-contain p-1" />
               )}
               <div>
                 <h2 className="text-2xl font-semibold text-cas-navy">{uni.name}</h2>
@@ -252,7 +252,7 @@ export default function UniversityDetailPage() {
                 <div>
                   <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Representative professor</p>
                   <div className="mt-2 flex items-center gap-3">
-                    {rep.photo && <img src={rep.photo} alt={rep.name} className="size-10 rounded-full object-cover" />}
+                    {rep.photo_url && <img src={rep.photo_url} alt={rep.name} className="size-10 rounded-full object-cover" />}
                     <div>
                       <p className="text-sm font-medium">{rep.name}</p>
                       {rep.title && <p className="text-xs text-muted-foreground">{rep.title}</p>}

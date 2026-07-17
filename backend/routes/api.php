@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
 use App\Http\Controllers\Api\V1\UniversityController;
+use App\Http\Controllers\Api\V1\UploadController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VisaCaseController;
 use Illuminate\Support\Facades\Route;
@@ -86,6 +87,10 @@ Route::prefix('v1')->group(function () {
         // Automation rules (read-only; admin settings feed)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
+
+        // Catalog image upload (WebP conversion) — catalog managers
+        Route::post('uploads/images', [UploadController::class, 'image'])
+            ->middleware('permission:universities.manage.global|scholarships.manage.global,staff');
 
         // In-app notifications (own feed)
         Route::get('notifications', [NotificationController::class, 'index']);

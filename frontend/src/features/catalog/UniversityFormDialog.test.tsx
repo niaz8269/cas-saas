@@ -9,9 +9,10 @@ import UniversityFormDialog from "./UniversityFormDialog"
 const UNI: University = {
   id: 1, name: "Jilin Medical University", code: "JLMU", slug: "jilin-medical-university",
   city: "Jilin City", address: null, website: "www.jlmu.cn", apply_link: null,
-  logo_path: null, cover_path: null, status: "active", moe_listed: true,
+  logo_path: null, cover_path: null, logo_url: null, cover_url: null,
+  status: "active", moe_listed: true,
   nearest_airport: null, about: null, requirements: ["IELTS 6.0"],
-  representative_professor: { name: "Prof. Li Wei", title: "Dean", photo: null },
+  representative_professor: { name: "Prof. Li Wei", title: "Dean", photo: null, photo_url: null },
 }
 
 beforeEach(() => vi.restoreAllMocks())
