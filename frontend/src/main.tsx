@@ -13,6 +13,8 @@ import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
 import LeadDetailPage from "@/features/crm/LeadDetailPage"
 import LeadsPage from "@/features/crm/LeadsPage"
+import StudentProfilePage from "@/features/crm/StudentProfilePage"
+import StudentsPage from "@/features/crm/StudentsPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
 
 const queryClient = new QueryClient({
@@ -36,8 +38,8 @@ const router = createBrowserRouter([
           { path: "/", element: <DashboardPage /> },
           { path: "/leads", element: <LeadsPage /> },
           { path: "/leads/:id", element: <LeadDetailPage /> },
-          { path: "/students", element: <ComingSoon module="Students" milestone="M3.6" /> },
-          { path: "/students/:id", element: <ComingSoon module="Student profile" milestone="M3.6" /> },
+          { path: "/students", element: <StudentsPage /> },
+          { path: "/students/:id", element: <StudentProfilePage /> },
           { path: "/applications", element: <ComingSoon module="Applications" milestone="M4" /> },
           { path: "/universities", element: <UniversitiesPage /> },
           { path: "/universities/:id", element: <UniversityDetailPage /> },

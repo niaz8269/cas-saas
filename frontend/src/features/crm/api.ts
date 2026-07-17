@@ -104,6 +104,9 @@ export function listStudents(params: StudentListParams = {}) {
 
 export const getStudent = (id: number | string) => api<{ data: StudentSummary }>(`/students/${id}`)
 
+export const updateStudent = (id: number | string, payload: Record<string, unknown>) =>
+  api<{ data: StudentSummary }>(`/students/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
 export const getTimeline = (id: number | string) =>
   api<Paginated<ActivityItem>>(`/students/${id}/timeline?per_page=50`)
 
