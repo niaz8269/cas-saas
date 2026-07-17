@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
+use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -45,6 +46,10 @@ Route::prefix('v1')->group(function () {
         Route::get('universities', [PublicCatalogController::class, 'universities']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
     });
+
+    // Public website enquiry form → lead (tighter throttle)
+    Route::post('public/enquiries', [PublicEnquiryController::class, 'store'])
+        ->middleware('throttle:enquiry');
 
     // Agent portal (own records only — report §5.7)
     Route::prefix('agent')->group(function () {

@@ -46,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(120)->by($request->ip());
         });
 
+        // Public write (enquiry form): tight per-IP cap to blunt spam.
+        RateLimiter::for('enquiry', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip());
+        });
+
         // Assigned tasks raise the owner's in-app notification (§5.9).
         Task::observe(TaskObserver::class);
     }
