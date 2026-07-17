@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Plus } from "lucide-react"
+import { ArrowLeft, FileText, Plus } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
-import { getInvoice, recordInvoicePayment } from "@/features/finance/api"
+import { getInvoice, getInvoicePdf, recordInvoicePayment } from "@/features/finance/api"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -54,6 +54,16 @@ export default function InvoiceDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["invoices"] })
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Payment failed."),
+  })
+
+  const pdfMutation = useMutation({
+    mutationFn: () => getInvoicePdf(id),
+    onSuccess: (blob) => {
+      const url = URL.createObjectURL(blob)
+      window.open(url, "_blank", "noopener")
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    },
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Could not generate the PDF."),
   })
 
   if (isPending) return <Skeleton className="h-72 w-full rounded-xl" />
@@ -98,11 +108,21 @@ export default function InvoiceDetailPage() {
           </div>
         </div>
 
-        {canManage && remaining > 0 && invoice.status !== "cancelled" && (
-          <Button className="mt-4" size="sm" onClick={() => { setAmount(String(remaining)); setPayOpen(true) }}>
-            <Plus className="size-4" /> Record payment
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={pdfMutation.isPending}
+            onClick={() => pdfMutation.mutate()}
+          >
+            <FileText className="size-4" /> {pdfMutation.isPending ? "Preparing…" : "PDF"}
           </Button>
-        )}
+          {canManage && remaining > 0 && invoice.status !== "cancelled" && (
+            <Button size="sm" onClick={() => { setAmount(String(remaining)); setPayOpen(true) }}>
+              <Plus className="size-4" /> Record payment
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

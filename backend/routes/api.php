@@ -157,6 +157,7 @@ Route::prefix('v1')->group(function () {
         // Finance & commission
         Route::get('invoices', [InvoiceController::class, 'index']);
         Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
+        Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf']);
         Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'storePayment']);
         Route::get('commissions', [CommissionController::class, 'index']);
         Route::get('commissions/{commission}', [CommissionController::class, 'show']);

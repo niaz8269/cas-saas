@@ -12,6 +12,7 @@ use App\Http\Resources\OfferResource;
 use App\Models\Application;
 use App\Models\Offer;
 use App\Services\Admissions\ApplicationWorkflow;
+use App\Support\BrandAssets;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -139,18 +140,13 @@ class ApplicationController extends Controller
             'intake:id,name',
         ]);
 
-        $logoPath = resource_path('images/cas-logo.png');
-        $logo = is_file($logoPath)
-            ? 'data:image/png;base64,'.base64_encode((string) file_get_contents($logoPath))
-            : null;
-
         $pdf = Pdf::loadView('pdf.offer', [
             'application' => $application,
             'offer' => $offer,
             'student' => $application->student,
             'university' => $application->university,
             'program' => $application->program,
-            'logo' => $logo,
+            'logo' => BrandAssets::logoDataUri(),
             'issuedOn' => ($offer->issued_date ?? now())->format('d M Y'),
             'expiresOn' => $offer->expiry_date?->format('d M Y') ?? '—',
         ]);

@@ -10,9 +10,12 @@ use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\University;
 use App\Services\Finance\InvoiceService;
+use App\Support\BrandAssets;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class InvoiceController extends Controller
 {
@@ -66,6 +69,34 @@ class InvoiceController extends Controller
         );
 
         return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
+    }
+
+    /** Render a branded invoice as a PDF, streamed inline. */
+    public function pdf(Request $request, Invoice $invoice): Response
+    {
+        $this->authorize('view', $invoice);
+
+        $invoice->load([
+            'items',
+            'payments.recorder:id,name',
+            'application:id,application_code',
+        ]);
+
+        $this->attachPartyNames(collect([$invoice]));
+
+        $money = fn ($value) => $invoice->currency.' '.number_format((float) $value, 2);
+
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'invoice' => $invoice,
+            'partyName' => $invoice->getAttribute('party_name'),
+            'logo' => BrandAssets::logoDataUri(),
+            'money' => $money,
+            'balanceDue' => (float) $invoice->total - (float) $invoice->amount_paid,
+            'issuedOn' => ($invoice->issued_at ?? $invoice->created_at ?? now())->format('d M Y'),
+            'dueOn' => $invoice->due_at?->format('d M Y') ?? '—',
+        ]);
+
+        return $pdf->stream('invoice-'.$invoice->invoice_no.'.pdf');
     }
 
     /**

@@ -1,4 +1,4 @@
-import { api } from "@/lib/api"
+import { api, apiBlob } from "@/lib/api"
 import type { Paginated } from "@/features/catalog/api"
 
 export interface InvoiceItemRow {
@@ -101,6 +101,9 @@ export const listInvoices = (params: { q?: string; status?: string; party_type?:
   })}`)
 
 export const getInvoice = (id: number | string) => api<{ data: InvoiceItemData }>(`/invoices/${id}`)
+
+/** Fetch the branded invoice PDF as a Blob (bearer-auth, streamed inline). */
+export const getInvoicePdf = (id: number | string) => apiBlob(`/invoices/${id}/pdf`)
 
 export const recordInvoicePayment = (id: number | string, payload: { amount: number; method?: string; reference?: string }) =>
   api<{ data: InvoiceItemData }>(`/invoices/${id}/payments`, { method: "POST", body: JSON.stringify(payload) })
