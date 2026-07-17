@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\VisaCaseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -73,6 +74,13 @@ Route::prefix('v1')->group(function () {
         Route::post('commissions/{commission}/transition', [CommissionController::class, 'transition']);
         Route::get('agent-payables', [AgentPayableController::class, 'index']);
         Route::post('agent-payables/{payable}/pay', [AgentPayableController::class, 'pay']);
+
+        // Visa
+        Route::get('visa-cases', [VisaCaseController::class, 'index']);
+        Route::get('visa-cases/{visaCase}', [VisaCaseController::class, 'show']);
+        Route::post('visa-cases/{visaCase}/transition', [VisaCaseController::class, 'transition']);
+        Route::post('visa-cases/{visaCase}/assign', [VisaCaseController::class, 'assign']);
+        Route::patch('visa-cases/{visaCase}/checklist/{item}', [VisaCaseController::class, 'updateChecklistItem']);
 
         // Catalog (policy-authorized in controllers)
         Route::apiResource('universities', UniversityController::class);

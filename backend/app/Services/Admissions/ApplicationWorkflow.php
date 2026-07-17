@@ -9,6 +9,7 @@ use App\Models\ApplicationStatusHistory;
 use App\Models\DocumentType;
 use App\Models\User;
 use App\Services\Finance\CommissionEngine;
+use App\Services\Visa\VisaWorkflow;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -115,9 +116,12 @@ class ApplicationWorkflow
 
             if ($to === 'accepted') {
                 // Acceptance opens the money trail: first-year tuition
-                // invoice + expected commission (report §5.4/§5.6).
+                // invoice + expected commission (report §5.4/§5.6) —
+                // and hands over to visa with a fresh case (§5.8).
                 app(CommissionEngine::class)
                     ->onApplicationAccepted($application, $actor);
+                app(VisaWorkflow::class)
+                    ->openCase($application, $actor);
             }
 
             return $application->refresh();
