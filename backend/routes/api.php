@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CourseController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
@@ -73,6 +74,9 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:staff')->group(function () {
         Route::post('auth/logout', [AuthController::class, 'logout']);
         Route::get('auth/me', [AuthController::class, 'me']);
+
+        // Analytics
+        Route::get('dashboards/executive', [DashboardController::class, 'executive']);
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
