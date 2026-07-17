@@ -103,6 +103,11 @@ class Student extends Authenticatable
         return $this->hasMany(Application::class);
     }
 
+    public function communications(): HasMany
+    {
+        return $this->hasMany(Communication::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");

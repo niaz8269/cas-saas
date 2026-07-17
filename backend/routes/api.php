@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\AgentPayableController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CommissionController;
+use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
@@ -92,6 +93,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('students/{student}', [StudentController::class, 'update']);
         Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);
         Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
+        Route::get('students/{student}/communications', [CommunicationController::class, 'index']);
+        Route::post('students/{student}/communications', [CommunicationController::class, 'store']);
 
         // Admissions
         Route::get('applications', [ApplicationController::class, 'index']);
