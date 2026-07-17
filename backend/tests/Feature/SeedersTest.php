@@ -1,14 +1,20 @@
 <?php
 
+use App\Models\Activity;
+use App\Models\Agent;
+use App\Models\ApiKey;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\Intake;
+use App\Models\Lead;
+use App\Models\Student;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use App\Models\User;
 use Database\Seeders\CatalogSeeder;
+use Database\Seeders\CrmSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
@@ -75,6 +81,23 @@ it('seeds the demo catalog with agreements ready for commission math', function 
     $before = UniversityAgreement::count();
     $this->seed(CatalogSeeder::class);
     expect(UniversityAgreement::count())->toBe($before);
+});
+
+it('seeds a realistic CRM pipeline', function () {
+    $counselor = User::where('email', 'counselor@cas.moe')->firstOrFail();
+
+    expect(Lead::count())->toBeGreaterThanOrEqual(25)
+        ->and(Lead::where('assigned_user_id', $counselor->id)->count())->toBeGreaterThanOrEqual(10)
+        ->and(Lead::where('status', 'duplicate')->whereNotNull('duplicate_of')->exists())->toBeTrue()
+        ->and(Student::count())->toBeGreaterThanOrEqual(10)
+        ->and(Activity::count())->toBeGreaterThanOrEqual(30)
+        ->and(Agent::where('type', 'sub')->whereNotNull('parent_agent_id')->exists())->toBeTrue()
+        ->and(ApiKey::count())->toBeGreaterThanOrEqual(3);
+
+    // Reseeding must not duplicate the pipeline.
+    $leadsBefore = Lead::count();
+    $this->seed(CrmSeeder::class);
+    expect(Lead::count())->toBe($leadsBefore);
 });
 
 it('seeds reference data: countries, departments, branches', function () {

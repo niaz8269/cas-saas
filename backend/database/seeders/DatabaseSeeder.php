@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             StaffUserSeeder::class,
             CatalogSeeder::class,
+            CrmSeeder::class,
         ]);
     }
 }
