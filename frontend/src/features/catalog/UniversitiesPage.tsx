@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table"
 import { useCan } from "@/features/auth/useCan"
 import { listUniversities } from "@/features/catalog/api"
-import UniversityCreateDialog from "@/features/catalog/UniversityCreateDialog"
+import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
 import { cn } from "@/lib/utils"
 
 const STATUS_BADGE: Record<string, string> = {
@@ -211,7 +211,7 @@ export default function UniversitiesPage() {
         )}
       </div>
 
-      <UniversityCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
+      <UniversityFormDialog open={createOpen} onOpenChange={setCreateOpen} />
     </div>
   )
 }

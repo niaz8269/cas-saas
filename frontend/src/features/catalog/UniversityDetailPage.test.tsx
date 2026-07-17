@@ -25,9 +25,19 @@ const UNIVERSITY = {
     id: 1,
     name: "Jilin Medical University",
     code: "JLMU",
+    slug: "jilin-medical-university",
     city: "Jilin City",
+    address: "No. 5 Jilin Avenue",
     website: "www.jlmu.cn",
+    apply_link: "https://apply.jlmu.cn",
+    logo_path: null,
+    cover_path: null,
     status: "active",
+    moe_listed: true,
+    nearest_airport: "Changchun Longjia (CGQ)",
+    about: "A leading medical university in Jilin.",
+    requirements: ["High school diploma", "IELTS 6.0"],
+    representative_professor: { name: "Prof. Li Wei", title: "Dean of International Education", photo: null },
     country: { id: 1, name: "China", iso2: "CN" },
     contacts: [{ id: 1, name: "Ms. Zhang Min", email: "admissions@jlmu.cn", phone: null, role: "International Office" }],
   },
@@ -84,6 +94,11 @@ it("renders the university header, contacts and courses", async () => {
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
   expect(screen.getByText("Ms. Zhang Min")).toBeInTheDocument()
   expect(await screen.findByText("MBBS")).toBeInTheDocument()
+  // Website content fields render.
+  expect(screen.getByText("MoE listed")).toBeInTheDocument()
+  expect(screen.getByText("IELTS 6.0")).toBeInTheDocument()
+  expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Apply/ })).toHaveAttribute("href", "https://apply.jlmu.cn")
 })
 
 it("hides the agreements section from plain catalog viewers", async () => {

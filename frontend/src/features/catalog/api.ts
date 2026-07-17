@@ -1,12 +1,28 @@
 import { api } from "@/lib/api"
 
+export interface RepresentativeProfessor {
+  name?: string | null
+  title?: string | null
+  photo?: string | null
+}
+
 export interface University {
   id: number
   name: string
   code: string
+  slug: string | null
   city: string | null
+  address: string | null
   website: string | null
+  apply_link: string | null
+  logo_path: string | null
+  cover_path: string | null
   status: "active" | "inactive"
+  moe_listed: boolean
+  nearest_airport: string | null
+  about: string | null
+  requirements: string[]
+  representative_professor: RepresentativeProfessor | null
   country?: { id: number; name: string; iso2: string }
   courses_count?: number
   intakes_count?: number
@@ -47,14 +63,31 @@ export function listUniversities(params: UniversityListParams = {}) {
 export interface UniversityPayload {
   name: string
   code: string
+  slug?: string
   city?: string
+  address?: string
   website?: string
+  apply_link?: string
+  logo_path?: string
+  cover_path?: string
   status?: "active" | "inactive"
+  moe_listed?: boolean
+  nearest_airport?: string
+  about?: string
+  requirements?: string[]
+  representative_professor?: RepresentativeProfessor | null
 }
 
 export function createUniversity(payload: UniversityPayload) {
   return api<{ data: University }>("/universities", {
     method: "POST",
+    body: JSON.stringify(payload),
+  })
+}
+
+export function updateUniversity(id: number | string, payload: Partial<UniversityPayload>) {
+  return api<{ data: University }>(`/universities/${id}`, {
+    method: "PATCH",
     body: JSON.stringify(payload),
   })
 }
