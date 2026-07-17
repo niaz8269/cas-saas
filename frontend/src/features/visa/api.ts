@@ -56,6 +56,16 @@ export const listVisaCases = (params: { status?: string; q?: string; page?: numb
 
 export const getVisaCase = (id: number | string) => api<{ data: VisaCaseItemData }>(`/visa-cases/${id}`)
 
+/** Staff eligible to own a visa case (holders of visa.manage.global). */
+export const listVisaOfficers = () =>
+  api<{ data: { id: number; name: string }[] }>("/visa-officers")
+
+export const assignVisaOfficer = (id: number | string, userId: number) =>
+  api<{ data: VisaCaseItemData }>(`/visa-cases/${id}/assign`, {
+    method: "POST",
+    body: JSON.stringify({ user_id: userId }),
+  })
+
 export const transitionVisaCase = (
   id: number | string,
   payload: { status: string; note?: string; appointment_at?: string },

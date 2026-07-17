@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react"
+import { fireEvent, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
@@ -126,6 +126,74 @@ it("offers approve and reject from submitted", async () => {
 
   expect(await screen.findByRole("button", { name: /Move to approved/ })).toBeInTheDocument()
   expect(screen.getByRole("button", { name: /Move to rejected/ })).toBeInTheDocument()
+})
+
+it("books an appointment with a chosen date", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["visa.view.global", "visa.manage.global"]),
+  })
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    if (String(input).includes("/transition") && init?.method === "POST") {
+      return Promise.resolve(jsonResponse({ data: { ...CASE, status: "appointment_booked" } }))
+    }
+    return Promise.resolve(jsonResponse({ data: { ...CASE, status: "documents_collection", appointment_at: null } }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderDetail()
+
+  await user.click(await screen.findByRole("button", { name: /Move to appointment booked/ }))
+
+  const dateInput = await screen.findByLabelText("Appointment date")
+  fireEvent.change(dateInput, { target: { value: "2026-08-15" } })
+  await user.click(screen.getByRole("button", { name: /Book appointment/ }))
+
+  await waitFor(() =>
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/visa-cases/3/transition",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ status: "appointment_booked", appointment_at: "2026-08-15" }),
+      }),
+    ),
+  )
+})
+
+it("assigns an officer through the picker", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["visa.view.global", "visa.manage.global"]),
+  })
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if (url.includes("/visa-officers")) {
+      return Promise.resolve(jsonResponse({ data: [{ id: 8, name: "Officer Wang" }, { id: 9, name: "Officer Li" }] }))
+    }
+    if (url.includes("/assign") && init?.method === "POST") {
+      return Promise.resolve(jsonResponse({ data: { ...CASE, officer: { id: 8, name: "Officer Wang" } } }))
+    }
+    return Promise.resolve(jsonResponse({ data: CASE }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderDetail()
+
+  await user.click(await screen.findByRole("button", { name: /Reassign/ }))
+
+  // The officer directory populates the picker.
+  await user.click(await screen.findByRole("combobox", { name: "Select officer" }))
+  await user.click(await screen.findByRole("option", { name: "Officer Wang" }))
+  await user.click(screen.getByRole("button", { name: "Assign" }))
+
+  await waitFor(() =>
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/visa-cases/3/assign",
+      expect.objectContaining({ method: "POST", body: JSON.stringify({ user_id: 8 }) }),
+    ),
+  )
 })
 
 it("hides transitions and checklist actions from viewers", async () => {

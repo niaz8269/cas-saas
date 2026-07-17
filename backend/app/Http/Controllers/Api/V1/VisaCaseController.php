@@ -8,9 +8,11 @@ use App\Http\Requests\Visa\TransitionVisaCaseRequest;
 use App\Http\Requests\Visa\UpdateVisaChecklistItemRequest;
 use App\Http\Resources\VisaCaseResource;
 use App\Http\Resources\VisaChecklistItemResource;
+use App\Models\User;
 use App\Models\VisaCase;
 use App\Models\VisaChecklistItem;
 use App\Services\Visa\VisaWorkflow;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -88,6 +90,25 @@ class VisaCaseController extends Controller
         return new VisaCaseResource(
             $visaCase->load([...self::LIST_RELATIONS, 'checklistItems', 'statusHistory.changedBy:id,name']),
         );
+    }
+
+    /**
+     * Staff eligible to own a visa case: anyone holding visa.manage.global
+     * directly or via a role. Scoped to visa viewers so officers can populate
+     * the assignment picker without the broader users.manage permission.
+     */
+    public function assignableOfficers(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', VisaCase::class);
+
+        $officers = User::query()
+            ->where(fn ($q) => $q
+                ->whereHas('permissions', fn ($p) => $p->where('name', 'visa.manage.global'))
+                ->orWhereHas('roles.permissions', fn ($p) => $p->where('name', 'visa.manage.global')))
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return response()->json(['data' => $officers]);
     }
 
     public function assign(AssignVisaOfficerRequest $request, VisaCase $visaCase): VisaCaseResource

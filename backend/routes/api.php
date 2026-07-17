@@ -168,6 +168,7 @@ Route::prefix('v1')->group(function () {
 
         // Visa
         Route::get('visa-cases', [VisaCaseController::class, 'index']);
+        Route::get('visa-officers', [VisaCaseController::class, 'assignableOfficers']);
         Route::get('visa-cases/{visaCase}', [VisaCaseController::class, 'show']);
         Route::post('visa-cases/{visaCase}/transition', [VisaCaseController::class, 'transition']);
         Route::post('visa-cases/{visaCase}/assign', [VisaCaseController::class, 'assign']);

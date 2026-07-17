@@ -1,14 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, ArrowRight, Check, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, CalendarClock, Check, UserCheck, X } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import {
+  assignVisaOfficer,
   getVisaCase,
+  listVisaOfficers,
   transitionVisaCase,
   updateVisaChecklistItem,
 } from "@/features/visa/api"
@@ -42,10 +61,20 @@ export default function VisaCaseDetailPage() {
   const canManage = can("visa.manage.global")
 
   const [error, setError] = useState<string | null>(null)
+  const [assignOpen, setAssignOpen] = useState(false)
+  const [selectedOfficer, setSelectedOfficer] = useState("")
+  const [appointmentOpen, setAppointmentOpen] = useState(false)
+  const [appointmentDate, setAppointmentDate] = useState("")
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["visa-case", id],
     queryFn: () => getVisaCase(id),
+  })
+
+  const officers = useQuery({
+    queryKey: ["visa-officers"],
+    queryFn: listVisaOfficers,
+    enabled: assignOpen,
   })
 
   const invalidate = () => {
@@ -54,10 +83,22 @@ export default function VisaCaseDetailPage() {
   }
 
   const transitionMutation = useMutation({
-    mutationFn: (status: string) => transitionVisaCase(id, { status }),
-    onSuccess: () => { setError(null); invalidate() },
+    mutationFn: (payload: { status: string; appointment_at?: string }) => transitionVisaCase(id, payload),
+    onSuccess: () => { setError(null); setAppointmentOpen(false); setAppointmentDate(""); invalidate() },
     onError: (err) => setError(errorMessage(err)),
   })
+
+  const assignMutation = useMutation({
+    mutationFn: (userId: number) => assignVisaOfficer(id, userId),
+    onSuccess: () => { setError(null); setAssignOpen(false); setSelectedOfficer(""); invalidate() },
+    onError: (err) => setError(errorMessage(err)),
+  })
+
+  // Booking an appointment prompts for the date; every other move is immediate.
+  const startTransition = (next: string) => {
+    if (next === "appointment_booked") setAppointmentOpen(true)
+    else transitionMutation.mutate({ status: next })
+  }
 
   const checklistMutation = useMutation({
     mutationFn: ({ itemId, status }: { itemId: number; status: "received" | "verified" }) =>
@@ -110,9 +151,17 @@ export default function VisaCaseDetailPage() {
               {visaCase.officer ? `Officer: ${visaCase.officer.name}` : "Unassigned"}
             </p>
           </div>
-          <Badge variant="outline" className={cn("border-transparent capitalize", VISA_STATUS_BADGE[visaCase.status])}>
-            {label(visaCase.status)}
-          </Badge>
+          <div className="flex flex-col items-end gap-2">
+            <Badge variant="outline" className={cn("border-transparent capitalize", VISA_STATUS_BADGE[visaCase.status])}>
+              {label(visaCase.status)}
+            </Badge>
+            {canManage && (
+              <Button variant="secondary" size="sm" onClick={() => setAssignOpen(true)}>
+                <UserCheck className="size-4" />
+                {visaCase.officer ? "Reassign" : "Assign officer"}
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Mini stepper */}
@@ -159,7 +208,7 @@ export default function VisaCaseDetailPage() {
                 size="sm"
                 variant={next === "rejected" ? "destructive" : "default"}
                 disabled={transitionMutation.isPending}
-                onClick={() => transitionMutation.mutate(next)}
+                onClick={() => startTransition(next)}
               >
                 {next === "rejected" ? <X className="size-4" /> : <ArrowRight className="size-4" />}
                 {transitionMutation.isPending
@@ -238,6 +287,68 @@ export default function VisaCaseDetailPage() {
           </ol>
         </section>
       </div>
+
+      {/* Assign officer */}
+      <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Assign visa officer</DialogTitle>
+            <DialogDescription>The officer owns this case through to travel-ready.</DialogDescription>
+          </DialogHeader>
+
+          <Select value={selectedOfficer} onValueChange={setSelectedOfficer}>
+            <SelectTrigger aria-label="Select officer">
+              <SelectValue placeholder={officers.isPending ? "Loading officers…" : "Select an officer"} />
+            </SelectTrigger>
+            <SelectContent>
+              {(officers.data?.data ?? []).map((officer) => (
+                <SelectItem key={officer.id} value={String(officer.id)}>{officer.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setAssignOpen(false)}>Cancel</Button>
+            <Button
+              disabled={!selectedOfficer || assignMutation.isPending}
+              onClick={() => assignMutation.mutate(Number(selectedOfficer))}
+            >
+              {assignMutation.isPending ? "Assigning…" : "Assign"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Book appointment */}
+      <Dialog open={appointmentOpen} onOpenChange={setAppointmentOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Book appointment</DialogTitle>
+            <DialogDescription>Set the embassy appointment date for this case.</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="appointment-date">Appointment date</Label>
+            <Input
+              id="appointment-date"
+              type="date"
+              value={appointmentDate}
+              onChange={(event) => setAppointmentDate(event.target.value)}
+            />
+          </div>
+
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setAppointmentOpen(false)}>Cancel</Button>
+            <Button
+              disabled={!appointmentDate || transitionMutation.isPending}
+              onClick={() => transitionMutation.mutate({ status: "appointment_booked", appointment_at: appointmentDate })}
+            >
+              <CalendarClock className="size-4" />
+              {transitionMutation.isPending ? "Booking…" : "Book appointment"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
