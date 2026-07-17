@@ -17,7 +17,8 @@ class UserController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $users = User::query()
-            ->with(['branch:id,name,code', 'department:id,name,code'])
+            ->with(['branch:id,name,code', 'department:id,name,code', 'roles:id,name'])
+            ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q

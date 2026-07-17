@@ -39,6 +39,7 @@ import StudentDocuments from "@/features/portal/student/StudentDocuments"
 import SiteLayout from "@/features/site/SiteLayout"
 import SiteHome from "@/features/site/SiteHome"
 import SiteUniversity from "@/features/site/SiteUniversity"
+import UsersPage from "@/features/admin/UsersPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -106,7 +107,7 @@ const router = createBrowserRouter([
           { path: "/visa", element: <VisaCasesPage /> },
           { path: "/visa/:id", element: <VisaCaseDetailPage /> },
           { path: "/reports", element: <ReportsPage /> },
-          { path: "/users", element: <ComingSoon module="User Management" milestone="M1+" /> },
+          { path: "/users", element: <UsersPage /> },
           { path: "/settings", element: <ComingSoon module="Settings" milestone="M8" /> },
         ],
       },
