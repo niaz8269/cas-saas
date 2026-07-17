@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Services\Auth\ScopeResolver;
 use Database\Factories\StudentFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
 class Student extends Authenticatable
 {
     /** @use HasFactory<StudentFactory> */
-    use HasApiTokens, HasFactory, SoftDeletes;
+    use Auditable, HasApiTokens, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'student_code',

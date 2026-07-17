@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Services\Auth\ScopeResolver;
 use Database\Factories\CommissionFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Commission extends Model
 {
     /** @use HasFactory<CommissionFactory> */
-    use HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'application_id',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Services\Auth\ScopeResolver;
 use Database\Factories\ApplicationFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Application extends Model
 {
     /** @use HasFactory<ApplicationFactory> */
-    use HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'application_code',

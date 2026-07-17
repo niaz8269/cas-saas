@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AgentPayableController;
 use App\Http\Controllers\Api\V1\ApplicationController;
+use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\CommissionController;
@@ -99,6 +100,10 @@ Route::prefix('v1')->group(function () {
         // Automation rules (read-only; admin settings feed)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
+
+        // Audit trail (admin/compliance)
+        Route::get('audit-logs', [AuditLogController::class, 'index'])
+            ->middleware('permission:users.manage.global,staff');
 
         // Catalog image upload (WebP conversion) — catalog managers
         Route::post('uploads/images', [UploadController::class, 'image'])
