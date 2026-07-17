@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\Auth\ScopeResolver;
 use Database\Factories\CommissionFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -70,5 +72,23 @@ class Commission extends Model
     public function payables(): HasMany
     {
         return $this->hasMany(AgentPayable::class);
+    }
+
+    /**
+     * Visibility under the user's commission.view scope (mirrors
+     * CommissionPolicy::view).
+     */
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        $scope = app(ScopeResolver::class)->resolve($user, 'commission', 'view');
+
+        return match ($scope) {
+            'global', 'branch', 'department' => $query,
+            'assigned', 'own' => $query->whereHas(
+                'application.student',
+                fn ($q) => $q->where('assigned_counselor_id', $user->id),
+            ),
+            default => $query->whereRaw('1 = 0'),
+        };
     }
 }

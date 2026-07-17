@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AgentPayableController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
+use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
@@ -60,6 +63,16 @@ Route::prefix('v1')->group(function () {
         Route::get('documents/{document}/download', [DocumentController::class, 'download']);
         Route::post('documents/{document}/verify', [DocumentController::class, 'verify']);
         Route::post('documents/{document}/reject', [DocumentController::class, 'reject']);
+
+        // Finance & commission
+        Route::get('invoices', [InvoiceController::class, 'index']);
+        Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
+        Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'storePayment']);
+        Route::get('commissions', [CommissionController::class, 'index']);
+        Route::get('commissions/{commission}', [CommissionController::class, 'show']);
+        Route::post('commissions/{commission}/transition', [CommissionController::class, 'transition']);
+        Route::get('agent-payables', [AgentPayableController::class, 'index']);
+        Route::post('agent-payables/{payable}/pay', [AgentPayableController::class, 'pay']);
 
         // Catalog (policy-authorized in controllers)
         Route::apiResource('universities', UniversityController::class);
