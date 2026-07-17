@@ -22,6 +22,7 @@ import LeadsPage from "@/features/crm/LeadsPage"
 import StudentProfilePage from "@/features/crm/StudentProfilePage"
 import StudentsPage from "@/features/crm/StudentsPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
+import ReportsPage from "@/features/dashboard/ReportsPage"
 import VisaCaseDetailPage from "@/features/visa/VisaCaseDetailPage"
 import VisaCasesPage from "@/features/visa/VisaCasesPage"
 import PortalLogin from "@/features/portal/PortalLogin"
@@ -92,7 +93,7 @@ const router = createBrowserRouter([
           { path: "/commissions/:id", element: <CommissionDetailPage /> },
           { path: "/visa", element: <VisaCasesPage /> },
           { path: "/visa/:id", element: <VisaCaseDetailPage /> },
-          { path: "/reports", element: <ComingSoon module="Reports" milestone="M9" /> },
+          { path: "/reports", element: <ReportsPage /> },
           { path: "/users", element: <ComingSoon module="User Management" milestone="M1+" /> },
           { path: "/settings", element: <ComingSoon module="Settings" milestone="M8" /> },
         ],

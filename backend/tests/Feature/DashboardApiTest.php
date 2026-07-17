@@ -1,10 +1,14 @@
 <?php
 
+use App\Models\Agent;
+use App\Models\AgentPayable;
 use App\Models\Application;
 use App\Models\Commission;
 use App\Models\Invoice;
 use App\Models\Lead;
+use App\Models\MarketingSource;
 use App\Models\Student;
+use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -58,6 +62,42 @@ it('scopes finance receivables to student invoices', function () {
         ->assertJsonPath('data.finance.billed', 30000)
         ->assertJsonPath('data.finance.collected', 12000)
         ->assertJsonPath('data.finance.receivables', 18000);
+});
+
+it('denies the performance report without a reports.view grant', function () {
+    actingAsStaffWith(['dashboard.view.global']);
+
+    $this->getJson('/api/v1/reports/performance')->assertForbidden();
+});
+
+it('returns university, agent and lead-source performance', function () {
+    actingAsStaffWith(['reports.view.global', 'applications.view.global', 'commission.view.global', 'leads.view.global']);
+
+    $agent = Agent::factory()->create(['agent_code' => 'GSP-0001', 'name' => 'Global Study Partners']);
+    Student::factory()->count(2)->create(['agent_id' => $agent->id]);
+    AgentPayable::create([
+        'commission_id' => Commission::factory()->create()->id, 'agent_id' => $agent->id,
+        'amount' => 1020, 'currency' => 'CNY', 'status' => 'payable', 'computed_at' => now(),
+    ]);
+
+    $university = University::factory()->create(['name' => 'Jilin Medical University', 'code' => 'JLMU']);
+    Application::factory()->count(2)->for($university)->create(['status' => 'submitted']);
+    Application::factory()->for($university)->create(['status' => 'accepted']);
+
+    $source = MarketingSource::factory()->create(['name' => 'Google Ads']);
+    Lead::factory()->count(3)->create(['marketing_source_id' => $source->id, 'status' => 'new']);
+    Lead::factory()->create(['marketing_source_id' => $source->id, 'status' => 'converted']);
+
+    $data = $this->getJson('/api/v1/reports/performance')->assertOk()->json('data');
+
+    $jlmu = collect($data['universities'])->firstWhere('code', 'JLMU');
+    expect($jlmu['applications'])->toBe(3)->and($jlmu['accepted'])->toBe(1);
+
+    $gsp = collect($data['agents'])->firstWhere('agent_code', 'GSP-0001');
+    expect($gsp['students'])->toBe(2)->and((float) $gsp['commission_earned'])->toBe(1020.0);
+
+    $google = collect($data['lead_sources'])->firstWhere('source', 'Google Ads');
+    expect($google['leads'])->toBe(4)->and($google['converted'])->toBe(1);
 });
 
 it('narrows aggregates to a counselors own book', function () {

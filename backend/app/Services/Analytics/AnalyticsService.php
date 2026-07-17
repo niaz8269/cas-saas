@@ -2,11 +2,15 @@
 
 namespace App\Services\Analytics;
 
+use App\Models\Agent;
+use App\Models\AgentPayable;
 use App\Models\Application;
 use App\Models\Commission;
 use App\Models\Invoice;
 use App\Models\Lead;
+use App\Models\MarketingSource;
 use App\Models\Student;
+use App\Models\University;
 use App\Models\User;
 use App\Models\VisaCase;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +37,105 @@ class AnalyticsService
             'finance' => $this->finance($user),
             'visa' => $this->visa($user),
         ];
+    }
+
+    /**
+     * Performance breakdowns for the reports screen (report §5.10):
+     * university, agent and lead-source contribution. Scoped like the
+     * dashboard.
+     *
+     * @return array<string, mixed>
+     */
+    public function performance(User $user): array
+    {
+        return [
+            'universities' => $this->universityPerformance($user),
+            'agents' => $this->agentPerformance(),
+            'lead_sources' => $this->leadSources($user),
+        ];
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function universityPerformance(User $user): array
+    {
+        $apps = Application::query()
+            ->visibleTo($user)
+            ->selectRaw("university_id, COUNT(*) as applications, SUM(CASE WHEN status = 'accepted' THEN 1 ELSE 0 END) as accepted")
+            ->groupBy('university_id')
+            ->get()
+            ->keyBy('university_id');
+
+        $received = Commission::query()
+            ->visibleTo($user)
+            ->selectRaw('university_id, SUM(received_amount) as received')
+            ->groupBy('university_id')
+            ->pluck('received', 'university_id');
+
+        return University::whereIn('id', $apps->keys())
+            ->get(['id', 'name', 'code'])
+            ->map(fn ($u) => [
+                'name' => $u->name,
+                'code' => $u->code,
+                'applications' => (int) $apps[$u->id]->applications,
+                'accepted' => (int) $apps[$u->id]->accepted,
+                'commission_received' => (float) ($received[$u->id] ?? 0),
+            ])
+            ->sortByDesc('applications')
+            ->take(10)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function agentPerformance(): array
+    {
+        $payables = AgentPayable::query()
+            ->selectRaw('agent_id, SUM(amount) as received')
+            ->groupBy('agent_id')
+            ->pluck('received', 'agent_id');
+
+        return Agent::query()
+            ->withCount('students')
+            ->get()
+            ->map(fn ($a) => [
+                'agent_code' => $a->agent_code,
+                'name' => $a->name,
+                'type' => $a->type,
+                'students' => (int) $a->students_count,
+                'commission_earned' => (float) ($payables[$a->id] ?? 0),
+            ])
+            ->sortByDesc('commission_earned')
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function leadSources(User $user): array
+    {
+        $rows = Lead::query()
+            ->visibleTo($user)
+            ->selectRaw('marketing_source_id, COUNT(*) as total, SUM(CASE WHEN status = \'converted\' THEN 1 ELSE 0 END) as converted')
+            ->groupBy('marketing_source_id')
+            ->get();
+
+        $names = MarketingSource::whereIn('id', $rows->pluck('marketing_source_id')->filter())
+            ->pluck('name', 'id');
+
+        return $rows
+            ->map(fn ($r) => [
+                'source' => $r->marketing_source_id ? ($names[$r->marketing_source_id] ?? 'Unknown') : 'Direct / API',
+                'leads' => (int) $r->total,
+                'converted' => (int) $r->converted,
+            ])
+            ->sortByDesc('leads')
+            ->values()
+            ->all();
     }
 
     /**

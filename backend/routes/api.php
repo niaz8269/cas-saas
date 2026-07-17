@@ -77,6 +77,7 @@ Route::prefix('v1')->group(function () {
 
         // Analytics
         Route::get('dashboards/executive', [DashboardController::class, 'executive']);
+        Route::get('reports/performance', [DashboardController::class, 'performance']);
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');

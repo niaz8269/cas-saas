@@ -20,3 +20,11 @@ export interface ExecutiveDashboard {
 }
 
 export const getExecutiveDashboard = () => api<{ data: ExecutiveDashboard }>("/dashboards/executive")
+
+export interface PerformanceReport {
+  universities: { name: string; code: string; applications: number; accepted: number; commission_received: number }[]
+  agents: { agent_code: string; name: string; type: string; students: number; commission_earned: number }[]
+  lead_sources: { source: string; leads: number; converted: number }[]
+}
+
+export const getPerformanceReport = () => api<{ data: PerformanceReport }>("/reports/performance")

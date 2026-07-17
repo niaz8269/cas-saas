@@ -32,4 +32,17 @@ class DashboardController extends Controller
 
         return response()->json(['data' => $this->analytics->executive($user)]);
     }
+
+    public function performance(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        abort_if(
+            $this->scopes->resolve($user, 'reports', 'view') === null,
+            403,
+            'You do not have access to reports.',
+        );
+
+        return response()->json(['data' => $this->analytics->performance($user)]);
+    }
 }
