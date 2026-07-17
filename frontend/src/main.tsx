@@ -13,6 +13,10 @@ import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
 import ApplicationDetailPage from "@/features/admissions/ApplicationDetailPage"
 import ApplicationsPage from "@/features/admissions/ApplicationsPage"
+import CommissionDetailPage from "@/features/finance/CommissionDetailPage"
+import CommissionsPage from "@/features/finance/CommissionsPage"
+import FinancePage from "@/features/finance/FinancePage"
+import InvoiceDetailPage from "@/features/finance/InvoiceDetailPage"
 import LeadDetailPage from "@/features/crm/LeadDetailPage"
 import LeadsPage from "@/features/crm/LeadsPage"
 import StudentProfilePage from "@/features/crm/StudentProfilePage"
@@ -47,8 +51,10 @@ const router = createBrowserRouter([
           { path: "/universities", element: <UniversitiesPage /> },
           { path: "/universities/:id", element: <UniversityDetailPage /> },
           { path: "/scholarships", element: <ComingSoon module="Scholarships" milestone="M2" /> },
-          { path: "/finance", element: <ComingSoon module="Finance" milestone="M5" /> },
-          { path: "/commissions", element: <ComingSoon module="Commissions" milestone="M5" /> },
+          { path: "/finance", element: <FinancePage /> },
+          { path: "/finance/:id", element: <InvoiceDetailPage /> },
+          { path: "/commissions", element: <CommissionsPage /> },
+          { path: "/commissions/:id", element: <CommissionDetailPage /> },
           { path: "/visa", element: <ComingSoon module="Visa" milestone="M6" /> },
           { path: "/reports", element: <ComingSoon module="Reports" milestone="M9" /> },
           { path: "/users", element: <ComingSoon module="User Management" milestone="M1+" /> },
