@@ -10,6 +10,7 @@ import ComingSoon from "@/components/layout/ComingSoon"
 import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
 import UniversitiesPage from "@/features/catalog/UniversitiesPage"
+import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
 
 const queryClient = new QueryClient({
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
           { path: "/students", element: <ComingSoon module="Students" milestone="M3" /> },
           { path: "/applications", element: <ComingSoon module="Applications" milestone="M4" /> },
           { path: "/universities", element: <UniversitiesPage /> },
+          { path: "/universities/:id", element: <UniversityDetailPage /> },
           { path: "/scholarships", element: <ComingSoon module="Scholarships" milestone="M2" /> },
           { path: "/finance", element: <ComingSoon module="Finance" milestone="M5" /> },
           { path: "/commissions", element: <ComingSoon module="Commissions" milestone="M5" /> },

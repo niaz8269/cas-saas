@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Plus, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -32,6 +33,7 @@ const STATUS_BADGE: Record<string, string> = {
 }
 
 export default function UniversitiesPage() {
+  const navigate = useNavigate()
   const can = useCan()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
@@ -158,7 +160,11 @@ export default function UniversitiesPage() {
             )}
 
             {universities.map((university) => (
-              <TableRow key={university.id} className="h-10">
+              <TableRow
+                key={university.id}
+                className="h-10 cursor-pointer"
+                onClick={() => navigate(`/universities/${university.id}`)}
+              >
                 <TableCell className="font-medium">{university.name}</TableCell>
                 <TableCell className="text-muted-foreground">{university.code}</TableCell>
                 <TableCell className="text-muted-foreground">{university.city ?? "—"}</TableCell>
