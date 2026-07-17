@@ -17,7 +17,7 @@ class UniversityAgreementFactory extends Factory
 
         return [
             'university_id' => University::factory(),
-            'course_id' => null,
+            'program_id' => null,
             'commission_type' => $type,
             'commission_value' => $type === 'percent'
                 ? fake()->numberBetween(5, 20)

@@ -54,7 +54,7 @@ class AgentPortalController extends Controller
             ->with([
                 'student:id,student_code,first_name,last_name',
                 'university:id,name',
-                'course:id,name,level',
+                'program:id,name,level',
                 'intake:id,name',
             ])
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))

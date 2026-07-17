@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Course;
+use App\Models\Program;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,7 +18,7 @@ it('lists universities with search and counts for viewers', function () {
         ->assertOk()
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.code', 'JLMU')
-        ->assertJsonStructure(['data' => [['id', 'name', 'code', 'status', 'courses_count']], 'meta']);
+        ->assertJsonStructure(['data' => [['id', 'name', 'code', 'status', 'programs_count']], 'meta']);
 });
 
 it('denies university listing without the view permission', function () {
@@ -66,36 +66,38 @@ it('soft deletes a university', function () {
     $this->assertSoftDeleted('universities', ['id' => $university->id]);
 });
 
-// ── Courses & intakes ───────────────────────────────────────────────────
+// ── Programs & intakes ──────────────────────────────────────────────────
 
-it('creates a course under a university', function () {
+it('creates a program under a university', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();
 
-    $this->postJson('/api/v1/courses', [
+    $this->postJson('/api/v1/programs', [
         'university_id' => $university->id,
         'name' => 'MBBS',
         'level' => 'bachelor',
+        'teaching_language' => 'English',
         'duration_months' => 72,
         'tuition_fee' => 30000,
         'currency' => 'CNY',
     ])
         ->assertCreated()
-        ->assertJsonPath('data.name', 'MBBS');
+        ->assertJsonPath('data.name', 'MBBS')
+        ->assertJsonPath('data.teaching_language', 'English');
 });
 
-it('rejects an intake whose course belongs to another university', function () {
+it('rejects an intake whose program belongs to another university', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();
-    $foreignCourse = Course::factory()->create(); // different university
+    $foreignProgram = Program::factory()->create(); // different university
 
     $this->postJson('/api/v1/intakes', [
         'university_id' => $university->id,
-        'course_id' => $foreignCourse->id,
+        'program_id' => $foreignProgram->id,
         'name' => 'September 2026',
     ])
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['course_id']);
+        ->assertJsonValidationErrors(['program_id']);
 });
 
 it('rejects an intake deadline after the start date', function () {

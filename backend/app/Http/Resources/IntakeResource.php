@@ -19,11 +19,11 @@ class IntakeResource extends JsonResource
         return [
             'id' => $this->id,
             'university_id' => $this->university_id,
-            'course_id' => $this->course_id,
-            'course' => $this->whenLoaded('course', fn () => [
-                'id' => $this->course->id,
-                'name' => $this->course->name,
-                'level' => $this->course->level,
+            'program_id' => $this->program_id,
+            'program' => $this->whenLoaded('program', fn () => [
+                'id' => $this->program->id,
+                'name' => $this->program->name,
+                'level' => $this->program->level,
             ]),
             'name' => $this->name,
             'start_date' => $this->start_date?->toDateString(),

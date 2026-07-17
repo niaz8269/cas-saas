@@ -26,7 +26,7 @@ class StudentPortalController extends Controller
         $applications = $request->user()->applications()
             ->with([
                 'university:id,name',
-                'course:id,name,level',
+                'program:id,name,level',
                 'intake:id,name',
                 'offers',
                 'statusHistory',

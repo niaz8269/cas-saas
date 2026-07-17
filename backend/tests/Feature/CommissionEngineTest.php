@@ -5,8 +5,8 @@ use App\Models\AgentAgreement;
 use App\Models\AgentPayable;
 use App\Models\Application;
 use App\Models\Commission;
-use App\Models\Course;
 use App\Models\Invoice;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
 use App\Models\UniversityAgreement;
@@ -25,25 +25,25 @@ function financeActor(): User
 }
 
 /**
- * JLMU-style fixture: course-specific fixed agreement + university-wide percent.
+ * JLMU-style fixture: program-specific fixed agreement + university-wide percent.
  */
 function jlmuFixture(): array
 {
     $university = University::factory()->create(['name' => 'Jilin Medical University']);
-    $mbbs = Course::factory()->for($university)->create([
+    $mbbs = Program::factory()->for($university)->create([
         'name' => 'MBBS', 'tuition_fee' => 30000, 'currency' => 'CNY',
     ]);
-    $nursing = Course::factory()->for($university)->create([
+    $nursing = Program::factory()->for($university)->create([
         'name' => 'Nursing', 'tuition_fee' => 20000, 'currency' => 'CNY',
     ]);
 
     $fixed = UniversityAgreement::factory()->for($university)->create([
-        'course_id' => $mbbs->id, 'commission_type' => 'fixed',
+        'program_id' => $mbbs->id, 'commission_type' => 'fixed',
         'commission_value' => 8000, 'currency' => 'CNY',
         'valid_from' => now()->subYear(), 'valid_to' => now()->addYear(),
     ]);
     $percent = UniversityAgreement::factory()->for($university)->create([
-        'course_id' => null, 'commission_type' => 'percent',
+        'program_id' => null, 'commission_type' => 'percent',
         'commission_value' => 12, 'currency' => null,
         'valid_from' => now()->subYear(), 'valid_to' => now()->addYear(),
     ]);
@@ -51,7 +51,7 @@ function jlmuFixture(): array
     return compact('university', 'mbbs', 'nursing', 'fixed', 'percent');
 }
 
-it('resolves course-specific agreements over university-wide ones', function () {
+it('resolves program-specific agreements over university-wide ones', function () {
     $fx = jlmuFixture();
     $resolver = app(AgreementResolver::class);
 
@@ -91,7 +91,7 @@ it('creates tuition invoice and expected commission on acceptance', function () 
         ->and($commission->statusHistory()->count())->toBe(1);
 });
 
-it('uses the fixed amount for course-specific agreements', function () {
+it('uses the fixed amount for program-specific agreements', function () {
     $fx = jlmuFixture();
     $application = Application::factory()->forCatalog($fx['university'], $fx['mbbs'])->create();
 

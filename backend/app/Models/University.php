@@ -80,9 +80,9 @@ class University extends Model
         return $this->hasMany(UniversityContact::class);
     }
 
-    public function courses(): HasMany
+    public function programs(): HasMany
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(Program::class);
     }
 
     public function intakes(): HasMany

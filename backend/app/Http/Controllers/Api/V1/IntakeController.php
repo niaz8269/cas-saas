@@ -18,9 +18,9 @@ class IntakeController extends Controller
         $this->authorize('viewAny', Intake::class);
 
         $intakes = Intake::query()
-            ->with('course:id,name,level')
+            ->with('program:id,name,level')
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
-            ->when($request->filled('filter.course_id'), fn ($q) => $q->where('course_id', $request->input('filter.course_id')))
+            ->when($request->filled('filter.program_id'), fn ($q) => $q->where('program_id', $request->input('filter.program_id')))
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->orderBy('start_date')
             ->paginate(min($request->integer('per_page', 25), 100));
@@ -32,14 +32,14 @@ class IntakeController extends Controller
     {
         $this->authorize('create', Intake::class);
 
-        return new IntakeResource(Intake::create($request->validated())->load('course:id,name,level'));
+        return new IntakeResource(Intake::create($request->validated())->load('program:id,name,level'));
     }
 
     public function show(Intake $intake): IntakeResource
     {
         $this->authorize('view', $intake);
 
-        return new IntakeResource($intake->load('course:id,name,level'));
+        return new IntakeResource($intake->load('program:id,name,level'));
     }
 
     public function update(UpdateIntakeRequest $request, Intake $intake): IntakeResource
@@ -48,7 +48,7 @@ class IntakeController extends Controller
 
         $intake->update($request->validated());
 
-        return new IntakeResource($intake->load('course:id,name,level'));
+        return new IntakeResource($intake->load('program:id,name,level'));
     }
 
     public function destroy(Intake $intake): Response

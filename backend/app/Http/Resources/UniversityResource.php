@@ -49,7 +49,7 @@ class UniversityResource extends JsonResource
                 'name' => $this->country->name,
                 'iso2' => $this->country->iso2,
             ]),
-            'courses_count' => $this->whenCounted('courses'),
+            'programs_count' => $this->whenCounted('programs'),
             'intakes_count' => $this->whenCounted('intakes'),
             'scholarships_count' => $this->whenCounted('scholarships'),
             'agreements_count' => $this->whenCounted('agreements'),

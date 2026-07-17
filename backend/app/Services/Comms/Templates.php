@@ -20,7 +20,7 @@ class Templates
         ],
         'offer_received' => [
             'subject' => 'Congratulations — your offer has arrived',
-            'body' => "Dear {first_name},\n\nGreat news! An offer has been issued for {course} at {university}. Please review the next steps with your counselor.\n\nCAS Education",
+            'body' => "Dear {first_name},\n\nGreat news! An offer has been issued for {program} at {university}. Please review the next steps with your counselor.\n\nCAS Education",
         ],
         'visa_approved' => [
             'subject' => 'Your visa has been approved',
@@ -48,7 +48,7 @@ class Templates
             '{first_name}' => $student->first_name,
             '{full_name}' => $student->full_name,
             '{student_code}' => $student->student_code,
-            '{course}' => $data['course'] ?? 'your program',
+            '{program}' => $data['program'] ?? 'your program',
             '{university}' => $data['university'] ?? 'your university',
             '{body}' => $data['body'] ?? '',
         ];

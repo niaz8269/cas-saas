@@ -17,7 +17,7 @@ class IntakeFactory extends Factory
 
         return [
             'university_id' => University::factory(),
-            'course_id' => null,
+            'program_id' => null,
             'name' => $start->format('F Y'),
             'start_date' => $start->format('Y-m-d'),
             'application_deadline' => fake()->dateTimeBetween('now', $start)->format('Y-m-d'),

@@ -21,9 +21,9 @@ class StoreUniversityAgreementRequest extends FormRequest
 
         return [
             'university_id' => ['required', 'integer', Rule::exists('universities', 'id')],
-            'course_id' => [
+            'program_id' => [
                 'nullable', 'integer',
-                Rule::exists('courses', 'id')->where('university_id', $universityId),
+                Rule::exists('programs', 'id')->where('university_id', $universityId),
             ],
             'commission_type' => ['required', Rule::in(['fixed', 'percent', 'tiered'])],
             'commission_value' => [

@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Application;
-use App\Models\Course;
 use App\Models\Document;
 use App\Models\DocumentType;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,13 +16,13 @@ const APP_COUNSELOR_PERMS = ['applications.view.assigned'];
 it('creates an application with code, history and timeline entry', function () {
     $user = actingAsStaffWith(ADMISSIONS_PERMS);
     $university = University::factory()->create();
-    $course = Course::factory()->for($university)->create();
+    $program = Program::factory()->for($university)->create();
     $student = Student::factory()->create();
 
     $response = $this->postJson('/api/v1/applications', [
         'student_id' => $student->id,
         'university_id' => $university->id,
-        'course_id' => $course->id,
+        'program_id' => $program->id,
     ])->assertCreated();
 
     expect($response->json('data.application_code'))->toMatch('/^APP-\d{4}-\d{5}$/')
@@ -34,17 +34,17 @@ it('creates an application with code, history and timeline entry', function () {
         ->and($student->activities()->where('type', 'system')->exists())->toBeTrue();
 });
 
-it('rejects a course from a different university', function () {
+it('rejects a program from a different university', function () {
     actingAsStaffWith(ADMISSIONS_PERMS);
     $university = University::factory()->create();
-    $foreignCourse = Course::factory()->create();
+    $foreignProgram = Program::factory()->create();
     $student = Student::factory()->create();
 
     $this->postJson('/api/v1/applications', [
         'student_id' => $student->id,
         'university_id' => $university->id,
-        'course_id' => $foreignCourse->id,
-    ])->assertStatus(422)->assertJsonValidationErrors(['course_id']);
+        'program_id' => $foreignProgram->id,
+    ])->assertStatus(422)->assertJsonValidationErrors(['program_id']);
 });
 
 it('scopes counselors to their students applications', function () {

@@ -46,18 +46,18 @@ class CommissionEngine
      */
     public function onApplicationAccepted(Application $application, User $actor): Commission
     {
-        $application->loadMissing(['course', 'student', 'university']);
-        $course = $application->course;
+        $application->loadMissing(['program', 'student', 'university']);
+        $program = $application->program;
 
-        if ($course?->tuition_fee !== null) {
+        if ($program?->tuition_fee !== null) {
             $this->invoices->create(
                 partyType: 'student',
                 partyId: $application->student_id,
                 applicationId: $application->id,
-                currency: $course->currency ?? 'CNY',
+                currency: $program->currency ?? 'CNY',
                 items: [[
-                    'description' => "First-year tuition — {$course->name}, {$application->university->name}",
-                    'unit_price' => (float) $course->tuition_fee,
+                    'description' => "First-year tuition — {$program->name}, {$application->university->name}",
+                    'unit_price' => (float) $program->tuition_fee,
                 ]],
                 actor: $actor,
             );
@@ -77,13 +77,13 @@ class CommissionEngine
         }
 
         $agreement = $this->agreements->resolve($application);
-        $application->loadMissing('course');
+        $application->loadMissing('program');
 
         [$amount, $currency] = match ($agreement?->commission_type) {
             'fixed' => [(float) $agreement->commission_value, $agreement->currency ?? 'CNY'],
             'percent' => [
-                round((float) $application->course->tuition_fee * (float) $agreement->commission_value / 100, 2),
-                $application->course->currency ?? 'CNY',
+                round((float) $application->program->tuition_fee * (float) $agreement->commission_value / 100, 2),
+                $application->program->currency ?? 'CNY',
             ],
             // tiered structures arrive with the Phase-2 spec; track at zero
             'tiered' => [0.0, $agreement->currency ?? 'CNY'],

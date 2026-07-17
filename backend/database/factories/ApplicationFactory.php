@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Application;
-use App\Models\Course;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,16 +21,16 @@ class ApplicationFactory extends Factory
             'application_code' => strtoupper(fake()->unique()->bothify('APP-2026-#####')),
             'student_id' => Student::factory(),
             'university_id' => $university,
-            'course_id' => Course::factory()->for($university, 'university'),
+            'program_id' => Program::factory()->for($university, 'university'),
             'status' => 'draft',
         ];
     }
 
-    public function forCatalog(University $university, Course $course): static
+    public function forCatalog(University $university, Program $program): static
     {
         return $this->state(fn () => [
             'university_id' => $university->id,
-            'course_id' => $course->id,
+            'program_id' => $program->id,
         ]);
     }
 }

@@ -34,7 +34,7 @@ it('queues the templated communication when a rule matches', function () {
     ]);
 
     app(AutomationEngine::class)->dispatch('application.status', [
-        'to' => 'offer_received', 'student_id' => $student->id, 'course' => 'MBBS', 'university' => 'JLMU',
+        'to' => 'offer_received', 'student_id' => $student->id, 'program' => 'MBBS', 'university' => 'JLMU',
     ]);
 
     $comm = Communication::first();

@@ -58,13 +58,13 @@ class ApplicationWorkflow
                 'created_at' => now(),
             ]);
 
-            $application->load(['university:id,name', 'course:id,name']);
+            $application->load(['university:id,name', 'program:id,name']);
 
             Activity::create([
                 'student_id' => $application->student_id,
                 'user_id' => $actor->id,
                 'type' => 'system',
-                'body' => "Application {$application->application_code} created — {$application->course->name} at {$application->university->name}",
+                'body' => "Application {$application->application_code} created — {$application->program->name} at {$application->university->name}",
                 'meta' => ['application_id' => $application->id],
                 'created_at' => now(),
             ]);
@@ -142,14 +142,14 @@ class ApplicationWorkflow
 
             // Declarative automations react to the same transition (§5.9).
             // After the accept block so it never front-loads a partial
-            // `course` relation (tuition_fee must stay readable there).
-            $application->loadMissing(['student', 'course', 'university']);
+            // `program` relation (tuition_fee must stay readable there).
+            $application->loadMissing(['student', 'program', 'university']);
             app(AutomationEngine::class)->dispatch('application.status', [
                 'to' => $to,
                 'from' => $from,
                 'student_id' => $application->student_id,
                 'counselor_id' => $application->student?->assigned_counselor_id,
-                'course' => $application->course?->name,
+                'program' => $application->program?->name,
                 'university' => $application->university?->name,
             ]);
 

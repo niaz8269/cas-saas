@@ -19,10 +19,10 @@ class UniversityAgreementResource extends JsonResource
         return [
             'id' => $this->id,
             'university_id' => $this->university_id,
-            'course_id' => $this->course_id,
-            'course' => $this->whenLoaded('course', fn () => $this->course ? [
-                'id' => $this->course->id,
-                'name' => $this->course->name,
+            'program_id' => $this->program_id,
+            'program' => $this->whenLoaded('program', fn () => $this->program ? [
+                'id' => $this->program->id,
+                'name' => $this->program->name,
             ] : null),
             'commission_type' => $this->commission_type,
             'commission_value' => $this->commission_value,

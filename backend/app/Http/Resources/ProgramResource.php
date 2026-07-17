@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Course;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin Course
+ * @mixin Program
  */
-class CourseResource extends JsonResource
+class ProgramResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -26,9 +26,11 @@ class CourseResource extends JsonResource
             ]),
             'name' => $this->name,
             'level' => $this->level,
+            'teaching_language' => $this->teaching_language,
             'duration_months' => $this->duration_months,
             'tuition_fee' => $this->tuition_fee,
             'currency' => $this->currency,
+            'apply_link' => $this->apply_link,
             'requirements' => $this->requirements,
             'status' => $this->status,
         ];

@@ -22,7 +22,7 @@ class StoreApplicationRequest extends FormRequest
         return [
             'student_id' => ['required', 'integer', Rule::exists('students', 'id')->whereNull('deleted_at')],
             'university_id' => ['required', 'integer', Rule::exists('universities', 'id')->whereNull('deleted_at')],
-            'course_id' => ['required', 'integer', Rule::exists('courses', 'id')->where('university_id', $universityId)],
+            'program_id' => ['required', 'integer', Rule::exists('programs', 'id')->where('university_id', $universityId)],
             'intake_id' => ['nullable', 'integer', Rule::exists('intakes', 'id')->where('university_id', $universityId)],
             'scholarship_id' => ['nullable', 'integer', Rule::exists('scholarships', 'id')->where('university_id', $universityId)],
             'agent_id' => ['nullable', 'integer', Rule::exists('agents', 'id')],

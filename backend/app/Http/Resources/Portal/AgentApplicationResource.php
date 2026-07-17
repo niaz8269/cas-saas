@@ -31,8 +31,8 @@ class AgentApplicationResource extends JsonResource
                 'full_name' => $this->student->full_name,
             ]),
             'university' => $this->whenLoaded('university', fn () => $this->university?->name),
-            'course' => $this->whenLoaded('course', fn () => $this->course ? [
-                'name' => $this->course->name, 'level' => $this->course->level,
+            'program' => $this->whenLoaded('program', fn () => $this->program ? [
+                'name' => $this->program->name, 'level' => $this->program->level,
             ] : null),
             'intake' => $this->whenLoaded('intake', fn () => $this->intake?->name),
             'created_at' => $this->created_at?->toIso8601String(),

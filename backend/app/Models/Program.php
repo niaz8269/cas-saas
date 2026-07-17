@@ -2,25 +2,27 @@
 
 namespace App\Models;
 
-use Database\Factories\CourseFactory;
+use Database\Factories\ProgramFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Course extends Model
+class Program extends Model
 {
-    /** @use HasFactory<CourseFactory> */
+    /** @use HasFactory<ProgramFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'university_id',
         'name',
         'level',
+        'teaching_language',
         'duration_months',
         'tuition_fee',
         'currency',
+        'apply_link',
         'requirements',
         'status',
     ];

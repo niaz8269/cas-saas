@@ -53,7 +53,7 @@ class AdmissionsSeeder extends Seeder
         }
 
         $students = Student::pluck('id');
-        $universities = University::with(['courses:id,university_id', 'intakes:id,university_id'])->get();
+        $universities = University::with(['programs:id,university_id', 'intakes:id,university_id'])->get();
 
         // target status => how many applications
         $ladder = [
@@ -71,12 +71,12 @@ class AdmissionsSeeder extends Seeder
         foreach ($ladder as $target => $count) {
             for ($i = 0; $i < $count; $i++) {
                 $university = $universities->random();
-                $course = $university->courses->random();
+                $program = $university->programs->random();
 
                 $application = $workflow->create([
                     'student_id' => $students[$studentIndex % $students->count()],
                     'university_id' => $university->id,
-                    'course_id' => $course->id,
+                    'program_id' => $program->id,
                     'intake_id' => $university->intakes->first()?->id,
                     'assigned_admissions_id' => $admissions->id,
                 ], $admissions);

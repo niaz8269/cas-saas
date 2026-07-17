@@ -21,9 +21,9 @@ class StoreIntakeRequest extends FormRequest
 
         return [
             'university_id' => ['required', 'integer', Rule::exists('universities', 'id')],
-            'course_id' => [
+            'program_id' => [
                 'nullable', 'integer',
-                Rule::exists('courses', 'id')->where('university_id', $universityId),
+                Rule::exists('programs', 'id')->where('university_id', $universityId),
             ],
             'name' => ['required', 'string', 'max:80'],
             'start_date' => ['nullable', 'date'],

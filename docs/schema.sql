@@ -267,27 +267,30 @@ CREATE TABLE university_contacts (
   CONSTRAINT fk_unicontacts_uni FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE courses (
+-- Programs (renamed from `courses` per ADR-0006). The program id is the PK.
+CREATE TABLE programs (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   university_id BIGINT UNSIGNED NOT NULL,
   name VARCHAR(190) NOT NULL, level VARCHAR(20) NOT NULL DEFAULT 'bachelor',
+  teaching_language VARCHAR(60) NULL,
   duration_months SMALLINT UNSIGNED NULL,
   tuition_fee DECIMAL(15,2) NULL, currency CHAR(3) NULL,
+  apply_link VARCHAR(255) NULL,
   requirements JSON NULL, status VARCHAR(20) NOT NULL DEFAULT 'active',
   created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL, deleted_at TIMESTAMP NULL,
-  KEY idx_courses_uni (university_id),
-  CONSTRAINT fk_courses_uni FOREIGN KEY (university_id) REFERENCES universities(id)
+  KEY idx_programs_uni (university_id),
+  CONSTRAINT fk_programs_uni FOREIGN KEY (university_id) REFERENCES universities(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE intakes (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  university_id BIGINT UNSIGNED NOT NULL, course_id BIGINT UNSIGNED NULL,
+  university_id BIGINT UNSIGNED NOT NULL, program_id BIGINT UNSIGNED NULL,
   name VARCHAR(80) NOT NULL, start_date DATE NULL, application_deadline DATE NULL,
   seats INT UNSIGNED NULL, status VARCHAR(20) NOT NULL DEFAULT 'open',
   created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
-  KEY idx_intakes_uni (university_id), KEY idx_intakes_course (course_id),
+  KEY idx_intakes_uni (university_id), KEY idx_intakes_program (program_id),
   CONSTRAINT fk_intakes_uni FOREIGN KEY (university_id) REFERENCES universities(id),
-  CONSTRAINT fk_intakes_course FOREIGN KEY (course_id) REFERENCES courses(id)
+  CONSTRAINT fk_intakes_program FOREIGN KEY (program_id) REFERENCES programs(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE scholarships (
@@ -302,16 +305,16 @@ CREATE TABLE scholarships (
 
 CREATE TABLE university_agreements (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  university_id BIGINT UNSIGNED NOT NULL, course_id BIGINT UNSIGNED NULL,
+  university_id BIGINT UNSIGNED NOT NULL, program_id BIGINT UNSIGNED NULL,
   commission_type VARCHAR(20) NOT NULL DEFAULT 'percent', -- fixed|percent|tiered
   commission_value DECIMAL(15,2) NOT NULL DEFAULT 0,
   currency CHAR(3) NULL,
   eligibility_trigger VARCHAR(60) NOT NULL DEFAULT 'arrival_first_year_paid',
   valid_from DATE NULL, valid_to DATE NULL,
   created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
-  KEY idx_agreements_uni (university_id), KEY idx_agreements_course (course_id),
+  KEY idx_agreements_uni (university_id), KEY idx_agreements_program (program_id),
   CONSTRAINT fk_agreements_uni FOREIGN KEY (university_id) REFERENCES universities(id),
-  CONSTRAINT fk_agreements_course FOREIGN KEY (course_id) REFERENCES courses(id)
+  CONSTRAINT fk_agreements_program FOREIGN KEY (program_id) REFERENCES programs(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE agent_agreements (
@@ -330,7 +333,7 @@ CREATE TABLE applications (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   application_code VARCHAR(40) NOT NULL,
   student_id BIGINT UNSIGNED NOT NULL,
-  university_id BIGINT UNSIGNED NOT NULL, course_id BIGINT UNSIGNED NOT NULL,
+  university_id BIGINT UNSIGNED NOT NULL, program_id BIGINT UNSIGNED NOT NULL,
   intake_id BIGINT UNSIGNED NULL, scholarship_id BIGINT UNSIGNED NULL,
   agent_id BIGINT UNSIGNED NULL, assigned_admissions_id BIGINT UNSIGNED NULL,
   status VARCHAR(30) NOT NULL DEFAULT 'draft',
@@ -340,10 +343,10 @@ CREATE TABLE applications (
   UNIQUE KEY uq_applications_code (application_code),
   KEY idx_apps_student (student_id),
   KEY idx_apps_status_admissions (status, assigned_admissions_id),
-  KEY idx_apps_uni (university_id), KEY idx_apps_course (course_id),
+  KEY idx_apps_uni (university_id), KEY idx_apps_program (program_id),
   CONSTRAINT fk_apps_student FOREIGN KEY (student_id) REFERENCES students(id),
   CONSTRAINT fk_apps_uni FOREIGN KEY (university_id) REFERENCES universities(id),
-  CONSTRAINT fk_apps_course FOREIGN KEY (course_id) REFERENCES courses(id),
+  CONSTRAINT fk_apps_program FOREIGN KEY (program_id) REFERENCES programs(id),
   CONSTRAINT fk_apps_intake FOREIGN KEY (intake_id) REFERENCES intakes(id),
   CONSTRAINT fk_apps_scholarship FOREIGN KEY (scholarship_id) REFERENCES scholarships(id),
   CONSTRAINT fk_apps_agent FOREIGN KEY (agent_id) REFERENCES agents(id),

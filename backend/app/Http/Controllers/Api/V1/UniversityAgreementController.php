@@ -18,7 +18,7 @@ class UniversityAgreementController extends Controller
         $this->authorize('viewAny', UniversityAgreement::class);
 
         $agreements = UniversityAgreement::query()
-            ->with('course:id,name')
+            ->with('program:id,name')
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
             ->orderByDesc('valid_from')
             ->paginate(min($request->integer('per_page', 25), 100));
@@ -31,7 +31,7 @@ class UniversityAgreementController extends Controller
         $this->authorize('create', UniversityAgreement::class);
 
         return new UniversityAgreementResource(
-            UniversityAgreement::create($request->validated())->load('course:id,name'),
+            UniversityAgreement::create($request->validated())->load('program:id,name'),
         );
     }
 
@@ -39,7 +39,7 @@ class UniversityAgreementController extends Controller
     {
         $this->authorize('view', $agreement);
 
-        return new UniversityAgreementResource($agreement->load('course:id,name'));
+        return new UniversityAgreementResource($agreement->load('program:id,name'));
     }
 
     public function update(UpdateUniversityAgreementRequest $request, UniversityAgreement $agreement): UniversityAgreementResource
@@ -48,7 +48,7 @@ class UniversityAgreementController extends Controller
 
         $agreement->update($request->validated());
 
-        return new UniversityAgreementResource($agreement->load('course:id,name'));
+        return new UniversityAgreementResource($agreement->load('program:id,name'));
     }
 
     public function destroy(UniversityAgreement $agreement): Response

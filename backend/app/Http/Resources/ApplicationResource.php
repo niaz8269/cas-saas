@@ -29,8 +29,8 @@ class ApplicationResource extends JsonResource
             'university' => $this->whenLoaded('university', fn () => [
                 'id' => $this->university->id, 'name' => $this->university->name, 'code' => $this->university->code,
             ]),
-            'course' => $this->whenLoaded('course', fn () => [
-                'id' => $this->course->id, 'name' => $this->course->name, 'level' => $this->course->level,
+            'program' => $this->whenLoaded('program', fn () => [
+                'id' => $this->program->id, 'name' => $this->program->name, 'level' => $this->program->level,
             ]),
             'intake' => $this->whenLoaded('intake', fn () => $this->intake ? [
                 'id' => $this->intake->id, 'name' => $this->intake->name,

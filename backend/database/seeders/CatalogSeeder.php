@@ -36,12 +36,13 @@ class CatalogSeeder extends Seeder
                 );
             }
 
-            $courses = [];
-            foreach ($data['courses'] as $course) {
-                [$name, $level, $months, $fee] = $course;
-                $courses[$name] = $university->courses()->firstOrCreate(
+            $programs = [];
+            foreach ($data['programs'] as $program) {
+                [$name, $level, $months, $fee] = $program;
+                $programs[$name] = $university->programs()->firstOrCreate(
                     ['name' => $name, 'level' => $level],
                     [
+                        'teaching_language' => str_contains($name, 'Chinese Language') ? 'Chinese' : 'English',
                         'duration_months' => $months,
                         'tuition_fee' => $fee,
                         'currency' => 'CNY',
@@ -53,7 +54,7 @@ class CatalogSeeder extends Seeder
 
             foreach (['September 2026' => ['2026-09-01', '2026-07-15'], 'March 2027' => ['2027-03-01', '2027-01-10']] as $intakeName => [$start, $deadline]) {
                 $university->intakes()->firstOrCreate(
-                    ['name' => $intakeName, 'course_id' => null],
+                    ['name' => $intakeName, 'program_id' => null],
                     ['start_date' => $start, 'application_deadline' => $deadline, 'seats' => 100, 'status' => 'open'],
                 );
             }
@@ -67,11 +68,11 @@ class CatalogSeeder extends Seeder
             }
 
             foreach ($data['agreements'] as $agreement) {
-                [$type, $value, $currency, $courseName] = $agreement;
+                [$type, $value, $currency, $programName] = $agreement;
                 $university->agreements()->firstOrCreate(
                     [
                         'commission_type' => $type,
-                        'course_id' => $courseName ? ($courses[$courseName]->id ?? null) : null,
+                        'program_id' => $programName ? ($programs[$programName]->id ?? null) : null,
                     ],
                     [
                         'commission_value' => $value,
@@ -95,7 +96,7 @@ class CatalogSeeder extends Seeder
                 'name' => 'Jilin Medical University', 'code' => 'JLMU', 'city' => 'Jilin City',
                 'website' => 'www.jlmu.cn',
                 'contacts' => [['Ms. Zhang Min', 'admissions@jlmu.cn', 'International Office']],
-                'courses' => [
+                'programs' => [
                     ['MBBS', 'bachelor', 72, 32000],
                     ['Nursing', 'bachelor', 48, 24000],
                 ],
@@ -109,12 +110,12 @@ class CatalogSeeder extends Seeder
                 'name' => 'Xinjiang Medical University', 'code' => 'XJMU', 'city' => 'Urumqi',
                 'website' => 'www.xjmu.edu.cn',
                 'contacts' => [['Mr. Ali Turgun', 'intl@xjmu.edu.cn', 'Admissions Officer']],
-                'courses' => [
+                'programs' => [
                     ['MBBS', 'bachelor', 72, 30000],
                     ['Traditional Chinese Medicine', 'bachelor', 60, 26000],
                 ],
                 'scholarships' => [['Belt & Road Scholarship', 'full', 'Full tuition']],
-                // Course-specific MBBS rate + a university-wide fallback so
+                // Program-specific MBBS rate + a university-wide fallback so
                 // every program resolves an agreement.
                 'agreements' => [['fixed', 9000, 'CNY', 'MBBS'], ['percent', 11, null, null]],
             ],
@@ -122,7 +123,7 @@ class CatalogSeeder extends Seeder
                 'name' => 'Dalian Medical University', 'code' => 'DMU', 'city' => 'Dalian',
                 'website' => 'www.dmu.edu.cn',
                 'contacts' => [['Ms. Wang Fang', 'fao@dmu.edu.cn', 'International Office']],
-                'courses' => [
+                'programs' => [
                     ['MBBS', 'bachelor', 72, 42000],
                     ['Stomatology (BDS)', 'bachelor', 60, 38000],
                 ],
@@ -133,7 +134,7 @@ class CatalogSeeder extends Seeder
                 'name' => 'Beijing Institute of Technology', 'code' => 'BIT', 'city' => 'Beijing',
                 'website' => 'www.bit.edu.cn',
                 'contacts' => [['Dr. Chen Hao', 'isc@bit.edu.cn', 'International Student Center']],
-                'courses' => [
+                'programs' => [
                     ['Computer Science and Technology', 'bachelor', 48, 30000],
                     ['Mechanical Engineering', 'master', 30, 34000],
                 ],
@@ -143,7 +144,7 @@ class CatalogSeeder extends Seeder
             [
                 'name' => 'Zhejiang University of Science and Technology', 'code' => 'ZUST', 'city' => 'Hangzhou',
                 'website' => 'www.zust.edu.cn',
-                'courses' => [
+                'programs' => [
                     ['Civil Engineering', 'bachelor', 48, 22000],
                     ['International Business', 'bachelor', 48, 20000],
                 ],
@@ -153,7 +154,7 @@ class CatalogSeeder extends Seeder
             [
                 'name' => 'Nanjing University of Information Science and Technology', 'code' => 'NUIST', 'city' => 'Nanjing',
                 'website' => 'www.nuist.edu.cn',
-                'courses' => [
+                'programs' => [
                     ['Computer Science and Technology', 'bachelor', 48, 24000],
                     ['Chinese Language Program', 'bachelor', 12, 16000],
                 ],
@@ -162,7 +163,7 @@ class CatalogSeeder extends Seeder
             [
                 'name' => 'Wuhan University of Technology', 'code' => 'WUT', 'city' => 'Wuhan',
                 'website' => 'www.whut.edu.cn',
-                'courses' => [
+                'programs' => [
                     ['Civil Engineering', 'bachelor', 48, 26000],
                     ['Automotive Engineering', 'master', 36, 32000],
                 ],
@@ -172,7 +173,7 @@ class CatalogSeeder extends Seeder
             [
                 'name' => 'Liaoning Petrochemical University', 'code' => 'LPU', 'city' => 'Fushun',
                 'website' => 'www.lnpu.edu.cn',
-                'courses' => [
+                'programs' => [
                     ['Petroleum Engineering', 'bachelor', 48, 21000],
                     ['Chinese Language Program', 'bachelor', 12, 14000],
                 ],

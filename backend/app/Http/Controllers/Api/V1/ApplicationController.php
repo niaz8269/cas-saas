@@ -19,7 +19,7 @@ class ApplicationController extends Controller
     private const LIST_RELATIONS = [
         'student:id,student_code,first_name,last_name',
         'university:id,name,code',
-        'course:id,name,level',
+        'program:id,name,level',
         'admissionsOfficer:id,name',
     ];
 

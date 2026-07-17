@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Catalog;
 
-class UpdateCourseRequest extends StoreCourseRequest
+class UpdateProgramRequest extends StoreProgramRequest
 {
     /**
      * @return array<string, array<int, mixed>>

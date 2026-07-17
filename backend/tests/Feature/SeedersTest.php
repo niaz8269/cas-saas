@@ -8,7 +8,6 @@ use App\Models\Application;
 use App\Models\Branch;
 use App\Models\Commission;
 use App\Models\Country;
-use App\Models\Course;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\DocumentType;
@@ -16,6 +15,7 @@ use App\Models\Intake;
 use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Offer;
+use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
 use App\Models\UniversityAgreement;
@@ -76,15 +76,15 @@ it('gives finance commission control but no lead management', function () {
 
 it('seeds the demo catalog with agreements ready for commission math', function () {
     expect(University::count())->toBeGreaterThanOrEqual(8)
-        ->and(Course::count())->toBeGreaterThanOrEqual(14)
+        ->and(Program::count())->toBeGreaterThanOrEqual(14)
         ->and(Intake::count())->toBeGreaterThanOrEqual(16)
         ->and(UniversityAgreement::count())->toBeGreaterThanOrEqual(8);
 
     // The JLMU MBBS-specific fixed agreement exists alongside its
     // university-wide percent agreement (specificity matters in M5).
     $jlmu = University::where('code', 'JLMU')->firstOrFail();
-    expect($jlmu->agreements()->whereNotNull('course_id')->where('commission_type', 'fixed')->exists())->toBeTrue()
-        ->and($jlmu->agreements()->whereNull('course_id')->where('commission_type', 'percent')->exists())->toBeTrue();
+    expect($jlmu->agreements()->whereNotNull('program_id')->where('commission_type', 'fixed')->exists())->toBeTrue()
+        ->and($jlmu->agreements()->whereNull('program_id')->where('commission_type', 'percent')->exists())->toBeTrue();
 
     // Idempotency: reseeding must not duplicate rows.
     $before = UniversityAgreement::count();

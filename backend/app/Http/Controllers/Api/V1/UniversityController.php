@@ -25,7 +25,7 @@ class UniversityController extends Controller
 
         $universities = University::query()
             ->with('country')
-            ->withCount(['courses', 'intakes', 'scholarships', 'agreements'])
+            ->withCount(['programs', 'intakes', 'scholarships', 'agreements'])
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q
@@ -56,7 +56,7 @@ class UniversityController extends Controller
 
         return new UniversityResource(
             $university->load(['country', 'contacts'])
-                ->loadCount(['courses', 'intakes', 'scholarships', 'agreements']),
+                ->loadCount(['programs', 'intakes', 'scholarships', 'agreements']),
         );
     }
 

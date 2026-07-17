@@ -28,7 +28,7 @@ class Application extends Model
         'application_code',
         'student_id',
         'university_id',
-        'course_id',
+        'program_id',
         'intake_id',
         'scholarship_id',
         'agent_id',
@@ -56,9 +56,9 @@ class Application extends Model
         return $this->belongsTo(University::class);
     }
 
-    public function course(): BelongsTo
+    public function program(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function intake(): BelongsTo

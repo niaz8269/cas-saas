@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
-use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\GuardianController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
+use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -155,7 +155,7 @@ Route::prefix('v1')->group(function () {
         Route::post('universities/{university}/contacts', [UniversityContactController::class, 'store']);
         Route::patch('contacts/{contact}', [UniversityContactController::class, 'update']);
         Route::delete('contacts/{contact}', [UniversityContactController::class, 'destroy']);
-        Route::apiResource('courses', CourseController::class);
+        Route::apiResource('programs', ProgramController::class);
         Route::apiResource('intakes', IntakeController::class);
         Route::apiResource('scholarships', ScholarshipController::class);
         Route::apiResource('agreements', UniversityAgreementController::class)

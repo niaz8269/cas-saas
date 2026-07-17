@@ -99,7 +99,7 @@ class AutomationEngine
             $action['channel'] ?? 'email',
             $action['template'] ?? 'custom',
             [
-                'course' => $context['course'] ?? null,
+                'program' => $context['program'] ?? null,
                 'university' => $context['university'] ?? null,
                 'body' => $action['body'] ?? null,
             ],

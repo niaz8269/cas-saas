@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Course;
+use App\Models\Program;
 use App\Models\University;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Course>
+ * @extends Factory<Program>
  */
-class CourseFactory extends Factory
+class ProgramFactory extends Factory
 {
     public function definition(): array
     {
@@ -20,6 +20,7 @@ class CourseFactory extends Factory
                 'International Business', 'Chinese Language Program',
             ]),
             'level' => fake()->randomElement(['bachelor', 'master', 'phd']),
+            'teaching_language' => 'English',
             'duration_months' => fake()->randomElement([12, 36, 48, 60, 72]),
             'tuition_fee' => fake()->numberBetween(15000, 45000),
             'currency' => 'CNY',

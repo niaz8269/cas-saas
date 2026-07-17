@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Commission terms per university (optionally per course). Drives the
+ * Commission terms per university (optionally per program). Drives the
  * expected-commission computation for every application (M5).
  */
 class UniversityAgreement extends Model
@@ -18,7 +18,7 @@ class UniversityAgreement extends Model
 
     protected $fillable = [
         'university_id',
-        'course_id',
+        'program_id',
         'commission_type',
         'commission_value',
         'currency',
@@ -41,8 +41,8 @@ class UniversityAgreement extends Model
         return $this->belongsTo(University::class);
     }
 
-    public function course(): BelongsTo
+    public function program(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Program::class, 'program_id');
     }
 }

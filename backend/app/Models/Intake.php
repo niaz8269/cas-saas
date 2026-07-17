@@ -14,7 +14,7 @@ class Intake extends Model
 
     protected $fillable = [
         'university_id',
-        'course_id',
+        'program_id',
         'name',
         'start_date',
         'application_deadline',
@@ -36,8 +36,8 @@ class Intake extends Model
         return $this->belongsTo(University::class);
     }
 
-    public function course(): BelongsTo
+    public function program(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Program::class, 'program_id');
     }
 }
