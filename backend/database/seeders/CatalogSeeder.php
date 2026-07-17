@@ -114,7 +114,9 @@ class CatalogSeeder extends Seeder
                     ['Traditional Chinese Medicine', 'bachelor', 60, 26000],
                 ],
                 'scholarships' => [['Belt & Road Scholarship', 'full', 'Full tuition']],
-                'agreements' => [['fixed', 9000, 'CNY', 'MBBS']],
+                // Course-specific MBBS rate + a university-wide fallback so
+                // every program resolves an agreement.
+                'agreements' => [['fixed', 9000, 'CNY', 'MBBS'], ['percent', 11, null, null]],
             ],
             [
                 'name' => 'Dalian Medical University', 'code' => 'DMU', 'city' => 'Dalian',

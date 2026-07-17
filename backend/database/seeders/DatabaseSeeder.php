@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             FinanceSeeder::class,
             VisaSeeder::class,
             PortalSeeder::class,
+            AutomationRuleSeeder::class,
         ]);
     }
 }

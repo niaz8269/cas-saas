@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\VisaCase;
 use App\Models\VisaStatusHistory;
+use App\Services\Comms\AutomationEngine;
 use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use Illuminate\Support\Facades\DB;
@@ -141,6 +142,14 @@ class VisaWorkflow
             if ($to === 'travel_ready') {
                 $this->onTravelReady($case, $actor);
             }
+
+            $case->loadMissing('student:id,assigned_counselor_id');
+            app(AutomationEngine::class)->dispatch('visa.status', [
+                'to' => $to,
+                'from' => $from,
+                'student_id' => $case->student_id,
+                'counselor_id' => $case->student?->assigned_counselor_id,
+            ]);
 
             return $case->refresh();
         });

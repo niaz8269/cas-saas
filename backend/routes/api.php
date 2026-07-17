@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AgentPayableController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CourseController;
@@ -75,6 +76,10 @@ Route::prefix('v1')->group(function () {
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+
+        // Automation rules (read-only; admin settings feed)
+        Route::get('automation-rules', [AutomationRuleController::class, 'index'])
+            ->middleware('permission:settings.manage.global,staff');
 
         // In-app notifications (own feed)
         Route::get('notifications', [NotificationController::class, 'index']);

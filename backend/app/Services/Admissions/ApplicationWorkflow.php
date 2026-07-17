@@ -8,6 +8,7 @@ use App\Models\Application;
 use App\Models\ApplicationStatusHistory;
 use App\Models\DocumentType;
 use App\Models\User;
+use App\Services\Comms\AutomationEngine;
 use App\Services\Comms\NotificationService;
 use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
@@ -138,6 +139,19 @@ class ApplicationWorkflow
                 app(VisaWorkflow::class)
                     ->openCase($application, $actor);
             }
+
+            // Declarative automations react to the same transition (§5.9).
+            // After the accept block so it never front-loads a partial
+            // `course` relation (tuition_fee must stay readable there).
+            $application->loadMissing(['student', 'course', 'university']);
+            app(AutomationEngine::class)->dispatch('application.status', [
+                'to' => $to,
+                'from' => $from,
+                'student_id' => $application->student_id,
+                'counselor_id' => $application->student?->assigned_counselor_id,
+                'course' => $application->course?->name,
+                'university' => $application->university?->name,
+            ]);
 
             return $application->refresh();
         });
