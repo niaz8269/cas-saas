@@ -1,8 +1,17 @@
 <?php
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,8 +21,69 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // API error envelope per CLAUDE.md: { message, errors, code }.
+        $isApi = fn (Request $request): bool => $request->is('api/*') || $request->expectsJson();
+
+        $exceptions->render(function (ValidationException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                    'errors' => $e->errors(),
+                    'code' => 'VALIDATION_ERROR',
+                ], $e->status);
+            }
+        });
+
+        $exceptions->render(function (AuthenticationException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return response()->json([
+                    'message' => 'Unauthenticated.',
+                    'code' => 'UNAUTHENTICATED',
+                ], 401);
+            }
+        });
+
+        $exceptions->render(function (AuthorizationException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return response()->json([
+                    'message' => 'This action is unauthorized.',
+                    'code' => 'FORBIDDEN',
+                ], 403);
+            }
+        });
+
+        $exceptions->render(function (UnauthorizedException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return response()->json([
+                    'message' => 'This action is unauthorized.',
+                    'code' => 'FORBIDDEN',
+                ], 403);
+            }
+        });
+
+        $exceptions->render(function (HttpExceptionInterface $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                $status = $e->getStatusCode();
+
+                $code = match ($status) {
+                    403 => 'FORBIDDEN',
+                    404 => 'NOT_FOUND',
+                    409 => 'CONFLICT',
+                    429 => 'RATE_LIMITED',
+                    default => 'HTTP_ERROR',
+                };
+
+                return response()->json([
+                    'message' => $e->getMessage() ?: 'Request failed.',
+                    'code' => $code,
+                ], $status, $e->getHeaders());
+            }
+        });
     })->create();

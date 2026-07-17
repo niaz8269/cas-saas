@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
             return $user instanceof User && $user->hasRole('Super Admin')
                 ? true
                 : null;
+        });
+
+        // Brute-force protection on login: 5 attempts/minute per email+IP.
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5)->by(
+                strtolower((string) $request->input('email')).'|'.$request->ip(),
+            );
         });
     }
 }
