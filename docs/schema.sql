@@ -91,6 +91,17 @@ CREATE TABLE model_has_roles (
   CONSTRAINT fk_mhr_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ADDENDUM (ADR-0003): direct model-level permission grants, required by
+-- spatie/laravel-permission's resolution path. Shape mirrors model_has_roles.
+CREATE TABLE model_has_permissions (
+  permission_id BIGINT UNSIGNED NOT NULL,
+  model_type    VARCHAR(150) NOT NULL,
+  model_id      BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (permission_id, model_id, model_type),
+  KEY idx_mhp_model (model_id, model_type),
+  CONSTRAINT fk_mhp_perm FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE settings (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `key` VARCHAR(150) NOT NULL, `value` JSON NULL, `group` VARCHAR(80) NULL,
