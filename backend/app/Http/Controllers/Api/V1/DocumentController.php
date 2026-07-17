@@ -101,6 +101,20 @@ class DocumentController extends Controller
     }
 
     /**
+     * Reference list of document types (checklist configuration).
+     */
+    public function types(): JsonResponse
+    {
+        $this->authorize('viewAny', Document::class);
+
+        return response()->json([
+            'data' => DocumentType::orderBy('name')->get([
+                'id', 'name', 'category', 'is_sensitive', 'required_for',
+            ]),
+        ]);
+    }
+
+    /**
      * Documents attached to an application (checklist section).
      */
     public function forApplication(Request $request, Application $application): AnonymousResourceCollection

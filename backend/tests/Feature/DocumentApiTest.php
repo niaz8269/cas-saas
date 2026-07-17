@@ -201,6 +201,17 @@ it('denies verification without the permission', function () {
     $this->postJson("/api/v1/documents/{$document->id}/verify")->assertStatus(403);
 });
 
+it('lists document types for checklist configuration', function () {
+    actingAsStaffWith(DOC_UPLOADER_PERMS);
+    DocumentType::factory()->requiredForApplication()->create(['name' => 'Passport']);
+    DocumentType::factory()->create(['name' => 'Bank Statement']);
+
+    $this->getJson('/api/v1/document-types')
+        ->assertOk()
+        ->assertJsonCount(2, 'data')
+        ->assertJsonPath('data.0.name', 'Bank Statement');
+});
+
 it('lists application documents for the checklist section', function () {
     ['application' => $application] = counselorApplication();
     Document::factory()->count(2)->create([

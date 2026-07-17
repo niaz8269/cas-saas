@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function () {
         Route::get('applications/{application}/documents', [DocumentController::class, 'forApplication']);
 
         // Documents (pre-signed, access-logged)
+        Route::get('document-types', [DocumentController::class, 'types']);
         Route::post('documents/presign', [DocumentController::class, 'presign']);
         Route::post('documents', [DocumentController::class, 'store']);
         Route::get('documents/{document}/download', [DocumentController::class, 'download']);

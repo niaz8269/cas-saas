@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
+import { listApplications } from "@/features/admissions/api"
+import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
@@ -57,6 +59,11 @@ export default function StudentProfilePage() {
 
   const student = useQuery({ queryKey: ["student", id], queryFn: () => getStudent(id) })
   const timeline = useQuery({ queryKey: ["student-timeline", id], queryFn: () => getTimeline(id) })
+  const applications = useQuery({
+    queryKey: ["student-applications", id],
+    queryFn: () => listApplications({ student_id: Number(id) }),
+    enabled: can("applications.view.assigned") || can("applications.view.global"),
+  })
 
   const noteMutation = useMutation({
     mutationFn: () => addNote(id, note),
@@ -144,6 +151,33 @@ export default function StudentProfilePage() {
                   </span>
                 </p>
               ))}
+            </div>
+          )}
+
+          {(applications.data?.data.length ?? 0) > 0 && (
+            <div className="mt-4 border-t pt-4">
+              <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Applications</p>
+              <ul className="mt-2 space-y-2">
+                {applications.data!.data.map((application) => (
+                  <li key={application.id}>
+                    <Link
+                      to={`/applications/${application.id}`}
+                      className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-muted"
+                    >
+                      <span>
+                        <span className="font-mono text-xs text-muted-foreground">{application.application_code}</span>
+                        <span className="ml-2">{application.university?.code}</span>
+                      </span>
+                      <Badge
+                        variant="outline"
+                        className={cn("border-transparent text-xs capitalize", APPLICATION_STATUS_BADGE[application.status])}
+                      >
+                        {statusLabel(application.status)}
+                      </Badge>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

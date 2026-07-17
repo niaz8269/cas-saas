@@ -10,13 +10,16 @@ export class ApiError extends Error {
   readonly status: number
   readonly errors: Record<string, string[]>
   readonly code: string
+  /** Full response body for endpoint-specific fields (e.g. `missing`). */
+  readonly payload: Record<string, unknown>
 
-  constructor(status: number, payload: ApiErrorPayload) {
+  constructor(status: number, payload: ApiErrorPayload & Record<string, unknown>) {
     super(payload.message || `HTTP ${status}`)
     this.name = "ApiError"
     this.status = status
     this.errors = payload.errors ?? {}
     this.code = payload.code ?? "HTTP_ERROR"
+    this.payload = payload
   }
 }
 

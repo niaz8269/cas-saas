@@ -1,0 +1,172 @@
+import { screen, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { Route, Routes } from "react-router-dom"
+
+import { useAuthStore } from "@/stores/auth"
+import { jsonResponse, renderWithProviders } from "@/test/utils"
+import type { AuthUser } from "@/types/auth"
+
+import ApplicationDetailPage from "./ApplicationDetailPage"
+import ApplicationsPage from "./ApplicationsPage"
+
+function makeUser(permissions: string[]): AuthUser {
+  return {
+    id: 3,
+    name: "Demo Admissions Officer",
+    email: "admissions@cas.moe",
+    phone: null,
+    status: "active",
+    roles: ["Admissions"],
+    permissions,
+    last_login_at: null,
+  }
+}
+
+const APPLICATION = {
+  id: 21,
+  application_code: "APP-2026-00021",
+  status: "under_review",
+  submitted_at: null,
+  student: { id: 5, student_code: "STU-2026-00005", full_name: "Ali Khan" },
+  university: { id: 1, name: "Jilin Medical University", code: "JLMU" },
+  course: { id: 10, name: "MBBS", level: "bachelor" },
+  intake: { id: 1, name: "September 2026" },
+  scholarship: null,
+  admissions_officer: { id: 3, name: "Demo Admissions Officer" },
+  offers: [],
+  status_history: [
+    { from_status: "draft", to_status: "under_review", note: null, changed_by: "Demo Admissions Officer", created_at: "2026-07-10T09:00:00Z" },
+    { from_status: null, to_status: "draft", note: null, changed_by: "Demo Admissions Officer", created_at: "2026-07-01T10:00:00Z" },
+  ],
+  documents_count: 1,
+  created_at: "2026-07-01T10:00:00Z",
+}
+
+const TYPES = {
+  data: [
+    { id: 1, name: "Passport", category: "identity", is_sensitive: true, required_for: ["application"] },
+    { id: 2, name: "Academic Transcript", category: "academic", is_sensitive: false, required_for: ["application"] },
+    { id: 3, name: "Bank Statement", category: "financial", is_sensitive: true, required_for: null },
+  ],
+}
+
+const DOCS = {
+  data: [
+    { id: 40, type: TYPES.data[0], file_name: "passport.pdf", mime: "application/pdf", size: 1000, status: "verified", version: 1, verified_by: "Admin", created_at: "2026-07-05T08:00:00Z" },
+  ],
+}
+
+function stubFetch(detailOverrides: Record<string, unknown> = {}) {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.includes("/document-types")) return Promise.resolve(jsonResponse(TYPES))
+      if (url.includes("/documents")) return Promise.resolve(jsonResponse(DOCS))
+      if (url.includes("/applications/21")) {
+        return Promise.resolve(jsonResponse({ data: { ...APPLICATION, ...detailOverrides }, checklist: { missing: ["Academic Transcript"] } }))
+      }
+      return Promise.resolve(
+        jsonResponse({ data: [APPLICATION], meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 } }),
+      )
+    }),
+  )
+}
+
+beforeEach(() => {
+  vi.restoreAllMocks()
+})
+
+it("lists applications with codes and status badges", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global"]) })
+  stubFetch()
+
+  renderWithProviders(<ApplicationsPage />)
+
+  expect(await screen.findByText("APP-2026-00021")).toBeInTheDocument()
+  expect(screen.getByText("Ali Khan")).toBeInTheDocument()
+  expect(screen.getByText("under review")).toBeInTheDocument()
+})
+
+function renderDetail() {
+  return renderWithProviders(
+    <Routes>
+      <Route path="/applications/:id" element={<ApplicationDetailPage />} />
+    </Routes>,
+    { route: "/applications/21" },
+  )
+}
+
+it("renders stepper, checklist states and history for updaters", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser([
+      "applications.view.global", "applications.update.global",
+      "documents.view.global", "documents.upload.global",
+    ]),
+  })
+  stubFetch()
+
+  renderDetail()
+
+  expect(await screen.findByText("APP-2026-00021")).toBeInTheDocument()
+  // Legal next moves for under_review (minus withdrawn button styling)
+  expect(screen.getByRole("button", { name: "documents pending" })).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "submitted" })).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Withdraw" })).toBeInTheDocument()
+  // Checklist: passport verified, transcript missing with upload button
+  expect(screen.getByText("Passport")).toBeInTheDocument()
+  expect(screen.getByText("verified")).toBeInTheDocument()
+  expect(screen.getByText("missing")).toBeInTheDocument()
+  // History entries
+  expect(screen.getByText(/draft →/)).toBeInTheDocument()
+})
+
+it("hides actions from view-only staff", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["applications.view.assigned", "documents.view.assigned"]),
+  })
+  stubFetch()
+
+  renderDetail()
+
+  await screen.findByText("APP-2026-00021")
+  expect(screen.queryByRole("button", { name: "submitted" })).not.toBeInTheDocument()
+  expect(screen.queryByRole("button", { name: /Upload/ })).not.toBeInTheDocument()
+})
+
+it("surfaces the missing checklist on a blocked submit", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["applications.view.global", "applications.update.global"]),
+  })
+  const user = userEvent.setup()
+
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.includes("/transition") && init?.method === "POST") {
+        return Promise.resolve(
+          jsonResponse(
+            { message: "Document checklist incomplete", code: "CHECKLIST_INCOMPLETE", missing: ["Academic Transcript", "Passport Photo"] },
+            409,
+          ),
+        )
+      }
+      if (url.includes("/document-types")) return Promise.resolve(jsonResponse(TYPES))
+      if (url.includes("/documents")) return Promise.resolve(jsonResponse(DOCS))
+      return Promise.resolve(jsonResponse({ data: APPLICATION, checklist: { missing: [] } }))
+    }),
+  )
+
+  renderDetail()
+
+  await user.click(await screen.findByRole("button", { name: "submitted" }))
+
+  const alert = await screen.findByRole("alert")
+  expect(alert).toHaveTextContent(/required documents are missing/)
+  expect(within(alert).getByText("Academic Transcript")).toBeInTheDocument()
+  expect(within(alert).getByText("Passport Photo")).toBeInTheDocument()
+})

@@ -11,6 +11,8 @@ import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
 import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
+import ApplicationDetailPage from "@/features/admissions/ApplicationDetailPage"
+import ApplicationsPage from "@/features/admissions/ApplicationsPage"
 import LeadDetailPage from "@/features/crm/LeadDetailPage"
 import LeadsPage from "@/features/crm/LeadsPage"
 import StudentProfilePage from "@/features/crm/StudentProfilePage"
@@ -40,7 +42,8 @@ const router = createBrowserRouter([
           { path: "/leads/:id", element: <LeadDetailPage /> },
           { path: "/students", element: <StudentsPage /> },
           { path: "/students/:id", element: <StudentProfilePage /> },
-          { path: "/applications", element: <ComingSoon module="Applications" milestone="M4" /> },
+          { path: "/applications", element: <ApplicationsPage /> },
+          { path: "/applications/:id", element: <ApplicationDetailPage /> },
           { path: "/universities", element: <UniversitiesPage /> },
           { path: "/universities/:id", element: <UniversityDetailPage /> },
           { path: "/scholarships", element: <ComingSoon module="Scholarships" milestone="M2" /> },
