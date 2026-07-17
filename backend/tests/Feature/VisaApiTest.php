@@ -25,8 +25,8 @@ it('lists cases with pipeline meta', function () {
     $this->getJson('/api/v1/visa-cases')
         ->assertOk()
         ->assertJsonCount(2, 'data')
-        ->assertJsonPath('meta.pipeline.not_started', 1)
-        ->assertJsonPath('meta.pipeline.submitted', 1);
+        ->assertJsonPath('pipeline.not_started', 1)
+        ->assertJsonPath('pipeline.submitted', 1);
 });
 
 it('limits assigned scope to the officer or counselor', function () {

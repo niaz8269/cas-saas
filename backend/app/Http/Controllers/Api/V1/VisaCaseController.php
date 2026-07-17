@@ -45,15 +45,16 @@ class VisaCaseController extends Controller
             ->latest()
             ->paginate(min($request->integer('per_page', 25), 100));
 
-        // Pipeline meta for the board header: count per status.
+        // Pipeline totals for the board header: count per lifecycle status.
         $pipeline = VisaCase::query()
             ->visibleTo($request->user())
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
-            ->pluck('total', 'status');
+            ->pluck('total', 'status')
+            ->map(fn ($total) => (int) $total);
 
         return VisaCaseResource::collection($cases)
-            ->additional(['meta' => ['pipeline' => $pipeline]]);
+            ->additional(['pipeline' => $pipeline]);
     }
 
     public function show(Request $request, VisaCase $visaCase): VisaCaseResource

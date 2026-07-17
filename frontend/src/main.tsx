@@ -22,6 +22,8 @@ import LeadsPage from "@/features/crm/LeadsPage"
 import StudentProfilePage from "@/features/crm/StudentProfilePage"
 import StudentsPage from "@/features/crm/StudentsPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
+import VisaCaseDetailPage from "@/features/visa/VisaCaseDetailPage"
+import VisaCasesPage from "@/features/visa/VisaCasesPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,7 +57,8 @@ const router = createBrowserRouter([
           { path: "/finance/:id", element: <InvoiceDetailPage /> },
           { path: "/commissions", element: <CommissionsPage /> },
           { path: "/commissions/:id", element: <CommissionDetailPage /> },
-          { path: "/visa", element: <ComingSoon module="Visa" milestone="M6" /> },
+          { path: "/visa", element: <VisaCasesPage /> },
+          { path: "/visa/:id", element: <VisaCaseDetailPage /> },
           { path: "/reports", element: <ComingSoon module="Reports" milestone="M9" /> },
           { path: "/users", element: <ComingSoon module="User Management" milestone="M1+" /> },
           { path: "/settings", element: <ComingSoon module="Settings" milestone="M8" /> },

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CrmSeeder::class,
             AdmissionsSeeder::class,
             FinanceSeeder::class,
+            VisaSeeder::class,
         ]);
     }
 }
