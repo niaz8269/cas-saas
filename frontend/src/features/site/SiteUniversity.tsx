@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversity, type SiteIntake } from "@/features/site/api"
+import EnquiryForm from "@/features/site/EnquiryForm"
 import { cn } from "@/lib/utils"
 
 const money = (v: string | number | null | undefined, currency?: string | null) =>
@@ -86,11 +87,16 @@ export default function SiteUniversity() {
                 )}
               </div>
             </div>
-            {u.apply_link && (
-              <Button asChild>
-                <a href={u.apply_link} target="_blank" rel="noreferrer">Apply now <ExternalLink className="size-4" /></a>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button asChild variant="secondary">
+                <a href="#enquire">Enquire</a>
               </Button>
-            )}
+              {u.apply_link && (
+                <Button asChild>
+                  <a href={u.apply_link} target="_blank" rel="noreferrer">Apply now <ExternalLink className="size-4" /></a>
+                </Button>
+              )}
+            </div>
           </div>
 
           {deadline && (
@@ -178,6 +184,9 @@ export default function SiteUniversity() {
           </div>
         </section>
       )}
+
+      {/* Enquiry */}
+      <EnquiryForm universityId={u.id} universityName={u.name} />
     </div>
   )
 }
