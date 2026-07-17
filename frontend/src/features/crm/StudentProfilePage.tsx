@@ -27,6 +27,7 @@ import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
+import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -204,6 +205,10 @@ export default function StudentProfilePage() {
               </Select>
             </div>
           )}
+
+          <div className="mt-4 border-t pt-4">
+            <SendMessageDialog studentId={id} />
+          </div>
         </div>
       </div>
 
