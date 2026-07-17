@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { listLeads } from "@/features/crm/api"
+import LeadRowActions from "@/features/crm/LeadRowActions"
 import { LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
 
@@ -103,13 +104,14 @@ export default function LeadsPage() {
               <TableHead>Assignee</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
+              <TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isPending &&
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 6 }).map((_, cell) => (
+                  {Array.from({ length: 7 }).map((_, cell) => (
                     <TableCell key={cell}>
                       <Skeleton className="h-4 w-full max-w-28" />
                     </TableCell>
@@ -119,7 +121,7 @@ export default function LeadsPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
+                <TableCell colSpan={7} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load leads.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>
                     Try again
@@ -130,7 +132,7 @@ export default function LeadsPage() {
 
             {!isPending && !isError && leads.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+                <TableCell colSpan={7} className="py-12 text-center">
                   <Filter className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No leads found</p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -173,6 +175,9 @@ export default function LeadsPage() {
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{formatDate(lead.created_at)}</TableCell>
+                <TableCell className="text-right">
+                  <LeadRowActions lead={lead} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
