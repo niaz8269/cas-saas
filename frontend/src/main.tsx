@@ -36,6 +36,9 @@ import StudentApplications from "@/features/portal/student/StudentApplications"
 import StudentVisa from "@/features/portal/student/StudentVisa"
 import StudentInvoices from "@/features/portal/student/StudentInvoices"
 import StudentDocuments from "@/features/portal/student/StudentDocuments"
+import SiteLayout from "@/features/site/SiteLayout"
+import SiteHome from "@/features/site/SiteHome"
+import SiteUniversity from "@/features/site/SiteUniversity"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +52,15 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
+
+  // Public website preview (unauthenticated) — consumes the public API
+  {
+    element: <SiteLayout />,
+    children: [
+      { path: "/site", element: <SiteHome /> },
+      { path: "/site/universities/:slug", element: <SiteUniversity /> },
+    ],
+  },
 
   // Mobile-first portals (agent + student) — separate token + shell (M7)
   { path: "/portal/login", element: <PortalLogin /> },
