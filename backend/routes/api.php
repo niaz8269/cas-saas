@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CourseController;
+use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\LeadController;
@@ -50,6 +51,14 @@ Route::prefix('v1')->group(function () {
         Route::patch('applications/{application}', [ApplicationController::class, 'update']);
         Route::post('applications/{application}/transition', [ApplicationController::class, 'transition']);
         Route::post('applications/{application}/offers', [ApplicationController::class, 'storeOffer']);
+        Route::get('applications/{application}/documents', [DocumentController::class, 'forApplication']);
+
+        // Documents (pre-signed, access-logged)
+        Route::post('documents/presign', [DocumentController::class, 'presign']);
+        Route::post('documents', [DocumentController::class, 'store']);
+        Route::get('documents/{document}/download', [DocumentController::class, 'download']);
+        Route::post('documents/{document}/verify', [DocumentController::class, 'verify']);
+        Route::post('documents/{document}/reject', [DocumentController::class, 'reject']);
 
         // Catalog (policy-authorized in controllers)
         Route::apiResource('universities', UniversityController::class);

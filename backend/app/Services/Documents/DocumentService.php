@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Services\Documents;
+
+use App\Models\Application;
+use App\Models\Document;
+use App\Models\DocumentAccessLog;
+use App\Models\DocumentType;
+use App\Models\Student;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+/**
+ * Documents live in S3/MinIO under keyed paths and are never public:
+ * uploads and downloads go through short-lived pre-signed URLs brokered
+ * here after a policy check, and every access is logged (§4.7).
+ */
+class DocumentService
+{
+    public const DISK = 's3';
+
+    public const MAX_BYTES = 25 * 1024 * 1024;
+
+    public const ALLOWED_MIMES = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+
+    /** Short type names accepted by the API mapped to models. */
+    public const DOCUMENTABLES = [
+        'application' => Application::class,
+        'student' => Student::class,
+    ];
+
+    /**
+     * Keyed storage path for a documentable (always under the student).
+     */
+    public function keyPrefix(Application|Student $documentable): string
+    {
+        return $documentable instanceof Application
+            ? "students/{$documentable->student_id}/applications/{$documentable->id}/"
+            : "students/{$documentable->id}/";
+    }
+
+    /**
+     * @return array{key: string, url: string, headers: array<string, string>, expires_at: string}
+     */
+    public function presignUpload(Application|Student $documentable, string $fileName, string $mime): array
+    {
+        $safeName = Str::limit(Str::slug(pathinfo($fileName, PATHINFO_FILENAME)), 80, '')
+            .'.'.strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        $key = $this->keyPrefix($documentable).Str::uuid().'_'.$safeName;
+        $expiresAt = now()->addMinutes(15);
+
+        ['url' => $url, 'headers' => $headers] = Storage::disk(self::DISK)
+            ->temporaryUploadUrl($key, $expiresAt, ['ContentType' => $mime]);
+
+        return [
+            'key' => $key,
+            'url' => $url,
+            'headers' => [...$headers, 'Content-Type' => $mime],
+            'expires_at' => $expiresAt->toIso8601String(),
+        ];
+    }
+
+    /**
+     * Register an uploaded object as a Document (next version per type).
+     */
+    public function register(
+        Application|Student $documentable,
+        DocumentType $type,
+        string $key,
+        string $fileName,
+        string $mime,
+        int $size,
+        User $actor,
+        ?string $ip,
+    ): Document {
+        return DB::transaction(function () use ($documentable, $type, $key, $fileName, $mime, $size, $actor, $ip) {
+            $version = (int) $documentable->documents()
+                ->where('document_type_id', $type->id)
+                ->max('version') + 1;
+
+            $document = $documentable->documents()->create([
+                'document_type_id' => $type->id,
+                'file_path' => $key,
+                'file_name' => $fileName,
+                'mime' => $mime,
+                'size' => $size,
+                'status' => 'pending',
+                'version' => $version,
+                'created_by' => $actor->id,
+            ]);
+
+            $this->log($document, $actor, 'upload', $ip);
+
+            return $document;
+        });
+    }
+
+    /**
+     * @return array{url: string, expires_at: string}
+     */
+    public function downloadUrl(Document $document, User $actor, ?string $ip): array
+    {
+        $expiresAt = now()->addMinutes(10);
+
+        $url = Storage::disk(self::DISK)->temporaryUrl($document->file_path, $expiresAt);
+
+        $this->log($document, $actor, 'download', $ip);
+
+        return ['url' => $url, 'expires_at' => $expiresAt->toIso8601String()];
+    }
+
+    public function log(Document $document, User $actor, string $action, ?string $ip): void
+    {
+        DocumentAccessLog::create([
+            'document_id' => $document->id,
+            'user_id' => $actor->id,
+            'action' => $action,
+            'ip' => $ip,
+            'created_at' => now(),
+        ]);
+    }
+}
