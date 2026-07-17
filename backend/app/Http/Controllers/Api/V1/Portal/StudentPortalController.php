@@ -10,9 +10,11 @@ use App\Http\Resources\Portal\StudentVisaCaseResource;
 use App\Models\DocumentType;
 use App\Models\Invoice;
 use App\Models\VisaCase;
+use App\Services\Finance\InvoicePdfRenderer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Student portal reads (report §5.11): own records only, financial and
@@ -63,6 +65,17 @@ class StudentPortalController extends Controller
             ->get();
 
         return StudentInvoiceResource::collection($invoices);
+    }
+
+    /** Stream the branded PDF for one of the student's own invoices. */
+    public function invoicePdf(Request $request, Invoice $invoice, InvoicePdfRenderer $renderer): Response
+    {
+        abort_unless(
+            $invoice->party_type === 'student' && $invoice->party_id === $request->user()->id,
+            404,
+        );
+
+        return $renderer->stream($invoice, $request->user()->full_name);
     }
 
     public function documents(Request $request): AnonymousResourceCollection

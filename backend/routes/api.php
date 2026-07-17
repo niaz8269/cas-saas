@@ -78,6 +78,7 @@ Route::prefix('v1')->group(function () {
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
+            Route::get('invoices/{invoice}/pdf', [StudentPortalController::class, 'invoicePdf']);
             Route::get('documents', [StudentPortalController::class, 'documents']);
             Route::get('document-types', [StudentPortalController::class, 'documentTypes']);
             Route::post('documents/presign', [StudentDocumentController::class, 'presign']);

@@ -9,6 +9,7 @@ import PortalLogin from "./PortalLogin"
 import RequirePortalAuth from "./RequirePortalAuth"
 import AgentCommissions from "./agent/AgentCommissions"
 import StudentApplications from "./student/StudentApplications"
+import StudentInvoices from "./student/StudentInvoices"
 
 beforeEach(() => {
   vi.restoreAllMocks()
@@ -134,4 +135,40 @@ it("shows a student application with its offer banner", async () => {
 
   expect(await screen.findByText("MBBS")).toBeInTheDocument()
   expect(screen.getByText(/Offer received/)).toBeInTheDocument()
+})
+
+it("downloads a student invoice as a brokered PDF", async () => {
+  usePortalAuthStore.setState({
+    token: "t", kind: "student",
+    profile: { id: 5, name: "Ali Khan", email: null, status: "arrived", code: "STU-2026-00005" },
+  })
+  const user = userEvent.setup()
+  const openSpy = vi.fn()
+  vi.stubGlobal("open", openSpy)
+  URL.createObjectURL = vi.fn(() => "blob:mock-invoice")
+  URL.revokeObjectURL = vi.fn()
+
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      if (String(input).includes("/pdf")) {
+        return Promise.resolve(new Response(new Blob(["%PDF-1.4 test"], { type: "application/pdf" })))
+      }
+      return Promise.resolve(
+        jsonResponse({
+          data: [{
+            id: 9, invoice_no: "INV-2026-09001", currency: "CNY",
+            subtotal: "30000", tax: "0", total: "30000", amount_paid: "12000",
+            status: "partially_paid", issued_at: null, due_at: null, items: [], receipts: [],
+          }],
+        }),
+      )
+    }),
+  )
+
+  renderWithProviders(<StudentInvoices />)
+
+  await user.click(await screen.findByRole("button", { name: /Download PDF/ }))
+
+  await waitFor(() => expect(openSpy).toHaveBeenCalledWith("blob:mock-invoice", "_blank", "noopener"))
 })

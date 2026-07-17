@@ -24,11 +24,12 @@ class PortalSeeder extends Seeder
         }
 
         // The demo's richest student record: accepted, paid, travel-ready.
+        // Give it a stable, memorable portal login (Faker emails change each seed).
         $student = VisaCase::where('status', 'travel_ready')->first()?->student;
 
         if ($student && $student->password === null) {
             $student->forceFill([
-                'email' => $student->email ?? 'student.demo@cas.moe',
+                'email' => 'student@cas.moe',
                 'password' => $password,
             ])->save();
         }

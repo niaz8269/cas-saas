@@ -71,6 +71,24 @@ it('shows only the students own invoices and receipts, never commission data', f
         ->assertJsonCount(1, 'data.0.receipts');
 });
 
+it('streams the students own invoice as a branded pdf', function () {
+    $student = actingAsStudentPortal();
+    $invoice = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'invoice_no' => 'INV-2026-09001']);
+    $invoice->items()->create(['description' => 'Tuition — year 1', 'qty' => 1, 'unit_price' => 30000, 'amount' => 30000]);
+
+    $response = $this->get("/api/v1/student/invoices/{$invoice->id}/pdf");
+
+    $response->assertOk()->assertHeader('content-type', 'application/pdf');
+    expect(substr((string) $response->getContent(), 0, 4))->toBe('%PDF');
+});
+
+it('404s when downloading another party invoice pdf', function () {
+    actingAsStudentPortal();
+    $foreign = Invoice::factory()->create(['party_type' => 'student', 'party_id' => 999]);
+
+    $this->get("/api/v1/student/invoices/{$foreign->id}/pdf")->assertNotFound();
+});
+
 it('presigns and registers an upload against the student only', function () {
     Storage::fake('s3');
     $student = actingAsStudentPortal();

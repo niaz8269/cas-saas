@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { Receipt } from "lucide-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { Download, Receipt } from "lucide-react"
 
-import { getStudentInvoices } from "@/features/portal/api"
+import { Button } from "@/components/ui/button"
+import { getStudentInvoicePdf, getStudentInvoices } from "@/features/portal/api"
 import {
   EmptyState,
   ListSkeleton,
@@ -16,6 +17,15 @@ export default function StudentInvoices() {
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["student", "invoices"],
     queryFn: getStudentInvoices,
+  })
+
+  const pdf = useMutation({
+    mutationFn: (id: number) => getStudentInvoicePdf(id),
+    onSuccess: (blob) => {
+      const url = URL.createObjectURL(blob)
+      window.open(url, "_blank", "noopener")
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    },
   })
 
   return (
@@ -67,6 +77,17 @@ export default function StudentInvoices() {
                   ))}
                 </div>
               )}
+
+              <Button
+                type="button"
+                variant="secondary"
+                className="mt-3 h-10 w-full"
+                disabled={pdf.isPending && pdf.variables === inv.id}
+                onClick={() => pdf.mutate(inv.id)}
+              >
+                <Download className="size-4" />
+                {pdf.isPending && pdf.variables === inv.id ? "Preparing…" : "Download PDF"}
+              </Button>
             </PortalCard>
           )
         })}

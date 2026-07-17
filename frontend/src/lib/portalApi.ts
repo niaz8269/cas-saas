@@ -34,3 +34,24 @@ export async function portalApi<T>(path: string, options: RequestInit = {}): Pro
 
   return data as T
 }
+
+/** Portal counterpart to apiBlob: fetch a binary response (e.g. a PDF) as a Blob. */
+export async function portalApiBlob(path: string, options: RequestInit = {}): Promise<Blob> {
+  const token = usePortalAuthStore.getState().token
+
+  const response = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  })
+
+  if (!response.ok) {
+    if (response.status === 401) usePortalAuthStore.getState().clearAuth()
+    const payload = await response.json().catch(() => null)
+    throw new ApiError(response.status, payload ?? { message: `HTTP ${response.status}` })
+  }
+
+  return response.blob()
+}

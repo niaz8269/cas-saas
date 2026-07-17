@@ -1,4 +1,4 @@
-import { portalApi } from "@/lib/portalApi"
+import { portalApi, portalApiBlob } from "@/lib/portalApi"
 import type { PortalKind } from "@/stores/portalAuth"
 
 // ── Auth ─────────────────────────────────────────────────────────────────
@@ -142,6 +142,10 @@ export const getStudentVisaCase = () =>
 
 export const getStudentInvoices = () =>
   portalApi<{ data: StudentInvoiceRow[] }>("/student/invoices")
+
+/** The branded invoice PDF for one of the student's own invoices, as a Blob. */
+export const getStudentInvoicePdf = (id: number) =>
+  portalApiBlob(`/student/invoices/${id}/pdf`)
 
 export const getStudentDocuments = () =>
   portalApi<{ data: StudentDocumentRow[] }>("/student/documents")
