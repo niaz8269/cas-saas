@@ -37,8 +37,23 @@ export interface StudentSummary {
   branch?: { id: number; name: string; code: string } | null
   agent?: { id: number; name: string; agent_code: string } | null
   counselor?: { id: number; name: string } | null
-  guardians?: { id: number; name: string; relation: string | null; phone: string | null }[]
+  guardians?: Guardian[]
   created_at: string | null
+}
+
+export interface Guardian {
+  id: number
+  name: string
+  relation: string | null
+  phone: string | null
+  email: string | null
+}
+
+export interface GuardianPayload {
+  name: string
+  relation?: string | null
+  phone?: string | null
+  email?: string | null
 }
 
 export interface ActivityItem {
@@ -115,3 +130,20 @@ export const addNote = (id: number | string, body: string) =>
     method: "POST",
     body: JSON.stringify({ body }),
   })
+
+// ── Guardians ──────────────────────────────────────────────────────────
+
+export const addGuardian = (studentId: number | string, payload: GuardianPayload) =>
+  api<{ data: Guardian }>(`/students/${studentId}/guardians`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
+export const updateGuardian = (studentId: number | string, guardianId: number, payload: GuardianPayload) =>
+  api<{ data: Guardian }>(`/students/${studentId}/guardians/${guardianId}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  })
+
+export const deleteGuardian = (studentId: number | string, guardianId: number) =>
+  api<{ message: string }>(`/students/${studentId}/guardians/${guardianId}`, { method: "DELETE" })

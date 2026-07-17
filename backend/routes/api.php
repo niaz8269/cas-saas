@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\GuardianController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
@@ -105,6 +106,9 @@ Route::prefix('v1')->group(function () {
         Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
         Route::get('students/{student}/communications', [CommunicationController::class, 'index']);
         Route::post('students/{student}/communications', [CommunicationController::class, 'store']);
+        Route::post('students/{student}/guardians', [GuardianController::class, 'store']);
+        Route::patch('students/{student}/guardians/{guardian}', [GuardianController::class, 'update']);
+        Route::delete('students/{student}/guardians/{guardian}', [GuardianController::class, 'destroy']);
 
         // Admissions
         Route::get('applications', [ApplicationController::class, 'index']);

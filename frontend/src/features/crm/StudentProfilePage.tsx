@@ -27,6 +27,7 @@ import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
+import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
@@ -141,19 +142,7 @@ export default function StudentProfilePage() {
             <Field label="Agent" value={s.agent ? `${s.agent.name} (${s.agent.agent_code})` : null} />
           </dl>
 
-          {(s.guardians?.length ?? 0) > 0 && (
-            <div className="mt-4 border-t pt-4">
-              <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Guardians</p>
-              {s.guardians!.map((guardian) => (
-                <p key={guardian.id} className="mt-1.5 text-sm">
-                  {guardian.name}
-                  <span className="text-muted-foreground">
-                    {" "}· {guardian.relation ?? "guardian"}{guardian.phone ? ` · ${guardian.phone}` : ""}
-                  </span>
-                </p>
-              ))}
-            </div>
-          )}
+          <GuardiansEditor studentId={id} guardians={s.guardians ?? []} canEdit={canUpdate} />
 
           {(applications.data?.data.length ?? 0) > 0 && (
             <div className="mt-4 border-t pt-4">
