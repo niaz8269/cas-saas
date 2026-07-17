@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
+use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
 /*
@@ -13,3 +16,32 @@ use Tests\TestCase;
 */
 
 pest()->extend(TestCase::class)->in('Feature');
+
+/*
+|--------------------------------------------------------------------------
+| Shared helpers
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Authenticate a staff user holding the given permissions (staff guard).
+ *
+ * @param  list<string>  $permissions
+ * @param  array<string, mixed>  $attributes
+ */
+function actingAsStaffWith(array $permissions = [], array $attributes = []): User
+{
+    $user = User::factory()->create($attributes);
+
+    foreach ($permissions as $permission) {
+        Permission::findOrCreate($permission, 'staff');
+    }
+
+    if ($permissions !== []) {
+        $user->givePermissionTo($permissions);
+    }
+
+    Sanctum::actingAs($user, guard: 'staff');
+
+    return $user;
+}

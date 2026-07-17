@@ -3,32 +3,9 @@
 use App\Models\Course;
 use App\Models\University;
 use App\Models\UniversityAgreement;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Sanctum\Sanctum;
-use Spatie\Permission\Models\Permission;
 
 uses(RefreshDatabase::class);
-
-/**
- * Authenticate a staff user holding the given permissions (staff guard).
- */
-function actingAsStaffWith(array $permissions = []): User
-{
-    $user = User::factory()->create();
-
-    foreach ($permissions as $permission) {
-        Permission::findOrCreate($permission, 'staff');
-    }
-
-    if ($permissions !== []) {
-        $user->givePermissionTo($permissions);
-    }
-
-    Sanctum::actingAs($user, guard: 'staff');
-
-    return $user;
-}
 
 // ── Universities ────────────────────────────────────────────────────────
 

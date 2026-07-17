@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\Auth\ScopeResolver;
 use Database\Factories\StudentFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -86,5 +88,24 @@ class Student extends Model
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * Constrain to the records visible under the user's resolved
+     * students.view scope (mirrors StudentPolicy::view).
+     */
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        $scope = app(ScopeResolver::class)->resolve($user, 'students', 'view');
+
+        return match ($scope) {
+            'global' => $query,
+            'branch', 'department' => $query->where('branch_id', $user->branch_id),
+            'assigned' => $query->where('assigned_counselor_id', $user->id),
+            'own' => $query->where(fn ($q) => $q
+                ->where('created_by', $user->id)
+                ->orWhere('assigned_counselor_id', $user->id)),
+            default => $query->whereRaw('1 = 0'),
+        };
     }
 }

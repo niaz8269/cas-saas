@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\Auth\ScopeResolver;
 use Database\Factories\LeadFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -87,5 +89,22 @@ class Lead extends Model
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * Constrain to the records visible under the user's resolved
+     * leads.view scope (mirrors LeadPolicy::view).
+     */
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        $scope = app(ScopeResolver::class)->resolve($user, 'leads', 'view');
+
+        return match ($scope) {
+            'global' => $query,
+            'branch' => $query->whereHas('assignee', fn ($q) => $q->where('branch_id', $user->branch_id)),
+            'department' => $query->whereHas('assignee', fn ($q) => $q->where('department_id', $user->department_id)),
+            'assigned', 'own' => $query->where('assigned_user_id', $user->id),
+            default => $query->whereRaw('1 = 0'),
+        };
     }
 }

@@ -4,7 +4,9 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
+use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
 use App\Http\Controllers\Api\V1\UniversityController;
@@ -27,6 +29,18 @@ Route::prefix('v1')->group(function () {
 
         Route::get('users', [UserController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+
+        // CRM (record-scoped via policies + visibleTo query scopes)
+        Route::get('leads', [LeadController::class, 'index']);
+        Route::get('leads/{lead}', [LeadController::class, 'show']);
+        Route::patch('leads/{lead}', [LeadController::class, 'update']);
+        Route::post('leads/{lead}/assign', [LeadController::class, 'assign']);
+        Route::post('leads/{lead}/convert', [LeadController::class, 'convert']);
+        Route::get('students', [StudentController::class, 'index']);
+        Route::get('students/{student}', [StudentController::class, 'show']);
+        Route::patch('students/{student}', [StudentController::class, 'update']);
+        Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);
+        Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
 
         // Catalog (policy-authorized in controllers)
         Route::apiResource('universities', UniversityController::class);
