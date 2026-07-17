@@ -11,6 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Role/permission and demo-admin seeders arrive in M1.2.
+        $this->call([
+            CountrySeeder::class,
+            DepartmentSeeder::class,
+            BranchSeeder::class,
+            RolesAndPermissionsSeeder::class,
+            StaffUserSeeder::class,
+        ]);
     }
 }

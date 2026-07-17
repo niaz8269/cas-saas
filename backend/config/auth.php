@@ -42,6 +42,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Staff API guard (Sanctum tokens issued to App\Models\User).
+        'staff' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+
+        // 'agent' and 'student' guards are added with their models (M3/M7).
     ],
 
     /*
