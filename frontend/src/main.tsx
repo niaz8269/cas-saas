@@ -24,6 +24,17 @@ import StudentsPage from "@/features/crm/StudentsPage"
 import DashboardPage from "@/features/dashboard/DashboardPage"
 import VisaCaseDetailPage from "@/features/visa/VisaCaseDetailPage"
 import VisaCasesPage from "@/features/visa/VisaCasesPage"
+import PortalLogin from "@/features/portal/PortalLogin"
+import PortalShell from "@/features/portal/PortalShell"
+import RequirePortalAuth from "@/features/portal/RequirePortalAuth"
+import AgentHome from "@/features/portal/agent/AgentHome"
+import AgentStudents from "@/features/portal/agent/AgentStudents"
+import AgentCommissions from "@/features/portal/agent/AgentCommissions"
+import StudentHome from "@/features/portal/student/StudentHome"
+import StudentApplications from "@/features/portal/student/StudentApplications"
+import StudentVisa from "@/features/portal/student/StudentVisa"
+import StudentInvoices from "@/features/portal/student/StudentInvoices"
+import StudentDocuments from "@/features/portal/student/StudentDocuments"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,6 +48,28 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
+
+  // Mobile-first portals (agent + student) — separate token + shell (M7)
+  { path: "/portal/login", element: <PortalLogin /> },
+  {
+    element: <RequirePortalAuth />,
+    children: [
+      {
+        element: <PortalShell />,
+        children: [
+          { path: "/portal/agent", element: <AgentHome /> },
+          { path: "/portal/agent/students", element: <AgentStudents /> },
+          { path: "/portal/agent/commissions", element: <AgentCommissions /> },
+          { path: "/portal/student", element: <StudentHome /> },
+          { path: "/portal/student/applications", element: <StudentApplications /> },
+          { path: "/portal/student/visa", element: <StudentVisa /> },
+          { path: "/portal/student/invoices", element: <StudentInvoices /> },
+          { path: "/portal/student/documents", element: <StudentDocuments /> },
+        ],
+      },
+    ],
+  },
+
   {
     element: <RequireAuth />,
     children: [

@@ -118,6 +118,17 @@ it('rejects a storage key outside the students prefix', function () {
     expect(Document::count())->toBe(0);
 });
 
+it('lists document types the student can upload against', function () {
+    actingAsStudentPortal();
+    DocumentType::factory()->create(['name' => 'Passport']);
+    DocumentType::factory()->create(['name' => 'Bank Statement']);
+
+    $this->getJson('/api/v1/student/document-types')
+        ->assertOk()
+        ->assertJsonCount(2, 'data')
+        ->assertJsonStructure(['data' => [['id', 'name', 'category']]]);
+});
+
 it('downloads only the students own documents', function () {
     Storage::fake('s3');
     $student = actingAsStudentPortal();

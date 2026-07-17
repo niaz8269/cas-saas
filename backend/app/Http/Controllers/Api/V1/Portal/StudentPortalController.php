@@ -7,8 +7,10 @@ use App\Http\Resources\Portal\StudentApplicationResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
 use App\Http\Resources\Portal\StudentInvoiceResource;
 use App\Http\Resources\Portal\StudentVisaCaseResource;
+use App\Models\DocumentType;
 use App\Models\Invoice;
 use App\Models\VisaCase;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -71,5 +73,17 @@ class StudentPortalController extends Controller
             ->get();
 
         return StudentDocumentResource::collection($documents);
+    }
+
+    /**
+     * Document types the student may upload against (names/categories are
+     * not sensitive; the sensitive flag governs staff visibility, not this
+     * picklist).
+     */
+    public function documentTypes(): JsonResponse
+    {
+        return response()->json([
+            'data' => DocumentType::orderBy('name')->get(['id', 'name', 'category']),
+        ]);
     }
 }

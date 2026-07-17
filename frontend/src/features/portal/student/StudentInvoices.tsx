@@ -1,0 +1,76 @@
+import { useQuery } from "@tanstack/react-query"
+import { Receipt } from "lucide-react"
+
+import { getStudentInvoices } from "@/features/portal/api"
+import {
+  EmptyState,
+  ListSkeleton,
+  LoadError,
+  PageTitle,
+  PortalCard,
+  StatusBadge,
+} from "@/features/portal/components"
+import { INVOICE_BADGE, money } from "@/features/portal/status"
+
+export default function StudentInvoices() {
+  const { data, isPending, isError, refetch } = useQuery({
+    queryKey: ["student", "invoices"],
+    queryFn: getStudentInvoices,
+  })
+
+  return (
+    <div>
+      <PageTitle title="Fees & receipts" subtitle="Your tuition invoices and payments" />
+
+      {isPending && <ListSkeleton rows={2} />}
+      {isError && <LoadError onRetry={refetch} />}
+
+      {data && data.data.length === 0 && (
+        <EmptyState icon={<Receipt className="mx-auto size-8" />} title="No invoices yet" />
+      )}
+
+      <div className="space-y-3">
+        {data?.data.map((inv) => {
+          const outstanding = Number(inv.total) - Number(inv.amount_paid)
+
+          return (
+            <PortalCard key={inv.id}>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-mono text-xs text-muted-foreground">{inv.invoice_no}</p>
+                  <p className="mt-1 text-lg font-semibold tabular-nums">{money(inv.total, inv.currency)}</p>
+                </div>
+                <StatusBadge status={inv.status} map={INVOICE_BADGE} />
+              </div>
+
+              <div className="mt-3 flex justify-between border-t pt-3 text-sm">
+                <span className="text-muted-foreground">Paid</span>
+                <span className="tabular-nums">{money(inv.amount_paid, inv.currency)}</span>
+              </div>
+              {outstanding > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Outstanding</span>
+                  <span className="font-medium tabular-nums text-amber-700">{money(outstanding, inv.currency)}</span>
+                </div>
+              )}
+
+              {inv.receipts && inv.receipts.length > 0 && (
+                <div className="mt-3 border-t pt-3">
+                  <p className="mb-1 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">Receipts</p>
+                  {inv.receipts.map((r) => (
+                    <div key={r.payment_no} className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        {r.received_at ? new Date(r.received_at).toLocaleDateString() : r.payment_no}
+                      </span>
+                      <span className="tabular-nums">{money(r.amount, inv.currency)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </PortalCard>
+          )
+        })}
+      </div>
+    </div>
+  )
+}

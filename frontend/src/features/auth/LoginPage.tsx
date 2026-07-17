@@ -153,6 +153,13 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          Student or agent?{" "}
+          <a href="/portal/login" className="font-medium text-cas-navy hover:underline">
+            Go to the portal
+          </a>
+        </p>
+
         <p className="mt-6 text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} CAS — Consultancy for Abroad Study
         </p>
