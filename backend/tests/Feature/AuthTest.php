@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -98,7 +99,7 @@ it('revokes the token on logout', function () {
     $this->postJson('/api/v1/auth/logout', [], ['Authorization' => "Bearer {$token}"])
         ->assertOk();
 
-    expect(\Laravel\Sanctum\PersonalAccessToken::count())->toBe(0);
+    expect(PersonalAccessToken::count())->toBe(0);
 
     // Guards are memoized within a single test; reset to simulate a fresh request.
     app('auth')->forgetGuards();

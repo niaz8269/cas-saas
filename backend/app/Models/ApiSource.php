@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\ApiSourceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApiSource extends Model
 {
-    /** @use HasFactory<\Database\Factories\ApiSourceFactory> */
+    /** @use HasFactory<ApiSourceFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
