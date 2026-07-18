@@ -1,11 +1,83 @@
-import { Facebook, Instagram, Linkedin, LogIn, Mail, Megaphone, Menu, MessageCircle, Phone, Send, X, Youtube } from "lucide-react"
-import { useState } from "react"
+import { ChevronDown, Facebook, Instagram, Linkedin, LogIn, Mail, Megaphone, Menu, MessageCircle, Phone, Send, X, Youtube } from "lucide-react"
+import { useRef, useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
+
+// Per-item dropdown menus for the primary nav links.
+const DROPDOWNS: Record<string, { to: string; items: [string, string][] }> = {
+  Universities: {
+    to: "/site/universities",
+    items: [
+      ["MoE-listed universities", "/site/universities?moe=1"],
+      ["Medical universities", "/site/universities?q=Medical"],
+      ["Engineering universities", "/site/universities?q=Engineering"],
+      ["Technology universities", "/site/universities?q=Technology"],
+      ["Normal universities", "/site/universities?q=Normal"],
+      ["All universities »", "/site/universities"],
+    ],
+  },
+  Programs: {
+    to: "/site/programs",
+    items: [
+      ["Study MBBS in China", "/site/programs?q=MBBS"],
+      ["Engineering programs", "/site/programs?q=Engineering"],
+      ["Business & MBA", "/site/programs?q=Business"],
+      ["Bachelor degrees", "/site/programs?level=bachelor"],
+      ["Master degrees", "/site/programs?level=master"],
+      ["PhD / Doctoral", "/site/programs?level=phd"],
+      ["All programs »", "/site/programs"],
+    ],
+  },
+  Scholarships: {
+    to: "/site/scholarships",
+    items: [
+      ["Full scholarships", "/site/scholarships?q=full"],
+      ["Partial scholarships", "/site/scholarships?q=partial"],
+      ["University scholarships", "/site/scholarships?q=university"],
+      ["Government (CSC)", "/site/scholarships?q=CSC"],
+      ["Provincial scholarships", "/site/scholarships?q=provincial"],
+      ["All scholarships »", "/site/scholarships"],
+    ],
+  },
+}
+
+function NavDropdown({ label }: { label: keyof typeof DROPDOWNS }) {
+  const { to, items } = DROPDOWNS[label]
+  const [open, setOpen] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true) }
+  const hide = () => { timer.current = setTimeout(() => setOpen(false), 120) }
+
+  return (
+    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      <NavLink to={to} className={({ isActive }) => cn(
+        "inline-flex items-center gap-1 text-sm font-medium transition-colors",
+        isActive ? "text-cas-navy" : "text-muted-foreground hover:text-cas-navy",
+      )}>
+        {label} <ChevronDown className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")} />
+      </NavLink>
+      <div className={cn(
+        "absolute top-full left-1/2 z-40 mt-3 w-60 -translate-x-1/2 origin-top overflow-hidden rounded-xl border bg-card shadow-xl transition-all duration-200",
+        open ? "visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
+      )}>
+        <div className="h-1 bg-cas-gold" />
+        <ul className="p-2">
+          {items.map(([l, u]) => (
+            <li key={l}>
+              <Link to={u} onClick={() => setOpen(false)} className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-cas-navy">
+                {l}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
 
 // Full list — used by the mobile menu.
 const NAV = [
@@ -17,14 +89,6 @@ const NAV = [
   { to: "/site/why-china", label: "Why China" },
   { to: "/site/news", label: "News" },
   { to: "/site/contact", label: "Contact" },
-]
-
-// Primary links shown on desktop next to the Explore mega-menu.
-const PRIMARY = [
-  { to: "/site/universities", label: "Universities" },
-  { to: "/site/programs", label: "Programs" },
-  { to: "/site/scholarships", label: "Scholarships" },
-  { to: "/site/why-china", label: "Why China" },
 ]
 
 const WHATSAPP = "https://wa.me/8618041566030"
@@ -67,9 +131,10 @@ export default function SiteLayout() {
           </Link>
 
           <nav className="hidden items-center gap-5 lg:flex">
-            {PRIMARY.map((item) => (
-              <NavLink key={item.to} to={item.to} className={navClass}>{item.label}</NavLink>
-            ))}
+            <NavDropdown label="Universities" />
+            <NavDropdown label="Programs" />
+            <NavDropdown label="Scholarships" />
+            <NavLink to="/site/why-china" className={navClass}>Why China</NavLink>
             <SiteMegaMenu />
           </nav>
 
