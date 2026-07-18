@@ -93,7 +93,7 @@ export default function SiteMegaMenu() {
 
       <div
         className={cn(
-          "absolute right-0 top-full z-40 mt-3 w-[min(92vw,62rem)] origin-top-right overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-200",
+          "absolute top-full left-1/2 z-40 mt-3 w-[min(94vw,58rem)] origin-top -translate-x-1/2 overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-200",
           open ? "visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
         )}
       >
