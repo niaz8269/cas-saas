@@ -154,7 +154,10 @@ export default function SiteHome() {
   return (
     <div className="space-y-16">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative -mx-4 -mt-8 overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700 px-4 py-14 text-white sm:-mx-6 sm:px-6 sm:py-20">
+      <section className="relative -mx-4 -mt-8 overflow-hidden px-4 py-14 text-white sm:-mx-6 sm:px-6 sm:py-20">
+        {/* Optional hero photo — drop /public/images/hero.jpg; the gradient shows until then. */}
+        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('/images/hero.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 via-cas-navy/85 to-cas-navy-700/80" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
           <span className="font-serif text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
