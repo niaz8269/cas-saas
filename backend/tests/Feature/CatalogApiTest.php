@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DocumentType;
 use App\Models\Program;
 use App\Models\University;
 use App\Models\UniversityAgreement;
@@ -121,6 +122,36 @@ it('rejects a non-numeric service charge', function () {
         'level' => 'bachelor',
         'service_charges' => ['self' => ['student' => 'free']],
     ])->assertStatus(422)->assertJsonValidationErrors('service_charges.self.student');
+});
+
+it('stores per-course requirement documents and section toggles', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+    $passport = DocumentType::factory()->create(['name' => 'Passport']);
+
+    $response = $this->postJson('/api/v1/programs', [
+        'university_id' => $university->id,
+        'name' => 'PhD Physics',
+        'level' => 'phd',
+        'requirements' => [
+            'documents' => [$passport->id],
+            'sections' => ['research' => true, 'study_plan' => true],
+        ],
+    ])->assertCreated();
+
+    $program = Program::findOrFail($response->json('data.id'));
+    expect($program->requirements['documents'])->toBe([$passport->id])
+        ->and($program->requirements['sections']['research'])->toBeTrue();
+});
+
+it('rejects a required document that does not exist', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+
+    $this->postJson('/api/v1/programs', [
+        'university_id' => $university->id, 'name' => 'X', 'level' => 'phd',
+        'requirements' => ['documents' => [999999]],
+    ])->assertStatus(422)->assertJsonValidationErrors('requirements.documents.0');
 });
 
 it('updates a program for catalog managers', function () {

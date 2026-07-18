@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -21,8 +21,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { createProgram, updateProgram, type Program, type ServiceChargeTier } from "@/features/catalog/api"
+import { listDocumentTypes } from "@/features/admissions/api"
+import {
+  createProgram,
+  updateProgram,
+  type Program,
+  type ProgramRequirements,
+  type ProgramSections,
+  type ServiceChargeTier,
+} from "@/features/catalog/api"
 import { ApiError } from "@/lib/api"
+
+const SECTION_OPTIONS: [keyof ProgramSections, string][] = [
+  ["work_experience", "Work experience"],
+  ["research", "Research details"],
+  ["study_plan", "Study plan"],
+  ["intro_video", "Self-intro video"],
+]
+
+/** Merge the picker's documents + section toggles back into requirements,
+ * preserving any other keys (e.g. min_age). */
+function buildRequirements(
+  base: ProgramRequirements | null | undefined,
+  documents: number[],
+  sections: ProgramSections,
+): ProgramRequirements {
+  const rest = { ...(base ?? {}) }
+  delete rest.documents
+  delete rest.sections
+
+  return { ...rest, documents, sections }
+}
 
 const schema = z.object({
   name: z.string().min(1, "Name is required").max(190),
@@ -117,9 +146,23 @@ export default function ProgramFormDialog({
   const { register, handleSubmit, reset, setError, setValue, watch, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(program) })
 
+  const [reqDocs, setReqDocs] = useState<number[]>([])
+  const [reqSections, setReqSections] = useState<ProgramSections>({})
+
+  const docTypes = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes, enabled: open })
+
   useEffect(() => {
-    if (open) reset(toValues(program))
+    if (!open) return
+    reset(toValues(program))
+    const req = program?.requirements ?? {}
+    setReqDocs((req.documents ?? []).filter((d): d is number => typeof d === "number"))
+    setReqSections(req.sections ?? {})
   }, [open, program, reset])
+
+  const toggleDoc = (id: number) =>
+    setReqDocs((docs) => (docs.includes(id) ? docs.filter((x) => x !== id) : [...docs, id]))
+  const toggleSection = (key: keyof ProgramSections) =>
+    setReqSections((s) => ({ ...s, [key]: !s[key] }))
 
   const level = watch("level")
 
@@ -134,6 +177,7 @@ export default function ProgramFormDialog({
         currency: v.currency || "CNY",
         teaching_language: v.teaching_language || null,
         apply_link: v.apply_link || null,
+        requirements: buildRequirements(program?.requirements, reqDocs, reqSections),
         service_charges: buildServiceCharges(v),
       }
 
@@ -240,6 +284,47 @@ export default function ProgramFormDialog({
               <span className="text-muted-foreground">Partial</span>
               <Input type="number" className="h-8" aria-label="Partial student charge" {...register("sc_partial_student")} />
               <Input type="number" className="h-8" aria-label="Partial agent charge" {...register("sc_partial_agent")} />
+            </div>
+          </div>
+
+          <div className="space-y-3 rounded-lg border p-3">
+            <Label>Application requirements</Label>
+            <p className="text-xs text-muted-foreground">What applicants must provide for this course — reflected in the apply form.</p>
+
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">Required documents</p>
+              <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border p-2">
+                {docTypes.data?.data.map((t) => (
+                  <label key={t.id} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      className="size-4 accent-cas-navy"
+                      aria-label={t.name}
+                      checked={reqDocs.includes(t.id)}
+                      onChange={() => toggleDoc(t.id)}
+                    />
+                    {t.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">Extra sections (typically Master / PhD)</p>
+              <div className="space-y-1.5">
+                {SECTION_OPTIONS.map(([key, label]) => (
+                  <label key={key} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      className="size-4 accent-cas-navy"
+                      aria-label={label}
+                      checked={Boolean(reqSections[key])}
+                      onChange={() => toggleSection(key)}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
 

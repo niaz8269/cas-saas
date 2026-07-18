@@ -134,6 +134,19 @@ export interface ServiceCharges {
   partial?: ServiceChargeTier | null
 }
 
+export interface ProgramSections {
+  work_experience?: boolean
+  research?: boolean
+  study_plan?: boolean
+  intro_video?: boolean
+}
+
+export interface ProgramRequirements {
+  documents?: (number | string)[] | null
+  sections?: ProgramSections | null
+  [key: string]: unknown
+}
+
 export interface Program {
   id: number
   university_id: number
@@ -144,6 +157,7 @@ export interface Program {
   currency: string | null
   teaching_language: string | null
   apply_link: string | null
+  requirements: ProgramRequirements | null
   service_charges: ServiceCharges | null
   status: string
 }
