@@ -41,6 +41,7 @@ import SiteHome from "@/features/site/SiteHome"
 import SiteUniversities from "@/features/site/SiteUniversities"
 import SiteUniversity from "@/features/site/SiteUniversity"
 import SiteProgramFinder from "@/features/site/SiteProgramFinder"
+import SiteScholarships from "@/features/site/SiteScholarships"
 import SitePlaceholder from "@/features/site/SitePlaceholder"
 import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
       { path: "/site/universities", element: <SiteUniversities /> },
       { path: "/site/universities/:slug", element: <SiteUniversity /> },
       { path: "/site/programs", element: <SiteProgramFinder /> },
-      { path: "/site/scholarships", element: <SitePlaceholder title="Scholarships" /> },
+      { path: "/site/scholarships", element: <SiteScholarships /> },
       { path: "/site/about", element: <SitePlaceholder title="About CAS" /> },
       { path: "/site/contact", element: <SitePlaceholder title="Contact us" /> },
     ],

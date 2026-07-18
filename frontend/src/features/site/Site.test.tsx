@@ -5,6 +5,7 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 
 import SiteHome from "./SiteHome"
 import SiteProgramFinder from "./SiteProgramFinder"
+import SiteScholarships from "./SiteScholarships"
 import SiteUniversities from "./SiteUniversities"
 import SiteUniversity from "./SiteUniversity"
 
@@ -73,6 +74,23 @@ it("finds programs and pre-fills the search from the URL", async () => {
   expect(await screen.findByText("MBBS")).toBeInTheDocument()
   expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("q=MBBS"), expect.anything()))
+})
+
+it("lists scholarships with their university and coverage", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+    data: [{
+      id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition",
+      amount: "30000.00", currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null,
+      apply_link: null, deadline: "2026-06-30", university: { name: "Jilin Medical", slug: "jilin-medical" },
+    }],
+    meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
+  })))
+
+  renderWithProviders(<SiteScholarships />)
+
+  expect(await screen.findByText("Belt & Road Scholarship")).toBeInTheDocument()
+  expect(screen.getByText("Full tuition")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
 })
 
 it("renders a university detail with programs, scholarships and deadline", async () => {
