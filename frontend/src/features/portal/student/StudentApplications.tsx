@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { FileText } from "lucide-react"
+import { FileText, Plus } from "lucide-react"
+import { Link } from "react-router-dom"
 
+import { Button } from "@/components/ui/button"
 import { getStudentApplications } from "@/features/portal/api"
 import {
   EmptyState,
@@ -21,6 +23,10 @@ export default function StudentApplications() {
   return (
     <div>
       <PageTitle title="My applications" subtitle="Track each application's progress" />
+
+      <Button asChild className="mb-4 h-11 w-full">
+        <Link to="/portal/student/apply"><Plus className="size-4" /> Start a new application</Link>
+      </Button>
 
       {isPending && <ListSkeleton rows={3} />}
       {isError && <LoadError onRetry={refetch} />}

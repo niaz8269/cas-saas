@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { FileText, Plane, Receipt, Upload } from "lucide-react"
+import { FileText, Plane, Plus, Receipt, Upload } from "lucide-react"
 import { Link } from "react-router-dom"
 
+import { Button } from "@/components/ui/button"
 import { getStudentApplications, getStudentInvoices } from "@/features/portal/api"
 import { PageTitle, PortalCard, StatusBadge } from "@/features/portal/components"
 import { APPLICATION_BADGE, money } from "@/features/portal/status"
@@ -22,6 +23,10 @@ export default function StudentHome() {
   return (
     <div className="space-y-4">
       <PageTitle title={`Hi, ${profile?.name?.split(" ")[0] ?? "there"}`} subtitle={`Student ${profile?.code ?? ""}`} />
+
+      <Button asChild className="h-12 w-full text-base">
+        <Link to="/portal/student/apply"><Plus className="size-5" /> Start a new application</Link>
+      </Button>
 
       {latest && (
         <PortalCard>

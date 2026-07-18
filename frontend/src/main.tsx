@@ -32,6 +32,7 @@ import AgentHome from "@/features/portal/agent/AgentHome"
 import AgentStudents from "@/features/portal/agent/AgentStudents"
 import AgentCommissions from "@/features/portal/agent/AgentCommissions"
 import StudentHome from "@/features/portal/student/StudentHome"
+import StudentApplyWizard from "@/features/portal/student/StudentApplyWizard"
 import StudentApplications from "@/features/portal/student/StudentApplications"
 import StudentVisa from "@/features/portal/student/StudentVisa"
 import StudentInvoices from "@/features/portal/student/StudentInvoices"
@@ -92,6 +93,7 @@ const router = createBrowserRouter([
           { path: "/portal/agent/students", element: <AgentStudents /> },
           { path: "/portal/agent/commissions", element: <AgentCommissions /> },
           { path: "/portal/student", element: <StudentHome /> },
+          { path: "/portal/student/apply", element: <StudentApplyWizard /> },
           { path: "/portal/student/applications", element: <StudentApplications /> },
           { path: "/portal/student/visa", element: <StudentVisa /> },
           { path: "/portal/student/invoices", element: <StudentInvoices /> },

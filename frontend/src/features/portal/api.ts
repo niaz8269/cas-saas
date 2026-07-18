@@ -195,6 +195,136 @@ export async function uploadStudentDocument(
   return registered.data
 }
 
+// ── Application wizard (student self-apply) ────────────────────────────────
+
+export type Degree = "master" | "bs" | "mbbs" | "bds" | "phd" | "diploma"
+export type Funding = "self" | "scholarship" | "partial"
+
+export interface WizardIntake {
+  id: number
+  name: string
+  start_date: string | null
+  application_deadline: string | null
+}
+
+export interface WizardScholarship {
+  id: number
+  name: string
+  type: string | null
+  coverage: string | null
+}
+
+export interface WizardProgram {
+  id: number
+  name: string
+  level: string
+  teaching_language: string | null
+  duration_months: number | null
+  tuition_fee: string | number | null
+  currency: string | null
+  university: {
+    id: number
+    name: string
+    slug: string | null
+    city: string | null
+    country: string | null
+    moe_listed: boolean
+  }
+  intakes: WizardIntake[]
+  scholarships: WizardScholarship[]
+}
+
+export interface RequiredDoc {
+  id: number
+  name: string
+  category: string | null
+  is_sensitive: boolean
+}
+
+export const getApplicationAvailability = (degree: Degree, funding: Funding) =>
+  portalApi<{ data: WizardProgram[] }>(
+    `/student/applications/availability?degree=${degree}&funding=${funding}`,
+  )
+
+export const getApplicationRequiredDocuments = (programId: number, scholarshipId?: number | null) =>
+  portalApi<{ data: RequiredDoc[] }>(
+    `/student/applications/required-documents?program_id=${programId}${scholarshipId ? `&scholarship_id=${scholarshipId}` : ""}`,
+  )
+
+export interface WizardGuardian {
+  relation: string
+  name: string
+  occupation?: string
+  phone?: string
+  email?: string
+}
+
+export interface WizardEducation {
+  level?: string
+  degree_name: string
+  institution?: string
+  board_or_university?: string
+  major?: string
+  start_year?: number | null
+  end_year?: number | null
+  grade_type?: string
+  grade_value?: string
+  is_completed?: boolean
+}
+
+export interface CreateApplicationPayload {
+  program_id: number
+  funding: Funding
+  scholarship_id?: number | null
+  intake_id?: number | null
+  profile?: Record<string, unknown>
+  guardians?: WizardGuardian[]
+  education?: WizardEducation[]
+}
+
+export interface DraftApplication {
+  id: number
+  application_code: string
+  status: string
+  required_documents: RequiredDoc[]
+}
+
+export const createStudentApplication = (payload: CreateApplicationPayload) =>
+  portalApi<{ data: DraftApplication }>("/student/applications", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
+/** Presign → direct PUT → register, scoped to a draft application (JPG). */
+export async function uploadApplicationDocument(
+  applicationId: number,
+  documentTypeId: number,
+  file: File,
+): Promise<StudentDocumentRow> {
+  const meta = { document_type_id: documentTypeId, file_name: file.name, mime: file.type, size: file.size }
+
+  const presign = await portalApi<PresignResponse>(
+    `/student/applications/${applicationId}/documents/presign`,
+    { method: "POST", body: JSON.stringify(meta) },
+  )
+
+  const put = await fetch(presign.url, { method: "PUT", headers: presign.headers, body: file })
+  if (!put.ok) throw new Error("Upload to storage failed.")
+
+  const registered = await portalApi<{ data: StudentDocumentRow }>(
+    `/student/applications/${applicationId}/documents`,
+    { method: "POST", body: JSON.stringify({ ...meta, key: presign.key }) },
+  )
+
+  return registered.data
+}
+
+export const submitStudentApplication = (applicationId: number) =>
+  portalApi<{ data: { id: number; application_code: string; status: string } }>(
+    `/student/applications/${applicationId}/submit`,
+    { method: "POST" },
+  )
+
 function query(params: Record<string, string | number | undefined>): string {
   const search = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {
