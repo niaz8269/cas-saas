@@ -39,22 +39,25 @@ class ApplicationWorkflow
 
     /**
      * @param  array<string, mixed>  $data
+     *
+     * $actor is null for portal-initiated creates (student/agent self-apply),
+     * mirroring portal document uploads — audit columns simply stay unset.
      */
-    public function create(array $data, User $actor): Application
+    public function create(array $data, ?User $actor): Application
     {
         return DB::transaction(function () use ($data, $actor) {
             $application = Application::create([
                 ...$data,
                 'application_code' => $this->nextCode(),
                 'status' => 'draft',
-                'created_by' => $actor->id,
+                'created_by' => $actor?->id,
             ]);
 
             ApplicationStatusHistory::create([
                 'application_id' => $application->id,
                 'from_status' => null,
                 'to_status' => 'draft',
-                'changed_by' => $actor->id,
+                'changed_by' => $actor?->id,
                 'created_at' => now(),
             ]);
 
@@ -62,7 +65,7 @@ class ApplicationWorkflow
 
             Activity::create([
                 'student_id' => $application->student_id,
-                'user_id' => $actor->id,
+                'user_id' => $actor?->id,
                 'type' => 'system',
                 'body' => "Application {$application->application_code} created — {$application->program->name} at {$application->university->name}",
                 'meta' => ['application_id' => $application->id],
@@ -73,7 +76,7 @@ class ApplicationWorkflow
         });
     }
 
-    public function transition(Application $application, string $to, User $actor, ?string $note = null): Application
+    public function transition(Application $application, string $to, ?User $actor, ?string $note = null): Application
     {
         $from = $application->status;
         $allowed = self::TRANSITIONS[$from] ?? [];
@@ -93,7 +96,7 @@ class ApplicationWorkflow
         return DB::transaction(function () use ($application, $from, $to, $actor, $note) {
             $application->forceFill([
                 'status' => $to,
-                'updated_by' => $actor->id,
+                'updated_by' => $actor?->id,
                 ...($to === 'submitted' ? ['submitted_at' => now()] : []),
             ])->save();
 
@@ -101,17 +104,17 @@ class ApplicationWorkflow
                 'application_id' => $application->id,
                 'from_status' => $from,
                 'to_status' => $to,
-                'changed_by' => $actor->id,
+                'changed_by' => $actor?->id,
                 'note' => $note,
                 'created_at' => now(),
             ]);
 
-            app(WorkflowLog::class)->record('application', $application->id, $from, $to, $actor->id);
+            app(WorkflowLog::class)->record('application', $application->id, $from, $to, $actor?->id);
 
             if (in_array($to, ['submitted', 'offer_received', 'accepted', 'rejected'], true)) {
                 Activity::create([
                     'student_id' => $application->student_id,
-                    'user_id' => $actor->id,
+                    'user_id' => $actor?->id,
                     'type' => 'status',
                     'body' => "Application {$application->application_code}: {$from} → {$to}",
                     'meta' => ['application_id' => $application->id],

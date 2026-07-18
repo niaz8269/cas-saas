@@ -84,6 +84,10 @@ Route::prefix('v1')->group(function () {
             // future applications/{application} routes).
             Route::get('applications/availability', [StudentApplicationController::class, 'availability']);
             Route::get('applications/required-documents', [StudentApplicationController::class, 'requiredDocuments']);
+            Route::post('applications', [StudentApplicationController::class, 'store']);
+            Route::post('applications/{application}/documents/presign', [StudentApplicationController::class, 'presignDocument']);
+            Route::post('applications/{application}/documents', [StudentApplicationController::class, 'storeDocument']);
+            Route::post('applications/{application}/submit', [StudentApplicationController::class, 'submit']);
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
