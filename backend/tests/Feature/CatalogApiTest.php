@@ -86,6 +86,43 @@ it('creates a program under a university', function () {
         ->assertJsonPath('data.teaching_language', 'English');
 });
 
+it('stores the per-course service-charge matrix', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+
+    $charges = [
+        'currency' => 'USD',
+        'self' => ['student' => 400, 'agent' => 200],
+        'partial' => ['student' => 450, 'agent' => 220],
+    ];
+
+    $response = $this->postJson('/api/v1/programs', [
+        'university_id' => $university->id,
+        'name' => 'MBBS',
+        'level' => 'bachelor',
+        'service_charges' => $charges,
+    ])
+        ->assertCreated()
+        ->assertJsonPath('data.service_charges.self.student', 400)
+        ->assertJsonPath('data.service_charges.partial.agent', 220);
+
+    $program = Program::findOrFail($response->json('data.id'));
+    expect($program->service_charges['currency'])->toBe('USD')
+        ->and($program->service_charges['self']['agent'])->toBe(200);
+});
+
+it('rejects a non-numeric service charge', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+
+    $this->postJson('/api/v1/programs', [
+        'university_id' => $university->id,
+        'name' => 'MBBS',
+        'level' => 'bachelor',
+        'service_charges' => ['self' => ['student' => 'free']],
+    ])->assertStatus(422)->assertJsonValidationErrors('service_charges.self.student');
+});
+
 it('updates a program for catalog managers', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $program = Program::factory()->create(['tuition_fee' => 30000, 'apply_link' => null]);

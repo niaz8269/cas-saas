@@ -24,6 +24,7 @@ class Program extends Model
         'currency',
         'apply_link',
         'requirements',
+        'service_charges',
         'status',
     ];
 
@@ -33,6 +34,7 @@ class Program extends Model
             'duration_months' => 'integer',
             'tuition_fee' => 'decimal:2',
             'requirements' => 'array',
+            'service_charges' => 'array',
         ];
     }
 

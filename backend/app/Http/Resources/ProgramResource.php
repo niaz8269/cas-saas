@@ -32,6 +32,7 @@ class ProgramResource extends JsonResource
             'currency' => $this->currency,
             'apply_link' => $this->apply_link,
             'requirements' => $this->requirements,
+            'service_charges' => $this->service_charges,
             'status' => $this->status,
         ];
     }

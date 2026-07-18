@@ -702,4 +702,10 @@ ALTER TABLE students
 
 ALTER TABLE student_guardians
   ADD COLUMN address VARCHAR(255) NULL AFTER email;
+
+-- ADDENDUM (ADR-0010): per-course CAS service charges — a JSON matrix keyed by
+-- funding (self|scholarship|partial) × applicant (student|agent) + currency.
+-- Display-only (course is the source of truth; Finance invoices later).
+ALTER TABLE programs
+  ADD COLUMN service_charges JSON NULL AFTER requirements;
 -- =========================== END OF SCHEMA ===========================

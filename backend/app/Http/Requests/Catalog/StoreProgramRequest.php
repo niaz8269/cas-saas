@@ -27,6 +27,14 @@ class StoreProgramRequest extends FormRequest
             'currency' => ['nullable', 'string', 'size:3'],
             'apply_link' => ['nullable', 'string', 'max:255'],
             'requirements' => ['nullable', 'array'],
+            'service_charges' => ['nullable', 'array'],
+            'service_charges.currency' => ['nullable', 'string', 'size:3'],
+            'service_charges.self.student' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.self.agent' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.scholarship.student' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.scholarship.agent' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.partial.student' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.partial.agent' => ['nullable', 'numeric', 'min:0'],
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
         ];
     }
