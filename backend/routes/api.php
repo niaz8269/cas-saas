@@ -139,6 +139,8 @@ Route::prefix('v1')->group(function () {
 
         // CRM (record-scoped via policies + visibleTo query scopes)
         Route::get('leads', [LeadController::class, 'index']);
+        Route::get('leads/sources', [LeadController::class, 'sources']);
+        Route::post('leads', [LeadController::class, 'store']);
         Route::get('leads/{lead}', [LeadController::class, 'show']);
         Route::patch('leads/{lead}', [LeadController::class, 'update']);
         Route::post('leads/{lead}/assign', [LeadController::class, 'assign']);

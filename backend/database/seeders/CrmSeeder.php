@@ -48,6 +48,8 @@ class CrmSeeder extends Seeder
         $paid = MarketingSource::firstOrCreate(['name' => 'Google Ads'], ['channel' => 'paid']);
         $social = MarketingSource::firstOrCreate(['name' => 'Facebook'], ['channel' => 'social']);
         MarketingSource::firstOrCreate(['name' => 'Agent Referral'], ['channel' => 'referral']);
+        MarketingSource::firstOrCreate(['name' => 'Walk-in'], ['channel' => 'direct']);
+        MarketingSource::firstOrCreate(['name' => 'Phone Enquiry'], ['channel' => 'direct']);
 
         Campaign::firstOrCreate(['utm_campaign' => 'spring-2026-google'], [
             'name' => 'Spring 2026 Google Push',

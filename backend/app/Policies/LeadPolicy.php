@@ -15,6 +15,11 @@ class LeadPolicy
         return $this->scopes->resolve($user, 'leads', 'view') !== null;
     }
 
+    public function create(User $user): bool
+    {
+        return $this->scopes->resolve($user, 'leads', 'create') !== null;
+    }
+
     public function view(User $user, Lead $lead): bool
     {
         return $this->withinScope($user, $lead, $this->scopes->resolve($user, 'leads', 'view'));

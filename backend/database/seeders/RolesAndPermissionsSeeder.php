@@ -57,7 +57,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ],
         'Counselor' => [
             'dashboard.view.assigned',
-            'leads.view.assigned', 'leads.update.assigned', 'leads.convert.assigned',
+            'leads.view.assigned', 'leads.create.assigned', 'leads.update.assigned', 'leads.convert.assigned',
             'students.view.assigned', 'students.update.assigned',
             'applications.view.assigned',
             'universities.view.global',

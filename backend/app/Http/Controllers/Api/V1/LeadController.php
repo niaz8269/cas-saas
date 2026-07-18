@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\AssignLeadRequest;
 use App\Http\Requests\Crm\ConvertLeadRequest;
+use App\Http\Requests\Crm\StoreLeadRequest;
 use App\Http\Requests\Crm\UpdateLeadRequest;
 use App\Http\Resources\LeadResource;
 use App\Http\Resources\StudentResource;
 use App\Models\Lead;
+use App\Models\MarketingSource;
 use App\Models\Task;
 use App\Services\Leads\ConvertLead;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -38,6 +41,47 @@ class LeadController extends Controller
             ->paginate(min($request->integer('per_page', 25), 100));
 
         return LeadResource::collection($leads);
+    }
+
+    /** Marketing sources for the "add lead" source picker. */
+    public function sources(): JsonResponse
+    {
+        return response()->json([
+            'data' => MarketingSource::orderBy('name')->get(['id', 'name', 'channel']),
+        ]);
+    }
+
+    /** Staff-added lead (admin / counselor / marketing — report §5.1). */
+    public function store(StoreLeadRequest $request): LeadResource
+    {
+        $this->authorize('create', Lead::class);
+
+        $data = $request->validated();
+        $assignedTo = $data['assigned_user_id'] ?? null;
+
+        $lead = Lead::create([
+            ...$data,
+            'intake_route' => $data['intake_route'] ?? 'info',
+            'status' => $assignedTo ? 'assigned' : 'new',
+        ]);
+
+        // Assigning at creation opens the same 48h SLA follow-up as assign().
+        if ($assignedTo) {
+            Task::create([
+                'title' => 'Follow up lead: '.($lead->full_name ?: $lead->email ?: "#{$lead->id}"),
+                'assignee_id' => $assignedTo,
+                'related_type' => Lead::class,
+                'related_id' => $lead->id,
+                'due_at' => now()->addHours(48),
+                'priority' => 'normal',
+                'status' => 'open',
+                'created_by' => $request->user()->id,
+            ]);
+        }
+
+        return new LeadResource(
+            $lead->load(['country:id,name,iso2', 'marketingSource:id,name', 'assignee:id,name']),
+        );
     }
 
     public function show(Request $request, Lead $lead): LeadResource
