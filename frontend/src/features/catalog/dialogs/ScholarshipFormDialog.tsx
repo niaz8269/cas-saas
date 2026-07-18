@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -18,10 +18,39 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   createScholarship,
+  listUniversities,
   updateScholarship,
   type Scholarship,
+  type ScholarshipLevelBenefit,
 } from "@/features/catalog/api"
 import { ApiError } from "@/lib/api"
+
+const LEVELS = [["bachelor", "Bachelor"], ["master", "Master"], ["phd", "PhD"]] as const
+type Level = (typeof LEVELS)[number][0]
+type LevelBenefit = { tuition_after: string; hostel_after: string; stipend_monthly: string }
+const emptyBenefit = (): LevelBenefit => ({ tuition_after: "", hostel_after: "", stipend_monthly: "" })
+const benefitStr = (b: ScholarshipLevelBenefit | undefined, k: keyof LevelBenefit): string =>
+  b?.[k] != null ? String(b[k]) : ""
+
+/** Per-level benefits state → JSON (or null). */
+function buildBenefits(levels: Record<Level, LevelBenefit>): Record<string, unknown> | null {
+  const num = (x: string) => {
+    const n = x ? Number(x) : NaN
+
+    return Number.isFinite(n) ? n : undefined
+  }
+  const out: Record<string, unknown> = {}
+  for (const [level] of LEVELS) {
+    const tier: Record<string, number> = {}
+    for (const key of ["tuition_after", "hostel_after", "stipend_monthly"] as const) {
+      const v = num(levels[level][key])
+      if (v !== undefined) tier[key] = v
+    }
+    if (Object.keys(tier).length) out[level] = tier
+  }
+
+  return Object.keys(out).length ? out : null
+}
 
 const schema = z.object({
   name: z.string().min(1, "Name is required").max(190),
@@ -81,9 +110,33 @@ export default function ScholarshipFormDialog({
   const { register, handleSubmit, reset, setError, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(scholarship) })
 
+  const [universityIds, setUniversityIds] = useState<number[]>([])
+  const [levelBenefits, setLevelBenefits] = useState<Record<Level, LevelBenefit>>({
+    bachelor: emptyBenefit(), master: emptyBenefit(), phd: emptyBenefit(),
+  })
+
+  const universities = useQuery({
+    queryKey: ["universities", "all"],
+    queryFn: () => listUniversities({ per_page: 100 }),
+    enabled: open && isGovernment,
+  })
+
   useEffect(() => {
-    if (open) reset(toValues(scholarship))
+    if (!open) return
+    reset(toValues(scholarship))
+    setUniversityIds(scholarship?.university_ids ?? [])
+    const b = scholarship?.benefits ?? {}
+    setLevelBenefits({
+      bachelor: { tuition_after: benefitStr(b.bachelor, "tuition_after"), hostel_after: benefitStr(b.bachelor, "hostel_after"), stipend_monthly: benefitStr(b.bachelor, "stipend_monthly") },
+      master: { tuition_after: benefitStr(b.master, "tuition_after"), hostel_after: benefitStr(b.master, "hostel_after"), stipend_monthly: benefitStr(b.master, "stipend_monthly") },
+      phd: { tuition_after: benefitStr(b.phd, "tuition_after"), hostel_after: benefitStr(b.phd, "hostel_after"), stipend_monthly: benefitStr(b.phd, "stipend_monthly") },
+    })
   }, [open, scholarship, reset])
+
+  const toggleUniversity = (id: number) =>
+    setUniversityIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
+  const setBenefit = (level: Level, key: keyof LevelBenefit, v: string) =>
+    setLevelBenefits((s) => ({ ...s, [level]: { ...s[level], [key]: v } }))
 
   const mutation = useMutation({
     mutationFn: (v: Values) => {
@@ -95,15 +148,21 @@ export default function ScholarshipFormDialog({
         status: v.status,
         coverage: v.coverage || null,
         amount: v.amount ? Number(v.amount) : null,
-        tuition_after: v.tuition_after ? Number(v.tuition_after) : null,
-        hostel_after: v.hostel_after ? Number(v.hostel_after) : null,
-        stipend_monthly: v.stipend_monthly ? Number(v.stipend_monthly) : null,
         currency: v.currency || null,
         deadline: v.deadline || null,
         description: v.description || null,
         eligibility: v.eligibility || null,
         how_to_apply: v.how_to_apply || null,
         apply_link: v.apply_link || null,
+      }
+
+      if (isGovernment) {
+        payload.university_ids = universityIds
+        payload.benefits = buildBenefits(levelBenefits)
+      } else {
+        payload.tuition_after = v.tuition_after ? Number(v.tuition_after) : null
+        payload.hostel_after = v.hostel_after ? Number(v.hostel_after) : null
+        payload.stipend_monthly = v.stipend_monthly ? Number(v.stipend_monthly) : null
       }
 
       return isEdit ? updateScholarship(scholarship!.id, payload) : createScholarship(payload)
@@ -158,14 +217,53 @@ export default function ScholarshipFormDialog({
             <Field label="Currency"><Input placeholder="CNY" className="uppercase" {...register("currency")} /></Field>
           </div>
 
-          <div className="rounded-lg border p-3">
-            <p className="mb-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">Student benefits (with this scholarship)</p>
-            <div className="grid grid-cols-3 gap-3">
-              <Field label="Tuition after"><Input type="number" placeholder="0" {...register("tuition_after")} /></Field>
-              <Field label="Hostel after"><Input type="number" placeholder="0" {...register("hostel_after")} /></Field>
-              <Field label="Stipend / month"><Input type="number" placeholder="0" {...register("stipend_monthly")} /></Field>
+          {isGovernment ? (
+            <>
+              <div className="rounded-lg border p-3">
+                <p className="mb-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">Universities enrolling under this award</p>
+                {universities.data?.data.length ? (
+                  <div className="grid max-h-40 grid-cols-2 gap-1 overflow-y-auto">
+                    {universities.data.data.map((u) => (
+                      <label key={u.id} className="flex items-center gap-2 text-sm">
+                        <input type="checkbox" className="size-4 shrink-0 accent-cas-navy" aria-label={u.name} checked={universityIds.includes(u.id)} onChange={() => toggleUniversity(u.id)} />
+                        <span className="truncate" title={u.name}>{u.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{universities.isLoading ? "Loading universities…" : "No universities yet."}</p>
+                )}
+              </div>
+
+              <div className="rounded-lg border p-3">
+                <p className="mb-1 text-xs font-medium tracking-wider text-muted-foreground uppercase">Benefits by degree</p>
+                <p className="mb-2 text-xs text-muted-foreground">Amounts in the currency set above.</p>
+                <div className="grid grid-cols-[4rem_1fr_1fr_1fr] items-center gap-2 text-xs">
+                  <span aria-hidden="true" />
+                  <span className="text-center font-medium text-muted-foreground">Tuition after</span>
+                  <span className="text-center font-medium text-muted-foreground">Hostel after</span>
+                  <span className="text-center font-medium text-muted-foreground">Stipend/mo</span>
+                  {LEVELS.map(([level, label]) => (
+                    <Fragment key={level}>
+                      <span className="text-muted-foreground">{label}</span>
+                      <Input type="number" className="h-8 px-2" aria-label={`${label} tuition after`} value={levelBenefits[level].tuition_after} onChange={(e) => setBenefit(level, "tuition_after", e.target.value)} />
+                      <Input type="number" className="h-8 px-2" aria-label={`${label} hostel after`} value={levelBenefits[level].hostel_after} onChange={(e) => setBenefit(level, "hostel_after", e.target.value)} />
+                      <Input type="number" className="h-8 px-2" aria-label={`${label} stipend`} value={levelBenefits[level].stipend_monthly} onChange={(e) => setBenefit(level, "stipend_monthly", e.target.value)} />
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-lg border p-3">
+              <p className="mb-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">Student benefits (with this scholarship)</p>
+              <div className="grid grid-cols-3 gap-3">
+                <Field label="Tuition after"><Input type="number" placeholder="0" {...register("tuition_after")} /></Field>
+                <Field label="Hostel after"><Input type="number" placeholder="0" {...register("hostel_after")} /></Field>
+                <Field label="Stipend / month"><Input type="number" placeholder="0" {...register("stipend_monthly")} /></Field>
+              </div>
             </div>
-          </div>
+          )}
 
           <Field label="Description"><Textarea rows={3} placeholder="A flagship scholarship for…" {...register("description")} /></Field>
           <Field label="Eligibility"><Textarea rows={2} placeholder="Open to first-year international undergraduates…" {...register("eligibility")} /></Field>

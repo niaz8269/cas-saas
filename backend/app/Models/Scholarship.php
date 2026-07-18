@@ -6,6 +6,7 @@ use Database\Factories\ScholarshipFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -32,6 +33,7 @@ class Scholarship extends Model
         'how_to_apply',
         'apply_link',
         'deadline',
+        'benefits',
         'status',
     ];
 
@@ -39,12 +41,19 @@ class Scholarship extends Model
     {
         return [
             'criteria' => 'array',
+            'benefits' => 'array',
             'amount' => 'decimal:2',
             'tuition_after' => 'decimal:2',
             'hostel_after' => 'decimal:2',
             'stipend_monthly' => 'decimal:2',
             'deadline' => 'date',
         ];
+    }
+
+    /** Universities that enrol students under this award (government scope). */
+    public function universities(): BelongsToMany
+    {
+        return $this->belongsToMany(University::class, 'scholarship_universities');
     }
 
     /**

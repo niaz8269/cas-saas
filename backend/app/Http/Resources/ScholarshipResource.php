@@ -39,6 +39,8 @@ class ScholarshipResource extends JsonResource
             'how_to_apply' => $this->how_to_apply,
             'apply_link' => $this->apply_link,
             'deadline' => $this->deadline?->toDateString(),
+            'benefits' => $this->benefits,
+            'university_ids' => $this->whenLoaded('universities', fn () => $this->universities->pluck('id')->sort()->values(), []),
             'status' => $this->status,
         ];
     }

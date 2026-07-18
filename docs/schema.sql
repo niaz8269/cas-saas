@@ -737,4 +737,19 @@ CREATE TABLE program_scholarships (
 ALTER TABLE scholarships
   ADD COLUMN scope VARCHAR(20) NOT NULL DEFAULT 'university' AFTER university_id,
   MODIFY COLUMN university_id BIGINT UNSIGNED NULL;
+
+-- Government scholarships: per-degree-level benefits JSON (bachelor|master|phd
+-- × tuition_after/hostel_after/stipend_monthly) and the universities they cover.
+ALTER TABLE scholarships
+  ADD COLUMN benefits JSON NULL AFTER deadline;
+
+CREATE TABLE scholarship_universities (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  scholarship_id BIGINT UNSIGNED NOT NULL,
+  university_id BIGINT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
+  UNIQUE KEY uq_scholarship_university (scholarship_id, university_id),
+  CONSTRAINT fk_schuni_scholarship FOREIGN KEY (scholarship_id) REFERENCES scholarships(id) ON DELETE CASCADE,
+  CONSTRAINT fk_schuni_university FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================

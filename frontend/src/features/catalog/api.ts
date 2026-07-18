@@ -50,6 +50,7 @@ export interface UniversityListParams {
   q?: string
   status?: string
   page?: number
+  per_page?: number
 }
 
 export function listUniversities(params: UniversityListParams = {}) {
@@ -57,6 +58,7 @@ export function listUniversities(params: UniversityListParams = {}) {
   if (params.q) search.set("q", params.q)
   if (params.status) search.set("filter[status]", params.status)
   if (params.page && params.page > 1) search.set("page", String(params.page))
+  if (params.per_page) search.set("per_page", String(params.per_page))
 
   const qs = search.toString()
 
@@ -197,7 +199,21 @@ export interface Scholarship {
   how_to_apply: string | null
   apply_link: string | null
   deadline: string | null
+  benefits: ScholarshipBenefits | null
+  university_ids: number[]
   status: string
+}
+
+export interface ScholarshipLevelBenefit {
+  tuition_after?: number | string | null
+  hostel_after?: number | string | null
+  stipend_monthly?: number | string | null
+}
+
+export interface ScholarshipBenefits {
+  bachelor?: ScholarshipLevelBenefit
+  master?: ScholarshipLevelBenefit
+  phd?: ScholarshipLevelBenefit
 }
 
 export interface Agreement {

@@ -35,6 +35,19 @@ class StoreScholarshipRequest extends FormRequest
             'how_to_apply' => ['nullable', 'string', 'max:20000'],
             'apply_link' => ['nullable', 'string', 'max:255'],
             'deadline' => ['nullable', 'date'],
+
+            // Government scope: universities that enrol under the award, and
+            // per-degree-level benefits.
+            'university_ids' => ['nullable', 'array'],
+            'university_ids.*' => ['integer', Rule::exists('universities', 'id')],
+            'benefits' => ['nullable', 'array'],
+            'benefits.bachelor' => ['nullable', 'array'],
+            'benefits.master' => ['nullable', 'array'],
+            'benefits.phd' => ['nullable', 'array'],
+            'benefits.*.tuition_after' => ['nullable', 'numeric', 'min:0'],
+            'benefits.*.hostel_after' => ['nullable', 'numeric', 'min:0'],
+            'benefits.*.stipend_monthly' => ['nullable', 'numeric', 'min:0'],
+
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
         ];
     }

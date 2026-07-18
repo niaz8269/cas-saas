@@ -333,17 +333,27 @@ it('manages scholarships behind the scholarships permissions', function () {
     $this->getJson('/api/v1/scholarships')->assertOk()->assertJsonCount(1, 'data');
 });
 
-it('creates a government scholarship with no university', function () {
+it('creates a government scholarship with universities and per-level benefits', function () {
     actingAsStaffWith(['scholarships.view.global', 'scholarships.manage.global']);
+    $u1 = University::factory()->create();
+    $u2 = University::factory()->create();
 
     $this->postJson('/api/v1/scholarships', [
         'scope' => 'government',
         'name' => 'Chinese Government Scholarship (CSC)',
         'type' => 'full',
+        'university_ids' => [$u1->id, $u2->id],
+        'benefits' => [
+            'bachelor' => ['tuition_after' => 0, 'stipend_monthly' => 2500],
+            'phd' => ['stipend_monthly' => 3500],
+        ],
     ])
         ->assertCreated()
         ->assertJsonPath('data.scope', 'government')
-        ->assertJsonPath('data.university_id', null);
+        ->assertJsonPath('data.university_id', null)
+        ->assertJsonPath('data.university_ids', [$u1->id, $u2->id])
+        ->assertJsonPath('data.benefits.bachelor.stipend_monthly', 2500)
+        ->assertJsonPath('data.benefits.phd.stipend_monthly', 3500);
 
     $this->getJson('/api/v1/scholarships?filter[scope]=government')
         ->assertOk()->assertJsonCount(1, 'data');

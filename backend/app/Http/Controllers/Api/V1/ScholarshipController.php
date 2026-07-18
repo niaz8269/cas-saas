@@ -33,23 +33,32 @@ class ScholarshipController extends Controller
     {
         $this->authorize('create', Scholarship::class);
 
-        return new ScholarshipResource(Scholarship::create($request->validated())->load('university:id,name'));
+        $data = $request->validated();
+        $scholarship = Scholarship::create($data);
+        $scholarship->universities()->sync($data['university_ids'] ?? []);
+
+        return new ScholarshipResource($scholarship->load('university:id,name', 'universities:id'));
     }
 
     public function show(Scholarship $scholarship): ScholarshipResource
     {
         $this->authorize('view', $scholarship);
 
-        return new ScholarshipResource($scholarship->load('university:id,name'));
+        return new ScholarshipResource($scholarship->load('university:id,name', 'universities:id'));
     }
 
     public function update(UpdateScholarshipRequest $request, Scholarship $scholarship): ScholarshipResource
     {
         $this->authorize('update', $scholarship);
 
-        $scholarship->update($request->validated());
+        $data = $request->validated();
+        $scholarship->update($data);
 
-        return new ScholarshipResource($scholarship->load('university:id,name'));
+        if (array_key_exists('university_ids', $data)) {
+            $scholarship->universities()->sync($data['university_ids'] ?? []);
+        }
+
+        return new ScholarshipResource($scholarship->load('university:id,name', 'universities:id'));
     }
 
     public function destroy(Scholarship $scholarship): Response
