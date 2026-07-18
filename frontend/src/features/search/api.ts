@@ -1,7 +1,7 @@
 import { api } from "@/lib/api"
 
 export interface SearchResult {
-  type: "student" | "lead" | "application"
+  type: "student" | "lead" | "application" | "university"
   id: number
   label: string
   sublabel: string | null

@@ -3,6 +3,7 @@
 use App\Models\Application;
 use App\Models\Lead;
 use App\Models\Student;
+use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -24,6 +25,27 @@ it('finds students, leads and applications the user can see', function () {
         ->and($data->where('type', 'lead')->count())->toBe(1)
         // the application matches through its student's name
         ->and($data->where('type', 'application')->count())->toBe(1);
+});
+
+it('finds universities by name, code or city for catalog viewers', function () {
+    actingAsStaffWith(['universities.view.global']);
+
+    $match = University::factory()->create(['name' => 'Zephyr Medical University', 'code' => 'ZMU']);
+    University::factory()->create(['name' => 'Other University', 'code' => 'OTH']);
+
+    $data = collect($this->getJson('/api/v1/search?q=Zephyr')->assertOk()->json('data'));
+
+    expect($data->where('type', 'university')->pluck('id')->all())->toBe([$match->id]);
+});
+
+it('omits universities from users without catalog view', function () {
+    actingAsStaffWith(['students.view.global']); // no universities.view
+
+    University::factory()->create(['name' => 'Hidden University']);
+
+    $data = collect($this->getJson('/api/v1/search?q=Hidden')->assertOk()->json('data'));
+
+    expect($data)->toBeEmpty();
 });
 
 it('omits entity types the user cannot view', function () {

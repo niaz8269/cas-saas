@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Lead;
 use App\Models\Student;
+use App\Models\University;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -93,6 +94,26 @@ class SearchController extends Controller
                     'id' => $application->id,
                     'label' => $application->application_code,
                     'sublabel' => trim(($application->student?->full_name ?? '').($application->university ? ' · '.$application->university->code : ''), ' ·'),
+                ];
+            }
+        }
+
+        if ($user->can('viewAny', University::class)) {
+            $universities = University::query()
+                ->where(fn ($q) => $q
+                    ->where('name', 'like', $like)
+                    ->orWhere('code', 'like', $like)
+                    ->orWhere('city', 'like', $like))
+                ->orderBy('name')
+                ->limit(self::PER_TYPE)
+                ->get(['id', 'name', 'code', 'city']);
+
+            foreach ($universities as $university) {
+                $results[] = [
+                    'type' => 'university',
+                    'id' => $university->id,
+                    'label' => $university->name,
+                    'sublabel' => trim($university->code.($university->city ? ' · '.$university->city : ''), ' ·'),
                 ];
             }
         }
