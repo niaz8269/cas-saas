@@ -731,4 +731,10 @@ CREATE TABLE program_scholarships (
   CONSTRAINT fk_progsch_program FOREIGN KEY (program_id) REFERENCES programs(id) ON DELETE CASCADE,
   CONSTRAINT fk_progsch_scholarship FOREIGN KEY (scholarship_id) REFERENCES scholarships(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Scholarship scope: internal to a university (default) or a government/
+-- national award with no single university (university_id becomes nullable).
+ALTER TABLE scholarships
+  ADD COLUMN scope VARCHAR(20) NOT NULL DEFAULT 'university' AFTER university_id,
+  MODIFY COLUMN university_id BIGINT UNSIGNED NULL;
 -- =========================== END OF SCHEMA ===========================

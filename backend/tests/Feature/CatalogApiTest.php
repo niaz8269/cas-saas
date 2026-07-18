@@ -333,6 +333,29 @@ it('manages scholarships behind the scholarships permissions', function () {
     $this->getJson('/api/v1/scholarships')->assertOk()->assertJsonCount(1, 'data');
 });
 
+it('creates a government scholarship with no university', function () {
+    actingAsStaffWith(['scholarships.view.global', 'scholarships.manage.global']);
+
+    $this->postJson('/api/v1/scholarships', [
+        'scope' => 'government',
+        'name' => 'Chinese Government Scholarship (CSC)',
+        'type' => 'full',
+    ])
+        ->assertCreated()
+        ->assertJsonPath('data.scope', 'government')
+        ->assertJsonPath('data.university_id', null);
+
+    $this->getJson('/api/v1/scholarships?filter[scope]=government')
+        ->assertOk()->assertJsonCount(1, 'data');
+});
+
+it('requires a university for an internal scholarship', function () {
+    actingAsStaffWith(['scholarships.view.global', 'scholarships.manage.global']);
+
+    $this->postJson('/api/v1/scholarships', ['name' => 'Internal Award'])
+        ->assertStatus(422)->assertJsonValidationErrors('university_id');
+});
+
 it('manages university contacts through the nested routes', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();

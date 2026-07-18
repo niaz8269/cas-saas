@@ -18,6 +18,7 @@ class ScholarshipResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'scope' => $this->scope,
             'university_id' => $this->university_id,
             'university' => $this->whenLoaded('university', fn () => [
                 'id' => $this->university->id,

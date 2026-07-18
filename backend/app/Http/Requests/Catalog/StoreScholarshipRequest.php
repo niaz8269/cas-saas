@@ -18,7 +18,8 @@ class StoreScholarshipRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'university_id' => ['required', 'integer', Rule::exists('universities', 'id')],
+            'scope' => ['nullable', Rule::in(['university', 'government'])],
+            'university_id' => ['nullable', 'required_unless:scope,government', 'integer', Rule::exists('universities', 'id')],
             'name' => ['required', 'string', 'max:190'],
             'slug' => ['nullable', 'string', 'max:190', 'regex:/^[a-z0-9-]+$/', Rule::unique('scholarships', 'slug')->ignore($this->route('scholarship'))],
             'type' => ['nullable', 'string', 'max:60'],

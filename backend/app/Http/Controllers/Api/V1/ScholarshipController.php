@@ -20,6 +20,7 @@ class ScholarshipController extends Controller
         $scholarships = Scholarship::query()
             ->with('university:id,name')
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
+            ->when($request->filled('filter.scope'), fn ($q) => $q->where('scope', $request->input('filter.scope')))
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('q'), fn ($q) => $q->where('name', 'like', '%'.$request->string('q').'%'))
             ->orderBy('name')
