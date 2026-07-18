@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Services\Admissions;
+
+use App\Models\DocumentType;
+use App\Models\Program;
+use App\Models\Scholarship;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+/**
+ * Read model behind the portal application-submission wizard (both the
+ * student self-apply and agent on-behalf flows). Resolves the degree +
+ * funding picker into concrete programs, and a chosen program (+ scholarship)
+ * into the document checklist the applicant must satisfy.
+ */
+class ApplicationCatalog
+{
+    /** The degree tiles the wizard offers (level filters + two by-name). */
+    public const DEGREES = ['master', 'bs', 'mbbs', 'bds', 'phd', 'diploma'];
+
+    /** The funding options; scholarship/partial gate on a matching award. */
+    public const FUNDING = ['self', 'scholarship', 'partial'];
+
+    /**
+     * General document set required until an admin configures a program's
+     * own list (report step 4 "for now use general"). Resolved by name.
+     */
+    public const GENERAL_DOCUMENTS = [
+        'Passport',
+        'Passport Photo',
+        'Medical Examination Form',
+        'Police Clearance Certificate',
+        'Degree Certificate',
+        'Academic Transcript',
+        'CV / Resume',
+    ];
+
+    /**
+     * Active programs matching a degree tile + funding option. For the two
+     * scholarship modes only programs whose university offers a matching
+     * award survive, and those awards are attached as `eligibleScholarships`.
+     *
+     * @return Collection<int, Program>
+     */
+    public function availability(string $degree, string $funding): Collection
+    {
+        $programs = Program::query()
+            ->where('status', 'active')
+            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->where(fn ($q) => $this->applyDegree($q, $degree))
+            ->with([
+                'university:id,name,slug,city,moe_listed,logo_path,country_id',
+                'university.country:id,name',
+                'intakes' => fn ($q) => $q->where('status', 'open')->orderBy('application_deadline'),
+            ])
+            ->orderByRaw('tuition_fee is null, tuition_fee')
+            ->orderBy('name')
+            ->get();
+
+        if ($funding === 'self') {
+            return $programs;
+        }
+
+        $coverage = $funding === 'partial' ? 'partial' : 'full';
+        $byUniversity = $this->scholarshipsByUniversity(
+            $programs->pluck('university_id')->unique(),
+            $coverage,
+        );
+
+        return $programs
+            ->filter(fn (Program $program) => $byUniversity->has($program->university_id))
+            ->each(fn (Program $program) => $program->setRelation(
+                'eligibleScholarships',
+                $byUniversity->get($program->university_id),
+            ))
+            ->values();
+    }
+
+    /**
+     * Required document types for a chosen program (+ optional scholarship):
+     * the admin-configured set on the program, otherwise the general
+     * fallback, plus any scholarship-specific extras (report step 5).
+     *
+     * @return Collection<int, DocumentType>
+     */
+    public function requiredDocuments(Program $program, ?Scholarship $scholarship = null): Collection
+    {
+        $types = $this->resolveTypes($program->requirements['documents'] ?? []);
+
+        if ($types->isEmpty()) {
+            $types = DocumentType::whereIn('name', self::GENERAL_DOCUMENTS)->get();
+        }
+
+        if ($scholarship !== null) {
+            $types = $types->concat($this->resolveTypes($scholarship->criteria['documents'] ?? []));
+        }
+
+        return $types->unique('id')->sortBy('name')->values();
+    }
+
+    /** Constrain a program query to one degree tile. */
+    private function applyDegree(Builder $query, string $degree): Builder
+    {
+        return match ($degree) {
+            'master' => $query->where('level', 'master'),
+            'phd' => $query->whereIn('level', ['phd', 'doctor', 'doctoral']),
+            'diploma' => $query->where('level', 'diploma'),
+            'mbbs' => $query->where('name', 'like', '%MBBS%'),
+            'bds' => $query->where(fn ($q) => $q
+                ->where('name', 'like', '%BDS%')
+                ->orWhere('name', 'like', '%Stomatolog%')),
+            // "BS" is a general bachelor — the medical bachelors have their
+            // own tiles, so exclude them here.
+            'bs' => $query->where('level', 'bachelor')
+                ->where('name', 'not like', '%MBBS%')
+                ->where('name', 'not like', '%BDS%')
+                ->where('name', 'not like', '%Stomatolog%'),
+            default => $query->whereRaw('1 = 0'),
+        };
+    }
+
+    /**
+     * Active scholarships whose coverage/type/name signals the wanted band
+     * ("full" | "partial"), grouped by university.
+     *
+     * @param  Collection<int, int>  $universityIds
+     * @return Collection<int, Collection<int, Scholarship>>
+     */
+    private function scholarshipsByUniversity(Collection $universityIds, string $coverage): Collection
+    {
+        if ($universityIds->isEmpty()) {
+            return collect();
+        }
+
+        return Scholarship::query()
+            ->where('status', 'active')
+            ->whereIn('university_id', $universityIds->all())
+            ->where(fn ($q) => $q
+                ->where('coverage', 'like', "%{$coverage}%")
+                ->orWhere('type', 'like', "%{$coverage}%")
+                ->orWhere('name', 'like', "%{$coverage}%"))
+            ->orderBy('name')
+            ->get()
+            ->groupBy('university_id');
+    }
+
+    /**
+     * Resolve a mixed list of document-type ids or names to models. Admin
+     * config stores ids; legacy/seed data may store names — accept both.
+     *
+     * @param  array<int, int|string>  $entries
+     * @return Collection<int, DocumentType>
+     */
+    private function resolveTypes(array $entries): Collection
+    {
+        if ($entries === []) {
+            return collect();
+        }
+
+        $ids = array_values(array_filter($entries, fn ($e) => is_int($e) || (is_string($e) && ctype_digit($e))));
+        $names = array_values(array_filter($entries, fn ($e) => is_string($e) && ! ctype_digit($e)));
+
+        return DocumentType::query()
+            ->when($ids !== [], fn ($q) => $q->orWhereIn('id', $ids))
+            ->when($names !== [], fn ($q) => $q->orWhere(function ($inner) use ($names) {
+                foreach ($names as $name) {
+                    $inner->orWhere('name', 'like', '%'.$name.'%');
+                }
+            }))
+            ->get();
+    }
+}

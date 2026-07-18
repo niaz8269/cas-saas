@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\MessageTemplateController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
+use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
@@ -79,6 +80,10 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:student')->group(function () {
             Route::post('auth/logout', [StudentAuthController::class, 'logout']);
             Route::get('auth/me', [StudentAuthController::class, 'me']);
+            // Application wizard — browsing (static segments precede any
+            // future applications/{application} routes).
+            Route::get('applications/availability', [StudentApplicationController::class, 'availability']);
+            Route::get('applications/required-documents', [StudentApplicationController::class, 'requiredDocuments']);
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
