@@ -186,6 +186,9 @@ export interface Scholarship {
   type: string | null
   coverage: string | null
   amount: string | number | null
+  tuition_after: string | number | null
+  hostel_after: string | number | null
+  stipend_monthly: string | number | null
   currency: string | null
   description: string | null
   eligibility: string | null

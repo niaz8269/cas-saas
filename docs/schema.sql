@@ -712,4 +712,11 @@ ALTER TABLE programs
 -- Hostel/accommodation fee per course, alongside tuition (same currency).
 ALTER TABLE programs
   ADD COLUMN hostel_fee DECIMAL(15,2) NULL AFTER tuition_fee;
+
+-- Concrete scholarship benefits: tuition/hostel a student pays after the
+-- award, plus an optional monthly stipend (same currency as the scholarship).
+ALTER TABLE scholarships
+  ADD COLUMN tuition_after    DECIMAL(15,2) NULL AFTER amount,
+  ADD COLUMN hostel_after     DECIMAL(15,2) NULL AFTER tuition_after,
+  ADD COLUMN stipend_monthly  DECIMAL(15,2) NULL AFTER hostel_after;
 -- =========================== END OF SCHEMA ===========================

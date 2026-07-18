@@ -295,7 +295,13 @@ it('manages scholarships behind the scholarships permissions', function () {
         'university_id' => $university->id,
         'name' => 'Presidential Scholarship',
         'type' => 'full',
-    ])->assertCreated();
+        'tuition_after' => 0,
+        'hostel_after' => 2000,
+        'stipend_monthly' => 800,
+    ])
+        ->assertCreated()
+        ->assertJsonPath('data.tuition_after', '0.00')
+        ->assertJsonPath('data.stipend_monthly', '800.00');
 
     $this->getJson('/api/v1/scholarships')->assertOk()->assertJsonCount(1, 'data');
 });

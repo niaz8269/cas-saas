@@ -21,6 +21,9 @@ class Scholarship extends Model
         'type',
         'coverage',
         'amount',
+        'tuition_after',
+        'hostel_after',
+        'stipend_monthly',
         'currency',
         'criteria',
         'description',
@@ -36,6 +39,9 @@ class Scholarship extends Model
         return [
             'criteria' => 'array',
             'amount' => 'decimal:2',
+            'tuition_after' => 'decimal:2',
+            'hostel_after' => 'decimal:2',
+            'stipend_monthly' => 'decimal:2',
             'deadline' => 'date',
         ];
     }

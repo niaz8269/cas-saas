@@ -29,6 +29,9 @@ const schema = z.object({
   status: z.enum(["active", "inactive"]),
   coverage: z.string().max(120).optional(),
   amount: z.string().optional(),
+  tuition_after: z.string().optional(),
+  hostel_after: z.string().optional(),
+  stipend_monthly: z.string().optional(),
   currency: z.string().max(3).optional(),
   deadline: z.string().optional(),
   description: z.string().max(20000).optional(),
@@ -46,6 +49,9 @@ function toValues(s?: Scholarship): Values {
     status: (s?.status as "active" | "inactive") ?? "active",
     coverage: s?.coverage ?? "",
     amount: s?.amount != null ? String(s.amount) : "",
+    tuition_after: s?.tuition_after != null ? String(s.tuition_after) : "",
+    hostel_after: s?.hostel_after != null ? String(s.hostel_after) : "",
+    stipend_monthly: s?.stipend_monthly != null ? String(s.stipend_monthly) : "",
     currency: s?.currency ?? "",
     deadline: s?.deadline ?? "",
     description: s?.description ?? "",
@@ -85,6 +91,9 @@ export default function ScholarshipFormDialog({
         status: v.status,
         coverage: v.coverage || null,
         amount: v.amount ? Number(v.amount) : null,
+        tuition_after: v.tuition_after ? Number(v.tuition_after) : null,
+        hostel_after: v.hostel_after ? Number(v.hostel_after) : null,
+        stipend_monthly: v.stipend_monthly ? Number(v.stipend_monthly) : null,
         currency: v.currency || null,
         deadline: v.deadline || null,
         description: v.description || null,
@@ -137,6 +146,15 @@ export default function ScholarshipFormDialog({
             <Field label="Coverage" className="col-span-1"><Input placeholder="Full tuition" {...register("coverage")} /></Field>
             <Field label="Amount"><Input inputMode="decimal" placeholder="30000" {...register("amount")} /></Field>
             <Field label="Currency"><Input placeholder="CNY" className="uppercase" {...register("currency")} /></Field>
+          </div>
+
+          <div className="rounded-lg border p-3">
+            <p className="mb-2 text-xs font-medium tracking-wider text-muted-foreground uppercase">Student benefits (with this scholarship)</p>
+            <div className="grid grid-cols-3 gap-3">
+              <Field label="Tuition after"><Input type="number" placeholder="0" {...register("tuition_after")} /></Field>
+              <Field label="Hostel after"><Input type="number" placeholder="0" {...register("hostel_after")} /></Field>
+              <Field label="Stipend / month"><Input type="number" placeholder="0" {...register("stipend_monthly")} /></Field>
+            </div>
           </div>
 
           <Field label="Description"><Textarea rows={3} placeholder="A flagship scholarship for…" {...register("description")} /></Field>
