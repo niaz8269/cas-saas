@@ -39,6 +39,9 @@ class StudentStoreApplicationRequest extends FormRequest
             'profile.gender' => ['nullable', Rule::in(['male', 'female', 'other'])],
             'profile.marital_status' => ['nullable', 'string', 'max:20'],
             'profile.religion' => ['nullable', 'string', 'max:60'],
+            'profile.english_test' => ['nullable', 'string', 'max:30'],
+            'profile.english_test_score' => ['nullable', 'string', 'max:30'],
+            'profile.english_test_date' => ['nullable', 'date'],
             'profile.permanent_address' => ['nullable', 'string', 'max:255'],
             'profile.current_address' => ['nullable', 'string', 'max:255'],
             'profile.city' => ['nullable', 'string', 'max:120'],
@@ -51,6 +54,7 @@ class StudentStoreApplicationRequest extends FormRequest
             'guardians.*.occupation' => ['nullable', 'string', 'max:120'],
             'guardians.*.phone' => ['nullable', 'string', 'max:30'],
             'guardians.*.email' => ['nullable', 'email', 'max:190'],
+            'guardians.*.address' => ['nullable', 'string', 'max:255'],
 
             'education' => ['sometimes', 'array', 'max:6'],
             'education.*.level' => ['nullable', 'string', 'max:40'],

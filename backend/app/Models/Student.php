@@ -39,6 +39,9 @@ class Student extends Authenticatable
         'gender',
         'marital_status',
         'religion',
+        'english_test',
+        'english_test_score',
+        'english_test_date',
         'permanent_address',
         'current_address',
         'city',
@@ -60,6 +63,7 @@ class Student extends Authenticatable
             'dob' => 'date',
             'passport_issue_date' => 'date',
             'passport_expiry_date' => 'date',
+            'english_test_date' => 'date',
             'password' => 'hashed',
             'last_login_at' => 'datetime',
         ];

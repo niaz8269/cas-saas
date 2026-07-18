@@ -82,6 +82,7 @@ Route::prefix('v1')->group(function () {
             Route::get('auth/me', [StudentAuthController::class, 'me']);
             // Application wizard — browsing (static segments precede any
             // future applications/{application} routes).
+            Route::get('countries', [StudentApplicationController::class, 'countries']);
             Route::get('applications/availability', [StudentApplicationController::class, 'availability']);
             Route::get('applications/required-documents', [StudentApplicationController::class, 'requiredDocuments']);
             Route::post('applications', [StudentApplicationController::class, 'store']);

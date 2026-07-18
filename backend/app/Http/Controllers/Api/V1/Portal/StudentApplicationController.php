@@ -7,6 +7,7 @@ use App\Http\Requests\Portal\StudentStoreApplicationRequest;
 use App\Http\Resources\Portal\ApplicantProgramResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
 use App\Models\Application;
+use App\Models\Country;
 use App\Models\DocumentType;
 use App\Models\Program;
 use App\Models\Scholarship;
@@ -42,6 +43,14 @@ class StudentApplicationController extends Controller
         $programs = $this->catalog->availability($validated['degree'], $validated['funding']);
 
         return ApplicantProgramResource::collection($programs)->response();
+    }
+
+    /** Countries for the nationality picker. */
+    public function countries(): JsonResponse
+    {
+        return response()->json([
+            'data' => Country::orderBy('name')->get(['id', 'name', 'iso2']),
+        ]);
     }
 
     /** Step 4: the resolved required-document checklist for a program. */

@@ -691,4 +691,15 @@ CREATE TABLE student_education (
   CONSTRAINT fk_studenteducation_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
   CONSTRAINT fk_studenteducation_country FOREIGN KEY (country_id) REFERENCES countries(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ADDENDUM (ADR-0009): richer application form — English proficiency on the
+-- student and an address on contacts (an emergency contact is a guardian row
+-- with relation 'Emergency contact'). Additive and nullable.
+ALTER TABLE students
+  ADD COLUMN english_test       VARCHAR(30) NULL AFTER religion,
+  ADD COLUMN english_test_score VARCHAR(30) NULL AFTER english_test,
+  ADD COLUMN english_test_date  DATE        NULL AFTER english_test_score;
+
+ALTER TABLE student_guardians
+  ADD COLUMN address VARCHAR(255) NULL AFTER email;
 -- =========================== END OF SCHEMA ===========================

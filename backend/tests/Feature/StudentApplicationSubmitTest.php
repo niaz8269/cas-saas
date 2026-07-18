@@ -38,10 +38,14 @@ function draftPayload(Program $program): array
             'passport_no' => 'AB1234567',
             'city' => 'Lahore',
             'place_of_birth' => 'Lahore',
+            'english_test' => 'IELTS',
+            'english_test_score' => '6.5',
+            'english_test_date' => '2025-03-01',
         ],
         'guardians' => [
             ['relation' => 'father', 'name' => 'Ali Khan', 'occupation' => 'Engineer', 'phone' => '+92 300 7654321'],
             ['relation' => 'mother', 'name' => 'Sara Khan'],
+            ['relation' => 'Emergency contact', 'name' => 'Bilal Khan', 'phone' => '+92 321 1112222', 'address' => 'House 5, Lahore'],
         ],
         'education' => [
             ['level' => 'intermediate', 'degree_name' => 'FSc Pre-Medical', 'institution' => 'Govt College',
@@ -75,9 +79,12 @@ it('creates a draft and persists the applicant profile, guardians and education'
     $student->refresh();
     expect($student->city)->toBe('Lahore')
         ->and($student->passport_no)->toBe('AB1234567')
-        ->and($student->guardians)->toHaveCount(2)
+        ->and($student->english_test)->toBe('IELTS')
+        ->and($student->english_test_score)->toBe('6.5')
+        ->and($student->guardians)->toHaveCount(3)
         ->and($student->education)->toHaveCount(1);
     expect($student->guardians->firstWhere('relation', 'father')->occupation)->toBe('Engineer');
+    expect($student->guardians->firstWhere('relation', 'Emergency contact')->address)->toBe('House 5, Lahore');
 
     // draft is recorded in the immutable history
     expect($application->statusHistory()->where('to_status', 'draft')->exists())->toBeTrue();

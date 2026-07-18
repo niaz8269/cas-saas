@@ -19,6 +19,7 @@ class StudentGuardian extends Model
         'occupation',
         'phone',
         'email',
+        'address',
     ];
 
     public function student(): BelongsTo

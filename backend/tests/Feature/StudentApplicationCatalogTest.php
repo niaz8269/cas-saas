@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\DocumentType;
 use App\Models\Program;
 use App\Models\Scholarship;
@@ -8,6 +9,15 @@ use App\Services\Admissions\ApplicationCatalog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+it('lists countries for the nationality picker', function () {
+    actingAsStudentPortal();
+    Country::factory()->create(['name' => 'Pakistan', 'iso2' => 'PK']);
+
+    $this->getJson('/api/v1/student/countries')
+        ->assertOk()
+        ->assertJsonFragment(['name' => 'Pakistan', 'iso2' => 'PK']);
+});
 
 /** Seed the general document set the wizard falls back to. */
 function seedGeneralDocumentTypes(): void
