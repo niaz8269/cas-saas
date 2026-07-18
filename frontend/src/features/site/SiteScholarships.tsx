@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteScholarships, type SiteScholarship } from "@/features/site/api"
+import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 function amountLabel(s: SiteScholarship): string | null {
@@ -46,12 +47,11 @@ export default function SiteScholarships() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">Scholarships & funding</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Full and partial awards offered by our partner universities. We help you find and apply for the ones you qualify for.
-        </p>
-      </div>
+      <SitePageHeader
+        eyebrow="Funding"
+        title="Scholarships & funding"
+        subtitle="Full and partial awards offered by our partner universities. We help you find and apply for the ones you qualify for."
+      />
 
       <div className="relative sm:max-w-md">
         <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -82,7 +82,7 @@ export default function SiteScholarships() {
         )}
 
         {scholarships.map((s) => (
-          <div key={s.id} className="flex flex-col rounded-xl border bg-card p-5 shadow-sm">
+          <div key={s.id} className="flex flex-col rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-cas-gold/40 hover:shadow-lg">
             <div className="flex items-start justify-between gap-2">
               <span className="inline-flex size-10 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Award className="size-5" /></span>
               {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}

@@ -61,6 +61,28 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
   )
 }
 
+/** Premium page-header band used at the top of the site's data pages. */
+export function SitePageHeader({ eyebrow, title, subtitle, action }: {
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  action?: ReactNode
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-cas-navy-50 via-card to-card p-6 shadow-sm sm:p-8">
+      <div className="pointer-events-none absolute -top-12 -right-12 size-44 rounded-full bg-cas-gold/10 blur-2xl" />
+      <div className="relative flex flex-wrap items-end justify-between gap-4">
+        <div>
+          {eyebrow && <p className="text-xs font-bold tracking-wider text-cas-gold-600 uppercase">{eyebrow}</p>}
+          <h1 className="mt-1 text-2xl font-bold text-cas-navy sm:text-3xl">{title}</h1>
+          {subtitle && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
+        </div>
+        {action}
+      </div>
+    </div>
+  )
+}
+
 /** Section heading with an optional "see all" link, used across site pages. */
 export function SiteSection({ title, subtitle, action, children }: {
   title: string

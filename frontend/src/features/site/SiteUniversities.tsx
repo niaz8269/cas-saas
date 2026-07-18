@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
-import { UniCard } from "@/features/site/components"
+import { SitePageHeader, UniCard } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
@@ -41,14 +41,13 @@ export default function SiteUniversities() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">Partner universities</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Browse universities across China — explore their programs, intakes and scholarships.
-        </p>
-      </div>
+      <SitePageHeader
+        eyebrow="Partner network"
+        title="Universities in China"
+        subtitle="Browse Ministry of Education–listed universities and explore their programs, intakes and scholarships."
+      />
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border bg-card p-4 shadow-sm">
         <div className="relative flex-1 sm:max-w-md">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -64,8 +63,8 @@ export default function SiteUniversities() {
           onClick={() => { setMoe((v) => !v); setPage(1) }}
           aria-pressed={moe}
           className={cn(
-            "inline-flex h-11 items-center gap-2 rounded-md border px-4 text-sm font-medium transition-colors",
-            moe ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground",
+            "inline-flex h-11 items-center gap-2 rounded-lg border px-4 text-sm font-medium transition-colors",
+            moe ? "border-cas-gold bg-cas-gold-50 text-cas-gold-600" : "bg-background text-muted-foreground hover:text-foreground",
           )}
         >
           <ShieldCheck className="size-4" /> MoE-listed only

@@ -88,32 +88,41 @@ export default function SiteUniversity() {
 
       {/* Hero */}
       <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-        {u.cover_url && <img src={u.cover_url} alt="" className="h-48 w-full object-cover sm:h-64" />}
+        {/* Cover — image, or a designed gradient banner when none is available */}
+        <div className="relative h-48 overflow-hidden sm:h-60">
+          {u.cover_url ? (
+            <img src={u.cover_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+              <span className="relative px-6 text-center font-serif text-2xl font-bold text-white/90 sm:text-3xl">{u.name}</span>
+            </div>
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+        </div>
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={`${u.name} logo`} className="size-16 shrink-0 rounded-xl border bg-white object-contain p-1" />}
+              {u.logo_url && <img src={u.logo_url} alt={`${u.name} logo`} className="-mt-14 size-20 shrink-0 rounded-xl border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
-                <h1 className="text-2xl font-semibold text-cas-navy">{u.name}</h1>
+                <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                   {(u.city || u.country) && <span className="inline-flex items-center gap-1"><MapPin className="size-3.5" /> {[u.city, u.country].filter(Boolean).join(", ")}</span>}
                   {u.nearest_airport && <span className="inline-flex items-center gap-1"><Plane className="size-3.5" /> {u.nearest_airport}</span>}
                 </div>
                 {u.moe_listed && (
-                  <Badge variant="outline" className="mt-3 border-transparent bg-cas-navy-50 text-cas-navy">
+                  <Badge variant="outline" className="mt-3 border-transparent bg-cas-gold-50 text-cas-gold-600">
                     <ShieldCheck className="size-3.5" /> China MoE-listed
                   </Badge>
                 )}
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <Button asChild variant="secondary">
-                <a href="#enquire">Enquire</a>
-              </Button>
+              <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-lg border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">Enquire</a>
               {u.apply_link && (
-                <Button asChild>
-                  <a href={u.apply_link} target="_blank" rel="noreferrer">Apply now <ExternalLink className="size-4" /></a>
-                </Button>
+                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy shadow-sm hover:bg-cas-gold-600">
+                  Apply now <ExternalLink className="size-4" />
+                </a>
               )}
             </div>
           </div>

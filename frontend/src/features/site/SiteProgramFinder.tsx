@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, type SiteProgram } from "@/features/site/api"
+import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const LEVELS = [
@@ -75,15 +76,14 @@ export default function SiteProgramFinder() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">Find your program</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Search programs across every partner university and filter by level, language and budget.
-        </p>
-      </div>
+      <SitePageHeader
+        eyebrow="Program finder"
+        title="Find your program"
+        subtitle="Search programs across every partner university and filter by level, teaching language and budget."
+      />
 
       {/* Filters */}
-      <div className="grid gap-3 rounded-xl border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
         <div className="relative sm:col-span-2 lg:col-span-1">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -131,24 +131,26 @@ export default function SiteProgramFinder() {
         )}
 
         {programs.map((p) => (
-          <div key={p.id} className="flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div key={p.id} className="flex flex-col gap-3 rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-gold/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              <h2 className="font-semibold text-cas-navy">{p.name}</h2>
-              <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                <span className="capitalize">{p.level}</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
+                <h2 className="font-semibold text-cas-navy">{p.name}</h2>
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
                 {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {p.duration_months} months</span>}
                 {p.university?.slug && (
-                  <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">
+                  <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-gold-600">
                     <School className="size-3.5" /> {p.university.name}
                   </Link>
                 )}
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-              <span className="font-semibold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}</span>
+              <span className="font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}</span>
               {p.university?.slug && (
-                <Link to={`/site/universities/${p.university.slug}`} className="text-xs font-medium text-cas-navy hover:underline">
+                <Link to={`/site/universities/${p.university.slug}`} className="inline-flex h-9 items-center gap-1 rounded-lg bg-cas-navy px-3.5 text-xs font-semibold text-white hover:bg-cas-navy-700">
                   View details →
                 </Link>
               )}
