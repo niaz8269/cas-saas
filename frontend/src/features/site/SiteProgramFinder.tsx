@@ -38,7 +38,7 @@ export default function SiteProgramFinder() {
   const [params] = useSearchParams()
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const [q, setQ] = useState(params.get("q") ?? "")
-  const [level, setLevel] = useState("all")
+  const [level, setLevel] = useState(params.get("level") ?? "all")
   const [language, setLanguage] = useState("all")
   const [maxFee, setMaxFee] = useState("")
   const [page, setPage] = useState(1)

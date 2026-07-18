@@ -47,14 +47,15 @@ it("renders the public universities grid", async () => {
   expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
 })
 
-it("renders the marketing home with hero and featured universities", async () => {
+it("renders the marketing home with hero, finder and featured universities", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
 
   renderWithProviders(<SiteHome />)
 
-  expect(screen.getByRole("heading", { name: /Study in China with CAS/ })).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /Find your program/ })).toHaveAttribute("href", "/site/programs")
-  expect(screen.getByText("Explore by field")).toBeInTheDocument()
+  expect(screen.getByRole("heading", { name: /Study in China with Confidence/ })).toBeInTheDocument()
+  expect(screen.getByText("Find Your Program")).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: /Search Programs/ })).toBeInTheDocument()
+  expect(screen.getByText("What do you want to study?")).toBeInTheDocument()
   // Featured universities come from the public API.
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
 })
