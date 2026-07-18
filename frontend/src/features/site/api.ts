@@ -37,6 +37,11 @@ export class SiteApiError extends Error {
   }
 }
 
+export interface SiteUniversityRef {
+  name: string
+  slug: string | null
+}
+
 export interface SiteProgram {
   id: number
   name: string
@@ -47,6 +52,7 @@ export interface SiteProgram {
   currency: string | null
   apply_link: string | null
   requirements: string[] | null
+  university?: SiteUniversityRef
 }
 
 export interface SiteIntake {
@@ -71,6 +77,7 @@ export interface SiteScholarship {
   how_to_apply: string | null
   apply_link: string | null
   deadline: string | null
+  university?: SiteUniversityRef
 }
 
 export interface SiteRepProfessor {
@@ -121,6 +128,27 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; page?: 
 
 export const getSiteUniversity = (slug: string) =>
   siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
+
+export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; page?: number } = {}) {
+  const search = new URLSearchParams()
+  if (params.q) search.set("q", params.q)
+  if (params.level) search.set("filter[level]", params.level)
+  if (params.language) search.set("filter[language]", params.language)
+  if (params.maxFee) search.set("filter[max_fee]", params.maxFee)
+  if (params.page && params.page > 1) search.set("page", String(params.page))
+  const qs = search.toString()
+
+  return siteApi<Paginated<SiteProgram>>(`/public/programs${qs ? `?${qs}` : ""}`)
+}
+
+export function getSiteScholarships(params: { q?: string; page?: number } = {}) {
+  const search = new URLSearchParams()
+  if (params.q) search.set("q", params.q)
+  if (params.page && params.page > 1) search.set("page", String(params.page))
+  const qs = search.toString()
+
+  return siteApi<Paginated<SiteScholarship>>(`/public/scholarships${qs ? `?${qs}` : ""}`)
+}
 
 export interface EnquiryPayload {
   first_name: string

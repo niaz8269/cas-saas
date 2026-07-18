@@ -29,6 +29,10 @@ class PublicScholarshipResource extends JsonResource
             'how_to_apply' => $this->how_to_apply,
             'apply_link' => $this->apply_link,
             'deadline' => $this->deadline?->toDateString(),
+            'university' => $this->whenLoaded('university', fn () => [
+                'name' => $this->university?->name,
+                'slug' => $this->university?->slug,
+            ]),
         ];
     }
 }

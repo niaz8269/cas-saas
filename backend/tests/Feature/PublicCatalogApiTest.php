@@ -79,3 +79,41 @@ it('404s for an inactive or unknown slug', function () {
     $this->getJson('/api/v1/public/universities/hidden-uni')->assertNotFound();
     $this->getJson('/api/v1/public/universities/does-not-exist')->assertNotFound();
 });
+
+it('finds programs across active universities with filters', function () {
+    $active = University::factory()->create(['name' => 'Jilin Medical', 'slug' => 'jilin-medical', 'status' => 'active']);
+    $hidden = University::factory()->create(['status' => 'inactive']);
+
+    Program::factory()->for($active)->create(['name' => 'MBBS', 'level' => 'bachelor', 'teaching_language' => 'English', 'tuition_fee' => 30000, 'status' => 'active']);
+    Program::factory()->for($active)->create(['name' => 'Master of Surgery', 'level' => 'master', 'tuition_fee' => 45000, 'status' => 'active']);
+    Program::factory()->for($active)->create(['name' => 'Archived', 'status' => 'inactive']);
+    Program::factory()->for($hidden)->create(['name' => 'Hidden MBBS', 'status' => 'active']); // inactive university
+
+    // All active programs from active universities, cheapest first, with the university attached.
+    $data = $this->getJson('/api/v1/public/programs')->assertOk()->assertJsonCount(2, 'data')->json('data');
+    expect($data[0]['name'])->toBe('MBBS')
+        ->and($data[0]['university']['slug'])->toBe('jilin-medical');
+
+    // Filters: level, budget, search.
+    $this->getJson('/api/v1/public/programs?filter[level]=master')
+        ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Master of Surgery');
+    $this->getJson('/api/v1/public/programs?filter[max_fee]=35000')
+        ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'MBBS');
+    $this->getJson('/api/v1/public/programs?q=surgery')
+        ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Master of Surgery');
+});
+
+it('lists active scholarships across active universities', function () {
+    $active = University::factory()->create(['slug' => 'jilin-medical', 'status' => 'active']);
+    $hidden = University::factory()->create(['status' => 'inactive']);
+
+    Scholarship::factory()->for($active)->create(['name' => 'Belt & Road', 'status' => 'active']);
+    Scholarship::factory()->for($active)->create(['name' => 'Retired', 'status' => 'inactive']);
+    Scholarship::factory()->for($hidden)->create(['name' => 'Hidden Award', 'status' => 'active']);
+
+    $this->getJson('/api/v1/public/scholarships')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Belt & Road')
+        ->assertJsonPath('data.0.university.slug', 'jilin-medical');
+});

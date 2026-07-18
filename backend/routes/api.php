@@ -47,6 +47,8 @@ Route::prefix('v1')->group(function () {
     // Public website catalog (unauthenticated, active/published only, throttled)
     Route::prefix('public')->middleware('throttle:public')->group(function () {
         Route::get('universities', [PublicCatalogController::class, 'universities']);
+        Route::get('programs', [PublicCatalogController::class, 'programs']);
+        Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
     });
 

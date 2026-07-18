@@ -28,6 +28,10 @@ class PublicProgramResource extends JsonResource
             'currency' => $this->currency,
             'apply_link' => $this->apply_link,
             'requirements' => $this->requirements,
+            'university' => $this->whenLoaded('university', fn () => [
+                'name' => $this->university?->name,
+                'slug' => $this->university?->slug,
+            ]),
         ];
     }
 }
