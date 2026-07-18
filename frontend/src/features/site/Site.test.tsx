@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { jsonResponse, renderWithProviders } from "@/test/utils"
 
 import SiteHome from "./SiteHome"
+import SiteUniversities from "./SiteUniversities"
 import SiteUniversity from "./SiteUniversity"
 
 const LIST = {
@@ -31,12 +32,24 @@ beforeEach(() => vi.restoreAllMocks())
 it("renders the public universities grid", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
 
-  renderWithProviders(<SiteHome />)
+  renderWithProviders(<SiteUniversities />)
 
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
   expect(screen.getByText("Beta Tech")).toBeInTheDocument()
   expect(screen.getByText("2 programs")).toBeInTheDocument()
   expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
+})
+
+it("renders the marketing home with hero and featured universities", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
+
+  renderWithProviders(<SiteHome />)
+
+  expect(screen.getByRole("heading", { name: /Study in China with CAS/ })).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Find your program/ })).toHaveAttribute("href", "/site/programs")
+  expect(screen.getByText("Explore by field")).toBeInTheDocument()
+  // Featured universities come from the public API.
+  expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
 })
 
 it("renders a university detail with programs, scholarships and deadline", async () => {
