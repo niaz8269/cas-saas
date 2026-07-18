@@ -6,6 +6,7 @@ use Database\Factories\ProgramFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -48,5 +49,11 @@ class Program extends Model
     public function intakes(): HasMany
     {
         return $this->hasMany(Intake::class);
+    }
+
+    /** Scholarships (of the same university) that support this program. */
+    public function scholarships(): BelongsToMany
+    {
+        return $this->belongsToMany(Scholarship::class, 'program_scholarships');
     }
 }

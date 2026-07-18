@@ -27,6 +27,8 @@ class StoreProgramRequest extends FormRequest
             'hostel_fee' => ['nullable', 'numeric', 'min:0'],
             'currency' => ['nullable', 'string', 'size:3'],
             'apply_link' => ['nullable', 'string', 'max:255'],
+            'scholarship_ids' => ['nullable', 'array'],
+            'scholarship_ids.*' => ['integer', Rule::exists('scholarships', 'id')],
             'requirements' => ['nullable', 'array'],
             'requirements.documents' => ['nullable', 'array'],
             'requirements.documents.*' => ['integer', Rule::exists('document_types', 'id')],

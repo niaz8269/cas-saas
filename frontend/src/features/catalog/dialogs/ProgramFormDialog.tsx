@@ -144,6 +144,7 @@ export default function ProgramFormDialog({
   const [chargeCurrency, setChargeCurrency] = useState("USD")
   const [selfCharge, setSelfCharge] = useState<ChargeTier>(emptyTier())
   const [schCharges, setSchCharges] = useState<Record<number, ChargeTier>>({})
+  const [linkedSchIds, setLinkedSchIds] = useState<number[]>([])
 
   const docTypes = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes, enabled: open })
   const scholarships = useQuery({
@@ -167,6 +168,7 @@ export default function ProgramFormDialog({
       map[entry.scholarship_id] = { student: tierStr(entry, "student"), agent: tierStr(entry, "agent") }
     }
     setSchCharges(map)
+    setLinkedSchIds(program?.scholarship_ids ?? [])
   }, [open, program, reset])
 
   const toggleDoc = (id: number) =>
@@ -176,9 +178,12 @@ export default function ProgramFormDialog({
   const setSelf = (key: keyof ChargeTier, v: string) => setSelfCharge((t) => ({ ...t, [key]: v }))
   const setSch = (id: number, key: keyof ChargeTier, v: string) =>
     setSchCharges((m) => ({ ...m, [id]: { ...(m[id] ?? emptyTier()), [key]: v } }))
+  const toggleLinkedSch = (id: number) =>
+    setLinkedSchIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
 
   const level = watch("level")
   const scholarshipList = scholarships.data?.data ?? []
+  const linkedScholarships = scholarshipList.filter((s) => linkedSchIds.includes(s.id))
 
   const mutation = useMutation({
     mutationFn: (v: Values) => {
@@ -193,7 +198,12 @@ export default function ProgramFormDialog({
         teaching_language: v.teaching_language || null,
         apply_link: v.apply_link || null,
         requirements: buildRequirements(program?.requirements, reqDocs, reqSections),
-        service_charges: buildServiceCharges(chargeCurrency, selfCharge, schCharges),
+        service_charges: buildServiceCharges(
+          chargeCurrency,
+          selfCharge,
+          Object.fromEntries(Object.entries(schCharges).filter(([id]) => linkedSchIds.includes(Number(id)))),
+        ),
+        scholarship_ids: linkedSchIds,
       }
 
       return isEdit ? updateProgram(program!.id, payload) : createProgram(payload)
@@ -288,7 +298,29 @@ export default function ProgramFormDialog({
                   <Input aria-label="Service charge currency" maxLength={3} className="h-8 w-16 uppercase" value={chargeCurrency} onChange={(e) => setChargeCurrency(e.target.value)} />
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground">What CAS charges to process this course — self-funded, and per scholarship.</p>
+              <p className="text-xs text-muted-foreground">Pick which scholarships support this course, then set what CAS charges.</p>
+
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-muted-foreground">Supported scholarships</p>
+                {scholarshipList.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">No scholarships on this university yet — add scholarships first.</p>
+                ) : (
+                  <div className="space-y-1">
+                    {scholarshipList.map((s) => (
+                      <label key={s.id} className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          className="size-4 accent-cas-navy"
+                          aria-label={`Support ${s.name}`}
+                          checked={linkedSchIds.includes(s.id)}
+                          onChange={() => toggleLinkedSch(s.id)}
+                        />
+                        {s.name}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <div className="grid grid-cols-[1fr_4.5rem_4.5rem] items-center gap-2 text-xs">
                 <span aria-hidden="true" />
@@ -299,7 +331,7 @@ export default function ProgramFormDialog({
                 <Input type="number" className="h-8 px-2" aria-label="Self-funded student charge" value={selfCharge.student} onChange={(e) => setSelf("student", e.target.value)} />
                 <Input type="number" className="h-8 px-2" aria-label="Self-funded agent charge" value={selfCharge.agent} onChange={(e) => setSelf("agent", e.target.value)} />
 
-                {scholarshipList.map((s) => (
+                {linkedScholarships.map((s) => (
                   <Fragment key={s.id}>
                     <span className="truncate text-muted-foreground" title={s.name}>{s.name}</span>
                     <Input type="number" className="h-8 px-2" aria-label={`${s.name} student charge`} value={schCharges[s.id]?.student ?? ""} onChange={(e) => setSch(s.id, "student", e.target.value)} />
@@ -307,10 +339,6 @@ export default function ProgramFormDialog({
                   </Fragment>
                 ))}
               </div>
-
-              {scholarships.isSuccess && scholarshipList.length === 0 && (
-                <p className="text-xs text-muted-foreground">No scholarships on this university yet — add scholarships to set their charges.</p>
-              )}
             </div>
 
             <div className="space-y-3 rounded-lg border p-3">

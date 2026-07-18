@@ -34,6 +34,7 @@ class ProgramResource extends JsonResource
             'apply_link' => $this->apply_link,
             'requirements' => $this->requirements,
             'service_charges' => $this->service_charges,
+            'scholarship_ids' => $this->whenLoaded('scholarships', fn () => $this->scholarships->pluck('id')->sort()->values(), []),
             'status' => $this->status,
         ];
     }

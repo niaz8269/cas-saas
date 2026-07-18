@@ -8,9 +8,9 @@ import ProgramFormDialog from "./ProgramFormDialog"
 
 const PROGRAM: Program = {
   id: 10, university_id: 1, name: "MBBS", level: "bachelor",
-  duration_months: 72, tuition_fee: "30000.00", currency: "CNY",
+  duration_months: 72, tuition_fee: "30000.00", hostel_fee: null, currency: "CNY",
   teaching_language: "English", apply_link: "https://apply.example.cn",
-  requirements: null, service_charges: null, status: "active",
+  requirements: null, service_charges: null, scholarship_ids: [], status: "active",
 }
 
 const DOC_TYPES = [
@@ -61,11 +61,14 @@ it("sends self-funded and per-scholarship service charges", async () => {
 
   await user.type(screen.getByLabelText("Name"), "MBBS")
   await user.type(screen.getByLabelText("Self-funded student charge"), "400")
-  await user.type(await screen.findByLabelText("Silk Road student charge"), "300")
+  // Link the scholarship — its charge row then appears.
+  await user.click(await screen.findByLabelText("Support Silk Road"))
+  await user.type(screen.getByLabelText("Silk Road student charge"), "300")
   await user.click(screen.getByRole("button", { name: "Add program" }))
 
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/programs", expect.objectContaining({ method: "POST" })))
   const body = JSON.parse((fetchMock.mock.calls.find(([u, i]) => u === "/api/v1/programs" && (i as RequestInit)?.method === "POST")![1] as RequestInit).body as string)
+  expect(body.scholarship_ids).toEqual([5])
   expect(body.service_charges).toMatchObject({ currency: "USD", self: { student: 400 }, scholarships: [{ scholarship_id: 5, student: 300 }] })
 })
 

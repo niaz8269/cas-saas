@@ -719,4 +719,16 @@ ALTER TABLE scholarships
   ADD COLUMN tuition_after    DECIMAL(15,2) NULL AFTER amount,
   ADD COLUMN hostel_after     DECIMAL(15,2) NULL AFTER tuition_after,
   ADD COLUMN stipend_monthly  DECIMAL(15,2) NULL AFTER hostel_after;
+
+-- Which of a university's scholarships support a program (admin-selected on
+-- the course form). Drives the apply flow and the service-charge matrix.
+CREATE TABLE program_scholarships (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  program_id BIGINT UNSIGNED NOT NULL,
+  scholarship_id BIGINT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
+  UNIQUE KEY uq_program_scholarship (program_id, scholarship_id),
+  CONSTRAINT fk_progsch_program FOREIGN KEY (program_id) REFERENCES programs(id) ON DELETE CASCADE,
+  CONSTRAINT fk_progsch_scholarship FOREIGN KEY (scholarship_id) REFERENCES scholarships(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================

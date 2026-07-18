@@ -127,6 +127,33 @@ it('rejects a non-numeric service charge', function () {
     ])->assertStatus(422)->assertJsonValidationErrors('service_charges.self.student');
 });
 
+it('links selected scholarships to a program', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+    $a = Scholarship::factory()->create(['university_id' => $university->id]);
+    $b = Scholarship::factory()->create(['university_id' => $university->id]);
+    $c = Scholarship::factory()->create(['university_id' => $university->id]);
+
+    $response = $this->postJson('/api/v1/programs', [
+        'university_id' => $university->id,
+        'name' => 'MBBS',
+        'level' => 'bachelor',
+        'scholarship_ids' => [$a->id, $c->id],
+    ])
+        ->assertCreated()
+        ->assertJsonPath('data.scholarship_ids', [$a->id, $c->id]);
+
+    $program = Program::findOrFail($response->json('data.id'));
+    expect($program->scholarships()->pluck('scholarships.id')->sort()->values()->all())
+        ->toBe([$a->id, $c->id]);
+
+    // Updating replaces the set.
+    $this->patchJson("/api/v1/programs/{$program->id}", ['scholarship_ids' => [$b->id]])
+        ->assertOk()
+        ->assertJsonPath('data.scholarship_ids', [$b->id]);
+    expect($program->scholarships()->pluck('scholarships.id')->all())->toBe([$b->id]);
+});
+
 it('stores per-course requirement documents and section toggles', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();

@@ -163,6 +163,7 @@ export interface Program {
   apply_link: string | null
   requirements: ProgramRequirements | null
   service_charges: ServiceCharges | null
+  scholarship_ids: number[]
   status: string
 }
 

@@ -18,7 +18,7 @@ class ProgramController extends Controller
         $this->authorize('viewAny', Program::class);
 
         $programs = Program::query()
-            ->with('university:id,name,code')
+            ->with('university:id,name,code', 'scholarships:id')
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
@@ -33,23 +33,32 @@ class ProgramController extends Controller
     {
         $this->authorize('create', Program::class);
 
-        return new ProgramResource(Program::create($request->validated())->load('university:id,name,code'));
+        $data = $request->validated();
+        $program = Program::create($data);
+        $program->scholarships()->sync($data['scholarship_ids'] ?? []);
+
+        return new ProgramResource($program->load('university:id,name,code', 'scholarships:id'));
     }
 
     public function show(Program $program): ProgramResource
     {
         $this->authorize('view', $program);
 
-        return new ProgramResource($program->load('university:id,name,code'));
+        return new ProgramResource($program->load('university:id,name,code', 'scholarships:id'));
     }
 
     public function update(UpdateProgramRequest $request, Program $program): ProgramResource
     {
         $this->authorize('update', $program);
 
-        $program->update($request->validated());
+        $data = $request->validated();
+        $program->update($data);
 
-        return new ProgramResource($program->load('university:id,name,code'));
+        if (array_key_exists('scholarship_ids', $data)) {
+            $program->scholarships()->sync($data['scholarship_ids'] ?? []);
+        }
+
+        return new ProgramResource($program->load('university:id,name,code', 'scholarships:id'));
     }
 
     public function destroy(Program $program): Response
