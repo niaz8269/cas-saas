@@ -44,6 +44,27 @@ it('validates the degree and funding options', function () {
         ->assertJsonValidationErrors('funding');
 });
 
+it('offers scholarship funding only when a matching award exists', function () {
+    actingAsStudentPortal();
+    $uni = University::factory()->create(['status' => 'active']);
+    Program::factory()->create(['university_id' => $uni->id, 'name' => 'MBBS', 'level' => 'bachelor', 'status' => 'active']);
+
+    // No scholarships yet → self only.
+    $this->getJson('/api/v1/student/applications/funding-options?degree=mbbs')
+        ->assertOk()
+        ->assertJsonPath('data.self', true)
+        ->assertJsonPath('data.scholarship', false)
+        ->assertJsonPath('data.partial', false);
+
+    // Admin sets a full award at that university → scholarship unlocks.
+    Scholarship::factory()->create(['university_id' => $uni->id, 'type' => 'full', 'coverage' => 'Full tuition', 'status' => 'active']);
+
+    $this->getJson('/api/v1/student/applications/funding-options?degree=mbbs')
+        ->assertOk()
+        ->assertJsonPath('data.scholarship', true)
+        ->assertJsonPath('data.partial', false);
+});
+
 it('returns programs for a degree tile, excluding other tiles', function () {
     actingAsStudentPortal();
     $uni = University::factory()->create(['status' => 'active']);

@@ -45,6 +45,17 @@ class StudentApplicationController extends Controller
         return ApplicantProgramResource::collection($programs)->response();
     }
 
+    /** Which funding options a degree can offer (self always; scholarship/
+     * partial only when a matching award exists). */
+    public function fundingOptions(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'degree' => ['required', Rule::in(ApplicationCatalog::DEGREES)],
+        ]);
+
+        return response()->json(['data' => $this->catalog->fundingOptions($validated['degree'])]);
+    }
+
     /** Countries for the nationality picker. */
     public function countries(): JsonResponse
     {

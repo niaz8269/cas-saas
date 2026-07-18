@@ -17,6 +17,7 @@ import {
   createStudentApplication,
   getApplicationAvailability,
   getCountries,
+  getFundingOptions,
   submitStudentApplication,
   uploadApplicationDocument,
   type CountryRow,
@@ -24,6 +25,7 @@ import {
   type Degree,
   type DraftApplication,
   type Funding,
+  type FundingOptions,
   type WizardEducation,
   type WizardGuardian,
   type WizardProgram,
@@ -87,6 +89,12 @@ export default function StudentApplyWizard() {
   })
 
   const countries = useQuery({ queryKey: ["apply", "countries"], queryFn: getCountries })
+
+  const fundingOpts = useQuery({
+    queryKey: ["apply", "funding-options", degree],
+    queryFn: () => getFundingOptions(degree as Degree),
+    enabled: step === 0 && !!degree,
+  })
 
   const resetDraft = () => {
     setDraft(null)
@@ -172,7 +180,9 @@ export default function StudentApplyWizard() {
           programs={availability.data?.data ?? []}
           loading={availability.isFetching}
           failed={availability.isError}
-          onDegree={(d) => { setDegree(d); setProgram(null); resetDraft() }}
+          fundingAvailable={fundingOpts.data?.data}
+          fundingLoading={fundingOpts.isFetching}
+          onDegree={(d) => { setDegree(d); setFunding(""); setProgram(null); resetDraft() }}
           onFunding={(f) => { setFunding(f); setProgram(null); setScholarshipId(""); resetDraft() }}
           onProgram={(p) => { setProgram(p); setIntakeId(""); setScholarshipId(""); resetDraft() }}
           onIntake={setIntakeId}
@@ -279,13 +289,20 @@ function CourseStep(props: {
   programs: WizardProgram[]
   loading: boolean
   failed: boolean
+  fundingAvailable?: FundingOptions
+  fundingLoading: boolean
   onDegree: (d: Degree) => void
   onFunding: (f: Funding) => void
   onProgram: (p: WizardProgram) => void
   onIntake: (id: string) => void
   onScholarship: (id: string) => void
 }) {
-  const { degree, funding, program, programs, loading, failed } = props
+  const { degree, funding, program, programs, loading, failed, fundingAvailable, fundingLoading } = props
+
+  // Only offer a funding tile the admin has actually enabled for this degree
+  // (self is always available; scholarship/partial gate on a matching award).
+  const fundingTiles = FUNDING.filter((f) => f.value === "self" || fundingAvailable?.[f.value])
+  const noScholarships = !!fundingAvailable && !fundingAvailable.scholarship && !fundingAvailable.partial
 
   return (
     <div className="space-y-4">
@@ -301,11 +318,20 @@ function CourseStep(props: {
       {degree && (
         <div>
           <p className="mb-2 text-sm font-medium">How will you fund it?</p>
-          <div className="grid grid-cols-1 gap-2">
-            {FUNDING.map((f) => (
-              <Tile key={f.value} active={funding === f.value} label={f.label} hint={f.hint} onClick={() => props.onFunding(f.value)} />
-            ))}
-          </div>
+          {fundingLoading && !fundingAvailable ? (
+            <p className="text-sm text-muted-foreground">Checking options…</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 gap-2">
+                {fundingTiles.map((f) => (
+                  <Tile key={f.value} active={funding === f.value} label={f.label} hint={f.hint} onClick={() => props.onFunding(f.value)} />
+                ))}
+              </div>
+              {noScholarships && (
+                <p className="mt-2 text-xs text-muted-foreground">No scholarships are currently offered for this degree — self-funded only.</p>
+              )}
+            </>
+          )}
         </div>
       )}
 

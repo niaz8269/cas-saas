@@ -78,6 +78,29 @@ class ApplicationCatalog
     }
 
     /**
+     * Which funding options a degree tile can offer: self-funded always, and
+     * scholarship / partial only when an admin has set a matching award on a
+     * university that runs a program of that degree.
+     *
+     * @return array{self: bool, scholarship: bool, partial: bool}
+     */
+    public function fundingOptions(string $degree): array
+    {
+        $universityIds = Program::query()
+            ->where('status', 'active')
+            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->where(fn ($q) => $this->applyDegree($q, $degree))
+            ->pluck('university_id')
+            ->unique();
+
+        return [
+            'self' => true,
+            'scholarship' => $this->scholarshipsByUniversity($universityIds, 'full')->isNotEmpty(),
+            'partial' => $this->scholarshipsByUniversity($universityIds, 'partial')->isNotEmpty(),
+        ];
+    }
+
+    /**
      * Required document types for a chosen program (+ optional scholarship):
      * the admin-configured set on the program, otherwise the general
      * fallback, plus any scholarship-specific extras (report step 5).

@@ -250,6 +250,15 @@ export interface CountryRow {
 export const getCountries = () =>
   portalApi<{ data: CountryRow[] }>("/student/countries")
 
+export interface FundingOptions {
+  self: boolean
+  scholarship: boolean
+  partial: boolean
+}
+
+export const getFundingOptions = (degree: Degree) =>
+  portalApi<{ data: FundingOptions }>(`/student/applications/funding-options?degree=${degree}`)
+
 export const getApplicationAvailability = (degree: Degree, funding: Funding) =>
   portalApi<{ data: WizardProgram[] }>(
     `/student/applications/availability?degree=${degree}&funding=${funding}`,
