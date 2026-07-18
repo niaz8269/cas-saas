@@ -25,11 +25,11 @@ import {
   listScholarships,
 } from "@/features/catalog/api"
 import AddAgreementDialog from "@/features/catalog/dialogs/AddAgreementDialog"
-import AddProgramDialog from "@/features/catalog/dialogs/AddProgramDialog"
+import ProgramFormDialog from "@/features/catalog/dialogs/ProgramFormDialog"
 import AddIntakeDialog from "@/features/catalog/dialogs/AddIntakeDialog"
 import ScholarshipFormDialog from "@/features/catalog/dialogs/ScholarshipFormDialog"
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
-import type { Intake, Scholarship } from "@/features/catalog/api"
+import type { Intake, Program, Scholarship } from "@/features/catalog/api"
 import { cn } from "@/lib/utils"
 
 /** Nearest upcoming intake deadline, with whole days remaining. */
@@ -78,6 +78,7 @@ export default function UniversityDetailPage() {
   const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement">(null)
   const [editOpen, setEditOpen] = useState(false)
   const [editingScholarship, setEditingScholarship] = useState<Scholarship | null>(null)
+  const [editingProgram, setEditingProgram] = useState<Program | null>(null)
 
   const university = useQuery({
     queryKey: ["university", id],
@@ -284,7 +285,7 @@ export default function UniversityDetailPage() {
         {programs.data?.data.length ? (
           <ul className="divide-y">
             {programs.data.data.map((program) => (
-              <li key={program.id} className="flex items-center justify-between py-2.5 text-sm">
+              <li key={program.id} className="group flex items-center justify-between py-2.5 text-sm">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-medium">{program.name}</span>
                   <span className="text-xs text-muted-foreground capitalize">{program.level}</span>
@@ -303,9 +304,21 @@ export default function UniversityDetailPage() {
                     </a>
                   )}
                 </div>
-                <div className="text-right text-muted-foreground tabular-nums">
-                  {program.duration_months ? `${program.duration_months} mo · ` : ""}
-                  {money(program.tuition_fee, program.currency)}/yr
+                <div className="flex shrink-0 items-center gap-2">
+                  <div className="text-right text-muted-foreground tabular-nums">
+                    {program.duration_months ? `${program.duration_months} mo · ` : ""}
+                    {money(program.tuition_fee, program.currency)}/yr
+                  </div>
+                  {canManage && (
+                    <button
+                      type="button"
+                      aria-label={`Edit ${program.name}`}
+                      onClick={() => setEditingProgram(program)}
+                      className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
+                    >
+                      <Pencil className="size-3.5" />
+                    </button>
+                  )}
                 </div>
               </li>
             ))}
@@ -414,7 +427,8 @@ export default function UniversityDetailPage() {
       )}
 
       {/* Add dialogs (managers only ever see the triggers) */}
-      <AddProgramDialog universityId={Number(id)} open={dialog === "program"} onOpenChange={(open) => !open && setDialog(null)} />
+      <ProgramFormDialog universityId={Number(id)} open={dialog === "program"} onOpenChange={(open) => !open && setDialog(null)} />
+      <ProgramFormDialog universityId={Number(id)} program={editingProgram ?? undefined} open={editingProgram !== null} onOpenChange={(open) => !open && setEditingProgram(null)} />
       <AddIntakeDialog universityId={Number(id)} programs={programs.data?.data ?? []} open={dialog === "intake"} onOpenChange={(open) => !open && setDialog(null)} />
       <ScholarshipFormDialog universityId={Number(id)} open={dialog === "scholarship"} onOpenChange={(open) => !open && setDialog(null)} />
       <ScholarshipFormDialog universityId={Number(id)} scholarship={editingScholarship ?? undefined} open={editingScholarship !== null} onOpenChange={(open) => !open && setEditingScholarship(null)} />

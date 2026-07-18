@@ -86,6 +86,29 @@ it('creates a program under a university', function () {
         ->assertJsonPath('data.teaching_language', 'English');
 });
 
+it('updates a program for catalog managers', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $program = Program::factory()->create(['tuition_fee' => 30000, 'apply_link' => null]);
+
+    $this->patchJson("/api/v1/programs/{$program->id}", [
+        'name' => 'MBBS (updated)',
+        'tuition_fee' => 34000,
+        'apply_link' => 'https://apply.example.cn/mbbs',
+    ])
+        ->assertOk()
+        ->assertJsonPath('data.name', 'MBBS (updated)')
+        ->assertJsonPath('data.apply_link', 'https://apply.example.cn/mbbs');
+
+    expect((float) $program->refresh()->tuition_fee)->toBe(34000.0);
+});
+
+it('denies program updates without catalog manage', function () {
+    actingAsStaffWith(['universities.view.global']);
+    $program = Program::factory()->create();
+
+    $this->patchJson("/api/v1/programs/{$program->id}", ['name' => 'Nope'])->assertForbidden();
+});
+
 it('rejects an intake whose program belongs to another university', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();

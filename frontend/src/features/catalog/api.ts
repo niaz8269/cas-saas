@@ -195,6 +195,9 @@ export const listAgreements = (universityId: number | string) =>
 export const createProgram = (payload: Record<string, unknown>) =>
   api<{ data: Program }>("/programs", { method: "POST", body: JSON.stringify(payload) })
 
+export const updateProgram = (id: number, payload: Record<string, unknown>) =>
+  api<{ data: Program }>(`/programs/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
 export const createIntake = (payload: Record<string, unknown>) =>
   api<{ data: Intake }>("/intakes", { method: "POST", body: JSON.stringify(payload) })
 
