@@ -6,6 +6,9 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
 import SiteHome from "./SiteHome"
+import SiteNews from "./SiteNews"
+import SiteServices from "./SiteServices"
+import SiteWhyChina from "./SiteWhyChina"
 import SiteProgramFinder from "./SiteProgramFinder"
 import SiteScholarships from "./SiteScholarships"
 import SiteUniversities from "./SiteUniversities"
@@ -101,6 +104,18 @@ it("renders the about page with the how-we-help steps", () => {
   expect(screen.getByRole("heading", { name: "About CAS" })).toBeInTheDocument()
   expect(screen.getByText("How we help")).toBeInTheDocument()
   expect(screen.getByText("Choose")).toBeInTheDocument()
+})
+
+it("renders the services, why-china and news pages", () => {
+  renderWithProviders(<SiteServices />)
+  expect(screen.getByRole("heading", { name: "Our services" })).toBeInTheDocument()
+  expect(screen.getByText("Visa assistance")).toBeInTheDocument()
+
+  renderWithProviders(<SiteWhyChina />)
+  expect(screen.getByRole("heading", { name: "Why study in China" })).toBeInTheDocument()
+
+  renderWithProviders(<SiteNews />)
+  expect(screen.getByRole("heading", { name: "News & updates" })).toBeInTheDocument()
 })
 
 it("renders the contact page with details and the enquiry form", () => {

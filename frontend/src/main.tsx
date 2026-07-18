@@ -44,6 +44,9 @@ import SiteProgramFinder from "@/features/site/SiteProgramFinder"
 import SiteScholarships from "@/features/site/SiteScholarships"
 import SiteAbout from "@/features/site/SiteAbout"
 import SiteContact from "@/features/site/SiteContact"
+import SiteServices from "@/features/site/SiteServices"
+import SiteWhyChina from "@/features/site/SiteWhyChina"
+import SiteNews from "@/features/site/SiteNews"
 import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
 
@@ -69,6 +72,9 @@ const router = createBrowserRouter([
       { path: "/site/universities/:slug", element: <SiteUniversity /> },
       { path: "/site/programs", element: <SiteProgramFinder /> },
       { path: "/site/scholarships", element: <SiteScholarships /> },
+      { path: "/site/services", element: <SiteServices /> },
+      { path: "/site/why-china", element: <SiteWhyChina /> },
+      { path: "/site/news", element: <SiteNews /> },
       { path: "/site/about", element: <SiteAbout /> },
       { path: "/site/contact", element: <SiteContact /> },
     ],

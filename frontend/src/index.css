@@ -16,6 +16,11 @@
   --cas-navy-50: #eaf0fb;
   --cas-red: #d81f26;
   --cas-red-50: #fcebec;
+  /* Gold — the public marketing accent (navy + gold) */
+  --cas-gold: #c8a13a;
+  --cas-gold-600: #a9832b;
+  --cas-gold-50: #f7efd9;
+  --cas-navy-900: #0a1a40;
   --ink: #1f2933;
   --muted-ink: #64748b;
   --line: #e2e8f0;
@@ -75,6 +80,10 @@
   --color-cas-navy-50: var(--cas-navy-50);
   --color-cas-red: var(--cas-red);
   --color-cas-red-50: var(--cas-red-50);
+  --color-cas-gold: var(--cas-gold);
+  --color-cas-gold-600: var(--cas-gold-600);
+  --color-cas-gold-50: var(--cas-gold-50);
+  --color-cas-navy-900: var(--cas-navy-900);
   --color-subtle: var(--bg-subtle);
   --color-success: var(--success);
   --color-warning: var(--warning);
