@@ -6,6 +6,7 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 
 import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
+import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
 import SiteMegaMenu from "./SiteMegaMenu"
 import SiteNews from "./SiteNews"
@@ -109,6 +110,14 @@ it("renders the about page with the how-we-help steps", () => {
   expect(screen.getByRole("heading", { name: "About CAS" })).toBeInTheDocument()
   expect(screen.getByText("How we help")).toBeInTheDocument()
   expect(screen.getByText("Choose")).toBeInTheDocument()
+})
+
+it("resets scroll to the top on navigation", () => {
+  const spy = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
+
+  renderWithProviders(<ScrollToTop />, { route: "/site/programs" })
+
+  expect(spy).toHaveBeenCalledWith(0, 0)
 })
 
 it("opens the Explore mega-menu with deep-linked columns", async () => {

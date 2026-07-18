@@ -40,7 +40,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       {/* Cover — a designed gradient banner when no image is available */}
       <div className="relative h-36 overflow-hidden">
         {u.cover_url ? (
-          <img src={u.cover_url} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={u.cover_url} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <div className="relative flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
             <School className="absolute size-16 text-white/10" />
@@ -58,7 +58,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
           {u.logo_url && (
-            <img src={u.logo_url} alt="" className="size-11 shrink-0 rounded-lg border bg-white object-contain p-0.5 shadow-sm" />
+            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="size-11 shrink-0 rounded-lg border bg-white object-contain p-0.5 shadow-sm" />
           )}
           <div className="min-w-0">
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-gold-600">{u.name}</h3>

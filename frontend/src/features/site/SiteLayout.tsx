@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
+import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
 
@@ -41,6 +42,7 @@ export default function SiteLayout() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-subtle">
+      <ScrollToTop />
       {/* Announcement bar */}
       {bannerOpen && (
         <div className="bg-cas-gold text-cas-navy">

@@ -99,7 +99,24 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    /* Offset in-page #anchor jumps so the sticky header doesn't cover them. */
+    scroll-padding-top: 6rem;
+  }
+
   body {
     @apply bg-subtle text-foreground font-sans antialiased;
+  }
+}
+
+/* Respect users who prefer reduced motion (accessibility). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
