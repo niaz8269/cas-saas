@@ -46,7 +46,7 @@ export default function SiteLayout() {
       {/* Announcement bar */}
       {bannerOpen && (
         <div className="bg-cas-gold text-cas-navy">
-          <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 text-sm sm:px-6">
+          <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm sm:px-6">
             <Megaphone className="hidden size-4 shrink-0 sm:block" />
             <p className="flex-1 text-center font-medium sm:text-left">
               March 2026 intake applications now open! Deadline: 28 February 2026.{" "}
@@ -61,7 +61,7 @@ export default function SiteLayout() {
 
       {/* Header */}
       <header className="sticky top-0 z-20 border-b bg-card/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link to="/site" className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
             <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto" />
           </Link>
@@ -114,13 +114,13 @@ export default function SiteLayout() {
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
         <Outlet />
       </main>
 
       {/* Footer */}
       <footer className="border-t bg-cas-navy text-white/80">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <img src={casLogo} alt="CAS" className="h-10 w-auto brightness-0 invert" />
             <p className="mt-3 max-w-sm text-sm">
@@ -178,7 +178,7 @@ export default function SiteLayout() {
         </div>
 
         <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/60 sm:flex-row sm:px-6">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/60 sm:flex-row sm:px-6">
             <p>© {new Date().getFullYear()} CAS Education. All rights reserved.</p>
             <p>Official authorized agent since 2012.</p>
           </div>

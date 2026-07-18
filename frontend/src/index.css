@@ -102,11 +102,20 @@
   html {
     /* Offset in-page #anchor jumps so the sticky header doesn't cover them. */
     scroll-padding-top: 6rem;
+    /* Clip the scrollbar-width overflow that full-bleed sections would add. */
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-subtle text-foreground font-sans antialiased;
   }
+}
+
+/* Full-bleed: let a section span the whole viewport width from inside a
+   centered container (used by the public-site hero band). */
+.site-bleed {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 /* Respect users who prefer reduced motion (accessibility). */
