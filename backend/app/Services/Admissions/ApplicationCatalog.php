@@ -58,10 +58,11 @@ class ApplicationCatalog
             ->orderBy('name')
             ->get();
 
-        // Attach the CAS service charge that applies to this funding + applicant.
+        // Attach the self-funded CAS service charge (scholarship charges are
+        // resolved once a specific scholarship is chosen).
         $programs->each(fn (Program $program) => $program->setAttribute(
             'applicant_service_charge',
-            $this->serviceChargeFor($program, $funding, $applicant),
+            $funding === 'self' ? $this->serviceChargeFor($program, $applicant) : null,
         ));
 
         if ($funding === 'self') {
@@ -84,12 +85,13 @@ class ApplicationCatalog
     }
 
     /**
-     * The CAS service charge for a course under a funding + applicant type,
-     * or null if none is set. Amounts live in programs.service_charges.
+     * The CAS service charge for a course + applicant type: the specific
+     * scholarship's charge when one is chosen, otherwise the self-funded
+     * charge. Null if none is set. Amounts live in programs.service_charges.
      *
      * @return array{amount: float, currency: string}|null
      */
-    public function serviceChargeFor(Program $program, string $funding, string $applicant): ?array
+    public function serviceChargeFor(Program $program, string $applicant, ?int $scholarshipId = null): ?array
     {
         $charges = $program->service_charges;
 
@@ -97,7 +99,13 @@ class ApplicationCatalog
             return null;
         }
 
-        $amount = $charges[$funding][$applicant] ?? null;
+        if ($scholarshipId !== null) {
+            $entry = collect($charges['scholarships'] ?? [])
+                ->firstWhere('scholarship_id', $scholarshipId);
+            $amount = $entry[$applicant] ?? null;
+        } else {
+            $amount = $charges['self'][$applicant] ?? null;
+        }
 
         if ($amount === null || $amount === '') {
             return null;

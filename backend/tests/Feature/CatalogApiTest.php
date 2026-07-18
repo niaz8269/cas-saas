@@ -2,6 +2,7 @@
 
 use App\Models\DocumentType;
 use App\Models\Program;
+use App\Models\Scholarship;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -91,10 +92,11 @@ it('stores the per-course service-charge matrix', function () {
     actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
     $university = University::factory()->create();
 
+    $scholarship = Scholarship::factory()->create(['university_id' => $university->id]);
     $charges = [
         'currency' => 'USD',
         'self' => ['student' => 400, 'agent' => 200],
-        'partial' => ['student' => 450, 'agent' => 220],
+        'scholarships' => [['scholarship_id' => $scholarship->id, 'student' => 300, 'agent' => 150]],
     ];
 
     $response = $this->postJson('/api/v1/programs', [
@@ -105,11 +107,12 @@ it('stores the per-course service-charge matrix', function () {
     ])
         ->assertCreated()
         ->assertJsonPath('data.service_charges.self.student', 400)
-        ->assertJsonPath('data.service_charges.partial.agent', 220);
+        ->assertJsonPath('data.service_charges.scholarships.0.scholarship_id', $scholarship->id)
+        ->assertJsonPath('data.service_charges.scholarships.0.agent', 150);
 
     $program = Program::findOrFail($response->json('data.id'));
     expect($program->service_charges['currency'])->toBe('USD')
-        ->and($program->service_charges['self']['agent'])->toBe(200);
+        ->and($program->service_charges['scholarships'][0]['student'])->toBe(300);
 });
 
 it('rejects a non-numeric service charge', function () {

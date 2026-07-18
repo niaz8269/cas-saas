@@ -21,6 +21,7 @@ class Program extends Model
         'teaching_language',
         'duration_months',
         'tuition_fee',
+        'hostel_fee',
         'currency',
         'apply_link',
         'requirements',
@@ -33,6 +34,7 @@ class Program extends Model
         return [
             'duration_months' => 'integer',
             'tuition_fee' => 'decimal:2',
+            'hostel_fee' => 'decimal:2',
             'requirements' => 'array',
             'service_charges' => 'array',
         ];

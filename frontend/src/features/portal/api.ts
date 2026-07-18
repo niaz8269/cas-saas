@@ -221,6 +221,7 @@ export interface WizardProgram {
   teaching_language: string | null
   duration_months: number | null
   tuition_fee: string | number | null
+  hostel_fee: string | number | null
   currency: string | null
   service_charge: { amount: number; currency: string } | null
   university: {

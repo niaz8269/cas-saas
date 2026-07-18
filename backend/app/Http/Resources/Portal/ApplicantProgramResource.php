@@ -25,6 +25,7 @@ class ApplicantProgramResource extends JsonResource
             'teaching_language' => $this->teaching_language,
             'duration_months' => $this->duration_months,
             'tuition_fee' => $this->tuition_fee,
+            'hostel_fee' => $this->hostel_fee,
             'currency' => $this->currency,
             'service_charge' => $this->applicant_service_charge,
             'university' => [

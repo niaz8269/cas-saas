@@ -24,6 +24,7 @@ class StoreProgramRequest extends FormRequest
             'teaching_language' => ['nullable', 'string', 'max:60'],
             'duration_months' => ['nullable', 'integer', 'min:1', 'max:120'],
             'tuition_fee' => ['nullable', 'numeric', 'min:0'],
+            'hostel_fee' => ['nullable', 'numeric', 'min:0'],
             'currency' => ['nullable', 'string', 'size:3'],
             'apply_link' => ['nullable', 'string', 'max:255'],
             'requirements' => ['nullable', 'array'],
@@ -38,10 +39,10 @@ class StoreProgramRequest extends FormRequest
             'service_charges.currency' => ['nullable', 'string', 'size:3'],
             'service_charges.self.student' => ['nullable', 'numeric', 'min:0'],
             'service_charges.self.agent' => ['nullable', 'numeric', 'min:0'],
-            'service_charges.scholarship.student' => ['nullable', 'numeric', 'min:0'],
-            'service_charges.scholarship.agent' => ['nullable', 'numeric', 'min:0'],
-            'service_charges.partial.student' => ['nullable', 'numeric', 'min:0'],
-            'service_charges.partial.agent' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.scholarships' => ['nullable', 'array'],
+            'service_charges.scholarships.*.scholarship_id' => ['required_with:service_charges.scholarships', 'integer'],
+            'service_charges.scholarships.*.student' => ['nullable', 'numeric', 'min:0'],
+            'service_charges.scholarships.*.agent' => ['nullable', 'numeric', 'min:0'],
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
         ];
     }

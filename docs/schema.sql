@@ -708,4 +708,8 @@ ALTER TABLE student_guardians
 -- Display-only (course is the source of truth; Finance invoices later).
 ALTER TABLE programs
   ADD COLUMN service_charges JSON NULL AFTER requirements;
+
+-- Hostel/accommodation fee per course, alongside tuition (same currency).
+ALTER TABLE programs
+  ADD COLUMN hostel_fee DECIMAL(15,2) NULL AFTER tuition_fee;
 -- =========================== END OF SCHEMA ===========================

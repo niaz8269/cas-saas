@@ -127,11 +127,14 @@ export interface ServiceChargeTier {
   agent?: number | string | null
 }
 
+export interface ServiceChargeScholarship extends ServiceChargeTier {
+  scholarship_id: number
+}
+
 export interface ServiceCharges {
   currency?: string | null
   self?: ServiceChargeTier | null
-  scholarship?: ServiceChargeTier | null
-  partial?: ServiceChargeTier | null
+  scholarships?: ServiceChargeScholarship[] | null
 }
 
 export interface ProgramSections {
@@ -154,6 +157,7 @@ export interface Program {
   level: "bachelor" | "master" | "phd"
   duration_months: number | null
   tuition_fee: string | number | null
+  hostel_fee: string | number | null
   currency: string | null
   teaching_language: string | null
   apply_link: string | null

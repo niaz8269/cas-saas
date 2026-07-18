@@ -371,7 +371,8 @@ function CourseStep(props: {
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
                     {p.teaching_language && <Chip>{p.teaching_language}</Chip>}
                     {p.duration_months && <Chip>{p.duration_months} months</Chip>}
-                    {p.tuition_fee != null && <Chip>{money(p.tuition_fee, p.currency)}/yr</Chip>}
+                    {p.tuition_fee != null && <Chip>Tuition {money(p.tuition_fee, p.currency)}/yr</Chip>}
+                    {p.hostel_fee != null && <Chip>Hostel {money(p.hostel_fee, p.currency)}/yr</Chip>}
                     {p.university.moe_listed && <Chip>MoE-listed</Chip>}
                   </div>
                   {p.service_charge && (
