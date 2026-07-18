@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Award, CalendarClock, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,8 +24,9 @@ export default function SiteScholarships() {
     canonicalPath: "/site/scholarships",
   })
 
-  const [searchInput, setSearchInput] = useState("")
-  const [q, setQ] = useState("")
+  const [params] = useSearchParams()
+  const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
+  const [q, setQ] = useState(params.get("q") ?? "")
   const [page, setPage] = useState(1)
 
   useEffect(() => {

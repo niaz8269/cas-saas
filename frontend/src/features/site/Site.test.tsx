@@ -1,4 +1,5 @@
 import { screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
 import { jsonResponse, renderWithProviders } from "@/test/utils"
@@ -6,6 +7,7 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
 import SiteHome from "./SiteHome"
+import SiteMegaMenu from "./SiteMegaMenu"
 import SiteNews from "./SiteNews"
 import SiteServices from "./SiteServices"
 import SiteWhyChina from "./SiteWhyChina"
@@ -105,6 +107,22 @@ it("renders the about page with the how-we-help steps", () => {
   expect(screen.getByRole("heading", { name: "About CAS" })).toBeInTheDocument()
   expect(screen.getByText("How we help")).toBeInTheDocument()
   expect(screen.getByText("Choose")).toBeInTheDocument()
+})
+
+it("opens the Explore mega-menu with deep-linked columns", async () => {
+  const user = userEvent.setup()
+  renderWithProviders(<SiteMegaMenu />)
+
+  const trigger = screen.getByRole("button", { name: /Explore/ })
+  expect(trigger).toHaveAttribute("aria-expanded", "false")
+
+  await user.hover(trigger)
+  expect(trigger).toHaveAttribute("aria-expanded", "true")
+
+  expect(screen.getByText("Destinations")).toBeInTheDocument()
+  expect(screen.getByText("Scholarships")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS")
+  expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1")
 })
 
 it("renders the services, why-china and news pages", () => {

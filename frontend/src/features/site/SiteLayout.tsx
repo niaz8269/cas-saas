@@ -3,8 +3,10 @@ import { useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
+import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
 
+// Full list — used by the mobile menu.
 const NAV = [
   { to: "/site/about", label: "About" },
   { to: "/site/universities", label: "Universities" },
@@ -14,6 +16,14 @@ const NAV = [
   { to: "/site/why-china", label: "Why China" },
   { to: "/site/news", label: "News" },
   { to: "/site/contact", label: "Contact" },
+]
+
+// Primary links shown on desktop next to the Explore mega-menu.
+const PRIMARY = [
+  { to: "/site/universities", label: "Universities" },
+  { to: "/site/programs", label: "Programs" },
+  { to: "/site/scholarships", label: "Scholarships" },
+  { to: "/site/why-china", label: "Why China" },
 ]
 
 const WHATSAPP = "https://wa.me/8618041566030"
@@ -54,10 +64,11 @@ export default function SiteLayout() {
             <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto" />
           </Link>
 
-          <nav className="hidden items-center gap-5 xl:flex">
-            {NAV.map((item) => (
+          <nav className="hidden items-center gap-5 lg:flex">
+            {PRIMARY.map((item) => (
               <NavLink key={item.to} to={item.to} className={navClass}>{item.label}</NavLink>
             ))}
+            <SiteMegaMenu />
           </nav>
 
           <div className="flex items-center gap-2">
@@ -69,7 +80,7 @@ export default function SiteLayout() {
             </Link>
             <button
               type="button"
-              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted xl:hidden"
+              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted lg:hidden"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((v) => !v)}
@@ -80,7 +91,7 @@ export default function SiteLayout() {
         </div>
 
         {menuOpen && (
-          <nav className="border-t bg-card px-4 py-2 xl:hidden">
+          <nav className="border-t bg-card px-4 py-2 lg:hidden">
             {NAV.map((item) => (
               <NavLink
                 key={item.to}

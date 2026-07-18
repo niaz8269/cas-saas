@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { School, Search, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,9 +18,10 @@ export default function SiteUniversities() {
     canonicalPath: "/site/universities",
   })
 
-  const [searchInput, setSearchInput] = useState("")
-  const [q, setQ] = useState("")
-  const [moe, setMoe] = useState(false)
+  const [params] = useSearchParams()
+  const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
+  const [q, setQ] = useState(params.get("q") ?? "")
+  const [moe, setMoe] = useState(params.get("moe") === "1")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
