@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             VisaSeeder::class,
             PortalSeeder::class,
             AutomationRuleSeeder::class,
+            DemoEnrichmentSeeder::class,
         ]);
     }
 }
