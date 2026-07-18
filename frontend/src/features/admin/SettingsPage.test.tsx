@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 
 import { useAuthStore } from "@/stores/auth"
 import { jsonResponse, renderWithProviders } from "@/test/utils"
@@ -32,6 +33,32 @@ it("surfaces automations, templates and channel config", async () => {
   expect(screen.getByText(/offer received/)).toBeInTheDocument() // rule summary
   expect(screen.getByText("Welcome to CAS Education")).toBeInTheDocument()
   expect(screen.getByText(/WhatsApp \/ SMS/)).toBeInTheDocument() // channels section
+})
+
+it("fires a template test send and confirms delivery", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if (url.includes("/test") && init?.method === "POST") {
+      return Promise.resolve(jsonResponse({ data: {
+        template: "welcome", channel: "email", to: "admin@cas.moe",
+        subject: "Welcome to CAS Education", body: "Dear Sample…", status: "sent",
+      } }))
+    }
+    return Promise.resolve(jsonResponse(url.includes("message-templates") ? TEMPLATES : RULES))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<SettingsPage />)
+
+  await user.click(await screen.findByRole("button", { name: /Send test/ }))
+  await user.click(await screen.findByRole("button", { name: "Send" }))
+
+  expect(await screen.findByText(/Sent to/)).toHaveTextContent("admin@cas.moe")
+  expect(fetchMock).toHaveBeenCalledWith(
+    "/api/v1/message-templates/welcome/test",
+    expect.objectContaining({ method: "POST" }),
+  )
 })
 
 it("shows access denied on 403", async () => {

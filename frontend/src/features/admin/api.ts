@@ -70,3 +70,18 @@ export interface MessageTemplate {
 export const listAutomationRules = () => api<{ data: AutomationRule[] }>("/automation-rules")
 
 export const listMessageTemplates = () => api<{ data: MessageTemplate[] }>("/message-templates")
+
+export interface TemplateTestResult {
+  template: string
+  channel: string
+  to: string
+  subject: string
+  body: string
+  status: string
+}
+
+export const testMessageTemplate = (key: string, payload: { channel: string; to?: string }) =>
+  api<{ data: TemplateTestResult }>(`/message-templates/${key}/test`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })

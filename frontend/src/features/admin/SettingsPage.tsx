@@ -8,6 +8,7 @@ import {
   listMessageTemplates,
   type AutomationRule,
 } from "@/features/admin/api"
+import TemplateTestDialog from "@/features/admin/TemplateTestDialog"
 
 function Section({ icon: Icon, title, description, children }: { icon: typeof Zap; title: string; description: string; children: React.ReactNode }) {
   return (
@@ -80,13 +81,16 @@ export default function SettingsPage() {
         {templates.isPending && <Skeleton className="h-16 w-full" />}
         <ul className="divide-y">
           {templates.data?.data.map((t) => (
-            <li key={t.key} className="py-3">
-              <div className="flex items-center gap-2">
-                <Bot className="size-3.5 text-muted-foreground" />
-                <p className="text-sm font-medium">{t.subject}</p>
-                <span className="font-mono text-xs text-muted-foreground">{t.key}</span>
+            <li key={t.key} className="flex items-start justify-between gap-3 py-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <Bot className="size-3.5 shrink-0 text-muted-foreground" />
+                  <p className="text-sm font-medium">{t.subject}</p>
+                  <span className="font-mono text-xs text-muted-foreground">{t.key}</span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{t.preview}</p>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{t.preview}</p>
+              <TemplateTestDialog templateKey={t.key} subject={t.subject} />
             </li>
           ))}
         </ul>

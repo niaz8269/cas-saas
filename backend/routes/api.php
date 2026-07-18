@@ -107,6 +107,8 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:settings.manage.global,staff');
         Route::get('message-templates', [MessageTemplateController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
+        Route::post('message-templates/{template}/test', [MessageTemplateController::class, 'test'])
+            ->middleware('permission:settings.manage.global,staff');
 
         // Audit trail (admin/compliance)
         Route::get('audit-logs', [AuditLogController::class, 'index'])
