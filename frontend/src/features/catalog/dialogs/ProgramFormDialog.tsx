@@ -201,12 +201,13 @@ export default function ProgramFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{isEdit ? "Edit program" : "Add program"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="space-y-4">
+        <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="flex min-h-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-1 pb-2">
           {errors.root && (
             <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>
           )}
@@ -259,6 +260,7 @@ export default function ProgramFormDialog({
             </div>
           </div>
 
+          <div className="grid items-start gap-4 md:grid-cols-2">
           <div className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center justify-between">
               <Label>CAS service charges</Label>
@@ -327,8 +329,11 @@ export default function ProgramFormDialog({
               </div>
             </div>
           </div>
+          </div>
 
-          <DialogFooter>
+          </div>
+
+          <DialogFooter className="mt-2 shrink-0 border-t pt-3">
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={mutation.isPending}>
               {mutation.isPending ? "Saving…" : isEdit ? "Save changes" : "Add program"}
