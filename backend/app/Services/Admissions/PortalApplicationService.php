@@ -6,6 +6,8 @@ use App\Models\Application;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\Student;
+use App\Models\User;
+use App\Services\Comms\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -18,9 +20,13 @@ use Illuminate\Validation\ValidationException;
  */
 class PortalApplicationService
 {
+    /** The role whose members verify and process incoming applications. */
+    private const ADMISSIONS_ROLE = 'Admissions';
+
     public function __construct(
         private readonly ApplicationWorkflow $workflow,
         private readonly ApplicationCatalog $catalog,
+        private readonly NotificationService $notifications,
     ) {}
 
     /**
@@ -68,7 +74,9 @@ class PortalApplicationService
 
     /**
      * Hand a draft to CAS. Blocks unless every required document (resolved
-     * for the chosen program + scholarship) has a non-rejected upload.
+     * for the chosen program + scholarship) has a non-rejected upload, then
+     * routes it straight to the Admissions department: an officer is assigned
+     * (so it enters their queue) and notified to verify and process it.
      */
     public function submit(Application $application): Application
     {
@@ -92,7 +100,61 @@ class PortalApplicationService
             ]);
         }
 
-        return $this->workflow->transition($application, 'under_review', null, 'Submitted via portal.');
+        $officer = $this->pickAdmissionsOfficer();
+
+        if ($officer !== null) {
+            $application->forceFill(['assigned_admissions_id' => $officer->id])->save();
+        }
+
+        $submitted = $this->workflow->transition(
+            $application,
+            'under_review',
+            null,
+            'Submitted via portal — routed to Admissions.',
+        );
+
+        if ($officer !== null) {
+            $this->notifications->push(
+                $officer->id,
+                'application.submitted',
+                'New application to verify',
+                "{$submitted->application_code} was submitted and assigned to you for verification.",
+                entityType: 'application',
+                entityId: $submitted->id,
+            );
+        }
+
+        return $submitted;
+    }
+
+    /**
+     * The Admissions officer to route a new application to: the one with the
+     * fewest open applications, so work spreads evenly. Null if none exist
+     * (the application still enters under_review for global-scope staff).
+     */
+    private function pickAdmissionsOfficer(): ?User
+    {
+        // whereHas (not the spatie role() scope) so a missing role yields an
+        // empty set instead of throwing.
+        $officerIds = User::query()
+            ->whereHas('roles', fn ($q) => $q->where('name', self::ADMISSIONS_ROLE))
+            ->orderBy('id')
+            ->pluck('id');
+
+        if ($officerIds->isEmpty()) {
+            return null;
+        }
+
+        $load = Application::query()
+            ->whereIn('assigned_admissions_id', $officerIds->all())
+            ->whereNotIn('status', ['accepted', 'rejected', 'withdrawn'])
+            ->selectRaw('assigned_admissions_id, COUNT(*) as open_count')
+            ->groupBy('assigned_admissions_id')
+            ->pluck('open_count', 'assigned_admissions_id');
+
+        $chosenId = $officerIds->sortBy(fn ($id) => $load[$id] ?? 0)->first();
+
+        return User::find($chosenId);
     }
 
     /**

@@ -2,10 +2,13 @@
 
 use App\Models\Application;
 use App\Models\DocumentType;
+use App\Models\Notification;
 use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
@@ -142,6 +145,35 @@ it('submits the draft to CAS once documents are complete', function () {
     $application = Application::find($id);
     expect($application->status)->toBe('under_review')
         ->and($application->statusHistory()->where('to_status', 'under_review')->exists())->toBeTrue();
+});
+
+it('routes a submitted application to an admissions officer and notifies them', function () {
+    Role::findOrCreate('Admissions', 'staff');
+    $officer = User::factory()->create();
+    $officer->assignRole('Admissions');
+
+    [$program, $passport] = programRequiringPassport();
+    $student = actingAsStudentPortal();
+    $id = $this->postJson('/api/v1/student/applications', draftPayload($program))->json('data.id');
+
+    $this->postJson("/api/v1/student/applications/{$id}/documents", [
+        'document_type_id' => $passport->id,
+        'key' => "students/{$student->id}/applications/{$id}/passport.jpg",
+        'file_name' => 'passport.jpg',
+        'mime' => 'image/jpeg',
+        'size' => 1000,
+    ])->assertCreated();
+
+    $this->postJson("/api/v1/student/applications/{$id}/submit")->assertOk();
+
+    $application = Application::find($id);
+    expect($application->status)->toBe('under_review')
+        ->and($application->assigned_admissions_id)->toBe($officer->id);
+
+    expect(Notification::where('user_id', $officer->id)
+        ->where('entity_type', 'application')
+        ->where('entity_id', $id)
+        ->exists())->toBeTrue();
 });
 
 it('never touches another students application', function () {
