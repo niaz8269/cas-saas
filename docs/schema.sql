@@ -581,7 +581,9 @@ CREATE TABLE automation_rules (
 CREATE TABLE notifications (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NULL, type VARCHAR(80) NOT NULL,
-  title VARCHAR(190) NULL, body TEXT NULL, channels JSON NULL,
+  title VARCHAR(190) NULL, body TEXT NULL,
+  entity_type VARCHAR(40) NULL, entity_id BIGINT UNSIGNED NULL,   -- record the bell links to
+  channels JSON NULL,
   read_at TIMESTAMP NULL, created_at TIMESTAMP NULL,
   KEY idx_notifications_user (user_id, read_at),
   CONSTRAINT fk_notifications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

@@ -25,6 +25,8 @@ class TaskObserver
             'task.assigned',
             $task->title,
             $task->due_at ? 'Due '.$task->due_at->diffForHumans() : null,
+            entityType: $task->student_id ? 'student' : null,
+            entityId: $task->student_id,
         );
     }
 }

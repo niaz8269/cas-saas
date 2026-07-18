@@ -38,6 +38,8 @@ class EscalateOverdueTasks extends Command
                 'task.escalated',
                 "Overdue: {$task->title}",
                 'This task passed its due date and has been escalated.',
+                entityType: $task->student_id ? 'student' : null,
+                entityId: $task->student_id,
             );
         }
 

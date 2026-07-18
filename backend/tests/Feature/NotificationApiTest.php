@@ -70,25 +70,42 @@ it('marks all read', function () {
     expect(Notification::where('user_id', $me->id)->whereNull('read_at')->count())->toBe(0);
 });
 
-it('raises a notification for the assignee when a task is created', function () {
+it('raises a notification linked to the student when a task is created', function () {
     $assignee = User::factory()->create();
+    $student = Student::factory()->create();
 
-    Task::factory()->create(['assignee_id' => $assignee->id, 'title' => 'Qualify programs']);
+    Task::factory()->create(['assignee_id' => $assignee->id, 'student_id' => $student->id, 'title' => 'Qualify programs']);
 
     $notification = Notification::where('user_id', $assignee->id)->first();
 
     expect($notification)->not->toBeNull()
         ->and($notification->type)->toBe('task.assigned')
-        ->and($notification->title)->toBe('Qualify programs');
+        ->and($notification->title)->toBe('Qualify programs')
+        ->and($notification->entity_type)->toBe('student')
+        ->and($notification->entity_id)->toBe($student->id);
 });
 
-it('notifies the counselor when an application reaches offer_received', function () {
+it('notifies the counselor with an application link on offer_received', function () {
     $counselor = User::factory()->create();
     $student = Student::factory()->create(['assigned_counselor_id' => $counselor->id]);
     $application = Application::factory()->create(['student_id' => $student->id, 'status' => 'submitted']);
 
     app(ApplicationWorkflow::class)->transition($application, 'offer_received', User::factory()->create());
 
-    expect(Notification::where('user_id', $counselor->id)->where('type', 'application.offer_received')->exists())
-        ->toBeTrue();
+    $notification = Notification::where('user_id', $counselor->id)
+        ->where('type', 'application.offer_received')->first();
+
+    expect($notification)->not->toBeNull()
+        ->and($notification->entity_type)->toBe('application')
+        ->and($notification->entity_id)->toBe($application->id);
+});
+
+it('exposes the entity reference through the notifications api', function () {
+    $me = actingAsStaffWith([]);
+    Notification::factory()->create(['user_id' => $me->id, 'entity_type' => 'application', 'entity_id' => 42]);
+
+    $this->getJson('/api/v1/notifications')
+        ->assertOk()
+        ->assertJsonPath('data.0.entity_type', 'application')
+        ->assertJsonPath('data.0.entity_id', 42);
 });

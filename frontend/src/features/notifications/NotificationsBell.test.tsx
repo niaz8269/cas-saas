@@ -1,5 +1,6 @@
 import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { Route, Routes } from "react-router-dom"
 
 import { useAuthStore } from "@/stores/auth"
 import { jsonResponse, renderWithProviders } from "@/test/utils"
@@ -49,6 +50,39 @@ it("opens the dropdown and lists notifications", async () => {
 
   expect(await screen.findByText("Qualify programs for Ali Khan")).toBeInTheDocument()
   expect(screen.getByText("Offer received: Ali Khan")).toBeInTheDocument()
+})
+
+it("navigates to the linked record and marks it read", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if (url.includes("/read") && init?.method === "POST") return Promise.resolve(jsonResponse({ data: {} }))
+    if (url.includes("unread-count")) return Promise.resolve(jsonResponse({ unread: 1 }))
+    return Promise.resolve(jsonResponse({
+      data: [{
+        id: 7, type: "application.offer_received", title: "Offer received: Ali Khan", body: null,
+        entity_type: "application", entity_id: 21, channels: ["in_app"], read_at: null, created_at: "2026-07-17T09:00:00Z",
+      }],
+      meta: { unread: 1, current_page: 1, last_page: 1, total: 1 },
+    }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(
+    <Routes>
+      <Route path="/" element={<NotificationsBell />} />
+      <Route path="/applications/:id" element={<div>APPLICATION PAGE</div>} />
+    </Routes>,
+  )
+
+  await user.click(await screen.findByLabelText(/Notifications/))
+  await user.click(await screen.findByText("Offer received: Ali Khan"))
+
+  expect(await screen.findByText("APPLICATION PAGE")).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith(
+    "/api/v1/notifications/7/read",
+    expect.objectContaining({ method: "POST" }),
+  )
 })
 
 it("marks all read", async () => {

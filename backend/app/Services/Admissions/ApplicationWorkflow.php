@@ -127,6 +127,8 @@ class ApplicationWorkflow
                     "application.{$to}",
                     "Application {$to}: {$application->student?->full_name}",
                     "{$application->application_code} is now {$to}.",
+                    entityType: 'application',
+                    entityId: $application->id,
                 );
             }
 

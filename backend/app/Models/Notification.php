@@ -23,6 +23,8 @@ class Notification extends Model
         'type',
         'title',
         'body',
+        'entity_type',
+        'entity_id',
         'channels',
         'read_at',
         'created_at',

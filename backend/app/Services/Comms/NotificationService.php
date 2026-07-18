@@ -20,6 +20,8 @@ class NotificationService
         string $title,
         ?string $body = null,
         array $channels = ['in_app'],
+        ?string $entityType = null,
+        ?int $entityId = null,
     ): ?Notification {
         if ($userId === null) {
             return null;
@@ -30,6 +32,8 @@ class NotificationService
             'type' => $type,
             'title' => $title,
             'body' => $body,
+            'entity_type' => $entityId !== null ? $entityType : null,
+            'entity_id' => $entityId,
             'channels' => $channels,
             'created_at' => now(),
         ]);

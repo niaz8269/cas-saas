@@ -5,6 +5,8 @@ export interface NotificationRow {
   type: string
   title: string | null
   body: string | null
+  entity_type: string | null
+  entity_id: number | null
   channels: string[] | null
   read_at: string | null
   created_at: string | null

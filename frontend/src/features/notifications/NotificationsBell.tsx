@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Bell } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import {
   DropdownMenu,
@@ -16,6 +17,21 @@ import {
 } from "@/features/notifications/api"
 import { cn } from "@/lib/utils"
 
+/** Map a notification's entity reference to an in-app route, when navigable. */
+const ENTITY_ROUTES: Record<string, (id: number) => string> = {
+  application: (id) => `/applications/${id}`,
+  student: (id) => `/students/${id}`,
+  lead: (id) => `/leads/${id}`,
+  visa: (id) => `/visa/${id}`,
+  university: (id) => `/universities/${id}`,
+}
+
+function linkFor(n: NotificationRow): string | null {
+  if (!n.entity_type || n.entity_id === null) return null
+
+  return ENTITY_ROUTES[n.entity_type]?.(n.entity_id) ?? null
+}
+
 function timeAgo(iso: string | null): string {
   if (!iso) return ""
   const diff = Date.now() - new Date(iso).getTime()
@@ -30,6 +46,7 @@ function timeAgo(iso: string | null): string {
 
 export default function NotificationsBell() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
 
   // Poll the unread count in the background; refresh the list on open.
@@ -62,6 +79,16 @@ export default function NotificationsBell() {
 
   const count = unread.data?.unread ?? 0
   const notifications = list.data?.data ?? []
+
+  const openNotification = (n: NotificationRow) => {
+    if (n.read_at === null) readOne.mutate(n.id)
+
+    const link = linkFor(n)
+    if (link) {
+      setOpen(false)
+      navigate(link)
+    }
+  }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -108,7 +135,7 @@ export default function NotificationsBell() {
               <li key={n.id}>
                 <button
                   type="button"
-                  onClick={() => n.read_at === null && readOne.mutate(n.id)}
+                  onClick={() => openNotification(n)}
                   className={cn(
                     "flex w-full gap-2 px-4 py-3 text-left transition-colors hover:bg-muted",
                     n.read_at === null && "bg-cas-navy-50/50",

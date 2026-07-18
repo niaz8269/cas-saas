@@ -120,6 +120,8 @@ class AutomationEngine
             $action['notification_type'] ?? 'automation',
             $action['title'] ?? 'Update',
             $action['body'] ?? null,
+            entityType: isset($context['student_id']) ? 'student' : null,
+            entityId: $context['student_id'] ?? null,
         );
     }
 }
