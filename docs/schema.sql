@@ -654,4 +654,41 @@ ALTER TABLE scholarships
   ADD COLUMN how_to_apply TEXT NULL,
   ADD COLUMN apply_link   VARCHAR(255) NULL,
   ADD UNIQUE KEY uq_scholarships_slug (slug);
+
+-- ADDENDUM (ADR-0008): applicant intake fields for the portal application-
+-- submission wizard — extended personal details on the student, a guardian
+-- occupation, and a prior-education history table. All additive and nullable.
+ALTER TABLE students
+  ADD COLUMN marital_status       VARCHAR(20)  NULL AFTER gender,
+  ADD COLUMN religion             VARCHAR(60)  NULL AFTER marital_status,
+  ADD COLUMN place_of_birth       VARCHAR(120) NULL AFTER dob,
+  ADD COLUMN passport_issue_date  DATE         NULL AFTER passport_no,
+  ADD COLUMN passport_expiry_date DATE         NULL AFTER passport_issue_date,
+  ADD COLUMN permanent_address    VARCHAR(255) NULL,
+  ADD COLUMN current_address      VARCHAR(255) NULL,
+  ADD COLUMN city                 VARCHAR(120) NULL,
+  ADD COLUMN postal_code          VARCHAR(20)  NULL;
+
+ALTER TABLE student_guardians
+  ADD COLUMN occupation VARCHAR(120) NULL AFTER relation;
+
+CREATE TABLE student_education (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  student_id BIGINT UNSIGNED NOT NULL,
+  level VARCHAR(40) NULL,                 -- high_school | intermediate | bachelor | master | ...
+  degree_name VARCHAR(150) NULL,
+  institution VARCHAR(190) NULL,
+  board_or_university VARCHAR(190) NULL,
+  country_id BIGINT UNSIGNED NULL,
+  major VARCHAR(150) NULL,
+  start_year SMALLINT UNSIGNED NULL,
+  end_year SMALLINT UNSIGNED NULL,
+  grade_type VARCHAR(20) NULL,            -- gpa | cgpa | percentage | grade
+  grade_value VARCHAR(30) NULL,
+  is_completed TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
+  KEY idx_studenteducation_student (student_id),
+  CONSTRAINT fk_studenteducation_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  CONSTRAINT fk_studenteducation_country FOREIGN KEY (country_id) REFERENCES countries(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================

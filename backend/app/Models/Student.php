@@ -32,8 +32,17 @@ class Student extends Authenticatable
         'email',
         'phone',
         'passport_no',
+        'passport_issue_date',
+        'passport_expiry_date',
         'dob',
+        'place_of_birth',
         'gender',
+        'marital_status',
+        'religion',
+        'permanent_address',
+        'current_address',
+        'city',
+        'postal_code',
         'country_id',
         'branch_id',
         'agent_id',
@@ -49,6 +58,8 @@ class Student extends Authenticatable
     {
         return [
             'dob' => 'date',
+            'passport_issue_date' => 'date',
+            'passport_expiry_date' => 'date',
             'password' => 'hashed',
             'last_login_at' => 'datetime',
         ];
@@ -77,6 +88,11 @@ class Student extends Authenticatable
     public function guardians(): HasMany
     {
         return $this->hasMany(StudentGuardian::class);
+    }
+
+    public function education(): HasMany
+    {
+        return $this->hasMany(StudentEducation::class)->latest('end_year');
     }
 
     public function activities(): HasMany

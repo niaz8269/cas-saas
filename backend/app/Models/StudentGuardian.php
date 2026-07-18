@@ -16,6 +16,7 @@ class StudentGuardian extends Model
         'student_id',
         'name',
         'relation',
+        'occupation',
         'phone',
         'email',
     ];

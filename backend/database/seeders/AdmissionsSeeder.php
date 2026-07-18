@@ -29,6 +29,8 @@ class AdmissionsSeeder extends Seeder
         ['Medical Examination Form', 'medical', false, null],
         ['Police Clearance Certificate', 'identity', true, null],
         ['Bank Statement', 'financial', true, null],
+        ['Degree Certificate', 'academic', false, null],
+        ['CV / Resume', 'personal', false, null],
     ];
 
     public function run(): void
