@@ -184,6 +184,7 @@ export interface Scholarship {
   university_id: number
   name: string
   slug: string | null
+  scope: "university" | "government"
   type: string | null
   coverage: string | null
   amount: string | number | null
@@ -223,6 +224,18 @@ export const listIntakes = (universityId: number | string) =>
 
 export const listScholarships = (universityId: number | string) =>
   api<Paginated<Scholarship>>(byUniversity("scholarships", universityId))
+
+/** Top-level scholarships filtered by scope (e.g. government awards). */
+export const listScholarshipsByScope = (
+  scope: "university" | "government",
+  params: { q?: string; page?: number } = {},
+) => {
+  const search = new URLSearchParams({ "filter[scope]": scope })
+  if (params.q) search.set("q", params.q)
+  if (params.page) search.set("page", String(params.page))
+
+  return api<Paginated<Scholarship>>(`/scholarships?${search.toString()}`)
+}
 
 export const listAgreements = (universityId: number | string) =>
   api<Paginated<Agreement>>(byUniversity("agreements", universityId))

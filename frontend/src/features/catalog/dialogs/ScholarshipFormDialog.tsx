@@ -63,17 +63,20 @@ function toValues(s?: Scholarship): Values {
 
 export default function ScholarshipFormDialog({
   universityId,
+  scope = "university",
   scholarship,
   open,
   onOpenChange,
 }: {
-  universityId: number
+  universityId?: number
+  scope?: "university" | "government"
   scholarship?: Scholarship
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
   const queryClient = useQueryClient()
   const isEdit = Boolean(scholarship)
+  const isGovernment = scope === "government"
 
   const { register, handleSubmit, reset, setError, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(scholarship) })
@@ -85,7 +88,8 @@ export default function ScholarshipFormDialog({
   const mutation = useMutation({
     mutationFn: (v: Values) => {
       const payload: Record<string, unknown> = {
-        university_id: universityId,
+        scope,
+        university_id: isGovernment ? null : universityId,
         name: v.name,
         type: v.type || null,
         status: v.status,
@@ -105,7 +109,9 @@ export default function ScholarshipFormDialog({
       return isEdit ? updateScholarship(scholarship!.id, payload) : createScholarship(payload)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["university-scholarships", universityId] })
+      queryClient.invalidateQueries({
+        queryKey: isGovernment ? ["scholarships", "government"] : ["university-scholarships", universityId],
+      })
       onOpenChange(false)
     },
     onError: (error) => {
@@ -124,8 +130,12 @@ export default function ScholarshipFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit scholarship" : "Add scholarship"}</DialogTitle>
-          <DialogDescription>Details shown on the scholarship's website page.</DialogDescription>
+          <DialogTitle>{isEdit ? "Edit" : "Add"} {isGovernment ? "government scholarship" : "scholarship"}</DialogTitle>
+          <DialogDescription>
+            {isGovernment
+              ? "A national/government award (e.g. CSC), not tied to a single university."
+              : "Details shown on the scholarship's website page."}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="space-y-4">

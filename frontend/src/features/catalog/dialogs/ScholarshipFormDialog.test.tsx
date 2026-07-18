@@ -7,7 +7,7 @@ import type { Scholarship } from "@/features/catalog/api"
 import ScholarshipFormDialog from "./ScholarshipFormDialog"
 
 const SCH: Scholarship = {
-  id: 5, university_id: 1, name: "Belt & Road Scholarship", slug: "belt-road-scholarship",
+  id: 5, university_id: 1, scope: "university", name: "Belt & Road Scholarship", slug: "belt-road-scholarship",
   type: "full", coverage: "Full tuition", amount: "30000.00",
   tuition_after: null, hostel_after: null, stipend_monthly: null, currency: "CNY",
   description: "Flagship award.", eligibility: "First-year internationals.",
