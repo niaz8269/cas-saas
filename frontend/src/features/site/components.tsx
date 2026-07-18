@@ -2,7 +2,29 @@ import { ArrowUpRight, GraduationCap, MapPin, School, ShieldCheck } from "lucide
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
 
+import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
+
+const DOT_GRID = {
+  backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
+  backgroundSize: "22px 22px",
+}
+
+/**
+ * A banner that shows an optional background photo layered under the brand
+ * navy gradient. If the image file is absent the gradient renders alone —
+ * so the site is always "picture-ready" and never looks broken.
+ */
+export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
+  return (
+    <div className={cn("relative isolate overflow-hidden bg-gradient-to-br from-cas-navy-900 to-cas-navy", className)}>
+      <div className="absolute inset-0 -z-10 bg-cover bg-center" style={{ backgroundImage: `url('${src}')` }} />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-cas-navy/35" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12]" style={DOT_GRID} />
+      {children}
+    </div>
+  )
+}
 
 function monogram(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase()

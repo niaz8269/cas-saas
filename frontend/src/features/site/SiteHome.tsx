@@ -24,7 +24,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
-import { SiteSection, UniCard } from "@/features/site/components"
+import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
 const DEADLINE = new Date("2026-02-28T23:59:59Z").getTime()
@@ -233,10 +233,9 @@ export default function SiteHome() {
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-2xl border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <div className="relative flex min-h-48 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy p-6">
-            <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+          <PhotoBanner src="/images/weekly.jpg" className="flex min-h-48 items-center justify-center p-6">
             <GraduationCap className="size-20 text-cas-gold/40" />
-          </div>
+          </PhotoBanner>
           <div className="p-6">
             {weekly ? (
               <>
@@ -271,13 +270,12 @@ export default function SiteHome() {
       {/* ── Highlights 3×3 ───────────────────────────────────── */}
       <SiteSection title="Highlights" subtitle="Handpicked routes into studying in China.">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }) => (
+          {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <div className="relative flex h-28 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
-                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+              <PhotoBanner src={`/images/campus-${(i % 6) + 1}.jpg`} className="flex h-28 items-center justify-center">
                 <Icon className="size-9 text-cas-gold/70" />
                 <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
-              </div>
+              </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="font-semibold text-cas-navy group-hover:text-cas-gold-600">{title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
@@ -292,12 +290,11 @@ export default function SiteHome() {
       <SiteSection title="Outstanding programs" subtitle="Popular programs students are applying to right now." action={<Link to="/site/programs" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl" />)}
-          {outstanding.map((p) => (
+          {outstanding.map((p, i) => (
             <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <div className="relative flex h-24 items-center justify-center bg-gradient-to-br from-cas-navy to-cas-navy-700">
-                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+              <PhotoBanner src={`/images/campus-${(i % 6) + 1}.jpg`} className="flex h-24 items-center justify-center">
                 <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
-              </div>
+              </PhotoBanner>
               <div className="p-4">
                 <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-gold-600">{p.name}</h3>
                 <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
@@ -343,12 +340,11 @@ export default function SiteHome() {
       {/* ── Watch & Learn ────────────────────────────────────── */}
       <SiteSection title="Watch & learn" subtitle="Guides and student stories from CAS.">
         <div className="grid gap-5 sm:grid-cols-3">
-          {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title) => (
+          {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title, i) => (
             <div key={title} className="group overflow-hidden rounded-2xl border bg-card shadow-sm">
-              <div className="relative flex h-40 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
-                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+              <PhotoBanner src={`/images/video-${i + 1}.jpg`} className="flex h-40 items-center justify-center">
                 <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-gold text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
-              </div>
+              </PhotoBanner>
               <div className="p-4"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
             </div>
           ))}
@@ -356,7 +352,9 @@ export default function SiteHome() {
       </SiteSection>
 
       {/* ── Reviews ──────────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cas-navy-900 to-cas-navy p-8 text-white sm:p-12">
+      <section className="relative overflow-hidden rounded-3xl p-8 text-white sm:p-12">
+        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('/images/reviews.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 to-cas-navy/88" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
         <div className="relative">
           <div className="text-center">
