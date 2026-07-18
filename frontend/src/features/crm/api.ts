@@ -99,6 +99,28 @@ export const convertLead = (id: number | string) =>
 export const listStaff = () =>
   api<Paginated<{ id: number; name: string; email: string }>>("/users?per_page=100")
 
+export interface LeadSource {
+  id: number
+  name: string
+  channel: string | null
+}
+
+export const listLeadSources = () => api<{ data: LeadSource[] }>("/leads/sources")
+
+export interface CreateLeadPayload {
+  first_name: string
+  last_name?: string
+  email?: string
+  phone?: string
+  marketing_source_id?: number | null
+  assigned_user_id?: number | null
+  intake_route?: "info" | "full"
+  message?: string
+}
+
+export const createLead = (payload: CreateLeadPayload) =>
+  api<{ data: LeadListItem }>("/leads", { method: "POST", body: JSON.stringify(payload) })
+
 // ── Students ───────────────────────────────────────────────────────────
 
 export interface StudentListParams {

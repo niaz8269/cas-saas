@@ -22,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useCan } from "@/features/auth/useCan"
+import AddLeadDialog from "@/features/crm/AddLeadDialog"
 import { listLeads } from "@/features/crm/api"
 import LeadRowActions from "@/features/crm/LeadRowActions"
 import { LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
@@ -33,6 +35,8 @@ function formatDate(iso: string | null): string {
 
 export default function LeadsPage() {
   const navigate = useNavigate()
+  const can = useCan()
+  const canCreate = can("leads.create.global") || can("leads.create.assigned")
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
@@ -92,6 +96,8 @@ export default function LeadsPage() {
             ))}
           </SelectContent>
         </Select>
+
+        {canCreate && <div className="ml-auto"><AddLeadDialog /></div>}
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
