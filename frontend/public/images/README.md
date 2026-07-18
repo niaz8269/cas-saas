@@ -8,18 +8,27 @@ gradient in its place, so nothing ever looks broken.
 penalizes duplicate/stolen imagery. Use your own campus/student/office photos, or
 royalty-free ones you're licensed to use (e.g. Unsplash/Pexels downloads).
 
-## Files the site looks for
+## What already ships
 
-| File name (exact)              | Where it shows                         | Recommended size |
-|--------------------------------|----------------------------------------|------------------|
-| `hero.jpg`                     | Home hero background                   | 1920 × 1080      |
-| `weekly.jpg`                   | "Weekly Programs" spotlight panel      | 800 × 600        |
-| `campus-1.jpg` … `campus-6.jpg`| Highlights grid + Outstanding programs (cycled across the cards) | 800 × 600 |
-| `video-1.jpg` … `video-3.jpg`  | "Watch & learn" thumbnails             | 800 × 600        |
-| `reviews.jpg`                  | "Reviews from our students" backdrop   | 1920 × 800       |
+`art-1.svg` … `art-6.svg` are **original CAS geometric artwork** (navy + gold), already
+wired into the Highlights, Outstanding Programs, Weekly Programs and Watch cards. You
+don't need to touch these — they render out of the box, no photos required.
 
-You don't need all of them — add what you have; the rest keep their gradient.
-Even just `hero.jpg` + `campus-1..6.jpg` transforms the whole page.
+## Photo slots left for you (optional)
+
+Drop these and they replace the gradient behind the big feature areas:
+
+| File name (exact) | Where it shows                       | Recommended size |
+|-------------------|--------------------------------------|------------------|
+| `hero.jpg`        | Home hero background                 | 1920 × 1080      |
+| `reviews.jpg`     | "Reviews from our students" backdrop | 1920 × 800       |
+
+Want your own photos on the cards instead of the artwork? Drop e.g. `campus-1.jpg`
+and tell me — I'll re-point those cards to your files.
+
+## University covers & logos
+Set per-university in the admin panel (Catalog → University → edit) — they show on the
+university cards and detail pages automatically.
 
 ## University covers & logos
 

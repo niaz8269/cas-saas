@@ -233,8 +233,8 @@ export default function SiteHome() {
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-2xl border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <PhotoBanner src="/images/weekly.jpg" className="flex min-h-48 items-center justify-center p-6">
-            <GraduationCap className="size-20 text-cas-gold/40" />
+          <PhotoBanner src="/images/art-3.svg" className="flex min-h-48 items-center justify-center p-6">
+            <GraduationCap className="size-20 text-cas-gold/50" />
           </PhotoBanner>
           <div className="p-6">
             {weekly ? (
@@ -272,8 +272,8 @@ export default function SiteHome() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <PhotoBanner src={`/images/campus-${(i % 6) + 1}.jpg`} className="flex h-28 items-center justify-center">
-                <Icon className="size-9 text-cas-gold/70" />
+              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
+                <Icon className="size-9 text-cas-gold/80" />
                 <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">
@@ -292,7 +292,7 @@ export default function SiteHome() {
           {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl" />)}
           {outstanding.map((p, i) => (
             <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <PhotoBanner src={`/images/campus-${(i % 6) + 1}.jpg`} className="flex h-24 items-center justify-center">
+              <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
                 <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
               </PhotoBanner>
               <div className="p-4">
@@ -342,7 +342,7 @@ export default function SiteHome() {
         <div className="grid gap-5 sm:grid-cols-3">
           {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title, i) => (
             <div key={title} className="group overflow-hidden rounded-2xl border bg-card shadow-sm">
-              <PhotoBanner src={`/images/video-${i + 1}.jpg`} className="flex h-40 items-center justify-center">
+              <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-40 items-center justify-center">
                 <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-gold text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
               </PhotoBanner>
               <div className="p-4"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
