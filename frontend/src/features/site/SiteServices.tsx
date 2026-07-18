@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom"
 
 import { SiteSection } from "@/features/site/components"
+import { useSeo } from "@/lib/seo"
 
 const SERVICES: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: GraduationCap, title: "Admission service", body: "We shortlist the right universities and programs, prepare your file and submit a complete, correct application on your behalf." },
@@ -22,6 +23,12 @@ const SERVICES: { icon: LucideIcon; title: string; body: string }[] = [
 ]
 
 export default function SiteServices() {
+  useSeo({
+    title: "Our Services",
+    description: "CAS services for studying in China — admission service, visa assistance, scholarship help, airport pickup and on-campus support, end to end.",
+    canonicalPath: "/site/services",
+  })
+
   return (
     <div className="space-y-12">
       <section className="rounded-2xl bg-cas-navy p-8 text-white shadow-sm sm:p-12">

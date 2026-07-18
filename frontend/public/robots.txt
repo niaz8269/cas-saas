@@ -1,0 +1,7 @@
+# CAS — Consultancy for Abroad Study
+# The public marketing site lives under /site; the ERP and portals are private.
+User-agent: *
+Allow: /site
+Disallow: /
+
+Sitemap: https://cas.moe/sitemap.xml

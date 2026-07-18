@@ -2,6 +2,7 @@ import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, Plane, Spar
 import { Link } from "react-router-dom"
 
 import { SiteSection } from "@/features/site/components"
+import { useSeo } from "@/lib/seo"
 
 const STEPS = [
   { icon: Compass, title: "Choose", body: "We match you to universities and programs that fit your goals, grades and budget." },
@@ -18,6 +19,12 @@ const WHY_CHINA = [
 ]
 
 export default function SiteAbout() {
+  useSeo({
+    title: "About CAS",
+    description: "About CAS — Consultancy for Abroad Study. An official authorized agent placing students into Ministry of Education–listed universities in China since 2012.",
+    canonicalPath: "/site/about",
+  })
+
   return (
     <div className="space-y-12">
       {/* Intro */}

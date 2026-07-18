@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { SiteSection } from "@/features/site/components"
+import { useSeo } from "@/lib/seo"
 
 const UPDATES: { date: string; tag: string; title: string; body: string; to: string }[] = [
   {
@@ -26,6 +27,12 @@ const UPDATES: { date: string; tag: string; title: string; body: string; to: str
 ]
 
 export default function SiteNews() {
+  useSeo({
+    title: "News & Updates",
+    description: "News and updates from CAS — intake deadlines, scholarship openings and partner-university announcements for studying in China.",
+    canonicalPath: "/site/news",
+  })
+
   return (
     <div className="space-y-8">
       <div>

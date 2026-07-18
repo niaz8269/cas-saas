@@ -2,6 +2,7 @@ import { ArrowRight, Award, Building2, Coins, GraduationCap, Globe2, Landmark, S
 import { Link } from "react-router-dom"
 
 import { SiteSection } from "@/features/site/components"
+import { useSeo } from "@/lib/seo"
 
 const REASONS: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Award, title: "World-ranked universities", body: "Study at Ministry of Education–listed and globally ranked institutions recognised worldwide." },
@@ -13,6 +14,12 @@ const REASONS: { icon: LucideIcon; title: string; body: string }[] = [
 ]
 
 export default function SiteWhyChina() {
+  useSeo({
+    title: "Why Study in China",
+    description: "Why study in China — world-ranked, Ministry of Education–listed universities, English-taught degrees, affordable tuition and generous scholarships.",
+    canonicalPath: "/site/why-china",
+  })
+
   return (
     <div className="space-y-12">
       <section className="rounded-2xl bg-cas-navy p-8 text-white shadow-sm sm:p-12">

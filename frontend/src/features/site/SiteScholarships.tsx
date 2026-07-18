@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteScholarships, type SiteScholarship } from "@/features/site/api"
+import { useSeo } from "@/lib/seo"
 
 function amountLabel(s: SiteScholarship): string | null {
   if (s.coverage) return s.coverage
@@ -17,6 +18,12 @@ function amountLabel(s: SiteScholarship): string | null {
 }
 
 export default function SiteScholarships() {
+  useSeo({
+    title: "Scholarships to Study in China",
+    description: "Scholarships to study in China — government, provincial and university awards, full and partial. Check coverage and deadlines and apply with CAS.",
+    canonicalPath: "/site/scholarships",
+  })
+
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [page, setPage] = useState(1)

@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversity, type SiteIntake } from "@/features/site/api"
 import EnquiryForm from "@/features/site/EnquiryForm"
+import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 const money = (v: string | number | null | undefined, currency?: string | null) =>
@@ -42,6 +43,24 @@ export default function SiteUniversity() {
     queryKey: ["site-university", slug],
     queryFn: () => getSiteUniversity(slug),
     retry: false,
+  })
+
+  const uni = data?.data
+  useSeo({
+    title: uni ? `${uni.name} — Programs & Scholarships` : "University in China",
+    description: uni
+      ? `${uni.name}${uni.city ? ` in ${uni.city}` : ""} — explore programs, intakes and scholarships${uni.moe_listed ? " at this Ministry of Education–listed university" : ""}, and apply with CAS.`
+      : "Explore programs, intakes and scholarships at Ministry of Education–listed universities in China.",
+    canonicalPath: `/site/universities/${slug}`,
+    jsonLd: uni
+      ? {
+          "@context": "https://schema.org",
+          "@type": "CollegeOrUniversity",
+          name: uni.name,
+          ...(uni.website ? { url: uni.website } : {}),
+          ...(uni.city ? { address: { "@type": "PostalAddress", addressLocality: uni.city, addressCountry: "CN" } } : {}),
+        }
+      : undefined,
   })
 
   if (isPending) return <Skeleton className="h-96 w-full rounded-2xl" />

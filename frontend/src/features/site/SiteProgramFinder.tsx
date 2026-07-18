@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, type SiteProgram } from "@/features/site/api"
+import { useSeo } from "@/lib/seo"
 
 const LEVELS = [
   { value: "all", label: "All levels" },
@@ -35,6 +36,12 @@ function money(value: SiteProgram["tuition_fee"], currency: string | null): stri
 }
 
 export default function SiteProgramFinder() {
+  useSeo({
+    title: "Find Programs to Study in China",
+    description: "Search programs to study in China — MBBS, engineering, business and more — across partner universities. Filter by degree level, teaching language and budget.",
+    canonicalPath: "/site/programs",
+  })
+
   const [params] = useSearchParams()
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const [q, setQ] = useState(params.get("q") ?? "")

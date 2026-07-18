@@ -24,6 +24,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
 import { SiteSection, UniCard } from "@/features/site/components"
+import { organizationJsonLd, useSeo } from "@/lib/seo"
 
 const FIELDS: { label: string; q: string; icon: LucideIcon }[] = [
   { label: "MBBS / Medicine", q: "MBBS", icon: Stethoscope },
@@ -46,6 +47,13 @@ const WHY: { title: string; body: string; icon: LucideIcon }[] = [
 const SUBJECTS = ["All subjects", "MBBS", "Engineering", "Business", "Computer Science", "Chinese Medicine", "Law"]
 
 export default function SiteHome() {
+  useSeo({
+    title: "Study in China — Universities, Programs & Scholarships",
+    description: "Study in China with CAS, an official authorized agent since 2012. Find MBBS, engineering and business programs at Ministry of Education–listed universities, with scholarships and full application-to-arrival support.",
+    canonicalPath: "/site",
+    jsonLd: organizationJsonLd(),
+  })
+
   const navigate = useNavigate()
   const [q, setQ] = useState("")
   const [level, setLevel] = useState("all")

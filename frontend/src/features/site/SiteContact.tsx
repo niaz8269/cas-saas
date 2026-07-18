@@ -1,6 +1,7 @@
 import { Globe, Mail, MapPin, MessageCircle } from "lucide-react"
 
 import EnquiryForm from "@/features/site/EnquiryForm"
+import { useSeo } from "@/lib/seo"
 
 const OFFICES = [
   { city: "Head Office", detail: "Beijing, China" },
@@ -8,6 +9,12 @@ const OFFICES = [
 ]
 
 export default function SiteContact() {
+  useSeo({
+    title: "Contact & Free Consultation",
+    description: "Contact CAS for a free consultation about studying in China. Get expert guidance on universities, programs, scholarships, admission and visas.",
+    canonicalPath: "/site/contact",
+  })
+
   return (
     <div className="space-y-6">
       <div>

@@ -7,9 +7,16 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
 import { UniCard } from "@/features/site/components"
+import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 export default function SiteUniversities() {
+  useSeo({
+    title: "Universities in China",
+    description: "Browse Ministry of Education–listed universities in China. Compare their programs, intakes and scholarships and apply with CAS.",
+    canonicalPath: "/site/universities",
+  })
+
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [moe, setMoe] = useState(false)
