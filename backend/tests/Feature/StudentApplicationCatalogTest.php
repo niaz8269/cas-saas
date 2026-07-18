@@ -85,6 +85,22 @@ it('returns programs for a degree tile, excluding other tiles', function () {
         ->assertJsonPath('data.0.name', 'Computer Science');
 });
 
+it('includes the applicable CAS service charge for the funding', function () {
+    actingAsStudentPortal();
+    $uni = University::factory()->create(['status' => 'active']);
+    Program::factory()->create([
+        'university_id' => $uni->id, 'name' => 'MBBS', 'level' => 'bachelor', 'status' => 'active',
+        'service_charges' => ['currency' => 'USD', 'self' => ['student' => 400, 'agent' => 200]],
+    ]);
+
+    $response = $this->getJson('/api/v1/student/applications/availability?degree=mbbs&funding=self')
+        ->assertOk()
+        ->assertJsonPath('data.0.service_charge.currency', 'USD');
+
+    // The student rate (400), not the agent rate (200).
+    expect((float) $response->json('data.0.service_charge.amount'))->toBe(400.0);
+});
+
 it('keeps only universities with a matching scholarship in scholarship mode', function () {
     actingAsStudentPortal();
     $withAward = University::factory()->create(['status' => 'active']);

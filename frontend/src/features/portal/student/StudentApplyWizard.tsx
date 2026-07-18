@@ -374,6 +374,11 @@ function CourseStep(props: {
                     {p.tuition_fee != null && <Chip>{money(p.tuition_fee, p.currency)}/yr</Chip>}
                     {p.university.moe_listed && <Chip>MoE-listed</Chip>}
                   </div>
+                  {p.service_charge && (
+                    <p className="mt-2 text-xs font-medium text-cas-navy">
+                      CAS service fee: {money(p.service_charge.amount, p.service_charge.currency)}
+                    </p>
+                  )}
                 </button>
               )
             })}
@@ -711,6 +716,9 @@ function ReviewStep({ program, draft, agreed, onAgreed }: {
         <p className="text-sm text-muted-foreground">{program?.university.name}{program?.university.city ? ` · ${program.university.city}` : ""}</p>
         <div className="rounded-lg bg-subtle p-3 text-sm">
           <p>Reference <strong>{draft.application_code}</strong></p>
+          {program?.service_charge && (
+            <p className="mt-1">CAS service fee: <strong>{money(program.service_charge.amount, program.service_charge.currency)}</strong></p>
+          )}
           <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached.</p>
         </div>
       </PortalCard>

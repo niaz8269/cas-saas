@@ -222,6 +222,7 @@ export interface WizardProgram {
   duration_months: number | null
   tuition_fee: string | number | null
   currency: string | null
+  service_charge: { amount: number; currency: string } | null
   university: {
     id: number
     name: string

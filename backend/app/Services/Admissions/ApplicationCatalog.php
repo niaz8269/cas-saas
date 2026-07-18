@@ -43,7 +43,7 @@ class ApplicationCatalog
      *
      * @return Collection<int, Program>
      */
-    public function availability(string $degree, string $funding): Collection
+    public function availability(string $degree, string $funding, string $applicant = 'student'): Collection
     {
         $programs = Program::query()
             ->where('status', 'active')
@@ -57,6 +57,12 @@ class ApplicationCatalog
             ->orderByRaw('tuition_fee is null, tuition_fee')
             ->orderBy('name')
             ->get();
+
+        // Attach the CAS service charge that applies to this funding + applicant.
+        $programs->each(fn (Program $program) => $program->setAttribute(
+            'applicant_service_charge',
+            $this->serviceChargeFor($program, $funding, $applicant),
+        ));
 
         if ($funding === 'self') {
             return $programs;
@@ -75,6 +81,29 @@ class ApplicationCatalog
                 $byUniversity->get($program->university_id),
             ))
             ->values();
+    }
+
+    /**
+     * The CAS service charge for a course under a funding + applicant type,
+     * or null if none is set. Amounts live in programs.service_charges.
+     *
+     * @return array{amount: float, currency: string}|null
+     */
+    public function serviceChargeFor(Program $program, string $funding, string $applicant): ?array
+    {
+        $charges = $program->service_charges;
+
+        if (! is_array($charges)) {
+            return null;
+        }
+
+        $amount = $charges[$funding][$applicant] ?? null;
+
+        if ($amount === null || $amount === '') {
+            return null;
+        }
+
+        return ['amount' => (float) $amount, 'currency' => $charges['currency'] ?? 'USD'];
     }
 
     /**
