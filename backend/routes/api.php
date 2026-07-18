@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
@@ -94,6 +95,7 @@ Route::prefix('v1')->group(function () {
         Route::get('auth/me', [AuthController::class, 'me']);
 
         // Analytics
+        Route::get('search', [SearchController::class, 'index']);
         Route::get('dashboards/executive', [DashboardController::class, 'executive']);
         Route::get('reports/performance', [DashboardController::class, 'performance']);
 

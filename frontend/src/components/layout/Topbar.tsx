@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useLogout } from "@/features/auth/useLogout"
 import NotificationsBell from "@/features/notifications/NotificationsBell"
+import GlobalSearch from "@/features/search/GlobalSearch"
 import { pageTitle } from "@/lib/navigation"
 import { useAuthStore } from "@/stores/auth"
 
@@ -48,6 +49,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       <h1 className="text-lg font-semibold text-foreground">{pageTitle(pathname)}</h1>
 
       <div className="ml-auto flex items-center gap-2">
+        <GlobalSearch />
         <NotificationsBell />
 
         <DropdownMenu>
