@@ -1,63 +1,83 @@
 import { useQuery } from "@tanstack/react-query"
 import {
-  Activity,
   ArrowRight,
   Award,
   BadgeCheck,
-  Briefcase,
-  Clock,
-  Cpu,
-  Headphones,
-  HeartPulse,
+  BookOpen,
+  Building2,
+  CalendarClock,
+  CheckCircle2,
+  GraduationCap,
+  Globe2,
   MessageCircle,
+  Play,
   Quote,
-  Scale,
   Search,
   ShieldCheck,
-  Sparkles,
   Star,
-  Stethoscope,
   Wallet,
+  Zap,
   type LucideIcon,
 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSiteUniversities } from "@/features/site/api"
+import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { SiteSection, UniCard } from "@/features/site/components"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
-const FIELDS: { label: string; q: string; icon: LucideIcon }[] = [
-  { label: "MBBS / Medicine", q: "MBBS", icon: Stethoscope },
-  { label: "Engineering", q: "Engineering", icon: Cpu },
-  { label: "Business & MBA", q: "Business", icon: Briefcase },
-  { label: "Computer Science", q: "Computer", icon: Activity },
-  { label: "Chinese Medicine", q: "Chinese Medicine", icon: HeartPulse },
-  { label: "Law", q: "Law", icon: Scale },
-]
-
-const WHY: { title: string; body: string; icon: LucideIcon }[] = [
-  { title: "Official authorized agent", body: "Working directly with Ministry of Education–listed universities since 2012.", icon: ShieldCheck },
-  { title: "Guaranteed admissions", body: "Strong admission rates and a 98% visa-success track record.", icon: BadgeCheck },
-  { title: "Fast processing", body: "Complete, correct applications prepared and submitted quickly.", icon: Clock },
-  { title: "End-to-end support", body: "One team from choosing a program to admission, visa and arrival.", icon: Award },
-  { title: "Scholarship access", body: "Government, provincial and university funding — matched to you.", icon: Wallet },
-  { title: "24/7 student support", body: "Help before you apply and long after you land on campus.", icon: Headphones },
-]
-
-const TESTIMONIALS: { quote: string; name: string; detail: string }[] = [
-  { quote: "CAS handled everything — choosing my university, the application and my visa. I'm now studying MBBS in China with zero stress.", name: "Ayesha K.", detail: "MBBS · Jilin" },
-  { quote: "The scholarship guidance alone saved me a fortune. Every message was answered quickly and professionally.", name: "Bilal R.", detail: "Engineering · Wuhan" },
-  { quote: "They supported me even after I arrived — registration, banking, everything. Truly end-to-end.", name: "Fatima S.", detail: "Business · Beijing" },
-]
-
-const SUBJECTS = ["All subjects", "MBBS", "Engineering", "Business", "Computer Science", "Chinese Medicine", "Law"]
+const DEADLINE = new Date("2026-02-28T23:59:59Z").getTime()
 
 const DOT_GRID = {
   backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
   backgroundSize: "22px 22px",
 }
+
+const SEARCH_TABS = [
+  { key: "programs", label: "Programs", to: "/site/programs" },
+  { key: "universities", label: "Universities", to: "/site/universities" },
+  { key: "scholarships", label: "Scholarships", to: "/site/scholarships" },
+]
+
+const HIGHLIGHTS: { title: string; body: string; to: string; tag: string; icon: LucideIcon }[] = [
+  { title: "Globally recognised medical degrees", body: "Study MBBS at Ministry of Education–listed universities recognised worldwide.", to: "/site/programs?q=MBBS", tag: "MBBS", icon: BadgeCheck },
+  { title: "Universities with late deadlines", body: "Still open for the coming intake — apply before the seats fill up.", to: "/site/universities", tag: "Deadlines", icon: CalendarClock },
+  { title: "No-CSCA universities", body: "Universities that admit international students without the CSCA test.", to: "/site/universities", tag: "Admissions", icon: CheckCircle2 },
+  { title: "Chinese-language foundations", body: "Foundation-year programs to prepare you for study and life in China.", to: "/site/programs?q=Chinese", tag: "Language", icon: BookOpen },
+  { title: "Fast-track applications", body: "Priority processing for complete applications submitted through CAS.", to: "/site/contact", tag: "Fast-track", icon: Zap },
+  { title: "Free-application universities", body: "Apply to selected universities with no application fee through CAS.", to: "/site/universities", tag: "Free apply", icon: ShieldCheck },
+  { title: "Budget-friendly universities", body: "Quality education with affordable tuition and living costs.", to: "/site/programs", tag: "Value", icon: Wallet },
+  { title: "Full-scholarship universities", body: "Universities offering full-tuition scholarships to eligible students.", to: "/site/scholarships?q=full", tag: "Scholarship", icon: Award },
+  { title: "Partial-scholarship universities", body: "Universities offering partial awards and monthly stipends.", to: "/site/scholarships?q=partial", tag: "Scholarship", icon: Globe2 },
+]
+
+const FEATURED: Record<string, { title: string; to: string }[]> = {
+  "Latest topics": [
+    { title: "March 2026 intake now open across partner universities", to: "/site/news" },
+    { title: "CSC & provincial scholarships accepting applications", to: "/site/scholarships" },
+    { title: "New Ministry of Education–listed universities added", to: "/site/universities" },
+    { title: "How to prepare a strong MBBS application", to: "/site/programs?q=MBBS" },
+  ],
+  "Common questions": [
+    { title: "Is an MBBS from China recognised in my country?", to: "/site/why-china" },
+    { title: "What are the tuition fees and living costs?", to: "/site/programs" },
+    { title: "Which universities don't require the CSCA test?", to: "/site/universities" },
+    { title: "How do I apply for a scholarship?", to: "/site/scholarships" },
+  ],
+  "Trending": [
+    { title: "Study MBBS in English", to: "/site/programs?q=MBBS" },
+    { title: "Engineering programs in China", to: "/site/programs?q=Engineering" },
+    { title: "Business & MBA programs", to: "/site/programs?q=Business" },
+    { title: "Full-tuition scholarships", to: "/site/scholarships?q=full" },
+  ],
+}
+
+const REVIEWS = [
+  { quote: "CAS handled everything — choosing my university, the application and my visa. I'm now studying MBBS in China with zero stress.", name: "Ayesha K.", detail: "MBBS · Jilin" },
+  { quote: "The scholarship guidance alone saved me a fortune. Every message was answered quickly and professionally.", name: "Bilal R.", detail: "Engineering · Wuhan" },
+  { quote: "They supported me even after I arrived — registration, banking, everything. Truly end-to-end.", name: "Fatima S.", detail: "Business · Beijing" },
+]
 
 function Stars() {
   return (
@@ -66,6 +86,37 @@ function Stars() {
     </span>
   )
 }
+
+function Countdown() {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+
+    return () => clearInterval(id)
+  }, [])
+
+  const diff = Math.max(0, DEADLINE - now)
+  const parts: [number, string][] = [
+    [Math.floor(diff / 86_400_000), "Days"],
+    [Math.floor((diff / 3_600_000) % 24), "Hrs"],
+    [Math.floor((diff / 60_000) % 60), "Min"],
+    [Math.floor((diff / 1_000) % 60), "Sec"],
+  ]
+
+  return (
+    <div className="flex gap-2">
+      {parts.map(([v, l]) => (
+        <div key={l} className="flex w-12 flex-col items-center rounded-lg bg-cas-navy px-1 py-1.5 text-white">
+          <span className="text-lg font-bold tabular-nums">{String(v).padStart(2, "0")}</span>
+          <span className="text-[10px] text-white/70 uppercase">{l}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const money = (v: string | number | null | undefined, c?: string | null) =>
+  v == null ? "On request" : `${Number(v).toLocaleString()} ${c ?? "CNY"}/yr`
 
 export default function SiteHome() {
   useSeo({
@@ -76,208 +127,300 @@ export default function SiteHome() {
   })
 
   const navigate = useNavigate()
-  const [q, setQ] = useState("")
-  const [level, setLevel] = useState("all")
-  const [subject, setSubject] = useState("All subjects")
+  const [tab, setTab] = useState("programs")
+  const [term, setTerm] = useState("")
+  const [contentTab, setContentTab] = useState("Latest topics")
 
-  const featured = useQuery({
-    queryKey: ["site-universities", "featured"],
-    queryFn: () => getSiteUniversities({ page: 1 }),
-  })
+  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1 }) })
+  const programs = useQuery({ queryKey: ["site-programs", "home"], queryFn: () => getSitePrograms({}) })
 
-  const universities = featured.data?.data.slice(0, 6) ?? []
-  const uniCount = featured.data?.meta.total ?? null
+  const featuredUnis = universities.data?.data.slice(0, 6) ?? []
+  const moreUnis = universities.data?.data.slice(0, 10) ?? []
+  const uniCount = universities.data?.meta.total ?? null
+  const weekly = programs.data?.data[0]
+  const outstanding = programs.data?.data.slice(0, 5) ?? []
 
   const stats = [
-    ["13+", "Years of experience"],
-    ["13K+", "Students enrolled"],
-    [uniCount ? `${uniCount}+` : "200+", "University partners"],
-    ["98%", "Visa success rate"],
-    ["20+", "Worldwide branches"],
-    ["50+", "Countries served"],
+    ["13+", "Years"], ["13K+", "Students"], [uniCount ? `${uniCount}+` : "200+", "Universities"],
+    ["98%", "Visa success"], ["20+", "Branches"], ["50+", "Countries"],
   ]
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    const term = q.trim() || (subject !== "All subjects" ? subject : "")
-    const params = new URLSearchParams()
-    if (term) params.set("q", term)
-    if (level !== "all") params.set("level", level)
-    navigate(`/site/programs${params.toString() ? `?${params}` : ""}`)
+    const to = SEARCH_TABS.find((t) => t.key === tab)!.to
+    navigate(`${to}${term.trim() ? `?q=${encodeURIComponent(term.trim())}` : ""}`)
   }
 
   return (
     <div className="space-y-16">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700 p-6 text-white shadow-xl sm:p-10 lg:p-12">
-        <div className="pointer-events-none absolute -top-24 -right-24 size-80 rounded-full bg-cas-gold/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-24 size-80 rounded-full bg-sky-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="relative -mx-4 -mt-8 overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700 px-4 py-14 text-white sm:-mx-6 sm:px-6 sm:py-20">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+          <span className="font-serif text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
+        </div>
+        <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-gold/15 blur-3xl" />
 
-        <div className="relative grid items-center gap-10 lg:grid-cols-2">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
-              <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
-            </span>
-            <h1 className="mt-5 font-serif text-4xl leading-[1.05] font-bold sm:text-5xl lg:text-6xl">
-              Study in <span className="text-cas-gold">China</span> with Confidence
-            </h1>
-            <p className="mt-5 max-w-md text-base text-white/80">
-              Your trusted path to Ministry of Education–listed universities — with full support from application to arrival.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy shadow-lg shadow-cas-gold/20 transition-transform hover:scale-[1.03] hover:bg-cas-gold-600">
-                <Sparkles className="size-4" /> Apply Now
-              </Link>
-              <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-lg border border-white/30 px-6 text-sm font-semibold text-white backdrop-blur hover:bg-white/10">
-                <MessageCircle className="size-4" /> Free Consultation
-              </Link>
-            </div>
-            <div className="mt-6 flex items-center gap-3 text-sm text-white/80">
-              <Stars />
-              <span>Trusted by <strong className="text-white">13,000+</strong> students</span>
-            </div>
-          </div>
+        <div className="relative mx-auto max-w-4xl text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
+            <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
+          </span>
+          <h1 className="mt-5 font-serif text-4xl font-bold sm:text-6xl">
+            Study in <span className="text-cas-gold">China</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base">
+            Explore Ministry of Education–listed universities and English-taught programs — with full support from application to arrival.
+          </p>
 
-          {/* Find Your Program widget */}
-          <form onSubmit={runSearch} className="relative overflow-hidden rounded-2xl bg-card p-6 text-foreground shadow-2xl">
-            <div className="absolute inset-x-0 top-0 h-1.5 bg-cas-gold" />
-            <p className="flex items-center gap-2 font-serif text-lg font-bold text-cas-navy">
-              <Search className="size-5 text-cas-gold" /> Find Your Program
-            </p>
-            <div className="mt-4 space-y-3">
+          {/* Tabbed search */}
+          <form onSubmit={runSearch} className="mx-auto mt-8 max-w-2xl">
+            <div className="flex justify-center gap-1">
+              {SEARCH_TABS.map((t) => (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => setTab(t.key)}
+                  className={cnTab(tab === t.key)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <div className="mt-2 flex overflow-hidden rounded-xl bg-card p-1.5 shadow-2xl">
               <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Program name or field of study…"
-                aria-label="Program name or field of study"
-                className="h-12 w-full rounded-lg border bg-background px-3.5 text-sm outline-none transition-colors focus:border-cas-navy focus:ring-2 focus:ring-cas-navy/10"
+                value={term}
+                onChange={(e) => setTerm(e.target.value)}
+                placeholder="Enter a university or program name…"
+                aria-label="Search"
+                className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
               />
-              <div className="grid grid-cols-2 gap-3">
-                <select value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Degree level" className="h-12 rounded-lg border bg-background px-2.5 text-sm">
-                  <option value="all">All degree levels</option>
-                  <option value="bachelor">Bachelor</option>
-                  <option value="master">Master</option>
-                  <option value="phd">PhD</option>
-                </select>
-                <select value={subject} onChange={(e) => setSubject(e.target.value)} aria-label="Subject" className="h-12 rounded-lg border bg-background px-2.5 text-sm">
-                  {SUBJECTS.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-              <button type="submit" className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-cas-navy text-sm font-bold text-white transition-colors hover:bg-cas-navy-700">
-                <Search className="size-4" /> Search Programs
+              <button type="submit" className="inline-flex items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
+                <Search className="size-4" /> Search
               </button>
-              <p className="text-center text-xs text-muted-foreground">Free to search · No obligation</p>
             </div>
           </form>
+
+          {/* Featured logos row */}
+          {featuredUnis.length > 0 && (
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-white/60">
+              <span>Featured:</span>
+              {featuredUnis.slice(0, 4).map((u) => (
+                <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-medium text-white/80 hover:bg-white/10">
+                  {u.name}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {/* ── Stats ────────────────────────────────────────────── */}
+      <section className="grid grid-cols-3 gap-3 sm:grid-cols-6">
         {stats.map(([v, l]) => (
-          <div key={l} className="group rounded-2xl border bg-card p-4 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-gold/50 hover:shadow-md">
-            <p className="bg-gradient-to-br from-cas-navy to-cas-navy-700 bg-clip-text text-2xl font-extrabold text-transparent tabular-nums sm:text-3xl">{v}</p>
-            <div className="mx-auto mt-1 h-0.5 w-6 rounded-full bg-cas-gold/60 transition-all group-hover:w-10" />
-            <p className="mt-1.5 text-xs text-muted-foreground">{l}</p>
+          <div key={l} className="rounded-2xl border bg-card p-4 text-center shadow-sm">
+            <p className="bg-gradient-to-br from-cas-navy to-cas-navy-700 bg-clip-text text-2xl font-extrabold text-transparent">{v}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{l}</p>
           </div>
         ))}
       </section>
 
-      {/* Fields */}
-      <SiteSection title="What do you want to study?" subtitle="Jump straight to the programs students ask for most.">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {FIELDS.map(({ label, q: fq, icon: Icon }) => (
-            <Link key={label} to={`/site/programs?q=${encodeURIComponent(fq)}`} className="group flex flex-col items-center gap-2.5 rounded-2xl border bg-card p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-cas-gold/50 hover:shadow-lg">
-              <span className="inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-cas-gold-50 to-cas-gold-50 text-cas-gold-600 transition-colors group-hover:from-cas-gold group-hover:to-cas-gold-600 group-hover:text-cas-navy"><Icon className="size-5" /></span>
-              <span className="text-xs font-semibold">{label}</span>
+      {/* ── Weekly Programs spotlight ────────────────────────── */}
+      <section>
+        <h2 className="flex items-center gap-2 text-xl font-bold text-cas-navy sm:text-2xl">
+          <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
+        </h2>
+        <div className="mt-4 grid gap-0 overflow-hidden rounded-2xl border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
+          <div className="relative flex min-h-48 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy p-6">
+            <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+            <GraduationCap className="size-20 text-cas-gold/40" />
+          </div>
+          <div className="p-6">
+            {weekly ? (
+              <>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-cas-navy">{weekly.university?.name ?? "Featured University"}</h3>
+                    <p className="text-sm text-muted-foreground">{weekly.name}{weekly.teaching_language ? ` · ${weekly.teaching_language}` : ""}</p>
+                  </div>
+                  <span className="rounded-full bg-cas-red-50 px-2.5 py-1 text-[11px] font-semibold text-cas-red">Limited seats</span>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3 text-sm">
+                  <div><p className="text-xs text-muted-foreground">Language</p><p className="font-semibold">{weekly.teaching_language ?? "English"}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Level</p><p className="font-semibold capitalize">{weekly.level}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Tuition</p><p className="font-semibold">{money(weekly.tuition_fee, weekly.currency)}</p></div>
+                </div>
+                <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-gold-600" /> Ministry of Education–listed university</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-gold-600" /> Full application and visa support from CAS</li>
+                </ul>
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                  <div><p className="mb-1 text-xs text-muted-foreground">Applications close in</p><Countdown /></div>
+                  <Link to="/site/contact" className="inline-flex h-11 items-center gap-2 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
+                </div>
+              </>
+            ) : (
+              <Skeleton className="h-48 w-full" />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Highlights 3×3 ───────────────────────────────────── */}
+      <SiteSection title="Highlights" subtitle="Handpicked routes into studying in China.">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }) => (
+            <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+              <div className="relative flex h-28 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
+                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+                <Icon className="size-9 text-cas-gold/70" />
+                <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="font-semibold text-cas-navy group-hover:text-cas-gold-600">{title}</h3>
+                <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-cas-navy">Learn more <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" /></span>
+              </div>
             </Link>
           ))}
         </div>
       </SiteSection>
 
-      {/* Featured universities */}
-      <SiteSection
-        title="World-class Chinese universities"
-        subtitle="A selection of the Ministry of Education–listed institutions we place students into."
-        action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}
-      >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
-          {!featured.isPending && universities.map((u) => <UniCard key={u.id} u={u} />)}
-          {!featured.isPending && universities.length === 0 && (
-            <div className="col-span-full rounded-2xl border border-dashed bg-card p-10 text-center">
-              <p className="text-sm text-muted-foreground">Our partner universities are ready to explore.</p>
-              <Link to="/site/universities" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:underline">Browse all universities <ArrowRight className="size-4" /></Link>
-            </div>
-          )}
-        </div>
-      </SiteSection>
-
-      {/* Why choose us */}
-      <SiteSection title="Why choose CAS" subtitle="What students and families get by applying with us.">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {WHY.map(({ title, body, icon: Icon }) => (
-            <div key={title} className="group rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-cas-navy/20 hover:shadow-lg">
-              <span className="inline-flex size-12 items-center justify-center rounded-xl bg-cas-navy-50 text-cas-navy transition-colors group-hover:bg-cas-navy group-hover:text-white"><Icon className="size-6" /></span>
-              <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
-            </div>
+      {/* ── Outstanding Programs ─────────────────────────────── */}
+      <SiteSection title="Outstanding programs" subtitle="Popular programs students are applying to right now." action={<Link to="/site/programs" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl" />)}
+          {outstanding.map((p) => (
+            <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+              <div className="relative flex h-24 items-center justify-center bg-gradient-to-br from-cas-navy to-cas-navy-700">
+                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+                <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
+              </div>
+              <div className="p-4">
+                <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-gold-600">{p.name}</h3>
+                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </SiteSection>
 
-      {/* Testimonials */}
-      <SiteSection title="What our students say" subtitle="Real journeys, from first enquiry to first day of class.">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="relative flex flex-col rounded-2xl border bg-card p-6 shadow-sm">
-              <Quote className="size-8 text-cas-gold/30" />
-              <blockquote className="mt-2 flex-1 text-sm text-foreground/90">"{t.quote}"</blockquote>
-              <figcaption className="mt-5 flex items-center gap-3 border-t pt-4">
-                <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-cas-gold">{t.name[0]}</span>
-                <span>
-                  <span className="block text-sm font-semibold text-cas-navy">{t.name}</span>
-                  <span className="block text-xs text-muted-foreground">{t.detail}</span>
-                </span>
-                <span className="ml-auto"><Stars /></span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </SiteSection>
-
-      {/* Scholarships band */}
-      <section className="relative overflow-hidden rounded-2xl border border-cas-gold/30 bg-gradient-to-r from-cas-gold-50 to-transparent p-6 sm:p-8">
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="flex items-start gap-4">
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-cas-gold text-cas-navy shadow-sm"><Award className="size-6" /></span>
-            <div>
-              <h2 className="text-lg font-bold text-cas-navy">Scholarships available</h2>
-              <p className="mt-1 max-w-xl text-sm text-muted-foreground">Government, provincial and university awards — full and partial. We help you find and apply for the ones you qualify for.</p>
+      {/* ── Featured Content (tabbed) ────────────────────────── */}
+      <SiteSection title="Featured content">
+        <div className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
+          <Link to="/site/why-china" className="group relative flex min-h-56 flex-col justify-end overflow-hidden rounded-2xl bg-gradient-to-br from-cas-navy-900 to-cas-navy p-7 text-white">
+            <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+            <BookOpen className="absolute top-6 right-6 size-16 text-cas-gold/30" />
+            <div className="relative">
+              <span className="rounded-full bg-cas-gold px-3 py-1 text-[11px] font-semibold text-cas-navy">Guide</span>
+              <h3 className="mt-3 font-serif text-2xl font-bold">Study in China: the complete guide for international students</h3>
+              <p className="mt-2 max-w-md text-sm text-white/80">Everything on universities, programs, scholarships, visas and life in China.</p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-cas-gold">Read the guide <ArrowRight className="size-4" /></span>
             </div>
-          </div>
-          <Link to="/site/scholarships" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
-            View scholarships <ArrowRight className="size-4" />
           </Link>
+
+          <div className="rounded-2xl border bg-card p-5 shadow-sm">
+            <div className="flex gap-1 border-b">
+              {Object.keys(FEATURED).map((k) => (
+                <button key={k} type="button" onClick={() => setContentTab(k)} className={cnContentTab(contentTab === k)}>{k}</button>
+              ))}
+            </div>
+            <ul className="mt-3 divide-y">
+              {FEATURED[contentTab].map((item) => (
+                <li key={item.title}>
+                  <Link to={item.to} className="flex items-start gap-2 py-3 text-sm text-foreground/90 hover:text-cas-navy">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-cas-gold" /> {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </SiteSection>
+
+      {/* ── Watch & Learn ────────────────────────────────────── */}
+      <SiteSection title="Watch & learn" subtitle="Guides and student stories from CAS.">
+        <div className="grid gap-5 sm:grid-cols-3">
+          {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title) => (
+            <div key={title} className="group overflow-hidden rounded-2xl border bg-card shadow-sm">
+              <div className="relative flex h-40 items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
+                <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
+                <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-gold text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
+              </div>
+              <div className="p-4"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
+            </div>
+          ))}
+        </div>
+      </SiteSection>
+
+      {/* ── Reviews ──────────────────────────────────────────── */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cas-navy-900 to-cas-navy p-8 text-white sm:p-12">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
+        <div className="relative">
+          <div className="text-center">
+            <h2 className="font-serif text-2xl font-bold sm:text-3xl">Reviews from our students</h2>
+            <p className="mt-2 text-sm text-white/70">Students from 50+ countries trust CAS with their journey.</p>
+          </div>
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {REVIEWS.map((t) => (
+              <figure key={t.name} className="flex flex-col rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 backdrop-blur">
+                <Quote className="size-7 text-cas-gold/50" />
+                <blockquote className="mt-2 flex-1 text-sm text-white/90">"{t.quote}"</blockquote>
+                <figcaption className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4">
+                  <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-gold text-sm font-bold text-cas-navy">{t.name[0]}</span>
+                  <span><span className="block text-sm font-semibold">{t.name}</span><span className="block text-xs text-white/60">{t.detail}</span></span>
+                  <span className="ml-auto"><Stars /></span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700 p-8 text-center text-white shadow-xl sm:p-14">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
-        <div className="pointer-events-none absolute -top-20 left-1/2 size-72 -translate-x-1/2 rounded-full bg-cas-gold/15 blur-3xl" />
-        <div className="relative">
-          <h2 className="font-serif text-3xl font-bold sm:text-4xl">Ready to study in China?</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-white/80">
-            Book a free consultation and a CAS counselor will guide you through your options — no obligation.
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-lg bg-white px-6 text-sm font-bold text-cas-navy hover:bg-white/90">Browse programs</Link>
-            <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy shadow-lg shadow-cas-gold/20 hover:bg-cas-gold-600">Free consultation</Link>
+      {/* ── More in China ────────────────────────────────────── */}
+      <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
+          {featuredUnis.map((u) => <UniCard key={u.id} u={u} />)}
+          {!universities.isPending && featuredUnis.length === 0 && (
+            <div className="col-span-full rounded-2xl border border-dashed bg-card p-10 text-center">
+              <p className="text-sm text-muted-foreground">Our partner universities are ready to explore.</p>
+              <Link to="/site/universities" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:underline">Browse all <ArrowRight className="size-4" /></Link>
+            </div>
+          )}
+        </div>
+        {moreUnis.length > 6 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {moreUnis.slice(6).map((u) => (
+              <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border bg-card px-3 py-1.5 text-xs font-medium text-cas-navy shadow-sm hover:border-cas-gold/50">{u.name}</Link>
+            ))}
           </div>
+        )}
+      </SiteSection>
+
+      {/* ── Final search / CTA ───────────────────────────────── */}
+      <section className="rounded-3xl border bg-gradient-to-r from-cas-gold-50 to-card p-8 text-center sm:p-12">
+        <Building2 className="mx-auto size-9 text-cas-navy" />
+        <h2 className="mt-3 font-serif text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Find your program in minutes — or book a free consultation and we'll guide you.</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
+          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600"><MessageCircle className="size-4" /> Free consultation</Link>
         </div>
       </section>
     </div>
   )
+}
+
+function cnTab(active: boolean): string {
+  return [
+    "rounded-t-lg px-5 py-2 text-sm font-semibold transition-colors",
+    active ? "bg-card text-cas-navy" : "bg-white/10 text-white/80 hover:bg-white/20",
+  ].join(" ")
+}
+
+function cnContentTab(active: boolean): string {
+  return [
+    "border-b-2 px-3 py-2 text-sm font-medium transition-colors",
+    active ? "border-cas-gold text-cas-navy" : "border-transparent text-muted-foreground hover:text-cas-navy",
+  ].join(" ")
 }
