@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { createProgram, updateProgram, type Program } from "@/features/catalog/api"
+import { createProgram, updateProgram, type Program, type ServiceChargeTier } from "@/features/catalog/api"
 import { ApiError } from "@/lib/api"
 
 const schema = z.object({
@@ -32,11 +32,23 @@ const schema = z.object({
   currency: z.string().max(3).optional(),
   teaching_language: z.string().max(60).optional(),
   apply_link: z.string().max(255).optional(),
+  sc_currency: z.string().max(3).optional(),
+  sc_self_student: z.string().optional(),
+  sc_self_agent: z.string().optional(),
+  sc_sch_student: z.string().optional(),
+  sc_sch_agent: z.string().optional(),
+  sc_partial_student: z.string().optional(),
+  sc_partial_agent: z.string().optional(),
 })
 
 type Values = z.infer<typeof schema>
 
+const tierValue = (tier: ServiceChargeTier | null | undefined, key: "student" | "agent"): string =>
+  tier?.[key] != null ? String(tier[key]) : ""
+
 function toValues(p?: Program): Values {
+  const sc = p?.service_charges ?? {}
+
   return {
     name: p?.name ?? "",
     level: (p?.level as Values["level"]) ?? "bachelor",
@@ -45,7 +57,47 @@ function toValues(p?: Program): Values {
     currency: p?.currency ?? "CNY",
     teaching_language: p?.teaching_language ?? "",
     apply_link: p?.apply_link ?? "",
+    sc_currency: sc.currency ?? "USD",
+    sc_self_student: tierValue(sc.self, "student"),
+    sc_self_agent: tierValue(sc.self, "agent"),
+    sc_sch_student: tierValue(sc.scholarship, "student"),
+    sc_sch_agent: tierValue(sc.scholarship, "agent"),
+    sc_partial_student: tierValue(sc.partial, "student"),
+    sc_partial_agent: tierValue(sc.partial, "agent"),
   }
+}
+
+/** Build the service_charges JSON from the flat form fields (or null). */
+function buildServiceCharges(v: Values): Record<string, unknown> | null {
+  const num = (x?: string) => {
+    const n = x ? Number(x) : NaN
+
+    return Number.isFinite(n) ? n : undefined
+  }
+  const tier = (st?: string, ag?: string) => {
+    const t: Record<string, number> = {}
+    const s = num(st)
+    const a = num(ag)
+    if (s !== undefined) t.student = s
+    if (a !== undefined) t.agent = a
+
+    return Object.keys(t).length ? t : undefined
+  }
+
+  const tiers = {
+    self: tier(v.sc_self_student, v.sc_self_agent),
+    scholarship: tier(v.sc_sch_student, v.sc_sch_agent),
+    partial: tier(v.sc_partial_student, v.sc_partial_agent),
+  }
+
+  if (!tiers.self && !tiers.scholarship && !tiers.partial) return null
+
+  const out: Record<string, unknown> = { currency: (v.sc_currency || "USD").toUpperCase() }
+  if (tiers.self) out.self = tiers.self
+  if (tiers.scholarship) out.scholarship = tiers.scholarship
+  if (tiers.partial) out.partial = tiers.partial
+
+  return out
 }
 
 export default function ProgramFormDialog({
@@ -82,6 +134,7 @@ export default function ProgramFormDialog({
         currency: v.currency || "CNY",
         teaching_language: v.teaching_language || null,
         apply_link: v.apply_link || null,
+        service_charges: buildServiceCharges(v),
       }
 
       return isEdit ? updateProgram(program!.id, payload) : createProgram(payload)
@@ -159,6 +212,34 @@ export default function ProgramFormDialog({
             <div className="space-y-2">
               <Label htmlFor="program-apply-link">Apply link</Label>
               <Input id="program-apply-link" placeholder="https://…" {...register("apply_link")} />
+            </div>
+          </div>
+
+          <div className="space-y-2 rounded-lg border p-3">
+            <div className="flex items-center justify-between">
+              <Label>CAS service charges</Label>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-muted-foreground">Currency</span>
+                <Input aria-label="Service charge currency" maxLength={3} className="h-8 w-16 uppercase" {...register("sc_currency")} />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">What CAS charges to process this course, per funding type.</p>
+            <div className="grid grid-cols-3 items-center gap-2 text-xs">
+              <span className="sr-only">Funding</span>
+              <span className="text-center font-medium text-muted-foreground">Direct student</span>
+              <span className="text-center font-medium text-muted-foreground">Agent / partner</span>
+
+              <span className="text-muted-foreground">Self-funded</span>
+              <Input type="number" className="h-8" aria-label="Self-funded student charge" {...register("sc_self_student")} />
+              <Input type="number" className="h-8" aria-label="Self-funded agent charge" {...register("sc_self_agent")} />
+
+              <span className="text-muted-foreground">Scholarship</span>
+              <Input type="number" className="h-8" aria-label="Scholarship student charge" {...register("sc_sch_student")} />
+              <Input type="number" className="h-8" aria-label="Scholarship agent charge" {...register("sc_sch_agent")} />
+
+              <span className="text-muted-foreground">Partial</span>
+              <Input type="number" className="h-8" aria-label="Partial student charge" {...register("sc_partial_student")} />
+              <Input type="number" className="h-8" aria-label="Partial agent charge" {...register("sc_partial_agent")} />
             </div>
           </div>
 

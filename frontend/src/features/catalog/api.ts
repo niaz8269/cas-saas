@@ -122,6 +122,18 @@ export function getUniversity(id: number | string) {
   return api<{ data: UniversityDetail }>(`/universities/${id}`)
 }
 
+export interface ServiceChargeTier {
+  student?: number | string | null
+  agent?: number | string | null
+}
+
+export interface ServiceCharges {
+  currency?: string | null
+  self?: ServiceChargeTier | null
+  scholarship?: ServiceChargeTier | null
+  partial?: ServiceChargeTier | null
+}
+
 export interface Program {
   id: number
   university_id: number
@@ -132,6 +144,7 @@ export interface Program {
   currency: string | null
   teaching_language: string | null
   apply_link: string | null
+  service_charges: ServiceCharges | null
   status: string
 }
 
