@@ -1,9 +1,10 @@
-import { screen } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import { Route, Routes } from "react-router-dom"
 
 import { jsonResponse, renderWithProviders } from "@/test/utils"
 
 import SiteHome from "./SiteHome"
+import SiteProgramFinder from "./SiteProgramFinder"
 import SiteUniversities from "./SiteUniversities"
 import SiteUniversity from "./SiteUniversity"
 
@@ -50,6 +51,28 @@ it("renders the marketing home with hero and featured universities", async () =>
   expect(screen.getByText("Explore by field")).toBeInTheDocument()
   // Featured universities come from the public API.
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
+})
+
+it("finds programs and pre-fills the search from the URL", async () => {
+  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+    data: [{
+      id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72,
+      tuition_fee: "30000.00", currency: "CNY", apply_link: null, requirements: null,
+      university: { name: "Jilin Medical", slug: "jilin-medical" },
+    }],
+    meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
+  }))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(
+    <Routes><Route path="/site/programs" element={<SiteProgramFinder />} /></Routes>,
+    { route: "/site/programs?q=MBBS" },
+  )
+
+  expect((screen.getByLabelText("Search programs") as HTMLInputElement).value).toBe("MBBS")
+  expect(await screen.findByText("MBBS")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("q=MBBS"), expect.anything()))
 })
 
 it("renders a university detail with programs, scholarships and deadline", async () => {
