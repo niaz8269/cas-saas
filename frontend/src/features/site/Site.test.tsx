@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom"
 
 import { jsonResponse, renderWithProviders } from "@/test/utils"
 
+import SiteAbout from "./SiteAbout"
+import SiteContact from "./SiteContact"
 import SiteHome from "./SiteHome"
 import SiteProgramFinder from "./SiteProgramFinder"
 import SiteScholarships from "./SiteScholarships"
@@ -91,6 +93,23 @@ it("lists scholarships with their university and coverage", async () => {
   expect(await screen.findByText("Belt & Road Scholarship")).toBeInTheDocument()
   expect(screen.getByText("Full tuition")).toBeInTheDocument()
   expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
+})
+
+it("renders the about page with the how-we-help steps", () => {
+  renderWithProviders(<SiteAbout />)
+
+  expect(screen.getByRole("heading", { name: "About CAS" })).toBeInTheDocument()
+  expect(screen.getByText("How we help")).toBeInTheDocument()
+  expect(screen.getByText("Choose")).toBeInTheDocument()
+})
+
+it("renders the contact page with details and the enquiry form", () => {
+  renderWithProviders(<SiteContact />)
+
+  expect(screen.getByRole("heading", { name: "Get in touch" })).toBeInTheDocument()
+  expect(screen.getByText("Offices")).toBeInTheDocument()
+  // The shared enquiry form is embedded.
+  expect(screen.getByRole("button", { name: /Send enquiry/ })).toBeInTheDocument()
 })
 
 it("renders a university detail with programs, scholarships and deadline", async () => {
