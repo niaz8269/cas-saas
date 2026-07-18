@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { Check, ChevronLeft, GraduationCap, Loader2, Plus, Upload, X } from "lucide-react"
+import { Check, ChevronLeft, GraduationCap, Loader2, Plus, ShieldCheck, Upload, X } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -16,8 +16,10 @@ import {
 import {
   createStudentApplication,
   getApplicationAvailability,
+  getCountries,
   submitStudentApplication,
   uploadApplicationDocument,
+  type CountryRow,
   type CreateApplicationPayload,
   type Degree,
   type DraftApplication,
@@ -26,7 +28,7 @@ import {
   type WizardGuardian,
   type WizardProgram,
 } from "@/features/portal/api"
-import { PageTitle, PortalCard } from "@/features/portal/components"
+import { PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -71,16 +73,20 @@ export default function StudentApplyWizard() {
     { relation: "mother", name: "" },
   ])
   const [education, setEducation] = useState<WizardEducation[]>([{ ...EMPTY_EDUCATION }])
+  const [emergency, setEmergency] = useState<WizardGuardian>({ relation: "Emergency contact", name: "" })
 
   // Draft + uploads
   const [draft, setDraft] = useState<DraftApplication | null>(null)
   const [uploaded, setUploaded] = useState<Record<number, string>>({})
+  const [agreed, setAgreed] = useState(false)
 
   const availability = useQuery({
     queryKey: ["apply", "availability", degree, funding],
     queryFn: () => getApplicationAvailability(degree as Degree, funding as Funding),
     enabled: step === 0 && !!degree && !!funding,
   })
+
+  const countries = useQuery({ queryKey: ["apply", "countries"], queryFn: getCountries })
 
   const resetDraft = () => {
     setDraft(null)
@@ -95,7 +101,7 @@ export default function StudentApplyWizard() {
         scholarship_id: scholarshipId ? Number(scholarshipId) : null,
         intake_id: intakeId ? Number(intakeId) : null,
         profile: Object.fromEntries(Object.entries(profile).filter(([, v]) => v !== "")),
-        guardians: guardians.filter((g) => g.name.trim() !== ""),
+        guardians: [...guardians, emergency].filter((g) => g.name.trim() !== ""),
         education: education.filter((e) => e.degree_name.trim() !== ""),
       }
 
@@ -136,13 +142,18 @@ export default function StudentApplyWizard() {
 
   return (
     <div className="space-y-4 pb-4">
-      <div className="flex items-center gap-2">
-        {step > 0 && step < 4 && (
-          <button type="button" onClick={goBack} className="text-muted-foreground hover:text-cas-navy" aria-label="Back">
-            <ChevronLeft className="size-5" />
-          </button>
-        )}
-        <PageTitle title="New application" subtitle={`Step ${step + 1} of ${STEPS.length} · ${STEPS[step]}`} />
+      <div className="overflow-hidden rounded-xl border bg-cas-navy shadow-sm">
+        <div className="flex items-center gap-2 px-4 py-3">
+          {step > 0 && step < 4 && (
+            <button type="button" onClick={goBack} className="text-white/70 hover:text-white" aria-label="Back">
+              <ChevronLeft className="size-5" />
+            </button>
+          )}
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.15em] text-cas-gold uppercase">CAS · Study in China</p>
+            <h1 className="text-lg font-semibold text-white">Application form</h1>
+          </div>
+        </div>
       </div>
 
       <Stepper step={step} />
@@ -169,14 +180,22 @@ export default function StudentApplyWizard() {
         />
       )}
 
-      {step === 1 && <ProfileStep profile={profile} onChange={(k, v) => setProfile((p) => ({ ...p, [k]: v }))} />}
+      {step === 1 && (
+        <ProfileStep
+          profile={profile}
+          countries={countries.data?.data ?? []}
+          onChange={(k, v) => setProfile((p) => ({ ...p, [k]: v }))}
+        />
+      )}
 
       {step === 2 && (
         <BackgroundStep
           guardians={guardians}
           education={education}
+          emergency={emergency}
           onGuardians={setGuardians}
           onEducation={setEducation}
+          onEmergency={setEmergency}
         />
       )}
 
@@ -190,7 +209,7 @@ export default function StudentApplyWizard() {
       )}
 
       {step === 4 && draft && (
-        <ReviewStep program={program} draft={draft} />
+        <ReviewStep program={program} draft={draft} agreed={agreed} onAgreed={setAgreed} />
       )}
 
       {/* Footer actions */}
@@ -213,7 +232,7 @@ export default function StudentApplyWizard() {
           </Button>
         )}
         {step === 4 && (
-          <Button className="h-11 w-full" disabled={submit.isPending} onClick={() => submit.mutate()}>
+          <Button className="h-11 w-full" disabled={submit.isPending || !agreed} onClick={() => submit.mutate()}>
             {submit.isPending ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
             Submit application
           </Button>
@@ -225,10 +244,24 @@ export default function StudentApplyWizard() {
 
 function Stepper({ step }: { step: number }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-start">
       {STEPS.map((label, i) => (
-        <div key={label} className="flex-1">
-          <div className={cn("h-1.5 rounded-full", i <= step ? "bg-cas-navy" : "bg-muted")} />
+        <div key={label} className="flex flex-1 flex-col items-center">
+          <div className="flex w-full items-center">
+            <div className={cn("h-0.5 flex-1", i === 0 ? "bg-transparent" : i <= step ? "bg-cas-navy" : "bg-muted")} />
+            <div className={cn(
+              "flex size-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold",
+              i < step
+                ? "border-cas-navy bg-cas-navy text-white"
+                : i === step
+                  ? "border-cas-navy text-cas-navy"
+                  : "border-muted text-muted-foreground",
+            )}>
+              {i < step ? <Check className="size-3.5" /> : i + 1}
+            </div>
+            <div className={cn("h-0.5 flex-1", i === STEPS.length - 1 ? "bg-transparent" : i < step ? "bg-cas-navy" : "bg-muted")} />
+          </div>
+          <span className={cn("mt-1 text-[10px]", i === step ? "font-medium text-cas-navy" : "text-muted-foreground")}>{label}</span>
         </div>
       ))}
     </div>
@@ -367,56 +400,95 @@ function CourseStep(props: {
 
 // ── Step 2: personal ────────────────────────────────────────────────────────
 
-function ProfileStep({ profile, onChange }: { profile: Profile; onChange: (k: string, v: string) => void }) {
+function ProfileStep({ profile, countries, onChange }: {
+  profile: Profile
+  countries: CountryRow[]
+  onChange: (k: string, v: string) => void
+}) {
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => onChange(k, e.target.value)
+  const hasTest = !!profile.english_test && profile.english_test !== "None"
 
   return (
-    <PortalCard className="space-y-3">
-      <p className="text-sm text-muted-foreground">Tell us about yourself. You can leave optional fields blank.</p>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Date of birth"><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
-        <Field label="Place of birth"><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
-        <Field label="Gender">
-          <Select value={profile.gender ?? ""} onValueChange={(v) => onChange("gender", v)}>
-            <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
-        <Field label="Marital status">
-          <Select value={profile.marital_status ?? ""} onValueChange={(v) => onChange("marital_status", v)}>
-            <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="single">Single</SelectItem>
-              <SelectItem value="married">Married</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
-        <Field label="Phone"><Input value={profile.phone ?? ""} onChange={set("phone")} /></Field>
-        <Field label="Religion (optional)"><Input value={profile.religion ?? ""} onChange={set("religion")} /></Field>
-      </div>
-
-      <p className="pt-1 text-sm font-medium">Passport</p>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Passport no."><Input value={profile.passport_no ?? ""} onChange={set("passport_no")} /></Field>
-        <div />
-        <Field label="Issue date"><Input type="date" value={profile.passport_issue_date ?? ""} onChange={set("passport_issue_date")} /></Field>
-        <Field label="Expiry date"><Input type="date" value={profile.passport_expiry_date ?? ""} onChange={set("passport_expiry_date")} /></Field>
-      </div>
-
-      <p className="pt-1 text-sm font-medium">Address</p>
-      <div className="space-y-3">
-        <Field label="Permanent address"><Input value={profile.permanent_address ?? ""} onChange={set("permanent_address")} /></Field>
-        <Field label="Current address"><Input value={profile.current_address ?? ""} onChange={set("current_address")} /></Field>
+    <div className="space-y-4">
+      <PortalCard className="space-y-3">
+        <SectionTitle>Personal details</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="City"><Input value={profile.city ?? ""} onChange={set("city")} /></Field>
-          <Field label="Postal code"><Input value={profile.postal_code ?? ""} onChange={set("postal_code")} /></Field>
+          <Field label="Date of birth"><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
+          <Field label="Place of birth"><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
+          <Field label="Nationality">
+            <Select value={profile.country_id ?? ""} onValueChange={(v) => onChange("country_id", v)}>
+              <SelectTrigger className="bg-background"><SelectValue placeholder="Select country" /></SelectTrigger>
+              <SelectContent>
+                {countries.map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Gender">
+            <Select value={profile.gender ?? ""} onValueChange={(v) => onChange("gender", v)}>
+              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Marital status">
+            <Select value={profile.marital_status ?? ""} onValueChange={(v) => onChange("marital_status", v)}>
+              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="single">Single</SelectItem>
+                <SelectItem value="married">Married</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Phone"><Input value={profile.phone ?? ""} onChange={set("phone")} /></Field>
+          <Field label="Religion (optional)"><Input value={profile.religion ?? ""} onChange={set("religion")} /></Field>
         </div>
-      </div>
-    </PortalCard>
+      </PortalCard>
+
+      <PortalCard className="space-y-3">
+        <SectionTitle>Passport</SectionTitle>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Passport no."><Input value={profile.passport_no ?? ""} onChange={set("passport_no")} /></Field>
+          <div />
+          <Field label="Issue date"><Input type="date" value={profile.passport_issue_date ?? ""} onChange={set("passport_issue_date")} /></Field>
+          <Field label="Expiry date"><Input type="date" value={profile.passport_expiry_date ?? ""} onChange={set("passport_expiry_date")} /></Field>
+        </div>
+      </PortalCard>
+
+      <PortalCard className="space-y-3">
+        <SectionTitle>English proficiency</SectionTitle>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Test taken">
+            <Select value={profile.english_test ?? ""} onValueChange={(v) => onChange("english_test", v)}>
+              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="IELTS">IELTS</SelectItem>
+                <SelectItem value="TOEFL">TOEFL</SelectItem>
+                <SelectItem value="PTE Academic">PTE Academic</SelectItem>
+                <SelectItem value="Duolingo">Duolingo</SelectItem>
+                <SelectItem value="None">None / not taken</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          {hasTest && <Field label="Overall score"><Input value={profile.english_test_score ?? ""} onChange={set("english_test_score")} placeholder="e.g. 6.5" /></Field>}
+          {hasTest && <Field label="Test date"><Input type="date" value={profile.english_test_date ?? ""} onChange={set("english_test_date")} /></Field>}
+        </div>
+      </PortalCard>
+
+      <PortalCard className="space-y-3">
+        <SectionTitle>Address</SectionTitle>
+        <div className="space-y-3">
+          <Field label="Permanent address"><Input value={profile.permanent_address ?? ""} onChange={set("permanent_address")} /></Field>
+          <Field label="Current address"><Input value={profile.current_address ?? ""} onChange={set("current_address")} /></Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="City"><Input value={profile.city ?? ""} onChange={set("city")} /></Field>
+            <Field label="Postal code"><Input value={profile.postal_code ?? ""} onChange={set("postal_code")} /></Field>
+          </div>
+        </div>
+      </PortalCard>
+    </div>
   )
 }
 
@@ -425,10 +497,12 @@ function ProfileStep({ profile, onChange }: { profile: Profile; onChange: (k: st
 function BackgroundStep(props: {
   guardians: WizardGuardian[]
   education: WizardEducation[]
+  emergency: WizardGuardian
   onGuardians: (g: WizardGuardian[]) => void
   onEducation: (e: WizardEducation[]) => void
+  onEmergency: (g: WizardGuardian) => void
 }) {
-  const { guardians, education } = props
+  const { guardians, education, emergency } = props
 
   const setGuardian = (i: number, k: keyof WizardGuardian, v: string) =>
     props.onGuardians(guardians.map((g, idx) => (idx === i ? { ...g, [k]: v } : g)))
@@ -436,10 +510,12 @@ function BackgroundStep(props: {
   const setEdu = (i: number, k: keyof WizardEducation, v: string) =>
     props.onEducation(education.map((e, idx) => (idx === i ? { ...e, [k]: v } : e)))
 
+  const setEmerg = (k: keyof WizardGuardian, v: string) => props.onEmergency({ ...emergency, [k]: v })
+
   return (
     <div className="space-y-4">
       <PortalCard className="space-y-3">
-        <p className="text-sm font-medium">Family</p>
+        <SectionTitle>Family</SectionTitle>
         {guardians.map((g, i) => (
           <div key={i} className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center justify-between">
@@ -469,7 +545,18 @@ function BackgroundStep(props: {
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <p className="text-sm font-medium">Most recent education</p>
+        <SectionTitle>Emergency contact</SectionTitle>
+        <p className="text-xs text-muted-foreground">Someone we can reach in an emergency (kept confidential).</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Field label="Full name"><Input value={emergency.name} onChange={(e) => setEmerg("name", e.target.value)} /></Field>
+          <Field label="Phone"><Input value={emergency.phone ?? ""} onChange={(e) => setEmerg("phone", e.target.value)} /></Field>
+          <Field label="Email"><Input value={emergency.email ?? ""} onChange={(e) => setEmerg("email", e.target.value)} /></Field>
+          <Field label="Address"><Input value={emergency.address ?? ""} onChange={(e) => setEmerg("address", e.target.value)} /></Field>
+        </div>
+      </PortalCard>
+
+      <PortalCard className="space-y-3">
+        <SectionTitle>Most recent education</SectionTitle>
         {education.map((e, i) => (
           <div key={i} className="space-y-2 rounded-lg border p-3">
             {i > 0 && (
@@ -581,22 +668,35 @@ function DocumentRow(props: {
 
 // ── Step 5: review ──────────────────────────────────────────────────────────
 
-function ReviewStep({ program, draft }: { program: WizardProgram | null; draft: DraftApplication }) {
+function ReviewStep({ program, draft, agreed, onAgreed }: {
+  program: WizardProgram | null
+  draft: DraftApplication
+  agreed: boolean
+  onAgreed: (v: boolean) => void
+}) {
   return (
-    <PortalCard className="space-y-3">
-      <div className="flex items-center gap-2 text-cas-navy">
-        <GraduationCap className="size-5" />
-        <p className="font-medium">{program?.name}</p>
-      </div>
-      <p className="text-sm text-muted-foreground">{program?.university.name}{program?.university.city ? ` · ${program.university.city}` : ""}</p>
-      <div className="rounded-lg bg-subtle p-3 text-sm">
-        <p>Application <strong>{draft.application_code}</strong></p>
-        <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached.</p>
-      </div>
-      <p className="text-sm text-muted-foreground">
-        By submitting, you confirm the information provided is accurate. CAS will review your application and be in touch.
-      </p>
-    </PortalCard>
+    <div className="space-y-4">
+      <PortalCard className="space-y-3">
+        <SectionTitle>Summary</SectionTitle>
+        <div className="flex items-center gap-2 text-cas-navy">
+          <GraduationCap className="size-5" />
+          <p className="font-medium">{program?.name}</p>
+        </div>
+        <p className="text-sm text-muted-foreground">{program?.university.name}{program?.university.city ? ` · ${program.university.city}` : ""}</p>
+        <div className="rounded-lg bg-subtle p-3 text-sm">
+          <p>Reference <strong>{draft.application_code}</strong></p>
+          <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached.</p>
+        </div>
+      </PortalCard>
+
+      <label className="flex cursor-pointer items-start gap-3 rounded-xl border bg-card p-4 shadow-sm">
+        <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />
+        <span className="flex items-start gap-2 text-sm text-muted-foreground">
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-cas-navy" />
+          I declare that the information provided is true and correct to the best of my knowledge, and I authorise CAS to process this application for admission and visa purposes.
+        </span>
+      </label>
+    </div>
   )
 }
 
@@ -629,4 +729,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       {children}
     </div>
   )
+}
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <p className="border-b pb-2 text-xs font-semibold tracking-wider text-cas-navy uppercase">{children}</p>
 }

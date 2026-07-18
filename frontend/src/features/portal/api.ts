@@ -241,6 +241,15 @@ export interface RequiredDoc {
   is_sensitive: boolean
 }
 
+export interface CountryRow {
+  id: number
+  name: string
+  iso2: string
+}
+
+export const getCountries = () =>
+  portalApi<{ data: CountryRow[] }>("/student/countries")
+
 export const getApplicationAvailability = (degree: Degree, funding: Funding) =>
   portalApi<{ data: WizardProgram[] }>(
     `/student/applications/availability?degree=${degree}&funding=${funding}`,
