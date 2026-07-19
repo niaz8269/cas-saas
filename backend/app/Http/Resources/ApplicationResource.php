@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Application;
+use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,6 +20,9 @@ class ApplicationResource extends JsonResource
         return [
             'id' => $this->id,
             'application_code' => $this->application_code,
+            'kind' => $this->kind,
+            'level' => $this->level,
+            'preferences' => $this->applicationPreferences(),
             'status' => $this->status,
             'submitted_at' => $this->submitted_at?->toIso8601String(),
             'student' => $this->whenLoaded('student', fn () => [
@@ -52,5 +56,29 @@ class ApplicationResource extends JsonResource
             'documents_count' => $this->whenCounted('documents'),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
+    }
+
+    /**
+     * Government-scholarship preferences with each university resolved to its
+     * name (empty for ordinary program applications).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function applicationPreferences(): array
+    {
+        $preferences = collect($this->preferences ?? []);
+
+        if ($preferences->isEmpty()) {
+            return [];
+        }
+
+        $names = University::whereIn('id', $preferences->pluck('university_id')->filter()->unique())
+            ->pluck('name', 'id');
+
+        return $preferences->map(fn ($p) => [
+            'major' => $p['major'] ?? null,
+            'university_id' => $p['university_id'] ?? null,
+            'university' => ! empty($p['university_id']) ? ($names[$p['university_id']] ?? null) : null,
+        ])->values()->all();
     }
 }

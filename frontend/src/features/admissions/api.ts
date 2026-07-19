@@ -1,9 +1,18 @@
 import { api, apiBlob } from "@/lib/api"
 import type { Paginated } from "@/features/catalog/api"
 
+export interface ApplicationPreference {
+  major: string | null
+  university_id: number | null
+  university: string | null
+}
+
 export interface ApplicationListItem {
   id: number
   application_code: string
+  kind: "program" | "scholarship"
+  level: string | null
+  preferences: ApplicationPreference[]
   status: string
   submitted_at: string | null
   student?: { id: number; student_code: string; full_name: string }

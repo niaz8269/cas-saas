@@ -27,6 +27,7 @@ class ApplicationController extends Controller
         'student:id,student_code,first_name,last_name',
         'university:id,name,code',
         'program:id,name,level',
+        'scholarship:id,name',
         'admissionsOfficer:id,name',
     ];
 

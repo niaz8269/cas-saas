@@ -151,8 +151,20 @@ export default function ApplicationsPage() {
                 </TableCell>
                 <TableCell className="font-medium">{application.student?.full_name ?? "—"}</TableCell>
                 <TableCell>
-                  <p>{application.university?.name ?? "—"}</p>
-                  <p className="text-xs text-muted-foreground">{application.program?.name ?? ""}</p>
+                  {application.kind === "scholarship" ? (
+                    <>
+                      <p className="flex items-center gap-1.5">
+                        <Badge variant="outline" className="border-transparent bg-cas-gold-50 text-cas-gold-600 capitalize">Scholarship</Badge>
+                        {application.scholarship?.name ?? "—"}
+                      </p>
+                      <p className="text-xs text-muted-foreground capitalize">{application.level ?? ""}{application.preferences.length ? ` · ${application.preferences.length} preference(s)` : ""}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>{application.university?.name ?? "—"}</p>
+                      <p className="text-xs text-muted-foreground">{application.program?.name ?? ""}</p>
+                    </>
+                  )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {application.admissions_officer?.name ?? "—"}

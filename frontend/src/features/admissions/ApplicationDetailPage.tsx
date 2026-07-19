@@ -264,8 +264,11 @@ export default function ApplicationDetailPage() {
                   {app.student.full_name}
                 </Link>
               )}
-              {" · "}{app.program?.name} at {app.university?.name}
-              {app.intake ? ` · ${app.intake.name}` : ""}
+              {app.kind === "scholarship" ? (
+                <span className="capitalize"> · Government scholarship: {app.scholarship?.name ?? "—"}{app.level ? ` · ${app.level}` : ""}</span>
+              ) : (
+                <>{" · "}{app.program?.name} at {app.university?.name}{app.intake ? ` · ${app.intake.name}` : ""}</>
+              )}
             </p>
           </div>
 
@@ -325,6 +328,22 @@ export default function ApplicationDetailPage() {
           </div>
         )}
       </div>
+
+      {app.kind === "scholarship" && app.preferences.length > 0 && (
+        <section className="rounded-xl border bg-card shadow-sm">
+          <header className="border-b px-5 py-3">
+            <h3 className="text-[15px] font-semibold">Major / university preferences</h3>
+          </header>
+          <ol className="divide-y">
+            {app.preferences.map((p, i) => (
+              <li key={i} className="flex items-center justify-between px-5 py-3 text-sm">
+                <span className="font-medium">{i + 1}. {p.major ?? "—"}</span>
+                <span className="text-muted-foreground">{p.university ?? "Any university"}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Checklist */}
