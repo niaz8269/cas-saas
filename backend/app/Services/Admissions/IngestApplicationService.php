@@ -55,6 +55,7 @@ class IngestApplicationService
                 'source_id' => $source->id,
                 'review' => true,
                 'agent_id' => $student->agent_id,
+                'custom_fields' => ! empty($data['custom_fields']) ? $data['custom_fields'] : null,
             ], null);
 
             foreach ($data['documents'] ?? [] as $doc) {

@@ -122,6 +122,8 @@ class ApplicationResource extends JsonResource
                 'end_year' => $e->end_year,
                 'grade' => $e->grade_value,
             ])->values()->all(),
+            // Extra admission-form fields with no dedicated column (from partner sites).
+            'custom' => (array) ($this->custom_fields ?? []),
         ];
     }
 

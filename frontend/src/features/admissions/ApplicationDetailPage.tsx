@@ -70,8 +70,13 @@ function InfoGroup({ title, fields }: { title: string; fields: FieldPair[] }) {
   )
 }
 
+function humanizeKey(key: string) {
+  return key.replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 function ApplicantDetails({ applicant }: { applicant: ApplicantProfile }) {
   const { personal, passport, contact, guardians, education } = applicant
+  const custom = Object.entries(applicant.custom ?? {})
   const years = (from: number | null, to: number | null) =>
     from || to ? ` (${from ?? "—"}–${to ?? "—"})` : ""
 
@@ -155,6 +160,13 @@ function ApplicantDetails({ applicant }: { applicant: ApplicantProfile }) {
               ))}
             </ul>
           </div>
+        )}
+
+        {custom.length > 0 && (
+          <InfoGroup
+            title="Additional information"
+            fields={custom.map(([key, value]) => [humanizeKey(key), value])}
+          />
         )}
       </div>
     </section>

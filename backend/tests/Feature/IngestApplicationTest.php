@@ -150,6 +150,27 @@ it('ingests a full XJMU application straight into Applications for verification'
         ->exists())->toBeTrue();
 });
 
+it('preserves extra partner fields with no column as custom fields', function () {
+    Country::factory()->create(['name' => 'Pakistan', 'iso2' => 'PK']);
+    ['key' => $key] = mbbsSourceWithKey();
+
+    $payload = xjmuPayload();
+    // A field the ERP models nowhere, sent two ways: an unknown student key…
+    $payload['student']['blood_group'] = 'B+';
+    // …and an explicit custom_fields bag (as a different portal might send).
+    $payload['custom_fields'] = ['high_school_gpa' => '3.9', 'hostel_required' => true];
+
+    $id = postApplication($payload, $key)->assertCreated()->json('application_id');
+
+    $custom = Application::findOrFail($id)->custom_fields;
+    expect($custom['blood_group'])->toBe('B+')
+        ->and($custom['high_school_gpa'])->toBe('3.9')
+        ->and($custom['hostel_required'])->toBe('true'); // scalars are stringified
+
+    // Unknown keys must not leak onto the student row.
+    expect(Application::find($id)->student->getAttributes())->not->toHaveKey('blood_group');
+});
+
 it('falls back to the source default program when none is supplied', function () {
     Country::factory()->create(['name' => 'Pakistan', 'iso2' => 'PK']);
     ['program' => $program, 'key' => $key] = mbbsSourceWithKey();

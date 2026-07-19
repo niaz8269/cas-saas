@@ -18,6 +18,14 @@ use Illuminate\Validation\Rule;
  */
 class IngestApplicationRequest extends FormRequest
 {
+    /** Student fields that map to real columns; anything else is kept as a custom field. */
+    private const KNOWN_STUDENT_KEYS = [
+        'first_name', 'last_name', 'chinese_name', 'email', 'alternate_email', 'phone',
+        'wechat_id', 'skype_id', 'passport_no', 'passport_expiry_date', 'dob', 'gender',
+        'marital_status', 'religion', 'native_language', 'nationality', 'place_of_birth',
+        'city', 'current_address', 'permanent_address',
+    ];
+
     public function authorize(): bool
     {
         return true; // the api-source middleware authenticates the key
@@ -83,6 +91,10 @@ class IngestApplicationRequest extends FormRequest
             'documents.*.file_name' => ['required', 'string', 'max:255'],
             'documents.*.mime' => ['nullable', 'string', 'max:120'],
             'documents.*.content' => ['required', 'string'], // base64-encoded bytes
+
+            // Arbitrary extra admission-form fields with no dedicated column.
+            'custom_fields' => ['nullable', 'array', 'max:60'],
+            'custom_fields.*' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -153,8 +165,29 @@ class IngestApplicationRequest extends FormRequest
             $this->merge(['education' => array_values($education)]);
         }
 
+        // Preserve any student fields we have no column for (e.g. a different
+        // university's portal sends its own extras) so nothing is silently
+        // dropped — they're stored and shown as "Additional information".
+        $asString = fn ($v) => is_bool($v) ? ($v ? 'true' : 'false') : (string) $v;
+
+        $extra = [];
+        foreach ($student as $key => $value) {
+            if (! in_array($key, self::KNOWN_STUDENT_KEYS, true) && is_scalar($value) && filled($value)) {
+                $extra[$key] = $asString($value);
+            }
+        }
+        $student = Arr::only($student, self::KNOWN_STUDENT_KEYS);
+
+        $explicit = [];
+        foreach ((array) $this->input('custom_fields', []) as $key => $value) {
+            if (is_scalar($value) && filled($value)) {
+                $explicit[$key] = $asString($value);
+            }
+        }
+
         $this->merge([
             'student' => $student,
+            'custom_fields' => array_merge($extra, $explicit), // explicit wins on key clash
             'declared_degree' => $this->input('declared_degree', $this->input('degree')),
             'declared_major' => $this->input('declared_major', $this->input('major')),
         ]);

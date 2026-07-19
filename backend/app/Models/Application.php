@@ -40,6 +40,7 @@ class Application extends Model
         'assigned_admissions_id',
         'status',
         'review',
+        'custom_fields',
         'submitted_at',
         'created_by',
         'updated_by',
@@ -50,6 +51,7 @@ class Application extends Model
         return [
             'submitted_at' => 'datetime',
             'preferences' => 'array',
+            'custom_fields' => 'array',
             'review' => 'boolean',
         ];
     }

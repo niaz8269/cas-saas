@@ -154,6 +154,7 @@ it("renders the full ingested applicant profile", async () => {
       },
       guardians: [{ name: "Arfa", relation: "Parent", phone: "0333", email: null, address: null }],
       education: [{ level: "Senior High School", degree_name: null, major: "Pre medical", institution: "Punjab Group", start_year: 2022, end_year: 2025, grade: null }],
+      custom: { blood_group: "B+", high_school_gpa: "3.9" },
     },
   })
 
@@ -165,6 +166,10 @@ it("renders the full ingested applicant profile", async () => {
   expect(screen.getByText("UD5164361")).toBeInTheDocument()
   expect(screen.getByText("Arfa")).toBeInTheDocument()
   expect(screen.getByText(/Punjab Group/)).toBeInTheDocument()
+  // Extra partner fields with no dedicated column show under "Additional information".
+  expect(screen.getByText("Additional information")).toBeInTheDocument()
+  expect(screen.getByText("Blood Group")).toBeInTheDocument()
+  expect(screen.getByText("B+")).toBeInTheDocument()
 })
 
 it("accepts an offer and hides the response actions after refetch", async () => {

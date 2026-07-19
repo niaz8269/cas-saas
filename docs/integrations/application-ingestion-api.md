@@ -61,9 +61,14 @@ Top-level fields:
 | `program_id`      | int    | no       | Override the key's default program. Must exist in CAS. |
 | `degree`          | string | no       | What the applicant declared (e.g. `"Bachelor's Degree"`). Recorded for reference. |
 | `major`           | string | no       | What the applicant declared (e.g. `"MBBS"`). Recorded for reference. |
+| `custom_fields`   | object | no       | Any extra fields your form collects that aren't in this spec (see §4.6). |
 
 > The API accepts common field **aliases** so you can send your form's own labels. Where an
 > alias is listed, either name works; the canonical name wins if both are sent.
+
+> **Extra fields are never lost.** Any field you send inside `student` that isn't listed here
+> is automatically preserved as a custom field — so a different university's form with its own
+> extra questions works without any change on the CAS side.
 
 ### 4.1 `student` (required)
 
@@ -139,6 +144,20 @@ Recorded on the student profile as a contact.
 Send each file's bytes Base64-encoded in `content`. Keep individual files reasonable
 (a few MB). A document whose Base64 cannot be decoded is skipped; a storage failure aborts
 the whole request (so you can safely retry with the same `Idempotency-Key`).
+
+### 4.6 `custom_fields` — anything extra
+
+A flat object of `key → value` for fields your form collects that aren't in this spec
+(e.g. blood group, hostel preference, a scholarship reference). Values are stored as strings
+and shown to reviewers under **Additional information**. Up to 60 keys; values ≤ 2000 chars.
+
+```json
+"custom_fields": { "blood_group": "B+", "hostel_required": "yes", "referral_code": "AG-2231" }
+```
+
+You don't have to use this bag: any unrecognized field placed directly inside `student` is
+captured the same way automatically. `custom_fields` is just the explicit, self-documenting
+option.
 
 ---
 

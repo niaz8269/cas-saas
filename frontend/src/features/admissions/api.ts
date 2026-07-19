@@ -55,6 +55,7 @@ export interface ApplicantProfile {
   }
   guardians: ApplicantGuardian[]
   education: ApplicantEducation[]
+  custom: Record<string, string>
 }
 
 export interface ApplicationListItem {

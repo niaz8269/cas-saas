@@ -793,4 +793,10 @@ ALTER TABLE students
   ADD COLUMN skype_id        VARCHAR(80)  NULL AFTER wechat_id,
   ADD COLUMN alternate_email VARCHAR(190) NULL AFTER email,
   ADD COLUMN native_language VARCHAR(60)  NULL AFTER religion;
+
+-- A JSON bag for admission-form fields a partner collects but the ERP has no
+-- dedicated column for; known fields still map to columns, extras are preserved
+-- here and shown generically (no schema change per new partner field).
+ALTER TABLE applications
+  ADD COLUMN custom_fields JSON NULL AFTER review;
 -- =========================== END OF SCHEMA ===========================
