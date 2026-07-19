@@ -3,6 +3,7 @@ import { FileText, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import ExportButton from "@/components/ExportButton"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,6 +30,17 @@ import {
   statusLabel,
 } from "@/features/admissions/status"
 import { cn } from "@/lib/utils"
+
+/** Build the export query string matching the list's current filters. */
+function applicationExportQuery(q: string, status: string, toVerify: boolean): string {
+  const p = new URLSearchParams()
+  if (q) p.set("q", q)
+  if (status !== "all") p.set("filter[status]", status)
+  if (toVerify) p.set("filter[review]", "1")
+  const s = p.toString()
+
+  return s ? `?${s}` : ""
+}
 
 export default function ApplicationsPage() {
   const navigate = useNavigate()
@@ -109,6 +121,10 @@ export default function ApplicationsPage() {
         >
           To verify
         </Button>
+
+        <div className="ml-auto">
+          <ExportButton path={`/applications/export${applicationExportQuery(q, status, toVerify)}`} filename="applications.csv" />
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">

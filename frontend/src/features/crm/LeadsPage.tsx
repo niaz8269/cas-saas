@@ -3,6 +3,7 @@ import { Filter, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import ExportButton from "@/components/ExportButton"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,6 +29,17 @@ import { listLeads } from "@/features/crm/api"
 import LeadRowActions from "@/features/crm/LeadRowActions"
 import { LEAD_FORM_TYPES, LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
+
+/** Build the export query string matching the list's current filters. */
+function leadExportQuery(q: string, status: string, formType: string): string {
+  const p = new URLSearchParams()
+  if (q) p.set("q", q)
+  if (status !== "all") p.set("filter[status]", status)
+  if (formType !== "all") p.set("filter[form_type]", formType)
+  const s = p.toString()
+
+  return s ? `?${s}` : ""
+}
 
 function formatDate(iso: string | null): string {
   return iso ? new Date(iso).toLocaleDateString() : "—"
@@ -117,7 +129,10 @@ export default function LeadsPage() {
           </SelectContent>
         </Select>
 
-        {canCreate && <div className="ml-auto"><AddLeadDialog /></div>}
+        <div className="ml-auto flex items-center gap-2">
+          <ExportButton path={`/leads/export${leadExportQuery(q, status, formType)}`} filename="leads.csv" />
+          {canCreate && <AddLeadDialog />}
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">

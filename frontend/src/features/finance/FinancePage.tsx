@@ -22,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import ExportButton from "@/components/ExportButton"
 import { useCan } from "@/features/auth/useCan"
 import { listInvoices } from "@/features/finance/api"
 import NewInvoiceDialog from "@/features/finance/NewInvoiceDialog"
@@ -29,6 +30,17 @@ import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { cn } from "@/lib/utils"
 
 const INVOICE_STATUSES = ["draft", "issued", "partially_paid", "paid", "cancelled", "overdue"]
+
+/** Build the export query string matching the list's current filters. */
+function invoiceExportQuery(q: string, status: string, partyType: string): string {
+  const p = new URLSearchParams()
+  if (q) p.set("q", q)
+  if (status !== "all") p.set("filter[status]", status)
+  if (partyType !== "all") p.set("filter[party_type]", partyType)
+  const s = p.toString()
+
+  return s ? `?${s}` : ""
+}
 
 export default function FinancePage() {
   const navigate = useNavigate()
@@ -102,11 +114,14 @@ export default function FinancePage() {
           </SelectContent>
         </Select>
 
-        {can("finance.manage.global") && (
-          <Button className="ml-auto" onClick={() => setNewOpen(true)}>
-            <Plus className="size-4" /> New invoice
-          </Button>
-        )}
+        <div className="ml-auto flex items-center gap-2">
+          <ExportButton path={`/invoices/export${invoiceExportQuery(q, status, partyType)}`} filename="invoices.csv" />
+          {can("finance.manage.global") && (
+            <Button onClick={() => setNewOpen(true)}>
+              <Plus className="size-4" /> New invoice
+            </Button>
+          )}
+        </div>
       </div>
 
       <NewInvoiceDialog open={newOpen} onOpenChange={setNewOpen} />

@@ -171,6 +171,7 @@ Route::prefix('v1')->group(function () {
 
         // CRM (record-scoped via policies + visibleTo query scopes)
         Route::get('leads', [LeadController::class, 'index']);
+        Route::get('leads/export', [LeadController::class, 'export']); // before {lead}
         Route::get('leads/sources', [LeadController::class, 'sources']);
         Route::post('leads', [LeadController::class, 'store']);
         Route::get('leads/{lead}', [LeadController::class, 'show']);
@@ -191,6 +192,7 @@ Route::prefix('v1')->group(function () {
 
         // Admissions
         Route::get('applications', [ApplicationController::class, 'index']);
+        Route::get('applications/export', [ApplicationController::class, 'export']); // before {application}
         Route::post('applications', [ApplicationController::class, 'store']);
         Route::get('applications/{application}', [ApplicationController::class, 'show']);
         Route::patch('applications/{application}', [ApplicationController::class, 'update']);
@@ -211,6 +213,7 @@ Route::prefix('v1')->group(function () {
         // Finance & commission
         Route::get('invoices', [InvoiceController::class, 'index']);
         // Static segments before the {invoice} wildcard.
+        Route::get('invoices/export', [InvoiceController::class, 'export']);
         Route::post('invoices', [InvoiceController::class, 'store']);
         Route::get('invoices/fee-schedule', [InvoiceController::class, 'feeSchedule']);
         Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);

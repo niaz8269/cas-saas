@@ -14,11 +14,14 @@ use App\Models\Application;
 use App\Models\Offer;
 use App\Services\Admissions\ApplicationWorkflow;
 use App\Support\BrandAssets;
+use App\Support\CsvExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class ApplicationController extends Controller
@@ -36,7 +39,49 @@ class ApplicationController extends Controller
     {
         $this->authorize('viewAny', Application::class);
 
-        $applications = Application::query()
+        $applications = $this->filteredApplications($request)
+            ->latest()
+            ->paginate(min($request->integer('per_page', 25), 100));
+
+        return ApplicationResource::collection($applications);
+    }
+
+    /** Export the filtered, RBAC-scoped applications as CSV. */
+    public function export(Request $request): StreamedResponse
+    {
+        $this->authorize('viewAny', Application::class);
+
+        return CsvExport::stream(
+            'applications-'.now()->format('Ymd-His').'.csv',
+            $this->filteredApplications($request),
+            ['Code', 'Student', 'Student code', 'University', 'Program', 'Kind', 'Scholarship',
+                'Status', 'To verify', 'Source', 'Officer', 'Documents', 'Submitted', 'Created'],
+            fn (Application $a) => [
+                $a->application_code,
+                $a->student?->full_name,
+                $a->student?->student_code,
+                $a->university?->name,
+                $a->program?->name,
+                $a->kind,
+                $a->scholarship?->name,
+                $a->status,
+                $a->review ? 'yes' : 'no',
+                $a->source?->name,
+                $a->admissionsOfficer?->name,
+                $a->documents_count,
+                $a->submitted_at?->toDateString(),
+                $a->created_at?->toDateString(),
+            ],
+        );
+    }
+
+    /**
+     * The filtered + RBAC-scoped applications query shared by index and export
+     * (no ordering/pagination applied).
+     */
+    private function filteredApplications(Request $request): Builder
+    {
+        return Application::query()
             ->visibleTo($request->user())
             ->with(self::LIST_RELATIONS)
             ->withCount('documents')
@@ -52,11 +97,7 @@ class ApplicationController extends Controller
                         ->where('first_name', 'like', $term)
                         ->orWhere('last_name', 'like', $term)
                         ->orWhere('student_code', 'like', $term)));
-            })
-            ->latest()
-            ->paginate(min($request->integer('per_page', 25), 100));
-
-        return ApplicationResource::collection($applications);
+            });
     }
 
     public function store(StoreApplicationRequest $request, ApplicationWorkflow $workflow): ApplicationResource

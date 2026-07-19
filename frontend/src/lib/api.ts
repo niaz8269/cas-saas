@@ -82,3 +82,20 @@ export async function apiBlob(path: string, options: RequestInit = {}): Promise<
 
   return response.blob()
 }
+
+/**
+ * Fetch a file (with auth) and trigger a browser download. Used for CSV exports;
+ * the server sets the filename via Content-Disposition, `fallbackName` is used
+ * if that's absent.
+ */
+export async function downloadFile(path: string, fallbackName: string): Promise<void> {
+  const blob = await apiBlob(path)
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = fallbackName
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 10_000)
+}

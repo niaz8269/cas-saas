@@ -13,9 +13,12 @@ use App\Models\Lead;
 use App\Models\MarketingSource;
 use App\Models\Task;
 use App\Services\Leads\ConvertLead;
+use App\Support\CsvExport;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LeadController extends Controller
 {
@@ -23,7 +26,41 @@ class LeadController extends Controller
     {
         $this->authorize('viewAny', Lead::class);
 
-        $leads = Lead::query()
+        $leads = $this->filteredLeads($request)
+            ->latest()
+            ->paginate(min($request->integer('per_page', 25), 100));
+
+        return LeadResource::collection($leads);
+    }
+
+    /** Export the filtered, RBAC-scoped leads as CSV. */
+    public function export(Request $request): StreamedResponse
+    {
+        $this->authorize('viewAny', Lead::class);
+
+        return CsvExport::stream(
+            'leads-'.now()->format('Ymd-His').'.csv',
+            $this->filteredLeads($request),
+            ['Name', 'Email', 'Phone', 'Country', 'Status', 'Form type', 'Source', 'Campaign', 'Assignee', 'Created'],
+            fn (Lead $l) => [
+                $l->full_name,
+                $l->email,
+                $l->phone,
+                $l->country?->name,
+                $l->status,
+                $l->form_type,
+                $l->websiteSource?->domain,
+                $l->campaign?->name,
+                $l->assignee?->name,
+                $l->created_at?->toDateString(),
+            ],
+        );
+    }
+
+    /** The filtered + RBAC-scoped leads query shared by index and export. */
+    private function filteredLeads(Request $request): Builder
+    {
+        return Lead::query()
             ->visibleTo($request->user())
             ->with(['country:id,name,iso2', 'websiteSource:id,domain', 'campaign:id,name', 'assignee:id,name'])
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
@@ -37,11 +74,7 @@ class LeadController extends Controller
                     ->orWhere('last_name', 'like', $term)
                     ->orWhere('email', 'like', $term)
                     ->orWhere('phone', 'like', $term));
-            })
-            ->latest()
-            ->paginate(min($request->integer('per_page', 25), 100));
-
-        return LeadResource::collection($leads);
+            });
     }
 
     /** Marketing sources for the "add lead" source picker. */

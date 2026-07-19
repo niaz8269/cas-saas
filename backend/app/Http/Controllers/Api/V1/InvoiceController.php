@@ -14,12 +14,15 @@ use App\Models\University;
 use App\Services\Finance\FeeScheduleService;
 use App\Services\Finance\InvoicePdfRenderer;
 use App\Services\Finance\InvoiceService;
+use App\Support\CsvExport;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoiceController extends Controller
 {
@@ -27,18 +30,49 @@ class InvoiceController extends Controller
     {
         $this->authorize('viewAny', Invoice::class);
 
-        $invoices = Invoice::query()
-            ->with('application:id,application_code,student_id', 'application.student:id,first_name,last_name')
-            ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
-            ->when($request->filled('filter.party_type'), fn ($q) => $q->where('party_type', $request->input('filter.party_type')))
-            ->when($request->filled('filter.application_id'), fn ($q) => $q->where('application_id', $request->input('filter.application_id')))
-            ->when($request->filled('q'), fn ($q) => $q->where('invoice_no', 'like', '%'.$request->string('q').'%'))
+        $invoices = $this->filteredInvoices($request)
             ->latest()
             ->paginate(min($request->integer('per_page', 25), 100));
 
         $this->attachPartyNames($invoices->getCollection());
 
         return InvoiceResource::collection($invoices);
+    }
+
+    /** Export the filtered invoices as CSV. */
+    public function export(Request $request): StreamedResponse
+    {
+        $this->authorize('viewAny', Invoice::class);
+
+        return CsvExport::stream(
+            'invoices-'.now()->format('Ymd-His').'.csv',
+            $this->filteredInvoices($request),
+            ['Invoice no', 'Party type', 'Application', 'Student', 'Currency', 'Subtotal', 'Total', 'Paid', 'Status', 'Issued', 'Due', 'Created'],
+            fn (Invoice $i) => [
+                $i->invoice_no,
+                $i->party_type,
+                $i->application?->application_code,
+                $i->application?->student?->full_name,
+                $i->currency,
+                $i->subtotal,
+                $i->total,
+                $i->amount_paid,
+                $i->status,
+                $i->issued_at?->toDateString(),
+                $i->due_at?->toDateString(),
+                $i->created_at?->toDateString(),
+            ],
+        );
+    }
+
+    private function filteredInvoices(Request $request): Builder
+    {
+        return Invoice::query()
+            ->with('application:id,application_code,student_id', 'application.student:id,first_name,last_name')
+            ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
+            ->when($request->filled('filter.party_type'), fn ($q) => $q->where('party_type', $request->input('filter.party_type')))
+            ->when($request->filled('filter.application_id'), fn ($q) => $q->where('application_id', $request->input('filter.application_id')))
+            ->when($request->filled('q'), fn ($q) => $q->where('invoice_no', 'like', '%'.$request->string('q').'%'));
     }
 
     /**

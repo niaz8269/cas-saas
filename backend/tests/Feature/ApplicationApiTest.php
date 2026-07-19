@@ -99,6 +99,26 @@ it('omits the applicant profile from the list endpoint', function () {
         ->assertJsonMissingPath('data.0.applicant');
 });
 
+it('exports the filtered applications as CSV', function () {
+    actingAsStaffWith(ADMISSIONS_PERMS);
+    $wanted = Application::factory()->create(['status' => 'under_review']);
+    Application::factory()->create(['status' => 'draft']); // excluded by the filter
+
+    $response = $this->get('/api/v1/applications/export?filter[status]=under_review');
+
+    $response->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
+    $csv = $response->streamedContent();
+
+    expect($csv)->toContain('Code,Student')                 // header row
+        ->and($csv)->toContain($wanted->application_code)   // matching row present
+        ->and(substr_count($csv, "\n"))->toBe(2);           // header + one data row only
+});
+
+it('denies the applications export without view permission', function () {
+    actingAsStaffWith([]);
+    $this->get('/api/v1/applications/export')->assertStatus(403);
+});
+
 it('performs a legal transition and writes immutable history', function () {
     actingAsStaffWith(ADMISSIONS_PERMS);
     $application = Application::factory()->create();
