@@ -4,16 +4,21 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Finance\StoreInvoicePaymentRequest;
+use App\Http\Requests\Finance\StoreInvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Agent;
+use App\Models\Application;
 use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\University;
+use App\Services\Finance\FeeScheduleService;
 use App\Services\Finance\InvoicePdfRenderer;
 use App\Services\Finance\InvoiceService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class InvoiceController extends Controller
@@ -34,6 +39,46 @@ class InvoiceController extends Controller
         $this->attachPartyNames($invoices->getCollection());
 
         return InvoiceResource::collection($invoices);
+    }
+
+    /**
+     * Suggested invoice lines for an application, pulled from the course's fee
+     * structure (tuition/hostel/service charge) for the officer to review.
+     */
+    public function feeSchedule(Request $request, FeeScheduleService $fees): JsonResponse
+    {
+        $this->authorize('manage', Invoice::class);
+
+        $request->validate([
+            'application_id' => ['required', 'integer', Rule::exists('applications', 'id')],
+        ]);
+
+        $application = Application::findOrFail($request->integer('application_id'));
+
+        return response()->json(['data' => $fees->for($application)]);
+    }
+
+    public function store(StoreInvoiceRequest $request, InvoiceService $service): InvoiceResource
+    {
+        $this->authorize('manage', Invoice::class);
+
+        $data = $request->validated();
+
+        $invoice = $service->create(
+            partyType: $data['party_type'],
+            partyId: $data['party_id'],
+            applicationId: $data['application_id'] ?? null,
+            currency: strtoupper($data['currency']),
+            items: $data['items'],
+            actor: $request->user(),
+            status: $data['status'] ?? 'issued',
+            dueDays: $data['due_days'] ?? 30,
+        );
+
+        $invoice->load(['items', 'application:id,application_code,student_id', 'application.student:id,first_name,last_name']);
+        $this->attachPartyNames(collect([$invoice]));
+
+        return new InvoiceResource($invoice);
     }
 
     public function show(Request $request, Invoice $invoice): InvoiceResource

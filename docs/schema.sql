@@ -805,4 +805,9 @@ ALTER TABLE applications
 ALTER TABLE leads
   ADD COLUMN form_type VARCHAR(40) NULL AFTER intake_route,
   ADD INDEX idx_leads_form_type (form_type);
+
+-- Categorises each invoice line (tuition, hostel, service_charge, admission_fee,
+-- visa_fee, …) so Finance can build/report invoices by fee type.
+ALTER TABLE invoice_items
+  ADD COLUMN fee_type VARCHAR(40) NULL AFTER invoice_id;
 -- =========================== END OF SCHEMA ===========================

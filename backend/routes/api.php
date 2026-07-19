@@ -197,6 +197,9 @@ Route::prefix('v1')->group(function () {
 
         // Finance & commission
         Route::get('invoices', [InvoiceController::class, 'index']);
+        // Static segments before the {invoice} wildcard.
+        Route::post('invoices', [InvoiceController::class, 'store']);
+        Route::get('invoices/fee-schedule', [InvoiceController::class, 'feeSchedule']);
         Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
         Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf']);
         Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'storePayment']);

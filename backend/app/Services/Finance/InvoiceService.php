@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class InvoiceService
 {
     /**
-     * @param  list<array{description: string, qty?: float|int, unit_price: float|int}>  $items
+     * @param  list<array{description: string, qty?: float|int, unit_price: float|int, fee_type?: string|null}>  $items
      */
     public function create(
         string $partyType,
@@ -43,6 +43,7 @@ class InvoiceService
             foreach ($items as $item) {
                 $qty = $item['qty'] ?? 1;
                 $invoice->items()->create([
+                    'fee_type' => $item['fee_type'] ?? null,
                     'description' => $item['description'],
                     'qty' => $qty,
                     'unit_price' => $item['unit_price'],

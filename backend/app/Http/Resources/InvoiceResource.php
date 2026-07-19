@@ -40,6 +40,7 @@ class InvoiceResource extends JsonResource
             'due_at' => $this->due_at?->toIso8601String(),
             'items' => $this->whenLoaded('items', fn () => $this->items->map(fn ($item) => [
                 'id' => $item->id,
+                'fee_type' => $item->fee_type,
                 'description' => $item->description,
                 'qty' => $item->qty,
                 'unit_price' => $item->unit_price,
