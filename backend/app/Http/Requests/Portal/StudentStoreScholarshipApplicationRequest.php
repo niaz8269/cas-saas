@@ -30,6 +30,11 @@ class StudentStoreScholarshipApplicationRequest extends FormRequest
             'preferences.*.university_id' => ['nullable', 'integer', Rule::exists('universities', 'id')],
 
             'profile' => ['sometimes', 'array'],
+            'profile.chinese_name' => ['nullable', 'string', 'max:120'],
+            'profile.native_language' => ['nullable', 'string', 'max:60'],
+            'profile.alternate_email' => ['nullable', 'email', 'max:190'],
+            'profile.wechat_id' => ['nullable', 'string', 'max:80'],
+            'profile.skype_id' => ['nullable', 'string', 'max:80'],
             'profile.phone' => ['nullable', 'string', 'max:30'],
             'profile.passport_no' => ['nullable', 'string', 'max:50'],
             'profile.passport_issue_date' => ['nullable', 'date'],

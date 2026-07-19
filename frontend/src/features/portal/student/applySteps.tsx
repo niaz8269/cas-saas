@@ -96,6 +96,18 @@ export function ProfileStep({ profile, countries, onChange }: {
           </Field>
           <Field label="Phone"><Input value={profile.phone ?? ""} onChange={set("phone")} /></Field>
           <Field label="Religion (optional)"><Input value={profile.religion ?? ""} onChange={set("religion")} /></Field>
+          <Field label="Chinese name (optional)"><Input value={profile.chinese_name ?? ""} onChange={set("chinese_name")} /></Field>
+          <Field label="Native language (optional)"><Input value={profile.native_language ?? ""} onChange={set("native_language")} /></Field>
+        </div>
+      </PortalCard>
+
+      <PortalCard className="space-y-3">
+        <SectionTitle>Contact</SectionTitle>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Alternate email (optional)"><Input type="email" value={profile.alternate_email ?? ""} onChange={set("alternate_email")} /></Field>
+          <div />
+          <Field label="WeChat ID (optional)"><Input value={profile.wechat_id ?? ""} onChange={set("wechat_id")} /></Field>
+          <Field label="Skype ID (optional)"><Input value={profile.skype_id ?? ""} onChange={set("skype_id")} /></Field>
         </div>
       </PortalCard>
 

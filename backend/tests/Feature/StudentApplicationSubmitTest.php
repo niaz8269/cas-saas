@@ -154,6 +154,30 @@ it('submits the draft to CAS once documents are complete', function () {
         ->and($application->statusHistory()->where('to_status', 'under_review')->exists())->toBeTrue();
 });
 
+it('persists the extended applicant profile fields', function () {
+    [$program] = programRequiringPassport();
+    $student = actingAsStudentPortal();
+
+    $payload = draftPayload($program);
+    $payload['profile'] = [
+        ...$payload['profile'],
+        'chinese_name' => '黄佳佳',
+        'native_language' => 'Urdu',
+        'alternate_email' => 'alt@example.com',
+        'wechat_id' => 'wx_1',
+        'skype_id' => 'sky_1',
+    ];
+
+    $this->postJson('/api/v1/student/applications', $payload)->assertCreated();
+
+    $student->refresh();
+    expect($student->chinese_name)->toBe('黄佳佳')
+        ->and($student->native_language)->toBe('Urdu')
+        ->and($student->alternate_email)->toBe('alt@example.com')
+        ->and($student->wechat_id)->toBe('wx_1')
+        ->and($student->skype_id)->toBe('sky_1');
+});
+
 it('routes a submitted application to an admissions officer and notifies them', function () {
     Role::findOrCreate('Admissions', 'staff');
     $officer = User::factory()->create();
