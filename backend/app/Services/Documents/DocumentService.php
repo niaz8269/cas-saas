@@ -20,6 +20,12 @@ class DocumentService
 {
     public const DISK = 's3';
 
+    /**
+     * Same bucket as DISK, but over the server-to-server network path. Use for
+     * reading/writing bytes on the server; use DISK for browser presigned URLs.
+     */
+    public const INTERNAL_DISK = 's3_internal';
+
     public const MAX_BYTES = 25 * 1024 * 1024;
 
     public const ALLOWED_MIMES = [

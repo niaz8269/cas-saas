@@ -16,6 +16,8 @@ use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
+beforeEach(fn () => Storage::fake('s3_internal'));
+
 /**
  * A source keyed to a university + default program, mirroring the Xinjiang
  * Medical MBBS partner site.
@@ -96,7 +98,6 @@ function xjmuPayload(): array
 }
 
 it('ingests a full XJMU application straight into Applications for verification', function () {
-    Storage::fake('s3');
     Role::findOrCreate('Admissions', 'staff');
     $officer = User::factory()->create();
     $officer->assignRole('Admissions');
@@ -140,7 +141,7 @@ it('ingests a full XJMU application straight into Applications for verification'
 
     // Documents are stored on S3 and registered against the application.
     expect($application->documents()->count())->toBe(2);
-    $application->documents->each(fn ($doc) => expect(Storage::disk('s3')->exists($doc->file_path))->toBeTrue());
+    $application->documents->each(fn ($doc) => expect(Storage::disk('s3_internal')->exists($doc->file_path))->toBeTrue());
 
     // The assigned officer is notified to verify.
     expect(Notification::where('user_id', $officer->id)

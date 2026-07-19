@@ -14,6 +14,7 @@ use App\Services\Documents\DocumentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
@@ -208,7 +209,11 @@ class IngestApplicationService
         $key = $this->documents->keyPrefix($application)
             .Str::uuid().'_'.Str::limit(Str::slug(pathinfo($doc['file_name'], PATHINFO_FILENAME)), 80, '').'.'.$ext;
 
-        Storage::disk(DocumentService::DISK)->put($key, $content);
+        // The disk is configured with throw=false, so a failed upload returns false.
+        // Don't register a document whose bytes never landed — fail the transaction.
+        if (Storage::disk(DocumentService::INTERNAL_DISK)->put($key, $content) === false) {
+            throw new RuntimeException("Failed to store document '{$doc['file_name']}' for application {$application->id}.");
+        }
 
         $this->documents->register(
             $application,

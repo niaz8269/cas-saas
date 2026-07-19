@@ -60,6 +60,24 @@ return [
             'report' => false,
         ],
 
+        // Same bucket as 's3', but reached over the server-to-server network path.
+        // Presigned URLs (handed to browsers) go through 's3' at a client-reachable
+        // endpoint (e.g. localhost:9000); code that reads/writes bytes on the server
+        // uses this disk at the internal endpoint (e.g. minio:9000). In production,
+        // AWS_ENDPOINT_INTERNAL is unset and this collapses to the same endpoint.
+        's3_internal' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'url' => env('AWS_URL'),
+            'endpoint' => env('AWS_ENDPOINT_INTERNAL', env('AWS_ENDPOINT')),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
