@@ -257,7 +257,14 @@ export default function ApplicationDetailPage() {
             >
               <ArrowLeft className="size-3.5" /> Applications
             </Link>
-            <h2 className="mt-1 text-2xl font-semibold text-cas-navy">{app.application_code}</h2>
+            <div className="mt-1 flex items-center gap-2">
+              <h2 className="text-2xl font-semibold text-cas-navy">{app.application_code}</h2>
+              {app.review && (
+                <Badge variant="outline" className="border-transparent bg-amber-50 text-amber-700">
+                  To verify
+                </Badge>
+              )}
+            </div>
             <p className="mt-1 text-sm text-muted-foreground">
               {app.student && (
                 <Link to={`/students/${app.student.id}`} className="text-cas-navy hover:underline">
@@ -269,6 +276,7 @@ export default function ApplicationDetailPage() {
               ) : (
                 <>{" · "}{app.program?.name} at {app.university?.name}{app.intake ? ` · ${app.intake.name}` : ""}</>
               )}
+              {app.source && <> · <span>received via <span className="font-medium text-foreground">{app.source.name}</span></span></>}
             </p>
           </div>
 

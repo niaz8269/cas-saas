@@ -770,4 +770,27 @@ CREATE TABLE majors (
   created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
   UNIQUE KEY uq_majors_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Direct university-admission application ingestion (partner sites POST full
+-- applications via API key). The key's source maps to a university + default
+-- program; ingested applications carry the source and a to-verify flag.
+ALTER TABLE api_sources
+  ADD COLUMN university_id       BIGINT UNSIGNED NULL AFTER type,
+  ADD COLUMN default_program_id  BIGINT UNSIGNED NULL AFTER university_id,
+  ADD CONSTRAINT fk_apisources_uni FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE SET NULL,
+  ADD CONSTRAINT fk_apisources_program FOREIGN KEY (default_program_id) REFERENCES programs(id) ON DELETE SET NULL;
+
+ALTER TABLE applications
+  ADD COLUMN source_id BIGINT UNSIGNED NULL AFTER agent_id,
+  ADD COLUMN review    TINYINT(1) NOT NULL DEFAULT 0 AFTER status,
+  ADD CONSTRAINT fk_apps_source FOREIGN KEY (source_id) REFERENCES api_sources(id) ON DELETE SET NULL;
+
+-- Extra applicant profile fields that partner forms (e.g. XJMU) collect but the
+-- ERP had no home for yet.
+ALTER TABLE students
+  ADD COLUMN chinese_name    VARCHAR(120) NULL AFTER last_name,
+  ADD COLUMN wechat_id       VARCHAR(80)  NULL AFTER phone,
+  ADD COLUMN skype_id        VARCHAR(80)  NULL AFTER wechat_id,
+  ADD COLUMN alternate_email VARCHAR(190) NULL AFTER email,
+  ADD COLUMN native_language VARCHAR(60)  NULL AFTER religion;
 -- =========================== END OF SCHEMA ===========================

@@ -36,8 +36,10 @@ class Application extends Model
         'scholarship_id',
         'preferences',
         'agent_id',
+        'source_id',
         'assigned_admissions_id',
         'status',
+        'review',
         'submitted_at',
         'created_by',
         'updated_by',
@@ -48,7 +50,13 @@ class Application extends Model
         return [
             'submitted_at' => 'datetime',
             'preferences' => 'array',
+            'review' => 'boolean',
         ];
+    }
+
+    public function source(): BelongsTo
+    {
+        return $this->belongsTo(ApiSource::class, 'source_id');
     }
 
     public function student(): BelongsTo

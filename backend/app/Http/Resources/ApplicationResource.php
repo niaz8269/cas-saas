@@ -23,6 +23,10 @@ class ApplicationResource extends JsonResource
             'kind' => $this->kind,
             'level' => $this->level,
             'preferences' => $this->applicationPreferences(),
+            'review' => (bool) $this->review,
+            'source' => $this->whenLoaded('source', fn () => $this->source ? [
+                'id' => $this->source->id, 'name' => $this->source->name,
+            ] : null),
             'status' => $this->status,
             'submitted_at' => $this->submitted_at?->toIso8601String(),
             'student' => $this->whenLoaded('student', fn () => [

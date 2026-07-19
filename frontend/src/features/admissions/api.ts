@@ -13,6 +13,8 @@ export interface ApplicationListItem {
   kind: "program" | "scholarship"
   level: string | null
   preferences: ApplicationPreference[]
+  review?: boolean
+  source?: { id: number; name: string } | null
   status: string
   submitted_at: string | null
   student?: { id: number; student_code: string; full_name: string }

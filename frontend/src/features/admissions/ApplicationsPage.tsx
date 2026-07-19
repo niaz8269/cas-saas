@@ -147,9 +147,21 @@ export default function ApplicationsPage() {
                 onClick={() => navigate(`/applications/${application.id}`)}
               >
                 <TableCell className="font-mono text-xs text-muted-foreground">
-                  {application.application_code}
+                  <span className="flex items-center gap-1.5">
+                    {application.application_code}
+                    {application.review && (
+                      <Badge variant="outline" className="border-transparent bg-amber-50 text-amber-700">
+                        To verify
+                      </Badge>
+                    )}
+                  </span>
                 </TableCell>
-                <TableCell className="font-medium">{application.student?.full_name ?? "—"}</TableCell>
+                <TableCell className="font-medium">
+                  {application.student?.full_name ?? "—"}
+                  {application.source && (
+                    <p className="text-xs font-normal text-muted-foreground">via {application.source.name}</p>
+                  )}
+                </TableCell>
                 <TableCell>
                   {application.kind === "scholarship" ? (
                     <>

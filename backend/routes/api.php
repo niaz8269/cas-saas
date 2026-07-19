@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\GuardianController;
+use App\Http\Controllers\Api\V1\Ingest\IngestApplicationController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
@@ -43,6 +44,10 @@ Route::prefix('v1')->group(function () {
 
     // Lead ingestion (per-source API keys; idempotent; rate-limited per key)
     Route::post('ingest/leads', LeadIngestController::class)
+        ->middleware('api-source');
+
+    // Direct university-admission application ingestion (partner sites)
+    Route::post('ingest/applications', IngestApplicationController::class)
         ->middleware('api-source');
 
     // Public website catalog (unauthenticated, active/published only, throttled)
