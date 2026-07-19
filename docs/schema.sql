@@ -810,4 +810,34 @@ ALTER TABLE leads
 -- visa_fee, …) so Finance can build/report invoices by fee type.
 ALTER TABLE invoice_items
   ADD COLUMN fee_type VARCHAR(40) NULL AFTER invoice_id;
+
+-- Captured server errors for the admin error monitor, grouped by fingerprint
+-- (class+file+line) with an occurrence count and last-seen timestamp.
+CREATE TABLE error_logs (
+  id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  fingerprint   VARCHAR(64) NOT NULL,
+  level         VARCHAR(20) NOT NULL DEFAULT 'error',
+  type          VARCHAR(190) NULL,
+  message       TEXT NOT NULL,
+  file          VARCHAR(500) NULL,
+  line          INT UNSIGNED NULL,
+  url           VARCHAR(500) NULL,
+  method        VARCHAR(10) NULL,
+  status        SMALLINT UNSIGNED NULL,
+  user_type     VARCHAR(30) NULL,
+  user_id       BIGINT UNSIGNED NULL,
+  ip            VARCHAR(45) NULL,
+  user_agent    VARCHAR(255) NULL,
+  context       JSON NULL,
+  occurrences   INT UNSIGNED NOT NULL DEFAULT 1,
+  first_seen_at TIMESTAMP NULL,
+  last_seen_at  TIMESTAMP NULL,
+  resolved_at   TIMESTAMP NULL,
+  resolved_by   BIGINT UNSIGNED NULL,
+  created_at    TIMESTAMP NULL, updated_at TIMESTAMP NULL,
+  UNIQUE KEY uq_error_logs_fingerprint (fingerprint),
+  KEY idx_error_logs_level (level),
+  KEY idx_error_logs_resolved (resolved_at),
+  KEY idx_error_logs_last_seen (last_seen_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================

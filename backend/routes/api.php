@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\ErrorLogController;
 use App\Http\Controllers\Api\V1\GuardianController;
 use App\Http\Controllers\Api\V1\Ingest\IngestApplicationController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
@@ -145,6 +146,14 @@ Route::prefix('v1')->group(function () {
         // Audit trail (admin/compliance)
         Route::get('audit-logs', [AuditLogController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+
+        // Error monitor (admin/ops)
+        Route::get('error-logs', [ErrorLogController::class, 'index'])
+            ->middleware('permission:settings.manage.global,staff');
+        Route::get('error-logs/{errorLog}', [ErrorLogController::class, 'show'])
+            ->middleware('permission:settings.manage.global,staff');
+        Route::post('error-logs/{errorLog}/resolve', [ErrorLogController::class, 'resolve'])
+            ->middleware('permission:settings.manage.global,staff');
 
         // Catalog image upload (WebP conversion) — catalog managers
         Route::post('uploads/images', [UploadController::class, 'image'])

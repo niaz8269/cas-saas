@@ -52,6 +52,7 @@ import SiteNews from "@/features/site/SiteNews"
 import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
 import IntegrationsPage from "@/features/admin/IntegrationsPage"
+import ErrorLogPage from "@/features/admin/ErrorLogPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -131,6 +132,7 @@ const router = createBrowserRouter([
           { path: "/reports", element: <ReportsPage /> },
           { path: "/users", element: <UsersPage /> },
           { path: "/integrations", element: <IntegrationsPage /> },
+          { path: "/error-log", element: <ErrorLogPage /> },
           { path: "/settings", element: <SettingsPage /> },
         ],
       },

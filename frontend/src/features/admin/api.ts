@@ -142,3 +142,47 @@ export const createApiKey = (sourceId: number, rate_limit?: number) =>
 
 export const revokeApiKey = (sourceId: number, keyId: number) =>
   api<undefined>(`/api-sources/${sourceId}/keys/${keyId}`, { method: "DELETE" })
+
+// ---- Error monitor ----
+
+export interface ErrorLogItem {
+  id: number
+  level: string
+  type: string | null
+  message: string
+  file: string | null
+  line: number | null
+  url: string | null
+  method: string | null
+  status: number | null
+  actor: string | null
+  ip: string | null
+  user_agent: string | null
+  occurrences: number
+  first_seen_at: string | null
+  last_seen_at: string | null
+  resolved: boolean
+  resolved_at: string | null
+  resolved_by?: string | null
+  context?: { trace?: string[]; previous?: string } | null
+}
+
+interface ErrorLogList {
+  data: ErrorLogItem[]
+  meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
+  stats: { unresolved: number; last_24h: number }
+}
+
+export function listErrorLogs(params: { status?: string; level?: string; q?: string; page?: number } = {}) {
+  return api<ErrorLogList>(`/error-logs${qs({
+    "filter[status]": params.status,
+    "filter[level]": params.level,
+    q: params.q,
+    page: params.page && params.page > 1 ? params.page : undefined,
+  })}`)
+}
+
+export const getErrorLog = (id: number) => api<{ data: ErrorLogItem }>(`/error-logs/${id}`)
+
+export const resolveErrorLog = (id: number) =>
+  api<{ data: ErrorLogItem }>(`/error-logs/${id}/resolve`, { method: "POST" })

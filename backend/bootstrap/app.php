@@ -2,6 +2,7 @@
 
 use App\Exceptions\ChecklistIncompleteException;
 use App\Http\Middleware\AuthenticateApiSource;
+use App\Services\Monitoring\ErrorLogger;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // Capture unhandled server errors into the admin error monitor. The
+        // logger applies its own skip-list (validation/auth/404/…) and never
+        // throws, so default logging still runs.
+        $exceptions->report(function (Throwable $e) {
+            app(ErrorLogger::class)->report($e);
+        });
+
         // API error envelope per CLAUDE.md: { message, errors, code }.
         $isApi = fn (Request $request): bool => $request->is('api/*') || $request->expectsJson();
 

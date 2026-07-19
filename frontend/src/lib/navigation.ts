@@ -11,6 +11,7 @@ import {
   Receipt,
   School,
   Settings,
+  Siren,
   UserCog,
   type LucideIcon,
 } from "lucide-react"
@@ -70,6 +71,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { title: "Users", to: "/users", icon: UserCog, module: "users" },
       { title: "Integrations", to: "/integrations", icon: KeyRound, module: "settings" },
+      { title: "Error monitor", to: "/error-log", icon: Siren, module: "settings" },
       { title: "Settings", to: "/settings", icon: Settings, module: "settings" },
     ],
   },
