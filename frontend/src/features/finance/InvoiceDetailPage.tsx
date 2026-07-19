@@ -131,7 +131,14 @@ export default function InvoiceDetailPage() {
           <div className="divide-y px-5">
             {invoice.items?.map((item) => (
               <div key={item.id} className="flex items-center justify-between py-3 text-sm">
-                <span>{item.description}</span>
+                <span>
+                  {item.description}
+                  {item.fee_type && (
+                    <span className="ml-2 rounded bg-cas-navy-50 px-1.5 py-0.5 text-xs text-cas-navy capitalize">
+                      {item.fee_type.replace(/_/g, " ")}
+                    </span>
+                  )}
+                </span>
                 <span className="tabular-nums">{money(item.amount, invoice.currency)}</span>
               </div>
             ))}

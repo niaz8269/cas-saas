@@ -3,6 +3,7 @@ import type { Paginated } from "@/features/catalog/api"
 
 export interface InvoiceItemRow {
   id: number
+  fee_type?: string | null
   description: string
   qty: string | number
   unit_price: string | number
@@ -107,6 +108,56 @@ export const getInvoicePdf = (id: number | string) => apiBlob(`/invoices/${id}/p
 
 export const recordInvoicePayment = (id: number | string, payload: { amount: number; method?: string; reference?: string }) =>
   api<{ data: InvoiceItemData }>(`/invoices/${id}/payments`, { method: "POST", body: JSON.stringify(payload) })
+
+// ---- Invoice creation from the course fee structure ----
+
+export interface FeeLine {
+  fee_type: string | null
+  description: string
+  qty: number
+  unit_price: number
+  currency: string
+  currency_mismatch: boolean
+}
+
+export interface FeeSchedule {
+  party_type: string
+  party_id: number
+  application_id: number
+  applicant: string
+  currency: string
+  context: {
+    application_code: string
+    student: string | null
+    program: string | null
+    university: string | null
+    scholarship: string | null
+  }
+  lines: FeeLine[]
+}
+
+export const getFeeSchedule = (applicationId: number | string) =>
+  api<{ data: FeeSchedule }>(`/invoices/fee-schedule?application_id=${applicationId}`)
+
+export interface NewInvoiceItem {
+  fee_type?: string | null
+  description: string
+  qty?: number
+  unit_price: number
+}
+
+export interface CreateInvoicePayload {
+  party_type: string
+  party_id: number
+  application_id?: number | null
+  currency: string
+  status?: string
+  due_days?: number
+  items: NewInvoiceItem[]
+}
+
+export const createInvoice = (payload: CreateInvoicePayload) =>
+  api<{ data: InvoiceItemData }>("/invoices", { method: "POST", body: JSON.stringify(payload) })
 
 export const listCommissions = (params: { status?: string; page?: number } = {}) =>
   api<Paginated<CommissionItemData> & { pipeline: PipelineMeta }>(`/commissions${qs({

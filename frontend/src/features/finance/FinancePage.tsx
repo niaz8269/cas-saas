@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Receipt, Search } from "lucide-react"
+import { Plus, Receipt, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -22,7 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useCan } from "@/features/auth/useCan"
 import { listInvoices } from "@/features/finance/api"
+import NewInvoiceDialog from "@/features/finance/NewInvoiceDialog"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { cn } from "@/lib/utils"
 
@@ -30,11 +32,13 @@ const INVOICE_STATUSES = ["draft", "issued", "partially_paid", "paid", "cancelle
 
 export default function FinancePage() {
   const navigate = useNavigate()
+  const can = useCan()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState("all")
   const [partyType, setPartyType] = useState("all")
   const [page, setPage] = useState(1)
+  const [newOpen, setNewOpen] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -97,7 +101,15 @@ export default function FinancePage() {
             <SelectItem value="university">University</SelectItem>
           </SelectContent>
         </Select>
+
+        {can("finance.manage.global") && (
+          <Button className="ml-auto" onClick={() => setNewOpen(true)}>
+            <Plus className="size-4" /> New invoice
+          </Button>
+        )}
       </div>
+
+      <NewInvoiceDialog open={newOpen} onOpenChange={setNewOpen} />
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
         <Table>
