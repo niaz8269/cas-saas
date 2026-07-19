@@ -38,6 +38,7 @@ class PublicEnquiryController extends Controller
             'country' => $request->input('country'),
             'message' => $request->input('message'),
             'intake_route' => 'info',
+            'form_type' => 'enquiry',
         ]);
 
         // Attach the browsing context to the lead (internal only, never

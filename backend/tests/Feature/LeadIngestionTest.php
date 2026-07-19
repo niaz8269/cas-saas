@@ -69,6 +69,25 @@ it('ingests a clean lead with source, campaign and country attribution', functio
         ->and($lead->status)->toBe('new');
 });
 
+it('captures the form type and its extra fields', function () {
+    ['key' => $key] = makeSourceWithKey();
+    Country::factory()->create(['iso2' => 'PK']);
+
+    $response = ingest([
+        ...CLEAN_PAYLOAD,
+        'email' => 'evt@example.com',
+        'phone' => '+92700111',
+        'form_type' => 'Event Registration',
+        'fields' => ['event' => 'China Expo 2026', 'event_date' => '2026-09-10', 'seats' => 2],
+    ], $key)->assertCreated();
+
+    $lead = Lead::findOrFail($response->json('lead_id'));
+    expect($lead->form_type)->toBe('event_registration') // normalized to a slug
+        ->and($lead->meta['form']['event'])->toBe('China Expo 2026')
+        ->and($lead->meta['form']['event_date'])->toBe('2026-09-10')
+        ->and($lead->meta['form']['seats'])->toBe('2'); // scalars stringified
+});
+
 it('rejects requests without a key', function () {
     ingest(CLEAN_PAYLOAD, '')
         ->assertStatus(401)

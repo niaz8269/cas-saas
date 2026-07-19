@@ -43,8 +43,13 @@ class LeadIngestionService
             'website_source_id' => $this->resolveWebsiteSource($source, $data['website_domain'] ?? null),
             'campaign_id' => $this->resolveCampaign($data['campaign_utm'] ?? null),
             'intake_route' => $data['intake_route'] ?? 'info',
+            'form_type' => $data['form_type'] ?? null,
             'message' => $data['message'] ?? null,
-            'meta' => ['api_source_id' => $source->id],
+            'meta' => array_filter([
+                'api_source_id' => $source->id,
+                // The form's own extra answers, kept verbatim for the counselor.
+                'form' => ! empty($data['fields']) ? $data['fields'] : null,
+            ], fn ($v) => $v !== null),
         ];
 
         // 1. Exact student match — the person already exists permanently.

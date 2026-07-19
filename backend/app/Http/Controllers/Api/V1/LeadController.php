@@ -29,6 +29,7 @@ class LeadController extends Controller
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('filter.assigned_user_id'), fn ($q) => $q->where('assigned_user_id', $request->input('filter.assigned_user_id')))
             ->when($request->filled('filter.website_source_id'), fn ($q) => $q->where('website_source_id', $request->input('filter.website_source_id')))
+            ->when($request->filled('filter.form_type'), fn ($q) => $q->where('form_type', $request->input('filter.form_type')))
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q

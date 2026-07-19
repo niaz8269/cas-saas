@@ -799,4 +799,10 @@ ALTER TABLE students
 -- here and shown generically (no schema change per new partner field).
 ALTER TABLE applications
   ADD COLUMN custom_fields JSON NULL AFTER review;
+
+-- Which external form a lead came from (contact, consultation, event, …) for
+-- triage/segmentation; the form's own extra answers live in leads.meta->'form'.
+ALTER TABLE leads
+  ADD COLUMN form_type VARCHAR(40) NULL AFTER intake_route,
+  ADD INDEX idx_leads_form_type (form_type);
 -- =========================== END OF SCHEMA ===========================

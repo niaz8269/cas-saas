@@ -10,6 +10,8 @@ export interface LeadListItem {
   phone: string | null
   status: string
   intake_route: string
+  form_type: string | null
+  form_fields: Record<string, string>
   message: string | null
   country?: { id: number; name: string; iso2: string }
   website_source?: { id: number; domain: string } | null

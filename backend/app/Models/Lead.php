@@ -32,6 +32,7 @@ class Lead extends Model
         'agent_id',
         'assigned_user_id',
         'intake_route',
+        'form_type',
         'status',
         'student_id',
         'duplicate_of',

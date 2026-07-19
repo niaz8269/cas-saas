@@ -161,7 +161,12 @@ export default function LeadsPage() {
                   <p className="text-xs text-muted-foreground">{lead.email ?? lead.phone ?? ""}</p>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {lead.website_source?.domain ?? "—"}
+                  <span>{lead.website_source?.domain ?? "—"}</span>
+                  {lead.form_type && (
+                    <Badge variant="outline" className="ml-2 border-transparent bg-cas-navy-50 text-cas-navy capitalize">
+                      {lead.form_type.replace(/_/g, " ")}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">{lead.country?.name ?? "—"}</TableCell>
                 <TableCell className="text-muted-foreground">{lead.assignee?.name ?? "Unassigned"}</TableCell>

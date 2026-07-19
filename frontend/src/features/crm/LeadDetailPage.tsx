@@ -133,6 +133,11 @@ export default function LeadDetailPage() {
               >
                 {lead.status}
               </Badge>
+              {lead.form_type && (
+                <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">
+                  {lead.form_type.replace(/_/g, " ")}
+                </Badge>
+              )}
               {lead.review && (
                 <Badge variant="outline" className="border-transparent bg-amber-50 text-amber-700">
                   needs dedup review
@@ -183,6 +188,20 @@ export default function LeadDetailPage() {
           <div className="mt-5 rounded-lg bg-subtle p-4 text-sm">
             <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Message</p>
             <p className="mt-1">{lead.message}</p>
+          </div>
+        )}
+
+        {Object.keys(lead.form_fields ?? {}).length > 0 && (
+          <div className="mt-5 rounded-lg bg-subtle p-4 text-sm">
+            <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Form submission</p>
+            <dl className="mt-2 grid gap-x-8 gap-y-2 sm:grid-cols-2">
+              {Object.entries(lead.form_fields).map(([key, value]) => (
+                <div key={key}>
+                  <dt className="text-xs text-muted-foreground capitalize">{key.replace(/[_-]+/g, " ")}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         )}
 

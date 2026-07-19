@@ -25,6 +25,8 @@ class LeadResource extends JsonResource
             'phone' => $this->phone,
             'status' => $this->status,
             'intake_route' => $this->intake_route,
+            'form_type' => $this->form_type,
+            'form_fields' => (array) data_get($this->meta, 'form', []),
             'message' => $this->message,
             'country' => $this->whenLoaded('country', fn () => [
                 'id' => $this->country->id, 'name' => $this->country->name, 'iso2' => $this->country->iso2,
