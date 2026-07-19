@@ -43,6 +43,7 @@ class ApplicationController extends Controller
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
             ->when($request->filled('filter.student_id'), fn ($q) => $q->where('student_id', $request->input('filter.student_id')))
+            ->when($request->filled('filter.review'), fn ($q) => $q->where('review', $request->boolean('filter.review')))
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q

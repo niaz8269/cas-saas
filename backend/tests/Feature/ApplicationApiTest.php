@@ -59,6 +59,18 @@ it('scopes counselors to their students applications', function () {
         ->and($response->json('data.0.id'))->toBe($mine->id);
 });
 
+it('filters applications awaiting verification', function () {
+    actingAsStaffWith(ADMISSIONS_PERMS);
+    $toVerify = Application::factory()->create(['review' => true]);
+    Application::factory()->count(2)->create(['review' => false]);
+
+    $response = $this->getJson('/api/v1/applications?filter[review]=1')->assertOk();
+
+    expect($response->json('meta.total'))->toBe(1)
+        ->and($response->json('data.0.id'))->toBe($toVerify->id)
+        ->and($response->json('data.0.review'))->toBeTrue();
+});
+
 it('performs a legal transition and writes immutable history', function () {
     actingAsStaffWith(ADMISSIONS_PERMS);
     $application = Application::factory()->create();

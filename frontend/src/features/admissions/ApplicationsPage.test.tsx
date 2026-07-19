@@ -88,6 +88,22 @@ it("lists applications with codes and status badges", async () => {
   expect(screen.getByText("under review")).toBeInTheDocument()
 })
 
+it("filters to applications awaiting verification", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global"]) })
+  stubFetch()
+
+  renderWithProviders(<ApplicationsPage />)
+  await screen.findByText("APP-2026-00021")
+
+  await userEvent.click(screen.getByRole("button", { name: "To verify", pressed: false }))
+
+  await waitFor(() => {
+    const calls = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+    const listCalls = calls.map((c) => decodeURIComponent(String(c[0]))).filter((u) => u.includes("/applications"))
+    expect(listCalls.some((u) => u.includes("filter[review]=1"))).toBe(true)
+  })
+})
+
 function renderDetail() {
   return renderWithProviders(
     <Routes>

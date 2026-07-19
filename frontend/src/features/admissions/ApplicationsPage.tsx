@@ -35,6 +35,7 @@ export default function ApplicationsPage() {
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
+  const [toVerify, setToVerify] = useState(false)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -47,11 +48,12 @@ export default function ApplicationsPage() {
   }, [searchInput])
 
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["applications", { q, status, page }],
+    queryKey: ["applications", { q, status, toVerify, page }],
     queryFn: () =>
       listApplications({
         q: q || undefined,
         status: status === "all" ? undefined : status,
+        review: toVerify || undefined,
         page,
       }),
     placeholderData: keepPreviousData,
@@ -91,6 +93,22 @@ export default function ApplicationsPage() {
             ))}
           </SelectContent>
         </Select>
+
+        <Button
+          type="button"
+          variant="outline"
+          aria-pressed={toVerify}
+          onClick={() => {
+            setToVerify((v) => !v)
+            setPage(1)
+          }}
+          className={cn(
+            "bg-background",
+            toVerify && "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50 hover:text-amber-700",
+          )}
+        >
+          To verify
+        </Button>
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">

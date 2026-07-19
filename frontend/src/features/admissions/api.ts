@@ -66,11 +66,14 @@ export interface DocumentTypeItem {
   required_for: string[] | null
 }
 
-export function listApplications(params: { q?: string; status?: string; page?: number; student_id?: number } = {}) {
+export function listApplications(
+  params: { q?: string; status?: string; page?: number; student_id?: number; review?: boolean } = {},
+) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.status) search.set("filter[status]", params.status)
   if (params.student_id) search.set("filter[student_id]", String(params.student_id))
+  if (params.review) search.set("filter[review]", "1")
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
