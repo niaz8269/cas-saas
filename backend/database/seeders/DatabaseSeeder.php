@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             StaffUserSeeder::class,
             CatalogSeeder::class,
+            MajorSeeder::class,
             CrmSeeder::class,
             AdmissionsSeeder::class,
             FinanceSeeder::class,

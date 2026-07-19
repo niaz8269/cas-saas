@@ -144,9 +144,9 @@ class ApplicationCatalog
      *
      * @return Collection<int, DocumentType>
      */
-    public function requiredDocuments(Program $program, ?Scholarship $scholarship = null): Collection
+    public function requiredDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
     {
-        $types = $this->resolveTypes($program->requirements['documents'] ?? []);
+        $types = $this->resolveTypes($program?->requirements['documents'] ?? []);
 
         if ($types->isEmpty()) {
             $types = DocumentType::whereIn('name', self::GENERAL_DOCUMENTS)->get();

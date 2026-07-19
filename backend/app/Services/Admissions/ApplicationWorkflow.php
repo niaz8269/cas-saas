@@ -61,13 +61,17 @@ class ApplicationWorkflow
                 'created_at' => now(),
             ]);
 
-            $application->load(['university:id,name', 'program:id,name']);
+            $application->load(['university:id,name', 'program:id,name', 'scholarship:id,name']);
+
+            $target = $application->program
+                ? "{$application->program->name} at {$application->university->name}"
+                : ($application->scholarship?->name ?? 'general application');
 
             Activity::create([
                 'student_id' => $application->student_id,
                 'user_id' => $actor?->id,
                 'type' => 'system',
-                'body' => "Application {$application->application_code} created — {$application->program->name} at {$application->university->name}",
+                'body' => "Application {$application->application_code} created — {$target}",
                 'meta' => ['application_id' => $application->id],
                 'created_at' => now(),
             ]);

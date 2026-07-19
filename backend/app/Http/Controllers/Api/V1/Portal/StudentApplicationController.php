@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api\V1\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Portal\StudentStoreApplicationRequest;
+use App\Http\Requests\Portal\StudentStoreScholarshipApplicationRequest;
 use App\Http\Resources\Portal\ApplicantProgramResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
 use App\Models\Application;
 use App\Models\Country;
 use App\Models\DocumentType;
+use App\Models\Major;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Services\Admissions\ApplicationCatalog;
@@ -62,6 +64,58 @@ class StudentApplicationController extends Controller
         return response()->json([
             'data' => Country::orderBy('name')->get(['id', 'name', 'iso2']),
         ]);
+    }
+
+    /** Study fields for the government-scholarship preference picker. */
+    public function majors(): JsonResponse
+    {
+        return response()->json([
+            'data' => Major::active()->orderBy('name')->get(['id', 'name']),
+        ]);
+    }
+
+    /** Active government scholarships (with their universities + benefits). */
+    public function governmentScholarships(): JsonResponse
+    {
+        $scholarships = Scholarship::query()
+            ->where('scope', 'government')
+            ->where('status', 'active')
+            ->with('universities:id,name,city')
+            ->orderBy('name')
+            ->get();
+
+        return response()->json([
+            'data' => $scholarships->map(fn (Scholarship $s) => [
+                'id' => $s->id,
+                'name' => $s->name,
+                'type' => $s->type,
+                'coverage' => $s->coverage,
+                'description' => $s->description,
+                'eligibility' => $s->eligibility,
+                'benefits' => $s->benefits,
+                'universities' => $s->universities->map(fn ($u) => [
+                    'id' => $u->id, 'name' => $u->name, 'city' => $u->city,
+                ])->values(),
+            ])->values(),
+        ]);
+    }
+
+    /** Create a draft general government-scholarship application. */
+    public function storeScholarshipApplication(StudentStoreScholarshipApplicationRequest $request): JsonResponse
+    {
+        $application = $this->applications->createScholarshipDraft($request->user(), $request->validated());
+        $application->loadMissing('scholarship');
+
+        return response()->json([
+            'data' => [
+                'id' => $application->id,
+                'application_code' => $application->application_code,
+                'status' => $application->status,
+                'required_documents' => $this->documentPayload(
+                    $this->catalog->requiredDocuments(null, $application->scholarship),
+                ),
+            ],
+        ], 201);
     }
 
     /** Step 4: the resolved required-document checklist for a program. */

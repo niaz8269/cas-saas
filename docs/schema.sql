@@ -752,4 +752,22 @@ CREATE TABLE scholarship_universities (
   CONSTRAINT fk_schuni_scholarship FOREIGN KEY (scholarship_id) REFERENCES scholarships(id) ON DELETE CASCADE,
   CONSTRAINT fk_schuni_university FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Second application kind: a general government-scholarship application with
+-- no exact program/university — a degree level + scholarship + up to three
+-- major/university preferences (subject to approval). Plus a majors picklist.
+ALTER TABLE applications
+  ADD COLUMN kind        VARCHAR(20) NOT NULL DEFAULT 'program' AFTER application_code,
+  ADD COLUMN level       VARCHAR(20) NULL AFTER kind,
+  ADD COLUMN preferences JSON        NULL AFTER scholarship_id,
+  MODIFY COLUMN university_id BIGINT UNSIGNED NULL,
+  MODIFY COLUMN program_id    BIGINT UNSIGNED NULL;
+
+CREATE TABLE majors (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'active',
+  created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL,
+  UNIQUE KEY uq_majors_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================

@@ -27,11 +27,14 @@ class Application extends Model
 
     protected $fillable = [
         'application_code',
+        'kind',
+        'level',
         'student_id',
         'university_id',
         'program_id',
         'intake_id',
         'scholarship_id',
+        'preferences',
         'agent_id',
         'assigned_admissions_id',
         'status',
@@ -44,6 +47,7 @@ class Application extends Model
     {
         return [
             'submitted_at' => 'datetime',
+            'preferences' => 'array',
         ];
     }
 

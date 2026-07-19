@@ -43,23 +43,7 @@ class PortalApplicationService
         $intakeId = $this->resolveIntakeId($program, $data['intake_id'] ?? null);
 
         return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId) {
-            if (! empty($data['profile'])) {
-                $student->fill($data['profile'])->save();
-            }
-
-            if (array_key_exists('guardians', $data)) {
-                $student->guardians()->delete();
-                foreach ($data['guardians'] as $guardian) {
-                    $student->guardians()->create($guardian);
-                }
-            }
-
-            if (array_key_exists('education', $data)) {
-                $student->education()->delete();
-                foreach ($data['education'] as $entry) {
-                    $student->education()->create($entry);
-                }
-            }
+            $this->persistApplicantData($student, $data);
 
             return $this->workflow->create([
                 'student_id' => $student->id,
@@ -70,6 +54,53 @@ class PortalApplicationService
                 'agent_id' => $student->agent_id,
             ], null);
         });
+    }
+
+    /**
+     * Create a draft general government-scholarship application: no exact
+     * program/university, just a degree level, the scholarship, and up to
+     * three major/university preferences (subject to approval).
+     *
+     * @param  array<string, mixed>  $data  validated payload
+     */
+    public function createScholarshipDraft(Student $student, array $data): Application
+    {
+        $scholarship = Scholarship::where('scope', 'government')->findOrFail($data['scholarship_id']);
+
+        return DB::transaction(function () use ($student, $data, $scholarship) {
+            $this->persistApplicantData($student, $data);
+
+            return $this->workflow->create([
+                'kind' => 'scholarship',
+                'level' => $data['level'],
+                'student_id' => $student->id,
+                'scholarship_id' => $scholarship->id,
+                'preferences' => array_values($data['preferences'] ?? []),
+                'agent_id' => $student->agent_id,
+            ], null);
+        });
+    }
+
+    /** Persist the wizard's profile / guardians / education onto the student. */
+    private function persistApplicantData(Student $student, array $data): void
+    {
+        if (! empty($data['profile'])) {
+            $student->fill($data['profile'])->save();
+        }
+
+        if (array_key_exists('guardians', $data)) {
+            $student->guardians()->delete();
+            foreach ($data['guardians'] as $guardian) {
+                $student->guardians()->create($guardian);
+            }
+        }
+
+        if (array_key_exists('education', $data)) {
+            $student->education()->delete();
+            foreach ($data['education'] as $entry) {
+                $student->education()->create($entry);
+            }
+        }
     }
 
     /**
