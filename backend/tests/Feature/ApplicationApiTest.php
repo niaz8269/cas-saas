@@ -71,6 +71,34 @@ it('filters applications awaiting verification', function () {
         ->and($response->json('data.0.review'))->toBeTrue();
 });
 
+it('exposes the full applicant profile on the detail endpoint', function () {
+    actingAsStaffWith(ADMISSIONS_PERMS);
+    $student = Student::factory()->create([
+        'chinese_name' => '黄佳佳', 'native_language' => 'Urdu', 'passport_no' => 'UD5164361',
+    ]);
+    $student->guardians()->create(['name' => 'Arfa', 'relation' => 'Parent', 'phone' => '0333']);
+    $student->education()->create([
+        'level' => 'Senior High School', 'major' => 'Pre medical',
+        'institution' => 'Punjab Group', 'start_year' => 2022, 'end_year' => 2025,
+    ]);
+    $application = Application::factory()->create(['student_id' => $student->id]);
+
+    $this->getJson("/api/v1/applications/{$application->id}")->assertOk()
+        ->assertJsonPath('data.applicant.personal.chinese_name', '黄佳佳')
+        ->assertJsonPath('data.applicant.personal.native_language', 'Urdu')
+        ->assertJsonPath('data.applicant.passport.passport_no', 'UD5164361')
+        ->assertJsonPath('data.applicant.guardians.0.name', 'Arfa')
+        ->assertJsonPath('data.applicant.education.0.institution', 'Punjab Group');
+});
+
+it('omits the applicant profile from the list endpoint', function () {
+    actingAsStaffWith(ADMISSIONS_PERMS);
+    Application::factory()->create();
+
+    $this->getJson('/api/v1/applications')->assertOk()
+        ->assertJsonMissingPath('data.0.applicant');
+});
+
 it('performs a legal transition and writes immutable history', function () {
     actingAsStaffWith(ADMISSIONS_PERMS);
     $application = Application::factory()->create();

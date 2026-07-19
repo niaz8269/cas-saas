@@ -138,6 +138,35 @@ it("renders stepper, checklist states and history for updaters", async () => {
   expect(screen.getByText(/draft →/)).toBeInTheDocument()
 })
 
+it("renders the full ingested applicant profile", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global", "documents.view.global"]) })
+  stubFetch({
+    applicant: {
+      personal: {
+        first_name: "Ayesha", last_name: "Shakeel", chinese_name: "黄佳佳", dob: "2005-06-25",
+        gender: "female", marital_status: "Single", religion: "Islam", nationality: "Pakistan",
+        native_language: "Urdu", place_of_birth: "Gujranwala, Pakistan", city: null,
+      },
+      passport: { passport_no: "UD5164361", issue_date: null, expiry_date: "2035-11-12" },
+      contact: {
+        email: "ayesha@example.com", alternate_email: "ayesha.alt@example.com", phone: "0300",
+        wechat_id: "wxid_1", skype_id: null, current_address: "Addr A", permanent_address: "Addr B",
+      },
+      guardians: [{ name: "Arfa", relation: "Parent", phone: "0333", email: null, address: null }],
+      education: [{ level: "Senior High School", degree_name: null, major: "Pre medical", institution: "Punjab Group", start_year: 2022, end_year: 2025, grade: null }],
+    },
+  })
+
+  renderDetail()
+
+  expect(await screen.findByText("Applicant details")).toBeInTheDocument()
+  expect(screen.getByText("黄佳佳")).toBeInTheDocument()
+  expect(screen.getByText("Pakistan")).toBeInTheDocument()
+  expect(screen.getByText("UD5164361")).toBeInTheDocument()
+  expect(screen.getByText("Arfa")).toBeInTheDocument()
+  expect(screen.getByText(/Punjab Group/)).toBeInTheDocument()
+})
+
 it("accepts an offer and hides the response actions after refetch", async () => {
   useAuthStore.setState({
     token: "t",

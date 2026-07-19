@@ -7,6 +7,56 @@ export interface ApplicationPreference {
   university: string | null
 }
 
+export interface ApplicantGuardian {
+  name: string | null
+  relation: string | null
+  phone: string | null
+  email: string | null
+  address: string | null
+}
+
+export interface ApplicantEducation {
+  level: string | null
+  degree_name: string | null
+  major: string | null
+  institution: string | null
+  start_year: number | null
+  end_year: number | null
+  grade: string | null
+}
+
+export interface ApplicantProfile {
+  personal: {
+    first_name: string | null
+    last_name: string | null
+    chinese_name: string | null
+    dob: string | null
+    gender: string | null
+    marital_status: string | null
+    religion: string | null
+    nationality: string | null
+    native_language: string | null
+    place_of_birth: string | null
+    city: string | null
+  }
+  passport: {
+    passport_no: string | null
+    issue_date: string | null
+    expiry_date: string | null
+  }
+  contact: {
+    email: string | null
+    alternate_email: string | null
+    phone: string | null
+    wechat_id: string | null
+    skype_id: string | null
+    current_address: string | null
+    permanent_address: string | null
+  }
+  guardians: ApplicantGuardian[]
+  education: ApplicantEducation[]
+}
+
 export interface ApplicationListItem {
   id: number
   application_code: string
@@ -15,6 +65,7 @@ export interface ApplicationListItem {
   preferences: ApplicationPreference[]
   review?: boolean
   source?: { id: number; name: string } | null
+  applicant?: ApplicantProfile
   status: string
   submitted_at: string | null
   student?: { id: number; student_code: string; full_name: string }

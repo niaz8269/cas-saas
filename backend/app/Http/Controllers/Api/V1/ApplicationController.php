@@ -73,11 +73,18 @@ class ApplicationController extends Controller
         $this->authorize('view', $application);
 
         $application->load([
-            ...self::LIST_RELATIONS,
-            'intake:id,name',
+            'university:id,name,code',
+            'program:id,name,level',
             'scholarship:id,name',
+            'source:id,name',
+            'admissionsOfficer:id,name',
+            'intake:id,name',
             'offers',
             'statusHistory.changedBy:id,name',
+            // Full applicant profile for the detail view (list uses trimmed columns).
+            'student.country:id,name',
+            'student.guardians',
+            'student.education',
         ])->loadCount('documents');
 
         return (new ApplicationResource($application))->additional([

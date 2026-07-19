@@ -35,6 +35,7 @@ import {
   transitionApplication,
   uploadDocument,
   verifyDocument,
+  type ApplicantProfile,
   type DocumentItem,
 } from "@/features/admissions/api"
 import {
@@ -47,6 +48,118 @@ import {
 } from "@/features/admissions/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
+
+type FieldPair = [label: string, value: string | number | null | undefined]
+
+function InfoGroup({ title, fields }: { title: string; fields: FieldPair[] }) {
+  const shown = fields.filter(([, v]) => v !== null && v !== undefined && v !== "")
+  if (shown.length === 0) return null
+
+  return (
+    <div>
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{title}</h4>
+      <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
+        {shown.map(([label, value]) => (
+          <div key={label}>
+            <dt className="text-xs text-muted-foreground">{label}</dt>
+            <dd className="text-sm text-ink">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
+}
+
+function ApplicantDetails({ applicant }: { applicant: ApplicantProfile }) {
+  const { personal, passport, contact, guardians, education } = applicant
+  const years = (from: number | null, to: number | null) =>
+    from || to ? ` (${from ?? "—"}–${to ?? "—"})` : ""
+
+  return (
+    <section className="rounded-xl border bg-card shadow-sm">
+      <header className="border-b px-5 py-3">
+        <h3 className="text-[15px] font-semibold">Applicant details</h3>
+      </header>
+      <div className="space-y-5 px-5 py-4">
+        <InfoGroup
+          title="Personal"
+          fields={[
+            ["Given name", personal.first_name],
+            ["Surname", personal.last_name],
+            ["Chinese name", personal.chinese_name],
+            ["Date of birth", personal.dob],
+            ["Gender", personal.gender],
+            ["Marital status", personal.marital_status],
+            ["Religion", personal.religion],
+            ["Nationality", personal.nationality],
+            ["Native language", personal.native_language],
+            ["Place of birth", personal.place_of_birth],
+            ["City", personal.city],
+          ]}
+        />
+        <InfoGroup
+          title="Passport"
+          fields={[
+            ["Passport no.", passport.passport_no],
+            ["Issued", passport.issue_date],
+            ["Expires", passport.expiry_date],
+          ]}
+        />
+        <InfoGroup
+          title="Contact"
+          fields={[
+            ["Email", contact.email],
+            ["Alternate email", contact.alternate_email],
+            ["Phone", contact.phone],
+            ["WeChat", contact.wechat_id],
+            ["Skype", contact.skype_id],
+            ["Present address", contact.current_address],
+            ["Permanent address", contact.permanent_address],
+          ]}
+        />
+
+        {guardians.length > 0 && (
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Guardians &amp; contacts
+            </h4>
+            <ul className="mt-2 space-y-2">
+              {guardians.map((g, i) => (
+                <li key={i} className="text-sm">
+                  <span className="font-medium text-ink">{g.name ?? "—"}</span>
+                  {g.relation && <span className="text-muted-foreground"> · {g.relation}</span>}
+                  <div className="text-xs text-muted-foreground">
+                    {[g.phone, g.email, g.address].filter(Boolean).join(" · ") || "—"}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {education.length > 0 && (
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Education</h4>
+            <ul className="mt-2 space-y-2">
+              {education.map((e, i) => (
+                <li key={i} className="text-sm">
+                  <span className="font-medium text-ink">
+                    {[e.level, e.major ?? e.degree_name].filter(Boolean).join(" — ") || "—"}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {e.institution ? ` at ${e.institution}` : ""}
+                    {years(e.start_year, e.end_year)}
+                    {e.grade ? ` · ${e.grade}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
 
 function Stepper({ current }: { current: string }) {
   const terminalIndex = APPLICATION_LADDER.indexOf(current as (typeof APPLICATION_LADDER)[number])
@@ -336,6 +449,8 @@ export default function ApplicationDetailPage() {
           </div>
         )}
       </div>
+
+      {app.applicant && <ApplicantDetails applicant={app.applicant} />}
 
       {app.kind === "scholarship" && app.preferences.length > 0 && (
         <section className="rounded-xl border bg-card shadow-sm">

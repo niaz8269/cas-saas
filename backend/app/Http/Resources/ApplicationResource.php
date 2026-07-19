@@ -34,6 +34,12 @@ class ApplicationResource extends JsonResource
                 'student_code' => $this->student->student_code,
                 'full_name' => $this->student->full_name,
             ]),
+            // Full applicant profile — only present on the detail endpoint, which
+            // loads the complete student row plus guardians and education.
+            'applicant' => $this->when(
+                (bool) $this->student?->relationLoaded('education'),
+                fn () => $this->applicantProfile(),
+            ),
             'university' => $this->whenLoaded('university', fn () => [
                 'id' => $this->university->id, 'name' => $this->university->name, 'code' => $this->university->code,
             ]),
@@ -59,6 +65,63 @@ class ApplicationResource extends JsonResource
             ])),
             'documents_count' => $this->whenCounted('documents'),
             'created_at' => $this->created_at?->toIso8601String(),
+        ];
+    }
+
+    /**
+     * The full applicant profile assembled for the detail view: personal,
+     * passport and contact details, plus guardians/contacts and education.
+     *
+     * @return array<string, mixed>
+     */
+    private function applicantProfile(): array
+    {
+        $s = $this->student;
+
+        return [
+            'personal' => [
+                'first_name' => $s->first_name,
+                'last_name' => $s->last_name,
+                'chinese_name' => $s->chinese_name,
+                'dob' => $s->dob?->format('Y-m-d'),
+                'gender' => $s->gender,
+                'marital_status' => $s->marital_status,
+                'religion' => $s->religion,
+                'nationality' => $s->country?->name,
+                'native_language' => $s->native_language,
+                'place_of_birth' => $s->place_of_birth,
+                'city' => $s->city,
+            ],
+            'passport' => [
+                'passport_no' => $s->passport_no,
+                'issue_date' => $s->passport_issue_date?->format('Y-m-d'),
+                'expiry_date' => $s->passport_expiry_date?->format('Y-m-d'),
+            ],
+            'contact' => [
+                'email' => $s->email,
+                'alternate_email' => $s->alternate_email,
+                'phone' => $s->phone,
+                'wechat_id' => $s->wechat_id,
+                'skype_id' => $s->skype_id,
+                'current_address' => $s->current_address,
+                'permanent_address' => $s->permanent_address,
+            ],
+            'guardians' => $s->guardians->map(fn ($g) => [
+                'name' => $g->name,
+                'relation' => $g->relation,
+                'phone' => $g->phone,
+                'email' => $g->email,
+                'address' => $g->address,
+            ])->values()->all(),
+            'education' => $s->education->map(fn ($e) => [
+                'level' => $e->level,
+                'degree_name' => $e->degree_name,
+                'major' => $e->major,
+                'institution' => $e->institution,
+                'start_year' => $e->start_year,
+                'end_year' => $e->end_year,
+                'grade' => $e->grade_value,
+            ])->values()->all(),
         ];
     }
 
