@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { FileText, Plane, Plus, Receipt, Upload } from "lucide-react"
+import { Award, FileText, Plane, Plus, Receipt, Upload } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -26,6 +26,9 @@ export default function StudentHome() {
 
       <Button asChild className="h-12 w-full text-base">
         <Link to="/portal/student/apply"><Plus className="size-5" /> Start a new application</Link>
+      </Button>
+      <Button asChild variant="secondary" className="h-11 w-full">
+        <Link to="/portal/student/apply-scholarship"><Award className="size-4" /> Apply for a Government Scholarship</Link>
       </Button>
 
       {latest && (

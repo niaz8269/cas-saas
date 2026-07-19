@@ -90,6 +90,7 @@ class StudentApplicationController extends Controller
                 'name' => $s->name,
                 'type' => $s->type,
                 'coverage' => $s->coverage,
+                'currency' => $s->currency,
                 'description' => $s->description,
                 'eligibility' => $s->eligibility,
                 'benefits' => $s->benefits,

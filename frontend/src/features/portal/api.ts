@@ -345,6 +345,58 @@ export const submitStudentApplication = (applicationId: number) =>
     { method: "POST" },
   )
 
+// ── Government-scholarship application (CSC etc.) ───────────────────────────
+
+export interface Major {
+  id: number
+  name: string
+}
+
+export interface ScholarshipLevelBenefit {
+  tuition_after?: number | string | null
+  hostel_after?: number | string | null
+  stipend_monthly?: number | string | null
+}
+
+export interface GovScholarship {
+  id: number
+  name: string
+  type: string | null
+  coverage: string | null
+  currency: string | null
+  description: string | null
+  eligibility: string | null
+  benefits: { bachelor?: ScholarshipLevelBenefit; master?: ScholarshipLevelBenefit; phd?: ScholarshipLevelBenefit } | null
+  universities: { id: number; name: string; city: string | null }[]
+}
+
+export type ScholarshipLevel = "bachelor" | "master" | "phd"
+
+export interface ScholarshipPreference {
+  major: string
+  university_id?: number | null
+}
+
+export interface ScholarshipApplicationPayload {
+  scholarship_id: number
+  level: ScholarshipLevel
+  preferences?: ScholarshipPreference[]
+  profile?: Record<string, unknown>
+  guardians?: WizardGuardian[]
+  education?: WizardEducation[]
+}
+
+export const getMajors = () => portalApi<{ data: Major[] }>("/student/majors")
+
+export const getGovernmentScholarships = () =>
+  portalApi<{ data: GovScholarship[] }>("/student/government-scholarships")
+
+export const createScholarshipApplication = (payload: ScholarshipApplicationPayload) =>
+  portalApi<{ data: DraftApplication }>("/student/scholarship-applications", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
 function query(params: Record<string, string | number | undefined>): string {
   const search = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {
