@@ -51,6 +51,18 @@ it('validates the items and the party', function () {
     ])->assertStatus(422)->assertJsonValidationErrors(['party_id', 'items']);
 });
 
+it('rejects an application that belongs to a different student', function () {
+    actingAsStaffWith(INVOICE_FINANCE_PERMS);
+    $student = Student::factory()->create();
+    $otherApplication = Application::factory()->create(); // different student
+
+    $this->postJson('/api/v1/invoices', [
+        'party_type' => 'student', 'party_id' => $student->id, 'currency' => 'CNY',
+        'application_id' => $otherApplication->id,
+        'items' => [['description' => 'Tuition', 'unit_price' => 100]],
+    ])->assertStatus(422)->assertJsonValidationErrors(['application_id']);
+});
+
 it('proposes fee lines from the course structure for a self-funded application', function () {
     actingAsStaffWith(INVOICE_FINANCE_PERMS);
     $uni = University::factory()->create();

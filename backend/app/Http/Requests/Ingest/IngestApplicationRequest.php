@@ -90,7 +90,9 @@ class IngestApplicationRequest extends FormRequest
             'documents.*.type' => ['required', 'string', 'max:120'],
             'documents.*.file_name' => ['required', 'string', 'max:255'],
             'documents.*.mime' => ['nullable', 'string', 'max:120'],
-            'documents.*.content' => ['required', 'string'], // base64-encoded bytes
+            // Base64 of the file bytes. Bounded (~11MB decoded) so a single
+            // request can't carry an unreasonable payload.
+            'documents.*.content' => ['required', 'string', 'max:15000000'],
 
             // Arbitrary extra admission-form fields with no dedicated column.
             'custom_fields' => ['nullable', 'array', 'max:60'],

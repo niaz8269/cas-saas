@@ -55,6 +55,13 @@ class StoreInvoiceRequest extends FormRequest
             if ($table && $id && ! DB::table($table)->where('id', $id)->exists()) {
                 $v->errors()->add('party_id', "No {$type} found for the given party_id.");
             }
+
+            // A linked application must belong to the student being billed.
+            $applicationId = $this->input('application_id');
+            if ($type === 'student' && $id && $applicationId
+                && ! DB::table('applications')->where('id', $applicationId)->where('student_id', $id)->exists()) {
+                $v->errors()->add('application_id', 'The application must belong to the selected student.');
+            }
         });
     }
 }
