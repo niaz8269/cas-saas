@@ -70,6 +70,7 @@ export interface ActivityItem {
 export interface LeadListParams {
   q?: string
   status?: string
+  form_type?: string
   page?: number
 }
 
@@ -77,6 +78,7 @@ export function listLeads(params: LeadListParams = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.status) search.set("filter[status]", params.status)
+  if (params.form_type) search.set("filter[form_type]", params.form_type)
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 

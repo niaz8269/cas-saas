@@ -26,7 +26,7 @@ import { useCan } from "@/features/auth/useCan"
 import AddLeadDialog from "@/features/crm/AddLeadDialog"
 import { listLeads } from "@/features/crm/api"
 import LeadRowActions from "@/features/crm/LeadRowActions"
-import { LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
+import { LEAD_FORM_TYPES, LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
 
 function formatDate(iso: string | null): string {
@@ -40,6 +40,7 @@ export default function LeadsPage() {
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
+  const [formType, setFormType] = useState<string>("all")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -52,11 +53,12 @@ export default function LeadsPage() {
   }, [searchInput])
 
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["leads", { q, status, page }],
+    queryKey: ["leads", { q, status, formType, page }],
     queryFn: () =>
       listLeads({
         q: q || undefined,
         status: status === "all" ? undefined : status,
+        form_type: formType === "all" ? undefined : formType,
         page,
       }),
     placeholderData: keepPreviousData,
@@ -93,6 +95,24 @@ export default function LeadsPage() {
             <SelectItem value="all">All statuses</SelectItem>
             {LEAD_STATUSES.map((s) => (
               <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={formType}
+          onValueChange={(value) => {
+            setFormType(value)
+            setPage(1)
+          }}
+        >
+          <SelectTrigger className="w-44 bg-background" aria-label="Filter by form type">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All forms</SelectItem>
+            {LEAD_FORM_TYPES.map((f) => (
+              <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>

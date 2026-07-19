@@ -20,6 +20,15 @@ export const LEAD_EDITABLE_STATUSES = [
   "new", "assigned", "contacted", "qualified", "unqualified", "lost",
 ] as const
 
+/** Common external-form types leads arrive from (leads.form_type). */
+export const LEAD_FORM_TYPES = [
+  { value: "enquiry", label: "Enquiry" },
+  { value: "contact", label: "Contact" },
+  { value: "consultation", label: "Consultation" },
+  { value: "event_registration", label: "Event registration" },
+  { value: "callback", label: "Callback" },
+] as const
+
 export const STUDENT_STATUS_BADGE: Record<string, string> = {
   active: "bg-cas-navy-50 text-cas-navy",
   in_process: "bg-amber-50 text-amber-700",
