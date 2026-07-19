@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\StudentController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
 use App\Http\Controllers\Api\V1\UniversityController;
@@ -168,6 +169,11 @@ Route::prefix('v1')->group(function () {
         Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
         Route::post('notifications/read-all', [NotificationController::class, 'markAllRead']);
         Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead']);
+
+        // Follow-up tasks (own — assigned to or created by the user)
+        Route::get('tasks', [TaskController::class, 'index']);
+        Route::post('tasks', [TaskController::class, 'store']);
+        Route::patch('tasks/{task}', [TaskController::class, 'update']);
 
         // CRM (record-scoped via policies + visibleTo query scopes)
         Route::get('leads', [LeadController::class, 'index']);

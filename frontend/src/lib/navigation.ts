@@ -7,6 +7,7 @@ import {
   GraduationCap,
   KeyRound,
   LayoutDashboard,
+  ListChecks,
   Plane,
   Receipt,
   School,
@@ -35,6 +36,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     items: [
       { title: "Dashboard", to: "/", icon: LayoutDashboard, module: "dashboard" },
+      { title: "Tasks", to: "/tasks", icon: ListChecks, module: null },
     ],
   },
   {

@@ -54,6 +54,7 @@ import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
 import IntegrationsPage from "@/features/admin/IntegrationsPage"
 import ErrorLogPage from "@/features/admin/ErrorLogPage"
+import TasksPage from "@/features/tasks/TasksPage"
 import { initErrorReporting } from "@/lib/errorReporting"
 
 initErrorReporting()
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { path: "/", element: <DashboardPage /> },
+          { path: "/tasks", element: <TasksPage /> },
           { path: "/leads", element: <LeadsPage /> },
           { path: "/leads/:id", element: <LeadDetailPage /> },
           { path: "/students", element: <StudentsPage /> },
