@@ -54,28 +54,85 @@ class ErrorLogger
                 ...$this->actor(),
             ];
 
-            $existing = ErrorLog::where('fingerprint', $fingerprint)->first();
-
-            if ($existing !== null) {
-                $existing->fill($attributes);
-                $existing->occurrences = (int) $existing->occurrences + 1;
-                // A recurrence re-opens a previously resolved error.
-                $existing->resolved_at = null;
-                $existing->resolved_by = null;
-                $existing->save();
-
-                return;
-            }
-
-            ErrorLog::create([
-                ...$attributes,
-                'fingerprint' => $fingerprint,
-                'occurrences' => 1,
-                'first_seen_at' => now(),
-            ]);
+            $this->persist($fingerprint, $attributes);
         } catch (Throwable) {
             // Swallow — never let error logging surface a new error.
         }
+    }
+
+    /**
+     * Record a client-side (browser) error reported by the SPA.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function reportClient(array $data, ?Request $request = null): void
+    {
+        try {
+            $request ??= request();
+            $message = Str::limit((string) ($data['message'] ?? 'Client error'), 2000, '');
+            $name = Str::limit((string) ($data['name'] ?? 'ClientError'), 190, '');
+            $source = $data['source'] ?? null;
+            $fingerprint = hash('sha256', 'client|'.$name.'|'.$message.'|'.($source ?? ''));
+
+            $this->persist($fingerprint, [
+                'level' => 'client',
+                'type' => $name,
+                'message' => $message,
+                'file' => $source ? Str::limit((string) $source, 500, '') : null,
+                'line' => isset($data['line']) ? (int) $data['line'] : null,
+                'url' => Str::limit((string) ($data['url'] ?? $request?->fullUrl()), 500, ''),
+                'method' => 'GET',
+                'status' => null,
+                'ip' => $request?->ip(),
+                'user_agent' => Str::limit((string) $request?->userAgent(), 255, ''),
+                'context' => array_filter([
+                    'trace' => $this->clientTrace($data['stack'] ?? null),
+                ], fn ($v) => $v !== null && $v !== []),
+                'last_seen_at' => now(),
+                ...$this->actor(),
+            ]);
+        } catch (Throwable) {
+            // Swallow.
+        }
+    }
+
+    /** Upsert the grouped error row: a recurrence bumps the count and re-opens it. */
+    private function persist(string $fingerprint, array $attributes): void
+    {
+        $existing = ErrorLog::where('fingerprint', $fingerprint)->first();
+
+        if ($existing !== null) {
+            $existing->fill($attributes);
+            $existing->occurrences = (int) $existing->occurrences + 1;
+            $existing->resolved_at = null;
+            $existing->resolved_by = null;
+            $existing->save();
+
+            return;
+        }
+
+        ErrorLog::create([
+            ...$attributes,
+            'fingerprint' => $fingerprint,
+            'occurrences' => 1,
+            'first_seen_at' => now(),
+        ]);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function clientTrace(mixed $stack): array
+    {
+        if (! is_string($stack) || $stack === '') {
+            return [];
+        }
+
+        return array_slice(
+            array_values(array_filter(array_map('trim', explode("\n", $stack)))),
+            0,
+            self::TRACE_FRAMES,
+        );
     }
 
     /** Skip expected/business exceptions and all client (< 500) HTTP errors. */

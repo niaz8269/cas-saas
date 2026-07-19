@@ -54,6 +54,29 @@ it('re-opens a resolved error when it recurs', function () {
     expect($log->resolved_at)->toBeNull()->and($log->occurrences)->toBe(2);
 });
 
+it('records a client-side error reported by an authenticated user', function () {
+    actingAsStaffWith([]); // any authenticated user, no special permission
+
+    $this->postJson('/api/v1/client-errors', [
+        'name' => 'TypeError',
+        'message' => "Cannot read properties of undefined (reading 'map')",
+        'source' => 'https://app/assets/index-abc.js',
+        'line' => 42,
+        'url' => 'https://app/finance',
+        'stack' => "at FinancePage (index-abc.js:42:10)\nat renderWithHooks",
+    ])->assertStatus(202);
+
+    $log = ErrorLog::where('level', 'client')->first();
+    expect($log)->not->toBeNull()
+        ->and($log->type)->toBe('TypeError')
+        ->and($log->user_type)->toBe('staff')
+        ->and($log->context['trace'][0])->toContain('FinancePage');
+});
+
+it('rejects client error reports from unauthenticated users', function () {
+    $this->postJson('/api/v1/client-errors', ['message' => 'boom'])->assertStatus(401);
+});
+
 it('denies the error monitor without settings.manage', function () {
     actingAsStaffWith(['finance.view.global']);
 

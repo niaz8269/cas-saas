@@ -5,6 +5,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
+import ErrorBoundary from "@/components/ErrorBoundary"
 import AppShell from "@/components/layout/AppShell"
 import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
@@ -53,6 +54,9 @@ import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
 import IntegrationsPage from "@/features/admin/IntegrationsPage"
 import ErrorLogPage from "@/features/admin/ErrorLogPage"
+import { initErrorReporting } from "@/lib/errorReporting"
+
+initErrorReporting()
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -142,8 +146,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

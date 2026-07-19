@@ -64,6 +64,10 @@ Route::prefix('v1')->group(function () {
     Route::post('public/enquiries', [PublicEnquiryController::class, 'store'])
         ->middleware('throttle:enquiry');
 
+    // Client-side (browser) error reporting from the SPA — any authenticated user.
+    Route::post('client-errors', [ErrorLogController::class, 'storeClient'])
+        ->middleware(['auth:staff,agent,student', 'throttle:30,1']);
+
     // Agent portal (own records only — report §5.7)
     Route::prefix('agent')->group(function () {
         Route::post('auth/login', [AgentAuthController::class, 'login'])

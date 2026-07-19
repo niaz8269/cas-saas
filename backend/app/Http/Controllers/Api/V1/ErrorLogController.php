@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Monitoring\StoreClientErrorRequest;
 use App\Http\Resources\ErrorLogResource;
 use App\Models\ErrorLog;
+use App\Services\Monitoring\ErrorLogger;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -38,6 +41,14 @@ class ErrorLogController extends Controller
                 'last_24h' => ErrorLog::where('last_seen_at', '>=', now()->subDay())->count(),
             ],
         ]);
+    }
+
+    /** Ingest a browser error reported by the SPA (any authenticated guard). */
+    public function storeClient(StoreClientErrorRequest $request, ErrorLogger $logger): JsonResponse
+    {
+        $logger->reportClient($request->validated(), $request);
+
+        return response()->json(['status' => 'recorded'], 202);
     }
 
     public function show(ErrorLog $errorLog): ErrorLogResource
