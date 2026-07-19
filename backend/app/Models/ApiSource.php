@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Database\Factories\ApiSourceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ApiSource extends Model
 {
     /** @use HasFactory<ApiSourceFactory> */
-    use HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -33,6 +34,12 @@ class ApiSource extends Model
     public function apiKeys(): HasMany
     {
         return $this->hasMany(ApiKey::class);
+    }
+
+    /** Keys that have not been revoked. */
+    public function activeKeys(): HasMany
+    {
+        return $this->hasMany(ApiKey::class)->whereNull('revoked_at');
     }
 
     /** For application-ingestion sources: the university the site belongs to. */

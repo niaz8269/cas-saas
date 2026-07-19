@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ApiKey extends Model
 {
+    use Auditable;
+
+    /** Never write the secret hash to the audit trail. */
+    protected array $auditExclude = ['key_hash'];
+
     /**
      * Hash a plain-text key for storage/lookup (plain keys are never stored).
      */

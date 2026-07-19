@@ -85,3 +85,60 @@ export const testMessageTemplate = (key: string, payload: { channel: string; to?
     method: "POST",
     body: JSON.stringify(payload),
   })
+
+// ---- Integrations: ingestion sources + API keys ----
+
+export interface ApiKeyItem {
+  id: number
+  label: string
+  rate_limit: number
+  active: boolean
+  revoked_at: string | null
+  created_at: string | null
+}
+
+export interface ApiSourceItem {
+  id: number
+  name: string
+  type: string
+  website_url: string | null
+  is_active: boolean
+  university: { id: number; name: string } | null
+  default_program: { id: number; name: string; level: string } | null
+  active_keys_count?: number
+  keys?: ApiKeyItem[]
+  created_at: string | null
+}
+
+export interface ApiSourcePayload {
+  name: string
+  type: string
+  website_url?: string | null
+  university_id?: number | null
+  default_program_id?: number | null
+  is_active?: boolean
+}
+
+export function listApiSources(params: { q?: string; page?: number } = {}) {
+  return api<Paginated<ApiSourceItem>>(
+    `/api-sources${qs({ q: params.q, page: params.page && params.page > 1 ? params.page : undefined })}`,
+  )
+}
+
+export const createApiSource = (payload: ApiSourcePayload) =>
+  api<{ data: ApiSourceItem }>("/api-sources", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateApiSource = (id: number, payload: Partial<ApiSourcePayload>) =>
+  api<{ data: ApiSourceItem }>(`/api-sources/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deleteApiSource = (id: number) =>
+  api<undefined>(`/api-sources/${id}`, { method: "DELETE" })
+
+export const createApiKey = (sourceId: number, rate_limit?: number) =>
+  api<{ plain_key: string; source: ApiSourceItem; key_id: number }>(`/api-sources/${sourceId}/keys`, {
+    method: "POST",
+    body: JSON.stringify({ rate_limit }),
+  })
+
+export const revokeApiKey = (sourceId: number, keyId: number) =>
+  api<undefined>(`/api-sources/${sourceId}/keys/${keyId}`, { method: "DELETE" })

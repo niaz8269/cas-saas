@@ -51,6 +51,7 @@ import SiteWhyChina from "@/features/site/SiteWhyChina"
 import SiteNews from "@/features/site/SiteNews"
 import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
+import IntegrationsPage from "@/features/admin/IntegrationsPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -129,6 +130,7 @@ const router = createBrowserRouter([
           { path: "/visa/:id", element: <VisaCaseDetailPage /> },
           { path: "/reports", element: <ReportsPage /> },
           { path: "/users", element: <UsersPage /> },
+          { path: "/integrations", element: <IntegrationsPage /> },
           { path: "/settings", element: <SettingsPage /> },
         ],
       },

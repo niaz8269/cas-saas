@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AgentPayableController;
+use App\Http\Controllers\Api\V1\ApiSourceController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -129,6 +130,16 @@ Route::prefix('v1')->group(function () {
         Route::get('message-templates', [MessageTemplateController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
         Route::post('message-templates/{template}/test', [MessageTemplateController::class, 'test'])
+            ->middleware('permission:settings.manage.global,staff');
+
+        // Integrations — ingestion sources + their API keys
+        Route::apiResource('api-sources', ApiSourceController::class)
+            ->except(['show'])
+            ->parameters(['api-sources' => 'apiSource'])
+            ->middleware('permission:settings.manage.global,staff');
+        Route::post('api-sources/{apiSource}/keys', [ApiSourceController::class, 'storeKey'])
+            ->middleware('permission:settings.manage.global,staff');
+        Route::delete('api-sources/{apiSource}/keys/{apiKey}', [ApiSourceController::class, 'destroyKey'])
             ->middleware('permission:settings.manage.global,staff');
 
         // Audit trail (admin/compliance)
