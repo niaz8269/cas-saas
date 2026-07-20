@@ -131,3 +131,16 @@ it('lists active scholarships across active universities', function () {
         ->assertJsonPath('data.0.name', 'Belt & Road')
         ->assertJsonPath('data.0.university.slug', 'jilin-medical');
 });
+
+it('filters scholarships by type and returns the distinct type list', function () {
+    $uni = University::factory()->create(['status' => 'active']);
+    Scholarship::factory()->for($uni)->create(['name' => 'Full Ride', 'type' => 'full', 'status' => 'active']);
+    Scholarship::factory()->for($uni)->create(['name' => 'Half Off', 'type' => 'partial', 'status' => 'active']);
+
+    $response = $this->getJson('/api/v1/public/scholarships?filter[type]=full')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Full Ride');
+
+    expect($response->json('types'))->toEqual(['full', 'partial']);
+});

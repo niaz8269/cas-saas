@@ -28,6 +28,7 @@ export default function SiteScholarships() {
   const [params] = useSearchParams()
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const [q, setQ] = useState(params.get("q") ?? "")
+  const [type, setType] = useState(params.get("type") ?? "")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -37,12 +38,13 @@ export default function SiteScholarships() {
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
-    queryKey: ["site-scholarships", { q, page }],
-    queryFn: () => getSiteScholarships({ q: q || undefined, page }),
+    queryKey: ["site-scholarships", { q, type, page }],
+    queryFn: () => getSiteScholarships({ q: q || undefined, type: type || undefined, page }),
     placeholderData: keepPreviousData,
   })
 
   const scholarships = data?.data ?? []
+  const types = data?.types ?? []
   const meta = data?.meta
 
   return (
@@ -53,15 +55,26 @@ export default function SiteScholarships() {
         subtitle="Full and partial awards offered by our partner universities. We help you find and apply for the ones you qualify for."
       />
 
-      <div className="relative sm:max-w-md">
-        <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search scholarships…"
-          className="h-11 bg-background pl-9"
-          aria-label="Search scholarships"
-        />
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 sm:max-w-md">
+          <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search scholarships…"
+            className="h-11 bg-background pl-9"
+            aria-label="Search scholarships"
+          />
+        </div>
+        <select
+          value={type}
+          onChange={(e) => { setType(e.target.value); setPage(1) }}
+          aria-label="Filter by scholarship type"
+          className="h-11 rounded-lg border bg-background px-3 text-sm text-foreground capitalize"
+        >
+          <option value="">All types</option>
+          {types.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
       </div>
 
       {isError && (

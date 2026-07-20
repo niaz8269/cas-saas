@@ -142,13 +142,14 @@ export function getSitePrograms(params: { q?: string; level?: string; language?:
   return siteApi<Paginated<SiteProgram>>(`/public/programs${qs ? `?${qs}` : ""}`)
 }
 
-export function getSiteScholarships(params: { q?: string; page?: number } = {}) {
+export function getSiteScholarships(params: { q?: string; type?: string; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
+  if (params.type) search.set("filter[type]", params.type)
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
-  return siteApi<Paginated<SiteScholarship>>(`/public/scholarships${qs ? `?${qs}` : ""}`)
+  return siteApi<Paginated<SiteScholarship> & { types?: string[] }>(`/public/scholarships${qs ? `?${qs}` : ""}`)
 }
 
 export interface EnquiryPayload {

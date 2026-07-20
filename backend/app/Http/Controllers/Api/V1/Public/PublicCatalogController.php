@@ -99,10 +99,21 @@ class PublicCatalogController extends Controller
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('type', 'like', $term));
             })
+            ->when($request->filled('filter.type'), fn ($q) => $q->where('type', $request->input('filter.type')))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
 
-        return PublicScholarshipResource::collection($scholarships);
+        // Distinct scholarship types for the filter (active + on active universities).
+        $types = Scholarship::query()
+            ->where('status', 'active')
+            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->whereNotNull('type')
+            ->where('type', '!=', '')
+            ->distinct()
+            ->orderBy('type')
+            ->pluck('type');
+
+        return PublicScholarshipResource::collection($scholarships)->additional(['types' => $types]);
     }
 }
