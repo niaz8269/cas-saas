@@ -3,6 +3,7 @@
 use App\Models\Activity;
 use App\Models\Branch;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -100,4 +101,18 @@ it('lets admins update any student and stamps updated_by', function () {
         ->assertJsonPath('data.status', 'in_process');
 
     expect($student->fresh()->updated_by)->toBe($admin->id);
+});
+
+it('reassigns a student to another counselor and returns it', function () {
+    actingAsStaffWith(STUDENT_ADMIN_PERMS);
+    $student = Student::factory()->create();
+    $counselor = User::factory()->create();
+
+    $this->patchJson("/api/v1/students/{$student->id}", [
+        'assigned_counselor_id' => $counselor->id,
+    ])
+        ->assertOk()
+        ->assertJsonPath('data.counselor.id', $counselor->id);
+
+    expect($student->fresh()->assigned_counselor_id)->toBe($counselor->id);
 });

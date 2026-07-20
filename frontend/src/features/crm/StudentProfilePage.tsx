@@ -28,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
-import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
+import { addNote, getStudent, getTimeline, listStaff, updateStudent } from "@/features/crm/api"
 import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
@@ -61,6 +61,9 @@ export default function StudentProfilePage() {
   const queryClient = useQueryClient()
   const can = useCan()
   const canUpdate = can("students.update.assigned") || can("students.update.global")
+  // Reassigning a student to a different counselor is a management action, not
+  // something a counselor should do to their own caseload — require global.
+  const canReassign = can("students.update.global")
 
   const [note, setNote] = useState("")
   const [noteType, setNoteType] = useState<ActivityType>("note")
@@ -92,6 +95,23 @@ export default function StudentProfilePage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["student", id] }),
     onError: (error) =>
       setActionError(error instanceof ApiError ? error.message : "Update failed."),
+  })
+
+  const counselors = useQuery({
+    queryKey: ["staff-directory", "Counselor"],
+    queryFn: () => listStaff("Counselor"),
+    enabled: canReassign,
+  })
+
+  const reassignMutation = useMutation({
+    mutationFn: (value: string) =>
+      updateStudent(id, { assigned_counselor_id: value === "0" ? null : Number(value) }),
+    onSuccess: () => {
+      setActionError(null)
+      queryClient.invalidateQueries({ queryKey: ["student", id] })
+    },
+    onError: (error) =>
+      setActionError(error instanceof ApiError ? error.message : "Reassignment failed."),
   })
 
   if (student.isPending) {
@@ -209,6 +229,29 @@ export default function StudentProfilePage() {
                     <SelectItem key={status} value={status} className="capitalize">
                       {status.replace("_", " ")}
                     </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {canReassign && (
+            <div className="mt-4 border-t pt-4">
+              <Label className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
+                Counselor
+              </Label>
+              <Select
+                value={s.counselor ? String(s.counselor.id) : "0"}
+                onValueChange={(value) => reassignMutation.mutate(value)}
+                disabled={reassignMutation.isPending || counselors.isPending}
+              >
+                <SelectTrigger className="mt-1.5 w-full" aria-label="Assigned counselor">
+                  <SelectValue placeholder={counselors.isPending ? "Loading…" : "Unassigned"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Unassigned</SelectItem>
+                  {(counselors.data?.data ?? []).map((c) => (
+                    <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
