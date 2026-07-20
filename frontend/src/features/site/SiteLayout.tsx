@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
 import ScrollToTop from "@/features/site/ScrollToTop"
+import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
 
@@ -134,7 +135,7 @@ export default function SiteLayout() {
   const [bannerOpen, setBannerOpen] = useState(true)
 
   return (
-    <div className="flex min-h-dvh flex-col bg-subtle">
+    <div className="flex min-h-dvh flex-col bg-subtle lg:pb-11">
       <ScrollToTop />
       {/* Announcement bar */}
       {bannerOpen && (
@@ -279,16 +280,8 @@ export default function SiteLayout() {
         </div>
       </footer>
 
-      {/* Floating WhatsApp */}
-      <a
-        href={WHATSAPP}
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Chat with us on WhatsApp"
-        className="fixed right-4 bottom-4 z-30 inline-flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 sm:right-6 sm:bottom-6"
-      >
-        <MessageCircle className="size-7" />
-      </a>
+      {/* Persistent conversion chrome: counsellor widget + help bar + back-to-top */}
+      <SiteHelpDock />
     </div>
   )
 }

@@ -8,6 +8,7 @@ import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
 import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
+import SiteHelpDock from "./SiteHelpDock"
 import SiteMegaMenu from "./SiteMegaMenu"
 import SiteNews from "./SiteNews"
 import SiteServices from "./SiteServices"
@@ -136,6 +137,17 @@ it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async ()
   }
   expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS")
   expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1")
+})
+
+it("opens the counsellor widget with CAS's own contact channels", async () => {
+  const user = userEvent.setup()
+  renderWithProviders(<SiteHelpDock />)
+
+  await user.click(screen.getByRole("button", { name: "Talk to a counsellor" }))
+
+  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8618041566030")
+  expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8618041566030")
+  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:info@cas.moe")
 })
 
 it("renders the services, why-china and news pages", () => {
