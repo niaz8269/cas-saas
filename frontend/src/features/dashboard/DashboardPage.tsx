@@ -19,9 +19,13 @@ import {
   YAxis,
 } from "recharts"
 
+import { Link } from "react-router-dom"
+
 import { Skeleton } from "@/components/ui/skeleton"
 import { getExecutiveDashboard } from "@/features/dashboard/api"
+import { listTasks } from "@/features/tasks/api"
 import { useAuthStore } from "@/stores/auth"
+import { cn } from "@/lib/utils"
 
 const NAVY = "#14357C"
 const GREEN = "#15803D"
@@ -59,6 +63,48 @@ function KpiCard({ icon: Icon, label, value, sub }: { icon: LucideIcon; label: s
       </div>
       <p className="mt-2 text-3xl font-semibold text-cas-navy tabular-nums">{value}</p>
       {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
+    </div>
+  )
+}
+
+function taskDue(iso: string): string {
+  const days = Math.round((new Date(iso).getTime() - Date.now()) / 86_400_000)
+  if (days === 0) return "today"
+  if (days < 0) return `${-days}d late`
+
+  return `in ${days}d`
+}
+
+/** The current user's own pending follow-ups, surfaced on the home page. */
+function MyTasksCard() {
+  const { data } = useQuery({
+    queryKey: ["tasks", { status: "active", page: 1 }],
+    queryFn: () => listTasks({ status: "active" }),
+  })
+
+  const tasks = Array.isArray(data?.data) ? data.data : []
+  const overdue = tasks.filter((t) => t.overdue).length
+
+  return (
+    <div className="rounded-xl border bg-card p-5 shadow-sm">
+      <div className="flex items-center justify-between">
+        <h3 className="text-[15px] font-semibold">My tasks</h3>
+        <Link to="/tasks" className="text-sm text-cas-navy hover:underline">View all</Link>
+      </div>
+      {overdue > 0 && <p className="mt-1 text-xs font-medium text-cas-red">{overdue} overdue</p>}
+      <ul className="mt-3 space-y-2">
+        {tasks.length === 0 && <li className="text-sm text-muted-foreground">Nothing pending — you're all caught up 🎉</li>}
+        {tasks.slice(0, 5).map((task) => (
+          <li key={task.id} className="flex items-center justify-between gap-3 text-sm">
+            <span className="truncate">{task.title}</span>
+            {task.due_at && (
+              <span className={cn("shrink-0 text-xs tabular-nums", task.overdue ? "text-cas-red" : "text-muted-foreground")}>
+                {taskDue(task.due_at)}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -125,6 +171,8 @@ export default function DashboardPage() {
             <KpiCard icon={FileText} label="Open applications" value={String(d.applications.open)} sub={`${d.applications.total} total`} />
             <KpiCard icon={Banknote} label="Commission received" value={money(d.commissions.received_total, d.commissions.currency)} sub={`${money(d.commissions.expected_total, d.commissions.currency)} expected`} />
           </div>
+
+          <MyTasksCard />
 
           <div className="grid gap-4 lg:grid-cols-2">
             <ChartCard title="Lead funnel">
