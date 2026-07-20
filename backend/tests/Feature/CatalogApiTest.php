@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Application;
 use App\Models\DocumentType;
 use App\Models\Program;
 use App\Models\Scholarship;
@@ -86,6 +87,52 @@ it('creates a program under a university', function () {
         ->assertCreated()
         ->assertJsonPath('data.name', 'MBBS')
         ->assertJsonPath('data.teaching_language', 'English');
+});
+
+it('soft deletes a program with no applications', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+    $program = Program::factory()->for($university)->create();
+
+    $this->deleteJson("/api/v1/programs/{$program->id}")->assertNoContent();
+
+    expect($program->fresh()->trashed())->toBeTrue();
+});
+
+it('refuses to delete a program that has applications', function () {
+    actingAsStaffWith(['universities.view.global', 'universities.manage.global']);
+    $university = University::factory()->create();
+    $program = Program::factory()->for($university)->create();
+    Application::factory()->create(['university_id' => $university->id, 'program_id' => $program->id]);
+
+    $this->deleteJson("/api/v1/programs/{$program->id}")->assertStatus(409);
+
+    expect($program->fresh()->trashed())->toBeFalse();
+});
+
+it('forbids viewers from deleting a program', function () {
+    actingAsStaffWith(['universities.view.global']);
+    $program = Program::factory()->create();
+
+    $this->deleteJson("/api/v1/programs/{$program->id}")->assertStatus(403);
+});
+
+it('refuses to delete a scholarship that has applications', function () {
+    actingAsStaffWith(['scholarships.view.global', 'scholarships.manage.global']);
+    $university = University::factory()->create();
+    $scholarship = Scholarship::factory()->create(['university_id' => $university->id]);
+    Application::factory()->create(['university_id' => $university->id, 'scholarship_id' => $scholarship->id]);
+
+    $this->deleteJson("/api/v1/scholarships/{$scholarship->id}")->assertStatus(409);
+});
+
+it('soft deletes a scholarship with no applications', function () {
+    actingAsStaffWith(['scholarships.view.global', 'scholarships.manage.global']);
+    $scholarship = Scholarship::factory()->create();
+
+    $this->deleteJson("/api/v1/scholarships/{$scholarship->id}")->assertNoContent();
+
+    expect($scholarship->fresh()->trashed())->toBeTrue();
 });
 
 it('stores the per-course service-charge matrix', function () {

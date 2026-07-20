@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Catalog\StoreScholarshipRequest;
 use App\Http\Requests\Catalog\UpdateScholarshipRequest;
 use App\Http\Resources\ScholarshipResource;
+use App\Models\Application;
 use App\Models\Scholarship;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -64,6 +65,10 @@ class ScholarshipController extends Controller
     public function destroy(Scholarship $scholarship): Response
     {
         $this->authorize('delete', $scholarship);
+
+        if (Application::where('scholarship_id', $scholarship->id)->exists()) {
+            abort(409, 'Cannot delete a scholarship that has applications. Retire it instead.');
+        }
 
         $scholarship->delete();
 

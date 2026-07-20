@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Catalog\StoreProgramRequest;
 use App\Http\Requests\Catalog\UpdateProgramRequest;
 use App\Http\Resources\ProgramResource;
+use App\Models\Application;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -64,6 +65,10 @@ class ProgramController extends Controller
     public function destroy(Program $program): Response
     {
         $this->authorize('delete', $program);
+
+        if (Application::where('program_id', $program->id)->exists()) {
+            abort(409, 'Cannot delete a program that has applications. Retire it instead.');
+        }
 
         $program->delete();
 

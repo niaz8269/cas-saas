@@ -262,6 +262,9 @@ export const createProgram = (payload: Record<string, unknown>) =>
 export const updateProgram = (id: number, payload: Record<string, unknown>) =>
   api<{ data: Program }>(`/programs/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 
+export const deleteProgram = (id: number) =>
+  api<undefined>(`/programs/${id}`, { method: "DELETE" })
+
 export const createIntake = (payload: Record<string, unknown>) =>
   api<{ data: Intake }>("/intakes", { method: "POST", body: JSON.stringify(payload) })
 
@@ -270,6 +273,9 @@ export const createScholarship = (payload: Record<string, unknown>) =>
 
 export const updateScholarship = (id: number, payload: Record<string, unknown>) =>
   api<{ data: Scholarship }>(`/scholarships/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deleteScholarship = (id: number) =>
+  api<undefined>(`/scholarships/${id}`, { method: "DELETE" })
 
 export const createAgreement = (payload: Record<string, unknown>) =>
   api<{ data: Agreement }>("/agreements", { method: "POST", body: JSON.stringify(payload) })

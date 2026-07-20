@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   ArrowLeft,
   CalendarClock,
@@ -9,21 +9,33 @@ import {
   Plane,
   Plus,
   ShieldCheck,
+  Trash2,
 } from "lucide-react"
 import { useState, type ReactNode } from "react"
 import { Link, useParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import {
+  deleteProgram,
+  deleteScholarship,
   getUniversity,
   listAgreements,
   listPrograms,
   listIntakes,
   listScholarships,
 } from "@/features/catalog/api"
+import { ApiError } from "@/lib/api"
 import AddAgreementDialog from "@/features/catalog/dialogs/AddAgreementDialog"
 import ProgramFormDialog from "@/features/catalog/dialogs/ProgramFormDialog"
 import AddIntakeDialog from "@/features/catalog/dialogs/AddIntakeDialog"
@@ -75,10 +87,25 @@ export default function UniversityDetailPage() {
   const canManage = can("universities.manage.global")
   const canSeeAgreements = canManage || can("commission.view.global")
 
+  const queryClient = useQueryClient()
   const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement">(null)
   const [editOpen, setEditOpen] = useState(false)
   const [editingScholarship, setEditingScholarship] = useState<Scholarship | null>(null)
   const [editingProgram, setEditingProgram] = useState<Program | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<{ kind: "program" | "scholarship"; id: number; name: string } | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+
+  const deleteMutation = useMutation({
+    mutationFn: () =>
+      deleteTarget!.kind === "program" ? deleteProgram(deleteTarget!.id) : deleteScholarship(deleteTarget!.id),
+    onSuccess: () => {
+      const key = deleteTarget!.kind === "program" ? "university-programs" : "university-scholarships"
+      queryClient.invalidateQueries({ queryKey: [key, Number(id)] })
+      setDeleteTarget(null)
+      setDeleteError(null)
+    },
+    onError: (err) => setDeleteError(err instanceof ApiError ? err.message : "Could not delete this."),
+  })
 
   const university = useQuery({
     queryKey: ["university", id],
@@ -310,14 +337,24 @@ export default function UniversityDetailPage() {
                     {money(program.tuition_fee, program.currency)}/yr
                   </div>
                   {canManage && (
-                    <button
-                      type="button"
-                      aria-label={`Edit ${program.name}`}
-                      onClick={() => setEditingProgram(program)}
-                      className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground"
-                    >
-                      <Pencil className="size-3.5" />
-                    </button>
+                    <div className="flex items-center gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        type="button"
+                        aria-label={`Edit ${program.name}`}
+                        onClick={() => setEditingProgram(program)}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <Pencil className="size-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Delete ${program.name}`}
+                        onClick={() => { setDeleteError(null); setDeleteTarget({ kind: "program", id: program.id, name: program.name }) }}
+                        className="text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    </div>
                   )}
                 </div>
               </li>
@@ -384,9 +421,14 @@ export default function UniversityDetailPage() {
                     </a>
                   )}
                   {canManage && (
-                    <button type="button" aria-label={`Edit ${scholarship.name}`} onClick={() => setEditingScholarship(scholarship)} className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-foreground">
-                      <Pencil className="size-3.5" />
-                    </button>
+                    <div className="flex items-center gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button type="button" aria-label={`Edit ${scholarship.name}`} onClick={() => setEditingScholarship(scholarship)} className="text-muted-foreground hover:text-foreground">
+                        <Pencil className="size-3.5" />
+                      </button>
+                      <button type="button" aria-label={`Delete ${scholarship.name}`} onClick={() => { setDeleteError(null); setDeleteTarget({ kind: "scholarship", id: scholarship.id, name: scholarship.name }) }} className="text-muted-foreground hover:text-destructive">
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    </div>
                   )}
                 </div>
               </li>
@@ -434,6 +476,24 @@ export default function UniversityDetailPage() {
       <ScholarshipFormDialog universityId={Number(id)} scholarship={editingScholarship ?? undefined} open={editingScholarship !== null} onOpenChange={(open) => !open && setEditingScholarship(null)} />
       <AddAgreementDialog universityId={Number(id)} programs={programs.data?.data ?? []} open={dialog === "agreement"} onOpenChange={(open) => !open && setDialog(null)} />
       <UniversityFormDialog open={editOpen} onOpenChange={setEditOpen} university={uni} />
+
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete {deleteTarget?.kind}?</DialogTitle>
+            <DialogDescription>
+              “{deleteTarget?.name}” will be removed from the catalog. Existing records that reference it are unaffected.
+            </DialogDescription>
+          </DialogHeader>
+          {deleteError && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{deleteError}</p>}
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button variant="destructive" disabled={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>
+              {deleteMutation.isPending ? "Deleting…" : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
