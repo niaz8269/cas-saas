@@ -29,6 +29,7 @@ import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, listStaff, updateStudent } from "@/features/crm/api"
+import CommunicationsPanel from "@/features/crm/CommunicationsPanel"
 import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
@@ -338,6 +339,10 @@ export default function StudentProfilePage() {
               })}
             </ol>
           </div>
+        </div>
+
+        <div className="mt-4">
+          <CommunicationsPanel studentId={id} />
         </div>
       </div>
 

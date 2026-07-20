@@ -44,6 +44,7 @@ export default function SendMessageDialog({ studentId }: { studentId: string }) 
       setError(null)
       // The send mirrors onto the timeline once the worker delivers it.
       queryClient.invalidateQueries({ queryKey: ["student-timeline", studentId] })
+      queryClient.invalidateQueries({ queryKey: ["student-communications", studentId] })
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Could not queue the message."),
   })

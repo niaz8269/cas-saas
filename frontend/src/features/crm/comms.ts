@@ -1,3 +1,4 @@
+import type { Paginated } from "@/features/catalog/api"
 import { api } from "@/lib/api"
 
 export const COMM_CHANNELS = [
@@ -21,11 +22,22 @@ export interface SendCommunicationPayload {
   body?: string
 }
 
+export interface CommunicationLog {
+  provider: string | null
+  status: string | null
+  error: string | null
+  created_at: string | null
+}
+
 export interface CommunicationRow {
   id: number
   channel: string
+  direction?: string
   template: string | null
+  body?: string | null
   status: string
+  sent_by?: string | null
+  logs?: CommunicationLog[]
   created_at: string | null
 }
 
@@ -34,3 +46,6 @@ export const sendCommunication = (studentId: number | string, payload: SendCommu
     method: "POST",
     body: JSON.stringify(payload),
   })
+
+export const listCommunications = (studentId: number | string) =>
+  api<Paginated<CommunicationRow>>(`/students/${studentId}/communications?per_page=50`)
