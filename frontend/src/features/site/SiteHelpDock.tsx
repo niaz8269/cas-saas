@@ -60,23 +60,23 @@ export default function SiteHelpDock() {
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-2">
-          <span className="text-sm leading-tight font-bold tracking-wide text-cas-orange uppercase">We are here<br />to help</span>
+          <span className="text-sm leading-tight font-bold tracking-wide text-cas-red uppercase">We are here<br />to help</span>
           <Divider />
           <div className="flex items-center gap-5">
             {COUNSELLORS.map((c) => (
               <div key={c.name} className="flex flex-col items-center gap-1">
-                <img src={`https://i.pravatar.cc/80?img=${c.img}`} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-orange/80" />
+                <img src={`https://i.pravatar.cc/80?img=${c.img}`} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-red/80" />
                 <span className="text-[11px] text-white/80">{c.name}</span>
               </div>
             ))}
           </div>
 
           <div className="ml-auto flex items-center gap-5">
-            <Link to="/site/study-plan" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-orange">
+            <Link to="/site/study-plan" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
               <CalendarDays className="size-5" /> Get Customized Application Plan
             </Link>
             <Divider />
-            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-orange">
+            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
               <span className="flex size-6 items-center justify-center rounded-full border border-white/50"><MoreHorizontal className="size-3.5" /></span>
               Leave Message
             </button>
@@ -98,7 +98,7 @@ export default function SiteHelpDock() {
           barVisible ? "pointer-events-none translate-x-full opacity-0" : "opacity-100",
         )}
       >
-        <MessageCircle className="size-5 text-cas-orange" />
+        <MessageCircle className="size-5 text-cas-red" />
         <span className="text-[11px] font-semibold tracking-wide">HELP</span>
       </button>
 
@@ -127,7 +127,7 @@ export default function SiteHelpDock() {
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-cas-navy"><Mail className="size-5" /></span>
             <span><span className="block text-sm font-medium text-ink">Email</span><span className="block text-xs text-muted-foreground">{EMAIL}</span></span>
           </a>
-          <Link to="/site/study-plan" onClick={() => setMsgOpen(false)} className="mt-1 block rounded-sm bg-cas-orange px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-cas-orange-600">
+          <Link to="/site/study-plan" onClick={() => setMsgOpen(false)} className="mt-1 block rounded-sm bg-cas-red px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-cas-red-600">
             Get a free study plan →
           </Link>
         </div>

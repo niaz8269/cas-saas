@@ -77,20 +77,20 @@ export default function SiteReviews() {
                 loading="lazy"
                 className={
                   "size-11 rounded-full border-2 object-cover shadow transition-all " +
-                  (active === i ? "z-10 scale-110 border-cas-orange ring-2 ring-cas-orange/40" : "border-white hover:scale-105")
+                  (active === i ? "z-10 scale-110 border-cas-red ring-2 ring-cas-red/40" : "border-white hover:scale-105")
                 }
               />
             </button>
           ))}
 
           {/* Review card (updates on hover/tap) */}
-          <div className="relative z-20 mt-4 max-w-md rounded-sm border-2 border-cas-orange bg-white p-4 shadow-sm sm:absolute sm:top-1/2 sm:left-0 sm:mt-0 sm:-translate-y-1/2">
-            {/* Orange pointer toward the map (desktop) */}
-            <span className="absolute top-1/2 right-0 hidden size-3.5 -translate-y-1/2 translate-x-1/2 rotate-45 border-t-2 border-r-2 border-cas-orange bg-white sm:block" />
+          <div className="relative z-20 mt-4 max-w-md rounded-sm border-2 border-cas-red bg-white p-4 shadow-sm sm:absolute sm:top-1/2 sm:left-0 sm:mt-0 sm:-translate-y-1/2">
+            {/* Accent pointer toward the map (desktop) */}
+            <span className="absolute top-1/2 right-0 hidden size-3.5 -translate-y-1/2 translate-x-1/2 rotate-45 border-t-2 border-r-2 border-cas-red bg-white sm:block" />
             <div className="flex items-center gap-3">
               <img src={pravatar(r.img)} alt="" className="size-14 rounded-sm object-cover" />
               <div>
-                <p className="font-semibold text-cas-orange-600">{r.name}</p>
+                <p className="font-semibold text-cas-red-600">{r.name}</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-cas-navy">
                   <img src={flag(r.code)} alt="" width={20} height={15} className="rounded-[1px] border" />
                   {r.country}
@@ -98,7 +98,7 @@ export default function SiteReviews() {
               </div>
             </div>
             <p className="mt-3 flex gap-2 text-sm text-muted-foreground">
-              <Quote className="size-4 shrink-0 text-cas-orange" />
+              <Quote className="size-4 shrink-0 text-cas-red" />
               <span>{r.quote}</span>
             </p>
           </div>

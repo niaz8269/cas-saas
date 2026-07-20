@@ -122,7 +122,7 @@ export default function SiteFAQ() {
           <h2 className="text-xl font-semibold">Still have questions?</h2>
           <p className="mt-1 text-sm text-white/80">Get a free study plan and a CAS advisor will answer everything for your situation.</p>
         </div>
-        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
+        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
           Get a free study plan <ArrowRight className="size-4" />
         </Link>
       </section>

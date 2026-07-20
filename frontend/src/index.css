@@ -15,15 +15,12 @@
   --cas-navy-700: #0f2a63;
   --cas-navy-50: #eaf0fb;
   --cas-red: #d81f26;
+  --cas-red-600: #b81d24;
   --cas-red-50: #fcebec;
   /* Gold — legacy accent (kept for admin/portal) */
   --cas-gold: #c8a13a;
   --cas-gold-600: #a9832b;
   --cas-gold-50: #f7efd9;
-  /* Orange — the public marketing-site accent (CUCAS-style) */
-  --cas-orange: #f5921e;
-  --cas-orange-600: #d97a0c;
-  --cas-orange-50: #fff2e2;
   --cas-navy-900: #0a1a40;
   --ink: #1f2933;
   --muted-ink: #64748b;
@@ -83,13 +80,11 @@
   --color-cas-navy-700: var(--cas-navy-700);
   --color-cas-navy-50: var(--cas-navy-50);
   --color-cas-red: var(--cas-red);
+  --color-cas-red-600: var(--cas-red-600);
   --color-cas-red-50: var(--cas-red-50);
   --color-cas-gold: var(--cas-gold);
   --color-cas-gold-600: var(--cas-gold-600);
   --color-cas-gold-50: var(--cas-gold-50);
-  --color-cas-orange: var(--cas-orange);
-  --color-cas-orange-600: var(--cas-orange-600);
-  --color-cas-orange-50: var(--cas-orange-50);
   --color-cas-navy-900: var(--cas-navy-900);
   --color-subtle: var(--bg-subtle);
   --color-success: var(--success);

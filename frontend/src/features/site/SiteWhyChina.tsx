@@ -23,7 +23,7 @@ export default function SiteWhyChina() {
   return (
     <div className="space-y-12">
       <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-orange/20 px-3 py-1 text-xs font-medium text-cas-orange-50">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
           <Sparkles className="size-3.5" /> A world-class education
         </span>
         <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Why study in China</h1>
@@ -54,7 +54,7 @@ export default function SiteWhyChina() {
         </div>
       </SiteSection>
 
-      <section className="flex flex-col items-start justify-between gap-4 rounded-sm border bg-cas-orange-50 p-6 sm:flex-row sm:items-center sm:p-8">
+      <section className="flex flex-col items-start justify-between gap-4 rounded-sm border bg-cas-red-50 p-6 sm:flex-row sm:items-center sm:p-8">
         <div>
           <h2 className="text-lg font-semibold text-cas-navy">Ready to explore your options?</h2>
           <p className="mt-1 text-sm text-muted-foreground">Browse programs across our partner universities and find your fit.</p>

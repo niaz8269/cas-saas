@@ -29,7 +29,7 @@ export default function SitePartner() {
   return (
     <div className="space-y-12">
       <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-orange/20 px-3 py-1 text-xs font-medium text-cas-orange-50">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
           For agencies &amp; recruiters
         </span>
         <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Partner with CAS</h1>
@@ -37,7 +37,7 @@ export default function SitePartner() {
           Give your students access to China's top universities through an authorized agent — with a live
           partner portal, competitive commissions and a team that supports you at every step.
         </p>
-        <Link to="/site/contact" className="mt-6 inline-flex h-11 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
+        <Link to="/site/contact" className="mt-6 inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
           Become a partner <ArrowRight className="size-4" />
         </Link>
       </section>
@@ -46,7 +46,7 @@ export default function SitePartner() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {BENEFITS.map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-orange-50 text-cas-orange-600"><Icon className="size-5" /></span>
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-red-50 text-cas-red-600"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -71,7 +71,7 @@ export default function SitePartner() {
           <h2 className="text-xl font-semibold">Ready to work together?</h2>
           <p className="mt-1 text-sm text-white/80">Tell us about your agency and we'll set up your partnership.</p>
         </div>
-        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
+        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
           Become a partner <ArrowRight className="size-4" />
         </Link>
       </section>

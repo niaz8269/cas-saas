@@ -71,7 +71,7 @@ export default function SiteCities() {
                     <Building2 className="size-4 text-cas-navy" />
                     {count > 0 ? `${count} universit${count === 1 ? "y" : "ies"}` : "Explore universities"}
                   </span>
-                  <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-orange-600">
+                  <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600">
                     View <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>

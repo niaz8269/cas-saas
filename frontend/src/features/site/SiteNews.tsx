@@ -56,7 +56,7 @@ export default function SiteNews() {
           {UPDATES.map((u) => (
             <article key={u.title} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="border-transparent bg-cas-orange-50 text-cas-orange-600">{u.tag}</Badge>
+                <Badge variant="outline" className="border-transparent bg-cas-red-50 text-cas-red-600">{u.tag}</Badge>
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays className="size-3.5" /> {u.date}</span>
               </div>
               <h2 className="mt-3 font-semibold text-cas-navy">{u.title}</h2>
@@ -74,7 +74,7 @@ export default function SiteNews() {
           {GUIDES.map(({ icon: Icon, title, body, to }) => (
             <Link key={title} to={to} className="group flex flex-col rounded-sm border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow">
               <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
-              <h3 className="mt-4 font-semibold text-cas-navy group-hover:text-cas-orange-600">{title}</h3>
+              <h3 className="mt-4 font-semibold text-cas-navy group-hover:text-cas-red-600">{title}</h3>
               <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{body}</p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-cas-navy">Read guide <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" /></span>
             </Link>

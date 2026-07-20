@@ -94,7 +94,7 @@ export default function SiteMegaMenu() {
         onKeyDown={(e) => { if (e.key === "Escape") setOpen(false) }}
         className={cn(
           "inline-flex items-center gap-1 rounded-sm px-1.5 py-1.5 transition-colors",
-          open ? "text-cas-orange" : "text-white/85 hover:text-white",
+          open ? "text-cas-red" : "text-white/85 hover:text-white",
         )}
       >
         <Menu className="size-5" />
@@ -110,11 +110,11 @@ export default function SiteMegaMenu() {
           open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-1 opacity-0",
         )}
       >
-        <div className="border-t-2 border-cas-orange bg-card shadow-sm">
+        <div className="border-t-2 border-cas-red bg-card shadow-sm">
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-8 px-4 py-8 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <p className="text-xs font-bold tracking-wider text-cas-orange-600 uppercase">{col.title}</p>
+                <p className="text-xs font-bold tracking-wider text-cas-red-600 uppercase">{col.title}</p>
                 <ul className="mt-3.5 space-y-2.5">
                   {col.links.map(([label, to]) => (
                     <li key={label}>

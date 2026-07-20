@@ -131,7 +131,7 @@ export default function SiteProgramFinder() {
         )}
 
         {programs.map((p) => (
-          <div key={p.id} className="flex flex-col gap-3 rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-orange/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
+          <div key={p.id} className="flex flex-col gap-3 rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-red/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
@@ -141,7 +141,7 @@ export default function SiteProgramFinder() {
                 {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
                 {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {p.duration_months} months</span>}
                 {p.university?.slug && (
-                  <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-orange-600">
+                  <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-red-600">
                     <School className="size-3.5" /> {p.university.name}
                   </Link>
                 )}

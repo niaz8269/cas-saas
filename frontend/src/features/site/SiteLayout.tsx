@@ -57,7 +57,7 @@ function NavItem({ item }: { item: NavItemT }) {
       to={item.to}
       className={({ isActive }) => cn(
         "inline-flex items-center py-1 text-[13px] font-semibold tracking-wide uppercase transition-colors",
-        isActive ? "text-cas-orange" : "text-white/85 hover:text-white",
+        isActive ? "text-cas-red" : "text-white/85 hover:text-white",
       )}
     >
       {item.label}
@@ -80,7 +80,7 @@ function NavItem({ item }: { item: NavItemT }) {
           <ul>
             {item.dropdown.map(([label, to], i) => (
               <li key={label} className={cn("mx-4", i < item.dropdown!.length - 1 && "border-b border-dashed border-gray-200")}>
-                <Link to={to} onClick={() => setOpen(false)} className="block py-2.5 text-sm text-gray-600 transition-colors hover:text-cas-orange-600">
+                <Link to={to} onClick={() => setOpen(false)} className="block py-2.5 text-sm text-gray-600 transition-colors hover:text-cas-red-600">
                   {label}
                 </Link>
               </li>
@@ -131,12 +131,12 @@ export default function SiteLayout() {
 
             <div className="flex items-center gap-3">
               <img src={UK_FLAG} alt="English" width={26} height={20} className="hidden rounded-[2px] shadow-sm sm:block" />
-              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-orange px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cas-orange-600">
+              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cas-red-600">
                 <LogIn className="size-4" /> SIGN IN
               </Link>
               <Link to="/site/news" aria-label="Updates" className="relative hidden text-white/85 transition-colors hover:text-white sm:inline-flex">
                 <Bell className="size-5" />
-                <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-orange px-1 text-[10px] font-bold text-white">6</span>
+                <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-red px-1 text-[10px] font-bold text-white">6</span>
               </Link>
               <button
                 type="button"
@@ -159,7 +159,7 @@ export default function SiteLayout() {
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) => cn(
                     "block rounded-sm px-3 py-2.5 text-sm font-medium",
-                    isActive ? "bg-white/10 text-cas-orange" : "text-white/85 hover:bg-white/10",
+                    isActive ? "bg-white/10 text-cas-red" : "text-white/85 hover:bg-white/10",
                   )}
                 >
                   {item.label}
@@ -193,7 +193,7 @@ export default function SiteLayout() {
                 { icon: Linkedin, label: "LinkedIn" },
               ].map(({ icon: Icon, label }) => (
                 <a key={label} href="https://www.cas.moe" target="_blank" rel="noreferrer" aria-label={label}
-                  className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-orange hover:text-cas-navy">
+                  className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-red hover:text-white">
                   <Icon className="size-4" />
                 </a>
               ))}
@@ -229,7 +229,7 @@ export default function SiteLayout() {
               <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> WhatsApp us</a></li>
             </ul>
-            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-white hover:bg-cas-orange-600">
+            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-red px-4 py-2 text-sm font-semibold text-white hover:bg-cas-red-600">
               Free consultation
             </Link>
           </div>
