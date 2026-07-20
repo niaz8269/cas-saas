@@ -240,7 +240,7 @@ export default function SiteHome() {
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
           <PhotoBanner src="/images/art-3.svg" className="flex min-h-48 items-center justify-center p-6">
-            <GraduationCap className="size-20 text-cas-gold/50" />
+            <GraduationCap className="size-20 text-cas-navy/40" />
           </PhotoBanner>
           <div className="p-6">
             {weekly ? (
@@ -279,7 +279,7 @@ export default function SiteHome() {
           {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
               <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
-                <Icon className="size-9 text-cas-gold/80" />
+                <Icon className="size-9 text-cas-navy/70" />
                 <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">
@@ -302,13 +302,13 @@ export default function SiteHome() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
-              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border border-white/10 bg-white/5 shadow-sm transition-all hover:-translate-y-1 hover:bg-white/10">
+              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
                   <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
                 </PhotoBanner>
                 <div className="p-4">
-                  <h3 className="line-clamp-1 font-semibold text-white group-hover:text-cas-gold">{p.name}</h3>
-                  <p className="mt-0.5 line-clamp-1 text-xs text-white/60">{p.university?.name}</p>
+                  <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-gold-600">{p.name}</h3>
+                  <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
                 </div>
               </Link>
             ))}
@@ -368,29 +368,24 @@ export default function SiteHome() {
         </div>
       </SiteSection>
 
-      {/* ── Reviews ──────────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-3xl p-8 text-white sm:p-12">
-        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('/images/reviews.jpg')" }} />
-        <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 to-cas-navy/88" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
-        <div className="relative">
-          <div className="text-center">
-            <h2 className="font-sans text-2xl font-bold sm:text-3xl">Reviews from our students</h2>
-            <p className="mt-2 text-sm text-white/70">Students from 50+ countries trust CAS with their journey.</p>
-          </div>
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {REVIEWS.map((t) => (
-              <figure key={t.name} className="flex flex-col rounded-sm bg-white/5 p-6 ring-1 ring-white/10 backdrop-blur">
-                <Quote className="size-7 text-cas-gold/50" />
-                <blockquote className="mt-2 flex-1 text-sm text-white/90">"{t.quote}"</blockquote>
-                <figcaption className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4">
-                  <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-gold text-sm font-bold text-cas-navy">{t.name[0]}</span>
-                  <span><span className="block text-sm font-semibold">{t.name}</span><span className="block text-xs text-white/60">{t.detail}</span></span>
-                  <span className="ml-auto"><Stars /></span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      {/* ── Reviews (light) ──────────────────────────────────── */}
+      <section>
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">Reviews from our students</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">Students from 50+ countries trust CAS with their journey.</p>
+        </div>
+        <div className="grid gap-5 lg:grid-cols-3">
+          {REVIEWS.map((t) => (
+            <figure key={t.name} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
+              <Quote className="size-7 text-cas-gold" />
+              <blockquote className="mt-2 flex-1 text-sm text-foreground/90">"{t.quote}"</blockquote>
+              <figcaption className="mt-5 flex items-center gap-3 border-t pt-4">
+                <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-white">{t.name[0]}</span>
+                <span><span className="block text-sm font-semibold text-cas-navy">{t.name}</span><span className="block text-xs text-muted-foreground">{t.detail}</span></span>
+                <span className="ml-auto"><Stars /></span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

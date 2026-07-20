@@ -5,22 +5,36 @@ import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
 
+// Light, varied placeholder tints — photo-ready image areas that read light &
+// colourful like the reference, instead of heavy dark blocks.
+const TONES = [
+  "from-sky-100 to-blue-50",
+  "from-amber-100 to-orange-50",
+  "from-emerald-100 to-teal-50",
+  "from-rose-100 to-pink-50",
+  "from-indigo-100 to-sky-50",
+  "from-violet-100 to-fuchsia-50",
+]
+
+function toneFor(seed: number | string): string {
+  const n = typeof seed === "number" ? seed : Number(String(seed).match(/(\d+)/)?.[1] ?? String(seed).length)
+  return TONES[Math.abs(n) % TONES.length]
+}
+
 const DOT_GRID = {
-  backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
-  backgroundSize: "22px 22px",
+  backgroundImage: "radial-gradient(circle, rgba(20,53,124,0.10) 1px, transparent 1px)",
+  backgroundSize: "18px 18px",
 }
 
 /**
- * A banner that shows an optional background photo layered under the brand
- * navy gradient. If the image file is absent the gradient renders alone —
- * so the site is always "picture-ready" and never looks broken.
+ * A light, colour-tinted image placeholder (photo-ready). If a real cover
+ * image is later supplied it can layer on top; until then the tint + soft dot
+ * texture keeps card image areas light and airy, matching the reference.
  */
 export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
   return (
-    <div className={cn("relative isolate overflow-hidden bg-gradient-to-br from-cas-navy-900 to-cas-navy", className)}>
-      <div className="absolute inset-0 -z-10 bg-cover bg-center" style={{ backgroundImage: `url('${src}')` }} />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-cas-navy/35" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12]" style={DOT_GRID} />
+    <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
+      <div className="pointer-events-none absolute inset-0 opacity-70" style={DOT_GRID} />
       {children}
     </div>
   )
@@ -42,12 +56,11 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
         {u.cover_url ? (
           <img src={u.cover_url} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
-          <div className="relative flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
-            <School className="absolute size-16 text-white/10" />
-            <span className="relative z-10 font-sans text-3xl font-bold tracking-wide text-cas-gold/90">{monogram(u.name)}</span>
+          <div className={cn("relative flex h-full items-center justify-center bg-gradient-to-br", toneFor(u.id))}>
+            <School className="absolute size-16 text-cas-navy/10" />
+            <span className="relative z-10 text-3xl font-bold tracking-wide text-cas-navy/70">{monogram(u.name)}</span>
           </div>
         )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
         {u.moe_listed && (
           <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-gold px-2.5 py-1 text-[11px] font-semibold text-cas-navy shadow-sm">
             <ShieldCheck className="size-3.5" /> MoE Listed
