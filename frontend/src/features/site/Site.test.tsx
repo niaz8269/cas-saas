@@ -120,18 +120,20 @@ it("resets scroll to the top on navigation", () => {
   expect(spy).toHaveBeenCalledWith(0, 0)
 })
 
-it("opens the Explore mega-menu with deep-linked columns", async () => {
+it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async () => {
   const user = userEvent.setup()
   renderWithProviders(<SiteMegaMenu />)
 
-  const trigger = screen.getByRole("button", { name: /Explore/ })
+  const trigger = screen.getByRole("button", { name: /Browse everything/ })
   expect(trigger).toHaveAttribute("aria-expanded", "false")
 
   await user.hover(trigger)
   expect(trigger).toHaveAttribute("aria-expanded", "true")
 
-  expect(screen.getByText("Destinations")).toBeInTheDocument()
-  expect(screen.getByText("Scholarships")).toBeInTheDocument()
+  // All five reference columns are present.
+  for (const col of ["Destinations", "Universities", "Programs", "Scholarships", "About"]) {
+    expect(screen.getByText(col)).toBeInTheDocument()
+  }
   expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS")
   expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1")
 })

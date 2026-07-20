@@ -1,4 +1,4 @@
-import { ChevronDown, LayoutGrid } from "lucide-react"
+import { ChevronDown, Menu } from "lucide-react"
 import { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
@@ -66,72 +66,87 @@ const COLUMNS: Col[] = [
   },
 ]
 
-/** CUCAS-style hover mega-menu: a full multi-column dropdown that animates in. */
+/**
+ * CUCAS-style mega-menu: a hamburger (☰) trigger in the navbar that reveals a
+ * full-width, 5-column dropdown on hover (click/keyboard-friendly too). The
+ * panel is anchored to the sticky <header>, so it spans the full width like the
+ * reference; hover intent is shared between the trigger and the panel.
+ */
 export default function SiteMegaMenu() {
   const [open, setOpen] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true) }
-  const hide = () => { timer.current = setTimeout(() => setOpen(false), 120) }
+  const hide = () => { timer.current = setTimeout(() => setOpen(false), 140) }
 
   return (
-    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+    <>
       <button
         type="button"
         aria-haspopup="true"
         aria-expanded={open}
+        aria-label="Browse everything"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+        onFocus={show}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => { if (e.key === "Escape") setOpen(false) }}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors",
+          "inline-flex items-center gap-1 rounded-md px-2 py-1.5 transition-colors",
           open ? "text-cas-navy" : "text-muted-foreground hover:text-cas-navy",
         )}
       >
-        <LayoutGrid className="size-4" /> Explore
-        <ChevronDown className={cn("size-4 transition-transform duration-200", open && "rotate-180")} />
+        <Menu className="size-5" />
+        <ChevronDown className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")} />
       </button>
 
+      {/* Full-width panel, anchored to the sticky header via inset-x-0 + top-full. */}
       <div
+        onMouseEnter={show}
+        onMouseLeave={hide}
         className={cn(
-          "absolute top-full left-1/2 z-40 mt-3 w-[min(94vw,58rem)] origin-top -translate-x-1/2 overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-200",
-          open ? "visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
+          "absolute inset-x-0 top-full z-40 origin-top transition-all duration-200",
+          open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-1 opacity-0",
         )}
       >
-        <div className="h-1 bg-cas-gold" />
-        <div className="grid grid-cols-2 gap-x-8 gap-y-8 p-7 sm:grid-cols-3 lg:grid-cols-5">
-          {COLUMNS.map((col) => (
-            <div key={col.title}>
-              <p className="text-xs font-bold tracking-wider text-cas-gold-600 uppercase">{col.title}</p>
-              <ul className="mt-3.5 space-y-2.5">
-                {col.links.map(([label, to]) => (
-                  <li key={label}>
-                    <Link
-                      to={to}
-                      onClick={() => setOpen(false)}
-                      className="text-sm text-muted-foreground transition-colors hover:text-cas-navy"
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to={col.checkAll.to}
-                onClick={() => setOpen(false)}
-                className="mt-3.5 inline-block text-xs font-semibold text-cas-navy hover:underline"
-              >
-                {col.checkAll.label} »
+        <div className="border-t-2 border-cas-gold bg-card shadow-2xl">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-8 px-4 py-8 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
+            {COLUMNS.map((col) => (
+              <div key={col.title}>
+                <p className="text-xs font-bold tracking-wider text-cas-gold-600 uppercase">{col.title}</p>
+                <ul className="mt-3.5 space-y-2.5">
+                  {col.links.map(([label, to]) => (
+                    <li key={label}>
+                      <Link
+                        to={to}
+                        onClick={() => setOpen(false)}
+                        className="text-sm text-muted-foreground transition-colors hover:text-cas-navy"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={col.checkAll.to}
+                  onClick={() => setOpen(false)}
+                  className="mt-3.5 inline-block text-xs font-semibold text-cas-navy hover:underline"
+                >
+                  {col.checkAll.label} »
+                </Link>
+              </div>
+            ))}
+          </div>
+          <div className="border-t bg-subtle">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 text-sm sm:px-6">
+              <span className="text-muted-foreground">Not sure where to start?</span>
+              <Link to="/site/contact" onClick={() => setOpen(false)} className="font-semibold text-cas-navy hover:underline">
+                Get a free consultation »
               </Link>
             </div>
-          ))}
-        </div>
-        <div className="flex items-center justify-between gap-3 border-t bg-subtle px-7 py-3 text-sm">
-          <span className="text-muted-foreground">Not sure where to start?</span>
-          <Link to="/site/contact" onClick={() => setOpen(false)} className="font-semibold text-cas-navy hover:underline">
-            Get a free consultation »
-          </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
