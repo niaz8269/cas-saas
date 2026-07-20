@@ -1,9 +1,14 @@
 import {
   ArrowRight,
+  Award,
   BookOpen,
+  Clock,
+  Globe,
   GraduationCap,
   Headphones,
+  HeartHandshake,
   PlaneLanding,
+  ShieldCheck,
   Stamp,
   Wallet,
   type LucideIcon,
@@ -12,6 +17,15 @@ import { Link } from "react-router-dom"
 
 import { SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
+
+const WHY: { icon: LucideIcon; title: string; body: string }[] = [
+  { icon: ShieldCheck, title: "Official authorized agent", body: "Working directly with universities since 2012 — your application is in trusted, accountable hands." },
+  { icon: Wallet, title: "Free to start, clear after", body: "Your consultation and study plan are free; any service fees are quoted up front with no hidden charges." },
+  { icon: HeartHandshake, title: "One dedicated advisor", body: "A single point of contact guides you from your first enquiry through to arrival." },
+  { icon: Clock, title: "Fast, complete applications", body: "We prepare everything correctly the first time, so you don't lose an intake to resubmissions." },
+  { icon: Award, title: "Strong admission record", body: "A proven track record of getting students admitted and visa-ready." },
+  { icon: Globe, title: "Support after you arrive", body: "Airport pickup, registration and settling-in help — we don't stop at the offer letter." },
+]
 
 const SERVICES: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: GraduationCap, title: "Admission service", body: "We shortlist the right universities and programs, prepare your file and submit a complete, correct application on your behalf." },
@@ -46,6 +60,28 @@ export default function SiteServices() {
           {SERVICES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-xl border bg-card p-6 shadow-sm">
               <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-gold-50 text-cas-gold-600"><Icon className="size-5" /></span>
+              <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
+            </div>
+          ))}
+        </div>
+      </SiteSection>
+
+      {/* Trust stats */}
+      <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {[["13+", "Years of experience"], ["13K+", "Students placed"], ["200+", "University partners"], ["98%", "Visa success rate"]].map(([v, l]) => (
+          <div key={l} className="rounded-xl border bg-card p-5 text-center shadow-sm">
+            <p className="text-3xl font-bold text-cas-navy tabular-nums">{v}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{l}</p>
+          </div>
+        ))}
+      </section>
+
+      <SiteSection title="Why choose CAS" subtitle="Trusted, transparent support at every step of your journey to China.">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {WHY.map(({ icon: Icon, title, body }) => (
+            <div key={title} className="rounded-xl border bg-card p-6 shadow-sm">
+              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
