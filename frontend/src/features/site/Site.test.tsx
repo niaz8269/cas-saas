@@ -227,7 +227,8 @@ it("renders the contact page with details and the enquiry form", () => {
   expect(screen.getByRole("button", { name: /Send enquiry/ })).toBeInTheDocument()
 })
 
-it("renders a university detail with programs, scholarships and deadline", async () => {
+it("renders a tabbed university detail with programs, scholarships and deadline", async () => {
+  const user = userEvent.setup()
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(DETAIL)))
 
   renderWithProviders(
@@ -237,14 +238,24 @@ it("renders a university detail with programs, scholarships and deadline", async
     { route: "/site/universities/jilin-medical-university" },
   )
 
+  // Fact header + Overview tab (default).
   expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
   expect(screen.getByText("China MoE-listed")).toBeInTheDocument()
-  expect(screen.getByText("MBBS")).toBeInTheDocument()
-  expect(screen.getByText("English")).toBeInTheDocument()
-  expect(screen.getByText("Belt & Road Scholarship")).toBeInTheDocument()
-  expect(screen.getByText("IELTS 6.0")).toBeInTheDocument()
   expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
-  // Future-dated intake shows a live countdown.
+  // Future-dated intake shows a live countdown; apply link in the header.
   expect(screen.getByText(/days left/)).toBeInTheDocument()
   expect(screen.getByRole("link", { name: /Apply now/ })).toHaveAttribute("href", "https://apply.jlmu.cn")
+
+  // Programs tab.
+  await user.click(screen.getByRole("button", { name: /Programs/ }))
+  expect(screen.getByText("MBBS")).toBeInTheDocument()
+  expect(screen.getByText("English")).toBeInTheDocument()
+
+  // Scholarships tab.
+  await user.click(screen.getByRole("button", { name: /Scholarships/ }))
+  expect(screen.getByText("Belt & Road Scholarship")).toBeInTheDocument()
+
+  // Admission tab.
+  await user.click(screen.getByRole("button", { name: /Admission/ }))
+  expect(screen.getByText("IELTS 6.0")).toBeInTheDocument()
 })
