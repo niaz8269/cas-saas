@@ -61,6 +61,29 @@ it("fires a template test send and confirms delivery", async () => {
   )
 })
 
+it("toggles an automation rule off", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if (url.includes("/automation-rules/") && init?.method === "PATCH") {
+      return Promise.resolve(jsonResponse({ data: { ...RULES.data[0], is_active: false } }))
+    }
+
+    return Promise.resolve(jsonResponse(url.includes("message-templates") ? TEMPLATES : RULES))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<SettingsPage />)
+
+  const toggle = await screen.findByRole("switch", { name: /Disable Email the student/ })
+  expect(toggle).toHaveAttribute("aria-checked", "true")
+  await user.click(toggle)
+
+  const patch = fetchMock.mock.calls.find(([u, i]) => String(u).includes("/automation-rules/1") && (i?.method === "PATCH"))
+  expect(patch).toBeTruthy()
+  expect(JSON.parse((patch![1] as RequestInit).body as string)).toEqual({ is_active: false })
+})
+
 it("shows access denied on 403", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ message: "no", code: "FORBIDDEN" }, 403)))
 

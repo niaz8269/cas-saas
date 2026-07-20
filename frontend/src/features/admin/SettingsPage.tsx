@@ -1,14 +1,16 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Bot, Mail, MessageSquare, Server, ShieldAlert, Zap } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   listAutomationRules,
   listMessageTemplates,
+  updateAutomationRule,
   type AutomationRule,
 } from "@/features/admin/api"
 import TemplateTestDialog from "@/features/admin/TemplateTestDialog"
+import { useCan } from "@/features/auth/useCan"
+import { cn } from "@/lib/utils"
 
 function Section({ icon: Icon, title, description, children }: { icon: typeof Zap; title: string; description: string; children: React.ReactNode }) {
   return (
@@ -37,8 +39,16 @@ function ruleSummary(rule: AutomationRule): string {
 }
 
 export default function SettingsPage() {
+  const can = useCan()
+  const canManage = can("settings.manage.global")
+  const queryClient = useQueryClient()
   const rules = useQuery({ queryKey: ["automation-rules"], queryFn: listAutomationRules })
   const templates = useQuery({ queryKey: ["message-templates"], queryFn: listMessageTemplates })
+
+  const toggleRule = useMutation({
+    mutationFn: ({ id, is_active }: { id: number; is_active: boolean }) => updateAutomationRule(id, { is_active }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["automation-rules"] }),
+  })
 
   const denied = rules.isError || templates.isError
 
@@ -59,21 +69,47 @@ export default function SettingsPage() {
         <p className="mt-1 text-sm text-muted-foreground">Automations, message templates and system configuration.</p>
       </div>
 
-      <Section icon={Zap} title="Automations" description="Rules that fire on domain events (read-only).">
+      <Section icon={Zap} title="Automations" description="Rules that fire on domain events. Toggle a rule to enable or pause it.">
         {rules.isPending && <Skeleton className="h-16 w-full" />}
         {rules.data && rules.data.data.length === 0 && <p className="text-sm text-muted-foreground">No automations configured.</p>}
         <ul className="divide-y">
-          {rules.data?.data.map((rule) => (
-            <li key={rule.id} className="flex items-start justify-between gap-3 py-3">
-              <div>
-                <p className="text-sm font-medium">{rule.name}</p>
-                <p className="text-xs text-muted-foreground">{ruleSummary(rule)}</p>
-              </div>
-              <Badge variant="outline" className={rule.is_active ? "border-transparent bg-green-100 text-green-800" : "border-transparent bg-muted text-muted-foreground"}>
-                {rule.is_active ? "Active" : "Off"}
-              </Badge>
-            </li>
-          ))}
+          {rules.data?.data.map((rule) => {
+            const busy = toggleRule.isPending && toggleRule.variables?.id === rule.id
+
+            return (
+              <li key={rule.id} className="flex items-center justify-between gap-3 py-3">
+                <div>
+                  <p className="text-sm font-medium">{rule.name}</p>
+                  <p className="text-xs text-muted-foreground">{ruleSummary(rule)}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={cn("text-xs font-medium", rule.is_active ? "text-green-700" : "text-muted-foreground")}>
+                    {rule.is_active ? "Active" : "Off"}
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={rule.is_active}
+                    aria-label={`${rule.is_active ? "Disable" : "Enable"} ${rule.name}`}
+                    disabled={!canManage || busy}
+                    onClick={() => toggleRule.mutate({ id: rule.id, is_active: !rule.is_active })}
+                    className={cn(
+                      "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:ring-offset-2 focus-visible:outline-none",
+                      rule.is_active ? "bg-cas-navy" : "bg-muted-foreground/30",
+                      (!canManage || busy) && "cursor-not-allowed opacity-60",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "inline-block size-4 transform rounded-full bg-white shadow transition-transform",
+                        rule.is_active ? "translate-x-4" : "translate-x-0.5",
+                      )}
+                    />
+                  </button>
+                </div>
+              </li>
+            )
+          })}
         </ul>
       </Section>
 

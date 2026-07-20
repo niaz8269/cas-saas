@@ -153,6 +153,8 @@ Route::prefix('v1')->group(function () {
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
+        Route::patch('automation-rules/{automationRule}', [AutomationRuleController::class, 'update'])
+            ->middleware('permission:settings.manage.global,staff');
         Route::get('message-templates', [MessageTemplateController::class, 'index'])
             ->middleware('permission:settings.manage.global,staff');
         Route::post('message-templates/{template}/test', [MessageTemplateController::class, 'test'])

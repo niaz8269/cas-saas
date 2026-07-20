@@ -101,6 +101,12 @@ export interface MessageTemplate {
 
 export const listAutomationRules = () => api<{ data: AutomationRule[] }>("/automation-rules")
 
+export const updateAutomationRule = (id: number, payload: { is_active: boolean }) =>
+  api<{ data: AutomationRule }>(`/automation-rules/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  })
+
 export const listMessageTemplates = () => api<{ data: MessageTemplate[] }>("/message-templates")
 
 export interface TemplateTestResult {
