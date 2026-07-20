@@ -45,6 +45,31 @@ export const listUsers = (params: { q?: string; status?: string; page?: number }
     "page": params.page && params.page > 1 ? params.page : undefined,
   })}`)
 
+export interface UserWritePayload {
+  name: string
+  email: string
+  phone?: string | null
+  password?: string
+  branch_id?: number | null
+  department_id?: number | null
+  status?: string
+  roles?: string[]
+}
+
+export const createUser = (payload: UserWritePayload) =>
+  api<{ data: StaffUser }>("/users", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateUser = (id: number, payload: Partial<UserWritePayload>) =>
+  api<{ data: StaffUser }>(`/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const listRoles = () => api<{ data: { id: number; name: string }[] }>("/roles")
+
+export const listBranches = () =>
+  api<{ data: { id: number; name: string; code: string }[] }>("/branches")
+
+export const listDepartments = () =>
+  api<{ data: { id: number; name: string; code: string }[] }>("/departments")
+
 export const listAuditLogs = (params: { action?: string; entity?: string; page?: number } = {}) =>
   api<AuditList>(`/audit-logs${qs({
     "filter[action]": params.action,

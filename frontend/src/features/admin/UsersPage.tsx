@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Search, ShieldAlert } from "lucide-react"
+import { Pencil, Plus, Search, ShieldAlert } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -21,8 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { listAuditLogs, listUsers, type AuditEntry } from "@/features/admin/api"
+import { listAuditLogs, listUsers, type AuditEntry, type StaffUser } from "@/features/admin/api"
+import UserFormDialog from "@/features/admin/UserFormDialog"
+import { isSuperAdmin } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
+import { useAuthStore } from "@/stores/auth"
 
 const ACTION_BADGE: Record<string, string> = {
   create: "bg-green-100 text-green-800",
@@ -67,6 +70,13 @@ function StaffTable() {
   const [q, setQ] = useState("")
   const [status, setStatus] = useState("all")
   const [page, setPage] = useState(1)
+  const [formOpen, setFormOpen] = useState(false)
+  const [editing, setEditing] = useState<StaffUser | null>(null)
+  const currentUser = useAuthStore((s) => s.user)
+  const superAdmin = isSuperAdmin(currentUser)
+
+  const openCreate = () => { setEditing(null); setFormOpen(true) }
+  const openEdit = (user: StaffUser) => { setEditing(user); setFormOpen(true) }
 
   useEffect(() => {
     const t = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
@@ -101,6 +111,9 @@ function StaffTable() {
             <SelectItem value="suspended">Suspended</SelectItem>
           </SelectContent>
         </Select>
+        <Button className="ml-auto" onClick={openCreate}>
+          <Plus className="size-4" /> New user
+        </Button>
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
@@ -113,29 +126,47 @@ function StaffTable() {
               <TableHead>Department</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Last login</TableHead>
+              <TableHead className="w-16 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isPending && Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i}>{Array.from({ length: 6 }).map((_, c) => <TableCell key={c}><Skeleton className="h-4 w-24" /></TableCell>)}</TableRow>
+              <TableRow key={i}>{Array.from({ length: 7 }).map((_, c) => <TableCell key={c}><Skeleton className="h-4 w-24" /></TableCell>)}</TableRow>
             ))}
-            {users.map((u) => (
-              <TableRow key={u.id}>
-                <TableCell>
-                  <p className="font-medium">{u.name}</p>
-                  <p className="text-xs text-muted-foreground">{u.email}</p>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-wrap gap-1">
-                    {u.roles.map((r) => <Badge key={r} variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{r}</Badge>)}
-                  </div>
-                </TableCell>
-                <TableCell className="text-muted-foreground">{u.branch?.code ?? "—"}</TableCell>
-                <TableCell className="text-muted-foreground">{u.department?.name ?? "—"}</TableCell>
-                <TableCell><Badge variant="outline" className={cn("border-transparent capitalize", STATUS_BADGE[u.status])}>{u.status}</Badge></TableCell>
-                <TableCell className="text-muted-foreground tabular-nums">{u.last_login_at ? new Date(u.last_login_at).toLocaleDateString() : "Never"}</TableCell>
-              </TableRow>
-            ))}
+            {users.map((u) => {
+              const isProtected = u.roles.includes("Super Admin") && !superAdmin
+
+              return (
+                <TableRow key={u.id}>
+                  <TableCell>
+                    <p className="font-medium">{u.name}</p>
+                    <p className="text-xs text-muted-foreground">{u.email}</p>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {u.roles.map((r) => <Badge key={r} variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{r}</Badge>)}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">{u.branch?.code ?? "—"}</TableCell>
+                  <TableCell className="text-muted-foreground">{u.department?.name ?? "—"}</TableCell>
+                  <TableCell><Badge variant="outline" className={cn("border-transparent capitalize", STATUS_BADGE[u.status])}>{u.status}</Badge></TableCell>
+                  <TableCell className="text-muted-foreground tabular-nums">{u.last_login_at ? new Date(u.last_login_at).toLocaleDateString() : "Never"}</TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8"
+                      onClick={() => openEdit(u)}
+                      disabled={isProtected}
+                      title={isProtected ? "Only a Super Admin can edit this account" : "Edit user"}
+                      aria-label={`Edit ${u.name}`}
+                    >
+                      <Pencil className="size-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
         {meta && meta.total > 0 && meta.last_page > 1 && (
@@ -148,6 +179,8 @@ function StaffTable() {
           </div>
         )}
       </div>
+
+      <UserFormDialog open={formOpen} onOpenChange={setFormOpen} user={editing} />
     </div>
   )
 }

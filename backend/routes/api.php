@@ -31,6 +31,9 @@ use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\BranchController;
+use App\Http\Controllers\Api\V1\DepartmentController;
+use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\StaffController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TaskController;
@@ -127,13 +130,22 @@ Route::prefix('v1')->group(function () {
         // Reference data (any staff)
         Route::get('countries', [CountryController::class, 'index']);
         Route::get('staff', [StaffController::class, 'index']);
+        Route::get('branches', [BranchController::class, 'index']);
+        Route::get('departments', [DepartmentController::class, 'index']);
 
         // Analytics
         Route::get('search', [SearchController::class, 'index']);
         Route::get('dashboards/executive', [DashboardController::class, 'executive']);
         Route::get('reports/performance', [DashboardController::class, 'performance']);
 
+        // User & access administration
         Route::get('users', [UserController::class, 'index'])
+            ->middleware('permission:users.manage.global,staff');
+        Route::post('users', [UserController::class, 'store'])
+            ->middleware('permission:users.manage.global,staff');
+        Route::patch('users/{user}', [UserController::class, 'update'])
+            ->middleware('permission:users.manage.global,staff');
+        Route::get('roles', [RoleController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
 
         // Automation rules + message templates (read-only; admin settings)
