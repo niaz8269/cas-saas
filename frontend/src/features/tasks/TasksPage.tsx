@@ -59,6 +59,7 @@ export default function TasksPage() {
   const [q, setQ] = useState("")
   const [page, setPage] = useState(1)
   const [newOpen, setNewOpen] = useState(false)
+  const [editing, setEditing] = useState<TaskItem | null>(null)
 
   useEffect(() => {
     const t = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
@@ -133,7 +134,12 @@ export default function TasksPage() {
             )}
 
             {tasks.map((task) => (
-              <TaskRow key={task.id} task={task} onSetStatus={(status) => setStatus.mutate({ id: task.id, status })} />
+              <TaskRow
+                key={task.id}
+                task={task}
+                onSetStatus={(status) => setStatus.mutate({ id: task.id, status })}
+                onEdit={() => setEditing(task)}
+              />
             ))}
           </TableBody>
         </Table>
@@ -149,12 +155,13 @@ export default function TasksPage() {
         )}
       </div>
 
-      <NewTaskDialog open={newOpen} onOpenChange={setNewOpen} />
+      <TaskDialog open={newOpen} onOpenChange={setNewOpen} />
+      <TaskDialog open={editing !== null} onOpenChange={(o) => !o && setEditing(null)} task={editing} />
     </div>
   )
 }
 
-function TaskRow({ task, onSetStatus }: { task: TaskItem; onSetStatus: (status: string) => void }) {
+function TaskRow({ task, onSetStatus, onEdit }: { task: TaskItem; onSetStatus: (status: string) => void; onEdit: () => void }) {
   const done = task.status === "done"
   const relatedTo = task.related && RELATED_ROUTE[task.related.type]
 
@@ -174,9 +181,15 @@ function TaskRow({ task, onSetStatus }: { task: TaskItem; onSetStatus: (status: 
         </button>
       </TableCell>
       <TableCell>
-        <p className={cn("font-medium", done && "line-through")}>{task.title}</p>
+        <button
+          type="button"
+          onClick={onEdit}
+          className={cn("text-left font-medium hover:text-cas-navy hover:underline", done && "line-through")}
+        >
+          {task.title}
+        </button>
         {task.student && (
-          <Link to={`/students/${task.student.id}`} className="text-xs text-cas-navy hover:underline">{task.student.name}</Link>
+          <Link to={`/students/${task.student.id}`} className="block text-xs text-cas-navy hover:underline">{task.student.name}</Link>
         )}
       </TableCell>
       <TableCell className="text-muted-foreground">
@@ -201,8 +214,9 @@ function TaskRow({ task, onSetStatus }: { task: TaskItem; onSetStatus: (status: 
   )
 }
 
-function NewTaskDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+function TaskDialog({ open, onOpenChange, task }: { open: boolean; onOpenChange: (open: boolean) => void; task?: TaskItem | null }) {
   const queryClient = useQueryClient()
+  const isEdit = Boolean(task)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [dueAt, setDueAt] = useState("")
@@ -210,28 +224,33 @@ function NewTaskDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (open) { setTitle(""); setDescription(""); setDueAt(""); setPriority("normal"); setError(null) }
-  }, [open])
+    if (open) {
+      setTitle(task?.title ?? "")
+      setDescription(task?.description ?? "")
+      setDueAt(task?.due_at ? task.due_at.slice(0, 10) : "")
+      setPriority(task?.priority ?? "normal")
+      setError(null)
+    }
+  }, [open, task])
 
   const mutation = useMutation({
-    mutationFn: () => createTask({
-      title: title.trim(),
-      description: description.trim() || null,
-      due_at: dueAt || null,
-      priority,
-    }),
+    mutationFn: () => {
+      const payload = { title: title.trim(), description: description.trim() || null, due_at: dueAt || null, priority }
+
+      return isEdit ? updateTask(task!.id, payload) : createTask(payload)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] })
       onOpenChange(false)
     },
-    onError: (e) => setError(e instanceof ApiError ? e.message : "Could not create the task."),
+    onError: (e) => setError(e instanceof ApiError ? e.message : "Could not save the task."),
   })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New task</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit task" : "New task"}</DialogTitle>
         </DialogHeader>
 
         {error && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>}
@@ -264,7 +283,7 @@ function NewTaskDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
         <DialogFooter>
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button type="button" disabled={!title.trim() || mutation.isPending} onClick={() => { setError(null); mutation.mutate() }}>
-            {mutation.isPending ? "Adding…" : "Add task"}
+            {mutation.isPending ? "Saving…" : isEdit ? "Save changes" : "Add task"}
           </Button>
         </DialogFooter>
       </DialogContent>
