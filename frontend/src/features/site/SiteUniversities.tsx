@@ -49,7 +49,7 @@ export default function SiteUniversities() {
         subtitle="Browse Ministry of Education–listed universities and explore their programs, intakes and scholarships."
       />
 
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border bg-card p-4 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 rounded-sm border bg-card p-4 shadow-sm">
         <div className="relative flex-1 sm:max-w-md">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -64,7 +64,7 @@ export default function SiteUniversities() {
           value={city}
           onChange={(e) => { setCity(e.target.value); setPage(1) }}
           aria-label="Filter by city"
-          className="h-11 rounded-lg border bg-background px-3 text-sm text-foreground"
+          className="h-11 rounded-sm border bg-background px-3 text-sm text-foreground"
         >
           <option value="">All cities</option>
           {cities.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -74,7 +74,7 @@ export default function SiteUniversities() {
           onClick={() => { setMoe((v) => !v); setPage(1) }}
           aria-pressed={moe}
           className={cn(
-            "inline-flex h-11 items-center gap-2 rounded-lg border px-4 text-sm font-medium transition-colors",
+            "inline-flex h-11 items-center gap-2 rounded-sm border px-4 text-sm font-medium transition-colors",
             moe ? "border-cas-gold bg-cas-gold-50 text-cas-gold-600" : "bg-background text-muted-foreground hover:text-foreground",
           )}
         >
@@ -83,16 +83,16 @@ export default function SiteUniversities() {
       </div>
 
       {isError && (
-        <div className="rounded-xl border bg-card p-8 text-center shadow-sm">
+        <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
           <p className="text-sm text-destructive">Couldn't load universities right now.</p>
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {isPending && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
+        {isPending && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-sm" />)}
 
         {!isPending && universities.length === 0 && !isError && (
-          <div className="col-span-full rounded-xl border bg-card p-12 text-center shadow-sm">
+          <div className="col-span-full rounded-sm border bg-card p-12 text-center shadow-sm">
             <School className="mx-auto size-8 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">No universities found</p>
             <p className="mt-1 text-sm text-muted-foreground">Try a different search or clear the filter.</p>

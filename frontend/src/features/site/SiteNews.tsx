@@ -54,7 +54,7 @@ export default function SiteNews() {
       <SiteSection title="Latest updates">
         <div className="grid gap-4 lg:grid-cols-3">
           {UPDATES.map((u) => (
-            <article key={u.title} className="flex flex-col rounded-xl border bg-card p-6 shadow-sm">
+            <article key={u.title} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="border-transparent bg-cas-gold-50 text-cas-gold-600">{u.tag}</Badge>
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays className="size-3.5" /> {u.date}</span>
@@ -72,8 +72,8 @@ export default function SiteNews() {
       <SiteSection title="Guides &amp; resources" subtitle="Everything you need to know to plan your studies in China.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {GUIDES.map(({ icon: Icon, title, body, to }) => (
-            <Link key={title} to={to} className="group flex flex-col rounded-xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
+            <Link key={title} to={to} className="group flex flex-col rounded-sm border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow">
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy group-hover:text-cas-gold-600">{title}</h3>
               <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{body}</p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-cas-navy">Read guide <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" /></span>

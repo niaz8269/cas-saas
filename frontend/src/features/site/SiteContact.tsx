@@ -27,7 +27,7 @@ export default function SiteContact() {
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Contact details */}
         <div className="space-y-4 lg:col-span-2">
-          <div className="rounded-2xl border bg-card p-6 shadow-sm">
+          <div className="rounded-sm border bg-card p-6 shadow-sm">
             <h2 className="font-semibold text-cas-navy">Talk to us</h2>
             <ul className="mt-4 space-y-4 text-sm">
               <li className="flex items-start gap-3">
@@ -45,7 +45,7 @@ export default function SiteContact() {
             </ul>
           </div>
 
-          <div className="rounded-2xl border bg-card p-6 shadow-sm">
+          <div className="rounded-sm border bg-card p-6 shadow-sm">
             <h2 className="font-semibold text-cas-navy">Offices</h2>
             <ul className="mt-4 space-y-3 text-sm">
               {OFFICES.map((o) => (

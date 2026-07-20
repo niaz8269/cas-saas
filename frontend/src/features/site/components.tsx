@@ -35,7 +35,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
   return (
     <Link
       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-      className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-cas-gold/40"
+      className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:ring-cas-gold/40"
     >
       {/* Cover — a designed gradient banner when no image is available */}
       <div className="relative h-36 overflow-hidden">
@@ -44,7 +44,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
         ) : (
           <div className="relative flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 to-cas-navy">
             <School className="absolute size-16 text-white/10" />
-            <span className="relative z-10 font-serif text-3xl font-bold tracking-wide text-cas-gold/90">{monogram(u.name)}</span>
+            <span className="relative z-10 font-sans text-3xl font-bold tracking-wide text-cas-gold/90">{monogram(u.name)}</span>
           </div>
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
@@ -58,7 +58,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
           {u.logo_url && (
-            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="size-11 shrink-0 rounded-lg border bg-white object-contain p-0.5 shadow-sm" />
+            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="size-11 shrink-0 rounded-sm border bg-white object-contain p-0.5 shadow-sm" />
           )}
           <div className="min-w-0">
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-gold-600">{u.name}</h3>
@@ -91,7 +91,7 @@ export function SitePageHeader({ eyebrow, title, subtitle, action }: {
   action?: ReactNode
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-cas-navy-50 via-card to-card p-6 shadow-sm sm:p-8">
+    <div className="relative overflow-hidden rounded-sm border bg-gradient-to-br from-cas-navy-50 via-card to-card p-6 shadow-sm sm:p-8">
       <div className="pointer-events-none absolute -top-12 -right-12 size-44 rounded-full bg-cas-gold/10 blur-2xl" />
       <div className="relative flex flex-wrap items-end justify-between gap-4">
         <div>

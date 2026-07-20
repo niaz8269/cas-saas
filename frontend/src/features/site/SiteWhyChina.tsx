@@ -22,7 +22,7 @@ export default function SiteWhyChina() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-2xl bg-cas-navy p-8 text-white shadow-sm sm:p-12">
+      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-gold/20 px-3 py-1 text-xs font-medium text-cas-gold-50">
           <Sparkles className="size-3.5" /> A world-class education
         </span>
@@ -35,7 +35,7 @@ export default function SiteWhyChina() {
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[["500K+", "International students"], ["English", "Taught programs"], ["Scholarships", "Widely available"], ["Global", "Degree recognition"]].map(([v, l]) => (
-          <div key={l} className="rounded-xl border bg-card p-5 text-center shadow-sm">
+          <div key={l} className="rounded-sm border bg-card p-5 text-center shadow-sm">
             <p className="text-2xl font-bold text-cas-navy">{v}</p>
             <p className="mt-1 text-xs text-muted-foreground">{l}</p>
           </div>
@@ -45,8 +45,8 @@ export default function SiteWhyChina() {
       <SiteSection title="Reasons students choose China" subtitle="What makes it one of the smartest study-abroad decisions today.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {REASONS.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-xl border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
+            <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -54,12 +54,12 @@ export default function SiteWhyChina() {
         </div>
       </SiteSection>
 
-      <section className="flex flex-col items-start justify-between gap-4 rounded-2xl border bg-cas-gold-50 p-6 sm:flex-row sm:items-center sm:p-8">
+      <section className="flex flex-col items-start justify-between gap-4 rounded-sm border bg-cas-gold-50 p-6 sm:flex-row sm:items-center sm:p-8">
         <div>
           <h2 className="text-lg font-semibold text-cas-navy">Ready to explore your options?</h2>
           <p className="mt-1 text-sm text-muted-foreground">Browse programs across our partner universities and find your fit.</p>
         </div>
-        <Link to="/site/programs" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-md bg-cas-navy px-6 text-sm font-semibold text-white hover:bg-cas-navy-700">
+        <Link to="/site/programs" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-semibold text-white hover:bg-cas-navy-700">
           Find your program <ArrowRight className="size-4" />
         </Link>
       </section>

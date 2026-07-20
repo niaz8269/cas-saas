@@ -107,7 +107,7 @@ function Countdown() {
   return (
     <div className="flex gap-2">
       {parts.map(([v, l]) => (
-        <div key={l} className="flex w-12 flex-col items-center rounded-lg bg-cas-navy px-1 py-1.5 text-white">
+        <div key={l} className="flex w-12 flex-col items-center rounded-sm bg-cas-navy px-1 py-1.5 text-white">
           <span className="text-lg font-bold tabular-nums">{String(v).padStart(2, "0")}</span>
           <span className="text-[10px] text-white/70 uppercase">{l}</span>
         </div>
@@ -153,7 +153,7 @@ export default function SiteHome() {
   }
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12">
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="site-bleed relative -mt-8 overflow-hidden px-4 py-14 text-white sm:py-20">
         {/* Optional hero photo — drop /public/images/hero.jpg; the gradient shows until then. */}
@@ -161,7 +161,7 @@ export default function SiteHome() {
         <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 via-cas-navy/85 to-cas-navy-700/80" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-          <span className="font-serif text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
+          <span className="font-sans text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
         </div>
         <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-gold/15 blur-3xl" />
 
@@ -170,7 +170,7 @@ export default function SiteHome() {
             <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
               <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
             </span>
-            <h1 className="mt-5 font-serif text-4xl font-bold sm:text-6xl">
+            <h1 className="mt-5 font-sans text-4xl font-bold sm:text-6xl">
               Study in <span className="text-cas-gold">China</span>
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base lg:mx-0">
@@ -191,7 +191,7 @@ export default function SiteHome() {
                   </button>
                 ))}
               </div>
-              <div className="mt-2 flex overflow-hidden rounded-xl bg-card p-1.5 shadow-2xl">
+              <div className="mt-2 flex overflow-hidden rounded-sm bg-card p-1.5 shadow-sm">
                 <input
                   value={term}
                   onChange={(e) => setTerm(e.target.value)}
@@ -199,7 +199,7 @@ export default function SiteHome() {
                   aria-label="Search"
                   className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
                 />
-                <button type="submit" className="inline-flex items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
+                <button type="submit" className="inline-flex items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
                   <Search className="size-4" /> Search
                 </button>
               </div>
@@ -226,7 +226,7 @@ export default function SiteHome() {
       {/* ── Stats ────────────────────────────────────────────── */}
       <section className="grid grid-cols-3 gap-3 sm:grid-cols-6">
         {stats.map(([v, l]) => (
-          <div key={l} className="rounded-2xl border bg-card p-4 text-center shadow-sm">
+          <div key={l} className="rounded-sm border bg-card p-4 text-center shadow-sm">
             <p className="bg-gradient-to-br from-cas-navy to-cas-navy-700 bg-clip-text text-2xl font-extrabold text-transparent">{v}</p>
             <p className="mt-1 text-[11px] text-muted-foreground">{l}</p>
           </div>
@@ -238,7 +238,7 @@ export default function SiteHome() {
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-3xl">
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
-        <div className="mt-4 grid gap-0 overflow-hidden rounded-2xl border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
+        <div className="mt-4 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
           <PhotoBanner src="/images/art-3.svg" className="flex min-h-48 items-center justify-center p-6">
             <GraduationCap className="size-20 text-cas-gold/50" />
           </PhotoBanner>
@@ -263,7 +263,7 @@ export default function SiteHome() {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div><p className="mb-1 text-xs text-muted-foreground">Applications close in</p><Countdown /></div>
-                  <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
+                  <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
                 </div>
               </>
             ) : (
@@ -277,7 +277,7 @@ export default function SiteHome() {
       <SiteSection title="Highlights" subtitle="Handpicked routes into studying in China.">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
-            <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+            <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
               <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
                 <Icon className="size-9 text-cas-gold/80" />
                 <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
@@ -300,9 +300,9 @@ export default function SiteHome() {
             <p className="mx-auto mt-2 max-w-2xl text-sm text-white/70">Popular programs students are applying to right now.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl bg-white/10" />)}
+            {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
-              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-sm transition-all hover:-translate-y-1 hover:bg-white/10">
+              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border border-white/10 bg-white/5 shadow-sm transition-all hover:-translate-y-1 hover:bg-white/10">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
                   <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
                 </PhotoBanner>
@@ -314,7 +314,7 @@ export default function SiteHome() {
             ))}
           </div>
           <div className="mt-6 flex justify-center">
-            <Link to="/site/programs" className="inline-flex items-center gap-1 rounded-md border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
+            <Link to="/site/programs" className="inline-flex items-center gap-1 rounded-sm border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
               View all programs <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -324,18 +324,18 @@ export default function SiteHome() {
       {/* ── Featured Content (tabbed) ────────────────────────── */}
       <SiteSection title="Featured content">
         <div className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
-          <Link to="/site/why-china" className="group relative flex min-h-56 flex-col justify-end overflow-hidden rounded-2xl bg-gradient-to-br from-cas-navy-900 to-cas-navy p-7 text-white">
+          <Link to="/site/why-china" className="group relative flex min-h-56 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-7 text-white">
             <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
             <BookOpen className="absolute top-6 right-6 size-16 text-cas-gold/30" />
             <div className="relative">
               <span className="rounded-full bg-cas-gold px-3 py-1 text-[11px] font-semibold text-cas-navy">Guide</span>
-              <h3 className="mt-3 font-serif text-2xl font-bold">Study in China: the complete guide for international students</h3>
+              <h3 className="mt-3 font-sans text-2xl font-bold">Study in China: the complete guide for international students</h3>
               <p className="mt-2 max-w-md text-sm text-white/80">Everything on universities, programs, scholarships, visas and life in China.</p>
               <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-cas-gold">Read the guide <ArrowRight className="size-4" /></span>
             </div>
           </Link>
 
-          <div className="rounded-2xl border bg-card p-5 shadow-sm">
+          <div className="rounded-sm border bg-card p-5 shadow-sm">
             <div className="flex gap-1 border-b">
               {Object.keys(FEATURED).map((k) => (
                 <button key={k} type="button" onClick={() => setContentTab(k)} className={cnContentTab(contentTab === k)}>{k}</button>
@@ -358,7 +358,7 @@ export default function SiteHome() {
       <SiteSection title="Watch & learn" subtitle="Guides and student stories from CAS.">
         <div className="grid gap-5 sm:grid-cols-3">
           {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title, i) => (
-            <div key={title} className="group overflow-hidden rounded-2xl border bg-card shadow-sm">
+            <div key={title} className="group overflow-hidden rounded-sm border bg-card shadow-sm">
               <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-40 items-center justify-center">
                 <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-gold text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
               </PhotoBanner>
@@ -375,12 +375,12 @@ export default function SiteHome() {
         <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
         <div className="relative">
           <div className="text-center">
-            <h2 className="font-serif text-2xl font-bold sm:text-3xl">Reviews from our students</h2>
+            <h2 className="font-sans text-2xl font-bold sm:text-3xl">Reviews from our students</h2>
             <p className="mt-2 text-sm text-white/70">Students from 50+ countries trust CAS with their journey.</p>
           </div>
           <div className="mt-8 grid gap-5 lg:grid-cols-3">
             {REVIEWS.map((t) => (
-              <figure key={t.name} className="flex flex-col rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 backdrop-blur">
+              <figure key={t.name} className="flex flex-col rounded-sm bg-white/5 p-6 ring-1 ring-white/10 backdrop-blur">
                 <Quote className="size-7 text-cas-gold/50" />
                 <blockquote className="mt-2 flex-1 text-sm text-white/90">"{t.quote}"</blockquote>
                 <figcaption className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4">
@@ -397,10 +397,10 @@ export default function SiteHome() {
       {/* ── More in China ────────────────────────────────────── */}
       <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
+          {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-sm" />)}
           {featuredUnis.map((u) => <UniCard key={u.id} u={u} />)}
           {!universities.isPending && featuredUnis.length === 0 && (
-            <div className="col-span-full rounded-2xl border border-dashed bg-card p-10 text-center">
+            <div className="col-span-full rounded-sm border border-dashed bg-card p-10 text-center">
               <p className="text-sm text-muted-foreground">Our partner universities are ready to explore.</p>
               <Link to="/site/universities" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:underline">Browse all <ArrowRight className="size-4" /></Link>
             </div>
@@ -418,11 +418,11 @@ export default function SiteHome() {
       {/* ── Final search / CTA ───────────────────────────────── */}
       <section className="rounded-3xl border bg-gradient-to-r from-cas-gold-50 to-card p-8 text-center sm:p-12">
         <Building2 className="mx-auto size-9 text-cas-navy" />
-        <h2 className="mt-3 font-serif text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
+        <h2 className="mt-3 font-sans text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Find your program in minutes — or book a free consultation and we'll guide you.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
-          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600"><MessageCircle className="size-4" /> Free consultation</Link>
+          <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
+          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600"><MessageCircle className="size-4" /> Free consultation</Link>
         </div>
       </section>
     </div>

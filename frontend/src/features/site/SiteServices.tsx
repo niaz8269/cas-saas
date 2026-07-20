@@ -45,7 +45,7 @@ export default function SiteServices() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-2xl bg-cas-navy p-8 text-white shadow-sm sm:p-12">
+      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-gold/20 px-3 py-1 text-xs font-medium text-cas-gold-50">
           End-to-end support
         </span>
@@ -58,8 +58,8 @@ export default function SiteServices() {
       <SiteSection title="What we do for you" subtitle="One team handling the whole journey, so nothing falls through the cracks.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-xl border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-gold-50 text-cas-gold-600"><Icon className="size-5" /></span>
+            <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-gold-50 text-cas-gold-600"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -70,7 +70,7 @@ export default function SiteServices() {
       {/* Trust stats */}
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[["13+", "Years of experience"], ["13K+", "Students placed"], ["200+", "University partners"], ["98%", "Visa success rate"]].map(([v, l]) => (
-          <div key={l} className="rounded-xl border bg-card p-5 text-center shadow-sm">
+          <div key={l} className="rounded-sm border bg-card p-5 text-center shadow-sm">
             <p className="text-3xl font-bold text-cas-navy tabular-nums">{v}</p>
             <p className="mt-1 text-xs text-muted-foreground">{l}</p>
           </div>
@@ -80,8 +80,8 @@ export default function SiteServices() {
       <SiteSection title="Why choose CAS" subtitle="Trusted, transparent support at every step of your journey to China.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {WHY.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-xl border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
+            <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -89,12 +89,12 @@ export default function SiteServices() {
         </div>
       </SiteSection>
 
-      <section className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
+      <section className="flex flex-col items-start justify-between gap-4 rounded-sm bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
         <div>
           <h2 className="text-xl font-semibold">Not sure where to start?</h2>
           <p className="mt-1 text-sm text-white/80">Book a free consultation and we'll map out your options.</p>
         </div>
-        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-md bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
           Free consultation <ArrowRight className="size-4" />
         </Link>
       </section>

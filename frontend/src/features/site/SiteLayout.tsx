@@ -77,12 +77,12 @@ export default function SiteLayout() {
             <Link to="/login" className="hidden items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-cas-navy sm:inline-flex">
               <LogIn className="size-4" /> Login
             </Link>
-            <Link to="/site/contact" className="inline-flex items-center gap-1.5 rounded-md bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <Link to="/site/contact" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
               <Send className="size-4" /> Apply Now
             </Link>
             <button
               type="button"
-              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted lg:hidden"
+              className="inline-flex size-9 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted lg:hidden"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((v) => !v)}
@@ -100,14 +100,14 @@ export default function SiteLayout() {
                 to={item.to}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) => cn(
-                  "block rounded-md px-3 py-2.5 text-sm font-medium",
+                  "block rounded-sm px-3 py-2.5 text-sm font-medium",
                   isActive ? "bg-cas-navy-50 text-cas-navy" : "text-muted-foreground hover:bg-muted",
                 )}
               >
                 {item.label}
               </NavLink>
             ))}
-            <Link to="/login" onClick={() => setMenuOpen(false)} className="block rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted sm:hidden">
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="block rounded-sm px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted sm:hidden">
               Staff login
             </Link>
           </nav>
@@ -171,7 +171,7 @@ export default function SiteLayout() {
               <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> WhatsApp us</a></li>
             </ul>
-            <Link to="/site/contact" className="mt-4 inline-flex rounded-md bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
               Free consultation
             </Link>
           </div>

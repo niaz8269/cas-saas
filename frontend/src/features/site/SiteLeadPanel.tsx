@@ -33,7 +33,7 @@ export default function SiteLeadPanel() {
   })
 
   return (
-    <div className="w-full rounded-2xl border border-white/15 bg-card p-5 text-left shadow-2xl">
+    <div className="w-full rounded-sm border border-white/15 bg-card p-5 text-left shadow-sm">
       {mutation.isSuccess ? (
         <div className="py-8 text-center">
           <CheckCircle2 className="mx-auto size-10 text-green-600" />
@@ -43,7 +43,7 @@ export default function SiteLeadPanel() {
       ) : (
         <>
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex size-9 items-center justify-center rounded-lg bg-cas-navy text-white">
+            <span className="inline-flex size-9 items-center justify-center rounded-sm bg-cas-navy text-white">
               <Send className="size-4" />
             </span>
             <div>
@@ -58,7 +58,7 @@ export default function SiteLeadPanel() {
             noValidate
           >
             {mutation.isError && Object.keys(errors).length === 0 && (
-              <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-xs text-destructive">
+              <p role="alert" className="rounded-sm bg-cas-red-50 px-3 py-2 text-xs text-destructive">
                 Something went wrong. Please try again.
               </p>
             )}

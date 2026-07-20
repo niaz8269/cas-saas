@@ -93,7 +93,7 @@ export default function SiteFAQ() {
       {CATEGORIES.map((cat) => (
         <section key={cat.title}>
           <h2 className="mb-3 text-lg font-semibold text-cas-navy">{cat.title}</h2>
-          <div className="divide-y overflow-hidden rounded-2xl border bg-card shadow-sm">
+          <div className="divide-y overflow-hidden rounded-sm border bg-card shadow-sm">
             {cat.items.map((item, i) => {
               const id = `${cat.title}-${i}`
               const isOpen = open === id
@@ -117,12 +117,12 @@ export default function SiteFAQ() {
         </section>
       ))}
 
-      <section className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
+      <section className="flex flex-col items-start justify-between gap-4 rounded-sm bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
         <div>
           <h2 className="text-xl font-semibold">Still have questions?</h2>
           <p className="mt-1 text-sm text-white/80">Get a free study plan and a CAS advisor will answer everything for your situation.</p>
         </div>
-        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-md bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
           Get a free study plan <ArrowRight className="size-4" />
         </Link>
       </section>

@@ -41,13 +41,13 @@ export default function SiteHelpDock() {
           <div className="flex items-center gap-2">
             <Link
               to="/site/study-plan"
-              className="inline-flex items-center gap-1.5 rounded-md bg-cas-gold px-3 py-1.5 font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
+              className="inline-flex items-center gap-1.5 rounded-sm bg-cas-gold px-3 py-1.5 font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
             >
               <CalendarCheck className="size-4" /> Get a free study plan
             </Link>
             <Link
               to="/site/contact"
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/25 px-3 py-1.5 font-medium transition-colors hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-sm border border-white/25 px-3 py-1.5 font-medium transition-colors hover:bg-white/10"
             >
               <MessageCircle className="size-4" /> Leave a message
             </Link>
@@ -73,7 +73,7 @@ export default function SiteHelpDock() {
       <div className="fixed right-4 bottom-4 z-40 sm:right-6 lg:bottom-[4.5rem]">
         <div
           className={cn(
-            "absolute right-0 bottom-16 w-72 origin-bottom-right overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-200",
+            "absolute right-0 bottom-16 w-72 origin-bottom-right overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-200",
             open ? "visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
           )}
         >
@@ -85,22 +85,22 @@ export default function SiteHelpDock() {
           </div>
           <div className="p-3">
             <p className="px-1 pb-2 text-sm text-muted-foreground">Free guidance — we usually reply within a day.</p>
-            <a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
+            <a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-muted">
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#128C42]"><MessageCircle className="size-5" /></span>
               <span><span className="block text-sm font-medium text-ink">WhatsApp</span><span className="block text-xs text-muted-foreground">Chat with us now</span></span>
             </a>
-            <a href={`tel:${PHONE}`} className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
+            <a href={`tel:${PHONE}`} className="flex items-center gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-muted">
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-cas-navy"><Phone className="size-5" /></span>
               <span><span className="block text-sm font-medium text-ink">Call us</span><span className="block text-xs text-muted-foreground">{PHONE_DISPLAY}</span></span>
             </a>
-            <a href={`mailto:${EMAIL}`} className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted">
+            <a href={`mailto:${EMAIL}`} className="flex items-center gap-3 rounded-sm px-3 py-2.5 transition-colors hover:bg-muted">
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-cas-navy"><Mail className="size-5" /></span>
               <span><span className="block text-sm font-medium text-ink">Email</span><span className="block text-xs text-muted-foreground">{EMAIL}</span></span>
             </a>
             <Link
               to="/site/study-plan"
               onClick={() => setOpen(false)}
-              className="mt-1 block rounded-lg bg-cas-gold px-3 py-2.5 text-center text-sm font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
+              className="mt-1 block rounded-sm bg-cas-gold px-3 py-2.5 text-center text-sm font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
             >
               Get a free study plan →
             </Link>

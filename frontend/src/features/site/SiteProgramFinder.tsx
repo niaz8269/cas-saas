@@ -83,7 +83,7 @@ export default function SiteProgramFinder() {
       />
 
       {/* Filters */}
-      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 rounded-sm border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
         <div className="relative sm:col-span-2 lg:col-span-1">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -113,17 +113,17 @@ export default function SiteProgramFinder() {
       </div>
 
       {isError && (
-        <div className="rounded-xl border bg-card p-8 text-center shadow-sm">
+        <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
           <p className="text-sm text-destructive">Couldn't load programs right now.</p>
         </div>
       )}
 
       {/* Results */}
       <div className="space-y-3">
-        {isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+        {isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-sm" />)}
 
         {!isPending && programs.length === 0 && !isError && (
-          <div className="rounded-xl border bg-card p-12 text-center shadow-sm">
+          <div className="rounded-sm border bg-card p-12 text-center shadow-sm">
             <GraduationCap className="mx-auto size-8 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">No programs match your filters</p>
             <p className="mt-1 text-sm text-muted-foreground">Try widening your search or clearing a filter.</p>
@@ -131,7 +131,7 @@ export default function SiteProgramFinder() {
         )}
 
         {programs.map((p) => (
-          <div key={p.id} className="flex flex-col gap-3 rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-gold/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
+          <div key={p.id} className="flex flex-col gap-3 rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-gold/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
@@ -150,7 +150,7 @@ export default function SiteProgramFinder() {
             <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
               <span className="font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}</span>
               {p.university?.slug && (
-                <Link to={`/site/universities/${p.university.slug}`} className="inline-flex h-9 items-center gap-1 rounded-lg bg-cas-navy px-3.5 text-xs font-semibold text-white hover:bg-cas-navy-700">
+                <Link to={`/site/universities/${p.university.slug}`} className="inline-flex h-9 items-center gap-1 rounded-sm bg-cas-navy px-3.5 text-xs font-semibold text-white hover:bg-cas-navy-700">
                   View details →
                 </Link>
               )}

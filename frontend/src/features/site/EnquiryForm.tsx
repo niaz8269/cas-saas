@@ -47,7 +47,7 @@ export default function EnquiryForm({
 
   if (mutation.isSuccess) {
     return (
-      <div className="rounded-2xl border bg-card p-8 text-center shadow-sm">
+      <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto size-10 text-green-600" />
         <h2 className="mt-3 text-lg font-semibold">Thank you!</h2>
         <p className="mt-1 text-sm text-muted-foreground">A CAS advisor will be in touch with you shortly.</p>
@@ -56,7 +56,7 @@ export default function EnquiryForm({
   }
 
   return (
-    <div id="enquire" className="rounded-2xl border bg-card p-6 shadow-sm">
+    <div id="enquire" className="rounded-sm border bg-card p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-cas-navy">Enquire{universityName ? ` about ${universityName}` : ""}</h2>
       <p className="mt-1 text-sm text-muted-foreground">Leave your details and a CAS advisor will guide you through the next steps.</p>
 
@@ -66,7 +66,7 @@ export default function EnquiryForm({
         noValidate
       >
         {mutation.isError && Object.keys(fieldErrors).length === 0 && (
-          <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">
+          <p role="alert" className="rounded-sm bg-cas-red-50 px-3 py-2 text-sm text-destructive">
             Something went wrong. Please try again.
           </p>
         )}

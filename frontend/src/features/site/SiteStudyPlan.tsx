@@ -22,7 +22,7 @@ const EMPTY = {
   name: "", email: "", phone: "", nationality: "",
 }
 
-const selectClass = "w-full rounded-md border bg-background px-3 py-2.5 text-sm"
+const selectClass = "w-full rounded-sm border bg-background px-3 py-2.5 text-sm"
 
 export default function SiteStudyPlan() {
   const [step, setStep] = useState(0)
@@ -80,9 +80,9 @@ export default function SiteStudyPlan() {
   if (mutation.isSuccess) {
     return (
       <div className="mx-auto max-w-xl py-10 text-center">
-        <div className="rounded-2xl border bg-card p-10 shadow-sm">
+        <div className="rounded-sm border bg-card p-10 shadow-sm">
           <CheckCircle2 className="mx-auto size-12 text-green-600" />
-          <h1 className="mt-4 font-serif text-2xl font-bold text-cas-navy">Your study plan is on its way</h1>
+          <h1 className="mt-4 font-sans text-2xl font-bold text-cas-navy">Your study plan is on its way</h1>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
             Thank you, {a.name.trim().split(/\s+/)[0]}. A CAS advisor will review your goals and get back to you
             within one working day with matched universities, programs and scholarships.
@@ -99,7 +99,7 @@ export default function SiteStudyPlan() {
         <span className="inline-flex items-center gap-2 rounded-full bg-cas-navy-50 px-3 py-1 text-xs font-semibold text-cas-navy">
           <Sparkles className="size-3.5" /> Free · takes 3 minutes
         </span>
-        <h1 className="mt-3 font-serif text-3xl font-bold text-cas-navy sm:text-4xl">Get your free study plan</h1>
+        <h1 className="mt-3 font-sans text-3xl font-bold text-cas-navy sm:text-4xl">Get your free study plan</h1>
         <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
           Answer a few questions and a CAS advisor will send you a personalised shortlist of universities,
           programs and scholarships — no cost, no obligation.
@@ -124,8 +124,8 @@ export default function SiteStudyPlan() {
         ))}
       </ol>
 
-      <div className="mt-6 rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
-        {clientError && <p role="alert" className="mb-4 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{clientError}</p>}
+      <div className="mt-6 rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+        {clientError && <p role="alert" className="mb-4 rounded-sm bg-cas-red-50 px-3 py-2 text-sm text-destructive">{clientError}</p>}
 
         {step === 0 && (
           <div className="space-y-6">
@@ -189,7 +189,7 @@ export default function SiteStudyPlan() {
                 <Input value={a.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" inputMode="tel" />
               </Field>
             </div>
-            <div className="rounded-lg bg-subtle p-3 text-xs text-muted-foreground">
+            <div className="rounded-sm bg-subtle p-3 text-xs text-muted-foreground">
               <GraduationCap className="mr-1.5 inline size-4 text-cas-navy" />
               We'll match you with Ministry of Education–listed universities and scholarships based on your answers.
             </div>

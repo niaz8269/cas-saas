@@ -68,11 +68,11 @@ export default function SiteUniversity() {
       : undefined,
   })
 
-  if (isPending) return <Skeleton className="h-96 w-full rounded-2xl" />
+  if (isPending) return <Skeleton className="h-96 w-full rounded-sm" />
 
   if (isError || !data) {
     return (
-      <div className="rounded-2xl border bg-card p-10 text-center shadow-sm">
+      <div className="rounded-sm border bg-card p-10 text-center shadow-sm">
         <p className="text-sm text-muted-foreground">This university isn't available.</p>
         <Button asChild variant="secondary" size="sm" className="mt-4">
           <Link to="/site"><ArrowLeft className="size-4" /> Back to universities</Link>
@@ -92,7 +92,7 @@ export default function SiteUniversity() {
       </Link>
 
       {/* Hero */}
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+      <div className="overflow-hidden rounded-sm border bg-card shadow-sm">
         {/* Cover — image, or a designed gradient banner when none is available */}
         <div className="relative h-48 overflow-hidden sm:h-60">
           {u.cover_url ? (
@@ -100,7 +100,7 @@ export default function SiteUniversity() {
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
-              <span className="relative px-6 text-center font-serif text-2xl font-bold text-white/90 sm:text-3xl">{u.name}</span>
+              <span className="relative px-6 text-center font-sans text-2xl font-bold text-white/90 sm:text-3xl">{u.name}</span>
             </div>
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
@@ -108,7 +108,7 @@ export default function SiteUniversity() {
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={`${u.name} logo`} className="-mt-14 size-20 shrink-0 rounded-xl border-2 border-card bg-white object-contain p-1 shadow-lg" />}
+              {u.logo_url && <img src={u.logo_url} alt={`${u.name} logo`} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
@@ -123,9 +123,9 @@ export default function SiteUniversity() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-lg border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">Enquire</a>
+              <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-sm border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">Enquire</a>
               {u.apply_link && (
-                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy shadow-sm hover:bg-cas-gold-600">
+                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-gold px-5 text-sm font-bold text-cas-navy shadow-sm hover:bg-cas-gold-600">
                   Apply now <ExternalLink className="size-4" />
                 </a>
               )}
@@ -133,7 +133,7 @@ export default function SiteUniversity() {
           </div>
 
           {deadline && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-lg bg-subtle px-3 py-2 text-sm">
+            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-sm bg-subtle px-3 py-2 text-sm">
               <CalendarClock className="size-4 text-cas-navy" />
               <span>Next intake <span className="font-medium">{deadline.name}</span> — closes {new Date(deadline.date).toLocaleDateString()}</span>
               <span className={cn("ml-auto rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums", deadline.daysLeft <= 14 ? "bg-cas-red-50 text-cas-red" : "bg-cas-navy-50 text-cas-navy")}>
@@ -168,14 +168,14 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
 
   return (
     <div>
-      <div className="flex flex-wrap gap-1 rounded-xl border bg-card p-1 shadow-sm">
+      <div className="flex flex-wrap gap-1 rounded-sm border bg-card p-1 shadow-sm">
         {tabs.map((t) => (
           <button
             key={t.key}
             type="button"
             onClick={() => setTab(t.key)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+              "inline-flex items-center gap-1.5 rounded-sm px-4 py-2 text-sm font-medium transition-colors",
               tab === t.key ? "bg-cas-navy text-white shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-cas-navy",
             )}
           >
@@ -196,7 +196,7 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
 }
 
 function Empty({ text }: { text: string }) {
-  return <p className="rounded-xl border bg-card p-6 text-sm text-muted-foreground shadow-sm">{text}</p>
+  return <p className="rounded-sm border bg-card p-6 text-sm text-muted-foreground shadow-sm">{text}</p>
 }
 
 function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
@@ -211,19 +211,19 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {facts.map(([l, v]) => (
-          <div key={l} className="rounded-xl border bg-card p-4 shadow-sm">
+          <div key={l} className="rounded-sm border bg-card p-4 shadow-sm">
             <p className="text-xs text-muted-foreground">{l}</p>
             <p className="mt-0.5 text-sm font-semibold text-cas-navy">{v}</p>
           </div>
         ))}
       </div>
       {u.about && (
-        <div className="rounded-2xl border bg-card p-6 shadow-sm">
+        <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
         </div>
       )}
       {rep?.name && (
-        <div className="rounded-2xl border bg-card p-6 shadow-sm">
+        <div className="rounded-sm border bg-card p-6 shadow-sm">
           <h3 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Your CAS representative</h3>
           <div className="mt-2 flex items-center gap-3">
             {rep.photo_url && <img src={rep.photo_url} alt={rep.name} className="size-11 rounded-full object-cover" />}
@@ -244,7 +244,7 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {u.programs.map((p) => (
-        <div key={p.id} className="rounded-xl border bg-card p-4 shadow-sm">
+        <div key={p.id} className="rounded-sm border bg-card p-4 shadow-sm">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="font-medium">{p.name}</h3>
@@ -266,7 +266,7 @@ function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
   if (!u.intakes.length) return <Empty text="Intake dates will be announced soon." />
 
   return (
-    <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+    <div className="overflow-hidden rounded-sm border bg-card shadow-sm">
       <ul className="divide-y">
         {u.intakes.map((i) => (
           <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
@@ -292,7 +292,7 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {u.scholarships.map((s) => (
-        <div key={s.id} className="rounded-xl border bg-card p-4 shadow-sm">
+        <div key={s.id} className="rounded-sm border bg-card p-4 shadow-sm">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-medium">{s.name}</h3>
             {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}
@@ -311,7 +311,7 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
 function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border bg-card p-6 shadow-sm">
+      <div className="rounded-sm border bg-card p-6 shadow-sm">
         <h3 className="font-semibold text-cas-navy">Admission requirements</h3>
         {u.requirements.length ? (
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -323,18 +323,18 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
           <p className="mt-2 text-sm text-muted-foreground">Requirements vary by program — ask a CAS advisor for the exact checklist for your course.</p>
         )}
       </div>
-      <div className="flex flex-col items-start justify-between gap-3 rounded-2xl bg-cas-navy p-6 text-white sm:flex-row sm:items-center">
+      <div className="flex flex-col items-start justify-between gap-3 rounded-sm bg-cas-navy p-6 text-white sm:flex-row sm:items-center">
         <div>
           <h3 className="font-semibold">Ready to apply?</h3>
           <p className="mt-0.5 text-sm text-white/80">CAS prepares and submits your application for you.</p>
         </div>
         <div className="flex gap-2">
           {u.apply_link && (
-            <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-md bg-cas-gold px-4 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-gold px-4 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
               Apply now <ExternalLink className="size-4" />
             </a>
           )}
-          <a href="#enquire" className="inline-flex h-10 items-center rounded-md border border-white/25 px-4 text-sm font-semibold hover:bg-white/10">Enquire</a>
+          <a href="#enquire" className="inline-flex h-10 items-center rounded-sm border border-white/25 px-4 text-sm font-semibold hover:bg-white/10">Enquire</a>
         </div>
       </div>
     </div>

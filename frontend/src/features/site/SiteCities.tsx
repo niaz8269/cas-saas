@@ -37,17 +37,17 @@ export default function SiteCities() {
       />
 
       {isError && (
-        <div className="rounded-xl border bg-card p-8 text-center shadow-sm">
+        <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
           <p className="text-sm text-destructive">Couldn't load destinations right now.</p>
         </div>
       )}
 
       {isPending ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-40 rounded-2xl" />)}
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-40 rounded-sm" />)}
         </div>
       ) : cities.length === 0 ? (
-        <div className="rounded-xl border bg-card p-12 text-center shadow-sm">
+        <div className="rounded-sm border bg-card p-12 text-center shadow-sm">
           <MapPin className="mx-auto size-8 text-muted-foreground" />
           <p className="mt-3 text-sm font-medium">No destinations listed yet</p>
         </div>
@@ -60,11 +60,11 @@ export default function SiteCities() {
               <Link
                 key={city}
                 to={`/site/universities?city=${encodeURIComponent(city)}`}
-                className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
               >
                 <div className="relative flex h-28 items-center justify-center overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
                   <div className="pointer-events-none absolute inset-0 opacity-[0.14]" style={DOT_GRID} />
-                  <span className="relative font-serif text-2xl font-bold text-white/95">{city}</span>
+                  <span className="relative font-sans text-2xl font-bold text-white/95">{city}</span>
                 </div>
                 <div className="flex flex-1 items-center justify-between gap-3 p-5">
                   <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
