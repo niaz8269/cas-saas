@@ -110,11 +110,11 @@ export default function SiteMegaMenu() {
           open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-1 opacity-0",
         )}
       >
-        <div className="border-t-2 border-cas-gold bg-card shadow-sm">
+        <div className="border-t-2 border-cas-orange bg-card shadow-sm">
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-8 px-4 py-8 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <p className="text-xs font-bold tracking-wider text-cas-gold-600 uppercase">{col.title}</p>
+                <p className="text-xs font-bold tracking-wider text-cas-orange-600 uppercase">{col.title}</p>
                 <ul className="mt-3.5 space-y-2.5">
                   {col.links.map(([label, to]) => (
                     <li key={label}>

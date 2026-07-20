@@ -82,7 +82,7 @@ const REVIEWS = [
 
 function Stars() {
   return (
-    <span className="inline-flex gap-0.5 text-cas-gold" aria-label="5 out of 5 stars">
+    <span className="inline-flex gap-0.5 text-cas-orange" aria-label="5 out of 5 stars">
       {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="size-4 fill-current" />)}
     </span>
   )
@@ -163,15 +163,15 @@ export default function SiteHome() {
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
           <span className="font-sans text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
         </div>
-        <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-gold/15 blur-3xl" />
+        <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-orange/15 blur-3xl" />
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr_20rem]">
           <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
-              <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
+            <span className="inline-flex items-center gap-2 rounded-full border border-cas-orange/30 bg-cas-orange/10 px-3 py-1 text-xs font-semibold text-cas-orange-50">
+              <span className="size-2 animate-pulse rounded-full bg-cas-orange" /> Official Authorized Agent Since 2012
             </span>
             <h1 className="mt-5 font-sans text-4xl font-bold sm:text-6xl">
-              Study in <span className="text-cas-gold">China</span>
+              Study in <span className="text-cas-orange">China</span>
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base lg:mx-0">
               Explore Ministry of Education–listed universities and English-taught programs — with full support from application to arrival.
@@ -199,7 +199,7 @@ export default function SiteHome() {
                   aria-label="Search"
                   className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
                 />
-                <button type="submit" className="inline-flex items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
+                <button type="submit" className="inline-flex items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-bold text-cas-navy hover:bg-cas-orange-600">
                   <Search className="size-4" /> Search
                 </button>
               </div>
@@ -258,12 +258,12 @@ export default function SiteHome() {
                   <div><p className="text-xs text-muted-foreground">Tuition</p><p className="font-semibold">{money(weekly.tuition_fee, weekly.currency)}</p></div>
                 </div>
                 <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-gold-600" /> Ministry of Education–listed university</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-gold-600" /> Full application and visa support from CAS</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-orange-600" /> Ministry of Education–listed university</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-orange-600" /> Full application and visa support from CAS</li>
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div><p className="mb-1 text-xs text-muted-foreground">Applications close in</p><Countdown /></div>
-                  <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
+                  <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-orange px-5 text-sm font-bold text-cas-navy hover:bg-cas-orange-600">Apply for a seat <ArrowRight className="size-4" /></Link>
                 </div>
               </>
             ) : (
@@ -280,10 +280,10 @@ export default function SiteHome() {
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
               <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
                 <Icon className="size-9 text-cas-navy/70" />
-                <span className="absolute top-3 left-3 rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
+                <span className="absolute top-3 left-3 rounded-full bg-cas-orange px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">
-                <h3 className="font-semibold text-cas-navy group-hover:text-cas-gold-600">{title}</h3>
+                <h3 className="font-semibold text-cas-navy group-hover:text-cas-orange-600">{title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
                 <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-cas-navy">Learn more <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" /></span>
               </div>
@@ -304,10 +304,10 @@ export default function SiteHome() {
             {outstanding.map((p, i) => (
               <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
-                  <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
+                  <span className="rounded-full bg-cas-orange px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
                 </PhotoBanner>
                 <div className="p-4">
-                  <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-gold-600">{p.name}</h3>
+                  <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-orange-600">{p.name}</h3>
                   <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
                 </div>
               </Link>
@@ -326,12 +326,12 @@ export default function SiteHome() {
         <div className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
           <Link to="/site/why-china" className="group relative flex min-h-56 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-7 text-white">
             <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
-            <BookOpen className="absolute top-6 right-6 size-16 text-cas-gold/30" />
+            <BookOpen className="absolute top-6 right-6 size-16 text-cas-orange/30" />
             <div className="relative">
-              <span className="rounded-full bg-cas-gold px-3 py-1 text-[11px] font-semibold text-cas-navy">Guide</span>
+              <span className="rounded-full bg-cas-orange px-3 py-1 text-[11px] font-semibold text-cas-navy">Guide</span>
               <h3 className="mt-3 font-sans text-2xl font-bold">Study in China: the complete guide for international students</h3>
               <p className="mt-2 max-w-md text-sm text-white/80">Everything on universities, programs, scholarships, visas and life in China.</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-cas-gold">Read the guide <ArrowRight className="size-4" /></span>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-cas-orange">Read the guide <ArrowRight className="size-4" /></span>
             </div>
           </Link>
 
@@ -345,7 +345,7 @@ export default function SiteHome() {
               {FEATURED[contentTab].map((item) => (
                 <li key={item.title}>
                   <Link to={item.to} className="flex items-start gap-2 py-3 text-sm text-foreground/90 hover:text-cas-navy">
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-cas-gold" /> {item.title}
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-cas-orange" /> {item.title}
                   </Link>
                 </li>
               ))}
@@ -360,7 +360,7 @@ export default function SiteHome() {
           {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title, i) => (
             <div key={title} className="group overflow-hidden rounded-sm border bg-card shadow-sm">
               <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-40 items-center justify-center">
-                <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-gold text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
+                <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-orange text-cas-navy shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
               </PhotoBanner>
               <div className="p-4"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
             </div>
@@ -377,7 +377,7 @@ export default function SiteHome() {
         <div className="grid gap-5 lg:grid-cols-3">
           {REVIEWS.map((t) => (
             <figure key={t.name} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
-              <Quote className="size-7 text-cas-gold" />
+              <Quote className="size-7 text-cas-orange" />
               <blockquote className="mt-2 flex-1 text-sm text-foreground/90">"{t.quote}"</blockquote>
               <figcaption className="mt-5 flex items-center gap-3 border-t pt-4">
                 <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-white">{t.name[0]}</span>
@@ -390,7 +390,7 @@ export default function SiteHome() {
       </section>
 
       {/* ── More in China ────────────────────────────────────── */}
-      <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
+      <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-orange-600">View all <ArrowRight className="size-4" /></Link>}>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-sm" />)}
           {featuredUnis.map((u) => <UniCard key={u.id} u={u} />)}
@@ -404,20 +404,20 @@ export default function SiteHome() {
         {moreUnis.length > 6 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {moreUnis.slice(6).map((u) => (
-              <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border bg-card px-3 py-1.5 text-xs font-medium text-cas-navy shadow-sm hover:border-cas-gold/50">{u.name}</Link>
+              <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border bg-card px-3 py-1.5 text-xs font-medium text-cas-navy shadow-sm hover:border-cas-orange/50">{u.name}</Link>
             ))}
           </div>
         )}
       </SiteSection>
 
       {/* ── Final search / CTA ───────────────────────────────── */}
-      <section className="rounded-3xl border bg-gradient-to-r from-cas-gold-50 to-card p-8 text-center sm:p-12">
+      <section className="rounded-3xl border bg-gradient-to-r from-cas-orange-50 to-card p-8 text-center sm:p-12">
         <Building2 className="mx-auto size-9 text-cas-navy" />
         <h2 className="mt-3 font-sans text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Find your program in minutes — or book a free consultation and we'll guide you.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
-          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600"><MessageCircle className="size-4" /> Free consultation</Link>
+          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-bold text-cas-navy hover:bg-cas-orange-600"><MessageCircle className="size-4" /> Free consultation</Link>
         </div>
       </section>
     </div>
@@ -434,6 +434,6 @@ function cnTab(active: boolean): string {
 function cnContentTab(active: boolean): string {
   return [
     "border-b-2 px-3 py-2 text-sm font-medium transition-colors",
-    active ? "border-cas-gold text-cas-navy" : "border-transparent text-muted-foreground hover:text-cas-navy",
+    active ? "border-cas-orange text-cas-navy" : "border-transparent text-muted-foreground hover:text-cas-navy",
   ].join(" ")
 }

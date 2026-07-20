@@ -45,7 +45,7 @@ export default function SiteLayout() {
       <ScrollToTop />
       {/* Announcement bar */}
       {bannerOpen && (
-        <div className="bg-cas-gold text-cas-navy">
+        <div className="bg-cas-orange text-cas-navy">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm sm:px-6">
             <Megaphone className="hidden size-4 shrink-0 sm:block" />
             <p className="flex-1 text-center font-medium sm:text-left">
@@ -77,7 +77,7 @@ export default function SiteLayout() {
             <Link to="/login" className="hidden items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-cas-navy sm:inline-flex">
               <LogIn className="size-4" /> Login
             </Link>
-            <Link to="/site/contact" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <Link to="/site/contact" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
               <Send className="size-4" /> Apply Now
             </Link>
             <button
@@ -135,7 +135,7 @@ export default function SiteLayout() {
                 { icon: Linkedin, label: "LinkedIn" },
               ].map(({ icon: Icon, label }) => (
                 <a key={label} href="https://www.cas.moe" target="_blank" rel="noreferrer" aria-label={label}
-                  className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-gold hover:text-cas-navy">
+                  className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-orange hover:text-cas-navy">
                   <Icon className="size-4" />
                 </a>
               ))}
@@ -171,7 +171,7 @@ export default function SiteLayout() {
               <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> WhatsApp us</a></li>
             </ul>
-            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-gold px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
               Free consultation
             </Link>
           </div>

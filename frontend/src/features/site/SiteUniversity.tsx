@@ -116,7 +116,7 @@ export default function SiteUniversity() {
                   {u.nearest_airport && <span className="inline-flex items-center gap-1"><Plane className="size-3.5" /> {u.nearest_airport}</span>}
                 </div>
                 {u.moe_listed && (
-                  <Badge variant="outline" className="mt-3 border-transparent bg-cas-gold-50 text-cas-gold-600">
+                  <Badge variant="outline" className="mt-3 border-transparent bg-cas-orange-50 text-cas-orange-600">
                     <ShieldCheck className="size-3.5" /> China MoE-listed
                   </Badge>
                 )}
@@ -125,7 +125,7 @@ export default function SiteUniversity() {
             <div className="flex flex-wrap items-center gap-2">
               <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-sm border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">Enquire</a>
               {u.apply_link && (
-                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-gold px-5 text-sm font-bold text-cas-navy shadow-sm hover:bg-cas-gold-600">
+                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-orange px-5 text-sm font-bold text-cas-navy shadow-sm hover:bg-cas-orange-600">
                   Apply now <ExternalLink className="size-4" />
                 </a>
               )}
@@ -330,7 +330,7 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
         </div>
         <div className="flex gap-2">
           {u.apply_link && (
-            <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-gold px-4 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+            <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-orange px-4 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
               Apply now <ExternalLink className="size-4" />
             </a>
           )}

@@ -49,7 +49,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
   return (
     <Link
       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-      className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:ring-cas-gold/40"
+      className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:ring-cas-orange/40"
     >
       {/* Cover — a designed gradient banner when no image is available */}
       <div className="relative h-36 overflow-hidden">
@@ -62,7 +62,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
           </div>
         )}
         {u.moe_listed && (
-          <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-gold px-2.5 py-1 text-[11px] font-semibold text-cas-navy shadow-sm">
+          <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-orange px-2.5 py-1 text-[11px] font-semibold text-cas-navy shadow-sm">
             <ShieldCheck className="size-3.5" /> MoE Listed
           </span>
         )}
@@ -74,7 +74,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
             <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="size-11 shrink-0 rounded-sm border bg-white object-contain p-0.5 shadow-sm" />
           )}
           <div className="min-w-0">
-            <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-gold-600">{u.name}</h3>
+            <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-orange-600">{u.name}</h3>
             {[u.city, u.country].filter(Boolean).length > 0 && (
               <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="size-3.5" /> {[u.city, u.country].filter(Boolean).join(", ")}
@@ -87,7 +87,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
           <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-navy-50 px-2.5 py-1 text-xs font-medium text-cas-navy">
             <GraduationCap className="size-3.5" /> {u.programs_count ?? 0} program{u.programs_count === 1 ? "" : "s"}
           </span>
-          <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-gold-600">
+          <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-orange-600">
             View <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
         </div>
@@ -105,10 +105,10 @@ export function SitePageHeader({ eyebrow, title, subtitle, action }: {
 }) {
   return (
     <div className="relative overflow-hidden rounded-sm border bg-gradient-to-br from-cas-navy-50 via-card to-card p-6 shadow-sm sm:p-8">
-      <div className="pointer-events-none absolute -top-12 -right-12 size-44 rounded-full bg-cas-gold/10 blur-2xl" />
+      <div className="pointer-events-none absolute -top-12 -right-12 size-44 rounded-full bg-cas-orange/10 blur-2xl" />
       <div className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
-          {eyebrow && <p className="text-xs font-bold tracking-wider text-cas-gold-600 uppercase">{eyebrow}</p>}
+          {eyebrow && <p className="text-xs font-bold tracking-wider text-cas-orange-600 uppercase">{eyebrow}</p>}
           <h1 className="mt-1 text-2xl font-bold text-cas-navy sm:text-3xl">{title}</h1>
           {subtitle && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
         </div>

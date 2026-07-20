@@ -46,7 +46,7 @@ export default function SiteServices() {
   return (
     <div className="space-y-12">
       <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-gold/20 px-3 py-1 text-xs font-medium text-cas-gold-50">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-orange/20 px-3 py-1 text-xs font-medium text-cas-orange-50">
           End-to-end support
         </span>
         <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Our services</h1>
@@ -59,7 +59,7 @@ export default function SiteServices() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-gold-50 text-cas-gold-600"><Icon className="size-5" /></span>
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-orange-50 text-cas-orange-600"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -94,7 +94,7 @@ export default function SiteServices() {
           <h2 className="text-xl font-semibold">Not sure where to start?</h2>
           <p className="mt-1 text-sm text-white/80">Book a free consultation and we'll map out your options.</p>
         </div>
-        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+        <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
           Free consultation <ArrowRight className="size-4" />
         </Link>
       </section>

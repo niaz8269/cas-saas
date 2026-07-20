@@ -35,13 +35,13 @@ export default function SiteHelpDock() {
       <div className="fixed inset-x-0 bottom-0 z-30 hidden border-t border-white/10 bg-cas-navy text-white/90 lg:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-2.5 text-sm">
           <p className="flex items-center gap-2 font-medium">
-            <Headset className="size-4 text-cas-gold" />
+            <Headset className="size-4 text-cas-orange" />
             We're here to help — free, expert guidance on studying in China.
           </p>
           <div className="flex items-center gap-2">
             <Link
               to="/site/study-plan"
-              className="inline-flex items-center gap-1.5 rounded-sm bg-cas-gold px-3 py-1.5 font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
+              className="inline-flex items-center gap-1.5 rounded-sm bg-cas-orange px-3 py-1.5 font-semibold text-cas-navy transition-colors hover:bg-cas-orange-600"
             >
               <CalendarCheck className="size-4" /> Get a free study plan
             </Link>
@@ -100,7 +100,7 @@ export default function SiteHelpDock() {
             <Link
               to="/site/study-plan"
               onClick={() => setOpen(false)}
-              className="mt-1 block rounded-sm bg-cas-gold px-3 py-2.5 text-center text-sm font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
+              className="mt-1 block rounded-sm bg-cas-orange px-3 py-2.5 text-center text-sm font-semibold text-cas-navy transition-colors hover:bg-cas-orange-600"
             >
               Get a free study plan →
             </Link>

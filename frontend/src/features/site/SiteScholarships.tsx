@@ -95,7 +95,7 @@ export default function SiteScholarships() {
         )}
 
         {scholarships.map((s) => (
-          <div key={s.id} className="flex flex-col rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-cas-gold/40 hover:shadow">
+          <div key={s.id} className="flex flex-col rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-cas-orange/40 hover:shadow">
             <div className="flex items-start justify-between gap-2">
               <span className="inline-flex size-10 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Award className="size-5" /></span>
               {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}

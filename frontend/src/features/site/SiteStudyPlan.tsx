@@ -113,7 +113,7 @@ export default function SiteStudyPlan() {
             <div className="flex flex-col items-center gap-1.5">
               <span className={cn(
                 "flex size-8 items-center justify-center rounded-full text-sm font-bold transition-colors",
-                i < step ? "bg-cas-navy text-white" : i === step ? "bg-cas-gold text-cas-navy" : "bg-muted text-muted-foreground",
+                i < step ? "bg-cas-navy text-white" : i === step ? "bg-cas-orange text-cas-navy" : "bg-muted text-muted-foreground",
               )}>
                 {i < step ? "✓" : i + 1}
               </span>

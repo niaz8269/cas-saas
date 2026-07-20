@@ -35,7 +35,7 @@ export default function SitePricing() {
   return (
     <div className="space-y-12">
       <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-gold/20 px-3 py-1 text-xs font-medium text-cas-gold-50">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-orange/20 px-3 py-1 text-xs font-medium text-cas-orange-50">
           Clear &amp; student-first
         </span>
         <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Simple, transparent pricing</h1>
@@ -49,7 +49,7 @@ export default function SitePricing() {
         <div className="grid gap-4 sm:grid-cols-3">
           {PRINCIPLES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
-              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-gold-50 text-cas-gold-600"><Icon className="size-5" /></span>
+              <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-orange-50 text-cas-orange-600"><Icon className="size-5" /></span>
               <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
             </div>
@@ -58,15 +58,15 @@ export default function SitePricing() {
       </SiteSection>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-sm border-2 border-cas-gold bg-card p-6 shadow-sm">
+        <div className="rounded-sm border-2 border-cas-orange bg-card p-6 shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-bold text-cas-navy uppercase">Free</span>
+            <span className="rounded-full bg-cas-orange px-2.5 py-0.5 text-[11px] font-bold text-cas-navy uppercase">Free</span>
             <h3 className="font-semibold text-cas-navy">Getting started</h3>
           </div>
           <ul className="mt-4 space-y-2.5">
             {FREE.map((f) => (
               <li key={f} className="flex items-start gap-2 text-sm">
-                <BadgeCheck className="mt-0.5 size-4 shrink-0 text-cas-gold-600" /> {f}
+                <BadgeCheck className="mt-0.5 size-4 shrink-0 text-cas-orange-600" /> {f}
               </li>
             ))}
           </ul>
@@ -91,7 +91,7 @@ export default function SitePricing() {
           <h2 className="text-xl font-semibold">Want a personalised quote?</h2>
           <p className="mt-1 text-sm text-white/80">Start with a free study plan — we'll follow up with clear next steps and costs.</p>
         </div>
-        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-gold px-6 text-sm font-semibold text-cas-navy hover:bg-cas-gold-600">
+        <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
           Get a free study plan <ArrowRight className="size-4" />
         </Link>
       </section>

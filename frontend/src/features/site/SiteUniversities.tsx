@@ -75,7 +75,7 @@ export default function SiteUniversities() {
           aria-pressed={moe}
           className={cn(
             "inline-flex h-11 items-center gap-2 rounded-sm border px-4 text-sm font-medium transition-colors",
-            moe ? "border-cas-gold bg-cas-gold-50 text-cas-gold-600" : "bg-background text-muted-foreground hover:text-foreground",
+            moe ? "border-cas-orange bg-cas-orange-50 text-cas-orange-600" : "bg-background text-muted-foreground hover:text-foreground",
           )}
         >
           <ShieldCheck className="size-4" /> MoE-listed only
