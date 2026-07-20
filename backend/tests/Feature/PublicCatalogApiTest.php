@@ -41,6 +41,20 @@ it('filters by search term and moe_listed', function () {
         ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Alpha Medical');
 });
 
+it('filters by city and returns the distinct city list', function () {
+    University::factory()->create(['name' => 'Alpha Medical', 'city' => 'Dalian', 'status' => 'active']);
+    University::factory()->create(['name' => 'Beta Tech', 'city' => 'Beijing', 'status' => 'active']);
+    University::factory()->create(['name' => 'Hidden', 'city' => 'Beijing', 'status' => 'inactive']);
+
+    $response = $this->getJson('/api/v1/public/universities?filter[city]=Beijing')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Beta Tech');
+
+    // The cities list covers active universities only (no "inactive" leak, no dupes).
+    expect($response->json('cities'))->toEqual(['Beijing', 'Dalian']);
+});
+
 it('shows a university by slug with only active programs, open intakes and active scholarships', function () {
     $uni = University::factory()->create([
         'name' => 'Jilin Medical University', 'slug' => 'jilin-medical-university', 'status' => 'active',

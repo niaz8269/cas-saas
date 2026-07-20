@@ -116,14 +116,15 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; page?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.moe) search.set("filter[moe_listed]", "1")
+  if (params.city) search.set("filter[city]", params.city)
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
-  return siteApi<Paginated<SiteUniversityCard>>(`/public/universities${qs ? `?${qs}` : ""}`)
+  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
 }
 
 export const getSiteUniversity = (slug: string) =>

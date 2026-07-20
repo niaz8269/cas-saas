@@ -33,11 +33,21 @@ class PublicCatalogController extends Controller
                     ->orWhere('city', 'like', $term));
             })
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
+            ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
             ->when($request->boolean('filter.moe_listed'), fn ($q) => $q->where('moe_listed', true))
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
 
-        return PublicUniversityResource::collection($universities);
+        // Distinct cities for the directory filter (active universities only).
+        $cities = University::query()
+            ->where('status', 'active')
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        return PublicUniversityResource::collection($universities)->additional(['cities' => $cities]);
     }
 
     public function university(string $slug): PublicUniversityResource

@@ -22,6 +22,7 @@ export default function SiteUniversities() {
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const [q, setQ] = useState(params.get("q") ?? "")
   const [moe, setMoe] = useState(params.get("moe") === "1")
+  const [city, setCity] = useState(params.get("city") ?? "")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -31,12 +32,13 @@ export default function SiteUniversities() {
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
-    queryKey: ["site-universities", { q, moe, page }],
-    queryFn: () => getSiteUniversities({ q: q || undefined, moe, page }),
+    queryKey: ["site-universities", { q, moe, city, page }],
+    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, page }),
     placeholderData: keepPreviousData,
   })
 
   const universities = data?.data ?? []
+  const cities = data?.cities ?? []
   const meta = data?.meta
 
   return (
@@ -58,6 +60,15 @@ export default function SiteUniversities() {
             aria-label="Search universities"
           />
         </div>
+        <select
+          value={city}
+          onChange={(e) => { setCity(e.target.value); setPage(1) }}
+          aria-label="Filter by city"
+          className="h-11 rounded-lg border bg-background px-3 text-sm text-foreground"
+        >
+          <option value="">All cities</option>
+          {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
         <button
           type="button"
           onClick={() => { setMoe((v) => !v); setPage(1) }}
