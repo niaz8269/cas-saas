@@ -8,6 +8,7 @@ import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
 import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
+import SiteCities from "./SiteCities"
 import SiteFAQ from "./SiteFAQ"
 import SiteHelpDock from "./SiteHelpDock"
 import SitePartner from "./SitePartner"
@@ -195,6 +196,20 @@ it("completes the study-plan wizard and submits a tagged study_plan enquiry", as
   expect(body.form_type).toBe("study_plan")
   expect(body.first_name).toBe("Sara")
   expect(body.details).toMatchObject({ Level: "Master's" })
+})
+
+it("renders the destinations page from the API city list", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+    data: [{ id: 1, name: "BIT", slug: "bit", city: "Beijing" }],
+    meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
+    cities: ["Beijing", "Shanghai"],
+  })))
+
+  renderWithProviders(<SiteCities />)
+
+  expect(await screen.findByRole("heading", { name: "Study in China by city", level: 1 })).toBeInTheDocument()
+  expect(await screen.findByRole("link", { name: /Beijing/ })).toHaveAttribute("href", "/site/universities?city=Beijing")
+  expect(screen.getByText("1 university")).toBeInTheDocument()
 })
 
 it("renders the FAQ with categories and expands an answer", async () => {

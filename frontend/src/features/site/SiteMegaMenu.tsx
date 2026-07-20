@@ -9,14 +9,14 @@ type Col = { title: string; checkAll: { label: string; to: string }; links: [str
 const COLUMNS: Col[] = [
   {
     title: "Destinations",
-    checkAll: { label: "All destinations", to: "/site/universities" },
+    checkAll: { label: "All destinations", to: "/site/cities" },
     links: [
-      ["Study in Beijing", "/site/universities?q=Beijing"],
-      ["Study in Shanghai", "/site/universities?q=Shanghai"],
-      ["Study in Wuhan", "/site/universities?q=Wuhan"],
-      ["Study in Nanjing", "/site/universities?q=Nanjing"],
-      ["Study in Guangzhou", "/site/universities?q=Guangzhou"],
-      ["Study in Chongqing", "/site/universities?q=Chongqing"],
+      ["Study in Beijing", "/site/universities?city=Beijing"],
+      ["Study in Shanghai", "/site/universities?city=Shanghai"],
+      ["Study in Wuhan", "/site/universities?city=Wuhan"],
+      ["Study in Nanjing", "/site/universities?city=Nanjing"],
+      ["Study in Hangzhou", "/site/universities?city=Hangzhou"],
+      ["Study in Dalian", "/site/universities?city=Dalian"],
     ],
   },
   {
