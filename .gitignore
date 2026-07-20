@@ -28,3 +28,6 @@ Thumbs.db
 # Misc
 tmp/
 coverage/
+
+# Local-only Docker Compose overrides (per-machine port remaps etc.)
+docker/compose.override.yml
