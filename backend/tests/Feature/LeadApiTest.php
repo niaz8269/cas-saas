@@ -26,6 +26,27 @@ it('logs a note on the lead timeline and lists it', function () {
         ->assertJsonPath('data.0.body', 'Called — call back Tuesday');
 });
 
+it('logs a typed activity (call) on the lead timeline', function () {
+    actingAsStaffWith(LEAD_ADMIN_PERMS);
+    $lead = Lead::factory()->create();
+
+    $this->postJson("/api/v1/leads/{$lead->id}/notes", [
+        'body' => 'Spoke for 10 min, interested in MBBS',
+        'type' => 'call',
+    ])
+        ->assertCreated()
+        ->assertJsonPath('data.type', 'call');
+});
+
+it('rejects an unknown activity type', function () {
+    actingAsStaffWith(LEAD_ADMIN_PERMS);
+    $lead = Lead::factory()->create();
+
+    $this->postJson("/api/v1/leads/{$lead->id}/notes", ['body' => 'x', 'type' => 'carrier-pigeon'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('type');
+});
+
 it('records a status change on the lead timeline', function () {
     actingAsStaffWith(LEAD_ADMIN_PERMS);
     $lead = Lead::factory()->create(['status' => 'new']);

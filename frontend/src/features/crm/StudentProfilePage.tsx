@@ -7,6 +7,7 @@ import {
   Phone,
   RefreshCw,
   StickyNote,
+  Users,
   type LucideIcon,
 } from "lucide-react"
 import { useState } from "react"
@@ -33,7 +34,7 @@ import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import StudentDocuments from "@/features/crm/StudentDocuments"
 import StudentTasks from "@/features/tasks/StudentTasks"
-import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
+import { ACTIVITY_TYPES, STUDENT_STATUS_BADGE, STUDENT_STATUSES, type ActivityType } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
@@ -41,6 +42,7 @@ const ACTIVITY_ICON: Record<string, LucideIcon> = {
   note: StickyNote,
   call: Phone,
   email: Mail,
+  meeting: Users,
   status: RefreshCw,
   system: Bot,
 }
@@ -61,6 +63,7 @@ export default function StudentProfilePage() {
   const canUpdate = can("students.update.assigned") || can("students.update.global")
 
   const [note, setNote] = useState("")
+  const [noteType, setNoteType] = useState<ActivityType>("note")
   const [actionError, setActionError] = useState<string | null>(null)
   const [editOpen, setEditOpen] = useState(false)
 
@@ -73,14 +76,15 @@ export default function StudentProfilePage() {
   })
 
   const noteMutation = useMutation({
-    mutationFn: () => addNote(id, note),
+    mutationFn: () => addNote(id, note, noteType),
     onSuccess: () => {
       setNote("")
+      setNoteType("note")
       setActionError(null)
       queryClient.invalidateQueries({ queryKey: ["student-timeline", id] })
     },
     onError: (error) =>
-      setActionError(error instanceof ApiError ? error.message : "Could not add the note."),
+      setActionError(error instanceof ApiError ? error.message : "Could not log the activity."),
   })
 
   const statusMutation = useMutation({
@@ -233,17 +237,27 @@ export default function StudentProfilePage() {
                   if (note.trim()) noteMutation.mutate()
                 }}
               >
-                <Label htmlFor="new-note" className="sr-only">Add a note</Label>
+                <Label htmlFor="new-note" className="sr-only">Log an activity</Label>
                 <Textarea
                   id="new-note"
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
-                  placeholder="Add a note to the timeline…"
+                  placeholder="Log a note or an outcome…"
                   rows={2}
                 />
-                <div className="mt-2 flex justify-end">
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <Select value={noteType} onValueChange={(v) => setNoteType(v as ActivityType)}>
+                    <SelectTrigger className="h-8 w-32" aria-label="Activity type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ACTIVITY_TYPES.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <Button type="submit" size="sm" disabled={!note.trim() || noteMutation.isPending}>
-                    {noteMutation.isPending ? "Saving…" : "Add note"}
+                    {noteMutation.isPending ? "Logging…" : "Log activity"}
                   </Button>
                 </div>
               </form>

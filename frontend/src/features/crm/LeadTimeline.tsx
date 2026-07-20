@@ -1,17 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Bot, Mail, Phone, RefreshCw, StickyNote, type LucideIcon } from "lucide-react"
+import { Bot, Mail, Phone, RefreshCw, StickyNote, Users, type LucideIcon } from "lucide-react"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
 import { addLeadNote, getLeadTimeline } from "@/features/crm/api"
+import { ACTIVITY_TYPES, type ActivityType } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
 
 const ACTIVITY_ICON: Record<string, LucideIcon> = {
   note: StickyNote,
   call: Phone,
   email: Mail,
+  meeting: Users,
   status: RefreshCw,
   system: Bot,
 }
@@ -25,6 +34,7 @@ function when(iso: string | null): string {
 export default function LeadTimeline({ leadId, canUpdate }: { leadId: string; canUpdate: boolean }) {
   const queryClient = useQueryClient()
   const [note, setNote] = useState("")
+  const [type, setType] = useState<ActivityType>("note")
   const [error, setError] = useState<string | null>(null)
 
   const { data, isPending, isError, refetch } = useQuery({
@@ -33,12 +43,13 @@ export default function LeadTimeline({ leadId, canUpdate }: { leadId: string; ca
   })
 
   const addNote = useMutation({
-    mutationFn: () => addLeadNote(leadId, note.trim()),
+    mutationFn: () => addLeadNote(leadId, note.trim(), type),
     onSuccess: () => {
       setNote("")
+      setType("note")
       queryClient.invalidateQueries({ queryKey: ["lead-timeline", leadId] })
     },
-    onError: (e) => setError(e instanceof ApiError ? e.message : "Could not add the note."),
+    onError: (e) => setError(e instanceof ApiError ? e.message : "Could not log the activity."),
   })
 
   const activities = Array.isArray(data?.data) ? data.data : []
@@ -55,14 +66,24 @@ export default function LeadTimeline({ leadId, canUpdate }: { leadId: string; ca
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Log a note or call outcome…"
+            placeholder="Log a note or an outcome…"
             rows={2}
-            aria-label="New note"
+            aria-label="Activity note"
           />
           {error && <p role="alert" className="mt-1 text-sm text-destructive">{error}</p>}
-          <div className="mt-2 flex justify-end">
+          <div className="mt-2 flex items-center justify-between gap-2">
+            <Select value={type} onValueChange={(v) => setType(v as ActivityType)}>
+              <SelectTrigger className="h-8 w-32" aria-label="Activity type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ACTIVITY_TYPES.map((t) => (
+                  <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Button type="submit" size="sm" disabled={!note.trim() || addNote.isPending}>
-              {addNote.isPending ? "Adding…" : "Add note"}
+              {addNote.isPending ? "Logging…" : "Log activity"}
             </Button>
           </div>
         </form>

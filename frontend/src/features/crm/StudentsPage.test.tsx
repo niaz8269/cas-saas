@@ -131,10 +131,10 @@ it("posts a note and refreshes the timeline for update-permission holders", asyn
 
   renderProfile()
 
-  const composer = await screen.findByPlaceholderText(/Add a note/)
+  const composer = await screen.findByPlaceholderText(/Log a note/)
   await user.type(composer, "Follow-up scheduled")
-  await user.click(screen.getByRole("button", { name: "Add note" }))
+  await user.click(screen.getByRole("button", { name: "Log activity" }))
 
   // Composer clears on success.
-  expect(await screen.findByPlaceholderText(/Add a note/)).toHaveValue("")
+  expect(await screen.findByPlaceholderText(/Log a note/)).toHaveValue("")
 })

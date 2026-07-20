@@ -113,7 +113,7 @@ class StudentController extends Controller
         $activity = Activity::create([
             'student_id' => $student->id,
             'user_id' => $request->user()->id,
-            'type' => 'note',
+            'type' => $request->input('type', 'note'),
             'body' => $request->string('body'),
             'created_at' => now(),
         ]);

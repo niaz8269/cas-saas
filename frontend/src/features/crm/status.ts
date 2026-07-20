@@ -41,3 +41,13 @@ export const STUDENT_STATUS_BADGE: Record<string, string> = {
 export const STUDENT_STATUSES = [
   "active", "in_process", "enrolled", "arrived", "withdrawn", "inactive",
 ] as const
+
+/** Manually loggable activity kinds (mirrors StoreNoteRequest::TYPES on the backend). */
+export const ACTIVITY_TYPES = [
+  { value: "note", label: "Note" },
+  { value: "call", label: "Call" },
+  { value: "email", label: "Email" },
+  { value: "meeting", label: "Meeting" },
+] as const
+
+export type ActivityType = (typeof ACTIVITY_TYPES)[number]["value"]

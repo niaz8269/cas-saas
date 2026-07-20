@@ -173,19 +173,19 @@ export const updateStudent = (id: number | string, payload: Record<string, unkno
 export const getTimeline = (id: number | string) =>
   api<Paginated<ActivityItem>>(`/students/${id}/timeline?per_page=50`)
 
-export const addNote = (id: number | string, body: string) =>
+export const addNote = (id: number | string, body: string, type = "note") =>
   api<{ data: ActivityItem }>(`/students/${id}/notes`, {
     method: "POST",
-    body: JSON.stringify({ body }),
+    body: JSON.stringify({ body, type }),
   })
 
 export const getLeadTimeline = (id: number | string) =>
   api<Paginated<ActivityItem>>(`/leads/${id}/timeline?per_page=50`)
 
-export const addLeadNote = (id: number | string, body: string) =>
+export const addLeadNote = (id: number | string, body: string, type = "note") =>
   api<{ data: ActivityItem }>(`/leads/${id}/notes`, {
     method: "POST",
-    body: JSON.stringify({ body }),
+    body: JSON.stringify({ body, type }),
   })
 
 // ── Guardians ──────────────────────────────────────────────────────────
