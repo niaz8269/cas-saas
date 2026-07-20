@@ -11,10 +11,8 @@ import {
   Globe2,
   MessageCircle,
   Play,
-  Quote,
   Search,
   ShieldCheck,
-  Star,
   Wallet,
   Zap,
   type LucideIcon,
@@ -26,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import SiteLeadPanel from "@/features/site/SiteLeadPanel"
+import SiteReviews from "@/features/site/SiteReviews"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
 const DEADLINE = new Date("2026-02-28T23:59:59Z").getTime()
@@ -72,32 +71,6 @@ const FEATURED: Record<string, { title: string; to: string }[]> = {
     { title: "Business & MBA programs", to: "/site/programs?q=Business" },
     { title: "Full-tuition scholarships", to: "/site/scholarships?q=full" },
   ],
-}
-
-const REVIEWS = [
-  { quote: "CAS handled everything — choosing my university, the application and my visa. I'm now studying MBBS in China with zero stress.", name: "Ayesha K.", detail: "MBBS · Jilin" },
-  { quote: "The scholarship guidance alone saved me a fortune. Every message was answered quickly and professionally.", name: "Bilal R.", detail: "Engineering · Wuhan" },
-  { quote: "They supported me even after I arrived — registration, banking, everything. Truly end-to-end.", name: "Fatima S.", detail: "Business · Beijing" },
-]
-
-// Student avatars scattered like pins across a world map (reference's reviews).
-const MAP_DOTS = {
-  backgroundImage: "radial-gradient(circle, rgba(20,53,124,0.16) 1.5px, transparent 1.5px)",
-  backgroundSize: "26px 26px",
-}
-const AVATAR_POS = [
-  { l: "9%", t: "34%", img: 12 }, { l: "21%", t: "62%", img: 5 }, { l: "31%", t: "24%", img: 33 },
-  { l: "42%", t: "54%", img: 8 }, { l: "50%", t: "22%", img: 45 }, { l: "58%", t: "68%", img: 20 },
-  { l: "67%", t: "36%", img: 51 }, { l: "78%", t: "58%", img: 14 }, { l: "89%", t: "30%", img: 60 },
-  { l: "16%", t: "82%", img: 26 }, { l: "72%", t: "82%", img: 39 }, { l: "40%", t: "82%", img: 3 },
-]
-
-function Stars() {
-  return (
-    <span className="inline-flex gap-0.5 text-cas-orange" aria-label="5 out of 5 stars">
-      {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="size-4 fill-current" />)}
-    </span>
-  )
 }
 
 function Countdown() {
@@ -387,45 +360,8 @@ export default function SiteHome() {
         </div>
       </SiteSection>
 
-      {/* ── Reviews (light) ──────────────────────────────────── */}
-      <section>
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">Reviews from our students</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">Students from 50+ countries trust CAS with their journey.</p>
-        </div>
-
-        {/* Global students — avatars pinned across a world map */}
-        <div className="relative mb-8 hidden h-64 overflow-hidden rounded-sm border bg-cas-navy-50/60 sm:block">
-          <div className="pointer-events-none absolute inset-0" style={MAP_DOTS} />
-          {AVATAR_POS.map((p, i) => (
-            <img
-              key={i}
-              src={`https://i.pravatar.cc/96?img=${p.img}`}
-              alt=""
-              loading="lazy"
-              className="absolute size-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white object-cover shadow"
-              style={{ left: p.l, top: p.t }}
-            />
-          ))}
-          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-cas-navy shadow-sm">
-            Students from 50+ countries
-          </span>
-        </div>
-
-        <div className="grid gap-5 lg:grid-cols-3">
-          {REVIEWS.map((t) => (
-            <figure key={t.name} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
-              <Quote className="size-7 text-cas-orange" />
-              <blockquote className="mt-2 flex-1 text-sm text-foreground/90">"{t.quote}"</blockquote>
-              <figcaption className="mt-5 flex items-center gap-3 border-t pt-4">
-                <span className="inline-flex size-10 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-white">{t.name[0]}</span>
-                <span><span className="block text-sm font-semibold text-cas-navy">{t.name}</span><span className="block text-xs text-muted-foreground">{t.detail}</span></span>
-                <span className="ml-auto"><Stars /></span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
+      {/* ── Reviews (monitor + world-map with hover cards) ───── */}
+      <SiteReviews />
 
       {/* ── More in China ────────────────────────────────────── */}
       <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-orange-600">View all <ArrowRight className="size-4" /></Link>}>
