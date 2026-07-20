@@ -30,6 +30,7 @@ import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/
 import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import StudentDocuments from "@/features/crm/StudentDocuments"
+import StudentTasks from "@/features/tasks/StudentTasks"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -146,6 +147,8 @@ export default function StudentProfilePage() {
           <GuardiansEditor studentId={id} guardians={s.guardians ?? []} canEdit={canUpdate} />
 
           <StudentDocuments studentId={id} canUpload={canUpdate} />
+
+          <StudentTasks studentId={id} />
 
           {(applications.data?.data.length ?? 0) > 0 && (
             <div className="mt-4 border-t pt-4">

@@ -78,6 +78,7 @@ function stubProfileFetch() {
       if (url.includes("/timeline")) return Promise.resolve(jsonResponse(TIMELINE))
       if (url.includes("/document-types")) return Promise.resolve(jsonResponse({ data: [] }))
       if (url.includes("/documents")) return Promise.resolve(jsonResponse({ data: [] }))
+      if (url.includes("/tasks")) return Promise.resolve(jsonResponse({ data: [], meta: { current_page: 1, last_page: 1, per_page: 50, total: 0, from: null, to: null } }))
       if (url.includes("/notes") && init?.method === "POST") {
         return Promise.resolve(jsonResponse({ data: { id: 3, type: "note", body: "New note", user: null, created_at: null } }, 201))
       }

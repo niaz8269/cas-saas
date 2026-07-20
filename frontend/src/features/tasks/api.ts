@@ -35,6 +35,9 @@ export function listTasks(params: { status?: string; overdue?: boolean; q?: stri
   return api<Paginated<TaskItem>>(`/tasks${qs ? `?${qs}` : ""}`)
 }
 
+export const listStudentTasks = (studentId: number | string) =>
+  api<Paginated<TaskItem>>(`/students/${studentId}/tasks`)
+
 export const createTask = (payload: TaskPayload) =>
   api<{ data: TaskItem }>("/tasks", { method: "POST", body: JSON.stringify(payload) })
 

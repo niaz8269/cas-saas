@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Student;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -57,4 +58,21 @@ it('flags overdue active tasks', function () {
     Task::factory()->create(['assignee_id' => $me->id, 'status' => 'open', 'due_at' => now()->subDay()]);
 
     $this->getJson('/api/v1/tasks')->assertOk()->assertJsonPath('data.0.overdue', true);
+});
+
+it('lists all tasks for a student (any assignee) on the profile endpoint', function () {
+    actingAsStaffWith(['students.view.global']);
+    $student = Student::factory()->create();
+    Task::factory()->count(2)->create(['student_id' => $student->id]);
+    Task::factory()->create(); // a different student's task
+
+    $response = $this->getJson("/api/v1/students/{$student->id}/tasks")->assertOk();
+    expect($response->json('meta.total'))->toBe(2);
+});
+
+it('denies a students tasks without student-view permission', function () {
+    actingAsStaffWith([]);
+    $student = Student::factory()->create();
+
+    $this->getJson("/api/v1/students/{$student->id}/tasks")->assertStatus(403);
 });

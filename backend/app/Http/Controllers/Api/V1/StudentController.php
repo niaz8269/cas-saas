@@ -7,6 +7,7 @@ use App\Http\Requests\Crm\StoreNoteRequest;
 use App\Http\Requests\Crm\UpdateStudentRequest;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\TaskResource;
 use App\Models\Activity;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -69,6 +70,22 @@ class StudentController extends Controller
             ->paginate(min($request->integer('per_page', 25), 100));
 
         return ActivityResource::collection($activities);
+    }
+
+    /**
+     * All follow-up tasks for this student (any assignee), soonest due first.
+     */
+    public function tasks(Request $request, Student $student): AnonymousResourceCollection
+    {
+        $this->authorize('view', $student);
+
+        $tasks = $student->tasks()
+            ->with('assignee:id,name')
+            ->orderByRaw("case when status in ('open', 'in_progress') then 0 else 1 end") // active first
+            ->orderByRaw('due_at is null, due_at asc')
+            ->paginate(min($request->integer('per_page', 50), 100));
+
+        return TaskResource::collection($tasks);
     }
 
     /**
