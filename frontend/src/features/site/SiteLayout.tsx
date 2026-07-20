@@ -119,8 +119,8 @@ export default function SiteLayout() {
         <div className="relative bg-[#2f2c4c] text-white shadow-sm">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <Link to="/site" className="flex shrink-0 items-center" onClick={() => setMenuOpen(false)}>
-              <span className="inline-flex items-center rounded-sm bg-white px-3 py-1.5 shadow-sm">
-                <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-7 w-auto sm:h-8" />
+              <span className="inline-flex items-center rounded-sm bg-white px-2.5 py-1.5 shadow-sm">
+                <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-8 w-auto sm:h-9" />
               </span>
             </Link>
 
