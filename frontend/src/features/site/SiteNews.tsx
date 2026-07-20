@@ -1,9 +1,18 @@
-import { ArrowRight, CalendarDays } from "lucide-react"
+import { ArrowRight, Award, CalendarDays, FileText, School, Stamp, Stethoscope, Wallet, type LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
+
+const GUIDES: { icon: LucideIcon; title: string; body: string; to: string }[] = [
+  { icon: FileText, title: "How to apply, step by step", body: "From choosing a program to submitting a complete application — the whole process explained.", to: "/site/study-plan" },
+  { icon: Stamp, title: "Your student visa, explained", body: "What the JW202 and admission letter are, and how the X-visa process works.", to: "/site/faq" },
+  { icon: Award, title: "Scholarships in China", body: "Government, provincial and university awards — who qualifies and how to apply.", to: "/site/scholarships" },
+  { icon: Wallet, title: "What it costs to study in China", body: "Tuition and living costs, and how CAS's transparent pricing works.", to: "/site/pricing" },
+  { icon: Stethoscope, title: "Study MBBS in China", body: "English-taught medical degrees at recognised universities — a popular route with CAS.", to: "/site/programs?q=MBBS" },
+  { icon: School, title: "Choosing the right university", body: "How to weigh city, ranking, language and budget to find your best fit.", to: "/site/universities" },
+]
 
 const UPDATES: { date: string; tag: string; title: string; body: string; to: string }[] = [
   {
@@ -36,9 +45,9 @@ export default function SiteNews() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">News & updates</h1>
+        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">News &amp; resources</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Intake deadlines, scholarship openings and the latest from CAS and our partner universities.
+          Intake deadlines and scholarship openings, plus guides to help you plan your studies in China.
         </p>
       </div>
 
@@ -56,6 +65,19 @@ export default function SiteNews() {
                 Learn more <ArrowRight className="size-4" />
               </Link>
             </article>
+          ))}
+        </div>
+      </SiteSection>
+
+      <SiteSection title="Guides &amp; resources" subtitle="Everything you need to know to plan your studies in China.">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {GUIDES.map(({ icon: Icon, title, body, to }) => (
+            <Link key={title} to={to} className="group flex flex-col rounded-xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
+              <h3 className="mt-4 font-semibold text-cas-navy group-hover:text-cas-gold-600">{title}</h3>
+              <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{body}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-cas-navy">Read guide <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" /></span>
+            </Link>
           ))}
         </div>
       </SiteSection>
