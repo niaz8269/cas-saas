@@ -1,4 +1,4 @@
-import { ArrowUpRight, GraduationCap, MapPin, School, ShieldCheck } from "lucide-react"
+import { ArrowUpRight, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
 
@@ -21,27 +21,28 @@ function toneFor(seed: number | string): string {
   return TONES[Math.abs(n) % TONES.length]
 }
 
-const DOT_GRID = {
-  backgroundImage: "radial-gradient(circle, rgba(20,53,124,0.10) 1px, transparent 1px)",
-  backgroundSize: "18px 18px",
+/**
+ * Real photo by seed via Lorem Picsum (free, hotlink-friendly, reuse-licensed).
+ * Deterministic per seed so each card keeps the same image. Swap these for the
+ * client's own / university photos for production.
+ */
+function photoUrl(seed: number | string, w: number, h: number): string {
+  return `https://picsum.photos/seed/cas-${String(seed).replace(/\W+/g, "")}/${w}/${h}`
 }
 
 /**
- * A light, colour-tinted image placeholder (photo-ready). If a real cover
- * image is later supplied it can layer on top; until then the tint + soft dot
- * texture keeps card image areas light and airy, matching the reference.
+ * A photo image area (real photo via photoUrl), with a soft gradient overlay so
+ * badges/labels stay legible — matching the reference's photo-topped cards. The
+ * colour tint shows underneath while the photo loads.
  */
 export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
-      <div className="pointer-events-none absolute inset-0 opacity-70" style={DOT_GRID} />
+      <img src={photoUrl(src, 640, 400)} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/35 via-black/5 to-black/15" />
       {children}
     </div>
   )
-}
-
-function monogram(name: string): string {
-  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase()
 }
 
 /** University card shared by the home page and the universities listing. */
@@ -53,14 +54,14 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
     >
       {/* Cover — a designed gradient banner when no image is available */}
       <div className="relative h-36 overflow-hidden">
-        {u.cover_url ? (
-          <img src={u.cover_url} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        ) : (
-          <div className={cn("relative flex h-full items-center justify-center bg-gradient-to-br", toneFor(u.id))}>
-            <School className="absolute size-16 text-cas-navy/10" />
-            <span className="relative z-10 text-3xl font-bold tracking-wide text-cas-navy/70">{monogram(u.name)}</span>
-          </div>
-        )}
+        <img
+          src={u.cover_url || photoUrl(u.id, 600, 320)}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         {u.moe_listed && (
           <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-orange px-2.5 py-1 text-[11px] font-semibold text-cas-navy shadow-sm">
             <ShieldCheck className="size-3.5" /> MoE Listed

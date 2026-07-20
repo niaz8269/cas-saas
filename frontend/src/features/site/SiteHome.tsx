@@ -80,6 +80,18 @@ const REVIEWS = [
   { quote: "They supported me even after I arrived — registration, banking, everything. Truly end-to-end.", name: "Fatima S.", detail: "Business · Beijing" },
 ]
 
+// Student avatars scattered like pins across a world map (reference's reviews).
+const MAP_DOTS = {
+  backgroundImage: "radial-gradient(circle, rgba(20,53,124,0.16) 1.5px, transparent 1.5px)",
+  backgroundSize: "26px 26px",
+}
+const AVATAR_POS = [
+  { l: "9%", t: "34%", img: 12 }, { l: "21%", t: "62%", img: 5 }, { l: "31%", t: "24%", img: 33 },
+  { l: "42%", t: "54%", img: 8 }, { l: "50%", t: "22%", img: 45 }, { l: "58%", t: "68%", img: 20 },
+  { l: "67%", t: "36%", img: 51 }, { l: "78%", t: "58%", img: 14 }, { l: "89%", t: "30%", img: 60 },
+  { l: "16%", t: "82%", img: 26 }, { l: "72%", t: "82%", img: 39 }, { l: "40%", t: "82%", img: 3 },
+]
+
 function Stars() {
   return (
     <span className="inline-flex gap-0.5 text-cas-orange" aria-label="5 out of 5 stars">
@@ -157,7 +169,7 @@ export default function SiteHome() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="site-bleed relative -mt-8 overflow-hidden px-4 py-14 text-white sm:py-20">
         {/* Optional hero photo — drop /public/images/hero.jpg; the gradient shows until then. */}
-        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('/images/hero.jpg')" }} />
+        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('https://picsum.photos/seed/cas-hero/1600/900')" }} />
         <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 via-cas-navy/85 to-cas-navy-700/80" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -247,7 +259,7 @@ export default function SiteHome() {
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
           <PhotoBanner src="/images/art-3.svg" className="flex min-h-48 items-center justify-center p-6">
-            <GraduationCap className="size-20 text-cas-navy/40" />
+            <GraduationCap className="size-20 text-white/80 drop-shadow" />
           </PhotoBanner>
           <div className="p-6">
             {weekly ? (
@@ -286,7 +298,7 @@ export default function SiteHome() {
           {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
               <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
-                <Icon className="size-9 text-cas-navy/70" />
+                <Icon className="size-9 text-white/90 drop-shadow" />
                 <span className="absolute top-3 left-3 rounded-full bg-cas-orange px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy">{tag}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">
@@ -381,6 +393,25 @@ export default function SiteHome() {
           <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">Reviews from our students</h2>
           <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">Students from 50+ countries trust CAS with their journey.</p>
         </div>
+
+        {/* Global students — avatars pinned across a world map */}
+        <div className="relative mb-8 hidden h-64 overflow-hidden rounded-sm border bg-cas-navy-50/60 sm:block">
+          <div className="pointer-events-none absolute inset-0" style={MAP_DOTS} />
+          {AVATAR_POS.map((p, i) => (
+            <img
+              key={i}
+              src={`https://i.pravatar.cc/96?img=${p.img}`}
+              alt=""
+              loading="lazy"
+              className="absolute size-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white object-cover shadow"
+              style={{ left: p.l, top: p.t }}
+            />
+          ))}
+          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-cas-navy shadow-sm">
+            Students from 50+ countries
+          </span>
+        </div>
+
         <div className="grid gap-5 lg:grid-cols-3">
           {REVIEWS.map((t) => (
             <figure key={t.name} className="flex flex-col rounded-sm border bg-card p-6 shadow-sm">
