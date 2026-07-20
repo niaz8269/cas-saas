@@ -150,6 +150,20 @@ export function listStudents(params: StudentListParams = {}) {
 
 export const getStudent = (id: number | string) => api<{ data: StudentSummary }>(`/students/${id}`)
 
+export interface StudentWritePayload {
+  first_name: string
+  last_name: string
+  email?: string | null
+  phone?: string | null
+  passport_no?: string | null
+  dob?: string | null
+  gender?: string | null
+  country_id?: number | null
+}
+
+export const createStudent = (payload: StudentWritePayload) =>
+  api<{ data: StudentSummary }>("/students", { method: "POST", body: JSON.stringify(payload) })
+
 export const updateStudent = (id: number | string, payload: Record<string, unknown>) =>
   api<{ data: StudentSummary }>(`/students/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 

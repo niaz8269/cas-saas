@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -15,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { listCountries, updateStudent, type StudentSummary } from "@/features/crm/api"
+import { createStudent, listCountries, updateStudent, type StudentSummary } from "@/features/crm/api"
 import { ApiError } from "@/lib/api"
 
 const schema = z.object({
@@ -31,29 +32,31 @@ const schema = z.object({
 
 type Values = z.infer<typeof schema>
 
-function toValues(s: StudentSummary): Values {
+function toValues(s?: StudentSummary | null): Values {
   return {
-    first_name: s.first_name ?? "",
-    last_name: s.last_name ?? "",
-    email: s.email ?? "",
-    phone: s.phone ?? "",
-    passport_no: s.passport_no ?? "",
-    dob: s.dob ? s.dob.slice(0, 10) : "",
-    gender: s.gender ?? "",
-    country_id: s.country ? String(s.country.id) : "",
+    first_name: s?.first_name ?? "",
+    last_name: s?.last_name ?? "",
+    email: s?.email ?? "",
+    phone: s?.phone ?? "",
+    passport_no: s?.passport_no ?? "",
+    dob: s?.dob ? s.dob.slice(0, 10) : "",
+    gender: s?.gender ?? "",
+    country_id: s?.country ? String(s.country.id) : "",
   }
 }
 
-export default function EditStudentDialog({
+export default function StudentFormDialog({
   open,
   onOpenChange,
   student,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  student: StudentSummary
+  student?: StudentSummary | null
 }) {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const isEdit = Boolean(student)
 
   const { register, handleSubmit, reset, setError, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(student) })
@@ -70,8 +73,8 @@ export default function EditStudentDialog({
   })
 
   const mutation = useMutation({
-    mutationFn: (v: Values) =>
-      updateStudent(student.id, {
+    mutationFn: (v: Values) => {
+      const payload = {
         first_name: v.first_name,
         last_name: v.last_name,
         email: v.email?.trim() || null,
@@ -80,11 +83,19 @@ export default function EditStudentDialog({
         dob: v.dob || null,
         gender: v.gender || null,
         country_id: v.country_id ? Number(v.country_id) : null,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["student", String(student.id)] })
+      }
+
+      return isEdit ? updateStudent(student!.id, payload) : createStudent(payload)
+    },
+    onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["students"] })
-      onOpenChange(false)
+      if (isEdit) {
+        queryClient.invalidateQueries({ queryKey: ["student", String(student!.id)] })
+        onOpenChange(false)
+      } else {
+        onOpenChange(false)
+        navigate(`/students/${res.data.id}`)
+      }
     },
     onError: (error) => {
       if (error instanceof ApiError && error.status === 422) {
@@ -103,8 +114,10 @@ export default function EditStudentDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Edit student</DialogTitle>
-          <DialogDescription>Update the student's personal and contact details.</DialogDescription>
+          <DialogTitle>{isEdit ? "Edit student" : "New student"}</DialogTitle>
+          <DialogDescription>
+            {isEdit ? "Update the student's personal and contact details." : "Add a student directly. A student code is assigned automatically."}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="space-y-4">
@@ -152,7 +165,7 @@ export default function EditStudentDialog({
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Saving…" : "Save changes"}
+              {mutation.isPending ? "Saving…" : isEdit ? "Save changes" : "Create student"}
             </Button>
           </DialogFooter>
         </form>

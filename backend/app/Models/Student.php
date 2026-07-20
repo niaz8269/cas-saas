@@ -74,6 +74,20 @@ class Student extends Authenticatable
         ];
     }
 
+    /** Next STU-{year}-{5-digit} code; retries on the (rare) collision. */
+    public static function nextCode(): string
+    {
+        $year = now()->year;
+        $sequence = static::withTrashed()->count() + 1;
+
+        do {
+            $code = sprintf('STU-%d-%05d', $year, $sequence);
+            $sequence++;
+        } while (static::withTrashed()->where('student_code', $code)->exists());
+
+        return $code;
+    }
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

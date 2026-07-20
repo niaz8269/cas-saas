@@ -189,6 +189,7 @@ Route::prefix('v1')->group(function () {
         Route::post('leads/{lead}/assign', [LeadController::class, 'assign']);
         Route::post('leads/{lead}/convert', [LeadController::class, 'convert']);
         Route::get('students', [StudentController::class, 'index']);
+        Route::post('students', [StudentController::class, 'store']);
         Route::get('students/{student}', [StudentController::class, 'show']);
         Route::patch('students/{student}', [StudentController::class, 'update']);
         Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);

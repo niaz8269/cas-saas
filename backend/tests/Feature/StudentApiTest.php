@@ -10,6 +10,33 @@ uses(RefreshDatabase::class);
 const STUDENT_COUNSELOR_PERMS = ['students.view.assigned', 'students.update.assigned'];
 const STUDENT_ADMIN_PERMS = ['students.view.global', 'students.update.global'];
 
+it('creates a student with a generated code for a creator', function () {
+    actingAsStaffWith(['students.create.global', 'students.view.global']);
+
+    $response = $this->postJson('/api/v1/students', [
+        'first_name' => 'Mei', 'last_name' => 'Chen', 'email' => 'mei@example.com',
+    ])->assertCreated();
+
+    expect($response->json('data.full_name'))->toBe('Mei Chen')
+        ->and($response->json('data.student_code'))->toMatch('/^STU-\d{4}-\d{5}$/')
+        ->and($response->json('data.status'))->toBe('active');
+    expect(Student::where('email', 'mei@example.com')->exists())->toBeTrue();
+});
+
+it('denies student creation without the create permission', function () {
+    actingAsStaffWith(['students.view.global']);
+
+    $this->postJson('/api/v1/students', ['first_name' => 'No', 'last_name' => 'Perm'])
+        ->assertStatus(403);
+});
+
+it('validates required names on student creation', function () {
+    actingAsStaffWith(['students.create.global']);
+
+    $this->postJson('/api/v1/students', ['email' => 'x@example.com'])
+        ->assertStatus(422)->assertJsonValidationErrors(['first_name', 'last_name']);
+});
+
 it('shows counselors only their assigned students', function () {
     $counselor = actingAsStaffWith(STUDENT_COUNSELOR_PERMS);
     $mine = Student::factory()->create(['assigned_counselor_id' => $counselor->id]);

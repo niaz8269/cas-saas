@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { GraduationCap, Search } from "lucide-react"
+import { GraduationCap, Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -22,16 +22,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useCan } from "@/features/auth/useCan"
 import { listStudents } from "@/features/crm/api"
+import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
 
 export default function StudentsPage() {
   const navigate = useNavigate()
+  const can = useCan()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
   const [page, setPage] = useState(1)
+  const [newOpen, setNewOpen] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -87,7 +91,15 @@ export default function StudentsPage() {
             ))}
           </SelectContent>
         </Select>
+
+        {can("students.create.global") && (
+          <Button className="ml-auto" onClick={() => setNewOpen(true)}>
+            <Plus className="size-4" /> New student
+          </Button>
+        )}
       </div>
+
+      <StudentFormDialog open={newOpen} onOpenChange={setNewOpen} />
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
         <Table>

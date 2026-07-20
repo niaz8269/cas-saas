@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\StoreNoteRequest;
+use App\Http\Requests\Crm\StoreStudentRequest;
 use App\Http\Requests\Crm\UpdateStudentRequest;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\StudentResource;
@@ -38,6 +39,20 @@ class StudentController extends Controller
             ->paginate(min($request->integer('per_page', 25), 100));
 
         return StudentResource::collection($students);
+    }
+
+    public function store(StoreStudentRequest $request): StudentResource
+    {
+        $this->authorize('create', Student::class);
+
+        $student = Student::create([
+            ...$request->validated(),
+            'student_code' => Student::nextCode(),
+            'status' => 'active',
+            'created_by' => $request->user()->id,
+        ]);
+
+        return new StudentResource($student->load(['country:id,name,iso2']));
     }
 
     public function show(Request $request, Student $student): StudentResource

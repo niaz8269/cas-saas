@@ -28,7 +28,7 @@ import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
-import EditStudentDialog from "@/features/crm/EditStudentDialog"
+import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import StudentDocuments from "@/features/crm/StudentDocuments"
@@ -284,7 +284,7 @@ export default function StudentProfilePage() {
         </div>
       </div>
 
-      <EditStudentDialog open={editOpen} onOpenChange={setEditOpen} student={s} />
+      <StudentFormDialog open={editOpen} onOpenChange={setEditOpen} student={s} />
     </div>
   )
 }
