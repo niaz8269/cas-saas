@@ -292,23 +292,34 @@ export default function SiteHome() {
         </div>
       </SiteSection>
 
-      {/* ── Outstanding Programs ─────────────────────────────── */}
-      <SiteSection title="Outstanding programs" subtitle="Popular programs students are applying to right now." action={<Link to="/site/programs" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-gold-600">View all <ArrowRight className="size-4" /></Link>}>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl" />)}
-          {outstanding.map((p, i) => (
-            <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
-              <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
-                <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
-              </PhotoBanner>
-              <div className="p-4">
-                <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-gold-600">{p.name}</h3>
-                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
-              </div>
+      {/* ── Outstanding Programs (dark band) ─────────────────── */}
+      <section className="site-bleed bg-cas-navy-900 px-4 py-14 text-white sm:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 text-center">
+            <h2 className="text-2xl font-bold sm:text-3xl">Outstanding programs</h2>
+            <p className="mx-auto mt-2 max-w-2xl text-sm text-white/70">Popular programs students are applying to right now.</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-2xl bg-white/10" />)}
+            {outstanding.map((p, i) => (
+              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-sm transition-all hover:-translate-y-1 hover:bg-white/10">
+                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
+                  <span className="rounded-full bg-cas-gold px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
+                </PhotoBanner>
+                <div className="p-4">
+                  <h3 className="line-clamp-1 font-semibold text-white group-hover:text-cas-gold">{p.name}</h3>
+                  <p className="mt-0.5 line-clamp-1 text-xs text-white/60">{p.university?.name}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6 flex justify-center">
+            <Link to="/site/programs" className="inline-flex items-center gap-1 rounded-md border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
+              View all programs <ArrowRight className="size-4" />
             </Link>
-          ))}
+          </div>
         </div>
-      </SiteSection>
+      </section>
 
       {/* ── Featured Content (tabbed) ────────────────────────── */}
       <SiteSection title="Featured content">
