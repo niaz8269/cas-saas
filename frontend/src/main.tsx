@@ -14,6 +14,7 @@ import UniversitiesPage from "@/features/catalog/UniversitiesPage"
 import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
 import ApplicationDetailPage from "@/features/admissions/ApplicationDetailPage"
 import ApplicationsPage from "@/features/admissions/ApplicationsPage"
+import AgentPayablesPage from "@/features/finance/AgentPayablesPage"
 import CommissionDetailPage from "@/features/finance/CommissionDetailPage"
 import CommissionsPage from "@/features/finance/CommissionsPage"
 import FinancePage from "@/features/finance/FinancePage"
@@ -133,6 +134,7 @@ const router = createBrowserRouter([
           { path: "/finance/:id", element: <InvoiceDetailPage /> },
           { path: "/commissions", element: <CommissionsPage /> },
           { path: "/commissions/:id", element: <CommissionDetailPage /> },
+          { path: "/agent-payables", element: <AgentPayablesPage /> },
           { path: "/visa", element: <VisaCasesPage /> },
           { path: "/visa/:id", element: <VisaCaseDetailPage /> },
           { path: "/reports", element: <ReportsPage /> },

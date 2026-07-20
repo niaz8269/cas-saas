@@ -5,6 +5,7 @@ import {
   FileText,
   Filter,
   GraduationCap,
+  HandCoins,
   KeyRound,
   LayoutDashboard,
   ListChecks,
@@ -59,6 +60,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { title: "Finance", to: "/finance", icon: Receipt, module: "finance" },
       { title: "Commissions", to: "/commissions", icon: Banknote, module: "commission" },
+      { title: "Agent payables", to: "/agent-payables", icon: HandCoins, module: "commission" },
     ],
   },
   {
