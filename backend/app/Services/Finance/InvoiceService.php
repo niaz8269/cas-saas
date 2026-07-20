@@ -87,6 +87,18 @@ class InvoiceService
         });
     }
 
+    /**
+     * Void an invoice raised in error. Only permitted while it carries no
+     * payments (a settled invoice must be corrected with a refund/credit note,
+     * never overwritten). The status change is captured by the audit trail.
+     */
+    public function void(Invoice $invoice): Invoice
+    {
+        $invoice->update(['status' => 'cancelled']);
+
+        return $invoice;
+    }
+
     private function nextNumber(string $prefix, string $model, string $column): string
     {
         $year = now()->year;

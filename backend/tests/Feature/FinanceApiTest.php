@@ -65,6 +65,44 @@ it('blocks payment recording without finance.manage.global', function () {
         ->assertStatus(403);
 });
 
+it('voids an unpaid invoice raised in error', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['status' => 'issued', 'amount_paid' => 0]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/void")
+        ->assertOk()
+        ->assertJsonPath('data.status', 'cancelled');
+
+    expect($invoice->fresh()->status)->toBe('cancelled');
+});
+
+it('refuses to void an invoice that has payments', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['total' => 1000, 'status' => 'partially_paid', 'amount_paid' => 400]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/void")
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('status');
+
+    expect($invoice->fresh()->status)->toBe('partially_paid');
+});
+
+it('refuses to void an already-cancelled invoice', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['status' => 'cancelled', 'amount_paid' => 0]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/void")
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('status');
+});
+
+it('blocks voiding without finance.manage.global', function () {
+    actingAsStaffWith(['finance.view.global']);
+    $invoice = Invoice::factory()->create(['amount_paid' => 0]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/void")->assertStatus(403);
+});
+
 // ── Commissions ─────────────────────────────────────────────────────────
 
 it('shows finance the full pipeline with totals meta', function () {

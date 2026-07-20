@@ -109,6 +109,10 @@ export const getInvoicePdf = (id: number | string) => apiBlob(`/invoices/${id}/p
 export const recordInvoicePayment = (id: number | string, payload: { amount: number; method?: string; reference?: string }) =>
   api<{ data: InvoiceItemData }>(`/invoices/${id}/payments`, { method: "POST", body: JSON.stringify(payload) })
 
+/** Void an unpaid invoice raised in error (blocked once any payment exists). */
+export const voidInvoice = (id: number | string) =>
+  api<{ data: InvoiceItemData }>(`/invoices/${id}/void`, { method: "POST" })
+
 // ---- Invoice creation from the course fee structure ----
 
 export interface FeeLine {

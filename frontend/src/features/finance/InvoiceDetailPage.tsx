@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, FileText, Plus } from "lucide-react"
+import { ArrowLeft, Ban, FileText, Plus } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
-import { getInvoice, getInvoicePdf, recordInvoicePayment } from "@/features/finance/api"
+import { getInvoice, getInvoicePdf, recordInvoicePayment, voidInvoice } from "@/features/finance/api"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -28,6 +28,7 @@ export default function InvoiceDetailPage() {
   const canManage = can("finance.manage.global")
 
   const [payOpen, setPayOpen] = useState(false)
+  const [voidOpen, setVoidOpen] = useState(false)
   const [amount, setAmount] = useState("")
   const [method, setMethod] = useState("bank_transfer")
   const [reference, setReference] = useState("")
@@ -54,6 +55,20 @@ export default function InvoiceDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["invoices"] })
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Payment failed."),
+  })
+
+  const voidMutation = useMutation({
+    mutationFn: () => voidInvoice(id),
+    onSuccess: () => {
+      setVoidOpen(false)
+      setError(null)
+      queryClient.invalidateQueries({ queryKey: ["invoice", id] })
+      queryClient.invalidateQueries({ queryKey: ["invoices"] })
+    },
+    onError: (err) => {
+      setVoidOpen(false)
+      setError(err instanceof ApiError ? err.message : "Could not void the invoice.")
+    },
   })
 
   const pdfMutation = useMutation({
@@ -122,7 +137,16 @@ export default function InvoiceDetailPage() {
               <Plus className="size-4" /> Record payment
             </Button>
           )}
+          {canManage && Number(invoice.amount_paid) === 0 && invoice.status !== "cancelled" && (
+            <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => { setError(null); setVoidOpen(true) }}>
+              <Ban className="size-4" /> Void invoice
+            </Button>
+          )}
         </div>
+
+        {error && !payOpen && (
+          <p role="alert" className="mt-4 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
+        )}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -188,6 +212,22 @@ export default function InvoiceDetailPage() {
             <Button variant="secondary" onClick={() => setPayOpen(false)}>Cancel</Button>
             <Button disabled={!amount || payMutation.isPending} onClick={() => payMutation.mutate()}>
               {payMutation.isPending ? "Saving…" : "Record payment"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={voidOpen} onOpenChange={setVoidOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader><DialogTitle>Void invoice {invoice.invoice_no}?</DialogTitle></DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            This marks the invoice as cancelled. Use it only for an invoice raised in error —
+            it has no payments recorded. This is logged to the audit trail.
+          </p>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setVoidOpen(false)}>Keep invoice</Button>
+            <Button variant="destructive" disabled={voidMutation.isPending} onClick={() => voidMutation.mutate()}>
+              {voidMutation.isPending ? "Voiding…" : "Void invoice"}
             </Button>
           </DialogFooter>
         </DialogContent>

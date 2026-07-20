@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -145,6 +146,30 @@ class InvoiceController extends Controller
             $request->input('method'),
             $request->input('reference'),
         );
+
+        return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
+    }
+
+    /**
+     * Void an invoice that was raised in error. Blocked once any payment has
+     * been recorded — a settled invoice is corrected with a refund/credit note,
+     * never voided.
+     */
+    public function void(Request $request, Invoice $invoice, InvoiceService $service): InvoiceResource
+    {
+        $this->authorize('manage', $invoice);
+
+        if ($invoice->status === 'cancelled') {
+            throw ValidationException::withMessages(['status' => 'This invoice is already cancelled.']);
+        }
+
+        if ((float) $invoice->amount_paid > 0) {
+            throw ValidationException::withMessages([
+                'status' => 'Cannot void an invoice with payments recorded. Issue a refund or credit note first.',
+            ]);
+        }
+
+        $service->void($invoice);
 
         return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
     }
