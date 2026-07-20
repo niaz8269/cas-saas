@@ -57,14 +57,14 @@ it("renders the public universities grid", async () => {
   expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
 })
 
-it("renders the CUCAS-style home with hero, tabbed search and sections", async () => {
+it("renders the CUCAS-style home with hero, search and sections", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
 
   renderWithProviders(<SiteHome />)
 
   expect(screen.getByRole("heading", { name: "Study in China", level: 1 })).toBeInTheDocument()
   expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument()
-  expect(screen.getByRole("button", { name: "Programs" })).toBeInTheDocument()
+  expect(screen.getByLabelText("Search universities or programs")).toBeInTheDocument()
   expect(screen.getByText("Weekly Programs")).toBeInTheDocument()
   expect(screen.getByText("Highlights")).toBeInTheDocument()
   expect(screen.getByText("Reviews from our students")).toBeInTheDocument()
@@ -149,7 +149,7 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
   const user = userEvent.setup()
   renderWithProviders(<SiteHelpDock />)
 
-  await user.click(screen.getByRole("button", { name: "Talk to a counsellor" }))
+  await user.click(screen.getByRole("button", { name: "Leave Message" }))
 
   expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8618041566030")
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8618041566030")

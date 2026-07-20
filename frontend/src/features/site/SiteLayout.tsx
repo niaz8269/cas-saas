@@ -1,5 +1,5 @@
-import { Facebook, Instagram, Linkedin, LogIn, Mail, Megaphone, Menu, MessageCircle, Phone, Send, X, Youtube } from "lucide-react"
-import { useState } from "react"
+import { Bell, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
+import { useRef, useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -8,10 +8,24 @@ import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
 
-// Primary top-nav — mirrors the reference header, adapted to CAS's services
-// (their "Why CUCAS / China CSCA / Pricing / Partner" → CAS equivalents).
-const NAV_PRIMARY: { to: string; label: string }[] = [
-  { to: "/site/about", label: "Why CAS" },
+type NavItemT = { to: string; label: string; dropdown?: [string, string][] }
+
+// Primary top-nav — mirrors the reference header, adapted to CAS's services.
+// "Why CAS" carries a stats dropdown, like the reference's "WHY CUCAS".
+const NAV_PRIMARY: NavItemT[] = [
+  {
+    to: "/site/about",
+    label: "Why CAS",
+    dropdown: [
+      ["200+ Universities", "/site/universities"],
+      ["5,000+ Programs", "/site/programs"],
+      ["500+ Scholarships", "/site/scholarships"],
+      ["50+ Cities", "/site/cities"],
+      ["Local Services", "/site/services"],
+      ["How it Works", "/site/about"],
+      ["Learning Center", "/site/news"],
+    ],
+  },
   { to: "/site/why-china", label: "Study in China" },
   { to: "/site/universities", label: "Universities" },
   { to: "/site/programs", label: "Programs" },
@@ -21,97 +35,139 @@ const NAV_PRIMARY: { to: string; label: string }[] = [
 
 // Fuller list for the mobile drawer.
 const NAV = [
-  ...NAV_PRIMARY,
+  ...NAV_PRIMARY.map(({ to, label }) => ({ to, label })),
   { to: "/site/scholarships", label: "Scholarships" },
   { to: "/site/study-plan", label: "Free study plan" },
   { to: "/site/news", label: "News" },
 ]
 
 const WHATSAPP = "https://wa.me/8618041566030"
+const UK_FLAG = "https://flagcdn.com/40x30/gb.png"
 
-function navClass({ isActive }: { isActive: boolean }) {
-  return cn(
-    "text-sm font-medium transition-colors",
-    isActive ? "text-cas-navy" : "text-muted-foreground hover:text-cas-navy",
+/** A desktop nav link that reveals a single-column dropdown on hover, like the
+ *  reference's "WHY CUCAS" menu (dashed separators + a caret pointer). */
+function NavItem({ item }: { item: NavItemT }) {
+  const [open, setOpen] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true) }
+  const hide = () => { timer.current = setTimeout(() => setOpen(false), 120) }
+
+  const link = (
+    <NavLink
+      to={item.to}
+      className={({ isActive }) => cn(
+        "inline-flex items-center py-1 text-[13px] font-semibold tracking-wide uppercase transition-colors",
+        isActive ? "text-cas-orange" : "text-white/85 hover:text-white",
+      )}
+    >
+      {item.label}
+    </NavLink>
+  )
+
+  if (!item.dropdown) return link
+
+  return (
+    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      {link}
+      <div
+        className={cn(
+          "absolute top-full left-1/2 z-40 -translate-x-1/2 pt-3 transition-all duration-150",
+          open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-1 opacity-0",
+        )}
+      >
+        <div className="relative w-60 rounded-sm bg-white py-1 shadow-xl ring-1 ring-black/5">
+          <span className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
+          <ul>
+            {item.dropdown.map(([label, to], i) => (
+              <li key={label} className={cn("mx-4", i < item.dropdown!.length - 1 && "border-b border-dashed border-gray-200")}>
+                <Link to={to} onClick={() => setOpen(false)} className="block py-2.5 text-sm text-gray-600 transition-colors hover:text-cas-orange-600">
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   )
 }
 
 export default function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [bannerOpen, setBannerOpen] = useState(true)
 
   return (
-    <div className="flex min-h-dvh flex-col bg-subtle lg:pb-11">
+    <div className="site-root flex min-h-dvh flex-col bg-subtle lg:pb-14">
       <ScrollToTop />
-      {/* Announcement bar */}
-      {bannerOpen && (
-        <div className="bg-cas-orange text-cas-navy">
-          <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm sm:px-6">
-            <Megaphone className="hidden size-4 shrink-0 sm:block" />
-            <p className="flex-1 text-center font-medium sm:text-left">
-              March 2026 intake applications now open! Deadline: 28 February 2026.{" "}
-              <Link to="/site/contact" className="underline underline-offset-2 hover:opacity-80">Apply now →</Link>
-            </p>
-            <button type="button" aria-label="Dismiss announcement" onClick={() => setBannerOpen(false)} className="shrink-0 rounded p-1 hover:bg-cas-navy/10">
-              <X className="size-4" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b bg-card/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link to="/site" className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
-            <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto" />
-          </Link>
-
-          <nav className="hidden items-center gap-5 lg:flex">
-            {NAV_PRIMARY.map((item) => (
-              <NavLink key={item.to} to={item.to} className={navClass}>{item.label}</NavLink>
-            ))}
-            <SiteMegaMenu />
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Link to="/login" className="hidden items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-cas-navy sm:inline-flex">
-              <LogIn className="size-4" /> Login
-            </Link>
-            <Link to="/site/contact" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
-              <Send className="size-4" /> Apply Now
-            </Link>
-            <button
-              type="button"
-              className="inline-flex size-9 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted lg:hidden"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((v) => !v)}
-            >
-              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-            </button>
+      <header className="sticky top-0 z-30">
+        {/* Top promo bar */}
+        <div className="bg-[#4b4869] text-white">
+          <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline">Browse Free-to-Apply Universities on CAS</span>
+              <Link to="/site/universities" className="rounded-sm bg-[#726f9f] px-2.5 py-0.5 text-xs transition-colors hover:bg-[#817eab]">Learn More</Link>
+            </div>
+            <div className="hidden items-center gap-3 md:flex">
+              <span>Fully-funded scholarships for 2026 — apply early</span>
+              <Link to="/site/scholarships" className="rounded-sm bg-[#726f9f] px-2.5 py-0.5 text-xs transition-colors hover:bg-[#817eab]">Learn More</Link>
+            </div>
           </div>
         </div>
 
-        {menuOpen && (
-          <nav className="border-t bg-card px-4 py-2 lg:hidden">
-            {NAV.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) => cn(
-                  "block rounded-sm px-3 py-2.5 text-sm font-medium",
-                  isActive ? "bg-cas-navy-50 text-cas-navy" : "text-muted-foreground hover:bg-muted",
-                )}
-              >
-                {item.label}
-              </NavLink>
-            ))}
-            <Link to="/login" onClick={() => setMenuOpen(false)} className="block rounded-sm px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted sm:hidden">
-              Staff login
+        {/* Main nav */}
+        <div className="relative bg-[#2f2c4c] text-white shadow-sm">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+            <Link to="/site" className="flex shrink-0 items-center" onClick={() => setMenuOpen(false)}>
+              <span className="inline-flex items-center rounded-sm bg-white px-3 py-1.5 shadow-sm">
+                <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-7 w-auto sm:h-8" />
+              </span>
             </Link>
-          </nav>
-        )}
+
+            <nav className="hidden items-center gap-6 lg:flex">
+              {NAV_PRIMARY.map((item) => <NavItem key={item.to} item={item} />)}
+              <SiteMegaMenu />
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <img src={UK_FLAG} alt="English" width={26} height={20} className="hidden rounded-[2px] shadow-sm sm:block" />
+              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-orange px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cas-orange-600">
+                <LogIn className="size-4" /> SIGN IN
+              </Link>
+              <Link to="/site/news" aria-label="Updates" className="relative hidden text-white/85 transition-colors hover:text-white sm:inline-flex">
+                <Bell className="size-5" />
+                <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-orange px-1 text-[10px] font-bold text-white">6</span>
+              </Link>
+              <button
+                type="button"
+                className="inline-flex size-9 items-center justify-center rounded-sm text-white/85 hover:bg-white/10 lg:hidden"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              </button>
+            </div>
+          </div>
+
+          {menuOpen && (
+            <nav className="border-t border-white/10 bg-[#2f2c4c] px-4 py-2 lg:hidden">
+              {NAV.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) => cn(
+                    "block rounded-sm px-3 py-2.5 text-sm font-medium",
+                    isActive ? "bg-white/10 text-cas-orange" : "text-white/85 hover:bg-white/10",
+                  )}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          )}
+        </div>
       </header>
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
@@ -122,7 +178,9 @@ export default function SiteLayout() {
       <footer className="border-t bg-cas-navy text-white/80">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <img src={casLogo} alt="CAS" className="h-10 w-auto brightness-0 invert" />
+            <span className="inline-flex items-center rounded-sm bg-white px-3 py-2 shadow-sm">
+              <img src={casLogo} alt="CAS" className="h-9 w-auto" />
+            </span>
             <p className="mt-3 max-w-sm text-sm">
               CAS — Consultancy for Abroad Study — has guided students to world-class Chinese universities since 2012,
               as an official authorized agent for Ministry of Education–listed institutions.
@@ -171,7 +229,7 @@ export default function SiteLayout() {
               <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> WhatsApp us</a></li>
             </ul>
-            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-cas-navy hover:bg-cas-orange-600">
+            <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-orange px-4 py-2 text-sm font-semibold text-white hover:bg-cas-orange-600">
               Free consultation
             </Link>
           </div>
@@ -185,7 +243,7 @@ export default function SiteLayout() {
         </div>
       </footer>
 
-      {/* Persistent conversion chrome: counsellor widget + help bar + back-to-top */}
+      {/* Persistent conversion chrome: HELP tab + bottom help bar + counsellor widget */}
       <SiteHelpDock />
     </div>
   )

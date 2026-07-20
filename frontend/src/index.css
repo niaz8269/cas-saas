@@ -125,6 +125,14 @@
   margin-right: calc(50% - 50vw);
 }
 
+/* The public marketing site uses a neutral grotesque like the reference
+   (CUCAS) — Arial/Helvetica on every OS — instead of the admin's Inter. The
+   second selector overrides Tailwind's `font-sans` utility inside the site. */
+.site-root,
+.site-root .font-sans {
+  font-family: Arial, "Helvetica Neue", Helvetica, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
 /* Respect users who prefer reduced motion (accessibility). */
 @media (prefers-reduced-motion: reduce) {
   *,

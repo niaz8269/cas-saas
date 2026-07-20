@@ -11,6 +11,7 @@ import {
   Globe2,
   MessageCircle,
   Play,
+  Plus,
   Search,
   ShieldCheck,
   Wallet,
@@ -23,7 +24,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
-import SiteLeadPanel from "@/features/site/SiteLeadPanel"
 import SiteReviews from "@/features/site/SiteReviews"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
@@ -33,12 +33,6 @@ const DOT_GRID = {
   backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
   backgroundSize: "22px 22px",
 }
-
-const SEARCH_TABS = [
-  { key: "programs", label: "Programs", to: "/site/programs" },
-  { key: "universities", label: "Universities", to: "/site/universities" },
-  { key: "scholarships", label: "Scholarships", to: "/site/scholarships" },
-]
 
 const HIGHLIGHTS: { title: string; body: string; to: string; tag: string; icon: LucideIcon }[] = [
   { title: "Globally recognised medical degrees", body: "Study MBBS at Ministry of Education–listed universities recognised worldwide.", to: "/site/programs?q=MBBS", tag: "MBBS", icon: BadgeCheck },
@@ -113,7 +107,6 @@ export default function SiteHome() {
   })
 
   const navigate = useNavigate()
-  const [tab, setTab] = useState("programs")
   const [term, setTerm] = useState("")
   const [contentTab, setContentTab] = useState("Latest topics")
 
@@ -133,85 +126,66 @@ export default function SiteHome() {
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    const to = SEARCH_TABS.find((t) => t.key === tab)!.to
-    navigate(`${to}${term.trim() ? `?q=${encodeURIComponent(term.trim())}` : ""}`)
+    navigate(`/site/universities${term.trim() ? `?q=${encodeURIComponent(term.trim())}` : ""}`)
   }
 
   return (
     <div className="space-y-12">
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="site-bleed relative -mt-8 overflow-hidden px-4 py-14 text-white sm:py-20">
-        {/* Optional hero photo — drop /public/images/hero.jpg; the gradient shows until then. */}
-        <div className="absolute inset-0 bg-cas-navy-900 bg-cover bg-center" style={{ backgroundImage: "url('https://picsum.photos/seed/cas-hero/1600/900')" }} />
-        <div className="absolute inset-0 bg-gradient-to-br from-cas-navy-900/92 via-cas-navy/85 to-cas-navy-700/80" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.1]" style={DOT_GRID} />
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-          <span className="font-sans text-[22vw] font-bold whitespace-nowrap text-white/[0.04] select-none">留学中国</span>
+      {/* ── Hero (centred, reference-style) ──────────────────── */}
+      <section className="site-bleed relative -mt-8 text-white">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://picsum.photos/seed/cas-hero/1600/900')" }} />
+          <div className="absolute inset-0 bg-[#1f1c39]/85" />
+          <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={DOT_GRID} />
         </div>
-        <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-orange/15 blur-3xl" />
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr_20rem]">
-          <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-cas-orange/30 bg-cas-orange/10 px-3 py-1 text-xs font-semibold text-cas-orange-50">
-              <span className="size-2 animate-pulse rounded-full bg-cas-orange" /> Official Authorized Agent Since 2012
-            </span>
-            <h1 className="mt-5 font-sans text-4xl font-bold sm:text-6xl">
-              Study in <span className="text-cas-orange">China</span>
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base lg:mx-0">
-              Explore Ministry of Education–listed universities and English-taught programs — with full support from application to arrival.
-            </p>
+        <div className="relative mx-auto max-w-5xl px-4 pt-16 pb-28 text-center sm:pt-24">
+          <h1 className="text-5xl font-normal tracking-tight sm:text-[5.5rem] sm:leading-[1.05]">Study in China</h1>
+          <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 sm:text-base">
+            {featuredUnis[0]?.name ? `${featuredUnis[0].name} : English-taught Programs` : "Ministry of Education–listed universities : English-taught Programs"}
+          </p>
 
-            {/* Tabbed search */}
-            <form onSubmit={runSearch} className="mx-auto mt-8 max-w-2xl lg:mx-0">
-              <div className="flex justify-center gap-1 lg:justify-start">
-                {SEARCH_TABS.map((t) => (
-                  <button
-                    key={t.key}
-                    type="button"
-                    onClick={() => setTab(t.key)}
-                    className={cnTab(tab === t.key)}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-              <div className="mt-2 flex overflow-hidden rounded-sm bg-card p-1.5 shadow-sm">
-                <input
-                  value={term}
-                  onChange={(e) => setTerm(e.target.value)}
-                  placeholder="Enter a university or program name…"
-                  aria-label="Search"
-                  className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
-                />
-                <button type="submit" className="inline-flex items-center gap-2 rounded-sm bg-cas-orange px-6 text-sm font-bold text-cas-navy hover:bg-cas-orange-600">
-                  <Search className="size-4" /> Search
-                </button>
-              </div>
-            </form>
+          {/* Ranked featured universities + expander (reference's numbered cards) */}
+          {featuredUnis.length > 0 && (
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              {featuredUnis.slice(0, 3).map((u, i) => (
+                <Link
+                  key={u.id}
+                  to={u.slug ? `/site/universities/${u.slug}` : "#"}
+                  className="group relative flex h-16 w-52 items-center gap-2.5 overflow-hidden rounded-sm border border-cas-orange/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10"
+                >
+                  <span className="absolute top-0 left-0 bg-cas-orange px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
+                  {u.logo_url
+                    ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
+                    : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
+                  <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
+                </Link>
+              ))}
+              <Link
+                to="/site/universities"
+                aria-label="Browse more universities"
+                className="flex size-9 items-center justify-center rounded-full border border-white/40 text-white/80 transition-colors hover:border-cas-orange hover:text-cas-orange"
+              >
+                <Plus className="size-5" />
+              </Link>
+            </div>
+          )}
+        </div>
 
-            {/* Ranked featured universities (reference's numbered hero cards) */}
-            {featuredUnis.length > 0 && (
-              <div className="mt-8 grid gap-2.5 sm:grid-cols-3">
-                {featuredUnis.slice(0, 3).map((u, i) => (
-                  <Link
-                    key={u.id}
-                    to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                    className="group relative flex items-center gap-2.5 overflow-hidden rounded-sm border border-white/15 bg-white/10 p-3 backdrop-blur transition-colors hover:bg-white/15"
-                  >
-                    <span className="absolute top-0 left-0 bg-cas-orange px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
-                    {u.logo_url
-                      ? <img src={u.logo_url} alt="" className="ml-3 size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
-                      : <span className="ml-3 flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
-                    <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Docked lead-capture panel (reference "Leave a message") */}
-          <SiteLeadPanel />
+        {/* Search bar — overlaps the section boundary, like the reference */}
+        <div className="absolute inset-x-0 bottom-0 z-10 translate-y-1/2 px-4">
+          <form onSubmit={runSearch} className="mx-auto flex max-w-3xl overflow-hidden rounded-sm bg-white p-1.5 shadow-xl ring-1 ring-black/5">
+            <input
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder="ENTER THE NAME OF A UNIVERSITY OR A PROGRAM"
+              aria-label="Search universities or programs"
+              className="flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-gray-400 outline-none"
+            />
+            <button type="submit" aria-label="Search" className="inline-flex items-center gap-2 rounded-sm bg-cas-orange px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-cas-orange-600">
+              <Search className="size-5" />
+            </button>
+          </form>
         </div>
       </section>
 
@@ -396,13 +370,6 @@ export default function SiteHome() {
       </section>
     </div>
   )
-}
-
-function cnTab(active: boolean): string {
-  return [
-    "rounded-t-lg px-5 py-2 text-sm font-semibold transition-colors",
-    active ? "bg-card text-cas-navy" : "bg-white/10 text-white/80 hover:bg-white/20",
-  ].join(" ")
 }
 
 function cnContentTab(active: boolean): string {

@@ -93,8 +93,8 @@ export default function SiteMegaMenu() {
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => { if (e.key === "Escape") setOpen(false) }}
         className={cn(
-          "inline-flex items-center gap-1 rounded-sm px-2 py-1.5 transition-colors",
-          open ? "text-cas-navy" : "text-muted-foreground hover:text-cas-navy",
+          "inline-flex items-center gap-1 rounded-sm px-1.5 py-1.5 transition-colors",
+          open ? "text-cas-orange" : "text-white/85 hover:text-white",
         )}
       >
         <Menu className="size-5" />
