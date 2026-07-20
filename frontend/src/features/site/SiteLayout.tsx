@@ -15,8 +15,8 @@ const NAV_PRIMARY: { to: string; label: string }[] = [
   { to: "/site/why-china", label: "Study in China" },
   { to: "/site/universities", label: "Universities" },
   { to: "/site/programs", label: "Programs" },
-  { to: "/site/services", label: "Pricing" },
-  { to: "/site/contact", label: "Partner" },
+  { to: "/site/pricing", label: "Pricing" },
+  { to: "/site/partner", label: "Partner" },
 ]
 
 // Fuller list for the mobile drawer.

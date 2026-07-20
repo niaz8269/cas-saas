@@ -9,6 +9,8 @@ import SiteContact from "./SiteContact"
 import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
 import SiteHelpDock from "./SiteHelpDock"
+import SitePartner from "./SitePartner"
+import SitePricing from "./SitePricing"
 import SiteLeadPanel from "./SiteLeadPanel"
 import SiteMegaMenu from "./SiteMegaMenu"
 import SiteStudyPlan from "./SiteStudyPlan"
@@ -192,6 +194,16 @@ it("completes the study-plan wizard and submits a tagged study_plan enquiry", as
   expect(body.form_type).toBe("study_plan")
   expect(body.first_name).toBe("Sara")
   expect(body.details).toMatchObject({ Level: "Master's" })
+})
+
+it("renders the pricing and partner pages", () => {
+  renderWithProviders(<SitePricing />)
+  expect(screen.getByRole("heading", { name: "Simple, transparent pricing", level: 1 })).toBeInTheDocument()
+  expect(screen.getByText("Getting started")).toBeInTheDocument()
+
+  renderWithProviders(<SitePartner />)
+  expect(screen.getByRole("heading", { name: "Partner with CAS", level: 1 })).toBeInTheDocument()
+  expect(screen.getAllByRole("link", { name: /Become a partner/ }).length).toBeGreaterThan(0)
 })
 
 it("renders the services, why-china and news pages", () => {
