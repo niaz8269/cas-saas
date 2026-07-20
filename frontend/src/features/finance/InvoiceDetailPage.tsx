@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Ban, FileText, Plus } from "lucide-react"
+import { ArrowLeft, Ban, FileText, Plus, Undo2 } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
-import { getInvoice, getInvoicePdf, recordInvoicePayment, voidInvoice } from "@/features/finance/api"
+import { getInvoice, getInvoicePdf, recordInvoicePayment, recordInvoiceRefund, voidInvoice } from "@/features/finance/api"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -29,9 +29,12 @@ export default function InvoiceDetailPage() {
 
   const [payOpen, setPayOpen] = useState(false)
   const [voidOpen, setVoidOpen] = useState(false)
+  const [refundOpen, setRefundOpen] = useState(false)
   const [amount, setAmount] = useState("")
   const [method, setMethod] = useState("bank_transfer")
   const [reference, setReference] = useState("")
+  const [refundAmount, setRefundAmount] = useState("")
+  const [refundReason, setRefundReason] = useState("")
   const [error, setError] = useState<string | null>(null)
 
   const { data, isPending, isError } = useQuery({
@@ -55,6 +58,19 @@ export default function InvoiceDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["invoices"] })
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Payment failed."),
+  })
+
+  const refundMutation = useMutation({
+    mutationFn: () => recordInvoiceRefund(id, { amount: Number(refundAmount), reference: refundReason.trim() }),
+    onSuccess: () => {
+      setRefundOpen(false)
+      setRefundAmount("")
+      setRefundReason("")
+      setError(null)
+      queryClient.invalidateQueries({ queryKey: ["invoice", id] })
+      queryClient.invalidateQueries({ queryKey: ["invoices"] })
+    },
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Refund failed."),
   })
 
   const voidMutation = useMutation({
@@ -137,6 +153,11 @@ export default function InvoiceDetailPage() {
               <Plus className="size-4" /> Record payment
             </Button>
           )}
+          {canManage && Number(invoice.amount_paid) > 0 && invoice.status !== "cancelled" && (
+            <Button size="sm" variant="secondary" onClick={() => { setError(null); setRefundAmount(String(invoice.amount_paid)); setRefundReason(""); setRefundOpen(true) }}>
+              <Undo2 className="size-4" /> Record refund
+            </Button>
+          )}
           {canManage && Number(invoice.amount_paid) === 0 && invoice.status !== "cancelled" && (
             <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => { setError(null); setVoidOpen(true) }}>
               <Ban className="size-4" /> Void invoice
@@ -144,7 +165,7 @@ export default function InvoiceDetailPage() {
           )}
         </div>
 
-        {error && !payOpen && (
+        {error && !payOpen && !refundOpen && (
           <p role="alert" className="mt-4 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
         )}
       </div>
@@ -175,17 +196,26 @@ export default function InvoiceDetailPage() {
             {(invoice.payments?.length ?? 0) === 0 && (
               <p className="py-5 text-sm text-muted-foreground">No payments recorded.</p>
             )}
-            {invoice.payments?.map((payment) => (
-              <div key={payment.id} className="flex items-center justify-between py-3 text-sm">
-                <div>
-                  <p className="font-mono text-xs text-muted-foreground">{payment.payment_no}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {[payment.method, payment.reference, payment.recorded_by].filter(Boolean).join(" · ")}
-                  </p>
+            {invoice.payments?.map((payment) => {
+              const isRefund = Number(payment.amount) < 0
+
+              return (
+                <div key={payment.id} className="flex items-center justify-between py-3 text-sm">
+                  <div>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {payment.payment_no}
+                      {isRefund && <span className="ml-2 rounded bg-cas-red-50 px-1.5 py-0.5 text-[10px] font-medium text-destructive uppercase">Refund</span>}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {[payment.method, payment.reference, payment.recorded_by].filter(Boolean).join(" · ")}
+                    </p>
+                  </div>
+                  <span className={cn("font-medium tabular-nums", isRefund && "text-destructive")}>
+                    {money(payment.amount, invoice.currency)}
+                  </span>
                 </div>
-                <span className="font-medium tabular-nums">{money(payment.amount, invoice.currency)}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
       </div>
@@ -228,6 +258,36 @@ export default function InvoiceDetailPage() {
             <Button variant="secondary" onClick={() => setVoidOpen(false)}>Keep invoice</Button>
             <Button variant="destructive" disabled={voidMutation.isPending} onClick={() => voidMutation.mutate()}>
               {voidMutation.isPending ? "Voiding…" : "Void invoice"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={refundOpen} onOpenChange={setRefundOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader><DialogTitle>Record refund</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            {error && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>}
+            <p className="text-sm text-muted-foreground">
+              Logged as an adjusting entry — the original payments are kept. Paid so far {money(invoice.amount_paid, invoice.currency)}.
+            </p>
+            <div className="space-y-1.5">
+              <Label htmlFor="refund-amount">Amount ({invoice.currency})</Label>
+              <Input id="refund-amount" type="number" step="0.01" value={refundAmount} onChange={(e) => setRefundAmount(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="refund-reason">Reason</Label>
+              <Input id="refund-reason" value={refundReason} onChange={(e) => setRefundReason(e.target.value)} placeholder="Duplicate payment, overcharge…" />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setRefundOpen(false)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              disabled={!refundAmount || !refundReason.trim() || refundMutation.isPending}
+              onClick={() => refundMutation.mutate()}
+            >
+              {refundMutation.isPending ? "Saving…" : "Record refund"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -252,6 +252,7 @@ Route::prefix('v1')->group(function () {
         Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf']);
         Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'storePayment']);
         Route::post('invoices/{invoice}/void', [InvoiceController::class, 'void']);
+        Route::post('invoices/{invoice}/refunds', [InvoiceController::class, 'refund']);
         Route::get('commissions', [CommissionController::class, 'index']);
         Route::get('commissions/{commission}', [CommissionController::class, 'show']);
         Route::post('commissions/{commission}/transition', [CommissionController::class, 'transition']);

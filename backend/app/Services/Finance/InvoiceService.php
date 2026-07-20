@@ -99,6 +99,39 @@ class InvoiceService
         return $invoice;
     }
 
+    /**
+     * Refund against a settled invoice, recorded as an append-only negative
+     * receipt (an adjusting entry — the original payment history is never
+     * altered). The paid total and status follow the new running balance.
+     */
+    public function recordRefund(Invoice $invoice, float $amount, User $actor, string $reason): Payment
+    {
+        return DB::transaction(function () use ($invoice, $amount, $actor, $reason) {
+            $refund = $invoice->payments()->create([
+                'payment_no' => $this->nextNumber('REF', Payment::class, 'payment_no'),
+                'amount' => -abs($amount),
+                'currency' => $invoice->currency,
+                'method' => 'refund',
+                'reference' => $reason,
+                'received_at' => now(),
+                'recorded_by' => $actor->id,
+            ]);
+
+            $paid = (float) $invoice->amount_paid - abs($amount);
+
+            $invoice->update([
+                'amount_paid' => $paid,
+                'status' => match (true) {
+                    $paid >= (float) $invoice->total => 'paid',
+                    $paid > 0 => 'partially_paid',
+                    default => 'issued',
+                },
+            ]);
+
+            return $refund;
+        });
+    }
+
     private function nextNumber(string $prefix, string $model, string $column): string
     {
         $year = now()->year;

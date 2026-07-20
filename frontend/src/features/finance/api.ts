@@ -113,6 +113,10 @@ export const recordInvoicePayment = (id: number | string, payload: { amount: num
 export const voidInvoice = (id: number | string) =>
   api<{ data: InvoiceItemData }>(`/invoices/${id}/void`, { method: "POST" })
 
+/** Refund against a settled invoice — recorded as an append-only negative receipt. */
+export const recordInvoiceRefund = (id: number | string, payload: { amount: number; reference: string }) =>
+  api<{ data: InvoiceItemData }>(`/invoices/${id}/refunds`, { method: "POST", body: JSON.stringify(payload) })
+
 // ---- Invoice creation from the course fee structure ----
 
 export interface FeeLine {

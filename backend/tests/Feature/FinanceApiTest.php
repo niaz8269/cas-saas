@@ -103,6 +103,59 @@ it('blocks voiding without finance.manage.global', function () {
     $this->postJson("/api/v1/invoices/{$invoice->id}/void")->assertStatus(403);
 });
 
+it('records a refund as an append-only negative receipt and lowers the paid total', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['total' => 10000, 'status' => 'paid', 'amount_paid' => 10000]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/refunds", ['amount' => 4000, 'reference' => 'Overcharge'])
+        ->assertOk()
+        ->assertJsonPath('data.status', 'partially_paid')
+        ->assertJsonPath('data.amount_paid', '6000.00');
+
+    $refund = $invoice->payments()->latest('id')->first();
+    expect((float) $refund->amount)->toBe(-4000.0)
+        ->and($refund->method)->toBe('refund')
+        ->and($refund->reference)->toBe('Overcharge')
+        ->and((float) $invoice->fresh()->amount_paid)->toBe(6000.0);
+});
+
+it('flips an invoice back to issued when fully refunded', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['total' => 5000, 'status' => 'paid', 'amount_paid' => 5000]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/refunds", ['amount' => 5000, 'reference' => 'Cancelled enrolment'])
+        ->assertOk()
+        ->assertJsonPath('data.status', 'issued');
+
+    expect((float) $invoice->fresh()->amount_paid)->toBe(0.0);
+});
+
+it('rejects a refund larger than the amount paid', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['total' => 5000, 'status' => 'partially_paid', 'amount_paid' => 2000]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/refunds", ['amount' => 3000, 'reference' => 'x'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('amount');
+});
+
+it('requires a reason for a refund', function () {
+    actingAsStaffWith(FINANCE_PERMS);
+    $invoice = Invoice::factory()->create(['total' => 5000, 'status' => 'paid', 'amount_paid' => 5000]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/refunds", ['amount' => 1000])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('reference');
+});
+
+it('blocks refunds without finance.manage.global', function () {
+    actingAsStaffWith(['finance.view.global']);
+    $invoice = Invoice::factory()->create(['total' => 5000, 'status' => 'paid', 'amount_paid' => 5000]);
+
+    $this->postJson("/api/v1/invoices/{$invoice->id}/refunds", ['amount' => 1000, 'reference' => 'x'])
+        ->assertStatus(403);
+});
+
 // ── Commissions ─────────────────────────────────────────────────────────
 
 it('shows finance the full pipeline with totals meta', function () {

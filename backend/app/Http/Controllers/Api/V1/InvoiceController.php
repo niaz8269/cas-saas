@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Finance\StoreInvoicePaymentRequest;
+use App\Http\Requests\Finance\StoreInvoiceRefundRequest;
 use App\Http\Requests\Finance\StoreInvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Agent;
@@ -170,6 +171,28 @@ class InvoiceController extends Controller
         }
 
         $service->void($invoice);
+
+        return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
+    }
+
+    /**
+     * Record a refund against a settled invoice as an append-only negative
+     * receipt. The original payments are never altered.
+     */
+    public function refund(StoreInvoiceRefundRequest $request, Invoice $invoice, InvoiceService $service): InvoiceResource
+    {
+        $this->authorize('manage', $invoice);
+
+        if ($invoice->status === 'cancelled') {
+            throw ValidationException::withMessages(['amount' => 'Cannot refund a cancelled invoice.']);
+        }
+
+        $service->recordRefund(
+            $invoice,
+            (float) $request->input('amount'),
+            $request->user(),
+            (string) $request->input('reference'),
+        );
 
         return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
     }
