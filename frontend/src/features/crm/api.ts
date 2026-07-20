@@ -111,6 +111,11 @@ export interface LeadSource {
 
 export const listLeadSources = () => api<{ data: LeadSource[] }>("/leads/sources")
 
+export interface CountryRef { id: number; name: string; iso2: string }
+
+/** Reference list of countries for staff pickers. */
+export const listCountries = () => api<{ data: CountryRef[] }>("/countries")
+
 export interface CreateLeadPayload {
   first_name: string
   last_name?: string

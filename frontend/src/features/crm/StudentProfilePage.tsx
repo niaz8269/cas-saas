@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   Bot,
   Mail,
+  Pencil,
   Phone,
   RefreshCw,
   StickyNote,
@@ -27,6 +28,7 @@ import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
 import { addNote, getStudent, getTimeline, updateStudent } from "@/features/crm/api"
+import EditStudentDialog from "@/features/crm/EditStudentDialog"
 import GuardiansEditor from "@/features/crm/GuardiansEditor"
 import SendMessageDialog from "@/features/crm/SendMessageDialog"
 import StudentDocuments from "@/features/crm/StudentDocuments"
@@ -60,6 +62,7 @@ export default function StudentProfilePage() {
 
   const [note, setNote] = useState("")
   const [actionError, setActionError] = useState<string | null>(null)
+  const [editOpen, setEditOpen] = useState(false)
 
   const student = useQuery({ queryKey: ["student", id], queryFn: () => getStudent(id) })
   const timeline = useQuery({ queryKey: ["student-timeline", id], queryFn: () => getTimeline(id) })
@@ -116,7 +119,14 @@ export default function StudentProfilePage() {
           >
             <ArrowLeft className="size-3.5" /> Students
           </Link>
-          <h2 className="mt-1 text-xl font-semibold text-cas-navy">{s.full_name}</h2>
+          <div className="mt-1 flex items-start justify-between gap-2">
+            <h2 className="text-xl font-semibold text-cas-navy">{s.full_name}</h2>
+            {canUpdate && (
+              <Button variant="secondary" size="sm" className="shrink-0" onClick={() => setEditOpen(true)}>
+                <Pencil className="size-3.5" /> Edit
+              </Button>
+            )}
+          </div>
           <div className="mt-1 flex items-center gap-2">
             <span className="font-mono text-xs text-muted-foreground">{s.student_code}</span>
             <Badge
@@ -273,6 +283,8 @@ export default function StudentProfilePage() {
           </div>
         </div>
       </div>
+
+      <EditStudentDialog open={editOpen} onOpenChange={setEditOpen} student={s} />
     </div>
   )
 }
