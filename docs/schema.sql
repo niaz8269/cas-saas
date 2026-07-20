@@ -811,6 +811,14 @@ ALTER TABLE leads
 ALTER TABLE invoice_items
   ADD COLUMN fee_type VARCHAR(40) NULL AFTER invoice_id;
 
+-- Activities can attach to a lead as well as a student, so calls/notes can be
+-- logged during pre-conversion nurturing (student_id becomes nullable).
+ALTER TABLE activities
+  MODIFY COLUMN student_id BIGINT UNSIGNED NULL,
+  ADD COLUMN lead_id BIGINT UNSIGNED NULL AFTER student_id,
+  ADD KEY idx_activities_lead (lead_id, created_at),
+  ADD CONSTRAINT fk_activities_lead FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE SET NULL;
+
 -- Captured server errors for the admin error monitor, grouped by fingerprint
 -- (class+file+line) with an occurrence count and last-seen timestamp.
 CREATE TABLE error_logs (

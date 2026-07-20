@@ -176,6 +176,15 @@ export const addNote = (id: number | string, body: string) =>
     body: JSON.stringify({ body }),
   })
 
+export const getLeadTimeline = (id: number | string) =>
+  api<Paginated<ActivityItem>>(`/leads/${id}/timeline?per_page=50`)
+
+export const addLeadNote = (id: number | string, body: string) =>
+  api<{ data: ActivityItem }>(`/leads/${id}/notes`, {
+    method: "POST",
+    body: JSON.stringify({ body }),
+  })
+
 // ── Guardians ──────────────────────────────────────────────────────────
 
 export const addGuardian = (studentId: number | string, payload: GuardianPayload) =>

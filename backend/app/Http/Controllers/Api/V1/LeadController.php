@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Crm\AssignLeadRequest;
 use App\Http\Requests\Crm\ConvertLeadRequest;
 use App\Http\Requests\Crm\StoreLeadRequest;
+use App\Http\Requests\Crm\StoreNoteRequest;
 use App\Http\Requests\Crm\UpdateLeadRequest;
+use App\Http\Resources\ActivityResource;
 use App\Http\Resources\LeadResource;
 use App\Http\Resources\StudentResource;
+use App\Models\Activity;
 use App\Models\Lead;
 use App\Models\MarketingSource;
 use App\Models\Task;
@@ -131,9 +134,50 @@ class LeadController extends Controller
     {
         $this->authorize('update', $lead);
 
+        $before = $lead->status;
         $lead->update($request->validated());
 
+        // Record status changes on the lead timeline.
+        if ($lead->status !== $before) {
+            Activity::create([
+                'lead_id' => $lead->id,
+                'user_id' => $request->user()->id,
+                'type' => 'status',
+                'body' => "Status changed from {$before} to {$lead->status}",
+                'created_at' => now(),
+            ]);
+        }
+
         return new LeadResource($lead->load('assignee:id,name'));
+    }
+
+    /** Activity timeline for the lead, newest first. */
+    public function timeline(Request $request, Lead $lead): AnonymousResourceCollection
+    {
+        $this->authorize('view', $lead);
+
+        $activities = $lead->activities()
+            ->with('user:id,name')
+            ->latest('id')
+            ->paginate(min($request->integer('per_page', 25), 100));
+
+        return ActivityResource::collection($activities);
+    }
+
+    /** Append a note to the lead timeline. */
+    public function addNote(StoreNoteRequest $request, Lead $lead): ActivityResource
+    {
+        $this->authorize('update', $lead);
+
+        $activity = Activity::create([
+            'lead_id' => $lead->id,
+            'user_id' => $request->user()->id,
+            'type' => 'note',
+            'body' => $request->string('body'),
+            'created_at' => now(),
+        ]);
+
+        return new ActivityResource($activity->load('user:id,name'));
     }
 
     /**

@@ -13,6 +13,29 @@ const LEAD_ADMIN_PERMS = [
     'leads.view.global', 'leads.update.global', 'leads.assign.global', 'leads.convert.assigned',
 ];
 
+it('logs a note on the lead timeline and lists it', function () {
+    actingAsStaffWith(LEAD_ADMIN_PERMS);
+    $lead = Lead::factory()->create();
+
+    $this->postJson("/api/v1/leads/{$lead->id}/notes", ['body' => 'Called — call back Tuesday'])
+        ->assertCreated()
+        ->assertJsonPath('data.type', 'note');
+
+    $this->getJson("/api/v1/leads/{$lead->id}/timeline")
+        ->assertOk()
+        ->assertJsonPath('data.0.body', 'Called — call back Tuesday');
+});
+
+it('records a status change on the lead timeline', function () {
+    actingAsStaffWith(LEAD_ADMIN_PERMS);
+    $lead = Lead::factory()->create(['status' => 'new']);
+
+    $this->patchJson("/api/v1/leads/{$lead->id}", ['status' => 'contacted'])->assertOk();
+
+    $response = $this->getJson("/api/v1/leads/{$lead->id}/timeline")->assertOk();
+    expect(collect($response->json('data'))->pluck('type'))->toContain('status');
+});
+
 it('shows counselors only their assigned leads', function () {
     $counselor = actingAsStaffWith(COUNSELOR_PERMS);
     $mine = Lead::factory()->assigned()->create(['assigned_user_id' => $counselor->id]);

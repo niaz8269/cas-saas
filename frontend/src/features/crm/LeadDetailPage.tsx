@@ -24,6 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import { assignLead, convertLead, getLead, listStaff, updateLead } from "@/features/crm/api"
+import LeadTimeline from "@/features/crm/LeadTimeline"
 import { LEAD_EDITABLE_STATUSES, LEAD_STATUS_BADGE } from "@/features/crm/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -225,6 +226,8 @@ export default function LeadDetailPage() {
           </div>
         )}
       </div>
+
+      <LeadTimeline leadId={id} canUpdate={canUpdate} />
 
       {/* Assign dialog */}
       <Dialog open={assignOpen} onOpenChange={setAssignOpen}>

@@ -188,6 +188,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('leads/{lead}', [LeadController::class, 'update']);
         Route::post('leads/{lead}/assign', [LeadController::class, 'assign']);
         Route::post('leads/{lead}/convert', [LeadController::class, 'convert']);
+        Route::get('leads/{lead}/timeline', [LeadController::class, 'timeline']);
+        Route::post('leads/{lead}/notes', [LeadController::class, 'addNote']);
         Route::get('students', [StudentController::class, 'index']);
         Route::post('students', [StudentController::class, 'store']);
         Route::get('students/{student}', [StudentController::class, 'show']);
