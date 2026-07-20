@@ -60,6 +60,7 @@ const COLUMNS: Col[] = [
       ["About CAS", "/site/about"],
       ["Our services", "/site/services"],
       ["Why study in China", "/site/why-china"],
+      ["FAQ", "/site/faq"],
       ["News & updates", "/site/news"],
       ["Get a free study plan", "/site/study-plan"],
     ],

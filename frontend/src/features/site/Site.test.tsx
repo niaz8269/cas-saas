@@ -8,6 +8,7 @@ import SiteAbout from "./SiteAbout"
 import SiteContact from "./SiteContact"
 import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
+import SiteFAQ from "./SiteFAQ"
 import SiteHelpDock from "./SiteHelpDock"
 import SitePartner from "./SitePartner"
 import SitePricing from "./SitePricing"
@@ -194,6 +195,18 @@ it("completes the study-plan wizard and submits a tagged study_plan enquiry", as
   expect(body.form_type).toBe("study_plan")
   expect(body.first_name).toBe("Sara")
   expect(body.details).toMatchObject({ Level: "Master's" })
+})
+
+it("renders the FAQ with categories and expands an answer", async () => {
+  const user = userEvent.setup()
+  renderWithProviders(<SiteFAQ />)
+
+  expect(screen.getByRole("heading", { name: "Frequently asked questions", level: 1 })).toBeInTheDocument()
+  expect(screen.getByText("Scholarships")).toBeInTheDocument()
+  // Answers are collapsed until their question is clicked.
+  expect(screen.queryByText(/globally recognised qualifications/)).not.toBeInTheDocument()
+  await user.click(screen.getByRole("button", { name: "Why study in China?" }))
+  expect(screen.getByText(/globally recognised qualifications/)).toBeInTheDocument()
 })
 
 it("renders the pricing and partner pages", () => {
