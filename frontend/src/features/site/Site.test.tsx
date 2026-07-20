@@ -9,6 +9,7 @@ import SiteContact from "./SiteContact"
 import ScrollToTop from "./ScrollToTop"
 import SiteHome from "./SiteHome"
 import SiteHelpDock from "./SiteHelpDock"
+import SiteLeadPanel from "./SiteLeadPanel"
 import SiteMegaMenu from "./SiteMegaMenu"
 import SiteNews from "./SiteNews"
 import SiteServices from "./SiteServices"
@@ -148,6 +149,23 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
   expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8618041566030")
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8618041566030")
   expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:info@cas.moe")
+})
+
+it("submits the hero lead panel to the public enquiries endpoint", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ message: "Thank you" }))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<SiteLeadPanel />)
+
+  await user.type(screen.getByLabelText("Your name"), "Ali")
+  await user.type(screen.getByLabelText("Email"), "ali@example.com")
+  await user.click(screen.getByRole("button", { name: /Send message/ }))
+
+  expect(await screen.findByText("Thank you!")).toBeInTheDocument()
+  const post = fetchMock.mock.calls.find(([u, i]) => String(u).includes("/public/enquiries") && i?.method === "POST")
+  expect(post).toBeTruthy()
+  expect(JSON.parse((post![1] as RequestInit).body as string)).toMatchObject({ first_name: "Ali", email: "ali@example.com" })
 })
 
 it("renders the services, why-china and news pages", () => {

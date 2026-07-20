@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
+import SiteLeadPanel from "@/features/site/SiteLeadPanel"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
 const DEADLINE = new Date("2026-02-28T23:59:59Z").getTime()
@@ -164,56 +165,61 @@ export default function SiteHome() {
         </div>
         <div className="pointer-events-none absolute -top-24 right-1/4 size-80 rounded-full bg-cas-gold/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-4xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
-            <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
-          </span>
-          <h1 className="mt-5 font-serif text-4xl font-bold sm:text-6xl">
-            Study in <span className="text-cas-gold">China</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base">
-            Explore Ministry of Education–listed universities and English-taught programs — with full support from application to arrival.
-          </p>
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr_20rem]">
+          <div className="text-center lg:text-left">
+            <span className="inline-flex items-center gap-2 rounded-full border border-cas-gold/30 bg-cas-gold/10 px-3 py-1 text-xs font-semibold text-cas-gold-50">
+              <span className="size-2 animate-pulse rounded-full bg-cas-gold" /> Official Authorized Agent Since 2012
+            </span>
+            <h1 className="mt-5 font-serif text-4xl font-bold sm:text-6xl">
+              Study in <span className="text-cas-gold">China</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-xl text-sm text-white/80 sm:text-base lg:mx-0">
+              Explore Ministry of Education–listed universities and English-taught programs — with full support from application to arrival.
+            </p>
 
-          {/* Tabbed search */}
-          <form onSubmit={runSearch} className="mx-auto mt-8 max-w-2xl">
-            <div className="flex justify-center gap-1">
-              {SEARCH_TABS.map((t) => (
-                <button
-                  key={t.key}
-                  type="button"
-                  onClick={() => setTab(t.key)}
-                  className={cnTab(tab === t.key)}
-                >
-                  {t.label}
+            {/* Tabbed search */}
+            <form onSubmit={runSearch} className="mx-auto mt-8 max-w-2xl lg:mx-0">
+              <div className="flex justify-center gap-1 lg:justify-start">
+                {SEARCH_TABS.map((t) => (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => setTab(t.key)}
+                    className={cnTab(tab === t.key)}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 flex overflow-hidden rounded-xl bg-card p-1.5 shadow-2xl">
+                <input
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  placeholder="Enter a university or program name…"
+                  aria-label="Search"
+                  className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
+                />
+                <button type="submit" className="inline-flex items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
+                  <Search className="size-4" /> Search
                 </button>
-              ))}
-            </div>
-            <div className="mt-2 flex overflow-hidden rounded-xl bg-card p-1.5 shadow-2xl">
-              <input
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-                placeholder="Enter a university or program name…"
-                aria-label="Search"
-                className="flex-1 bg-transparent px-4 text-sm text-foreground outline-none"
-              />
-              <button type="submit" className="inline-flex items-center gap-2 rounded-lg bg-cas-gold px-6 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">
-                <Search className="size-4" /> Search
-              </button>
-            </div>
-          </form>
+              </div>
+            </form>
 
-          {/* Featured logos row */}
-          {featuredUnis.length > 0 && (
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-white/60">
-              <span>Featured:</span>
-              {featuredUnis.slice(0, 4).map((u) => (
-                <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-medium text-white/80 hover:bg-white/10">
-                  {u.name}
-                </Link>
-              ))}
-            </div>
-          )}
+            {/* Featured logos row */}
+            {featuredUnis.length > 0 && (
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-white/60 lg:justify-start">
+                <span>Featured:</span>
+                {featuredUnis.slice(0, 4).map((u) => (
+                  <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-medium text-white/80 hover:bg-white/10">
+                    {u.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Docked lead-capture panel (reference "Leave a message") */}
+          <SiteLeadPanel />
         </div>
       </section>
 
