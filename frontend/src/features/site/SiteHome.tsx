@@ -205,13 +205,20 @@ export default function SiteHome() {
               </div>
             </form>
 
-            {/* Featured logos row */}
+            {/* Ranked featured universities (reference's numbered hero cards) */}
             {featuredUnis.length > 0 && (
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-white/60 lg:justify-start">
-                <span>Featured:</span>
-                {featuredUnis.slice(0, 4).map((u) => (
-                  <Link key={u.id} to={u.slug ? `/site/universities/${u.slug}` : "#"} className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-medium text-white/80 hover:bg-white/10">
-                    {u.name}
+              <div className="mt-8 grid gap-2.5 sm:grid-cols-3">
+                {featuredUnis.slice(0, 3).map((u, i) => (
+                  <Link
+                    key={u.id}
+                    to={u.slug ? `/site/universities/${u.slug}` : "#"}
+                    className="group relative flex items-center gap-2.5 overflow-hidden rounded-sm border border-white/15 bg-white/10 p-3 backdrop-blur transition-colors hover:bg-white/15"
+                  >
+                    <span className="absolute top-0 left-0 bg-cas-orange px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
+                    {u.logo_url
+                      ? <img src={u.logo_url} alt="" className="ml-3 size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
+                      : <span className="ml-3 flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
+                    <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
                   </Link>
                 ))}
               </div>
