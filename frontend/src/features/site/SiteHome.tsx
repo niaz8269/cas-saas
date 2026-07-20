@@ -263,7 +263,7 @@ export default function SiteHome() {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div><p className="mb-1 text-xs text-muted-foreground">Applications close in</p><Countdown /></div>
-                  <Link to="/site/contact" className="inline-flex h-11 items-center gap-2 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
+                  <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-lg bg-cas-gold px-5 text-sm font-bold text-cas-navy hover:bg-cas-gold-600">Apply for a seat <ArrowRight className="size-4" /></Link>
                 </div>
               </>
             ) : (

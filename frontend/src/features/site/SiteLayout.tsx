@@ -1,5 +1,5 @@
-import { ChevronDown, Facebook, Instagram, Linkedin, LogIn, Mail, Megaphone, Menu, MessageCircle, Phone, Send, X, Youtube } from "lucide-react"
-import { useRef, useState } from "react"
+import { Facebook, Instagram, Linkedin, LogIn, Mail, Megaphone, Menu, MessageCircle, Phone, Send, X, Youtube } from "lucide-react"
+import { useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -8,117 +8,23 @@ import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { cn } from "@/lib/utils"
 
-// Per-item nav dropdowns, grouped into sub-categories.
-type Group = { heading: string; items: [string, string][] }
-const DROPDOWNS: Record<string, { to: string; groups: Group[]; all: [string, string] }> = {
-  Universities: {
-    to: "/site/universities",
-    groups: [
-      { heading: "Destinations", items: [
-        ["Beijing", "/site/universities?q=Beijing"],
-        ["Shanghai", "/site/universities?q=Shanghai"],
-        ["Guangzhou", "/site/universities?q=Guangzhou"],
-        ["Wuhan", "/site/universities?q=Wuhan"],
-      ] },
-      { heading: "By type", items: [
-        ["Medical universities", "/site/universities?q=Medical"],
-        ["Engineering universities", "/site/universities?q=Engineering"],
-        ["Technology universities", "/site/universities?q=Technology"],
-        ["MoE-listed universities", "/site/universities?moe=1"],
-      ] },
-    ],
-    all: ["All universities »", "/site/universities"],
-  },
-  Programs: {
-    to: "/site/programs",
-    groups: [
-      { heading: "By subject", items: [
-        ["MBBS / Medicine", "/site/programs?q=MBBS"],
-        ["Engineering", "/site/programs?q=Engineering"],
-        ["Business & MBA", "/site/programs?q=Business"],
-        ["Computer Science", "/site/programs?q=Computer"],
-        ["Law", "/site/programs?q=Law"],
-      ] },
-      { heading: "By degree", items: [
-        ["Bachelor degrees", "/site/programs?level=bachelor"],
-        ["Master degrees", "/site/programs?level=master"],
-        ["PhD / Doctoral", "/site/programs?level=phd"],
-        ["Chinese language", "/site/programs?q=Chinese"],
-      ] },
-    ],
-    all: ["All programs »", "/site/programs"],
-  },
-  Scholarships: {
-    to: "/site/scholarships",
-    groups: [
-      { heading: "By coverage", items: [
-        ["Full scholarships", "/site/scholarships?q=full"],
-        ["Partial scholarships", "/site/scholarships?q=partial"],
-      ] },
-      { heading: "By provider", items: [
-        ["University scholarships", "/site/scholarships?q=university"],
-        ["Government (CSC)", "/site/scholarships?q=CSC"],
-        ["Provincial scholarships", "/site/scholarships?q=provincial"],
-      ] },
-    ],
-    all: ["All scholarships »", "/site/scholarships"],
-  },
-}
-
-function NavDropdown({ label }: { label: keyof typeof DROPDOWNS }) {
-  const { to, groups, all } = DROPDOWNS[label]
-  const [open, setOpen] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true) }
-  const hide = () => { timer.current = setTimeout(() => setOpen(false), 120) }
-
-  return (
-    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
-      <NavLink to={to} className={({ isActive }) => cn(
-        "inline-flex items-center gap-1 text-sm font-medium transition-colors",
-        isActive ? "text-cas-navy" : "text-muted-foreground hover:text-cas-navy",
-      )}>
-        {label} <ChevronDown className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")} />
-      </NavLink>
-      <div className={cn(
-        "absolute top-full left-1/2 z-40 mt-3 w-64 -translate-x-1/2 origin-top overflow-hidden rounded-xl border bg-card shadow-xl transition-all duration-200",
-        open ? "visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
-      )}>
-        <div className="h-1 bg-cas-gold" />
-        <div className="p-2">
-          {groups.map((g) => (
-            <div key={g.heading} className="mb-1 last:mb-0">
-              <p className="px-3 pt-2 pb-1 text-[11px] font-bold tracking-wider text-cas-gold-600 uppercase">{g.heading}</p>
-              <ul>
-                {g.items.map(([l, u]) => (
-                  <li key={l}>
-                    <Link to={u} onClick={() => setOpen(false)} className="block rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-cas-navy">
-                      {l}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          <Link to={all[1]} onClick={() => setOpen(false)} className="mt-1 block border-t px-3 py-2 text-xs font-semibold text-cas-navy hover:underline">
-            {all[0]}
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Full list — used by the mobile menu.
-const NAV = [
-  { to: "/site/about", label: "About" },
+// Primary top-nav — mirrors the reference header, adapted to CAS's services
+// (their "Why CUCAS / China CSCA / Pricing / Partner" → CAS equivalents).
+const NAV_PRIMARY: { to: string; label: string }[] = [
+  { to: "/site/about", label: "Why CAS" },
+  { to: "/site/why-china", label: "Study in China" },
   { to: "/site/universities", label: "Universities" },
   { to: "/site/programs", label: "Programs" },
+  { to: "/site/services", label: "Pricing" },
+  { to: "/site/contact", label: "Partner" },
+]
+
+// Fuller list for the mobile drawer.
+const NAV = [
+  ...NAV_PRIMARY,
   { to: "/site/scholarships", label: "Scholarships" },
-  { to: "/site/services", label: "Services" },
-  { to: "/site/why-china", label: "Why China" },
+  { to: "/site/study-plan", label: "Free study plan" },
   { to: "/site/news", label: "News" },
-  { to: "/site/contact", label: "Contact" },
 ]
 
 const WHATSAPP = "https://wa.me/8618041566030"
@@ -161,10 +67,9 @@ export default function SiteLayout() {
           </Link>
 
           <nav className="hidden items-center gap-5 lg:flex">
-            <NavDropdown label="Universities" />
-            <NavDropdown label="Programs" />
-            <NavDropdown label="Scholarships" />
-            <NavLink to="/site/why-china" className={navClass}>Why China</NavLink>
+            {NAV_PRIMARY.map((item) => (
+              <NavLink key={item.to} to={item.to} className={navClass}>{item.label}</NavLink>
+            ))}
             <SiteMegaMenu />
           </nav>
 
