@@ -235,7 +235,7 @@ export default function SiteHome() {
 
       {/* ── Weekly Programs spotlight ────────────────────────── */}
       <section>
-        <h2 className="flex items-center gap-2 text-xl font-bold text-cas-navy sm:text-2xl">
+        <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-3xl">
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-2xl border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">

@@ -114,14 +114,12 @@ export function SiteSection({ title, subtitle, action, children }: {
 }) {
   return (
     <section>
-      <div className="mb-4 flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-semibold text-cas-navy sm:text-2xl">{title}</h2>
-          {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
-        </div>
-        {action}
+      <div className="mb-6 text-center">
+        <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">{title}</h2>
+        {subtitle && <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {children}
+      {action && <div className="mt-6 flex justify-center">{action}</div>}
     </section>
   )
 }
