@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Check, Download, FileText, FileUp, Plus } from "lucide-react"
+import { ArrowLeft, Check, Download, FileText, FileUp, Plus, UserCog } from "lucide-react"
 import { useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -33,11 +33,13 @@ import {
   respondToOffer,
   storeOffer,
   transitionApplication,
+  updateApplication,
   uploadDocument,
   verifyDocument,
   type ApplicantProfile,
   type DocumentItem,
 } from "@/features/admissions/api"
+import { listStaff } from "@/features/crm/api"
 import {
   APPLICATION_LADDER,
   APPLICATION_STATUS_BADGE,
@@ -221,11 +223,18 @@ export default function ApplicationDetailPage() {
   const [offerType, setOfferType] = useState("conditional")
   const [offerRef, setOfferRef] = useState("")
   const [uploadTypeId, setUploadTypeId] = useState<number | null>(null)
+  const [reassignOpen, setReassignOpen] = useState(false)
+  const [selectedOfficer, setSelectedOfficer] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const application = useQuery({ queryKey: ["application", id], queryFn: () => getApplication(id) })
   const documents = useQuery({ queryKey: ["application-documents", id], queryFn: () => listApplicationDocuments(id) })
   const types = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes })
+  const officers = useQuery({
+    queryKey: ["staff-directory", "Admissions"],
+    queryFn: () => listStaff("Admissions"),
+    enabled: reassignOpen,
+  })
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["application", id] })
@@ -249,6 +258,21 @@ export default function ApplicationDetailPage() {
       setMissing([])
       setActionError(error instanceof ApiError ? error.message : "Transition failed.")
     },
+  })
+
+  const reassignMutation = useMutation({
+    mutationFn: () =>
+      updateApplication(id, {
+        assigned_admissions_id:
+          selectedOfficer && selectedOfficer !== "0" ? Number(selectedOfficer) : null,
+      }),
+    onSuccess: () => {
+      setActionError(null)
+      setReassignOpen(false)
+      invalidate()
+    },
+    onError: (error) =>
+      setActionError(error instanceof ApiError ? error.message : "Reassignment failed."),
   })
 
   const uploadMutation = useMutation({
@@ -415,6 +439,25 @@ export default function ApplicationDetailPage() {
 
         <div className="mt-5 border-t pt-5">
           <Stepper current={app.status} />
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+          <span className="text-muted-foreground">Admissions officer:</span>
+          <span className="font-medium">{app.admissions_officer?.name ?? "Unassigned"}</span>
+          {canUpdate && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 gap-1 px-2 text-cas-navy hover:text-cas-navy"
+              onClick={() => {
+                setSelectedOfficer(app.admissions_officer ? String(app.admissions_officer.id) : "")
+                setActionError(null)
+                setReassignOpen(true)
+              }}
+            >
+              <UserCog className="size-3.5" /> Reassign
+            </Button>
+          )}
         </div>
 
         {actionError && (
@@ -654,6 +697,38 @@ export default function ApplicationDetailPage() {
             <Button variant="secondary" onClick={() => setOfferOpen(false)}>Cancel</Button>
             <Button disabled={offerMutation.isPending} onClick={() => offerMutation.mutate()}>
               {offerMutation.isPending ? "Saving…" : "Record offer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reassign admissions officer */}
+      <Dialog open={reassignOpen} onOpenChange={setReassignOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reassign admissions officer</DialogTitle>
+          </DialogHeader>
+
+          <Select value={selectedOfficer} onValueChange={setSelectedOfficer}>
+            <SelectTrigger aria-label="Select admissions officer">
+              <SelectValue placeholder={officers.isPending ? "Loading officers…" : "Select an officer"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">Unassigned</SelectItem>
+              {(officers.data?.data ?? []).map((officer) => (
+                <SelectItem key={officer.id} value={String(officer.id)}>
+                  {officer.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setReassignOpen(false)}>
+              Cancel
+            </Button>
+            <Button disabled={reassignMutation.isPending} onClick={() => reassignMutation.mutate()}>
+              {reassignMutation.isPending ? "Saving…" : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,0 +1,8 @@
+# Local-only override (do not commit). Remaps the web (nginx) host port off
+# 8080, which a host service already holds on this machine. The frontend reaches
+# the backend over the internal docker network (web:80), so the app works
+# regardless of the host port; this just avoids the bind conflict.
+services:
+  web:
+    ports: !override
+      - "8081:80"

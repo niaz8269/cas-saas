@@ -141,6 +141,20 @@ export const transitionApplication = (id: number | string, status: string, note?
     body: JSON.stringify({ status, note }),
   })
 
+/** Edit an application's assignment/routing (admissions officer, intake, scholarship). */
+export const updateApplication = (
+  id: number | string,
+  payload: {
+    assigned_admissions_id?: number | null
+    intake_id?: number | null
+    scholarship_id?: number | null
+  },
+) =>
+  api<{ data: ApplicationListItem }>(`/applications/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  })
+
 export const storeOffer = (id: number | string, payload: Record<string, unknown>) =>
   api<{ data: OfferItem }>(`/applications/${id}/offers`, {
     method: "POST",

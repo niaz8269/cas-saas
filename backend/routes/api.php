@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\StaffController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
@@ -125,6 +126,7 @@ Route::prefix('v1')->group(function () {
 
         // Reference data (any staff)
         Route::get('countries', [CountryController::class, 'index']);
+        Route::get('staff', [StaffController::class, 'index']);
 
         // Analytics
         Route::get('search', [SearchController::class, 'index']);

@@ -6,6 +6,7 @@ use App\Models\DocumentType;
 use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -117,6 +118,36 @@ it('exports the filtered applications as CSV', function () {
 it('denies the applications export without view permission', function () {
     actingAsStaffWith([]);
     $this->get('/api/v1/applications/export')->assertStatus(403);
+});
+
+it('reassigns the admissions officer via update and returns it', function () {
+    actingAsStaffWith(ADMISSIONS_PERMS);
+    $university = University::factory()->create();
+    $application = Application::factory()->create(['university_id' => $university->id]);
+    $officer = User::factory()->create();
+
+    $this->patchJson("/api/v1/applications/{$application->id}", [
+        'assigned_admissions_id' => $officer->id,
+    ])
+        ->assertOk()
+        ->assertJsonPath('data.admissions_officer.id', $officer->id);
+
+    expect($application->fresh()->assigned_admissions_id)->toBe($officer->id);
+});
+
+it('clears the admissions officer when reassigned to null', function () {
+    $me = actingAsStaffWith(ADMISSIONS_PERMS);
+    $university = University::factory()->create();
+    $application = Application::factory()->create([
+        'university_id' => $university->id,
+        'assigned_admissions_id' => $me->id,
+    ]);
+
+    $this->patchJson("/api/v1/applications/{$application->id}", [
+        'assigned_admissions_id' => null,
+    ])->assertOk();
+
+    expect($application->fresh()->assigned_admissions_id)->toBeNull();
 });
 
 it('performs a legal transition and writes immutable history', function () {

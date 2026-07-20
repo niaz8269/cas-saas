@@ -100,8 +100,11 @@ export const convertLead = (id: number | string) =>
   api<{ data: StudentSummary }>(`/leads/${id}/convert`, { method: "POST", body: JSON.stringify({}) })
 
 /** Staff directory (requires users.manage.global — used by assigners). */
-export const listStaff = () =>
-  api<Paginated<{ id: number; name: string; email: string }>>("/users?per_page=100")
+export type StaffMember = { id: number; name: string }
+
+/** Staff directory for assignee/officer/counselor pickers (id + name), optionally filtered by role. */
+export const listStaff = (role?: string) =>
+  api<{ data: StaffMember[] }>(role ? `/staff?role=${encodeURIComponent(role)}` : "/staff")
 
 export interface LeadSource {
   id: number
