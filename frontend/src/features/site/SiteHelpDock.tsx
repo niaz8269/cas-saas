@@ -40,7 +40,7 @@ export default function SiteHelpDock() {
           </p>
           <div className="flex items-center gap-2">
             <Link
-              to="/site/contact"
+              to="/site/study-plan"
               className="inline-flex items-center gap-1.5 rounded-md bg-cas-gold px-3 py-1.5 font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
             >
               <CalendarCheck className="size-4" /> Get a free study plan
@@ -98,7 +98,7 @@ export default function SiteHelpDock() {
               <span><span className="block text-sm font-medium text-ink">Email</span><span className="block text-xs text-muted-foreground">{EMAIL}</span></span>
             </a>
             <Link
-              to="/site/contact"
+              to="/site/study-plan"
               onClick={() => setOpen(false)}
               className="mt-1 block rounded-lg bg-cas-gold px-3 py-2.5 text-center text-sm font-semibold text-cas-navy transition-colors hover:bg-cas-gold-600"
             >

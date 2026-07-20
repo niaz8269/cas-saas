@@ -11,6 +11,7 @@ import SiteHome from "./SiteHome"
 import SiteHelpDock from "./SiteHelpDock"
 import SiteLeadPanel from "./SiteLeadPanel"
 import SiteMegaMenu from "./SiteMegaMenu"
+import SiteStudyPlan from "./SiteStudyPlan"
 import SiteNews from "./SiteNews"
 import SiteServices from "./SiteServices"
 import SiteWhyChina from "./SiteWhyChina"
@@ -166,6 +167,31 @@ it("submits the hero lead panel to the public enquiries endpoint", async () => {
   const post = fetchMock.mock.calls.find(([u, i]) => String(u).includes("/public/enquiries") && i?.method === "POST")
   expect(post).toBeTruthy()
   expect(JSON.parse((post![1] as RequestInit).body as string)).toMatchObject({ first_name: "Ali", email: "ali@example.com" })
+})
+
+it("completes the study-plan wizard and submits a tagged study_plan enquiry", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ message: "Thanks" }))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<SiteStudyPlan />)
+
+  // Step 1 — pick a level, then continue.
+  await user.click(screen.getByRole("button", { name: "Master's" }))
+  await user.click(screen.getByRole("button", { name: /Continue/ }))
+  // Step 2 — optional, continue.
+  await user.click(screen.getByRole("button", { name: /Continue/ }))
+  // Step 3 — contact details.
+  await user.type(screen.getByLabelText("Full name"), "Sara Ahmed")
+  await user.type(screen.getByLabelText("Email"), "sara@example.com")
+  await user.click(screen.getByRole("button", { name: /Get my study plan/ }))
+
+  expect(await screen.findByText(/study plan is on its way/i)).toBeInTheDocument()
+  const post = fetchMock.mock.calls.find(([u, i]) => String(u).includes("/public/enquiries") && i?.method === "POST")
+  const body = JSON.parse((post![1] as RequestInit).body as string)
+  expect(body.form_type).toBe("study_plan")
+  expect(body.first_name).toBe("Sara")
+  expect(body.details).toMatchObject({ Level: "Master's" })
 })
 
 it("renders the services, why-china and news pages", () => {

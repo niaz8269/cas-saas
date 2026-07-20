@@ -158,6 +158,8 @@ export interface EnquiryPayload {
   message?: string
   interested_university_id?: number
   source_url?: string
+  form_type?: "enquiry" | "study_plan" | "contact"
+  details?: Record<string, string>
 }
 
 export const postEnquiry = (payload: EnquiryPayload) =>

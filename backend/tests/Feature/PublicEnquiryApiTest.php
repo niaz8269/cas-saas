@@ -40,6 +40,28 @@ it('creates a source-attributed lead from a public enquiry', function () {
         ->and($lead->meta['enquiry']['program_id'])->toBe($program->id);
 });
 
+it('tags a study-plan submission and stores the answers in lead meta', function () {
+    $this->postJson('/api/v1/public/enquiries', [
+        'first_name' => 'Sara',
+        'email' => 'sara@example.com',
+        'message' => 'Study plan request',
+        'form_type' => 'study_plan',
+        'details' => ['Level' => "Master's", 'Field' => 'Engineering', 'Funding' => 'Looking for a scholarship'],
+    ])->assertStatus(202);
+
+    $lead = Lead::first();
+    expect($lead->form_type)->toBe('study_plan')
+        ->and($lead->meta['plan']['Level'])->toBe("Master's")
+        ->and($lead->meta['plan']['Field'])->toBe('Engineering')
+        ->and($lead->meta['plan']['Funding'])->toBe('Looking for a scholarship');
+});
+
+it('rejects an unknown form_type', function () {
+    $this->postJson('/api/v1/public/enquiries', [
+        'first_name' => 'X', 'email' => 'x@example.com', 'form_type' => 'spam',
+    ])->assertStatus(422)->assertJsonValidationErrors('form_type');
+});
+
 it('requires a name and at least an email or phone', function () {
     $this->postJson('/api/v1/public/enquiries', ['message' => 'hi'])
         ->assertStatus(422)

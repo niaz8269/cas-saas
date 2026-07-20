@@ -38,19 +38,31 @@ class PublicEnquiryController extends Controller
             'country' => $request->input('country'),
             'message' => $request->input('message'),
             'intake_route' => 'info',
-            'form_type' => 'enquiry',
+            'form_type' => $request->input('form_type', 'enquiry'),
         ]);
 
-        // Attach the browsing context to the lead (internal only, never
-        // returned) so a counselor sees what the visitor was looking at.
+        // Attach the browsing context + study-plan answers to the lead (internal
+        // only, never returned) so a counselor sees what the visitor wanted.
         $interest = array_filter([
             'university_id' => $request->integer('interested_university_id') ?: null,
             'program_id' => $request->integer('interested_program_id') ?: null,
             'source_url' => $request->input('source_url'),
         ], fn ($v) => $v !== null);
 
-        if ($interest !== [] && ($leadId = $result['body']['lead_id'] ?? null) && ($lead = Lead::find($leadId))) {
-            $lead->update(['meta' => [...($lead->meta ?? []), 'enquiry' => $interest]]);
+        $plan = array_filter(
+            (array) $request->input('details', []),
+            fn ($v) => $v !== null && $v !== '',
+        );
+
+        if (($interest !== [] || $plan !== []) && ($leadId = $result['body']['lead_id'] ?? null) && ($lead = Lead::find($leadId))) {
+            $meta = $lead->meta ?? [];
+            if ($interest !== []) {
+                $meta['enquiry'] = $interest;
+            }
+            if ($plan !== []) {
+                $meta['plan'] = $plan;
+            }
+            $lead->update(['meta' => $meta]);
         }
 
         return $this->accepted();

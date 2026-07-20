@@ -61,7 +61,7 @@ const COLUMNS: Col[] = [
       ["Our services", "/site/services"],
       ["Why study in China", "/site/why-china"],
       ["News & updates", "/site/news"],
-      ["Free consultation", "/site/contact"],
+      ["Get a free study plan", "/site/study-plan"],
     ],
   },
 ]

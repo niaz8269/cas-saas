@@ -48,6 +48,7 @@ import SiteProgramFinder from "@/features/site/SiteProgramFinder"
 import SiteScholarships from "@/features/site/SiteScholarships"
 import SiteAbout from "@/features/site/SiteAbout"
 import SiteContact from "@/features/site/SiteContact"
+import SiteStudyPlan from "@/features/site/SiteStudyPlan"
 import SiteServices from "@/features/site/SiteServices"
 import SiteWhyChina from "@/features/site/SiteWhyChina"
 import SiteNews from "@/features/site/SiteNews"
@@ -87,6 +88,7 @@ const router = createBrowserRouter([
       { path: "/site/news", element: <SiteNews /> },
       { path: "/site/about", element: <SiteAbout /> },
       { path: "/site/contact", element: <SiteContact /> },
+      { path: "/site/study-plan", element: <SiteStudyPlan /> },
     ],
   },
 

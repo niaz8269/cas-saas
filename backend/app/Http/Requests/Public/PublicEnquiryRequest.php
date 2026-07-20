@@ -27,6 +27,11 @@ class PublicEnquiryRequest extends FormRequest
             'interested_university_id' => ['nullable', 'integer', Rule::exists('universities', 'id')],
             'interested_program_id' => ['nullable', 'integer', Rule::exists('programs', 'id')],
             'source_url' => ['nullable', 'string', 'max:255'],
+            // Which website form this came from (study-plan wizard vs plain enquiry).
+            'form_type' => ['nullable', Rule::in(['enquiry', 'study_plan', 'contact'])],
+            // Structured qualifying answers (study-plan wizard) → stored in lead meta.
+            'details' => ['nullable', 'array', 'max:20'],
+            'details.*' => ['nullable', 'string', 'max:200'],
             // Honeypot: a hidden field real users leave empty (spam guard).
             'company' => ['nullable', 'string', 'max:100'],
         ];
