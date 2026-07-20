@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Pencil, Plus, Search, ShieldAlert } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Check, Pencil, Plus, Search, ShieldAlert } from "lucide-react"
+import { Fragment, useEffect, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { listAuditLogs, listUsers, type AuditEntry, type StaffUser } from "@/features/admin/api"
+import { getRoleMatrix, listAuditLogs, listUsers, type AuditEntry, type StaffUser } from "@/features/admin/api"
 import UserFormDialog from "@/features/admin/UserFormDialog"
 import { isSuperAdmin } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
@@ -39,28 +39,30 @@ const STATUS_BADGE: Record<string, string> = {
   suspended: "bg-cas-red-50 text-cas-red",
 }
 
+const TAB_LABELS: Record<string, string> = { staff: "Staff", roles: "Roles & permissions", audit: "Audit trail" }
+
 export default function UsersPage() {
-  const [tab, setTab] = useState<"staff" | "audit">("staff")
+  const [tab, setTab] = useState<"staff" | "roles" | "audit">("staff")
 
   return (
     <div className="space-y-4">
       <div className="flex gap-1 rounded-lg bg-subtle p-1 sm:w-fit">
-        {(["staff", "audit"] as const).map((t) => (
+        {(["staff", "roles", "audit"] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setTab(t)}
             className={cn(
-              "rounded-md px-4 py-1.5 text-sm font-medium capitalize transition-colors",
+              "rounded-md px-4 py-1.5 text-sm font-medium transition-colors",
               tab === t ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {t === "staff" ? "Staff" : "Audit trail"}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
 
-      {tab === "staff" ? <StaffTable /> : <AuditTable />}
+      {tab === "staff" ? <StaffTable /> : tab === "roles" ? <RolesMatrix /> : <AuditTable />}
     </div>
   )
 }
@@ -272,6 +274,65 @@ function ChangeSummary({ entry }: { entry: AuditEntry }) {
         </p>
       ))}
       {keys.length > 3 && <p className="text-muted-foreground">+{keys.length - 3} more</p>}
+    </div>
+  )
+}
+
+function RolesMatrix() {
+  const { data, isPending, isError } = useQuery({ queryKey: ["role-matrix"], queryFn: getRoleMatrix })
+
+  if (isError) return <Denied />
+  if (isPending) return <Skeleton className="h-96 w-full rounded-xl" />
+
+  const { permissions, roles } = data.data
+  const groups = permissions.reduce<Record<string, string[]>>((acc, perm) => {
+    const module = perm.split(".")[0]
+    ;(acc[module] ??= []).push(perm)
+
+    return acc
+  }, {})
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        What each role can do. <span className="font-medium text-foreground">Super Admin</span> has unrestricted
+        access to everything and is not shown. This view is read-only.
+      </p>
+      <div className="overflow-x-auto rounded-xl border bg-card shadow-sm">
+        <Table>
+          <TableHeader className="bg-subtle">
+            <TableRow>
+              <TableHead className="sticky left-0 z-10 bg-subtle">Permission</TableHead>
+              {roles.map((r) => (
+                <TableHead key={r.name} className="min-w-24 text-center whitespace-nowrap">{r.name}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Object.entries(groups).map(([module, perms]) => (
+              <Fragment key={module}>
+                <TableRow className="bg-subtle/60 hover:bg-subtle/60">
+                  <TableCell colSpan={roles.length + 1} className="py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {module}
+                  </TableCell>
+                </TableRow>
+                {perms.map((perm) => (
+                  <TableRow key={perm}>
+                    <TableCell className="sticky left-0 z-10 bg-card font-mono text-xs">{perm}</TableCell>
+                    {roles.map((r) => (
+                      <TableCell key={r.name} className="text-center">
+                        {r.permissions.includes(perm)
+                          ? <Check className="mx-auto size-4 text-green-600" aria-label="granted" />
+                          : <span className="text-muted-foreground/40" aria-label="not granted">·</span>}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </Fragment>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }

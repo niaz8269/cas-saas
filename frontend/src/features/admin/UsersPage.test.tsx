@@ -113,6 +113,31 @@ it("hides the Super Admin role from a non-super-admin", async () => {
   expect(within(dialog).queryByLabelText("Super Admin")).not.toBeInTheDocument()
 })
 
+it("shows the role→permission matrix on the Roles tab", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    const url = String(input)
+    if (url.includes("/roles/matrix")) {
+      return Promise.resolve(jsonResponse({ data: {
+        permissions: ["students.view.global", "users.manage.global"],
+        roles: [
+          { name: "Admin", permissions: ["students.view.global", "users.manage.global"] },
+          { name: "Counselor", permissions: ["students.view.global"] },
+        ],
+      } }))
+    }
+
+    return Promise.resolve(jsonResponse(USERS))
+  }))
+
+  renderWithProviders(<UsersPage />)
+  await user.click(screen.getByRole("button", { name: "Roles & permissions" }))
+
+  expect(await screen.findByText("students.view.global")).toBeInTheDocument()
+  expect(screen.getByRole("columnheader", { name: "Counselor" })).toBeInTheDocument()
+  expect(screen.getByText(/unrestricted/i)).toBeInTheDocument()
+})
+
 it("shows access denied on a 403", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ message: "forbidden", code: "FORBIDDEN" }, 403)))
 

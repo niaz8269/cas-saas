@@ -147,6 +147,8 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:users.manage.global,staff');
         Route::get('roles', [RoleController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
+        Route::get('roles/matrix', [RoleController::class, 'matrix'])
+            ->middleware('permission:users.manage.global,staff');
 
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])

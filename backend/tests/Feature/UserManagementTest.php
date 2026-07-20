@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
@@ -131,6 +132,29 @@ it('lists assignable roles only for user-managers', function () {
     $this->getJson('/api/v1/roles')
         ->assertOk()
         ->assertJsonStructure(['data' => [['id', 'name']]]);
+});
+
+it('returns the role→permission matrix, excluding Super Admin', function () {
+    actingAsStaffWith(USER_ADMIN_PERMS);
+    Role::findOrCreate('Super Admin', 'staff');
+    $admin = Role::findOrCreate('Admin', 'staff');
+    $perm = Permission::findOrCreate('students.view.global', 'staff');
+    $admin->givePermissionTo($perm);
+
+    $response = $this->getJson('/api/v1/roles/matrix')
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['permissions', 'roles' => [['name', 'permissions']]]]);
+
+    $data = $response->json('data');
+    expect($data['permissions'])->toContain('students.view.global')
+        ->and(collect($data['roles'])->pluck('name'))->not->toContain('Super Admin')
+        ->and(collect($data['roles'])->firstWhere('name', 'Admin')['permissions'])
+        ->toContain('students.view.global');
+});
+
+it('denies the role matrix without users.manage', function () {
+    actingAsStaffWith([]);
+    $this->getJson('/api/v1/roles/matrix')->assertStatus(403);
 });
 
 it('lists active branches and departments for any staff', function () {

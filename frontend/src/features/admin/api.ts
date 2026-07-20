@@ -64,6 +64,13 @@ export const updateUser = (id: number, payload: Partial<UserWritePayload>) =>
 
 export const listRoles = () => api<{ data: { id: number; name: string }[] }>("/roles")
 
+export interface RoleMatrix {
+  permissions: string[]
+  roles: { name: string; permissions: string[] }[]
+}
+
+export const getRoleMatrix = () => api<{ data: RoleMatrix }>("/roles/matrix")
+
 export const listBranches = () =>
   api<{ data: { id: number; name: string; code: string }[] }>("/branches")
 
