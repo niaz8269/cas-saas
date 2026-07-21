@@ -10,6 +10,10 @@ const PHONE_DISPLAY = "+86 180 4156 6030"
 const WHATSAPP = "https://wa.me/8618041566030"
 const EMAIL = "info@cas.moe"
 
+const avatar = (n: number) => `https://i.pravatar.cc/96?img=${n}`
+// Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
+const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
+
 // Counsellor faces shown in the help bar (placeholders — swap for real staff).
 const COUNSELLORS = [
   { name: "Cathy", img: 1 },
@@ -64,9 +68,31 @@ export default function SiteHelpDock() {
           <Divider />
           <div className="flex items-center gap-5">
             {COUNSELLORS.map((c) => (
-              <div key={c.name} className="flex flex-col items-center gap-1">
-                <img src={`https://i.pravatar.cc/80?img=${c.img}`} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-red/80" />
+              <div key={c.name} className="group relative flex cursor-pointer flex-col items-center gap-1">
+                <img src={avatar(c.img)} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-red/80" />
                 <span className="text-[11px] text-white/80">{c.name}</span>
+
+                {/* Contact-details card revealed on hover */}
+                <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 hidden w-[25rem] -translate-x-1/2 group-hover:block">
+                  <div className="relative rounded-lg bg-white p-4 text-left text-cas-navy shadow-2xl">
+                    <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
+                    <div className="flex items-start gap-4">
+                      <div className="flex shrink-0 flex-col items-center gap-1.5">
+                        <img src={avatar(c.img)} alt="" className="size-14 rounded-full object-cover ring-2 ring-cas-red/70" />
+                        <span className="text-sm font-semibold text-cas-red-600">{c.name}</span>
+                      </div>
+                      <div className="space-y-2 text-sm leading-tight">
+                        <div><p className="font-semibold">WeChat:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                        <div><p className="font-semibold">WhatsApp/Tel:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                        <div><p className="font-semibold">Telegram:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                      </div>
+                      <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
+                        <img src={qrUrl(WHATSAPP)} alt="WeChat QR code" width={92} height={92} className="rounded" />
+                        <span className="text-xs text-muted-foreground">WeChat</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
