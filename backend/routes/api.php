@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\MessageTemplateController;
 use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\Portal\AgentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
@@ -83,6 +84,18 @@ Route::prefix('v1')->group(function () {
             Route::post('auth/logout', [AgentAuthController::class, 'logout']);
             Route::get('auth/me', [AgentAuthController::class, 'me']);
             Route::get('students', [AgentPortalController::class, 'students']);
+
+            // Apply on behalf of an owned student — browsing then the write
+            // path (static segments precede any applications/{application}).
+            Route::get('countries', [AgentApplicationController::class, 'countries']);
+            Route::get('applications/funding-options', [AgentApplicationController::class, 'fundingOptions']);
+            Route::get('applications/availability', [AgentApplicationController::class, 'availability']);
+            Route::get('applications/required-documents', [AgentApplicationController::class, 'requiredDocuments']);
+            Route::post('applications', [AgentApplicationController::class, 'store']);
+            Route::post('applications/{application}/documents/presign', [AgentApplicationController::class, 'presignDocument']);
+            Route::post('applications/{application}/documents', [AgentApplicationController::class, 'storeDocument']);
+            Route::post('applications/{application}/submit', [AgentApplicationController::class, 'submit']);
+
             Route::get('applications', [AgentPortalController::class, 'applications']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
