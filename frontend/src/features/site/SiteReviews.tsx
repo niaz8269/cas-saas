@@ -35,9 +35,9 @@ export default function SiteReviews() {
 
   return (
     <section>
-      <div className="mb-8 text-center">
-        <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">Reviews from our students</h2>
-        <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">Students from 50+ countries trust CAS with their journey.</p>
+      <div className="mb-10 text-center">
+        <h2 className="text-2xl font-bold text-cas-navy sm:text-[2rem]">Reviews from our students</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">Students from 50+ countries trust CAS with their journey.</p>
       </div>
 
       <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,340px)_1fr]">

@@ -53,7 +53,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:ring-cas-red/40"
     >
       {/* Cover — a designed gradient banner when no image is available */}
-      <div className="relative h-36 overflow-hidden">
+      <div className="relative h-44 overflow-hidden">
         <img
           src={u.cover_url || photoUrl(u.id, 600, 320)}
           alt=""
@@ -128,12 +128,12 @@ export function SiteSection({ title, subtitle, action, children }: {
 }) {
   return (
     <section>
-      <div className="mb-6 text-center">
-        <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">{title}</h2>
-        {subtitle && <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
+      <div className="mb-10 text-center">
+        <h2 className="text-2xl font-bold text-cas-navy sm:text-[2rem]">{title}</h2>
+        {subtitle && <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>}
       </div>
       {children}
-      {action && <div className="mt-6 flex justify-center">{action}</div>}
+      {action && <div className="mt-9 flex justify-center">{action}</div>}
     </section>
   )
 }

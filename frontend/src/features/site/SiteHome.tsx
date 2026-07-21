@@ -132,7 +132,7 @@ export default function SiteHome() {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
       <section className="site-bleed relative flex min-h-screen flex-col justify-center text-white">
         <div className="absolute inset-0 overflow-hidden">
@@ -209,10 +209,10 @@ export default function SiteHome() {
 
       {/* ── Weekly Programs spotlight ────────────────────────── */}
       <section>
-        <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-3xl">
+        <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
-        <div className="mt-4 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
+        <div className="mt-10 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
           <PhotoBanner src="/images/art-3.svg" className="min-h-48" />
           <div className="p-6">
             {weekly ? (
@@ -247,16 +247,16 @@ export default function SiteHome() {
 
       {/* ── Highlights 3×3 ───────────────────────────────────── */}
       <SiteSection title="Highlights" subtitle="Handpicked routes into studying in China.">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
           {HIGHLIGHTS.map(({ title, body, to, tag }, i) => (
-            <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
-              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="h-28">
+            <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="h-44">
                 <span className="absolute top-3 left-3 rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white">{tag}</span>
               </PhotoBanner>
-              <div className="flex flex-1 flex-col p-5">
+              <div className="flex flex-1 flex-col p-6">
                 <h3 className="font-semibold text-cas-navy group-hover:text-cas-red-600">{title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-cas-navy">Learn more <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" /></span>
+                <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cas-navy">Learn more <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" /></span>
               </div>
             </Link>
           ))}
@@ -264,27 +264,27 @@ export default function SiteHome() {
       </SiteSection>
 
       {/* ── Outstanding Programs (dark band) ─────────────────── */}
-      <section className="site-bleed bg-cas-navy-900 px-4 py-14 text-white sm:py-16">
+      <section className="site-bleed bg-cas-navy-900 px-4 py-16 text-white sm:py-24">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6 text-center">
-            <h2 className="text-2xl font-bold sm:text-3xl">Outstanding programs</h2>
-            <p className="mx-auto mt-2 max-w-2xl text-sm text-white/70">Popular programs students are applying to right now.</p>
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl font-bold sm:text-[2rem]">Outstanding programs</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-white/70 sm:text-base">Popular programs students are applying to right now.</p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-sm bg-white/10" />)}
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
-              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
-                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-24 items-center justify-center">
+              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
                   <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level}</span>
                 </PhotoBanner>
-                <div className="p-4">
+                <div className="p-5">
                   <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-red-600">{p.name}</h3>
-                  <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
+                  <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{p.university?.name}</p>
                 </div>
               </Link>
             ))}
           </div>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-9 flex justify-center">
             <Link to="/site/programs" className="inline-flex items-center gap-1 rounded-sm border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
               View all programs <ArrowRight className="size-4" />
             </Link>
@@ -294,8 +294,8 @@ export default function SiteHome() {
 
       {/* ── Featured Content (tabbed) ────────────────────────── */}
       <SiteSection title="Featured content">
-        <div className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
-          <Link to="/site/why-china" className="group relative flex min-h-56 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-7 text-white">
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+          <Link to="/site/why-china" className="group relative flex min-h-64 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-8 text-white">
             <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
             <BookOpen className="absolute top-6 right-6 size-16 text-cas-red/30" />
             <div className="relative">
@@ -327,13 +327,13 @@ export default function SiteHome() {
 
       {/* ── Watch & Learn ────────────────────────────────────── */}
       <SiteSection title="Watch & learn" subtitle="Guides and student stories from CAS.">
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-3 sm:gap-7">
           {["How CAS helps you apply", "Life as an international student", "Choosing the right program"].map((title, i) => (
             <div key={title} className="group overflow-hidden rounded-sm border bg-card shadow-sm">
-              <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-40 items-center justify-center">
+              <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-48 items-center justify-center">
                 <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-red text-white shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
               </PhotoBanner>
-              <div className="p-4"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
+              <div className="p-5"><h3 className="font-semibold text-cas-navy">{title}</h3></div>
             </div>
           ))}
         </div>
@@ -344,7 +344,7 @@ export default function SiteHome() {
 
       {/* ── More in China ────────────────────────────────────── */}
       <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-red-600">View all <ArrowRight className="size-4" /></Link>}>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-sm" />)}
           {featuredUnis.map((u) => <UniCard key={u.id} u={u} />)}
           {!universities.isPending && featuredUnis.length === 0 && (
