@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest"
+import "@/i18n" // initialise i18next so useTranslation() resolves keys in tests
 
 // jsdom lacks the Pointer Capture and scrollIntoView APIs that Radix UI
 // primitives (Select, DropdownMenu) call on open. Polyfill them so those

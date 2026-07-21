@@ -1,0 +1,58 @@
+{
+  "language": {
+    "select": "Select language"
+  },
+  "nav": {
+    "whyCas": "Why CAS",
+    "studyInChina": "Study in China",
+    "universities": "Universities",
+    "programs": "Programs",
+    "pricing": "Pricing",
+    "partner": "Partner",
+    "scholarships": "Scholarships",
+    "freeStudyPlan": "Free study plan",
+    "news": "News"
+  },
+  "whyCasMenu": {
+    "universities": "200+ Universities",
+    "programs": "5,000+ Programs",
+    "scholarships": "500+ Scholarships",
+    "cities": "50+ Cities",
+    "localServices": "Local Services",
+    "howItWorks": "How it Works",
+    "learningCenter": "Learning Center"
+  },
+  "header": {
+    "promoFreeApplyText": "Browse Free-to-Apply Universities on CAS",
+    "promoScholarshipsText": "Fully-funded scholarships for 2026 — apply early",
+    "learnMore": "Learn More",
+    "signIn": "SIGN IN",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "notifications": "Notifications",
+    "previousNotification": "Previous notification",
+    "nextNotification": "Next notification",
+    "close": "Close",
+    "learnMoreArrow": "Learn More »"
+  },
+  "footer": {
+    "blurb": "CAS — Consultancy for Abroad Study — has guided students to world-class Chinese universities since 2012, as an official authorized agent for Ministry of Education–listed institutions.",
+    "explore": "Explore",
+    "exploreUniversities": "Universities",
+    "explorePrograms": "Programs",
+    "exploreScholarships": "Scholarships",
+    "exploreWhyChina": "Why China",
+    "exploreNews": "News & updates",
+    "services": "Services",
+    "serviceAdmission": "Admission service",
+    "serviceVisa": "Visa assistance",
+    "serviceScholarships": "Scholarship assistance",
+    "serviceAbout": "About CAS",
+    "serviceStaffLogin": "Staff login",
+    "getInTouch": "Get in touch",
+    "whatsappUs": "WhatsApp us",
+    "freeConsultation": "Free consultation",
+    "rights": "© {{year}} CAS Education. All rights reserved.",
+    "authorized": "Official authorized agent since 2012."
+  }
+}
