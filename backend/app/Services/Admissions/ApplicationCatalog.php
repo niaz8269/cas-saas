@@ -7,6 +7,9 @@ use App\Models\Program;
 use App\Models\Scholarship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Read model behind the portal application-submission wizard (both the
@@ -157,6 +160,78 @@ class ApplicationCatalog
         }
 
         return $types->unique('id')->sortBy('name')->values();
+    }
+
+    /** The field types the admin can attach to a course (report item 11). */
+    public const FIELD_TYPES = ['text', 'textarea', 'number', 'date', 'select'];
+
+    /**
+     * The admin-defined custom application fields for a program: a normalised
+     * list of {key,label,type,required,options}. Only well-formed entries
+     * survive; empty when none configured.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function customFields(?Program $program): array
+    {
+        return collect($program?->requirements['fields'] ?? [])
+            ->filter(fn ($f) => is_array($f)
+                && ! empty($f['key'])
+                && ! empty($f['label'])
+                && in_array($f['type'] ?? null, self::FIELD_TYPES, true))
+            ->map(fn ($f) => [
+                'key' => (string) $f['key'],
+                'label' => (string) $f['label'],
+                'type' => (string) $f['type'],
+                'required' => (bool) ($f['required'] ?? false),
+                'options' => array_values(array_filter(
+                    (array) ($f['options'] ?? []),
+                    fn ($o) => is_string($o) && $o !== '',
+                )),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Validate + clean an applicant's answers to a program's custom fields.
+     * Unknown keys are dropped, required fields must be present, select answers
+     * must be a configured option, and numbers/dates are checked. Returns the
+     * cleaned key => value map (configured keys only), or [] when none apply.
+     *
+     * @param  array<string, mixed>  $answers
+     * @return array<string, mixed>
+     *
+     * @throws ValidationException
+     */
+    public function validateCustomFields(?Program $program, array $answers): array
+    {
+        $spec = $this->customFields($program);
+
+        if ($spec === []) {
+            return [];
+        }
+
+        $rules = [];
+        $attributes = [];
+
+        foreach ($spec as $field) {
+            $key = $field['key'];
+            $presence = $field['required'] ? 'required' : 'nullable';
+
+            $rules["custom_fields.{$key}"] = match ($field['type']) {
+                'number' => [$presence, 'numeric'],
+                'date' => [$presence, 'date'],
+                'select' => [$presence, 'string', Rule::in($field['options'])],
+                'textarea' => [$presence, 'string', 'max:5000'],
+                default => [$presence, 'string', 'max:1000'],
+            };
+            $attributes["custom_fields.{$key}"] = $field['label'];
+        }
+
+        $validated = Validator::make(['custom_fields' => $answers], $rules, [], $attributes)->validate();
+
+        return $validated['custom_fields'] ?? [];
     }
 
     /** Constrain a program query to one degree tile. */

@@ -29,6 +29,11 @@ class StudentStoreApplicationRequest extends FormRequest
             'intake_id' => ['nullable', 'integer', Rule::exists('intakes', 'id')],
             'funding' => ['required', Rule::in(ApplicationCatalog::FUNDING)],
 
+            // Answers to the course's admin-defined custom fields; validated in
+            // detail server-side against the program's spec (report item 11).
+            'custom_fields' => ['sometimes', 'array'],
+            'custom_fields.*' => ['nullable', 'string', 'max:5000'],
+
             'profile' => ['sometimes', 'array'],
             'profile.chinese_name' => ['nullable', 'string', 'max:120'],
             'profile.native_language' => ['nullable', 'string', 'max:60'],

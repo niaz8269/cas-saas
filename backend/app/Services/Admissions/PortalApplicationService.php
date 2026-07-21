@@ -41,8 +41,11 @@ class PortalApplicationService
 
         $scholarship = $this->resolveScholarship($program, $data);
         $intakeId = $this->resolveIntakeId($program, $data['intake_id'] ?? null);
+        // Validate the applicant's answers against the course's custom-field
+        // spec (report item 11) — deny-by-default, unknown keys dropped.
+        $customFields = $this->catalog->validateCustomFields($program, $data['custom_fields'] ?? []);
 
-        return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId) {
+        return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId, $customFields) {
             $this->persistApplicantData($student, $data);
 
             return $this->workflow->create([
@@ -52,6 +55,7 @@ class PortalApplicationService
                 'scholarship_id' => $scholarship?->id,
                 'intake_id' => $intakeId,
                 'agent_id' => $student->agent_id,
+                'custom_fields' => $customFields !== [] ? $customFields : null,
             ], null);
         });
     }

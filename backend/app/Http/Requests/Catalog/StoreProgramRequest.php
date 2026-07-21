@@ -37,6 +37,15 @@ class StoreProgramRequest extends FormRequest
             'requirements.sections.research' => ['nullable', 'boolean'],
             'requirements.sections.study_plan' => ['nullable', 'boolean'],
             'requirements.sections.intro_video' => ['nullable', 'boolean'],
+            // Admin-defined custom application fields (report item 11). The
+            // applicant's answers are validated server-side against this spec.
+            'requirements.fields' => ['nullable', 'array', 'max:30'],
+            'requirements.fields.*.key' => ['required', 'string', 'max:60', 'regex:/^[a-z][a-z0-9_]*$/', 'distinct'],
+            'requirements.fields.*.label' => ['required', 'string', 'max:120'],
+            'requirements.fields.*.type' => ['required', Rule::in(['text', 'textarea', 'number', 'date', 'select'])],
+            'requirements.fields.*.required' => ['boolean'],
+            'requirements.fields.*.options' => ['nullable', 'array'],
+            'requirements.fields.*.options.*' => ['string', 'max:120'],
             'service_charges' => ['nullable', 'array'],
             'service_charges.currency' => ['nullable', 'string', 'size:3'],
             'service_charges.self.student' => ['nullable', 'numeric', 'min:0'],
