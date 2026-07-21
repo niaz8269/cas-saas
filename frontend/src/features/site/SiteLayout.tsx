@@ -2,7 +2,7 @@ import { Bell, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, 
 import { useRef, useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 
-import casLogo from "@/assets/cas-logo.png"
+import casLogoWhite from "@/assets/cas-logo-white.png"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
@@ -119,9 +119,7 @@ export default function SiteLayout() {
         <div className="relative bg-[#2f2c4c] text-white shadow-sm">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <Link to="/site" className="flex shrink-0 items-center" onClick={() => setMenuOpen(false)}>
-              <span className="inline-flex items-center rounded-sm bg-white px-2.5 py-1.5 shadow-sm">
-                <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-8 w-auto sm:h-9" />
-              </span>
+              <img src={casLogoWhite} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto sm:h-10" />
             </Link>
 
             <nav className="hidden items-center gap-6 lg:flex">
@@ -178,9 +176,7 @@ export default function SiteLayout() {
       <footer className="border-t bg-cas-navy text-white/80">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <span className="inline-flex items-center rounded-sm bg-white px-3 py-2 shadow-sm">
-              <img src={casLogo} alt="CAS" className="h-9 w-auto" />
-            </span>
+            <img src={casLogoWhite} alt="CAS" className="h-10 w-auto" />
             <p className="mt-3 max-w-sm text-sm">
               CAS — Consultancy for Abroad Study — has guided students to world-class Chinese universities since 2012,
               as an official authorized agent for Ministry of Education–listed institutions.
