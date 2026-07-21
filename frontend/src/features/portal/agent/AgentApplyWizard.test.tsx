@@ -16,6 +16,7 @@ const PROGRAM = {
   id: 3, name: "MBBS Clinical", level: "bachelor", teaching_language: "English",
   duration_months: 72, tuition_fee: 30000, hostel_fee: null, currency: "CNY",
   service_charge: { amount: 400, currency: "USD" },
+  custom_fields: [{ key: "portfolio_url", label: "Portfolio URL", type: "text", required: true, options: [] }],
   university: { id: 1, name: "Fudan University", slug: null, city: "Shanghai", country: "China", moe_listed: true },
   intakes: [], scholarships: [],
 }
@@ -59,6 +60,8 @@ it("applies for one of the agent's own students and sends student_id in the draf
   await user.click(await screen.findByText("Bachelor of Medicine")) // MBBS degree tile
   await user.click(await screen.findByText("Pay tuition yourself")) // self-funded tile
   await user.click(await screen.findByText("MBBS Clinical")) // program card
+  // The course carries a required custom field — Continue is gated until answered.
+  await user.type(await screen.findByLabelText("Portfolio URL"), "https://folio.example/ali")
   await user.click(screen.getByRole("button", { name: "Continue" }))
 
   // Step 3 — personal: nothing required, continue.
@@ -76,6 +79,7 @@ it("applies for one of the agent's own students and sends student_id in the draf
   )!
   const body = JSON.parse((createCall[1] as RequestInit).body as string)
   expect(body).toMatchObject({ student_id: 7, program_id: 3, funding: "self" })
+  expect(body.custom_fields).toEqual({ portfolio_url: "https://folio.example/ali" })
 
   // Advances to the documents step for the new draft.
   expect(await screen.findByText("Passport")).toBeInTheDocument()

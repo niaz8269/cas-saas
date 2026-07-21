@@ -214,6 +214,14 @@ export interface WizardScholarship {
   coverage: string | null
 }
 
+export interface PortalCustomField {
+  key: string
+  label: string
+  type: "text" | "textarea" | "number" | "date" | "select"
+  required: boolean
+  options: string[]
+}
+
 export interface WizardProgram {
   id: number
   name: string
@@ -224,6 +232,7 @@ export interface WizardProgram {
   hostel_fee: string | number | null
   currency: string | null
   service_charge: { amount: number; currency: string } | null
+  custom_fields?: PortalCustomField[]
   university: {
     id: number
     name: string
@@ -308,6 +317,7 @@ export interface CreateApplicationPayload {
   profile?: Record<string, unknown>
   guardians?: WizardGuardian[]
   education?: WizardEducation[]
+  custom_fields?: Record<string, string>
 }
 
 export interface DraftApplication {

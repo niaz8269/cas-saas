@@ -89,6 +89,26 @@ it("saves required documents and section toggles", async () => {
   expect(body.requirements).toMatchObject({ documents: [1], sections: { research: true } })
 })
 
+it("builds a custom field into the requirements spec", async () => {
+  const user = userEvent.setup()
+  const fetchMock = withDocTypes(() => Promise.resolve(jsonResponse({ data: { ...PROGRAM, id: 14 } }, 201)))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<ProgramFormDialog universityId={1} open onOpenChange={() => {}} />)
+
+  await user.type(screen.getByLabelText("Name"), "MBBS")
+  await user.click(screen.getByRole("button", { name: "Add field" }))
+  await user.type(screen.getByLabelText("Field 1 label"), "Portfolio URL")
+  await user.click(screen.getByLabelText("Field 1 required"))
+  await user.click(screen.getByRole("button", { name: "Add program" }))
+
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/programs", expect.objectContaining({ method: "POST" })))
+  const body = JSON.parse((fetchMock.mock.calls.find(([u, i]) => u === "/api/v1/programs" && (i as RequestInit)?.method === "POST")![1] as RequestInit).body as string)
+  expect(body.requirements.fields).toEqual([
+    { key: "portfolio_url", label: "Portfolio URL", type: "text", required: true },
+  ])
+})
+
 it("edits an existing program (PATCH, pre-filled)", async () => {
   const user = userEvent.setup()
   const fetchMock = withDocTypes(() => Promise.resolve(jsonResponse({ data: PROGRAM })))

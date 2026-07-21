@@ -146,9 +146,20 @@ export interface ProgramSections {
   intro_video?: boolean
 }
 
+export type ProgramFieldType = "text" | "textarea" | "number" | "date" | "select"
+
+export interface ProgramCustomField {
+  key: string
+  label: string
+  type: ProgramFieldType
+  required?: boolean
+  options?: string[]
+}
+
 export interface ProgramRequirements {
   documents?: (number | string)[] | null
   sections?: ProgramSections | null
+  fields?: ProgramCustomField[] | null
   [key: string]: unknown
 }
 

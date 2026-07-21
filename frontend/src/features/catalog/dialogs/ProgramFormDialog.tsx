@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Plus, X } from "lucide-react"
 import { Fragment, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -27,11 +28,55 @@ import {
   listScholarships,
   updateProgram,
   type Program,
+  type ProgramCustomField,
+  type ProgramFieldType,
   type ProgramRequirements,
   type ProgramSections,
   type ServiceChargeTier,
 } from "@/features/catalog/api"
 import { ApiError } from "@/lib/api"
+
+const FIELD_TYPES: [ProgramFieldType, string][] = [
+  ["text", "Text"],
+  ["textarea", "Paragraph"],
+  ["number", "Number"],
+  ["date", "Date"],
+  ["select", "Dropdown"],
+]
+
+/** The builder edits fields by label; the backend key is derived on save. */
+type EditableField = { label: string; type: ProgramFieldType; required: boolean; optionsText: string }
+
+const emptyField = (): EditableField => ({ label: "", type: "text", required: false, optionsText: "" })
+
+/** Derive a snake_case key that satisfies the backend's ^[a-z][a-z0-9_]*$. */
+function toFieldKey(label: string): string {
+  const k = label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "")
+  if (!k) return "field"
+
+  return /^[a-z]/.test(k) ? k : `f_${k}`
+}
+
+/** Editable rows → the spec the API stores, with distinct derived keys. */
+function buildFields(editable: EditableField[]): ProgramCustomField[] {
+  const seen = new Set<string>()
+
+  return editable
+    .filter((f) => f.label.trim() !== "")
+    .map((f) => {
+      const base = toFieldKey(f.label)
+      let key = base
+      for (let i = 2; seen.has(key); i++) key = `${base}_${i}`
+      seen.add(key)
+
+      const field: ProgramCustomField = { key, label: f.label.trim(), type: f.type, required: f.required }
+      if (f.type === "select") {
+        field.options = f.optionsText.split(",").map((o) => o.trim()).filter((o) => o !== "")
+      }
+
+      return field
+    })
+}
 
 const SECTION_OPTIONS: [keyof ProgramSections, string][] = [
   ["work_experience", "Work experience"],
@@ -45,18 +90,23 @@ const emptyTier = (): ChargeTier => ({ student: "", agent: "" })
 const tierStr = (tier: ServiceChargeTier | null | undefined, key: "student" | "agent"): string =>
   tier?.[key] != null ? String(tier[key]) : ""
 
-/** Merge the picker's documents + section toggles back into requirements,
- * preserving any other keys (e.g. min_age). */
+/** Merge the picker's documents + section toggles + custom fields back into
+ * requirements, preserving any other keys (e.g. min_age). */
 function buildRequirements(
   base: ProgramRequirements | null | undefined,
   documents: number[],
   sections: ProgramSections,
+  fields: ProgramCustomField[],
 ): ProgramRequirements {
   const rest = { ...(base ?? {}) }
   delete rest.documents
   delete rest.sections
+  delete rest.fields
 
-  return { ...rest, documents, sections }
+  const out: ProgramRequirements = { ...rest, documents, sections }
+  if (fields.length) out.fields = fields
+
+  return out
 }
 
 /** Build the service_charges JSON (self + per-scholarship) or null. */
@@ -141,6 +191,7 @@ export default function ProgramFormDialog({
 
   const [reqDocs, setReqDocs] = useState<number[]>([])
   const [reqSections, setReqSections] = useState<ProgramSections>({})
+  const [reqFields, setReqFields] = useState<EditableField[]>([])
   const [chargeCurrency, setChargeCurrency] = useState("USD")
   const [selfCharge, setSelfCharge] = useState<ChargeTier>(emptyTier())
   const [schCharges, setSchCharges] = useState<Record<number, ChargeTier>>({})
@@ -159,6 +210,9 @@ export default function ProgramFormDialog({
     const req = program?.requirements ?? {}
     setReqDocs((req.documents ?? []).filter((d): d is number => typeof d === "number"))
     setReqSections(req.sections ?? {})
+    setReqFields((req.fields ?? [])
+      .filter((f): f is ProgramCustomField => !!f && typeof f.label === "string")
+      .map((f) => ({ label: f.label, type: f.type, required: !!f.required, optionsText: (f.options ?? []).join(", ") })))
 
     const sc = program?.service_charges ?? {}
     setChargeCurrency(sc.currency ?? "USD")
@@ -175,6 +229,10 @@ export default function ProgramFormDialog({
     setReqDocs((docs) => (docs.includes(id) ? docs.filter((x) => x !== id) : [...docs, id]))
   const toggleSection = (key: keyof ProgramSections) =>
     setReqSections((s) => ({ ...s, [key]: !s[key] }))
+  const addField = () => setReqFields((fs) => [...fs, emptyField()])
+  const removeField = (i: number) => setReqFields((fs) => fs.filter((_, idx) => idx !== i))
+  const setField = (i: number, patch: Partial<EditableField>) =>
+    setReqFields((fs) => fs.map((f, idx) => (idx === i ? { ...f, ...patch } : f)))
   const setSelf = (key: keyof ChargeTier, v: string) => setSelfCharge((t) => ({ ...t, [key]: v }))
   const setSch = (id: number, key: keyof ChargeTier, v: string) =>
     setSchCharges((m) => ({ ...m, [id]: { ...(m[id] ?? emptyTier()), [key]: v } }))
@@ -197,7 +255,7 @@ export default function ProgramFormDialog({
         currency: v.currency || "CNY",
         teaching_language: v.teaching_language || null,
         apply_link: v.apply_link || null,
-        requirements: buildRequirements(program?.requirements, reqDocs, reqSections),
+        requirements: buildRequirements(program?.requirements, reqDocs, reqSections, buildFields(reqFields)),
         service_charges: buildServiceCharges(
           chargeCurrency,
           selfCharge,
@@ -379,6 +437,59 @@ export default function ProgramFormDialog({
                     </label>
                   ))}
                 </div>
+              </div>
+
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-muted-foreground">Custom fields</p>
+                <p className="mb-2 text-xs text-muted-foreground">Extra questions the applicant answers for this course.</p>
+                <div className="space-y-2">
+                  {reqFields.map((f, i) => (
+                    <div key={i} className="space-y-2 rounded-md border p-2">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          aria-label={`Field ${i + 1} label`}
+                          placeholder="Question (e.g. Portfolio URL)"
+                          className="h-8"
+                          value={f.label}
+                          onChange={(e) => setField(i, { label: e.target.value })}
+                        />
+                        <button type="button" onClick={() => removeField(i)} aria-label={`Remove field ${i + 1}`}>
+                          <X className="size-4 text-muted-foreground" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Select value={f.type} onValueChange={(v) => setField(i, { type: v as ProgramFieldType })}>
+                          <SelectTrigger aria-label={`Field ${i + 1} type`} className="h-8 w-32"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {FIELD_TYPES.map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <input
+                            type="checkbox"
+                            className="size-4 accent-cas-navy"
+                            aria-label={`Field ${i + 1} required`}
+                            checked={f.required}
+                            onChange={(e) => setField(i, { required: e.target.checked })}
+                          />
+                          Required
+                        </label>
+                      </div>
+                      {f.type === "select" && (
+                        <Input
+                          aria-label={`Field ${i + 1} options`}
+                          placeholder="Options, comma-separated"
+                          className="h-8"
+                          value={f.optionsText}
+                          onChange={(e) => setField(i, { optionsText: e.target.value })}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <Button type="button" variant="secondary" size="sm" className="mt-2 w-full" onClick={addField}>
+                  <Plus className="size-4" /> Add field
+                </Button>
               </div>
             </div>
           </div>

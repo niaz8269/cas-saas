@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import {
   uploadApplicationDocument,
   type CountryRow,
@@ -18,6 +19,7 @@ import {
   type DraftApplication,
   type Funding,
   type FundingOptions,
+  type PortalCustomField,
   type WizardEducation,
   type WizardGuardian,
   type WizardProgram,
@@ -374,6 +376,41 @@ export function SectionTitle({ children }: { children: ReactNode }) {
   return <p className="border-b pb-2 text-xs font-semibold tracking-wider text-cas-navy uppercase">{children}</p>
 }
 
+// ── Admin-defined custom fields (report item 11) ──────────────────────────────
+
+export function CustomFieldsCard({ fields, answers, onChange }: {
+  fields: PortalCustomField[]
+  answers: Record<string, string>
+  onChange: (key: string, value: string) => void
+}) {
+  return (
+    <PortalCard className="space-y-3">
+      <SectionTitle>Additional questions</SectionTitle>
+      {fields.map((f) => (
+        <Field key={f.key} label={f.required ? `${f.label} *` : f.label}>
+          {f.type === "textarea" ? (
+            <Textarea aria-label={f.label} value={answers[f.key] ?? ""} onChange={(e) => onChange(f.key, e.target.value)} />
+          ) : f.type === "select" ? (
+            <Select value={answers[f.key] ?? ""} onValueChange={(v) => onChange(f.key, v)}>
+              <SelectTrigger aria-label={f.label} className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectContent>
+                {f.options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          ) : (
+            <Input
+              aria-label={f.label}
+              type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+              value={answers[f.key] ?? ""}
+              onChange={(e) => onChange(f.key, e.target.value)}
+            />
+          )}
+        </Field>
+      ))}
+    </PortalCard>
+  )
+}
+
 // ── Course step (degree → funding → program → intake/scholarship) ─────────────
 
 export function CourseStep(props: {
@@ -387,11 +424,13 @@ export function CourseStep(props: {
   failed: boolean
   fundingAvailable?: FundingOptions
   fundingLoading: boolean
+  customAnswers: Record<string, string>
   onDegree: (d: Degree) => void
   onFunding: (f: Funding) => void
   onProgram: (p: WizardProgram) => void
   onIntake: (id: string) => void
   onScholarship: (id: string) => void
+  onCustomAnswer: (key: string, value: string) => void
 }) {
   const { degree, funding, program, programs, loading, failed, fundingAvailable, fundingLoading } = props
 
@@ -519,6 +558,10 @@ export function CourseStep(props: {
             </div>
           )}
         </div>
+      )}
+
+      {program && (program.custom_fields?.length ?? 0) > 0 && (
+        <CustomFieldsCard fields={program.custom_fields!} answers={props.customAnswers} onChange={props.onCustomAnswer} />
       )}
     </div>
   )

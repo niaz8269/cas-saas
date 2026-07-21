@@ -54,6 +54,7 @@ export default function AgentApplyWizard() {
   const [program, setProgram] = useState<WizardProgram | null>(null)
   const [intakeId, setIntakeId] = useState<string>("")
   const [scholarshipId, setScholarshipId] = useState<string>("")
+  const [customAnswers, setCustomAnswers] = useState<Record<string, string>>({})
 
   // Applicant
   const [profile, setProfile] = useState<Profile>({})
@@ -102,6 +103,7 @@ export default function AgentApplyWizard() {
         profile: Object.fromEntries(Object.entries(profile).filter(([, v]) => v !== "")),
         guardians: [...guardians, emergency].filter((g) => g.name.trim() !== ""),
         education: education.filter((e) => e.degree_name.trim() !== ""),
+        custom_fields: Object.fromEntries(Object.entries(customAnswers).filter(([, v]) => v.trim() !== "")),
       }
 
       return createApplication("agent", payload)
@@ -136,7 +138,10 @@ export default function AgentApplyWizard() {
     setStep((s) => Math.max(s - 1, 0))
   }
 
-  const canLeaveCourse = !!program && (funding === "self" || !!scholarshipId)
+  const requiredCustomAnswered = (program?.custom_fields ?? [])
+    .filter((f) => f.required)
+    .every((f) => (customAnswers[f.key] ?? "").trim() !== "")
+  const canLeaveCourse = !!program && (funding === "self" || !!scholarshipId) && requiredCustomAnswered
   const allDocsUploaded = (draft?.required_documents ?? []).every((d) => uploaded[d.id])
 
   return (
@@ -182,11 +187,13 @@ export default function AgentApplyWizard() {
           failed={availability.isError}
           fundingAvailable={fundingOpts.data?.data}
           fundingLoading={fundingOpts.isFetching}
+          customAnswers={customAnswers}
           onDegree={(d) => { setDegree(d); setFunding(""); setProgram(null); resetDraft() }}
           onFunding={(f) => { setFunding(f); setProgram(null); setScholarshipId(""); resetDraft() }}
-          onProgram={(p) => { setProgram(p); setIntakeId(""); setScholarshipId(""); resetDraft() }}
+          onProgram={(p) => { setProgram(p); setIntakeId(""); setScholarshipId(""); setCustomAnswers({}); resetDraft() }}
           onIntake={setIntakeId}
           onScholarship={setScholarshipId}
+          onCustomAnswer={(k, v) => setCustomAnswers((a) => ({ ...a, [k]: v }))}
         />
       )}
 
