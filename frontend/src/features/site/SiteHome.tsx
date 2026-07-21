@@ -134,7 +134,7 @@ export default function SiteHome() {
   return (
     <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
-      <section className="site-bleed relative flex min-h-screen flex-col justify-center text-white">
+      <section className="site-bleed relative flex min-h-[80vh] flex-col justify-center text-white">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
