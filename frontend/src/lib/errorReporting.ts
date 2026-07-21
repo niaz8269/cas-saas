@@ -10,6 +10,17 @@ const seen = new Set<string>()
 let sent = 0
 const MAX_PER_SESSION = 25
 
+// Only report from production builds — dev-server/HMR errors (e.g. a transient
+// "X is not defined" while editing) are console noise, not real incidents, and
+// shouldn't fill the admin error monitor.
+const ENABLED = import.meta.env.PROD
+
+// Known browser/library noise that isn't actionable.
+const BENIGN = [
+  "ResizeObserver loop limit exceeded",
+  "ResizeObserver loop completed with undelivered notifications",
+]
+
 export interface ClientError {
   name?: string
   message: string
@@ -20,8 +31,10 @@ export interface ClientError {
 
 export function reportClientError(err: ClientError): void {
   try {
+    if (!ENABLED) return
     const token = useAuthStore.getState().token
     if (!token || sent >= MAX_PER_SESSION || !err.message) return
+    if (BENIGN.some((b) => err.message.includes(b))) return
 
     const fingerprint = `${err.name ?? ""}|${err.message}|${err.source ?? ""}`
     if (seen.has(fingerprint)) return
