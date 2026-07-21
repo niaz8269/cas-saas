@@ -34,6 +34,14 @@ const DOT_GRID = {
   backgroundSize: "22px 22px",
 }
 
+// Popular-search shortcuts under the hero search (reference's quick tags).
+const POPULAR_SEARCHES: [string, string][] = [
+  ["Chinese Language Program", "/site/programs?q=Chinese"],
+  ["MBBS", "/site/programs?q=MBBS"],
+  ["BS International Trade", "/site/programs?q=Trade"],
+  ["Engineering", "/site/programs?q=Engineering"],
+]
+
 const HIGHLIGHTS: { title: string; body: string; to: string; tag: string; icon: LucideIcon }[] = [
   { title: "Globally recognised medical degrees", body: "Study MBBS at Ministry of Education–listed universities recognised worldwide.", to: "/site/programs?q=MBBS", tag: "MBBS", icon: BadgeCheck },
   { title: "Universities with late deadlines", body: "Still open for the coming intake — apply before the seats fill up.", to: "/site/universities", tag: "Deadlines", icon: CalendarClock },
@@ -166,20 +174,29 @@ export default function SiteHome() {
           )}
         </div>
 
-        {/* Search bar — overlaps the section boundary, like the reference */}
-        <div className="absolute inset-x-0 bottom-0 z-10 translate-y-1/2 px-4">
-          <form onSubmit={runSearch} className="mx-auto flex max-w-3xl overflow-hidden rounded-sm bg-white p-1.5 shadow-xl ring-1 ring-black/5">
-            <input
-              value={term}
-              onChange={(e) => setTerm(e.target.value)}
-              placeholder="ENTER THE NAME OF A UNIVERSITY OR A PROGRAM"
-              aria-label="Search universities or programs"
-              className="flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-gray-400 outline-none"
-            />
-            <button type="submit" aria-label="Search" className="inline-flex items-center gap-2 rounded-sm bg-cas-red px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-cas-red-600">
-              <Search className="size-5" />
-            </button>
-          </form>
+        {/* Search bar — red-bordered input + popular tags, overlapping the edge */}
+        <div className="absolute inset-x-0 bottom-0 z-10 translate-y-10 px-4">
+          <div className="mx-auto max-w-3xl rounded-sm bg-white p-5 shadow-xl ring-1 ring-black/5 sm:p-6">
+            <form onSubmit={runSearch} className="flex">
+              <input
+                value={term}
+                onChange={(e) => setTerm(e.target.value)}
+                placeholder="ENTER THE NAME OF A UNIVERSITY OR A PROGRAM"
+                aria-label="Search universities or programs"
+                className="flex-1 rounded-l-sm border-2 border-r-0 border-cas-red bg-white px-4 py-3 text-sm text-ink placeholder:text-gray-400 outline-none focus:border-cas-red-600"
+              />
+              <button type="submit" aria-label="Search" className="inline-flex items-center rounded-r-sm bg-cas-red px-6 text-white transition-colors hover:bg-cas-red-600">
+                <Search className="size-5" />
+              </button>
+            </form>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+              {POPULAR_SEARCHES.map(([label, to]) => (
+                <Link key={label} to={to} className="rounded-sm bg-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:bg-cas-red-50 hover:text-cas-red-600">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
