@@ -11,7 +11,6 @@ import {
   Globe2,
   MessageCircle,
   Play,
-  Plus,
   Search,
   ShieldCheck,
   Wallet,
@@ -24,6 +23,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
+import HeroUpdates from "@/features/site/HeroUpdates"
 import SiteReviews from "@/features/site/SiteReviews"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
@@ -149,7 +149,8 @@ export default function SiteHome() {
 
           {/* Ranked featured universities + expander (reference's numbered cards) */}
           {featuredUnis.length > 0 && (
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-9">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {featuredUnis.slice(0, 3).map((u, i) => (
                 <Link
                   key={u.id}
@@ -163,13 +164,8 @@ export default function SiteHome() {
                   <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
                 </Link>
               ))}
-              <Link
-                to="/site/universities"
-                aria-label="Browse more universities"
-                className="flex size-9 items-center justify-center rounded-full border border-white/40 text-white/80 transition-colors hover:border-cas-red hover:text-cas-red"
-              >
-                <Plus className="size-5" />
-              </Link>
+            </div>
+            <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} />
             </div>
           )}
         </div>
