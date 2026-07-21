@@ -6,6 +6,10 @@ import { cn } from "@/lib/utils"
 
 type Col = { title: string; checkAll: { label: string; to: string }; links: [string, string][] }
 
+// Tag every browse-menu link with its source so it's a distinct URL from the
+// equivalent nav/body link (and it doubles as a click-source signal).
+const src = (to: string) => `${to}${to.includes("?") ? "&" : "?"}src=menu`
+
 const COLUMNS: Col[] = [
   {
     title: "Destinations",
@@ -119,7 +123,7 @@ export default function SiteMegaMenu() {
                   {col.links.map(([label, to]) => (
                     <li key={label}>
                       <Link
-                        to={to}
+                        to={src(to)}
                         onClick={() => setOpen(false)}
                         className="text-sm text-muted-foreground transition-colors hover:text-cas-navy"
                       >
@@ -129,7 +133,7 @@ export default function SiteMegaMenu() {
                   ))}
                 </ul>
                 <Link
-                  to={col.checkAll.to}
+                  to={src(col.checkAll.to)}
                   onClick={() => setOpen(false)}
                   className="mt-3.5 inline-block text-xs font-semibold text-cas-navy hover:underline"
                 >
@@ -141,7 +145,7 @@ export default function SiteMegaMenu() {
           <div className="border-t bg-subtle">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 text-sm sm:px-6">
               <span className="text-muted-foreground">Not sure where to start?</span>
-              <Link to="/site/contact" onClick={() => setOpen(false)} className="font-semibold text-cas-navy hover:underline">
+              <Link to="/site/contact?from=menu" onClick={() => setOpen(false)} className="font-semibold text-cas-navy hover:underline">
                 Get a free consultation »
               </Link>
             </div>

@@ -102,7 +102,7 @@ export default function SiteHelpDock() {
           </div>
 
           <div className="ml-auto flex items-center gap-5">
-            <Link to="/site/study-plan" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
+            <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
               <CalendarDays className="size-5" /> Get Customized Application Plan
             </Link>
             <Divider />
@@ -157,7 +157,7 @@ export default function SiteHelpDock() {
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-cas-navy"><Mail className="size-5" /></span>
             <span><span className="block text-sm font-medium text-ink">Email</span><span className="block text-xs text-muted-foreground">{EMAIL}</span></span>
           </a>
-          <Link to="/site/study-plan" onClick={() => setMsgOpen(false)} className="mt-1 block rounded-sm bg-cas-red px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-cas-red-600">
+          <Link to="/site/study-plan?plan=free" onClick={() => setMsgOpen(false)} className="mt-1 block rounded-sm bg-cas-red px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-cas-red-600">
             Get a free study plan →
           </Link>
         </div>

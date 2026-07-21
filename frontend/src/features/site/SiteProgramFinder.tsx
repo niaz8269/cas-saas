@@ -47,8 +47,8 @@ export default function SiteProgramFinder() {
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const [q, setQ] = useState(params.get("q") ?? "")
   const [level, setLevel] = useState(params.get("level") ?? "all")
-  const [language, setLanguage] = useState("all")
-  const [maxFee, setMaxFee] = useState("")
+  const [language, setLanguage] = useState(params.get("language") ?? "all")
+  const [maxFee, setMaxFee] = useState(params.get("maxFee") ?? "")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -69,7 +69,16 @@ export default function SiteProgramFinder() {
     placeholderData: keepPreviousData,
   })
 
-  const programs = data?.data ?? []
+  // Optional client-side sort so distinct index links (?sort=popular|fee|newest)
+  // land on distinct, framed program views.
+  const sortKey = params.get("sort") ?? ""
+  const feeOf = (f: string | number | null | undefined) => (f == null ? Infinity : Number(f))
+  const programs = (() => {
+    const list = [...(data?.data ?? [])]
+    if (sortKey === "fee") return list.sort((a, b) => feeOf(a.tuition_fee) - feeOf(b.tuition_fee))
+    if (sortKey === "newest") return list.sort((a, b) => b.id - a.id)
+    return list // "popular" / default keeps API order
+  })()
   const meta = data?.meta
 
   const reset = (setter: (v: string) => void) => (v: string) => { setter(v); setPage(1) }

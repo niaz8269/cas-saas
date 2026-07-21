@@ -141,8 +141,8 @@ it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async ()
   for (const col of ["Destinations", "Universities", "Programs", "Scholarships", "About"]) {
     expect(screen.getByText(col)).toBeInTheDocument()
   }
-  expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS")
-  expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1")
+  expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS&src=menu")
+  expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1&src=menu")
 })
 
 it("opens the counsellor widget with CAS's own contact channels", async () => {

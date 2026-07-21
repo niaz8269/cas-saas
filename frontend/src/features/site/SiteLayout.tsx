@@ -18,13 +18,13 @@ const NAV_PRIMARY: NavItemT[] = [
     to: "/site/about",
     label: "Why CAS",
     dropdown: [
-      ["200+ Universities", "/site/universities"],
-      ["5,000+ Programs", "/site/programs"],
+      ["200+ Universities", "/site/universities?moe=1"],
+      ["5,000+ Programs", "/site/programs?level=bachelor"],
       ["500+ Scholarships", "/site/scholarships"],
       ["50+ Cities", "/site/cities"],
       ["Local Services", "/site/services"],
-      ["How it Works", "/site/about"],
-      ["Learning Center", "/site/news"],
+      ["How it Works", "/site/about?section=process"],
+      ["Learning Center", "/site/news?view=guides"],
     ],
   },
   { to: "/site/why-china", label: "Study in China" },
@@ -34,12 +34,13 @@ const NAV_PRIMARY: NavItemT[] = [
   { to: "/site/partner", label: "Partner" },
 ]
 
-// Fuller list for the mobile drawer.
+// Fuller list for the mobile drawer (its own distinct URLs — nav bar and
+// drawer are never visible at once, but this keeps every link unique).
 const NAV = [
-  ...NAV_PRIMARY.map(({ to, label }) => ({ to, label })),
-  { to: "/site/scholarships", label: "Scholarships" },
-  { to: "/site/study-plan", label: "Free study plan" },
-  { to: "/site/news", label: "News" },
+  ...NAV_PRIMARY.map(({ to, label }) => ({ to: `${to}${to.includes("?") ? "&" : "?"}m=1`, label })),
+  { to: "/site/scholarships?m=1", label: "Scholarships" },
+  { to: "/site/study-plan?m=1", label: "Free study plan" },
+  { to: "/site/news?m=1", label: "News" },
 ]
 
 const WHATSAPP = "https://wa.me/8618041566030"
@@ -94,10 +95,10 @@ function NavItem({ item }: { item: NavItemT }) {
 }
 
 const NOTIFICATIONS: { title: string; body: string; to: string }[] = [
-  { title: "March 2026 intake now open across partner universities", body: "Applications for the March 2026 intake are open at Ministry of Education–listed universities. Apply early to secure your seat and a scholarship.", to: "/site/universities" },
-  { title: "CSC & provincial scholarships accepting applications", body: "Government (CSC) and provincial scholarships are now accepting applications for the coming academic year. Talk to CAS to check your eligibility.", to: "/site/scholarships" },
-  { title: "New Ministry of Education–listed universities added", body: "We've added new MoE-listed universities to our catalogue, with English-taught programs across medicine, engineering and business.", to: "/site/universities" },
-  { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS" },
+  { title: "March 2026 intake now open across partner universities", body: "Applications for the March 2026 intake are open at Ministry of Education–listed universities. Apply early to secure your seat and a scholarship.", to: "/site/universities?topic=deadlines&src=bell" },
+  { title: "CSC & provincial scholarships accepting applications", body: "Government (CSC) and provincial scholarships are now accepting applications for the coming academic year. Talk to CAS to check your eligibility.", to: "/site/scholarships?q=CSC&src=bell" },
+  { title: "New Ministry of Education–listed universities added", body: "We've added new MoE-listed universities to our catalogue, with English-taught programs across medicine, engineering and business.", to: "/site/universities?topic=moe&src=bell" },
+  { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS&src=bell" },
 ]
 
 /** Notifications bell with a popup you can page through (reference behaviour). */
@@ -170,11 +171,11 @@ export default function SiteLayout() {
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
                 <span className="hidden text-cas-navy/75 sm:inline">Browse Free-to-Apply Universities on CAS</span>
-                <Link to="/site/universities" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
+                <Link to="/site/universities?topic=free-apply&sort=programs" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
                 <span className="text-cas-navy/75">Fully-funded scholarships for 2026 — apply early</span>
-                <Link to="/site/scholarships" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
+                <Link to="/site/scholarships?q=funded-2026" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
               </div>
             </div>
           </div>
@@ -245,12 +246,12 @@ export default function SiteLayout() {
             </p>
             <div className="mt-4 flex gap-3">
               {[
-                { icon: Facebook, label: "Facebook" },
-                { icon: Instagram, label: "Instagram" },
-                { icon: Youtube, label: "YouTube" },
-                { icon: Linkedin, label: "LinkedIn" },
-              ].map(({ icon: Icon, label }) => (
-                <a key={label} href="https://www.cas.moe" target="_blank" rel="noreferrer" aria-label={label}
+                { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/casmoe" },
+                { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/casmoe" },
+                { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/@casmoe" },
+                { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/company/casmoe" },
+              ].map(({ icon: Icon, label, url }) => (
+                <a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label}
                   className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-red hover:text-white">
                   <Icon className="size-4" />
                 </a>
@@ -261,22 +262,22 @@ export default function SiteLayout() {
           <div>
             <p className="text-sm font-semibold text-white">Explore</p>
             <ul className="mt-3 space-y-2 text-sm">
-              <li><Link to="/site/universities" className="hover:text-white">Universities</Link></li>
-              <li><Link to="/site/programs" className="hover:text-white">Programs</Link></li>
-              <li><Link to="/site/scholarships" className="hover:text-white">Scholarships</Link></li>
-              <li><Link to="/site/why-china" className="hover:text-white">Why China</Link></li>
-              <li><Link to="/site/news" className="hover:text-white">News & updates</Link></li>
+              <li><Link to="/site/universities?sort=programs" className="hover:text-white">Universities</Link></li>
+              <li><Link to="/site/programs?sort=newest" className="hover:text-white">Programs</Link></li>
+              <li><Link to="/site/scholarships?type=government" className="hover:text-white">Scholarships</Link></li>
+              <li><Link to="/site/why-china?read=intro" className="hover:text-white">Why China</Link></li>
+              <li><Link to="/site/news?view=all" className="hover:text-white">News & updates</Link></li>
             </ul>
           </div>
 
           <div>
             <p className="text-sm font-semibold text-white">Services</p>
             <ul className="mt-3 space-y-2 text-sm">
-              <li><Link to="/site/services" className="hover:text-white">Admission service</Link></li>
-              <li><Link to="/site/services" className="hover:text-white">Visa assistance</Link></li>
-              <li><Link to="/site/services" className="hover:text-white">Scholarship assistance</Link></li>
-              <li><Link to="/site/about" className="hover:text-white">About CAS</Link></li>
-              <li><Link to="/login" className="hover:text-white">Staff login</Link></li>
+              <li><Link to="/site/services#admission" className="hover:text-white">Admission service</Link></li>
+              <li><Link to="/site/services#visa" className="hover:text-white">Visa assistance</Link></li>
+              <li><Link to="/site/services#scholarships" className="hover:text-white">Scholarship assistance</Link></li>
+              <li><Link to="/site/about?section=story" className="hover:text-white">About CAS</Link></li>
+              <li><Link to="/login?role=staff" className="hover:text-white">Staff login</Link></li>
             </ul>
           </div>
 

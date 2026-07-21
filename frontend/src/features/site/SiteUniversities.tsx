@@ -11,17 +11,38 @@ import { SitePageHeader, UniCard } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
+// Contextual "topic" views so distinct index links land on distinct,
+// framed university lists (backend has no topic flags yet, so these set the
+// heading + the closest real filter — MoE and/or a keyword).
+const TOPICS: Record<string, { eyebrow: string; title: string; subtitle: string; moe?: boolean; q?: string }> = {
+  moe: { eyebrow: "Recognised worldwide", title: "Ministry of Education–listed universities", subtitle: "Officially recognised universities whose degrees are valid worldwide.", moe: true },
+  "no-csca": { eyebrow: "Admissions", title: "No-CSCA universities", subtitle: "Universities that admit international students without sitting the CSCA test.", moe: true },
+  deadlines: { eyebrow: "Apply soon", title: "Universities with late deadlines", subtitle: "Still open for the coming intake — apply before the seats fill up." },
+  "free-apply": { eyebrow: "Free to apply", title: "Free-application universities", subtitle: "Apply to selected universities with no application fee through CAS.", moe: true },
+  medical: { eyebrow: "Medicine", title: "Medical universities", subtitle: "Leading universities for MBBS, dentistry, nursing and pharmacy in China.", q: "Medical" },
+}
+
+const SORTS: Record<string, { label: string; cmp: (a: { name: string; id: number; programs_count?: number }, b: { name: string; id: number; programs_count?: number }) => number }> = {
+  name: { label: "A–Z", cmp: (a, b) => a.name.localeCompare(b.name) },
+  programs: { label: "Most programs", cmp: (a, b) => (b.programs_count ?? 0) - (a.programs_count ?? 0) },
+  newest: { label: "Newest", cmp: (a, b) => b.id - a.id },
+}
+
 export default function SiteUniversities() {
+  const [params] = useSearchParams()
+  const topic = TOPICS[params.get("topic") ?? ""]
+  const sortKey = params.get("sort") ?? ""
+  const sort = SORTS[sortKey]
+
   useSeo({
-    title: "Universities in China",
+    title: topic?.title ?? "Universities in China",
     description: "Browse Ministry of Education–listed universities in China. Compare their programs, intakes and scholarships and apply with CAS.",
     canonicalPath: "/site/universities",
   })
 
-  const [params] = useSearchParams()
-  const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
-  const [q, setQ] = useState(params.get("q") ?? "")
-  const [moe, setMoe] = useState(params.get("moe") === "1")
+  const [searchInput, setSearchInput] = useState(params.get("q") ?? topic?.q ?? "")
+  const [q, setQ] = useState(params.get("q") ?? topic?.q ?? "")
+  const [moe, setMoe] = useState(params.get("moe") === "1" || !!topic?.moe)
   const [city, setCity] = useState(params.get("city") ?? "")
   const [page, setPage] = useState(1)
 
@@ -37,16 +58,16 @@ export default function SiteUniversities() {
     placeholderData: keepPreviousData,
   })
 
-  const universities = data?.data ?? []
+  const universities = sort ? [...(data?.data ?? [])].sort(sort.cmp) : data?.data ?? []
   const cities = data?.cities ?? []
   const meta = data?.meta
 
   return (
     <div className="space-y-6">
       <SitePageHeader
-        eyebrow="Partner network"
-        title="Universities in China"
-        subtitle="Browse Ministry of Education–listed universities and explore their programs, intakes and scholarships."
+        eyebrow={topic?.eyebrow ?? (sort ? `Sorted by ${sort.label}` : "Partner network")}
+        title={topic?.title ?? "Universities in China"}
+        subtitle={topic?.subtitle ?? "Browse Ministry of Education–listed universities and explore their programs, intakes and scholarships."}
       />
 
       <div className="flex flex-wrap items-center gap-3 rounded-sm border bg-card p-4 shadow-sm">

@@ -15,11 +15,11 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"]
 
 const NEW_STORIES: [string, string][] = [
-  ["March 2026 intake now open across partner universities", "/site/news"],
-  ["CSC & provincial scholarships accepting applications", "/site/scholarships"],
-  ["New Ministry of Education–listed universities added", "/site/universities"],
-  ["How to prepare a strong MBBS application", "/site/programs?q=MBBS"],
-  ["Student visa guide: documents and timeline", "/site/why-china"],
+  ["March 2026 intake now open across partner universities", "/site/news?post=march-2026-intake"],
+  ["CSC & provincial scholarships accepting applications", "/site/news?post=csc-scholarships"],
+  ["New Ministry of Education–listed universities added", "/site/news?post=new-moe-universities"],
+  ["How to prepare a strong MBBS application", "/site/news?post=mbbs-application-guide"],
+  ["Student visa guide: documents and timeline", "/site/news?post=student-visa-guide"],
 ]
 
 const STOPWORDS = new Set(["of", "and", "the", "for", "&", "in", "a"])
@@ -100,7 +100,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
               ? universities.map((u) => (
                 <Row
                   key={u.id}
-                  to={u.slug ? `/site/universities/${u.slug}` : "/site/universities"}
+                  to={u.slug ? `/site/universities/${u.slug}` : "/site/universities?src=updates"}
                   left={<>{u.name} <span className="text-white/45">| {abbr(u.name)}{u.city ? ` | ${u.city}` : ""}</span></>}
                   right={`Last application: ${lastApp}`}
                 />
@@ -111,7 +111,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
               ? programs.map((p) => (
                 <Row
                   key={p.id}
-                  to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"}
+                  to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
                   left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level}</span></span></>}
                   right={`Last application: ${lastApp}`}
                 />
@@ -124,7 +124,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                 ? scholarships.data.data.map((s) => (
                   <Row
                     key={s.id}
-                    to={s.university?.slug ? `/site/universities/${s.university.slug}` : "/site/scholarships"}
+                    to={s.university?.slug ? `/site/universities/${s.university.slug}` : "/site/scholarships?src=updates"}
                     left={<>{s.name} <span className="text-white/45">| {s.coverage ?? s.type ?? "Scholarship"}{s.university?.name ? ` | ${s.university.name}` : ""}</span></>}
                     right={s.deadline ? `Deadline: ${fmtDate(s.deadline)}` : "Open now"}
                   />

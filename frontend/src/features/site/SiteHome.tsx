@@ -43,35 +43,35 @@ const POPULAR_SEARCHES: [string, string][] = [
 ]
 
 const HIGHLIGHTS: { title: string; body: string; to: string; tag: string; icon: LucideIcon }[] = [
-  { title: "Globally recognised medical degrees", body: "Study MBBS at Ministry of Education–listed universities recognised worldwide.", to: "/site/programs?q=MBBS", tag: "MBBS", icon: BadgeCheck },
-  { title: "Universities with late deadlines", body: "Still open for the coming intake — apply before the seats fill up.", to: "/site/universities", tag: "Deadlines", icon: CalendarClock },
-  { title: "No-CSCA universities", body: "Universities that admit international students without the CSCA test.", to: "/site/universities", tag: "Admissions", icon: CheckCircle2 },
-  { title: "Chinese-language foundations", body: "Foundation-year programs to prepare you for study and life in China.", to: "/site/programs?q=Chinese", tag: "Language", icon: BookOpen },
-  { title: "Fast-track applications", body: "Priority processing for complete applications submitted through CAS.", to: "/site/contact", tag: "Fast-track", icon: Zap },
-  { title: "Free-application universities", body: "Apply to selected universities with no application fee through CAS.", to: "/site/universities", tag: "Free apply", icon: ShieldCheck },
-  { title: "Budget-friendly universities", body: "Quality education with affordable tuition and living costs.", to: "/site/programs", tag: "Value", icon: Wallet },
-  { title: "Full-scholarship universities", body: "Universities offering full-tuition scholarships to eligible students.", to: "/site/scholarships?q=full", tag: "Scholarship", icon: Award },
-  { title: "Partial-scholarship universities", body: "Universities offering partial awards and monthly stipends.", to: "/site/scholarships?q=partial", tag: "Scholarship", icon: Globe2 },
+  { title: "Globally recognised medical degrees", body: "Study MBBS at Ministry of Education–listed universities recognised worldwide.", to: "/site/universities?topic=medical", tag: "MBBS", icon: BadgeCheck },
+  { title: "Universities with late deadlines", body: "Still open for the coming intake — apply before the seats fill up.", to: "/site/universities?topic=deadlines", tag: "Deadlines", icon: CalendarClock },
+  { title: "No-CSCA universities", body: "Universities that admit international students without the CSCA test.", to: "/site/universities?topic=no-csca", tag: "Admissions", icon: CheckCircle2 },
+  { title: "Chinese-language foundations", body: "Foundation-year programs to prepare you for study and life in China.", to: "/site/programs?language=Chinese", tag: "Language", icon: BookOpen },
+  { title: "Fast-track applications", body: "Priority processing for complete applications submitted through CAS.", to: "/site/services#fast-track", tag: "Fast-track", icon: Zap },
+  { title: "Free-application universities", body: "Apply to selected universities with no application fee through CAS.", to: "/site/universities?topic=free-apply", tag: "Free apply", icon: ShieldCheck },
+  { title: "Budget-friendly universities", body: "Quality education with affordable tuition and living costs.", to: "/site/programs?maxFee=20000", tag: "Value", icon: Wallet },
+  { title: "Full-scholarship universities", body: "Universities offering full-tuition scholarships to eligible students.", to: "/site/scholarships?type=full", tag: "Scholarship", icon: Award },
+  { title: "Partial-scholarship universities", body: "Universities offering partial awards and monthly stipends.", to: "/site/scholarships?type=partial", tag: "Scholarship", icon: Globe2 },
 ]
 
 const FEATURED: Record<string, { title: string; to: string }[]> = {
   "Latest topics": [
     { title: "March 2026 intake now open across partner universities", to: "/site/news" },
-    { title: "CSC & provincial scholarships accepting applications", to: "/site/scholarships" },
-    { title: "New Ministry of Education–listed universities added", to: "/site/universities" },
-    { title: "How to prepare a strong MBBS application", to: "/site/programs?q=MBBS" },
+    { title: "CSC & provincial scholarships accepting applications", to: "/site/scholarships?q=CSC" },
+    { title: "New Ministry of Education–listed universities added", to: "/site/universities?topic=moe" },
+    { title: "How to prepare a strong MBBS application", to: "/site/programs?q=MBBS&level=bachelor" },
   ],
   "Common questions": [
-    { title: "Is an MBBS from China recognised in my country?", to: "/site/why-china" },
-    { title: "What are the tuition fees and living costs?", to: "/site/programs" },
-    { title: "Which universities don't require the CSCA test?", to: "/site/universities" },
-    { title: "How do I apply for a scholarship?", to: "/site/scholarships" },
+    { title: "Is an MBBS from China recognised in my country?", to: "/site/faq?q=recognition" },
+    { title: "What are the tuition fees and living costs?", to: "/site/pricing#costs" },
+    { title: "Which universities don't require the CSCA test?", to: "/site/faq?q=csca" },
+    { title: "How do I apply for a scholarship?", to: "/site/faq?q=scholarships" },
   ],
   "Trending": [
-    { title: "Study MBBS in English", to: "/site/programs?q=MBBS" },
-    { title: "Engineering programs in China", to: "/site/programs?q=Engineering" },
+    { title: "Study MBBS in English", to: "/site/programs?language=English" },
+    { title: "Engineering programs in China", to: "/site/programs?q=Engineering&level=master" },
     { title: "Business & MBA programs", to: "/site/programs?q=Business" },
-    { title: "Full-tuition scholarships", to: "/site/scholarships?q=full" },
+    { title: "Full-tuition scholarships", to: "/site/scholarships?q=full-tuition" },
   ],
 }
 
@@ -149,7 +149,7 @@ export default function SiteHome() {
             <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">Study in China</h1>
             {featuredUnis[0] ? (
               <Link
-                to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs"}
+                to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs?ref=featured"}
                 className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
               >
                 {featuredUnis[0].name} : English-taught Programs
@@ -276,7 +276,7 @@ export default function SiteHome() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
             {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
-              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+              <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?ref=outstanding"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
                   <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level}</span>
                 </PhotoBanner>
@@ -288,7 +288,7 @@ export default function SiteHome() {
             ))}
           </div>
           <div className="mt-9 flex justify-center">
-            <Link to="/site/programs" className="inline-flex items-center gap-1 rounded-sm border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
+            <Link to="/site/programs?sort=popular" className="inline-flex items-center gap-1 rounded-sm border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10">
               View all programs <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -298,7 +298,7 @@ export default function SiteHome() {
       {/* ── Featured Content (tabbed) ────────────────────────── */}
       <SiteSection title="Featured content">
         <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-          <Link to="/site/why-china" className="group relative flex min-h-64 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-8 text-white">
+          <Link to="/site/why-china?read=full" className="group relative flex min-h-64 flex-col justify-end overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 to-cas-navy p-8 text-white">
             <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={DOT_GRID} />
             <BookOpen className="absolute top-6 right-6 size-16 text-cas-red/30" />
             <div className="relative">
@@ -346,14 +346,14 @@ export default function SiteHome() {
       <SiteReviews />
 
       {/* ── More in China ────────────────────────────────────── */}
-      <SiteSection title="More universities in China" action={<Link to="/site/universities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-red-600">View all <ArrowRight className="size-4" /></Link>}>
+      <SiteSection title="More universities in China" action={<Link to="/site/universities?sort=name" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-red-600">View all <ArrowRight className="size-4" /></Link>}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {universities.isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-sm" />)}
           {featuredUnis.map((u) => <UniCard key={u.id} u={u} />)}
           {!universities.isPending && featuredUnis.length === 0 && (
             <div className="col-span-full rounded-sm border border-dashed bg-card p-10 text-center">
               <p className="text-sm text-muted-foreground">Our partner universities are ready to explore.</p>
-              <Link to="/site/universities" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:underline">Browse all <ArrowRight className="size-4" /></Link>
+              <Link to="/site/universities?sort=newest" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:underline">Browse all <ArrowRight className="size-4" /></Link>
             </div>
           )}
         </div>
@@ -372,8 +372,8 @@ export default function SiteHome() {
         <h2 className="mt-3 font-sans text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Find your program in minutes — or book a free consultation and we'll guide you.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link to="/site/programs" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
-          <Link to="/site/contact" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-bold text-white hover:bg-cas-red-600"><MessageCircle className="size-4" /> Free consultation</Link>
+          <Link to="/site/programs?sort=fee" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-bold text-white hover:bg-cas-navy-700"><Search className="size-4" /> Find your program</Link>
+          <Link to="/site/contact?topic=consultation" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-bold text-white hover:bg-cas-red-600"><MessageCircle className="size-4" /> Free consultation</Link>
         </div>
       </section>
     </div>
