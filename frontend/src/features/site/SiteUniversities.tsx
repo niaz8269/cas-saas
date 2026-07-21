@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { School, Search, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -14,29 +15,32 @@ import { cn } from "@/lib/utils"
 // Contextual "topic" views so distinct index links land on distinct,
 // framed university lists (backend has no topic flags yet, so these set the
 // heading + the closest real filter — MoE and/or a keyword).
+// eyebrow/title/subtitle are i18n keys resolved at render; q stays a query value.
 const TOPICS: Record<string, { eyebrow: string; title: string; subtitle: string; moe?: boolean; q?: string }> = {
-  moe: { eyebrow: "Recognised worldwide", title: "Ministry of Education–listed universities", subtitle: "Officially recognised universities whose degrees are valid worldwide.", moe: true },
-  "no-csca": { eyebrow: "Admissions", title: "No-CSCA universities", subtitle: "Universities that admit international students without sitting the CSCA test.", moe: true },
-  deadlines: { eyebrow: "Apply soon", title: "Universities with late deadlines", subtitle: "Still open for the coming intake — apply before the seats fill up." },
-  "free-apply": { eyebrow: "Free to apply", title: "Free-application universities", subtitle: "Apply to selected universities with no application fee through CAS.", moe: true },
-  medical: { eyebrow: "Medicine", title: "Medical universities", subtitle: "Leading universities for MBBS, dentistry, nursing and pharmacy in China.", q: "Medical" },
+  moe: { eyebrow: "universities.topicMoeEyebrow", title: "universities.topicMoeTitle", subtitle: "universities.topicMoeSubtitle", moe: true },
+  "no-csca": { eyebrow: "universities.topicNoCscaEyebrow", title: "universities.topicNoCscaTitle", subtitle: "universities.topicNoCscaSubtitle", moe: true },
+  deadlines: { eyebrow: "universities.topicDeadlinesEyebrow", title: "universities.topicDeadlinesTitle", subtitle: "universities.topicDeadlinesSubtitle" },
+  "free-apply": { eyebrow: "universities.topicFreeApplyEyebrow", title: "universities.topicFreeApplyTitle", subtitle: "universities.topicFreeApplySubtitle", moe: true },
+  medical: { eyebrow: "universities.topicMedicalEyebrow", title: "universities.topicMedicalTitle", subtitle: "universities.topicMedicalSubtitle", q: "Medical" },
 }
 
-const SORTS: Record<string, { label: string; cmp: (a: { name: string; id: number; programs_count?: number }, b: { name: string; id: number; programs_count?: number }) => number }> = {
-  name: { label: "A–Z", cmp: (a, b) => a.name.localeCompare(b.name) },
-  programs: { label: "Most programs", cmp: (a, b) => (b.programs_count ?? 0) - (a.programs_count ?? 0) },
-  newest: { label: "Newest", cmp: (a, b) => b.id - a.id },
+// labelKey is an i18n key resolved at render; cmp stays; the record keys are sort URL values.
+const SORTS: Record<string, { labelKey: string; cmp: (a: { name: string; id: number; programs_count?: number }, b: { name: string; id: number; programs_count?: number }) => number }> = {
+  name: { labelKey: "universities.sortNameLabel", cmp: (a, b) => a.name.localeCompare(b.name) },
+  programs: { labelKey: "universities.sortProgramsLabel", cmp: (a, b) => (b.programs_count ?? 0) - (a.programs_count ?? 0) },
+  newest: { labelKey: "universities.sortNewestLabel", cmp: (a, b) => b.id - a.id },
 }
 
 export default function SiteUniversities() {
+  const { t } = useTranslation()
   const [params] = useSearchParams()
   const topic = TOPICS[params.get("topic") ?? ""]
   const sortKey = params.get("sort") ?? ""
   const sort = SORTS[sortKey]
 
   useSeo({
-    title: topic?.title ?? "Universities in China",
-    description: "Browse Ministry of Education–listed universities in China. Compare their programs, intakes and scholarships and apply with CAS.",
+    title: topic ? t(topic.title) : t("universities.pageTitle"),
+    description: t("universities.seoDescription"),
     canonicalPath: "/site/universities",
   })
 
@@ -65,9 +69,9 @@ export default function SiteUniversities() {
   return (
     <div className="space-y-6">
       <SitePageHeader
-        eyebrow={topic?.eyebrow ?? (sort ? `Sorted by ${sort.label}` : "Partner network")}
-        title={topic?.title ?? "Universities in China"}
-        subtitle={topic?.subtitle ?? "Browse Ministry of Education–listed universities and explore their programs, intakes and scholarships."}
+        eyebrow={topic ? t(topic.eyebrow) : (sort ? t("universities.sortedBy", { label: t(sort.labelKey) }) : t("universities.eyebrowPartnerNetwork"))}
+        title={topic ? t(topic.title) : t("universities.pageTitle")}
+        subtitle={topic ? t(topic.subtitle) : t("universities.pageSubtitle")}
       />
 
       <div className="flex flex-wrap items-center gap-3 rounded-sm border bg-card p-4 shadow-sm">
@@ -76,18 +80,18 @@ export default function SiteUniversities() {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search universities or cities…"
+            placeholder={t("universities.searchPlaceholder")}
             className="h-11 bg-background pl-9"
-            aria-label="Search universities"
+            aria-label={t("universities.searchAriaLabel")}
           />
         </div>
         <select
           value={city}
           onChange={(e) => { setCity(e.target.value); setPage(1) }}
-          aria-label="Filter by city"
+          aria-label={t("universities.filterByCityAriaLabel")}
           className="h-11 rounded-sm border bg-background px-3 text-sm text-foreground"
         >
-          <option value="">All cities</option>
+          <option value="">{t("universities.allCities")}</option>
           {cities.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
         <button
@@ -99,13 +103,13 @@ export default function SiteUniversities() {
             moe ? "border-cas-red bg-cas-red-50 text-cas-red-600" : "bg-background text-muted-foreground hover:text-foreground",
           )}
         >
-          <ShieldCheck className="size-4" /> MoE-listed only
+          <ShieldCheck className="size-4" /> {t("universities.moeListedOnly")}
         </button>
       </div>
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
-          <p className="text-sm text-destructive">Couldn't load universities right now.</p>
+          <p className="text-sm text-destructive">{t("universities.loadError")}</p>
         </div>
       )}
 
@@ -115,8 +119,8 @@ export default function SiteUniversities() {
         {!isPending && universities.length === 0 && !isError && (
           <div className="col-span-full rounded-sm border bg-card p-12 text-center shadow-sm">
             <School className="mx-auto size-8 text-muted-foreground" />
-            <p className="mt-3 text-sm font-medium">No universities found</p>
-            <p className="mt-1 text-sm text-muted-foreground">Try a different search or clear the filter.</p>
+            <p className="mt-3 text-sm font-medium">{t("universities.emptyTitle")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("universities.emptyHint")}</p>
           </div>
         )}
 
@@ -125,9 +129,9 @@ export default function SiteUniversities() {
 
       {meta && meta.total > 0 && meta.last_page > 1 && (
         <div className="flex items-center justify-center gap-2">
-          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Previous</Button>
-          <span className="text-sm text-muted-foreground">Page {meta.current_page} of {meta.last_page}</span>
-          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
+          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>{t("universities.previous")}</Button>
+          <span className="text-sm text-muted-foreground">{t("universities.pageOf", { current: meta.current_page, total: meta.last_page })}</span>
+          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("universities.next")}</Button>
         </div>
       )}
     </div>

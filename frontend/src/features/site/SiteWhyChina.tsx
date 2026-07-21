@@ -1,35 +1,39 @@
 import { ArrowRight, Award, Building2, Coins, GraduationCap, Globe2, Landmark, Sparkles, type LucideIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
-const REASONS: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Award, title: "World-ranked universities", body: "Study at Ministry of Education–listed and globally ranked institutions recognised worldwide." },
-  { icon: Globe2, title: "English-taught degrees", body: "Full degrees taught in English across medicine, engineering, business and more — no Chinese required to start." },
-  { icon: Coins, title: "Affordable & funded", body: "Low tuition and living costs, plus generous government, provincial and university scholarships." },
-  { icon: Building2, title: "Opportunity & industry", body: "Study in one of the world's largest economies, with real exposure to research and industry." },
-  { icon: Landmark, title: "Rich culture & safety", body: "Modern, safe cities with a deep culture and a large, welcoming international-student community." },
-  { icon: GraduationCap, title: "Globally recognised degrees", body: "Qualifications accepted by employers and licensing bodies around the world." },
+// Display text lives in i18n keys resolved via t() at render (report — 5-language support).
+const REASONS: { icon: LucideIcon; titleKey: string; bodyKey: string }[] = [
+  { icon: Award, titleKey: "whyChina.reasons.worldRanked.title", bodyKey: "whyChina.reasons.worldRanked.body" },
+  { icon: Globe2, titleKey: "whyChina.reasons.englishTaught.title", bodyKey: "whyChina.reasons.englishTaught.body" },
+  { icon: Coins, titleKey: "whyChina.reasons.affordable.title", bodyKey: "whyChina.reasons.affordable.body" },
+  { icon: Building2, titleKey: "whyChina.reasons.opportunity.title", bodyKey: "whyChina.reasons.opportunity.body" },
+  { icon: Landmark, titleKey: "whyChina.reasons.culture.title", bodyKey: "whyChina.reasons.culture.body" },
+  { icon: GraduationCap, titleKey: "whyChina.reasons.recognised.title", bodyKey: "whyChina.reasons.recognised.body" },
 ]
 
 export default function SiteWhyChina() {
+  const { t } = useTranslation()
+
   useSeo({
-    title: "Why Study in China",
-    description: "Why study in China — world-ranked, Ministry of Education–listed universities, English-taught degrees, affordable tuition and generous scholarships.",
+    title: t("whyChina.seoTitle"),
+    description: t("whyChina.seoDescription"),
     canonicalPath: "/site/why-china",
   })
 
   return (
     <div className="space-y-12">
       <SitePageHeader
-        eyebrow={<><Sparkles className="size-3.5" /> A world-class education</>}
-        title="Why study in China"
-        subtitle="China has become one of the world's leading destinations for international students — combining top universities, affordable costs, generous scholarships and real opportunity."
+        eyebrow={<><Sparkles className="size-3.5" /> {t("whyChina.eyebrow")}</>}
+        title={t("whyChina.title")}
+        subtitle={t("whyChina.subtitle")}
       />
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {[["500K+", "International students"], ["English", "Taught programs"], ["Scholarships", "Widely available"], ["Global", "Degree recognition"]].map(([v, l]) => (
+        {[[t("whyChina.stats.students.value"), t("whyChina.stats.students.label")], [t("whyChina.stats.english.value"), t("whyChina.stats.english.label")], [t("whyChina.stats.scholarships.value"), t("whyChina.stats.scholarships.label")], [t("whyChina.stats.recognition.value"), t("whyChina.stats.recognition.label")]].map(([v, l]) => (
           <div key={l} className="rounded-sm border bg-card p-5 text-center shadow-sm">
             <p className="text-2xl font-bold text-cas-navy">{v}</p>
             <p className="mt-1 text-xs text-muted-foreground">{l}</p>
@@ -37,13 +41,13 @@ export default function SiteWhyChina() {
         ))}
       </section>
 
-      <SiteSection title="Reasons students choose China" subtitle="What makes it one of the smartest study-abroad decisions today.">
+      <SiteSection title={t("whyChina.reasonsTitle")} subtitle={t("whyChina.reasonsSubtitle")}>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {REASONS.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
+          {REASONS.map(({ icon: Icon, titleKey, bodyKey }) => (
+            <div key={titleKey} className="rounded-sm border bg-card p-6 shadow-sm">
               <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
-              <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
+              <h3 className="mt-4 font-semibold text-cas-navy">{t(titleKey)}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">{t(bodyKey)}</p>
             </div>
           ))}
         </div>
@@ -51,11 +55,11 @@ export default function SiteWhyChina() {
 
       <section className="flex flex-col items-start justify-between gap-4 rounded-sm border bg-cas-red-50 p-6 sm:flex-row sm:items-center sm:p-8">
         <div>
-          <h2 className="text-lg font-semibold text-cas-navy">Ready to explore your options?</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Browse programs across our partner universities and find your fit.</p>
+          <h2 className="text-lg font-semibold text-cas-navy">{t("whyChina.ctaTitle")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("whyChina.ctaSubtitle")}</p>
         </div>
         <Link to="/site/programs" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-navy px-6 text-sm font-semibold text-white hover:bg-cas-navy-700">
-          Find your program <ArrowRight className="size-4" />
+          {t("whyChina.ctaButton")} <ArrowRight className="size-4" />
         </Link>
       </section>
     </div>

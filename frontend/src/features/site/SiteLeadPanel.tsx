@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { CheckCircle2, Send } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,6 +14,7 @@ import { postEnquiry, SiteApiError, type EnquiryPayload } from "@/features/site/
  * submissions land as source-tagged CRM leads; includes the honeypot field.
  */
 export default function SiteLeadPanel() {
+  const { t } = useTranslation()
   const [values, setValues] = useState({ first_name: "", email: "", message: "" })
   const [company, setCompany] = useState("") // honeypot
   const [errors, setErrors] = useState<Record<string, string[]>>({})
@@ -37,8 +39,8 @@ export default function SiteLeadPanel() {
       {mutation.isSuccess ? (
         <div className="py-8 text-center">
           <CheckCircle2 className="mx-auto size-10 text-green-600" />
-          <h2 className="mt-3 text-base font-semibold text-ink">Thank you!</h2>
-          <p className="mt-1 text-sm text-muted-foreground">A CAS advisor will be in touch shortly.</p>
+          <h2 className="mt-3 text-base font-semibold text-ink">{t("leadPanel.thankYou")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("leadPanel.thankYouBody")}</p>
         </div>
       ) : (
         <>
@@ -47,8 +49,8 @@ export default function SiteLeadPanel() {
               <Send className="size-4" />
             </span>
             <div>
-              <h2 className="text-sm font-bold text-ink">Leave a message</h2>
-              <p className="text-xs text-muted-foreground">Free guidance — we reply within a day.</p>
+              <h2 className="text-sm font-bold text-ink">{t("leadPanel.title")}</h2>
+              <p className="text-xs text-muted-foreground">{t("leadPanel.subtitle")}</p>
             </div>
           </div>
 
@@ -59,18 +61,18 @@ export default function SiteLeadPanel() {
           >
             {mutation.isError && Object.keys(errors).length === 0 && (
               <p role="alert" className="rounded-sm bg-cas-red-50 px-3 py-2 text-xs text-destructive">
-                Something went wrong. Please try again.
+                {t("leadPanel.errorGeneric")}
               </p>
             )}
             <div>
-              <Input value={values.first_name} onChange={set("first_name")} placeholder="Your name" autoComplete="given-name" aria-label="Your name" />
+              <Input value={values.first_name} onChange={set("first_name")} placeholder={t("leadPanel.yourName")} autoComplete="given-name" aria-label={t("leadPanel.yourName")} />
               {errors.first_name?.[0] && <p role="alert" className="mt-1 text-xs text-destructive">{errors.first_name[0]}</p>}
             </div>
             <div>
-              <Input type="email" value={values.email} onChange={set("email")} placeholder="Email" autoComplete="email" inputMode="email" aria-label="Email" />
+              <Input type="email" value={values.email} onChange={set("email")} placeholder={t("leadPanel.email")} autoComplete="email" inputMode="email" aria-label={t("leadPanel.email")} />
               {errors.email?.[0] && <p role="alert" className="mt-1 text-xs text-destructive">{errors.email[0]}</p>}
             </div>
-            <Textarea rows={3} value={values.message} onChange={set("message")} placeholder="What would you like to study?" aria-label="Message" />
+            <Textarea rows={3} value={values.message} onChange={set("message")} placeholder={t("leadPanel.messagePlaceholder")} aria-label={t("leadPanel.messageAria")} />
 
             {/* Honeypot — hidden, off tab order. */}
             <div className="hidden" aria-hidden="true">
@@ -78,9 +80,9 @@ export default function SiteLeadPanel() {
             </div>
 
             <Button type="submit" className="h-10 w-full" disabled={mutation.isPending}>
-              <Send className="size-4" /> {mutation.isPending ? "Sending…" : "Send message"}
+              <Send className="size-4" /> {mutation.isPending ? t("leadPanel.sending") : t("leadPanel.send")}
             </Button>
-            <p className="text-center text-[11px] text-muted-foreground">Free · no obligation</p>
+            <p className="text-center text-[11px] text-muted-foreground">{t("leadPanel.freeNoObligation")}</p>
           </form>
         </>
       )}

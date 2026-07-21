@@ -1,5 +1,6 @@
 import { Play, Quote, X } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import worldMap from "@/assets/worldmap-dots.png"
 
@@ -29,6 +30,7 @@ const MONITOR_FACES = [5, 8, 33, 20, 3, 65]
 /** Reviews section modelled on the reference: a monitor that opens a video
  *  popup + a dotted world map whose avatars reveal a review card on hover. */
 export default function SiteReviews() {
+  const { t } = useTranslation()
   const [active, setActive] = useState<number | null>(null)
   const [videoOpen, setVideoOpen] = useState(false)
   const r = active === null ? null : REVIEWS[active]
@@ -36,8 +38,8 @@ export default function SiteReviews() {
   return (
     <section>
       <div className="mb-10 text-center">
-        <h2 className="text-2xl font-bold text-cas-navy sm:text-[2rem]">Reviews from our students</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">Students from 50+ countries trust CAS with their journey.</p>
+        <h2 className="text-2xl font-bold text-cas-navy sm:text-[2rem]">{t("reviews.heading")}</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">{t("reviews.subheading")}</p>
       </div>
 
       <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,340px)_1fr]">
@@ -46,7 +48,7 @@ export default function SiteReviews() {
           <button
             type="button"
             onClick={() => setVideoOpen(true)}
-            aria-label="Play student stories video"
+            aria-label={t("reviews.playVideo")}
             className="group relative block w-full overflow-hidden rounded-sm border-[6px] border-cas-navy bg-cas-navy shadow-sm"
           >
             <div className="grid grid-cols-3 gap-px">
@@ -64,7 +66,7 @@ export default function SiteReviews() {
 
         {/* Dotted world map with pinned avatars + hover-reveal card */}
         <div className="relative" onMouseLeave={() => setActive(null)}>
-          <img src={worldMap} alt="Students across the world" className="pointer-events-none w-full select-none" />
+          <img src={worldMap} alt={t("reviews.mapAlt")} className="pointer-events-none w-full select-none" />
 
           {REVIEWS.map((rv, i) => (
             <button
@@ -73,7 +75,7 @@ export default function SiteReviews() {
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
               onClick={() => setActive(i)}
-              aria-label={`Review from ${rv.name}, ${rv.country}`}
+              aria-label={t("reviews.reviewFrom", { name: rv.name, country: rv.country })}
               className="absolute -translate-x-1/2 -translate-y-1/2"
               style={{ left: rv.l, top: rv.t }}
             >
@@ -119,16 +121,16 @@ export default function SiteReviews() {
             <button
               type="button"
               onClick={() => setVideoOpen(false)}
-              aria-label="Close video"
+              aria-label={t("reviews.closeVideo")}
               className="absolute -top-10 right-0 inline-flex items-center gap-1 text-sm text-white transition-colors hover:text-cas-red"
             >
-              <X className="size-6" /> Close
+              <X className="size-6" /> {t("reviews.close")}
             </button>
             <div className="aspect-video overflow-hidden rounded-sm bg-black shadow-2xl">
               <iframe
                 className="h-full w-full"
                 src={`https://www.youtube.com/embed/${YT_ID}?autoplay=1&rel=0`}
-                title="CAS — Study in China"
+                title={t("reviews.videoTitle")}
                 allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen
               />

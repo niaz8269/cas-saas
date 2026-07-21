@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Building2, MapPin } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
@@ -13,9 +14,10 @@ const DOT_GRID = {
 }
 
 export default function SiteCities() {
+  const { t } = useTranslation()
   useSeo({
-    title: "Study in China by City — Beijing, Shanghai & More",
-    description: "Browse Chinese study destinations by city and explore the Ministry of Education–listed universities in each, with full application support from CAS.",
+    title: t("cities.seoTitle"),
+    description: t("cities.seoDescription"),
     canonicalPath: "/site/cities",
   })
 
@@ -31,14 +33,14 @@ export default function SiteCities() {
   return (
     <div className="space-y-6">
       <SitePageHeader
-        eyebrow="Destinations"
-        title="Study in China by city"
-        subtitle="From the capital to the coast — pick a city and explore its Ministry of Education–listed universities."
+        eyebrow={t("cities.eyebrow")}
+        title={t("cities.title")}
+        subtitle={t("cities.subtitle")}
       />
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
-          <p className="text-sm text-destructive">Couldn't load destinations right now.</p>
+          <p className="text-sm text-destructive">{t("cities.loadError")}</p>
         </div>
       )}
 
@@ -49,7 +51,7 @@ export default function SiteCities() {
       ) : cities.length === 0 ? (
         <div className="rounded-sm border bg-card p-12 text-center shadow-sm">
           <MapPin className="mx-auto size-8 text-muted-foreground" />
-          <p className="mt-3 text-sm font-medium">No destinations listed yet</p>
+          <p className="mt-3 text-sm font-medium">{t("cities.emptyTitle")}</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -69,10 +71,10 @@ export default function SiteCities() {
                 <div className="flex flex-1 items-center justify-between gap-3 p-5">
                   <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Building2 className="size-4 text-cas-navy" />
-                    {count > 0 ? `${count} universit${count === 1 ? "y" : "ies"}` : "Explore universities"}
+                    {count > 0 ? t("cities.universityCount", { count }) : t("cities.exploreUniversities")}
                   </span>
                   <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600">
-                    View <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                    {t("cities.view")} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </Link>

@@ -1,6 +1,8 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import type { TFunction } from "i18next"
 import { Clock, GraduationCap, Languages, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -17,29 +19,32 @@ import { getSitePrograms, type SiteProgram } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
+// Display labels are i18n keys resolved at render; option `value`s are the
+// query-param values sent to the API and must stay unchanged.
 const LEVELS = [
-  { value: "all", label: "All levels" },
-  { value: "bachelor", label: "Bachelor" },
-  { value: "master", label: "Master" },
-  { value: "phd", label: "PhD" },
+  { value: "all", labelKey: "programs.levelAll" },
+  { value: "bachelor", labelKey: "programs.levelBachelor" },
+  { value: "master", labelKey: "programs.levelMaster" },
+  { value: "phd", labelKey: "programs.levelPhd" },
 ]
 
 const LANGUAGES = [
-  { value: "all", label: "Any language" },
-  { value: "English", label: "English" },
-  { value: "Chinese", label: "Chinese" },
+  { value: "all", labelKey: "programs.langAny" },
+  { value: "English", labelKey: "programs.langEnglish" },
+  { value: "Chinese", labelKey: "programs.langChinese" },
 ]
 
-function money(value: SiteProgram["tuition_fee"], currency: string | null): string {
-  if (value == null) return "Fee on request"
+function money(value: SiteProgram["tuition_fee"], currency: string | null, t: TFunction): string {
+  if (value == null) return t("programs.feeOnRequest")
 
-  return `${Number(value).toLocaleString()} ${currency ?? "CNY"}/yr`
+  return t("programs.perYear", { amount: Number(value).toLocaleString(), currency: currency ?? "CNY" })
 }
 
 export default function SiteProgramFinder() {
+  const { t } = useTranslation()
   useSeo({
-    title: "Find Programs to Study in China",
-    description: "Search programs to study in China — MBBS, engineering, business and more — across partner universities. Filter by degree level, teaching language and budget.",
+    title: t("programs.seoTitle"),
+    description: t("programs.seoDescription"),
     canonicalPath: "/site/programs",
   })
 
@@ -52,9 +57,9 @@ export default function SiteProgramFinder() {
   const [page, setPage] = useState(1)
 
   useEffect(() => {
-    const t = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
+    const timer = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
 
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
@@ -86,9 +91,9 @@ export default function SiteProgramFinder() {
   return (
     <div className="space-y-6">
       <SitePageHeader
-        eyebrow="Program finder"
-        title="Find your program"
-        subtitle="Search programs across every partner university and filter by level, teaching language and budget."
+        eyebrow={t("programs.eyebrow")}
+        title={t("programs.title")}
+        subtitle={t("programs.subtitle")}
       />
 
       {/* Filters */}
@@ -98,32 +103,32 @@ export default function SiteProgramFinder() {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="e.g. MBBS, Engineering…"
+            placeholder={t("programs.searchPlaceholder")}
             className="h-11 bg-background pl-9"
-            aria-label="Search programs"
+            aria-label={t("programs.searchAria")}
           />
         </div>
         <Select value={level} onValueChange={reset(setLevel)}>
-          <SelectTrigger className="h-11 bg-background" aria-label="Level"><SelectValue /></SelectTrigger>
-          <SelectContent>{LEVELS.map((l) => <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>)}</SelectContent>
+          <SelectTrigger className="h-11 bg-background" aria-label={t("programs.levelAria")}><SelectValue /></SelectTrigger>
+          <SelectContent>{LEVELS.map((l) => <SelectItem key={l.value} value={l.value}>{t(l.labelKey)}</SelectItem>)}</SelectContent>
         </Select>
         <Select value={language} onValueChange={reset(setLanguage)}>
-          <SelectTrigger className="h-11 bg-background" aria-label="Teaching language"><SelectValue /></SelectTrigger>
-          <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>)}</SelectContent>
+          <SelectTrigger className="h-11 bg-background" aria-label={t("programs.languageAria")}><SelectValue /></SelectTrigger>
+          <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l.value} value={l.value}>{t(l.labelKey)}</SelectItem>)}</SelectContent>
         </Select>
         <Input
           value={maxFee}
           onChange={(e) => { setMaxFee(e.target.value.replace(/[^0-9]/g, "")); setPage(1) }}
           inputMode="numeric"
-          placeholder="Max tuition / year"
+          placeholder={t("programs.maxFeePlaceholder")}
           className="h-11 bg-background"
-          aria-label="Maximum tuition per year"
+          aria-label={t("programs.maxFeeAria")}
         />
       </div>
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
-          <p className="text-sm text-destructive">Couldn't load programs right now.</p>
+          <p className="text-sm text-destructive">{t("programs.loadError")}</p>
         </div>
       )}
 
@@ -134,8 +139,8 @@ export default function SiteProgramFinder() {
         {!isPending && programs.length === 0 && !isError && (
           <div className="rounded-sm border bg-card p-12 text-center shadow-sm">
             <GraduationCap className="mx-auto size-8 text-muted-foreground" />
-            <p className="mt-3 text-sm font-medium">No programs match your filters</p>
-            <p className="mt-1 text-sm text-muted-foreground">Try widening your search or clearing a filter.</p>
+            <p className="mt-3 text-sm font-medium">{t("programs.emptyTitle")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("programs.emptyBody")}</p>
           </div>
         )}
 
@@ -148,7 +153,7 @@ export default function SiteProgramFinder() {
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
-                {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {p.duration_months} months</span>}
+                {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {t("programs.months", { count: p.duration_months })}</span>}
                 {p.university?.slug && (
                   <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-red-600">
                     <School className="size-3.5" /> {p.university.name}
@@ -157,10 +162,10 @@ export default function SiteProgramFinder() {
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-              <span className="font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}</span>
+              <span className="font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency, t)}</span>
               {p.university?.slug && (
                 <Link to={`/site/universities/${p.university.slug}`} className="inline-flex h-9 items-center gap-1 rounded-sm bg-cas-navy px-3.5 text-xs font-semibold text-white hover:bg-cas-navy-700">
-                  View details →
+                  {t("programs.viewDetails")}
                 </Link>
               )}
             </div>
@@ -170,9 +175,9 @@ export default function SiteProgramFinder() {
 
       {meta && meta.total > 0 && meta.last_page > 1 && (
         <div className="flex items-center justify-center gap-2">
-          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Previous</Button>
-          <span className="text-sm text-muted-foreground">Page {meta.current_page} of {meta.last_page}</span>
-          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
+          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>{t("programs.previous")}</Button>
+          <span className="text-sm text-muted-foreground">{t("programs.pageOf", { current: meta.current_page, last: meta.last_page })}</span>
+          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("programs.next")}</Button>
         </div>
       )}
     </div>

@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
@@ -42,6 +43,7 @@ function nextDeadline(intakes: SiteIntake[]): { name: string; date: string; days
 }
 
 export default function SiteUniversity() {
+  const { t } = useTranslation()
   const { slug = "" } = useParams()
 
   const { data, isPending, isError } = useQuery({
@@ -52,10 +54,14 @@ export default function SiteUniversity() {
 
   const uni = data?.data
   useSeo({
-    title: uni ? `${uni.name} — Programs & Scholarships` : "University in China",
+    title: uni ? t("university.seoTitle", { name: uni.name }) : t("university.seoTitleFallback"),
     description: uni
-      ? `${uni.name}${uni.city ? ` in ${uni.city}` : ""} — explore programs, intakes and scholarships${uni.moe_listed ? " at this Ministry of Education–listed university" : ""}, and apply with CAS.`
-      : "Explore programs, intakes and scholarships at Ministry of Education–listed universities in China.",
+      ? t("university.seoDescription", {
+          name: uni.name,
+          location: uni.city ? t("university.seoDescriptionLocation", { city: uni.city }) : "",
+          moe: uni.moe_listed ? t("university.seoDescriptionMoe") : "",
+        })
+      : t("university.seoDescriptionFallback"),
     canonicalPath: `/site/universities/${slug}`,
     jsonLd: uni
       ? {
@@ -73,9 +79,9 @@ export default function SiteUniversity() {
   if (isError || !data) {
     return (
       <div className="rounded-sm border bg-card p-10 text-center shadow-sm">
-        <p className="text-sm text-muted-foreground">This university isn't available.</p>
+        <p className="text-sm text-muted-foreground">{t("university.notAvailable")}</p>
         <Button asChild variant="secondary" size="sm" className="mt-4">
-          <Link to="/site"><ArrowLeft className="size-4" /> Back to universities</Link>
+          <Link to="/site"><ArrowLeft className="size-4" /> {t("university.backToUniversities")}</Link>
         </Button>
       </div>
     )
@@ -88,7 +94,7 @@ export default function SiteUniversity() {
   return (
     <div className="space-y-6">
       <Link to="/site" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="size-4" /> All universities
+        <ArrowLeft className="size-4" /> {t("university.allUniversities")}
       </Link>
 
       {/* Hero */}
@@ -108,7 +114,7 @@ export default function SiteUniversity() {
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={`${u.name} logo`} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
+              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
@@ -117,16 +123,16 @@ export default function SiteUniversity() {
                 </div>
                 {u.moe_listed && (
                   <Badge variant="outline" className="mt-3 border-transparent bg-cas-red-50 text-cas-red-600">
-                    <ShieldCheck className="size-3.5" /> China MoE-listed
+                    <ShieldCheck className="size-3.5" /> {t("university.moeListedBadge")}
                   </Badge>
                 )}
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-sm border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">Enquire</a>
+              <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-sm border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">{t("university.enquire")}</a>
               {u.apply_link && (
                 <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-red px-5 text-sm font-bold text-white shadow-sm hover:bg-cas-red-600">
-                  Apply now <ExternalLink className="size-4" />
+                  {t("university.applyNow")} <ExternalLink className="size-4" />
                 </a>
               )}
             </div>
@@ -135,9 +141,9 @@ export default function SiteUniversity() {
           {deadline && (
             <div className="mt-5 flex flex-wrap items-center gap-2 rounded-sm bg-subtle px-3 py-2 text-sm">
               <CalendarClock className="size-4 text-cas-navy" />
-              <span>Next intake <span className="font-medium">{deadline.name}</span> — closes {new Date(deadline.date).toLocaleDateString()}</span>
+              <span>{t("university.nextIntakePrefix")} <span className="font-medium">{deadline.name}</span> {t("university.nextIntakeCloses", { date: new Date(deadline.date).toLocaleDateString() })}</span>
               <span className={cn("ml-auto rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums", deadline.daysLeft <= 14 ? "bg-cas-red-50 text-cas-red" : "bg-cas-navy-50 text-cas-navy")}>
-                {deadline.daysLeft} day{deadline.daysLeft === 1 ? "" : "s"} left
+                {t("university.daysLeft", { count: deadline.daysLeft })}
               </span>
             </div>
           )}
@@ -157,29 +163,30 @@ export default function SiteUniversity() {
 // ── Tabbed detail body ───────────────────────────────────────────────────
 
 function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
+  const { t } = useTranslation()
   const tabs: { key: string; label: string; icon: LucideIcon }[] = [
-    { key: "overview", label: "Overview", icon: Info },
-    { key: "programs", label: `Programs${u.programs.length ? ` (${u.programs.length})` : ""}`, icon: GraduationCap },
-    ...(u.intakes.length ? [{ key: "intakes", label: "Intakes", icon: CalendarDays }] : []),
-    ...(u.scholarships.length ? [{ key: "scholarships", label: "Scholarships", icon: Award }] : []),
-    { key: "admission", label: "Admission", icon: ClipboardCheck },
+    { key: "overview", label: t("university.tabOverview"), icon: Info },
+    { key: "programs", label: u.programs.length ? t("university.tabProgramsCount", { count: u.programs.length }) : t("university.tabPrograms"), icon: GraduationCap },
+    ...(u.intakes.length ? [{ key: "intakes", label: t("university.tabIntakes"), icon: CalendarDays }] : []),
+    ...(u.scholarships.length ? [{ key: "scholarships", label: t("university.tabScholarships"), icon: Award }] : []),
+    { key: "admission", label: t("university.tabAdmission"), icon: ClipboardCheck },
   ]
   const [tab, setTab] = useState("overview")
 
   return (
     <div>
       <div className="flex flex-wrap gap-1 rounded-sm border bg-card p-1 shadow-sm">
-        {tabs.map((t) => (
+        {tabs.map((tb) => (
           <button
-            key={t.key}
+            key={tb.key}
             type="button"
-            onClick={() => setTab(t.key)}
+            onClick={() => setTab(tb.key)}
             className={cn(
               "inline-flex items-center gap-1.5 rounded-sm px-4 py-2 text-sm font-medium transition-colors",
-              tab === t.key ? "bg-cas-navy text-white shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-cas-navy",
+              tab === tb.key ? "bg-cas-navy text-white shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-cas-navy",
             )}
           >
-            <t.icon className="size-4" /> {t.label}
+            <tb.icon className="size-4" /> {tb.label}
           </button>
         ))}
       </div>
@@ -200,11 +207,12 @@ function Empty({ text }: { text: string }) {
 }
 
 function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
+  const { t } = useTranslation()
   const facts: [string, string][] = [
-    ["Location", [u.city, u.country].filter(Boolean).join(", ") || "—"],
-    ["MoE-listed", u.moe_listed ? "Yes" : "—"],
-    ["Nearest airport", u.nearest_airport || "—"],
-    ["Programs", String(u.programs.length)],
+    [t("university.factLocation"), [u.city, u.country].filter(Boolean).join(", ") || "—"],
+    [t("university.factMoeListed"), u.moe_listed ? t("university.yes") : "—"],
+    [t("university.factNearestAirport"), u.nearest_airport || "—"],
+    [t("university.factPrograms"), String(u.programs.length)],
   ]
 
   return (
@@ -224,7 +232,7 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
       )}
       {rep?.name && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
-          <h3 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Your CAS representative</h3>
+          <h3 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("university.repHeading")}</h3>
           <div className="mt-2 flex items-center gap-3">
             {rep.photo_url && <img src={rep.photo_url} alt={rep.name} className="size-11 rounded-full object-cover" />}
             <div>
@@ -239,7 +247,8 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
 }
 
 function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
-  if (!u.programs.length) return <Empty text="Programs will be listed soon — enquire and we'll share the current list." />
+  const { t } = useTranslation()
+  if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
   return (
     <div className="grid gap-3 sm:grid-cols-2">
@@ -248,13 +257,13 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="font-medium">{p.name}</h3>
-              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? ` · ${p.duration_months} months` : ""}</p>
+              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
             </div>
-            {p.tuition_fee != null && <span className="text-sm font-semibold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}<span className="text-xs font-normal text-muted-foreground">/yr</span></span>}
+            {p.tuition_fee != null && <span className="text-sm font-semibold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}<span className="text-xs font-normal text-muted-foreground">{t("university.perYear")}</span></span>}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
-            {p.apply_link && <a href={p.apply_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">Apply <ExternalLink className="size-3" /></a>}
+            {p.apply_link && <a href={p.apply_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ExternalLink className="size-3" /></a>}
           </div>
         </div>
       ))}
@@ -263,7 +272,8 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
 }
 
 function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
-  if (!u.intakes.length) return <Empty text="Intake dates will be announced soon." />
+  const { t } = useTranslation()
+  if (!u.intakes.length) return <Empty text={t("university.intakesEmpty")} />
 
   return (
     <div className="overflow-hidden rounded-sm border bg-card shadow-sm">
@@ -272,12 +282,12 @@ function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
           <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
             <div>
               <p className="font-medium">{i.name}</p>
-              <p className="text-xs text-muted-foreground">{i.program ?? "All programs"}{i.seats ? ` · ${i.seats} seats` : ""}</p>
+              <p className="text-xs text-muted-foreground">{i.program ?? t("university.allPrograms")}{i.seats ? t("university.seatsCount", { count: i.seats }) : ""}</p>
             </div>
             <div className="text-right text-muted-foreground">
               {i.application_deadline
-                ? <>Apply by <span className="font-medium text-cas-navy">{new Date(i.application_deadline).toLocaleDateString()}</span></>
-                : "Rolling admission"}
+                ? <>{t("university.applyBy")} <span className="font-medium text-cas-navy">{new Date(i.application_deadline).toLocaleDateString()}</span></>
+                : t("university.rollingAdmission")}
             </div>
           </li>
         ))}
@@ -287,7 +297,8 @@ function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
 }
 
 function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
-  if (!u.scholarships.length) return <Empty text="No scholarships listed yet — ask a CAS advisor about your options." />
+  const { t } = useTranslation()
+  if (!u.scholarships.length) return <Empty text={t("university.scholarshipsEmpty")} />
 
   return (
     <div className="grid gap-3 sm:grid-cols-2">
@@ -299,9 +310,9 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
           </div>
           {s.description && <p className="mt-1.5 text-sm text-muted-foreground">{s.description}</p>}
           <p className="mt-2 text-sm text-muted-foreground">
-            {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? `Deadline ${new Date(s.deadline).toLocaleDateString()}` : null].filter(Boolean).join(" · ")}
+            {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? t("university.deadlineLabel", { date: new Date(s.deadline).toLocaleDateString() }) : null].filter(Boolean).join(" · ")}
           </p>
-          {s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">How to apply <ExternalLink className="size-3" /></a>}
+          {s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">{t("university.howToApply")} <ExternalLink className="size-3" /></a>}
         </div>
       ))}
     </div>
@@ -309,10 +320,11 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
 }
 
 function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
+  const { t } = useTranslation()
   return (
     <div className="space-y-4">
       <div className="rounded-sm border bg-card p-6 shadow-sm">
-        <h3 className="font-semibold text-cas-navy">Admission requirements</h3>
+        <h3 className="font-semibold text-cas-navy">{t("university.admissionRequirements")}</h3>
         {u.requirements.length ? (
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {u.requirements.map((r, i) => (
@@ -320,21 +332,21 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">Requirements vary by program — ask a CAS advisor for the exact checklist for your course.</p>
+          <p className="mt-2 text-sm text-muted-foreground">{t("university.requirementsFallback")}</p>
         )}
       </div>
       <div className="flex flex-col items-start justify-between gap-3 rounded-sm bg-cas-navy p-6 text-white sm:flex-row sm:items-center">
         <div>
-          <h3 className="font-semibold">Ready to apply?</h3>
-          <p className="mt-0.5 text-sm text-white/80">CAS prepares and submits your application for you.</p>
+          <h3 className="font-semibold">{t("university.readyToApply")}</h3>
+          <p className="mt-0.5 text-sm text-white/80">{t("university.readyToApplyBody")}</p>
         </div>
         <div className="flex gap-2">
           {u.apply_link && (
             <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-red px-4 text-sm font-semibold text-white hover:bg-cas-red-600">
-              Apply now <ExternalLink className="size-4" />
+              {t("university.applyNow")} <ExternalLink className="size-4" />
             </a>
           )}
-          <a href="#enquire" className="inline-flex h-10 items-center rounded-sm border border-white/25 px-4 text-sm font-semibold hover:bg-white/10">Enquire</a>
+          <a href="#enquire" className="inline-flex h-10 items-center rounded-sm border border-white/25 px-4 text-sm font-semibold hover:bg-white/10">{t("university.enquire")}</a>
         </div>
       </div>
     </div>

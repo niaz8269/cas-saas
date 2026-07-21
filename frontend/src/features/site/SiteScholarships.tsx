@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Award, CalendarClock, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
@@ -19,9 +20,10 @@ function amountLabel(s: SiteScholarship): string | null {
 }
 
 export default function SiteScholarships() {
+  const { t } = useTranslation()
   useSeo({
-    title: "Scholarships to Study in China",
-    description: "Scholarships to study in China — government, provincial and university awards, full and partial. Check coverage and deadlines and apply with CAS.",
+    title: t("scholarships.seoTitle"),
+    description: t("scholarships.seoDescription"),
     canonicalPath: "/site/scholarships",
   })
 
@@ -32,9 +34,9 @@ export default function SiteScholarships() {
   const [page, setPage] = useState(1)
 
   useEffect(() => {
-    const t = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
+    const timer = setTimeout(() => { setQ(searchInput); setPage(1) }, 300)
 
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
@@ -50,9 +52,9 @@ export default function SiteScholarships() {
   return (
     <div className="space-y-6">
       <SitePageHeader
-        eyebrow="Funding"
-        title="Scholarships & funding"
-        subtitle="Full and partial awards offered by our partner universities. We help you find and apply for the ones you qualify for."
+        eyebrow={t("scholarships.eyebrow")}
+        title={t("scholarships.title")}
+        subtitle={t("scholarships.subtitle")}
       />
 
       <div className="flex flex-wrap items-center gap-3">
@@ -61,25 +63,25 @@ export default function SiteScholarships() {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search scholarships…"
+            placeholder={t("scholarships.searchPlaceholder")}
             className="h-11 bg-background pl-9"
-            aria-label="Search scholarships"
+            aria-label={t("scholarships.searchAria")}
           />
         </div>
         <select
           value={type}
           onChange={(e) => { setType(e.target.value); setPage(1) }}
-          aria-label="Filter by scholarship type"
+          aria-label={t("scholarships.typeAria")}
           className="h-11 rounded-sm border bg-background px-3 text-sm text-foreground capitalize"
         >
-          <option value="">All types</option>
-          {types.map((t) => <option key={t} value={t}>{t}</option>)}
+          <option value="">{t("scholarships.allTypes")}</option>
+          {types.map((ty) => <option key={ty} value={ty}>{ty}</option>)}
         </select>
       </div>
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
-          <p className="text-sm text-destructive">Couldn't load scholarships right now.</p>
+          <p className="text-sm text-destructive">{t("scholarships.loadError")}</p>
         </div>
       )}
 
@@ -89,8 +91,8 @@ export default function SiteScholarships() {
         {!isPending && scholarships.length === 0 && !isError && (
           <div className="col-span-full rounded-sm border bg-card p-12 text-center shadow-sm">
             <Award className="mx-auto size-8 text-muted-foreground" />
-            <p className="mt-3 text-sm font-medium">No scholarships found</p>
-            <p className="mt-1 text-sm text-muted-foreground">Try a different search.</p>
+            <p className="mt-3 text-sm font-medium">{t("scholarships.emptyTitle")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("scholarships.emptyBody")}</p>
           </div>
         )}
 
@@ -111,7 +113,7 @@ export default function SiteScholarships() {
                 </Link>
               )}
               {s.deadline && (
-                <p className="flex items-center gap-1"><CalendarClock className="size-3.5" /> Apply by {new Date(s.deadline).toLocaleDateString()}</p>
+                <p className="flex items-center gap-1"><CalendarClock className="size-3.5" /> {t("scholarships.applyBy", { date: new Date(s.deadline).toLocaleDateString() })}</p>
               )}
             </div>
           </div>
@@ -120,9 +122,9 @@ export default function SiteScholarships() {
 
       {meta && meta.total > 0 && meta.last_page > 1 && (
         <div className="flex items-center justify-center gap-2">
-          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Previous</Button>
-          <span className="text-sm text-muted-foreground">Page {meta.current_page} of {meta.last_page}</span>
-          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
+          <Button variant="secondary" size="sm" disabled={meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>{t("scholarships.previous")}</Button>
+          <span className="text-sm text-muted-foreground">{t("scholarships.pageOf", { current: meta.current_page, last: meta.last_page })}</span>
+          <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("scholarships.next")}</Button>
         </div>
       )}
     </div>

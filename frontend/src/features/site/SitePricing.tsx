@@ -1,52 +1,55 @@
 import { ArrowRight, BadgeCheck, ReceiptText, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
-const PRINCIPLES: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Sparkles, title: "Free to get started", body: "Your first consultation and a personalised study plan — including a university and scholarship shortlist — cost nothing." },
-  { icon: ReceiptText, title: "Priced transparently", body: "Where a service has a fee, you see a clear, itemised quote before you commit. No hidden charges, ever." },
-  { icon: ShieldCheck, title: "Only pay for what you need", body: "Take the full package or just the parts you want. Your advisor tailors the support — and the cost — to your plan." },
+// Display text carried as i18n KEY strings, resolved via t() at render.
+const PRINCIPLES: { icon: LucideIcon; titleKey: string; bodyKey: string }[] = [
+  { icon: Sparkles, titleKey: "pricing.principleFreeTitle", bodyKey: "pricing.principleFreeBody" },
+  { icon: ReceiptText, titleKey: "pricing.principleTransparentTitle", bodyKey: "pricing.principleTransparentBody" },
+  { icon: ShieldCheck, titleKey: "pricing.principleOnlyPayTitle", bodyKey: "pricing.principleOnlyPayBody" },
 ]
 
 const FREE = [
-  "Initial consultation with an advisor",
-  "Personalised study plan",
-  "University & program shortlisting",
-  "Scholarship matching guidance",
+  "pricing.free1",
+  "pricing.free2",
+  "pricing.free3",
+  "pricing.free4",
 ]
 
 const QUOTED = [
-  "Application handling & document review",
-  "Visa (JW202 / admission letter) assistance",
-  "Accommodation booking",
-  "Airport pickup & pre-departure support",
-  "Certified document translation",
+  "pricing.quoted1",
+  "pricing.quoted2",
+  "pricing.quoted3",
+  "pricing.quoted4",
+  "pricing.quoted5",
 ]
 
 export default function SitePricing() {
+  const { t } = useTranslation()
   useSeo({
-    title: "Pricing — Transparent Fees for Studying in China",
-    description: "How CAS pricing works: a free consultation and study plan, with any paid services quoted clearly and up front. No hidden fees.",
+    title: t("pricing.seoTitle"),
+    description: t("pricing.seoDescription"),
     canonicalPath: "/site/pricing",
   })
 
   return (
     <div className="space-y-12">
       <SitePageHeader
-        eyebrow="Clear & student-first"
-        title="Simple, transparent pricing"
-        subtitle="Every student's plan is different, so we start free and quote clearly for anything beyond that — you'll always know the cost before you commit."
+        eyebrow={t("pricing.headerEyebrow")}
+        title={t("pricing.headerTitle")}
+        subtitle={t("pricing.headerSubtitle")}
       />
 
-      <SiteSection title="How our pricing works">
+      <SiteSection title={t("pricing.howTitle")}>
         <div className="grid gap-4 sm:grid-cols-3">
-          {PRINCIPLES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-sm border bg-card p-6 shadow-sm">
+          {PRINCIPLES.map(({ icon: Icon, titleKey, bodyKey }) => (
+            <div key={titleKey} className="rounded-sm border bg-card p-6 shadow-sm">
               <span className="inline-flex size-11 items-center justify-center rounded-sm bg-cas-red-50 text-cas-red-600"><Icon className="size-5" /></span>
-              <h3 className="mt-4 font-semibold text-cas-navy">{title}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
+              <h3 className="mt-4 font-semibold text-cas-navy">{t(titleKey)}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">{t(bodyKey)}</p>
             </div>
           ))}
         </div>
@@ -55,26 +58,26 @@ export default function SitePricing() {
       <section className="grid gap-4 md:grid-cols-2">
         <div className="rounded-sm border-2 border-cas-red bg-card p-6 shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-bold text-white uppercase">Free</span>
-            <h3 className="font-semibold text-cas-navy">Getting started</h3>
+            <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-bold text-white uppercase">{t("pricing.freeBadge")}</span>
+            <h3 className="font-semibold text-cas-navy">{t("pricing.freeCardTitle")}</h3>
           </div>
           <ul className="mt-4 space-y-2.5">
             {FREE.map((f) => (
               <li key={f} className="flex items-start gap-2 text-sm">
-                <BadgeCheck className="mt-0.5 size-4 shrink-0 text-cas-red-600" /> {f}
+                <BadgeCheck className="mt-0.5 size-4 shrink-0 text-cas-red-600" /> {t(f)}
               </li>
             ))}
           </ul>
         </div>
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-bold text-cas-navy uppercase">Quoted up front</span>
-            <h3 className="font-semibold text-cas-navy">Optional services</h3>
+            <span className="rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-bold text-cas-navy uppercase">{t("pricing.quotedBadge")}</span>
+            <h3 className="font-semibold text-cas-navy">{t("pricing.quotedCardTitle")}</h3>
           </div>
           <ul className="mt-4 space-y-2.5">
             {QUOTED.map((q) => (
               <li key={q} className="flex items-start gap-2 text-sm text-muted-foreground">
-                <ReceiptText className="mt-0.5 size-4 shrink-0 text-cas-navy" /> {q}
+                <ReceiptText className="mt-0.5 size-4 shrink-0 text-cas-navy" /> {t(q)}
               </li>
             ))}
           </ul>
@@ -83,11 +86,11 @@ export default function SitePricing() {
 
       <section className="flex flex-col items-start justify-between gap-4 rounded-sm bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-xl font-semibold">Want a personalised quote?</h2>
-          <p className="mt-1 text-sm text-white/80">Start with a free study plan — we'll follow up with clear next steps and costs.</p>
+          <h2 className="text-xl font-semibold">{t("pricing.ctaTitle")}</h2>
+          <p className="mt-1 text-sm text-white/80">{t("pricing.ctaSubtitle")}</p>
         </div>
         <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
-          Get a free study plan <ArrowRight className="size-4" />
+          {t("pricing.ctaButton")} <ArrowRight className="size-4" />
         </Link>
       </section>
     </div>

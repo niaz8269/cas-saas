@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { ArrowLeft, ArrowRight, CheckCircle2, GraduationCap, Send, Sparkles } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -8,14 +9,59 @@ import { Input } from "@/components/ui/input"
 import { postEnquiry, SiteApiError, type EnquiryPayload } from "@/features/site/api"
 import { cn } from "@/lib/utils"
 
-const LEVELS = ["Bachelor's", "Master's", "PhD / Doctoral", "Non-degree", "Chinese language"]
-const FIELDS = ["Medicine / MBBS", "Engineering", "Business & MBA", "Computer Science", "Natural Sciences", "Humanities & Arts", "Law", "Education", "Agriculture", "Other"]
-const INTAKES = ["Spring 2026", "Autumn 2026", "Spring 2027", "Autumn 2027", "Flexible"]
-const FUNDING = ["Self-funded", "Looking for a scholarship"]
-const CITIES = ["Any city", "Beijing", "Shanghai", "Guangzhou", "Nanjing", "Hangzhou", "Wuhan", "Chongqing", "Other"]
-const GRADES = ["90–100%", "80–89%", "70–79%", "60–69%", "Below 60%", "Prefer not to say"]
+// Option lists: `value` is the (unchanged) submitted form value; `labelKey`
+// is the i18n key for its display text, resolved via t() at render.
+const LEVELS = [
+  { value: "Bachelor's", labelKey: "studyPlan.levels.bachelor" },
+  { value: "Master's", labelKey: "studyPlan.levels.master" },
+  { value: "PhD / Doctoral", labelKey: "studyPlan.levels.phd" },
+  { value: "Non-degree", labelKey: "studyPlan.levels.nonDegree" },
+  { value: "Chinese language", labelKey: "studyPlan.levels.chinese" },
+]
+const FIELDS = [
+  { value: "Medicine / MBBS", labelKey: "studyPlan.fields.medicine" },
+  { value: "Engineering", labelKey: "studyPlan.fields.engineering" },
+  { value: "Business & MBA", labelKey: "studyPlan.fields.business" },
+  { value: "Computer Science", labelKey: "studyPlan.fields.computerScience" },
+  { value: "Natural Sciences", labelKey: "studyPlan.fields.naturalSciences" },
+  { value: "Humanities & Arts", labelKey: "studyPlan.fields.humanities" },
+  { value: "Law", labelKey: "studyPlan.fields.law" },
+  { value: "Education", labelKey: "studyPlan.fields.education" },
+  { value: "Agriculture", labelKey: "studyPlan.fields.agriculture" },
+  { value: "Other", labelKey: "studyPlan.fields.other" },
+]
+const INTAKES = [
+  { value: "Spring 2026", labelKey: "studyPlan.intakes.spring2026" },
+  { value: "Autumn 2026", labelKey: "studyPlan.intakes.autumn2026" },
+  { value: "Spring 2027", labelKey: "studyPlan.intakes.spring2027" },
+  { value: "Autumn 2027", labelKey: "studyPlan.intakes.autumn2027" },
+  { value: "Flexible", labelKey: "studyPlan.intakes.flexible" },
+]
+const FUNDING = [
+  { value: "Self-funded", labelKey: "studyPlan.funding.selfFunded" },
+  { value: "Looking for a scholarship", labelKey: "studyPlan.funding.scholarship" },
+]
+const CITIES = [
+  { value: "Any city", labelKey: "studyPlan.cities.any" },
+  { value: "Beijing", labelKey: "studyPlan.cities.beijing" },
+  { value: "Shanghai", labelKey: "studyPlan.cities.shanghai" },
+  { value: "Guangzhou", labelKey: "studyPlan.cities.guangzhou" },
+  { value: "Nanjing", labelKey: "studyPlan.cities.nanjing" },
+  { value: "Hangzhou", labelKey: "studyPlan.cities.hangzhou" },
+  { value: "Wuhan", labelKey: "studyPlan.cities.wuhan" },
+  { value: "Chongqing", labelKey: "studyPlan.cities.chongqing" },
+  { value: "Other", labelKey: "studyPlan.cities.other" },
+]
+const GRADES = [
+  { value: "90–100%", labelKey: "studyPlan.grades.g90" },
+  { value: "80–89%", labelKey: "studyPlan.grades.g80" },
+  { value: "70–79%", labelKey: "studyPlan.grades.g70" },
+  { value: "60–69%", labelKey: "studyPlan.grades.g60" },
+  { value: "Below 60%", labelKey: "studyPlan.grades.below60" },
+  { value: "Prefer not to say", labelKey: "studyPlan.grades.preferNotToSay" },
+]
 
-const STEPS = ["Your goal", "Preferences", "Your details"]
+const STEPS = ["studyPlan.steps.goal", "studyPlan.steps.preferences", "studyPlan.steps.details"]
 
 const EMPTY = {
   level: "", field: "", intake: "", funding: "", city: "", grade: "",
@@ -25,6 +71,7 @@ const EMPTY = {
 const selectClass = "w-full rounded-sm border bg-background px-3 py-2.5 text-sm"
 
 export default function SiteStudyPlan() {
+  const { t } = useTranslation()
   const [step, setStep] = useState(0)
   const [a, setA] = useState({ ...EMPTY })
   const [clientError, setClientError] = useState<string | null>(null)
@@ -64,15 +111,15 @@ export default function SiteStudyPlan() {
   })
 
   const next = () => {
-    if (step === 0 && !a.level) { setClientError("Please choose what you'd like to study."); return }
+    if (step === 0 && !a.level) { setClientError(t("studyPlan.errors.chooseStudy")); return }
     setClientError(null)
     setStep((s) => Math.min(s + 1, STEPS.length - 1))
   }
   const back = () => { setClientError(null); setStep((s) => Math.max(s - 1, 0)) }
 
   const submit = () => {
-    if (!a.name.trim()) { setClientError("Please tell us your name."); return }
-    if (!a.email.trim() && !a.phone.trim()) { setClientError("Add an email or a phone number so we can reach you."); return }
+    if (!a.name.trim()) { setClientError(t("studyPlan.errors.name")); return }
+    if (!a.email.trim() && !a.phone.trim()) { setClientError(t("studyPlan.errors.contact")); return }
     setClientError(null); setErrors({})
     mutation.mutate()
   }
@@ -82,12 +129,11 @@ export default function SiteStudyPlan() {
       <div className="mx-auto max-w-xl py-10 text-center">
         <div className="rounded-sm border bg-card p-10 shadow-sm">
           <CheckCircle2 className="mx-auto size-12 text-green-600" />
-          <h1 className="mt-4 font-sans text-2xl font-bold text-cas-navy">Your study plan is on its way</h1>
+          <h1 className="mt-4 font-sans text-2xl font-bold text-cas-navy">{t("studyPlan.success.title")}</h1>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            Thank you, {a.name.trim().split(/\s+/)[0]}. A CAS advisor will review your goals and get back to you
-            within one working day with matched universities, programs and scholarships.
+            {t("studyPlan.success.body", { name: a.name.trim().split(/\s+/)[0] })}
           </p>
-          <Button asChild className="mt-6"><Link to="/site/universities">Browse universities meanwhile →</Link></Button>
+          <Button asChild className="mt-6"><Link to="/site/universities">{t("studyPlan.success.browse")}</Link></Button>
         </div>
       </div>
     )
@@ -97,12 +143,11 @@ export default function SiteStudyPlan() {
     <div className="mx-auto max-w-2xl py-6">
       <div className="text-center">
         <span className="inline-flex items-center gap-2 rounded-full bg-cas-navy-50 px-3 py-1 text-xs font-semibold text-cas-navy">
-          <Sparkles className="size-3.5" /> Free · takes 3 minutes
+          <Sparkles className="size-3.5" /> {t("studyPlan.badge")}
         </span>
-        <h1 className="mt-3 font-sans text-3xl font-bold text-cas-navy sm:text-4xl">Get your free study plan</h1>
+        <h1 className="mt-3 font-sans text-3xl font-bold text-cas-navy sm:text-4xl">{t("studyPlan.title")}</h1>
         <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
-          Answer a few questions and a CAS advisor will send you a personalised shortlist of universities,
-          programs and scholarships — no cost, no obligation.
+          {t("studyPlan.subtitle")}
         </p>
       </div>
 
@@ -117,7 +162,7 @@ export default function SiteStudyPlan() {
               )}>
                 {i < step ? "✓" : i + 1}
               </span>
-              <span className={cn("text-[11px] font-medium", i === step ? "text-cas-navy" : "text-muted-foreground")}>{label}</span>
+              <span className={cn("text-[11px] font-medium", i === step ? "text-cas-navy" : "text-muted-foreground")}>{t(label)}</span>
             </div>
             {i < STEPS.length - 1 && <span className={cn("mx-2 h-0.5 flex-1 rounded", i < step ? "bg-cas-navy" : "bg-muted")} />}
           </li>
@@ -129,17 +174,17 @@ export default function SiteStudyPlan() {
 
         {step === 0 && (
           <div className="space-y-6">
-            <Field label="What would you like to study?">
+            <Field label={t("studyPlan.q.study")}>
               <div className="flex flex-wrap gap-2">
                 {LEVELS.map((l) => (
-                  <Chip key={l} active={a.level === l} onClick={() => set("level", l)}>{l}</Chip>
+                  <Chip key={l.value} active={a.level === l.value} onClick={() => set("level", l.value)}>{t(l.labelKey)}</Chip>
                 ))}
               </div>
             </Field>
-            <Field label="Field of study" hint="Optional">
+            <Field label={t("studyPlan.q.field")} hint={t("studyPlan.optional")}>
               <select className={selectClass} value={a.field} onChange={(e) => set("field", e.target.value)}>
-                <option value="">Not sure yet</option>
-                {FIELDS.map((f) => <option key={f} value={f}>{f}</option>)}
+                <option value="">{t("studyPlan.fieldNotSure")}</option>
+                {FIELDS.map((f) => <option key={f.value} value={f.value}>{t(f.labelKey)}</option>)}
               </select>
             </Field>
           </div>
@@ -147,27 +192,27 @@ export default function SiteStudyPlan() {
 
         {step === 1 && (
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="When do you want to start?">
+            <Field label={t("studyPlan.q.intake")}>
               <select className={selectClass} value={a.intake} onChange={(e) => set("intake", e.target.value)}>
-                <option value="">No preference</option>
-                {INTAKES.map((v) => <option key={v} value={v}>{v}</option>)}
+                <option value="">{t("studyPlan.noPreference")}</option>
+                {INTAKES.map((v) => <option key={v.value} value={v.value}>{t(v.labelKey)}</option>)}
               </select>
             </Field>
-            <Field label="How will you fund your studies?">
+            <Field label={t("studyPlan.q.funding")}>
               <select className={selectClass} value={a.funding} onChange={(e) => set("funding", e.target.value)}>
-                <option value="">No preference</option>
-                {FUNDING.map((v) => <option key={v} value={v}>{v}</option>)}
+                <option value="">{t("studyPlan.noPreference")}</option>
+                {FUNDING.map((v) => <option key={v.value} value={v.value}>{t(v.labelKey)}</option>)}
               </select>
             </Field>
-            <Field label="Preferred city" hint="Optional">
+            <Field label={t("studyPlan.q.city")} hint={t("studyPlan.optional")}>
               <select className={selectClass} value={a.city} onChange={(e) => set("city", e.target.value)}>
-                {CITIES.map((v) => <option key={v} value={v}>{v}</option>)}
+                {CITIES.map((v) => <option key={v.value} value={v.value}>{t(v.labelKey)}</option>)}
               </select>
             </Field>
-            <Field label="Current average grade" hint="Optional">
+            <Field label={t("studyPlan.q.grade")} hint={t("studyPlan.optional")}>
               <select className={selectClass} value={a.grade} onChange={(e) => set("grade", e.target.value)}>
-                <option value="">Prefer not to say</option>
-                {GRADES.map((v) => <option key={v} value={v}>{v}</option>)}
+                <option value="">{t("studyPlan.grades.preferNotToSay")}</option>
+                {GRADES.map((v) => <option key={v.value} value={v.value}>{t(v.labelKey)}</option>)}
               </select>
             </Field>
           </div>
@@ -176,22 +221,22 @@ export default function SiteStudyPlan() {
         {step === 2 && (
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Full name" error={errors.first_name?.[0]}>
+              <Field label={t("studyPlan.q.name")} error={errors.first_name?.[0]}>
                 <Input value={a.name} onChange={(e) => set("name", e.target.value)} autoComplete="name" />
               </Field>
-              <Field label="Nationality" hint="Optional">
+              <Field label={t("studyPlan.q.nationality")} hint={t("studyPlan.optional")}>
                 <Input value={a.nationality} onChange={(e) => set("nationality", e.target.value)} autoComplete="country-name" />
               </Field>
-              <Field label="Email" error={errors.email?.[0]}>
+              <Field label={t("studyPlan.q.email")} error={errors.email?.[0]}>
                 <Input type="email" value={a.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" inputMode="email" />
               </Field>
-              <Field label="Phone / WhatsApp" error={errors.phone?.[0]}>
+              <Field label={t("studyPlan.q.phone")} error={errors.phone?.[0]}>
                 <Input value={a.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" inputMode="tel" />
               </Field>
             </div>
             <div className="rounded-sm bg-subtle p-3 text-xs text-muted-foreground">
               <GraduationCap className="mr-1.5 inline size-4 text-cas-navy" />
-              We'll match you with Ministry of Education–listed universities and scholarships based on your answers.
+              {t("studyPlan.matchNote")}
             </div>
             <div className="hidden" aria-hidden="true">
               <label>Company<input tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} /></label>
@@ -202,13 +247,13 @@ export default function SiteStudyPlan() {
         {/* Nav */}
         <div className="mt-8 flex items-center justify-between">
           <Button type="button" variant="ghost" onClick={back} disabled={step === 0} className={cn(step === 0 && "invisible")}>
-            <ArrowLeft className="size-4" /> Back
+            <ArrowLeft className="size-4" /> {t("studyPlan.back")}
           </Button>
           {step < STEPS.length - 1 ? (
-            <Button type="button" onClick={next}>Continue <ArrowRight className="size-4" /></Button>
+            <Button type="button" onClick={next}>{t("studyPlan.continue")} <ArrowRight className="size-4" /></Button>
           ) : (
             <Button type="button" onClick={submit} disabled={mutation.isPending}>
-              <Send className="size-4" /> {mutation.isPending ? "Sending…" : "Get my study plan"}
+              <Send className="size-4" /> {mutation.isPending ? t("studyPlan.sending") : t("studyPlan.submit")}
             </Button>
           )}
         </div>

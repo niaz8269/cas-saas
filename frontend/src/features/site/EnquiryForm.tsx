@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { CheckCircle2, Send } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +21,7 @@ export default function EnquiryForm({
   universityId?: number
   universityName?: string
 }) {
+  const { t } = useTranslation()
   const [values, setValues] = useState({ first_name: "", last_name: "", email: "", phone: "", message: "" })
   const [company, setCompany] = useState("") // honeypot
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
@@ -49,16 +51,16 @@ export default function EnquiryForm({
     return (
       <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto size-10 text-green-600" />
-        <h2 className="mt-3 text-lg font-semibold">Thank you!</h2>
-        <p className="mt-1 text-sm text-muted-foreground">A CAS advisor will be in touch with you shortly.</p>
+        <h2 className="mt-3 text-lg font-semibold">{t("enquiry.thankYou")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t("enquiry.thankYouBody")}</p>
       </div>
     )
   }
 
   return (
     <div id="enquire" className="rounded-sm border bg-card p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-cas-navy">Enquire{universityName ? ` about ${universityName}` : ""}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Leave your details and a CAS advisor will guide you through the next steps.</p>
+      <h2 className="text-lg font-semibold text-cas-navy">{universityName ? t("enquiry.titleAbout", { name: universityName }) : t("enquiry.title")}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{t("enquiry.subtitle")}</p>
 
       <form
         className="mt-4 space-y-4"
@@ -67,27 +69,27 @@ export default function EnquiryForm({
       >
         {mutation.isError && Object.keys(fieldErrors).length === 0 && (
           <p role="alert" className="rounded-sm bg-cas-red-50 px-3 py-2 text-sm text-destructive">
-            Something went wrong. Please try again.
+            {t("enquiry.errorGeneric")}
           </p>
         )}
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <FormField label="First name" error={fieldErrors.first_name?.[0]}>
+          <FormField label={t("enquiry.firstName")} error={fieldErrors.first_name?.[0]}>
             <Input value={values.first_name} onChange={set("first_name")} autoComplete="given-name" />
           </FormField>
-          <FormField label="Last name">
+          <FormField label={t("enquiry.lastName")}>
             <Input value={values.last_name} onChange={set("last_name")} autoComplete="family-name" />
           </FormField>
-          <FormField label="Email" error={fieldErrors.email?.[0]}>
+          <FormField label={t("enquiry.email")} error={fieldErrors.email?.[0]}>
             <Input type="email" value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" />
           </FormField>
-          <FormField label="Phone" error={fieldErrors.phone?.[0]}>
+          <FormField label={t("enquiry.phone")} error={fieldErrors.phone?.[0]}>
             <Input value={values.phone} onChange={set("phone")} autoComplete="tel" inputMode="tel" />
           </FormField>
         </div>
 
-        <FormField label="Message">
-          <Textarea rows={3} value={values.message} onChange={set("message")} placeholder="Tell us what you're interested in…" />
+        <FormField label={t("enquiry.message")}>
+          <Textarea rows={3} value={values.message} onChange={set("message")} placeholder={t("enquiry.messagePlaceholder")} />
         </FormField>
 
         {/* Honeypot — hidden from users, off the tab order. */}
@@ -97,7 +99,7 @@ export default function EnquiryForm({
 
         <Button type="submit" className="h-11 w-full sm:w-auto" disabled={mutation.isPending}>
           <Send className="size-4" />
-          {mutation.isPending ? "Sending…" : "Send enquiry"}
+          {mutation.isPending ? t("enquiry.sending") : t("enquiry.send")}
         </Button>
       </form>
     </div>

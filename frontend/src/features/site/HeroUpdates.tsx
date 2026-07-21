@@ -1,25 +1,28 @@
 import { useQuery } from "@tanstack/react-query"
 import { Plus, X } from "lucide-react"
 import { type ReactNode, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { getSiteScholarships, type SiteProgram, type SiteUniversityCard } from "@/features/site/api"
 import { cn } from "@/lib/utils"
 
+// Display labels are i18n keys resolved at render (report — 5-language support).
 const TABS = [
-  { key: "universities", label: "University Updates" },
-  { key: "programs", label: "Program Updates" },
-  { key: "scholarships", label: "Latest Scholarships" },
-  { key: "news", label: "New Stories" },
+  { key: "universities", labelKey: "heroUpdates.tabUniversities" },
+  { key: "programs", labelKey: "heroUpdates.tabPrograms" },
+  { key: "scholarships", labelKey: "heroUpdates.tabScholarships" },
+  { key: "news", labelKey: "heroUpdates.tabNews" },
 ] as const
 type TabKey = (typeof TABS)[number]["key"]
 
+// [titleKey, to] — title is an i18n key resolved at render; the URL stays literal.
 const NEW_STORIES: [string, string][] = [
-  ["March 2026 intake now open across partner universities", "/site/news?post=march-2026-intake"],
-  ["CSC & provincial scholarships accepting applications", "/site/news?post=csc-scholarships"],
-  ["New Ministry of Education–listed universities added", "/site/news?post=new-moe-universities"],
-  ["How to prepare a strong MBBS application", "/site/news?post=mbbs-application-guide"],
-  ["Student visa guide: documents and timeline", "/site/news?post=student-visa-guide"],
+  ["heroUpdates.storyMarchIntake", "/site/news?post=march-2026-intake"],
+  ["heroUpdates.storyCscScholarships", "/site/news?post=csc-scholarships"],
+  ["heroUpdates.storyNewMoe", "/site/news?post=new-moe-universities"],
+  ["heroUpdates.storyMbbsGuide", "/site/news?post=mbbs-application-guide"],
+  ["heroUpdates.storyVisaGuide", "/site/news?post=student-visa-guide"],
 ]
 
 const STOPWORDS = new Set(["of", "and", "the", "for", "&", "in", "a"])
@@ -49,6 +52,7 @@ function Note({ children }: { children: ReactNode }) {
  * across universities, programs, scholarships and stories.
  */
 export default function HeroUpdates({ universities, programs }: { universities: SiteUniversityCard[]; programs: SiteProgram[] }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<TabKey>("universities")
 
@@ -69,7 +73,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          aria-label={open ? "Hide latest updates" : "Show latest updates"}
+          aria-label={open ? t("heroUpdates.hideUpdates") : t("heroUpdates.showUpdates")}
           className="flex size-9 items-center justify-center rounded-full border border-white/40 bg-black/20 text-white/80 backdrop-blur transition-colors hover:border-cas-red hover:text-cas-red"
         >
           {open ? <X className="size-5" /> : <Plus className="size-5" />}
@@ -80,17 +84,17 @@ export default function HeroUpdates({ universities, programs }: { universities: 
       {open && (
         <div className="absolute top-full left-1/2 z-30 mt-3 w-[calc(100vw-2rem)] max-w-4xl -translate-x-1/2 overflow-hidden rounded-sm border border-white/10 bg-[#1a1733]/95 text-left shadow-2xl backdrop-blur">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-white/10 px-4 py-3">
-            {TABS.map((t) => (
+            {TABS.map((item) => (
               <button
-                key={t.key}
+                key={item.key}
                 type="button"
-                onClick={() => setTab(t.key)}
+                onClick={() => setTab(item.key)}
                 className={cn(
                   "text-sm font-semibold tracking-wide uppercase transition-colors",
-                  tab === t.key ? "text-cas-red" : "text-white/70 hover:text-white",
+                  tab === item.key ? "text-cas-red" : "text-white/70 hover:text-white",
                 )}
               >
-                {t.label}
+                {t(item.labelKey)}
               </button>
             ))}
           </div>
@@ -102,10 +106,10 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={u.id}
                   to={u.slug ? `/site/universities/${u.slug}` : "/site/universities?src=updates"}
                   left={<>{u.name} <span className="text-white/45">| {abbr(u.name)}{u.city ? ` | ${u.city}` : ""}</span></>}
-                  right={`Last application: ${lastApp}`}
+                  right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))
-              : <Note>No universities to show yet.</Note>)}
+              : <Note>{t("heroUpdates.noUniversities")}</Note>)}
 
             {tab === "programs" && (programs.length
               ? programs.map((p) => (
@@ -113,26 +117,26 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={p.id}
                   to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
                   left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level}</span></span></>}
-                  right={`Last application: ${lastApp}`}
+                  right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))
-              : <Note>No programs to show yet.</Note>)}
+              : <Note>{t("heroUpdates.noPrograms")}</Note>)}
 
             {tab === "scholarships" && (scholarships.isPending
-              ? <Note>Loading…</Note>
+              ? <Note>{t("heroUpdates.loading")}</Note>
               : scholarships.data?.data.length
                 ? scholarships.data.data.map((s) => (
                   <Row
                     key={s.id}
                     to={s.university?.slug ? `/site/universities/${s.university.slug}` : "/site/scholarships?src=updates"}
-                    left={<>{s.name} <span className="text-white/45">| {s.coverage ?? s.type ?? "Scholarship"}{s.university?.name ? ` | ${s.university.name}` : ""}</span></>}
-                    right={s.deadline ? `Deadline: ${fmtDate(s.deadline)}` : "Open now"}
+                    left={<>{s.name} <span className="text-white/45">| {s.coverage ?? s.type ?? t("heroUpdates.scholarshipFallback")}{s.university?.name ? ` | ${s.university.name}` : ""}</span></>}
+                    right={s.deadline ? t("heroUpdates.deadline", { date: fmtDate(s.deadline) }) : t("heroUpdates.openNow")}
                   />
                 ))
-                : <Note>No scholarships to show yet.</Note>)}
+                : <Note>{t("heroUpdates.noScholarships")}</Note>)}
 
-            {tab === "news" && NEW_STORIES.map(([title, to]) => (
-              <Row key={title} to={to} left={title} right={`Updated ${lastApp}`} />
+            {tab === "news" && NEW_STORIES.map(([titleKey, to]) => (
+              <Row key={titleKey} to={to} left={t(titleKey)} right={t("heroUpdates.updated", { date: lastApp })} />
             ))}
           </div>
         </div>

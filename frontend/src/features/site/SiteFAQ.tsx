@@ -1,83 +1,87 @@
 import { ArrowRight, ChevronDown } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
-type QA = { q: string; a: string }
-type Category = { title: string; items: QA[] }
+type QA = { qKey: string; aKey: string }
+type Category = { titleKey: string; items: QA[] }
 
+// Display text lives in i18n keys resolved via t() at render (report — 5-language support).
 const CATEGORIES: Category[] = [
   {
-    title: "Studying in China",
+    titleKey: "faq.studyingInChina.title",
     items: [
-      { q: "Why study in China?", a: "China offers Ministry of Education–listed universities, a growing range of English-taught degrees, affordable tuition and living costs, and generous scholarships — with globally recognised qualifications." },
-      { q: "Can I study in English?", a: "Yes. Many universities offer full degrees taught entirely in English, especially in medicine, engineering and business. Chinese-taught programs and language foundation options are also available." },
-      { q: "Do I need to speak Chinese?", a: "Not for English-taught programs. For Chinese-taught programs you may need an HSK qualification; we can advise on a foundation year or language program if needed." },
-      { q: "Are the degrees recognised internationally?", a: "CAS works with Ministry of Education–listed universities whose degrees are widely recognised. Recognition specifics vary by country and profession, so ask your advisor about your target country." },
+      { qKey: "faq.studyingInChina.q1", aKey: "faq.studyingInChina.a1" },
+      { qKey: "faq.studyingInChina.q2", aKey: "faq.studyingInChina.a2" },
+      { qKey: "faq.studyingInChina.q3", aKey: "faq.studyingInChina.a3" },
+      { qKey: "faq.studyingInChina.q4", aKey: "faq.studyingInChina.a4" },
     ],
   },
   {
-    title: "Choosing a university & program",
+    titleKey: "faq.choosing.title",
     items: [
-      { q: "How do I choose the right university and program?", a: "Start with a free study plan — tell us your goal, budget and preferences and a CAS advisor sends you a personalised shortlist. You can also browse and filter universities, programs and scholarships on this site." },
-      { q: "What programs can I apply for?", a: "Bachelor's, master's and doctoral degrees plus non-degree and Chinese-language programs — across fields including medicine (MBBS), engineering, business, computer science and more." },
-      { q: "What does “MoE-listed” mean?", a: "It means the Ministry of Education has approved the university to enrol international students. CAS focuses on MoE-listed universities, which you can identify by the badge on each university page." },
+      { qKey: "faq.choosing.q1", aKey: "faq.choosing.a1" },
+      { qKey: "faq.choosing.q2", aKey: "faq.choosing.a2" },
+      { qKey: "faq.choosing.q3", aKey: "faq.choosing.a3" },
     ],
   },
   {
-    title: "Scholarships",
+    titleKey: "faq.scholarships.title",
     items: [
-      { q: "What scholarships are available?", a: "Government (CSC), provincial and university scholarships — both full (tuition, accommodation and a stipend) and partial. Availability varies by university, program and intake." },
-      { q: "Am I eligible for a scholarship?", a: "Eligibility depends on your grades, level, nationality and the specific award. Your CAS advisor matches you to the scholarships you have the best chance of winning." },
-      { q: "Does CAS help with scholarship applications?", a: "Yes — we help you identify suitable scholarships, prepare the documents and submit on time alongside your university application." },
+      { qKey: "faq.scholarships.q1", aKey: "faq.scholarships.a1" },
+      { qKey: "faq.scholarships.q2", aKey: "faq.scholarships.a2" },
+      { qKey: "faq.scholarships.q3", aKey: "faq.scholarships.a3" },
     ],
   },
   {
-    title: "Applying with CAS",
+    titleKey: "faq.applying.title",
     items: [
-      { q: "How does the application process work?", a: "Study plan → shortlist → prepare your documents → CAS submits your application → you receive an offer → visa support → arrival support. One team handles the whole journey." },
-      { q: "What documents will I need?", a: "Typically your passport, academic transcripts and certificates, passport photos and, depending on the program, a language certificate and medical or police checks. Your advisor gives you an exact checklist." },
-      { q: "How long does it take?", a: "It varies by university and intake — often a few weeks to a couple of months from application to offer. Applying early in the intake window gives you the most options." },
-      { q: "Is the consultation really free?", a: "Yes. Your initial consultation and study plan are free with no obligation. Any paid services are quoted clearly up front — see our pricing page." },
+      { qKey: "faq.applying.q1", aKey: "faq.applying.a1" },
+      { qKey: "faq.applying.q2", aKey: "faq.applying.a2" },
+      { qKey: "faq.applying.q3", aKey: "faq.applying.a3" },
+      { qKey: "faq.applying.q4", aKey: "faq.applying.a4" },
     ],
   },
   {
-    title: "Visa & arrival",
+    titleKey: "faq.visa.title",
     items: [
-      { q: "How do I get a student visa?", a: "After you're admitted, the university issues an admission letter and a JW202 form; you then apply for a student (X) visa at a Chinese embassy or consulate. CAS guides you through each step." },
-      { q: "Does CAS support me after I arrive?", a: "Yes — airport pickup, help with university registration, accommodation and settling in are part of our end-to-end support." },
+      { qKey: "faq.visa.q1", aKey: "faq.visa.a1" },
+      { qKey: "faq.visa.q2", aKey: "faq.visa.a2" },
     ],
   },
   {
-    title: "Fees & payments",
+    titleKey: "faq.fees.title",
     items: [
-      { q: "How much does it cost to study in China?", a: "It depends on the university, city and program — tuition plus living costs. Tell us your plan and we'll give you a clear, personalised estimate." },
-      { q: "What does CAS charge?", a: "Your consultation and study plan are free. Where a service has a fee, you'll see an itemised quote before you commit — there are no hidden charges." },
+      { qKey: "faq.fees.q1", aKey: "faq.fees.a1" },
+      { qKey: "faq.fees.q2", aKey: "faq.fees.a2" },
     ],
   },
 ]
 
-function faqJsonLd(cats: Category[]): Record<string, unknown> {
+function faqJsonLd(cats: Category[], t: (key: string) => string): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: cats.flatMap((c) => c.items).map(({ q, a }) => ({
+    mainEntity: cats.flatMap((c) => c.items).map(({ qKey, aKey }) => ({
       "@type": "Question",
-      name: q,
-      acceptedAnswer: { "@type": "Answer", text: a },
+      name: t(qKey),
+      acceptedAnswer: { "@type": "Answer", text: t(aKey) },
     })),
   }
 }
 
 export default function SiteFAQ() {
+  const { t } = useTranslation()
+
   useSeo({
-    title: "FAQ — Studying in China with CAS",
-    description: "Answers to common questions about studying in China with CAS: choosing a university and program, scholarships, applying, student visas, arrival support and fees.",
+    title: t("faq.seoTitle"),
+    description: t("faq.seoDescription"),
     canonicalPath: "/site/faq",
-    jsonLd: faqJsonLd(CATEGORIES),
+    jsonLd: faqJsonLd(CATEGORIES, t),
   })
 
   const [open, setOpen] = useState<string | null>(null)
@@ -85,17 +89,17 @@ export default function SiteFAQ() {
   return (
     <div className="space-y-8">
       <SitePageHeader
-        eyebrow="Help centre"
-        title="Frequently asked questions"
-        subtitle="Everything you need to know about studying in China with CAS — from choosing a university to visas, scholarships and fees."
+        eyebrow={t("faq.eyebrow")}
+        title={t("faq.title")}
+        subtitle={t("faq.subtitle")}
       />
 
       {CATEGORIES.map((cat) => (
-        <section key={cat.title}>
-          <h2 className="mb-3 text-lg font-semibold text-cas-navy">{cat.title}</h2>
+        <section key={cat.titleKey}>
+          <h2 className="mb-3 text-lg font-semibold text-cas-navy">{t(cat.titleKey)}</h2>
           <div className="divide-y overflow-hidden rounded-sm border bg-card shadow-sm">
             {cat.items.map((item, i) => {
-              const id = `${cat.title}-${i}`
+              const id = `${cat.titleKey}-${i}`
               const isOpen = open === id
 
               return (
@@ -106,10 +110,10 @@ export default function SiteFAQ() {
                     aria-expanded={isOpen}
                     className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-muted/50"
                   >
-                    <span className="text-sm font-medium text-ink sm:text-base">{item.q}</span>
+                    <span className="text-sm font-medium text-ink sm:text-base">{t(item.qKey)}</span>
                     <ChevronDown className={cn("size-5 shrink-0 text-cas-navy transition-transform duration-200", isOpen && "rotate-180")} />
                   </button>
-                  {isOpen && <p className="px-5 pb-4 text-sm text-muted-foreground">{item.a}</p>}
+                  {isOpen && <p className="px-5 pb-4 text-sm text-muted-foreground">{t(item.aKey)}</p>}
                 </div>
               )
             })}
@@ -119,11 +123,11 @@ export default function SiteFAQ() {
 
       <section className="flex flex-col items-start justify-between gap-4 rounded-sm bg-cas-navy p-8 text-white sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-xl font-semibold">Still have questions?</h2>
-          <p className="mt-1 text-sm text-white/80">Get a free study plan and a CAS advisor will answer everything for your situation.</p>
+          <h2 className="text-xl font-semibold">{t("faq.ctaTitle")}</h2>
+          <p className="mt-1 text-sm text-white/80">{t("faq.ctaSubtitle")}</p>
         </div>
         <Link to="/site/study-plan" className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
-          Get a free study plan <ArrowRight className="size-4" />
+          {t("faq.ctaButton")} <ArrowRight className="size-4" />
         </Link>
       </section>
     </div>

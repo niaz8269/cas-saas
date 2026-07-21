@@ -1,5 +1,6 @@
 import { ArrowUpRight, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
@@ -47,6 +48,8 @@ export function PhotoBanner({ src, className, children }: { src: string; classNa
 
 /** University card shared by the home page and the universities listing. */
 export function UniCard({ u }: { u: SiteUniversityCard }) {
+  const { t } = useTranslation()
+
   return (
     <Link
       to={u.slug ? `/site/universities/${u.slug}` : "#"}
@@ -64,7 +67,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         {u.moe_listed && (
           <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-red px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
-            <ShieldCheck className="size-3.5" /> MoE Listed
+            <ShieldCheck className="size-3.5" /> {t("components.moeListed")}
           </span>
         )}
       </div>
@@ -86,10 +89,10 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
         {u.about && <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{u.about}</p>}
         <div className="mt-auto flex items-center justify-between pt-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-navy-50 px-2.5 py-1 text-xs font-medium text-cas-navy">
-            <GraduationCap className="size-3.5" /> {u.programs_count ?? 0} program{u.programs_count === 1 ? "" : "s"}
+            <GraduationCap className="size-3.5" /> {t("components.programCount", { count: u.programs_count ?? 0 })}
           </span>
           <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600">
-            View <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            {t("components.view")} <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
         </div>
       </div>
