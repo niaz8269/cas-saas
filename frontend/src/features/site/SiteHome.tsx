@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
+import heroBg from "@/assets/b1.webp"
 import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
 import SiteReviews from "@/features/site/SiteReviews"
@@ -133,16 +134,18 @@ export default function SiteHome() {
 
   return (
     <div className="space-y-12">
-      {/* ── Hero (centred, reference-style) ──────────────────── */}
-      <section className="site-bleed relative -mt-8 text-white">
+      {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
+      <section className="site-bleed relative flex min-h-screen flex-col justify-center text-white">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://picsum.photos/seed/cas-hero/1600/900')" }} />
-          <div className="absolute inset-0 bg-[#1f1c39]/85" />
-          <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={DOT_GRID} />
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
+          {/* Light at the very top (so the navy header/logo read on the misty
+              sky), darkening downward so the heading and search stay legible. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/60" />
+          <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={DOT_GRID} />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-4 pt-16 pb-28 text-center sm:pt-24">
-          <h1 className="text-5xl font-normal tracking-tight sm:text-[5.5rem] sm:leading-[1.05]">Study in China</h1>
+        <div className="relative mx-auto max-w-5xl px-4 pt-28 pb-36 text-center">
+          <h1 className="text-5xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-[5.5rem] sm:leading-[1.05]">Study in China</h1>
           <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 sm:text-base">
             {featuredUnis[0]?.name ? `${featuredUnis[0].name} : English-taught Programs` : "Ministry of Education–listed universities : English-taught Programs"}
           </p>

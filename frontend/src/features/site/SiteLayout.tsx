@@ -1,7 +1,8 @@
 import { Bell, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
-import { useRef, useState } from "react"
-import { Link, NavLink, Outlet } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
+import casLogo from "@/assets/cas-logo.png"
 import casLogoWhite from "@/assets/cas-logo-white.png"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
@@ -56,8 +57,8 @@ function NavItem({ item }: { item: NavItemT }) {
     <NavLink
       to={item.to}
       className={({ isActive }) => cn(
-        "inline-flex items-center py-1 text-[13px] font-semibold tracking-wide uppercase transition-colors",
-        isActive ? "text-cas-red" : "text-white/85 hover:text-white",
+        "inline-flex items-center py-1 text-[13px] font-semibold tracking-wide uppercase transition-colors [text-shadow:0_1px_2px_rgba(255,255,255,0.35)]",
+        isActive ? "text-cas-red" : "text-cas-navy hover:text-cas-red",
       )}
     >
       {item.label}
@@ -94,32 +95,48 @@ function NavItem({ item }: { item: NavItemT }) {
 
 export default function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { pathname } = useLocation()
+  const isHome = pathname === "/site"
+
+  // Header is transparent over the home hero and turns solid once scrolled
+  // (or on any non-home page). The logo stays the real colour mark throughout.
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+  const solid = !isHome || scrolled
 
   return (
     <div className="site-root flex min-h-dvh flex-col bg-subtle lg:pb-14">
       <ScrollToTop />
 
-      {/* Header */}
-      <header className="sticky top-0 z-30">
-        {/* Top promo bar */}
-        <div className="bg-[#4b4869] text-white">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
-            <div className="flex items-center gap-3">
-              <span className="hidden sm:inline">Browse Free-to-Apply Universities on CAS</span>
-              <Link to="/site/universities" className="rounded-sm bg-[#726f9f] px-2.5 py-0.5 text-xs transition-colors hover:bg-[#817eab]">Learn More</Link>
-            </div>
-            <div className="hidden items-center gap-3 md:flex">
-              <span>Fully-funded scholarships for 2026 — apply early</span>
-              <Link to="/site/scholarships" className="rounded-sm bg-[#726f9f] px-2.5 py-0.5 text-xs transition-colors hover:bg-[#817eab]">Learn More</Link>
+      {/* Header — transparent over the hero, solid once scrolled/elsewhere */}
+      <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-transparent")}>
+        {/* Top promo bar — only in the solid state */}
+        {solid && (
+          <div className="border-b bg-subtle">
+            <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="hidden text-muted-foreground sm:inline">Browse Free-to-Apply Universities on CAS</span>
+                <Link to="/site/universities" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
+              </div>
+              <div className="hidden items-center gap-3 md:flex">
+                <span className="text-muted-foreground">Fully-funded scholarships for 2026 — apply early</span>
+                <Link to="/site/scholarships" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Main nav */}
-        <div className="relative bg-[#2f2c4c] text-white shadow-sm">
+        <div className="relative">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <Link to="/site" className="flex shrink-0 items-center" onClick={() => setMenuOpen(false)}>
-              <img src={casLogoWhite} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto sm:h-10" />
+              <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto drop-shadow-sm sm:h-10" />
             </Link>
 
             <nav className="hidden items-center gap-6 lg:flex">
@@ -129,16 +146,16 @@ export default function SiteLayout() {
 
             <div className="flex items-center gap-3">
               <img src={UK_FLAG} alt="English" width={26} height={20} className="hidden rounded-[2px] shadow-sm sm:block" />
-              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-cas-red-600">
+              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600">
                 <LogIn className="size-4" /> SIGN IN
               </Link>
-              <Link to="/site/news" aria-label="Updates" className="relative hidden text-white/85 transition-colors hover:text-white sm:inline-flex">
+              <Link to="/site/news" aria-label="Updates" className="relative hidden text-cas-navy transition-colors hover:text-cas-red sm:inline-flex">
                 <Bell className="size-5" />
                 <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-red px-1 text-[10px] font-bold text-white">6</span>
               </Link>
               <button
                 type="button"
-                className="inline-flex size-9 items-center justify-center rounded-sm text-white/85 hover:bg-white/10 lg:hidden"
+                className="inline-flex size-9 items-center justify-center rounded-sm text-cas-navy hover:bg-black/5 lg:hidden"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={menuOpen}
                 onClick={() => setMenuOpen((v) => !v)}
@@ -149,7 +166,7 @@ export default function SiteLayout() {
           </div>
 
           {menuOpen && (
-            <nav className="border-t border-white/10 bg-[#2f2c4c] px-4 py-2 lg:hidden">
+            <nav className="border-t bg-white px-4 py-2 shadow-sm lg:hidden">
               {NAV.map((item) => (
                 <NavLink
                   key={item.to}
@@ -157,7 +174,7 @@ export default function SiteLayout() {
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) => cn(
                     "block rounded-sm px-3 py-2.5 text-sm font-medium",
-                    isActive ? "bg-white/10 text-cas-red" : "text-white/85 hover:bg-white/10",
+                    isActive ? "bg-cas-red-50 text-cas-red" : "text-cas-navy hover:bg-black/5",
                   )}
                 >
                   {item.label}
@@ -168,7 +185,7 @@ export default function SiteLayout() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
+      <main className={cn("mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6", isHome ? "pb-8" : "pt-28 pb-8")}>
         <Outlet />
       </main>
 
