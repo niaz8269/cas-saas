@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Portal;
 use App\Http\Controllers\Api\V1\Portal\Concerns\HandlesPortalApplications;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Portal\AgentStoreApplicationRequest;
+use App\Http\Requests\Portal\AgentStoreScholarshipApplicationRequest;
 use App\Models\Application;
 use App\Models\Student;
 use App\Services\Admissions\ApplicationCatalog;
@@ -56,6 +57,29 @@ class AgentApplicationController extends Controller
                 'status' => $application->status,
                 'required_documents' => $this->documentPayload(
                     $this->catalog->requiredDocuments($application->program, $application->scholarship),
+                ),
+            ],
+        ], 201);
+    }
+
+    /** Create a draft government-scholarship application for an owned student. */
+    public function storeScholarshipApplication(AgentStoreScholarshipApplicationRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        // The request already validated the student belongs to this agent.
+        $student = Student::findOrFail($validated['student_id']);
+
+        $application = $this->applications->createScholarshipDraft($student, $validated);
+        $application->loadMissing('scholarship');
+
+        return response()->json([
+            'data' => [
+                'id' => $application->id,
+                'application_code' => $application->application_code,
+                'status' => $application->status,
+                'required_documents' => $this->documentPayload(
+                    $this->catalog->requiredDocuments(null, $application->scholarship),
                 ),
             ],
         ], 201);

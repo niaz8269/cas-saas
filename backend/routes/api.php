@@ -96,6 +96,11 @@ Route::prefix('v1')->group(function () {
             Route::post('applications/{application}/documents', [AgentApplicationController::class, 'storeDocument']);
             Route::post('applications/{application}/submit', [AgentApplicationController::class, 'submit']);
 
+            // Government-scholarship variant (reference reads + create draft).
+            Route::get('majors', [AgentApplicationController::class, 'majors']);
+            Route::get('government-scholarships', [AgentApplicationController::class, 'governmentScholarships']);
+            Route::post('scholarship-applications', [AgentApplicationController::class, 'storeScholarshipApplication']);
+
             Route::get('applications', [AgentPortalController::class, 'applications']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);

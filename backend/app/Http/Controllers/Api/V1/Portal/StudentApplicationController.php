@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Portal\StudentStoreApplicationRequest;
 use App\Http\Requests\Portal\StudentStoreScholarshipApplicationRequest;
 use App\Models\Application;
-use App\Models\Major;
-use App\Models\Scholarship;
 use App\Services\Admissions\ApplicationCatalog;
 use App\Services\Admissions\PortalApplicationService;
 use App\Services\Documents\DocumentService;
@@ -35,41 +33,6 @@ class StudentApplicationController extends Controller
     protected function applicantRate(): string
     {
         return 'student';
-    }
-
-    /** Study fields for the government-scholarship preference picker. */
-    public function majors(): JsonResponse
-    {
-        return response()->json([
-            'data' => Major::active()->orderBy('name')->get(['id', 'name']),
-        ]);
-    }
-
-    /** Active government scholarships (with their universities + benefits). */
-    public function governmentScholarships(): JsonResponse
-    {
-        $scholarships = Scholarship::query()
-            ->where('scope', 'government')
-            ->where('status', 'active')
-            ->with('universities:id,name,city')
-            ->orderBy('name')
-            ->get();
-
-        return response()->json([
-            'data' => $scholarships->map(fn (Scholarship $s) => [
-                'id' => $s->id,
-                'name' => $s->name,
-                'type' => $s->type,
-                'coverage' => $s->coverage,
-                'currency' => $s->currency,
-                'description' => $s->description,
-                'eligibility' => $s->eligibility,
-                'benefits' => $s->benefits,
-                'universities' => $s->universities->map(fn ($u) => [
-                    'id' => $u->id, 'name' => $u->name, 'city' => $u->city,
-                ])->values(),
-            ])->values(),
-        ]);
     }
 
     /** Create a draft general government-scholarship application. */
