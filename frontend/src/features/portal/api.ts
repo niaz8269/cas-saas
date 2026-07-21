@@ -74,7 +74,7 @@ export interface AgentPayableRow {
   university: string | null
 }
 
-export const getAgentStudents = (params: { status?: string; page?: number } = {}) =>
+export const getAgentStudents = (params: { status?: string; page?: number; q?: string } = {}) =>
   portalApi<Paginated<AgentStudentRow>>(`/agent/students${query(params)}`)
 
 export const getAgentApplications = (params: { status?: string; page?: number } = {}) =>
@@ -249,8 +249,11 @@ export interface CountryRow {
   iso2: string
 }
 
-export const getCountries = () =>
-  portalApi<{ data: CountryRow[] }>("/student/countries")
+export const getApplyCountries = (kind: PortalKind) =>
+  portalApi<{ data: CountryRow[] }>(`/${kind}/countries`)
+
+/** Student-scoped convenience wrapper (the student wizard omits the kind). */
+export const getCountries = () => getApplyCountries("student")
 
 export interface FundingOptions {
   self: boolean
@@ -258,13 +261,18 @@ export interface FundingOptions {
   partial: boolean
 }
 
-export const getFundingOptions = (degree: Degree) =>
-  portalApi<{ data: FundingOptions }>(`/student/applications/funding-options?degree=${degree}`)
+export const getApplyFundingOptions = (kind: PortalKind, degree: Degree) =>
+  portalApi<{ data: FundingOptions }>(`/${kind}/applications/funding-options?degree=${degree}`)
+
+export const getFundingOptions = (degree: Degree) => getApplyFundingOptions("student", degree)
+
+export const getApplyAvailability = (kind: PortalKind, degree: Degree, funding: Funding) =>
+  portalApi<{ data: WizardProgram[] }>(
+    `/${kind}/applications/availability?degree=${degree}&funding=${funding}`,
+  )
 
 export const getApplicationAvailability = (degree: Degree, funding: Funding) =>
-  portalApi<{ data: WizardProgram[] }>(
-    `/student/applications/availability?degree=${degree}&funding=${funding}`,
-  )
+  getApplyAvailability("student", degree, funding)
 
 export const getApplicationRequiredDocuments = (programId: number, scholarshipId?: number | null) =>
   portalApi<{ data: RequiredDoc[] }>(
@@ -309,14 +317,30 @@ export interface DraftApplication {
   required_documents: RequiredDoc[]
 }
 
-export const createStudentApplication = (payload: CreateApplicationPayload) =>
-  portalApi<{ data: DraftApplication }>("/student/applications", {
+/** The agent applies on behalf of one of their own students (adds student_id). */
+export interface AgentCreateApplicationPayload extends CreateApplicationPayload {
+  student_id: number
+}
+
+/**
+ * Create a draft application. The kind selects the portal guard/tier: "student"
+ * for self-apply, "agent" for apply-on-behalf (payload carries student_id).
+ */
+export const createApplication = (
+  kind: PortalKind,
+  payload: CreateApplicationPayload | AgentCreateApplicationPayload,
+) =>
+  portalApi<{ data: DraftApplication }>(`/${kind}/applications`, {
     method: "POST",
     body: JSON.stringify(payload),
   })
 
+export const createStudentApplication = (payload: CreateApplicationPayload) =>
+  createApplication("student", payload)
+
 /** Presign → direct PUT → register, scoped to a draft application (JPG). */
 export async function uploadApplicationDocument(
+  kind: PortalKind,
   applicationId: number,
   documentTypeId: number,
   file: File,
@@ -324,7 +348,7 @@ export async function uploadApplicationDocument(
   const meta = { document_type_id: documentTypeId, file_name: file.name, mime: file.type, size: file.size }
 
   const presign = await portalApi<PresignResponse>(
-    `/student/applications/${applicationId}/documents/presign`,
+    `/${kind}/applications/${applicationId}/documents/presign`,
     { method: "POST", body: JSON.stringify(meta) },
   )
 
@@ -332,18 +356,21 @@ export async function uploadApplicationDocument(
   if (!put.ok) throw new Error("Upload to storage failed.")
 
   const registered = await portalApi<{ data: StudentDocumentRow }>(
-    `/student/applications/${applicationId}/documents`,
+    `/${kind}/applications/${applicationId}/documents`,
     { method: "POST", body: JSON.stringify({ ...meta, key: presign.key }) },
   )
 
   return registered.data
 }
 
-export const submitStudentApplication = (applicationId: number) =>
+export const submitApplication = (kind: PortalKind, applicationId: number) =>
   portalApi<{ data: { id: number; application_code: string; status: string } }>(
-    `/student/applications/${applicationId}/submit`,
+    `/${kind}/applications/${applicationId}/submit`,
     { method: "POST" },
   )
+
+export const submitStudentApplication = (applicationId: number) =>
+  submitApplication("student", applicationId)
 
 // ── Government-scholarship application (CSC etc.) ───────────────────────────
 

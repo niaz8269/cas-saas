@@ -32,6 +32,7 @@ import PortalShell from "@/features/portal/PortalShell"
 import RequirePortalAuth from "@/features/portal/RequirePortalAuth"
 import AgentHome from "@/features/portal/agent/AgentHome"
 import AgentStudents from "@/features/portal/agent/AgentStudents"
+import AgentApplyWizard from "@/features/portal/agent/AgentApplyWizard"
 import AgentCommissions from "@/features/portal/agent/AgentCommissions"
 import StudentHome from "@/features/portal/student/StudentHome"
 import StudentApplyWizard from "@/features/portal/student/StudentApplyWizard"
@@ -110,6 +111,7 @@ const router = createBrowserRouter([
         children: [
           { path: "/portal/agent", element: <AgentHome /> },
           { path: "/portal/agent/students", element: <AgentStudents /> },
+          { path: "/portal/agent/apply", element: <AgentApplyWizard /> },
           { path: "/portal/agent/commissions", element: <AgentCommissions /> },
           { path: "/portal/student", element: <StudentHome /> },
           { path: "/portal/student/apply", element: <StudentApplyWizard /> },

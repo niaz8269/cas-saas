@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import {
+  FilePlus2,
   FileText,
   GraduationCap,
   LayoutGrid,
@@ -26,6 +27,7 @@ interface PortalNavItem {
 const AGENT_NAV: PortalNavItem[] = [
   { to: "/portal/agent", label: "Home", icon: LayoutGrid, end: true },
   { to: "/portal/agent/students", label: "Students", icon: GraduationCap },
+  { to: "/portal/agent/apply", label: "Apply", icon: FilePlus2 },
   { to: "/portal/agent/commissions", label: "Earnings", icon: Wallet },
 ]
 

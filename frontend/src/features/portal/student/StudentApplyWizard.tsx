@@ -1,17 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { Check, ChevronLeft, GraduationCap, Loader2, ShieldCheck } from "lucide-react"
+import { Check, ChevronLeft, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   createStudentApplication,
   getApplicationAvailability,
@@ -22,40 +14,20 @@ import {
   type Degree,
   type DraftApplication,
   type Funding,
-  type FundingOptions,
   type WizardEducation,
   type WizardGuardian,
   type WizardProgram,
 } from "@/features/portal/api"
-import { PortalCard } from "@/features/portal/components"
 import { EMPTY_EDUCATION, type Profile } from "@/features/portal/student/applyShared"
 import {
   BackgroundStep,
-  Chip,
+  CourseStep,
   DocumentsStep,
   ProfileStep,
-  SectionTitle,
+  ReviewStep,
   Stepper,
-  Tile,
 } from "@/features/portal/student/applySteps"
-import { money } from "@/features/portal/status"
 import { ApiError } from "@/lib/api"
-import { cn } from "@/lib/utils"
-
-const DEGREES: { value: Degree; label: string; hint: string }[] = [
-  { value: "mbbs", label: "MBBS", hint: "Bachelor of Medicine" },
-  { value: "bds", label: "BDS", hint: "Bachelor of Dental Surgery" },
-  { value: "bs", label: "Bachelor (BS)", hint: "Undergraduate degree" },
-  { value: "master", label: "Master", hint: "Postgraduate degree" },
-  { value: "phd", label: "PhD", hint: "Doctoral degree" },
-  { value: "diploma", label: "Diploma", hint: "Short qualification" },
-]
-
-const FUNDING: { value: Funding; label: string; hint: string }[] = [
-  { value: "self", label: "Self-funded", hint: "Pay tuition yourself" },
-  { value: "scholarship", label: "Scholarship", hint: "Full scholarship" },
-  { value: "partial", label: "Partial scholarship", hint: "Partial support" },
-]
 
 const STEPS = ["Course", "Personal", "Background", "Documents", "Review"]
 
@@ -251,193 +223,6 @@ export default function StudentApplyWizard() {
           </Button>
         )}
       </div>
-    </div>
-  )
-}
-
-// ── Step 1: course ──────────────────────────────────────────────────────────
-
-function CourseStep(props: {
-  degree: Degree | ""
-  funding: Funding | ""
-  program: WizardProgram | null
-  intakeId: string
-  scholarshipId: string
-  programs: WizardProgram[]
-  loading: boolean
-  failed: boolean
-  fundingAvailable?: FundingOptions
-  fundingLoading: boolean
-  onDegree: (d: Degree) => void
-  onFunding: (f: Funding) => void
-  onProgram: (p: WizardProgram) => void
-  onIntake: (id: string) => void
-  onScholarship: (id: string) => void
-}) {
-  const { degree, funding, program, programs, loading, failed, fundingAvailable, fundingLoading } = props
-
-  const fundingTiles = FUNDING.filter((f) => f.value === "self" || fundingAvailable?.[f.value])
-  const noScholarships = !!fundingAvailable && !fundingAvailable.scholarship && !fundingAvailable.partial
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <p className="mb-2 text-sm font-medium">Which degree?</p>
-        <div className="grid grid-cols-2 gap-2">
-          {DEGREES.map((d) => (
-            <Tile key={d.value} active={degree === d.value} label={d.label} hint={d.hint} onClick={() => props.onDegree(d.value)} />
-          ))}
-        </div>
-      </div>
-
-      {degree && (
-        <div>
-          <p className="mb-2 text-sm font-medium">How will you fund it?</p>
-          {fundingLoading && !fundingAvailable ? (
-            <p className="text-sm text-muted-foreground">Checking options…</p>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 gap-2">
-                {fundingTiles.map((f) => (
-                  <Tile key={f.value} active={funding === f.value} label={f.label} hint={f.hint} onClick={() => props.onFunding(f.value)} />
-                ))}
-              </div>
-              {noScholarships && (
-                <p className="mt-2 text-xs text-muted-foreground">No scholarships are currently offered for this degree — self-funded only.</p>
-              )}
-            </>
-          )}
-        </div>
-      )}
-
-      {degree && funding && (
-        <div>
-          <p className="mb-2 text-sm font-medium">Available programs</p>
-          {loading && <p className="text-sm text-muted-foreground">Finding programs…</p>}
-          {failed && <p className="text-sm text-destructive">Could not load programs. Go back and try again.</p>}
-          {!loading && !failed && programs.length === 0 && (
-            <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
-              No programs match this combination yet. Try a different degree or funding option.
-            </p>
-          )}
-          <div className="space-y-2">
-            {programs.map((p) => {
-              const active = program?.id === p.id
-
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => props.onProgram(p)}
-                  className={cn(
-                    "w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-colors",
-                    active ? "border-cas-navy ring-1 ring-cas-navy" : "hover:border-cas-navy/40",
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium">{p.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {p.university.name}{p.university.city ? ` · ${p.university.city}` : ""}
-                      </p>
-                    </div>
-                    {active && <Check className="size-5 shrink-0 text-cas-navy" />}
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
-                    {p.teaching_language && <Chip>{p.teaching_language}</Chip>}
-                    {p.duration_months && <Chip>{p.duration_months} months</Chip>}
-                    {p.tuition_fee != null && <Chip>Tuition {money(p.tuition_fee, p.currency)}/yr</Chip>}
-                    {p.hostel_fee != null && <Chip>Hostel {money(p.hostel_fee, p.currency)}/yr</Chip>}
-                    {p.university.moe_listed && <Chip>MoE-listed</Chip>}
-                  </div>
-                  {p.service_charge && (
-                    <p className="mt-2 text-xs font-medium text-cas-navy">
-                      CAS service fee: {money(p.service_charge.amount, p.service_charge.currency)}
-                    </p>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {program && (
-        <div className="space-y-3 rounded-xl border bg-subtle p-4">
-          {program.intakes.length > 0 && (
-            <div>
-              <Label className="text-sm">Intake</Label>
-              <Select value={props.intakeId} onValueChange={props.onIntake}>
-                <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder="Choose an intake (optional)" /></SelectTrigger>
-                <SelectContent>
-                  {program.intakes.map((i) => (
-                    <SelectItem key={i.id} value={String(i.id)}>
-                      {i.name}{i.application_deadline ? ` · apply by ${new Date(i.application_deadline).toLocaleDateString()}` : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {funding !== "self" && (
-            <div>
-              <Label className="text-sm">Scholarship</Label>
-              {program.scholarships.length > 0 ? (
-                <Select value={props.scholarshipId} onValueChange={props.onScholarship}>
-                  <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder="Choose a scholarship" /></SelectTrigger>
-                  <SelectContent>
-                    {program.scholarships.map((s) => (
-                      <SelectItem key={s.id} value={String(s.id)}>
-                        {s.name}{s.coverage ? ` · ${s.coverage}` : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <p className="mt-1 text-sm text-muted-foreground">No scholarships listed for this university.</p>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ── Step 5: review ──────────────────────────────────────────────────────────
-
-function ReviewStep({ program, draft, agreed, onAgreed }: {
-  program: WizardProgram | null
-  draft: DraftApplication
-  agreed: boolean
-  onAgreed: (v: boolean) => void
-}) {
-  return (
-    <div className="space-y-4">
-      <PortalCard className="space-y-3">
-        <SectionTitle>Summary</SectionTitle>
-        <div className="flex items-center gap-2 text-cas-navy">
-          <GraduationCap className="size-5" />
-          <p className="font-medium">{program?.name}</p>
-        </div>
-        <p className="text-sm text-muted-foreground">{program?.university.name}{program?.university.city ? ` · ${program.university.city}` : ""}</p>
-        <div className="rounded-lg bg-subtle p-3 text-sm">
-          <p>Reference <strong>{draft.application_code}</strong></p>
-          {program?.service_charge && (
-            <p className="mt-1">CAS service fee: <strong>{money(program.service_charge.amount, program.service_charge.currency)}</strong></p>
-          )}
-          <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached.</p>
-        </div>
-      </PortalCard>
-
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border bg-card p-4 shadow-sm">
-        <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />
-        <span className="flex items-start gap-2 text-sm text-muted-foreground">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-cas-navy" />
-          I declare that the information provided is true and correct to the best of my knowledge, and I authorise CAS to process this application for admission and visa purposes.
-        </span>
-      </label>
     </div>
   )
 }

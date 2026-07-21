@@ -1,5 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { GraduationCap } from "lucide-react"
+import { FilePlus2, GraduationCap } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { getAgentStudents } from "@/features/portal/api"
@@ -24,7 +25,12 @@ export default function AgentStudents() {
 
   return (
     <div>
-      <PageTitle title="My students" subtitle="Students you have referred to CAS" />
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <PageTitle title="My students" subtitle="Students you have referred to CAS" />
+        <Button asChild size="sm" className="shrink-0">
+          <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> New application</Link>
+        </Button>
+      </div>
 
       {isPending && <ListSkeleton rows={4} />}
       {isError && <LoadError onRetry={refetch} />}
@@ -43,7 +49,14 @@ export default function AgentStudents() {
                 {s.student_code}{s.country ? ` · ${s.country}` : ""} · {s.applications_count} app(s)
               </p>
             </div>
-            <StatusBadge status={s.status} map={STUDENT_BADGE} />
+            <div className="flex shrink-0 items-center gap-2">
+              <StatusBadge status={s.status} map={STUDENT_BADGE} />
+              <Button asChild variant="secondary" size="sm" className="gap-1">
+                <Link to={`/portal/agent/apply?student=${s.id}&name=${encodeURIComponent(s.full_name)}`}>
+                  <FilePlus2 className="size-4" /> Apply
+                </Link>
+              </Button>
+            </div>
           </PortalCard>
         ))}
       </div>
