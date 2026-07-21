@@ -134,56 +134,59 @@ export default function SiteHome() {
   return (
     <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
-      <section className="site-bleed relative flex min-h-[80vh] flex-col justify-center text-white">
+      <section className="site-bleed relative flex min-h-[92vh] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
               sky), darkening downward so the heading and search stay legible. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/25 to-black/60" />
           <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={DOT_GRID} />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-4 pt-28 pb-36 text-center">
-          <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">Study in China</h1>
-          {featuredUnis[0] ? (
-            <Link
-              to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs"}
-              className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
-            >
-              {featuredUnis[0].name} : English-taught Programs
-            </Link>
-          ) : (
-            <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
-              Ministry of Education–listed universities : English-taught Programs
-            </p>
-          )}
+        {/* Content — centred in the space above the search */}
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-20 text-center">
+          <div className="w-full max-w-5xl">
+            <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">Study in China</h1>
+            {featuredUnis[0] ? (
+              <Link
+                to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs"}
+                className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
+              >
+                {featuredUnis[0].name} : English-taught Programs
+              </Link>
+            ) : (
+              <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
+                Ministry of Education–listed universities : English-taught Programs
+              </p>
+            )}
 
-          {/* Ranked featured universities + expander (reference's numbered cards) */}
-          {featuredUnis.length > 0 && (
-            <div className="mt-9">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {featuredUnis.slice(0, 3).map((u, i) => (
-                <Link
-                  key={u.id}
-                  to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                  className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
-                >
-                  <span className="absolute top-0 left-0 bg-cas-red px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
-                  {u.logo_url
-                    ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
-                    : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
-                  <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
-                </Link>
-              ))}
-            </div>
-            <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} />
-            </div>
-          )}
+            {/* Ranked featured universities + expander (reference's numbered cards) */}
+            {featuredUnis.length > 0 && (
+              <div className="mt-9">
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  {featuredUnis.slice(0, 3).map((u, i) => (
+                    <Link
+                      key={u.id}
+                      to={u.slug ? `/site/universities/${u.slug}` : "#"}
+                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
+                    >
+                      <span className="absolute top-0 left-0 bg-cas-red px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
+                      {u.logo_url
+                        ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
+                        : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
+                      <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
+                    </Link>
+                  ))}
+                </div>
+                <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} />
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Search bar — red-bordered input + popular tags, overlapping the edge */}
-        <div className="absolute inset-x-0 bottom-0 z-10 translate-y-10 px-4">
-          <div className="mx-auto max-w-3xl rounded-sm bg-white p-5 shadow-xl ring-1 ring-black/5 sm:p-6">
+        {/* Search bar — sits over the bottom of the full-screen image, fully visible */}
+        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-8">
+          <div className="rounded-sm bg-white p-5 shadow-xl ring-1 ring-black/5 sm:p-6">
             <form onSubmit={runSearch} className="flex">
               <input
                 value={term}
