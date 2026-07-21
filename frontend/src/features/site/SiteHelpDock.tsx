@@ -72,8 +72,10 @@ export default function SiteHelpDock() {
                 <img src={avatar(c.img)} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-red/80" />
                 <span className="text-[11px] text-white/80">{c.name}</span>
 
-                {/* Contact-details card revealed on hover */}
-                <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-3 hidden w-[25rem] -translate-x-1/2 group-hover:block">
+                {/* Contact-details card revealed on hover. The wrapper's pb-3
+                    bridges the gap to the avatar so moving the cursor into the
+                    card keeps it open (and lets the WhatsApp link be clicked). */}
+                <div className="absolute bottom-full left-1/2 z-50 hidden w-[24rem] -translate-x-1/2 pb-3 group-hover:block">
                   <div className="relative rounded-lg bg-white p-4 text-left text-cas-navy shadow-2xl">
                     <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
                     <div className="flex items-start gap-4">
@@ -81,10 +83,12 @@ export default function SiteHelpDock() {
                         <img src={avatar(c.img)} alt="" className="size-14 rounded-full object-cover ring-2 ring-cas-red/70" />
                         <span className="text-sm font-semibold text-cas-red-600">{c.name}</span>
                       </div>
-                      <div className="space-y-2 text-sm leading-tight">
+                      <div className="space-y-2.5 text-sm leading-tight">
                         <div><p className="font-semibold">WeChat:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
-                        <div><p className="font-semibold">WhatsApp/Tel:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
-                        <div><p className="font-semibold">Telegram:</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                        <div>
+                          <p className="font-semibold">WhatsApp/Tel:</p>
+                          <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
+                        </div>
                       </div>
                       <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
                         <img src={qrUrl(WHATSAPP)} alt="WeChat QR code" width={92} height={92} className="rounded" />
