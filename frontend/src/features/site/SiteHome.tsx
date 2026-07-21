@@ -144,11 +144,11 @@ export default function SiteHome() {
         </div>
 
         <div className="relative mx-auto max-w-5xl px-4 pt-28 pb-36 text-center">
-          <h1 className="text-5xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-[5.5rem] sm:leading-[1.05]">Study in China</h1>
+          <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">Study in China</h1>
           {featuredUnis[0] ? (
             <Link
               to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs"}
-              className="mx-auto mt-5 inline-block max-w-2xl text-sm text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:text-base"
+              className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
             >
               {featuredUnis[0].name} : English-taught Programs
             </Link>
@@ -166,7 +166,7 @@ export default function SiteHome() {
                 <Link
                   key={u.id}
                   to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                  className="group relative flex h-16 w-52 items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10"
+                  className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                 >
                   <span className="absolute top-0 left-0 bg-cas-red px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
                   {u.logo_url

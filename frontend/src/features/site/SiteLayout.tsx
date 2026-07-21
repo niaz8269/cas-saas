@@ -159,7 +159,7 @@ export default function SiteLayout() {
   const solid = !isHome || scrolled
 
   return (
-    <div className="site-root flex min-h-dvh flex-col bg-subtle lg:pb-14">
+    <div className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-14">
       <ScrollToTop />
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
@@ -184,7 +184,7 @@ export default function SiteLayout() {
         <div className="relative">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <Link to="/site" className="flex shrink-0 items-center" onClick={() => setMenuOpen(false)}>
-              <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-9 w-auto drop-shadow-sm sm:h-10" />
+              <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-6 w-auto drop-shadow-sm sm:h-9 lg:h-10" />
             </Link>
 
             <nav className="hidden items-center gap-6 lg:flex">
@@ -192,10 +192,10 @@ export default function SiteLayout() {
               <SiteMegaMenu />
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <img src={UK_FLAG} alt="English" width={26} height={20} className="hidden rounded-[2px] shadow-sm sm:block" />
-              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600">
-                <LogIn className="size-4" /> SIGN IN
+              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                <LogIn className="size-4" /> <span className="hidden sm:inline">SIGN IN</span>
               </Link>
               <NotificationBell />
               <button
