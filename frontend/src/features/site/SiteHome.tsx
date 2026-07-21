@@ -115,14 +115,8 @@ export default function SiteHome() {
 
   const featuredUnis = universities.data?.data.slice(0, 6) ?? []
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
-  const uniCount = universities.data?.meta.total ?? null
   const weekly = programs.data?.data[0]
   const outstanding = programs.data?.data.slice(0, 5) ?? []
-
-  const stats = [
-    ["13+", "Years"], ["13K+", "Students"], [uniCount ? `${uniCount}+` : "200+", "Universities"],
-    ["98%", "Visa success"], ["20+", "Branches"], ["50+", "Countries"],
-  ]
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -187,16 +181,6 @@ export default function SiteHome() {
             </button>
           </form>
         </div>
-      </section>
-
-      {/* ── Stats ────────────────────────────────────────────── */}
-      <section className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-        {stats.map(([v, l]) => (
-          <div key={l} className="rounded-sm border bg-card p-4 text-center shadow-sm">
-            <p className="bg-gradient-to-br from-cas-navy to-cas-navy-700 bg-clip-text text-2xl font-extrabold text-transparent">{v}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{l}</p>
-          </div>
-        ))}
       </section>
 
       {/* ── Weekly Programs spotlight ────────────────────────── */}
