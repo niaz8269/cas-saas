@@ -7,7 +7,6 @@ import {
   Building2,
   CalendarClock,
   CheckCircle2,
-  GraduationCap,
   Globe2,
   MessageCircle,
   Play,
@@ -214,9 +213,7 @@ export default function SiteHome() {
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> Weekly Programs
         </h2>
         <div className="mt-4 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <PhotoBanner src="/images/art-3.svg" className="flex min-h-48 items-center justify-center p-6">
-            <GraduationCap className="size-20 text-white/80 drop-shadow" />
-          </PhotoBanner>
+          <PhotoBanner src="/images/art-3.svg" className="min-h-48" />
           <div className="p-6">
             {weekly ? (
               <>
@@ -251,10 +248,9 @@ export default function SiteHome() {
       {/* ── Highlights 3×3 ───────────────────────────────────── */}
       <SiteSection title="Highlights" subtitle="Handpicked routes into studying in China.">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {HIGHLIGHTS.map(({ title, body, to, tag, icon: Icon }, i) => (
+          {HIGHLIGHTS.map(({ title, body, to, tag }, i) => (
             <Link key={title} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow">
-              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="flex h-28 items-center justify-center">
-                <Icon className="size-9 text-white/90 drop-shadow" />
+              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="h-28">
                 <span className="absolute top-3 left-3 rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white">{tag}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-5">

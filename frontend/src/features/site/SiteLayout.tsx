@@ -1,4 +1,4 @@
-import { Bell, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
+import { Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
@@ -93,6 +93,54 @@ function NavItem({ item }: { item: NavItemT }) {
   )
 }
 
+const NOTIFICATIONS: { title: string; body: string; to: string }[] = [
+  { title: "March 2026 intake now open across partner universities", body: "Applications for the March 2026 intake are open at Ministry of Education–listed universities. Apply early to secure your seat and a scholarship.", to: "/site/universities" },
+  { title: "CSC & provincial scholarships accepting applications", body: "Government (CSC) and provincial scholarships are now accepting applications for the coming academic year. Talk to CAS to check your eligibility.", to: "/site/scholarships" },
+  { title: "New Ministry of Education–listed universities added", body: "We've added new MoE-listed universities to our catalogue, with English-taught programs across medicine, engineering and business.", to: "/site/universities" },
+  { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS" },
+]
+
+/** Notifications bell with a popup you can page through (reference behaviour). */
+function NotificationBell() {
+  const [open, setOpen] = useState(false)
+  const [idx, setIdx] = useState(0)
+  const n = NOTIFICATIONS.length
+  const item = NOTIFICATIONS[idx]
+  const go = (d: number) => setIdx((i) => (i + d + n) % n)
+
+  return (
+    <div className="relative hidden sm:block">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label="Notifications"
+        className="relative inline-flex text-cas-navy transition-colors hover:text-cas-red"
+      >
+        <Bell className="size-5" />
+        <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-red px-1 text-[10px] font-bold text-white">{n}</span>
+      </button>
+
+      {open && (
+        <div className="absolute top-full right-0 z-40 mt-3 w-80 rounded-sm border bg-white p-4 text-left shadow-xl">
+          <span className="absolute -top-1.5 right-4 size-3 rotate-45 border-t border-l bg-white" />
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="absolute top-3 right-3 text-cas-red hover:text-cas-red-600"><X className="size-4" /></button>
+          <h4 className="pr-6 text-sm font-semibold text-cas-navy">{item.title}</h4>
+          <div className="my-3 border-t border-dashed" />
+          <p className="text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+          <div className="mt-4 flex items-center justify-between">
+            <Link to={item.to} onClick={() => setOpen(false)} className="text-sm font-semibold text-cas-red hover:underline">Learn More »</Link>
+            <div className="flex items-center gap-1.5">
+              <button type="button" onClick={() => go(-1)} aria-label="Previous notification" className="flex size-7 items-center justify-center rounded-full border text-cas-navy transition-colors hover:border-cas-red hover:text-cas-red"><ChevronLeft className="size-4" /></button>
+              <button type="button" onClick={() => go(1)} aria-label="Next notification" className="flex size-7 items-center justify-center rounded-full border text-cas-navy transition-colors hover:border-cas-red hover:text-cas-red"><ChevronRight className="size-4" /></button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
@@ -149,10 +197,7 @@ export default function SiteLayout() {
               <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600">
                 <LogIn className="size-4" /> SIGN IN
               </Link>
-              <Link to="/site/news" aria-label="Updates" className="relative hidden text-cas-navy transition-colors hover:text-cas-red sm:inline-flex">
-                <Bell className="size-5" />
-                <span className="absolute -top-1.5 -right-1.5 flex min-w-4 items-center justify-center rounded-full bg-cas-red px-1 text-[10px] font-bold text-white">6</span>
-              </Link>
+              <NotificationBell />
               <button
                 type="button"
                 className="inline-flex size-9 items-center justify-center rounded-sm text-cas-navy hover:bg-black/5 lg:hidden"
