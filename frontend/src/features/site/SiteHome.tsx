@@ -146,9 +146,18 @@ export default function SiteHome() {
 
         <div className="relative mx-auto max-w-5xl px-4 pt-28 pb-36 text-center">
           <h1 className="text-5xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-[5.5rem] sm:leading-[1.05]">Study in China</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 sm:text-base">
-            {featuredUnis[0]?.name ? `${featuredUnis[0].name} : English-taught Programs` : "Ministry of Education–listed universities : English-taught Programs"}
-          </p>
+          {featuredUnis[0] ? (
+            <Link
+              to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs"}
+              className="mx-auto mt-5 inline-block max-w-2xl text-sm text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:text-base"
+            >
+              {featuredUnis[0].name} : English-taught Programs
+            </Link>
+          ) : (
+            <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
+              Ministry of Education–listed universities : English-taught Programs
+            </p>
+          )}
 
           {/* Ranked featured universities + expander (reference's numbered cards) */}
           {featuredUnis.length > 0 && (

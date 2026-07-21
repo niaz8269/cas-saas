@@ -95,7 +95,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
             ))}
           </div>
 
-          <div className="max-h-64 overflow-y-auto">
+          <div className="scrollbar-slim max-h-64 overflow-y-auto">
             {tab === "universities" && (universities.length
               ? universities.map((u) => (
                 <Row

@@ -114,18 +114,18 @@ export default function SiteLayout() {
     <div className="site-root flex min-h-dvh flex-col bg-subtle lg:pb-14">
       <ScrollToTop />
 
-      {/* Header — transparent over the hero, solid once scrolled/elsewhere */}
-      <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-transparent")}>
-        {/* Top promo bar — only in the solid state */}
-        {solid && (
-          <div className="border-b bg-subtle">
+      {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
+      <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/15 backdrop-blur-md")}>
+        {/* Top promo bar — visible at the top, hidden once scrolled */}
+        {!scrolled && (
+          <div className={cn("border-b", solid ? "border-black/5 bg-subtle" : "border-white/25")}>
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
-                <span className="hidden text-muted-foreground sm:inline">Browse Free-to-Apply Universities on CAS</span>
+                <span className="hidden text-cas-navy/75 sm:inline">Browse Free-to-Apply Universities on CAS</span>
                 <Link to="/site/universities" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
-                <span className="text-muted-foreground">Fully-funded scholarships for 2026 — apply early</span>
+                <span className="text-cas-navy/75">Fully-funded scholarships for 2026 — apply early</span>
                 <Link to="/site/scholarships" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">Learn More</Link>
               </div>
             </div>
