@@ -128,6 +128,13 @@
   font-family: Arial, "Helvetica Neue", Helvetica, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
+/* Scale the public site's type + spacing up ~10% together (zoom scales the
+   whole subtree, so text and its containers grow in proportion). Scoped to
+   the site so the admin/portal keep their designed sizes. */
+.site-root {
+  zoom: 1.1;
+}
+
 /* Slim, subtle scrollbar for the hero updates popup, like the reference. */
 .scrollbar-slim {
   scrollbar-width: thin;
