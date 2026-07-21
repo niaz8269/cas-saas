@@ -1,19 +1,17 @@
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query"
-import { Check, ChevronLeft, GraduationCap, Loader2, Search } from "lucide-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { Check, ChevronLeft, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { AgentStudentPicker, type PickedStudent } from "@/features/portal/agent/AgentStudentPicker"
 import {
   createApplication,
-  getAgentStudents,
   getApplyAvailability,
   getApplyCountries,
   getApplyFundingOptions,
   submitApplication,
   type AgentCreateApplicationPayload,
-  type AgentStudentRow,
   type Degree,
   type DraftApplication,
   type Funding,
@@ -21,7 +19,6 @@ import {
   type WizardGuardian,
   type WizardProgram,
 } from "@/features/portal/api"
-import { EmptyState, ListSkeleton, LoadError } from "@/features/portal/components"
 import { EMPTY_EDUCATION, type Profile } from "@/features/portal/student/applyShared"
 import {
   BackgroundStep,
@@ -32,14 +29,8 @@ import {
   Stepper,
 } from "@/features/portal/student/applySteps"
 import { ApiError } from "@/lib/api"
-import { cn } from "@/lib/utils"
 
 const STEPS = ["Student", "Course", "Personal", "Background", "Documents", "Review"]
-
-interface PickedStudent {
-  id: number
-  name: string
-}
 
 export default function AgentApplyWizard() {
   const navigate = useNavigate()
@@ -173,7 +164,7 @@ export default function AgentApplyWizard() {
       )}
 
       {step === 0 && (
-        <StudentPickerStep
+        <AgentStudentPicker
           selectedId={student?.id ?? null}
           onSelect={(s) => { setStudent(s); resetDraft() }}
         />
@@ -267,87 +258,6 @@ export default function AgentApplyWizard() {
           </Button>
         )}
       </div>
-    </div>
-  )
-}
-
-// ── Step 1: pick one of the agent's own students ──────────────────────────────
-
-function StudentPickerStep({ selectedId, onSelect }: {
-  selectedId: number | null
-  onSelect: (s: PickedStudent) => void
-}) {
-  const [term, setTerm] = useState("")
-  const [page, setPage] = useState(1)
-
-  const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["agent", "students", "picker", { term, page }],
-    queryFn: () => getAgentStudents({ q: term || undefined, page }),
-    placeholderData: keepPreviousData,
-  })
-
-  return (
-    <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">Choose the student you are applying for.</p>
-
-      <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={term}
-          onChange={(e) => { setTerm(e.target.value); setPage(1) }}
-          placeholder="Search by name or student code"
-          className="pl-9"
-        />
-      </div>
-
-      {isPending && <ListSkeleton rows={4} />}
-      {isError && <LoadError onRetry={refetch} />}
-
-      {data && data.data.length === 0 && (
-        <EmptyState
-          icon={<GraduationCap className="mx-auto size-8" />}
-          title={term ? "No matching students" : "No students yet"}
-          hint={term ? "Try a different name or code." : "Students you refer to CAS will appear here."}
-        />
-      )}
-
-      <div className="space-y-2">
-        {data?.data.map((s: AgentStudentRow) => {
-          const active = selectedId === s.id
-
-          return (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => onSelect({ id: s.id, name: s.full_name })}
-              className={cn(
-                "w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-colors",
-                active ? "border-cas-navy ring-1 ring-cas-navy" : "hover:border-cas-navy/40",
-              )}
-            >
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{s.full_name}</p>
-                  <p className="font-mono text-xs text-muted-foreground">
-                    {s.student_code}{s.country ? ` · ${s.country}` : ""} · {s.applications_count} app(s)
-                  </p>
-                </div>
-                {active && <Check className="size-5 shrink-0 text-cas-navy" />}
-              </div>
-            </button>
-          )
-        })}
-      </div>
-
-      {data && data.meta.last_page > 1 && (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>{data.meta.from}–{data.meta.to} of {data.meta.total}</span>
-          <div className="flex gap-2">
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Prev</Button>
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page >= data.meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

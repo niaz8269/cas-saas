@@ -82,7 +82,6 @@ it("applies for one of the agent's own students and sends student_id in the draf
 })
 
 it("pre-selects the student from the ?student= query and skips the picker", async () => {
-  const user = userEvent.setup()
   const fetchMock = withAgentApi(() => Promise.resolve(jsonResponse(DRAFT, 201)))
   vi.stubGlobal("fetch", fetchMock)
 

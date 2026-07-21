@@ -413,16 +413,31 @@ export interface ScholarshipApplicationPayload {
   education?: WizardEducation[]
 }
 
-export const getMajors = () => portalApi<{ data: Major[] }>("/student/majors")
+export const getApplyMajors = (kind: PortalKind) => portalApi<{ data: Major[] }>(`/${kind}/majors`)
 
-export const getGovernmentScholarships = () =>
-  portalApi<{ data: GovScholarship[] }>("/student/government-scholarships")
+export const getMajors = () => getApplyMajors("student")
 
-export const createScholarshipApplication = (payload: ScholarshipApplicationPayload) =>
-  portalApi<{ data: DraftApplication }>("/student/scholarship-applications", {
+export const getApplyGovernmentScholarships = (kind: PortalKind) =>
+  portalApi<{ data: GovScholarship[] }>(`/${kind}/government-scholarships`)
+
+export const getGovernmentScholarships = () => getApplyGovernmentScholarships("student")
+
+/** The agent applies for a government scholarship on behalf of an owned student. */
+export interface AgentScholarshipApplicationPayload extends ScholarshipApplicationPayload {
+  student_id: number
+}
+
+export const createScholarshipApplicationFor = (
+  kind: PortalKind,
+  payload: ScholarshipApplicationPayload | AgentScholarshipApplicationPayload,
+) =>
+  portalApi<{ data: DraftApplication }>(`/${kind}/scholarship-applications`, {
     method: "POST",
     body: JSON.stringify(payload),
   })
+
+export const createScholarshipApplication = (payload: ScholarshipApplicationPayload) =>
+  createScholarshipApplicationFor("student", payload)
 
 function query(params: Record<string, string | number | undefined>): string {
   const search = new URLSearchParams()

@@ -1,4 +1,4 @@
-import type { Degree, Funding, WizardEducation } from "@/features/portal/api"
+import type { Degree, Funding, ScholarshipLevel, ScholarshipPreference, WizardEducation } from "@/features/portal/api"
 
 /** Flat key/value bag for the profile fields the apply wizards collect. */
 export type Profile = Record<string, string>
@@ -21,3 +21,12 @@ export const FUNDING: { value: Funding; label: string; hint: string }[] = [
   { value: "scholarship", label: "Scholarship", hint: "Full scholarship" },
   { value: "partial", label: "Partial scholarship", hint: "Partial support" },
 ]
+
+/** Degree levels shared by the government-scholarship wizards. */
+export const LEVELS: { value: ScholarshipLevel; label: string; hint: string }[] = [
+  { value: "bachelor", label: "Bachelor / BS", hint: "Undergraduate" },
+  { value: "master", label: "Master", hint: "Postgraduate" },
+  { value: "phd", label: "PhD", hint: "Doctoral" },
+]
+
+export const emptyPref = (): ScholarshipPreference => ({ major: "", university_id: null })

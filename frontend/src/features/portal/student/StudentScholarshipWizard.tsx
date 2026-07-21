@@ -1,16 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { Award, Check, ChevronLeft, Loader2, Plus, ShieldCheck, X } from "lucide-react"
+import { Check, ChevronLeft, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   createScholarshipApplication,
   getCountries,
@@ -20,34 +13,25 @@ import {
   type DraftApplication,
   type GovScholarship,
   type ScholarshipLevel,
-  type ScholarshipLevelBenefit,
   type ScholarshipPreference,
   type WizardEducation,
   type WizardGuardian,
 } from "@/features/portal/api"
-import { PortalCard } from "@/features/portal/components"
-import { EMPTY_EDUCATION, type Profile } from "@/features/portal/student/applyShared"
+import { emptyPref, EMPTY_EDUCATION, type Profile } from "@/features/portal/student/applyShared"
 import {
   BackgroundStep,
   DocumentsStep,
-  Field,
   ProfileStep,
-  SectionTitle,
   Stepper,
-  Tile,
 } from "@/features/portal/student/applySteps"
-import { money } from "@/features/portal/status"
+import {
+  PreferencesStep,
+  ScholarshipReviewStep,
+  ScholarshipStep,
+} from "@/features/portal/student/scholarshipSteps"
 import { ApiError } from "@/lib/api"
-import { cn } from "@/lib/utils"
-
-const LEVELS: { value: ScholarshipLevel; label: string; hint: string }[] = [
-  { value: "bachelor", label: "Bachelor / BS", hint: "Undergraduate" },
-  { value: "master", label: "Master", hint: "Postgraduate" },
-  { value: "phd", label: "PhD", hint: "Doctoral" },
-]
 
 const STEPS = ["Scholarship", "Preferences", "Personal", "Background", "Documents", "Review"]
-const emptyPref = (): ScholarshipPreference => ({ major: "", university_id: null })
 
 export default function StudentScholarshipWizard() {
   const navigate = useNavigate()
@@ -173,7 +157,7 @@ export default function StudentScholarshipWizard() {
       )}
 
       {step === 5 && draft && (
-        <ReviewStep scholarship={scholarship} level={level as ScholarshipLevel} preferences={preferences} draft={draft} agreed={agreed} onAgreed={setAgreed} />
+        <ScholarshipReviewStep scholarship={scholarship} level={level as ScholarshipLevel} preferences={preferences} draft={draft} agreed={agreed} onAgreed={setAgreed} />
       )}
 
       <div className="flex gap-2">
@@ -198,187 +182,6 @@ export default function StudentScholarshipWizard() {
           </Button>
         )}
       </div>
-    </div>
-  )
-}
-
-// ── Step 1: degree + scholarship + details ──────────────────────────────────
-
-function ScholarshipStep(props: {
-  level: ScholarshipLevel | ""
-  scholarship: GovScholarship | null
-  scholarships: GovScholarship[]
-  loading: boolean
-  onLevel: (l: ScholarshipLevel) => void
-  onScholarship: (s: GovScholarship) => void
-}) {
-  const { level, scholarship, scholarships, loading } = props
-  const benefit: ScholarshipLevelBenefit | undefined = level && scholarship ? scholarship.benefits?.[level] : undefined
-  const cur = scholarship?.currency ?? undefined
-  const val = (v: number | string | null | undefined) => (v == null ? "—" : money(v, cur))
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <p className="mb-2 text-sm font-medium">Which degree?</p>
-        <div className="grid grid-cols-3 gap-2">
-          {LEVELS.map((l) => (
-            <Tile key={l.value} active={level === l.value} label={l.label} hint={l.hint} onClick={() => props.onLevel(l.value)} />
-          ))}
-        </div>
-      </div>
-
-      {level && (
-        <div>
-          <p className="mb-2 text-sm font-medium">Choose a scholarship</p>
-          {loading && <p className="text-sm text-muted-foreground">Loading scholarships…</p>}
-          {!loading && scholarships.length === 0 && (
-            <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">No government scholarships are open right now.</p>
-          )}
-          <div className="space-y-2">
-            {scholarships.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => props.onScholarship(s)}
-                className={cn(
-                  "w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-colors",
-                  scholarship?.id === s.id ? "border-cas-navy ring-1 ring-cas-navy" : "hover:border-cas-navy/40",
-                )}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="flex items-center gap-1.5 text-sm font-medium"><Award className="size-4 text-cas-gold-600" /> {s.name}</p>
-                    {s.coverage && <p className="text-sm text-muted-foreground">{s.coverage}</p>}
-                  </div>
-                  {scholarship?.id === s.id && <Check className="size-5 shrink-0 text-cas-navy" />}
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {scholarship && (
-        <PortalCard className="space-y-3">
-          <SectionTitle>What this scholarship covers ({LEVELS.find((l) => l.value === level)?.label})</SectionTitle>
-          {scholarship.description && <p className="text-sm text-muted-foreground">{scholarship.description}</p>}
-          <div className="grid grid-cols-3 gap-2 text-sm">
-            <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Tuition after</p>
-              <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.tuition_after)}</p>
-            </div>
-            <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Hostel after</p>
-              <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.hostel_after)}</p>
-            </div>
-            <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Stipend / mo</p>
-              <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.stipend_monthly)}</p>
-            </div>
-          </div>
-          {scholarship.universities.length > 0 && (
-            <p className="text-xs text-muted-foreground">Enrols at: {scholarship.universities.map((u) => u.name).join(", ")}</p>
-          )}
-        </PortalCard>
-      )}
-    </div>
-  )
-}
-
-// ── Step 2: preferences ─────────────────────────────────────────────────────
-
-function PreferencesStep(props: {
-  preferences: ScholarshipPreference[]
-  majors: { id: number; name: string }[]
-  universities: { id: number; name: string }[]
-  onChange: (i: number, key: keyof ScholarshipPreference, v: string) => void
-  onAdd: () => void
-  onRemove: (i: number) => void
-}) {
-  const { preferences, majors, universities } = props
-
-  return (
-    <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">Pick up to 3 majors you're interested in (and, optionally, a preferred university). Subject to CAS approval.</p>
-      {preferences.map((p, i) => (
-        <PortalCard key={i} className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Preference {i + 1}</span>
-            {preferences.length > 1 && (
-              <button type="button" onClick={() => props.onRemove(i)} aria-label="Remove preference">
-                <X className="size-4 text-muted-foreground" />
-              </button>
-            )}
-          </div>
-          <Field label="Major">
-            <Select value={p.major} onValueChange={(v) => props.onChange(i, "major", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Choose a major" /></SelectTrigger>
-              <SelectContent>
-                {majors.map((m) => <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field label="Preferred university (optional)">
-            <Select value={p.university_id ? String(p.university_id) : ""} onValueChange={(v) => props.onChange(i, "university_id", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Any university" /></SelectTrigger>
-              <SelectContent>
-                {universities.map((u) => <SelectItem key={u.id} value={String(u.id)}>{u.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </Field>
-        </PortalCard>
-      ))}
-      {preferences.length < 3 && (
-        <Button type="button" variant="secondary" className="w-full" onClick={props.onAdd}>
-          <Plus className="size-4" /> Add preference
-        </Button>
-      )}
-    </div>
-  )
-}
-
-// ── Step 6: review ──────────────────────────────────────────────────────────
-
-function ReviewStep(props: {
-  scholarship: GovScholarship | null
-  level: ScholarshipLevel
-  preferences: ScholarshipPreference[]
-  draft: DraftApplication
-  agreed: boolean
-  onAgreed: (v: boolean) => void
-}) {
-  const { scholarship, level, preferences, draft, agreed, onAgreed } = props
-  const uniName = (id: number | null | undefined) =>
-    id ? (scholarship?.universities.find((u) => u.id === Number(id))?.name ?? "—") : "Any university"
-
-  return (
-    <div className="space-y-4">
-      <PortalCard className="space-y-3">
-        <SectionTitle>Summary</SectionTitle>
-        <div className="flex items-center gap-2 text-cas-navy">
-          <Award className="size-5" />
-          <p className="font-medium">{scholarship?.name}</p>
-        </div>
-        <p className="text-sm text-muted-foreground capitalize">{LEVELS.find((l) => l.value === level)?.label}</p>
-        <ol className="space-y-1 text-sm">
-          {preferences.filter((p) => p.major.trim() !== "").map((p, i) => (
-            <li key={i}><strong>{i + 1}.</strong> {p.major} <span className="text-muted-foreground">→ {uniName(p.university_id)}</span></li>
-          ))}
-        </ol>
-        <div className="rounded-lg bg-subtle p-3 text-sm">
-          <p>Reference <strong>{draft.application_code}</strong></p>
-          <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached · subject to CAS approval.</p>
-        </div>
-      </PortalCard>
-
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border bg-card p-4 shadow-sm">
-        <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />
-        <span className="flex items-start gap-2 text-sm text-muted-foreground">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-cas-navy" />
-          I declare that the information provided is true and correct, and I authorise CAS to process this scholarship application on my behalf.
-        </span>
-      </label>
     </div>
   )
 }

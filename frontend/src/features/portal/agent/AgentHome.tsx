@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { GraduationCap, Wallet } from "lucide-react"
+import { Award, GraduationCap, Plus, Wallet } from "lucide-react"
 import { Link } from "react-router-dom"
 
+import { Button } from "@/components/ui/button"
 import { getAgentCommissions, getAgentStudents } from "@/features/portal/api"
 import { ListSkeleton, PageTitle, PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
@@ -19,6 +20,13 @@ export default function AgentHome() {
   return (
     <div className="space-y-4">
       <PageTitle title={`Hello, ${profile?.name?.split(" ")[0] ?? "there"}`} subtitle="Your CAS partner portal" />
+
+      <Button asChild className="h-12 w-full text-base">
+        <Link to="/portal/agent/apply"><Plus className="size-5" /> Apply for a student</Link>
+      </Button>
+      <Button asChild variant="secondary" className="h-11 w-full">
+        <Link to="/portal/agent/apply-scholarship"><Award className="size-4" /> Government scholarship application</Link>
+      </Button>
 
       <div className="grid grid-cols-2 gap-3">
         <Link to="/portal/agent/students">
