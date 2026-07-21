@@ -1,7 +1,7 @@
 import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, Plane, Sparkles, Users } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const STEPS = [
@@ -27,15 +27,11 @@ export default function SiteAbout() {
 
   return (
     <div className="space-y-12">
-      {/* Intro */}
-      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <h1 className="max-w-2xl text-3xl font-bold sm:text-4xl">About CAS</h1>
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
-          CAS — Consultancy for Abroad Study — helps students from around the world study at Ministry of
-          Education–listed universities across China. We handle the whole journey: choosing the right program,
-          applying, securing scholarships, and supporting you through visa and arrival.
-        </p>
-      </section>
+      <SitePageHeader
+        eyebrow="Our story"
+        title="About CAS"
+        subtitle="CAS — Consultancy for Abroad Study — helps students from around the world study at Ministry of Education–listed universities across China. We handle the whole journey: choosing the right program, applying, securing scholarships, and supporting you through visa and arrival."
+      />
 
       {/* Stats */}
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">

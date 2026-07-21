@@ -76,7 +76,7 @@ export default function SiteHelpDock() {
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
                 <div className="absolute bottom-full left-1/2 z-50 hidden w-[24rem] -translate-x-1/2 pb-3 group-hover:block">
-                  <div className="relative rounded-lg bg-white p-4 text-left text-cas-navy shadow-2xl">
+                  <div className="relative rounded-sm bg-white p-4 text-left text-cas-navy shadow-2xl">
                     <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
                     <div className="flex items-start gap-4">
                       <div className="flex shrink-0 flex-col items-center gap-1.5">

@@ -1,7 +1,7 @@
 import { ArrowRight, Award, Banknote, Building2, Handshake, LineChart, Megaphone, type LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const BENEFITS: { icon: LucideIcon; title: string; body: string }[] = [
@@ -28,19 +28,16 @@ export default function SitePartner() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
-          For agencies &amp; recruiters
-        </span>
-        <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Partner with CAS</h1>
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
-          Give your students access to China's top universities through an authorized agent — with a live
-          partner portal, competitive commissions and a team that supports you at every step.
-        </p>
-        <Link to="/site/contact" className="mt-6 inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
-          Become a partner <ArrowRight className="size-4" />
-        </Link>
-      </section>
+      <SitePageHeader
+        eyebrow="For agencies & recruiters"
+        title="Partner with CAS"
+        subtitle="Give your students access to China's top universities through an authorized agent — with a live partner portal, competitive commissions and a team that supports you at every step."
+        action={
+          <Link to="/site/contact" className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
+            Become a partner <ArrowRight className="size-4" />
+          </Link>
+        }
+      />
 
       <SiteSection title="Why partner with us" subtitle="One trusted channel into studying in China.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

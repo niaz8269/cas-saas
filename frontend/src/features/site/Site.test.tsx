@@ -243,7 +243,7 @@ it("renders the services, why-china and news pages", () => {
   expect(screen.getByRole("heading", { name: "Why study in China" })).toBeInTheDocument()
 
   renderWithProviders(<SiteNews />)
-  expect(screen.getByRole("heading", { name: "News & resources" })).toBeInTheDocument()
+  expect(screen.getByRole("heading", { name: "Latest from CAS" })).toBeInTheDocument()
 })
 
 it("renders the contact page with details and the enquiry form", () => {

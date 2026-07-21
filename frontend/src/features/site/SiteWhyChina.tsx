@@ -1,7 +1,7 @@
 import { ArrowRight, Award, Building2, Coins, GraduationCap, Globe2, Landmark, Sparkles, type LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const REASONS: { icon: LucideIcon; title: string; body: string }[] = [
@@ -22,16 +22,11 @@ export default function SiteWhyChina() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
-          <Sparkles className="size-3.5" /> A world-class education
-        </span>
-        <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Why study in China</h1>
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
-          China has become one of the world's leading destinations for international students — combining top universities,
-          affordable costs, generous scholarships and real opportunity.
-        </p>
-      </section>
+      <SitePageHeader
+        eyebrow={<><Sparkles className="size-3.5" /> A world-class education</>}
+        title="Why study in China"
+        subtitle="China has become one of the world's leading destinations for international students — combining top universities, affordable costs, generous scholarships and real opportunity."
+      />
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[["500K+", "International students"], ["English", "Taught programs"], ["Scholarships", "Widely available"], ["Global", "Degree recognition"]].map(([v, l]) => (

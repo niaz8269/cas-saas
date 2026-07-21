@@ -1,7 +1,7 @@
 import { ArrowRight, BadgeCheck, ReceiptText, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const PRINCIPLES: { icon: LucideIcon; title: string; body: string }[] = [
@@ -34,16 +34,11 @@ export default function SitePricing() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
-          Clear &amp; student-first
-        </span>
-        <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Simple, transparent pricing</h1>
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
-          Every student's plan is different, so we start free and quote clearly for anything beyond that —
-          you'll always know the cost before you commit.
-        </p>
-      </section>
+      <SitePageHeader
+        eyebrow="Clear & student-first"
+        title="Simple, transparent pricing"
+        subtitle="Every student's plan is different, so we start free and quote clearly for anything beyond that — you'll always know the cost before you commit."
+      />
 
       <SiteSection title="How our pricing works">
         <div className="grid gap-4 sm:grid-cols-3">

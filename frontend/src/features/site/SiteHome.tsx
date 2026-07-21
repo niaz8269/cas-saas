@@ -367,7 +367,7 @@ export default function SiteHome() {
       </SiteSection>
 
       {/* ── Final search / CTA ───────────────────────────────── */}
-      <section className="rounded-3xl border bg-gradient-to-r from-cas-red-50 to-card p-8 text-center sm:p-12">
+      <section className="rounded-sm border bg-gradient-to-r from-cas-red-50 to-card p-8 text-center sm:p-12">
         <Building2 className="mx-auto size-9 text-cas-navy" />
         <h2 className="mt-3 font-sans text-2xl font-bold text-cas-navy sm:text-3xl">Search universities and programs</h2>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Find your program in minutes — or book a free consultation and we'll guide you.</p>

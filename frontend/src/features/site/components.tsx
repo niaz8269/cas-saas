@@ -97,25 +97,29 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
   )
 }
 
-/** Premium page-header band used at the top of the site's data pages. */
+/**
+ * The one page-header band used at the top of every site page (listing and
+ * content) — a prominent navy banner with a red eyebrow pill, so the whole
+ * site shares a single header pattern.
+ */
 export function SitePageHeader({ eyebrow, title, subtitle, action }: {
-  eyebrow?: string
+  eyebrow?: ReactNode
   title: string
   subtitle?: string
   action?: ReactNode
 }) {
   return (
-    <div className="relative overflow-hidden rounded-sm border bg-gradient-to-br from-cas-navy-50 via-card to-card p-6 shadow-sm sm:p-8">
-      <div className="pointer-events-none absolute -top-12 -right-12 size-44 rounded-full bg-cas-red/10 blur-2xl" />
-      <div className="relative flex flex-wrap items-end justify-between gap-4">
+    <section className="relative overflow-hidden rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
+      <div className="pointer-events-none absolute -top-16 -right-12 size-56 rounded-full bg-cas-red/20 blur-3xl" />
+      <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
-          {eyebrow && <p className="text-xs font-bold tracking-wider text-cas-red-600 uppercase">{eyebrow}</p>}
-          <h1 className="mt-1 text-2xl font-bold text-cas-navy sm:text-3xl">{title}</h1>
-          {subtitle && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
+          {eyebrow && <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">{eyebrow}</span>}
+          <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">{title}</h1>
+          {subtitle && <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">{subtitle}</p>}
         </div>
         {action}
       </div>
-    </div>
+    </section>
   )
 }
 

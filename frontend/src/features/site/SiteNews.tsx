@@ -2,7 +2,7 @@ import { ArrowRight, Award, CalendarDays, FileText, School, Stamp, Stethoscope, 
 import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const GUIDES: { icon: LucideIcon; title: string; body: string; to: string }[] = [
@@ -44,12 +44,11 @@ export default function SiteNews() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">News &amp; resources</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Intake deadlines and scholarship openings, plus guides to help you plan your studies in China.
-        </p>
-      </div>
+      <SitePageHeader
+        eyebrow="News & resources"
+        title="Latest from CAS"
+        subtitle="Intake deadlines and scholarship openings, plus guides to help you plan your studies in China."
+      />
 
       <SiteSection title="Latest updates">
         <div className="grid gap-4 lg:grid-cols-3">

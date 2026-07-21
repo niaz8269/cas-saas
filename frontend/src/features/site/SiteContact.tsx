@@ -1,5 +1,6 @@
 import { Globe, Mail, MapPin, MessageCircle } from "lucide-react"
 
+import { SitePageHeader } from "@/features/site/components"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { useSeo } from "@/lib/seo"
 
@@ -17,12 +18,11 @@ export default function SiteContact() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-cas-navy sm:text-3xl">Get in touch</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Request a free consultation and a CAS counselor will guide you through your options.
-        </p>
-      </div>
+      <SitePageHeader
+        eyebrow="We're here to help"
+        title="Get in touch"
+        subtitle="Request a free consultation and a CAS counselor will guide you through your options."
+      />
 
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Contact details */}

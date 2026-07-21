@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { SiteSection } from "@/features/site/components"
+import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 const WHY: { icon: LucideIcon; title: string; body: string }[] = [
@@ -45,15 +45,11 @@ export default function SiteServices() {
 
   return (
     <div className="space-y-12">
-      <section className="rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">
-          End-to-end support
-        </span>
-        <h1 className="mt-4 max-w-2xl text-3xl font-bold sm:text-4xl">Our services</h1>
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
-          From your first enquiry to your first day of class — and beyond — CAS supports you at every step of studying in China.
-        </p>
-      </section>
+      <SitePageHeader
+        eyebrow="End-to-end support"
+        title="Our services"
+        subtitle="From your first enquiry to your first day of class — and beyond — CAS supports you at every step of studying in China."
+      />
 
       <SiteSection title="What we do for you" subtitle="One team handling the whole journey, so nothing falls through the cracks.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
