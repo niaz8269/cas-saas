@@ -10,6 +10,7 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -19,27 +20,29 @@ import { cn } from "@/lib/utils"
 
 interface PortalNavItem {
   to: string
-  label: string
+  labelKey: string
   icon: LucideIcon
   end?: boolean
 }
 
+// Bottom-nav labels are i18n keys resolved at render (5-language support).
 const AGENT_NAV: PortalNavItem[] = [
-  { to: "/portal/agent", label: "Home", icon: LayoutGrid, end: true },
-  { to: "/portal/agent/students", label: "Students", icon: GraduationCap },
-  { to: "/portal/agent/apply", label: "Apply", icon: FilePlus2 },
-  { to: "/portal/agent/commissions", label: "Earnings", icon: Wallet },
+  { to: "/portal/agent", labelKey: "portal.navHome", icon: LayoutGrid, end: true },
+  { to: "/portal/agent/students", labelKey: "portal.navStudents", icon: GraduationCap },
+  { to: "/portal/agent/apply", labelKey: "portal.navApply", icon: FilePlus2 },
+  { to: "/portal/agent/commissions", labelKey: "portal.navEarnings", icon: Wallet },
 ]
 
 const STUDENT_NAV: PortalNavItem[] = [
-  { to: "/portal/student", label: "Home", icon: LayoutGrid, end: true },
-  { to: "/portal/student/applications", label: "Apps", icon: FileText },
-  { to: "/portal/student/visa", label: "Visa", icon: Plane },
-  { to: "/portal/student/invoices", label: "Fees", icon: Receipt },
-  { to: "/portal/student/documents", label: "Docs", icon: FileText },
+  { to: "/portal/student", labelKey: "portal.navHome", icon: LayoutGrid, end: true },
+  { to: "/portal/student/applications", labelKey: "portal.navApps", icon: FileText },
+  { to: "/portal/student/visa", labelKey: "portal.navVisa", icon: Plane },
+  { to: "/portal/student/invoices", labelKey: "portal.navFees", icon: Receipt },
+  { to: "/portal/student/documents", labelKey: "portal.navDocs", icon: FileText },
 ]
 
 export default function PortalShell() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const kind = usePortalAuthStore((s) => s.kind)
   const profile = usePortalAuthStore((s) => s.profile)
@@ -68,7 +71,7 @@ export default function PortalShell() {
           <button
             type="button"
             onClick={() => logoutMutation.mutate()}
-            aria-label="Sign out"
+            aria-label={t("portal.signOut")}
             className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-subtle hover:text-foreground"
           >
             <LogOut className="size-5" />
@@ -97,7 +100,7 @@ export default function PortalShell() {
                 {({ isActive }) => (
                   <>
                     <item.icon className={cn("size-5", isActive && "stroke-[2.5]")} aria-hidden="true" />
-                    {item.label}
+                    {t(item.labelKey)}
                   </>
                 )}
               </NavLink>

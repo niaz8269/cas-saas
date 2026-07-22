@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Download, Receipt } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { getStudentInvoicePdf, getStudentInvoices } from "@/features/portal/api"
@@ -14,6 +15,7 @@ import {
 import { INVOICE_BADGE, money } from "@/features/portal/status"
 
 export default function StudentInvoices() {
+  const { t } = useTranslation()
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["student", "invoices"],
     queryFn: getStudentInvoices,
@@ -30,13 +32,13 @@ export default function StudentInvoices() {
 
   return (
     <div>
-      <PageTitle title="Fees & receipts" subtitle="Your tuition invoices and payments" />
+      <PageTitle title={t("studentPortal.invoices.title")} subtitle={t("studentPortal.invoices.subtitle")} />
 
       {isPending && <ListSkeleton rows={2} />}
       {isError && <LoadError onRetry={refetch} />}
 
       {data && data.data.length === 0 && (
-        <EmptyState icon={<Receipt className="mx-auto size-8" />} title="No invoices yet" />
+        <EmptyState icon={<Receipt className="mx-auto size-8" />} title={t("studentPortal.invoices.emptyTitle")} />
       )}
 
       <div className="space-y-3">
@@ -54,19 +56,19 @@ export default function StudentInvoices() {
               </div>
 
               <div className="mt-3 flex justify-between border-t pt-3 text-sm">
-                <span className="text-muted-foreground">Paid</span>
+                <span className="text-muted-foreground">{t("studentPortal.invoices.paid")}</span>
                 <span className="tabular-nums">{money(inv.amount_paid, inv.currency)}</span>
               </div>
               {outstanding > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Outstanding</span>
+                  <span className="text-muted-foreground">{t("studentPortal.invoices.outstanding")}</span>
                   <span className="font-medium tabular-nums text-amber-700">{money(outstanding, inv.currency)}</span>
                 </div>
               )}
 
               {inv.receipts && inv.receipts.length > 0 && (
                 <div className="mt-3 border-t pt-3">
-                  <p className="mb-1 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">Receipts</p>
+                  <p className="mb-1 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{t("studentPortal.invoices.receipts")}</p>
                   {inv.receipts.map((r) => (
                     <div key={r.payment_no} className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
@@ -86,7 +88,7 @@ export default function StudentInvoices() {
                 onClick={() => pdf.mutate(inv.id)}
               >
                 <Download className="size-4" />
-                {pdf.isPending && pdf.variables === inv.id ? "Preparing…" : "Download PDF"}
+                {pdf.isPending && pdf.variables === inv.id ? t("studentPortal.invoices.preparing") : t("studentPortal.invoices.downloadPdf")}
               </Button>
             </PortalCard>
           )

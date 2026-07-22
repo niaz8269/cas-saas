@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { Check, Plane } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { ApiError } from "@/lib/api"
 import { getStudentVisaCase } from "@/features/portal/api"
@@ -14,6 +15,7 @@ import {
 import { DOC_BADGE, VISA_BADGE } from "@/features/portal/status"
 
 export default function StudentVisa() {
+  const { t } = useTranslation()
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["student", "visa-case"],
     queryFn: getStudentVisaCase,
@@ -22,41 +24,41 @@ export default function StudentVisa() {
 
   const noCase = error instanceof ApiError && error.status === 404
 
-  if (isPending) return (<div><PageTitle title="Visa" /><ListSkeleton rows={2} /></div>)
+  if (isPending) return (<div><PageTitle title={t("studentPortal.visa.title")} /><ListSkeleton rows={2} /></div>)
 
   if (noCase) {
     return (
       <div>
-        <PageTitle title="Visa" />
-        <EmptyState icon={<Plane className="mx-auto size-8" />} title="No visa case yet"
-          hint="Your visa case opens once your admission is confirmed." />
+        <PageTitle title={t("studentPortal.visa.title")} />
+        <EmptyState icon={<Plane className="mx-auto size-8" />} title={t("studentPortal.visa.emptyTitle")}
+          hint={t("studentPortal.visa.emptyHint")} />
       </div>
     )
   }
 
-  if (isError || !data) return (<div><PageTitle title="Visa" /><LoadError onRetry={refetch} /></div>)
+  if (isError || !data) return (<div><PageTitle title={t("studentPortal.visa.title")} /><LoadError onRetry={refetch} /></div>)
 
   const visa = data.data
   const milestones = [
-    ["Appointment", visa.appointment_at],
-    ["Submitted", visa.submitted_at],
-    ["Decision", visa.decision_at],
-    ["Travel ready", visa.travel_ready_at],
+    ["studentPortal.visa.milestoneAppointment", visa.appointment_at],
+    ["studentPortal.visa.milestoneSubmitted", visa.submitted_at],
+    ["studentPortal.visa.milestoneDecision", visa.decision_at],
+    ["studentPortal.visa.milestoneTravelReady", visa.travel_ready_at],
   ] as const
 
   return (
     <div className="space-y-4">
-      <PageTitle title="Visa" subtitle={visa.application_code ?? undefined} />
+      <PageTitle title={t("studentPortal.visa.title")} subtitle={visa.application_code ?? undefined} />
 
       <PortalCard>
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium">Current status</p>
+          <p className="text-sm font-medium">{t("studentPortal.visa.currentStatus")}</p>
           <StatusBadge status={visa.status} map={VISA_BADGE} />
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          {milestones.map(([title, value]) => (
-            <div key={title} className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{title}</p>
+          {milestones.map(([labelKey, value]) => (
+            <div key={labelKey} className="rounded-lg bg-subtle p-2.5">
+              <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{t(labelKey)}</p>
               <p className="mt-0.5 text-sm font-medium tabular-nums">
                 {value ? new Date(value).toLocaleDateString() : "—"}
               </p>
@@ -66,7 +68,7 @@ export default function StudentVisa() {
       </PortalCard>
 
       <div>
-        <h2 className="mb-2 text-sm font-semibold">Document checklist</h2>
+        <h2 className="mb-2 text-sm font-semibold">{t("studentPortal.visa.documentChecklist")}</h2>
         <div className="space-y-2">
           {visa.checklist?.map((item, i) => (
             <PortalCard key={i} className="flex items-center justify-between gap-3 py-3">
@@ -74,7 +76,7 @@ export default function StudentVisa() {
                 {item.status === "verified"
                   ? <Check className="size-4 text-green-600" />
                   : <span className="size-4 rounded-full border" aria-hidden="true" />}
-                <span className="text-sm">{item.name}{item.is_required ? "" : " (optional)"}</span>
+                <span className="text-sm">{item.name}{item.is_required ? "" : t("studentPortal.visa.optionalSuffix")}</span>
               </div>
               <StatusBadge status={item.status} map={DOC_BADGE} />
             </PortalCard>

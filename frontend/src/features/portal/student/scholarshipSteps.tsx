@@ -1,5 +1,6 @@
 import { Award, Check, Plus, ShieldCheck, X } from "lucide-react"
 import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -32,6 +33,7 @@ export function ScholarshipStep(props: {
   onLevel: (l: ScholarshipLevel) => void
   onScholarship: (s: GovScholarship) => void
 }) {
+  const { t } = useTranslation()
   const { level, scholarship, scholarships, loading } = props
   const benefit: ScholarshipLevelBenefit | undefined = level && scholarship ? scholarship.benefits?.[level] : undefined
   const cur = scholarship?.currency ?? undefined
@@ -40,20 +42,20 @@ export function ScholarshipStep(props: {
   return (
     <div className="space-y-4">
       <div>
-        <p className="mb-2 text-sm font-medium">Which degree?</p>
+        <p className="mb-2 text-sm font-medium">{t("wizard.course.whichDegree")}</p>
         <div className="grid grid-cols-3 gap-2">
           {LEVELS.map((l) => (
-            <Tile key={l.value} active={level === l.value} label={l.label} hint={l.hint} onClick={() => props.onLevel(l.value)} />
+            <Tile key={l.value} active={level === l.value} label={t(l.labelKey)} hint={t(l.hintKey)} onClick={() => props.onLevel(l.value)} />
           ))}
         </div>
       </div>
 
       {level && (
         <div>
-          <p className="mb-2 text-sm font-medium">Choose a scholarship</p>
-          {loading && <p className="text-sm text-muted-foreground">Loading scholarships…</p>}
+          <p className="mb-2 text-sm font-medium">{t("wizard.scholarship.chooseScholarship")}</p>
+          {loading && <p className="text-sm text-muted-foreground">{t("wizard.scholarship.loadingScholarships")}</p>}
           {!loading && scholarships.length === 0 && (
-            <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">No government scholarships are open right now.</p>
+            <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">{t("wizard.scholarship.noneOpen")}</p>
           )}
           <div className="space-y-2">
             {scholarships.map((s) => (
@@ -81,24 +83,24 @@ export function ScholarshipStep(props: {
 
       {scholarship && (
         <PortalCard className="space-y-3">
-          <SectionTitle>What this scholarship covers ({LEVELS.find((l) => l.value === level)?.label})</SectionTitle>
+          <SectionTitle>{t("wizard.scholarship.coversTitle", { level: t(LEVELS.find((l) => l.value === level)?.labelKey ?? "") })}</SectionTitle>
           {scholarship.description && <p className="text-sm text-muted-foreground">{scholarship.description}</p>}
           <div className="grid grid-cols-3 gap-2 text-sm">
             <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Tuition after</p>
+              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">{t("wizard.scholarship.tuitionAfter")}</p>
               <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.tuition_after)}</p>
             </div>
             <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Hostel after</p>
+              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">{t("wizard.scholarship.hostelAfter")}</p>
               <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.hostel_after)}</p>
             </div>
             <div className="rounded-lg bg-subtle p-2.5">
-              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">Stipend / mo</p>
+              <p className="text-[11px] tracking-wider text-muted-foreground uppercase">{t("wizard.scholarship.stipendMonthly")}</p>
               <p className="mt-0.5 font-medium tabular-nums">{val(benefit?.stipend_monthly)}</p>
             </div>
           </div>
           {scholarship.universities.length > 0 && (
-            <p className="text-xs text-muted-foreground">Enrols at: {scholarship.universities.map((u) => u.name).join(", ")}</p>
+            <p className="text-xs text-muted-foreground">{t("wizard.scholarship.enrolsAt", { names: scholarship.universities.map((u) => u.name).join(", ") })}</p>
           )}
         </PortalCard>
       )}
@@ -116,32 +118,33 @@ export function PreferencesStep(props: {
   onAdd: () => void
   onRemove: (i: number) => void
 }) {
+  const { t } = useTranslation()
   const { preferences, majors, universities } = props
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">Pick up to 3 majors (and, optionally, a preferred university). Subject to CAS approval.</p>
+      <p className="text-sm text-muted-foreground">{t("wizard.preferences.intro")}</p>
       {preferences.map((p, i) => (
         <PortalCard key={i} className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Preference {i + 1}</span>
+            <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("wizard.preferences.preferenceN", { n: i + 1 })}</span>
             {preferences.length > 1 && (
-              <button type="button" onClick={() => props.onRemove(i)} aria-label="Remove preference">
+              <button type="button" onClick={() => props.onRemove(i)} aria-label={t("wizard.preferences.removePreference")}>
                 <X className="size-4 text-muted-foreground" />
               </button>
             )}
           </div>
-          <Field label="Major">
+          <Field label={t("wizard.preferences.major")}>
             <Select value={p.major} onValueChange={(v) => props.onChange(i, "major", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Choose a major" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.preferences.chooseMajor")} /></SelectTrigger>
               <SelectContent>
                 {majors.map((m) => <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Preferred university (optional)">
+          <Field label={t("wizard.preferences.preferredUniversity")}>
             <Select value={p.university_id ? String(p.university_id) : ""} onValueChange={(v) => props.onChange(i, "university_id", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Any university" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.preferences.anyUniversity")} /></SelectTrigger>
               <SelectContent>
                 {universities.map((u) => <SelectItem key={u.id} value={String(u.id)}>{u.name}</SelectItem>)}
               </SelectContent>
@@ -151,7 +154,7 @@ export function PreferencesStep(props: {
       ))}
       {preferences.length < 3 && (
         <Button type="button" variant="secondary" className="w-full" onClick={props.onAdd}>
-          <Plus className="size-4" /> Add preference
+          <Plus className="size-4" /> {t("wizard.preferences.addPreference")}
         </Button>
       )}
     </div>
@@ -170,27 +173,28 @@ export function ScholarshipReviewStep(props: {
   /** Overrides the default (student self-apply) declaration wording. */
   declaration?: ReactNode
 }) {
+  const { t } = useTranslation()
   const { scholarship, level, preferences, draft, agreed, onAgreed, declaration } = props
   const uniName = (id: number | null | undefined) =>
-    id ? (scholarship?.universities.find((u) => u.id === Number(id))?.name ?? "—") : "Any university"
+    id ? (scholarship?.universities.find((u) => u.id === Number(id))?.name ?? "—") : t("wizard.preferences.anyUniversity")
 
   return (
     <div className="space-y-4">
       <PortalCard className="space-y-3">
-        <SectionTitle>Summary</SectionTitle>
+        <SectionTitle>{t("wizard.review.summary")}</SectionTitle>
         <div className="flex items-center gap-2 text-cas-navy">
           <Award className="size-5" />
           <p className="font-medium">{scholarship?.name}</p>
         </div>
-        <p className="text-sm text-muted-foreground capitalize">{LEVELS.find((l) => l.value === level)?.label}</p>
+        <p className="text-sm text-muted-foreground capitalize">{t(LEVELS.find((l) => l.value === level)?.labelKey ?? "")}</p>
         <ol className="space-y-1 text-sm">
           {preferences.filter((p) => p.major.trim() !== "").map((p, i) => (
             <li key={i}><strong>{i + 1}.</strong> {p.major} <span className="text-muted-foreground">→ {uniName(p.university_id)}</span></li>
           ))}
         </ol>
         <div className="rounded-lg bg-subtle p-3 text-sm">
-          <p>Reference <strong>{draft.application_code}</strong></p>
-          <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached · subject to CAS approval.</p>
+          <p>{t("wizard.review.reference")} <strong>{draft.application_code}</strong></p>
+          <p className="mt-1 text-muted-foreground">{t("wizard.scholarship.documentsAttachedApproval", { count: draft.required_documents.length })}</p>
         </div>
       </PortalCard>
 
@@ -198,7 +202,7 @@ export function ScholarshipReviewStep(props: {
         <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />
         <span className="flex items-start gap-2 text-sm text-muted-foreground">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-cas-navy" />
-          {declaration ?? "I declare that the information provided is true and correct, and I authorise CAS to process this scholarship application on my behalf."}
+          {declaration ?? t("wizard.scholarship.declaration")}
         </span>
       </label>
     </div>

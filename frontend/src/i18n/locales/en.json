@@ -922,5 +922,393 @@
       "min": "Min",
       "sec": "Sec"
     }
+  },
+  "portal": {
+    "navHome": "Home",
+    "navStudents": "Students",
+    "navApply": "Apply",
+    "navEarnings": "Earnings",
+    "navApps": "Apps",
+    "navVisa": "Visa",
+    "navFees": "Fees",
+    "navDocs": "Docs",
+    "signOut": "Sign out",
+    "loginTitle": "Portal sign in",
+    "loginSubtitle": "Access your CAS records",
+    "portalTypeAria": "Portal type",
+    "roleStudent": "Student",
+    "roleAgent": "Agent",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "copyright": "© {{year}} CAS — Consultancy for Abroad Study",
+    "errorEmailRequired": "Email is required",
+    "errorEmailInvalid": "Enter a valid email address",
+    "errorPasswordRequired": "Password is required",
+    "errorServerUnreachable": "Unable to reach the server. Please try again.",
+    "loadErrorMessage": "Something went wrong.",
+    "retry": "Try again"
+  },
+  "portalStatus": {
+    "draft": "Draft",
+    "underReview": "Under review",
+    "documentsPending": "Documents pending",
+    "submitted": "Submitted",
+    "offerReceived": "Offer received",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "withdrawn": "Withdrawn",
+    "deferred": "Deferred",
+    "notStarted": "Not started",
+    "documentsCollection": "Documents collection",
+    "appointmentBooked": "Appointment booked",
+    "approved": "Approved",
+    "travelReady": "Travel ready",
+    "issued": "Issued",
+    "partiallyPaid": "Partially paid",
+    "paid": "Paid",
+    "cancelled": "Cancelled",
+    "overdue": "Overdue",
+    "active": "Active",
+    "inProcess": "In process",
+    "enrolled": "Enrolled",
+    "arrived": "Arrived",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "verified": "Verified",
+    "received": "Received",
+    "payable": "Payable"
+  },
+  "studentPortal": {
+    "home": {
+      "greeting": "Hi, {{name}}",
+      "greetingFallbackName": "there",
+      "studentCode": "Student {{code}}",
+      "startNewApplication": "Start a new application",
+      "applyScholarship": "Apply for a Government Scholarship",
+      "latestApplication": "Latest application",
+      "applications": "Applications",
+      "outstandingFees": "Outstanding fees",
+      "visaStatus": "Visa status",
+      "uploadDocs": "Upload docs"
+    },
+    "applications": {
+      "title": "My applications",
+      "subtitle": "Track each application's progress",
+      "startNewApplication": "Start a new application",
+      "emptyTitle": "No applications yet",
+      "offerReceived": "Offer received",
+      "offerReference": " · {{reference}}",
+      "offerValidTo": " · valid to {{date}}"
+    },
+    "documents": {
+      "title": "Documents",
+      "subtitle": "Upload and review your documents",
+      "addDocument": "Add a document",
+      "documentTypeAria": "Document type",
+      "choosePlaceholder": "Choose a document type",
+      "uploading": "Uploading…",
+      "chooseUpload": "Choose file & upload",
+      "uploadFailed": "Upload failed. Please try again.",
+      "fileTooLarge": "Files may not exceed 25 MB.",
+      "emptyTitle": "No documents yet",
+      "emptyHint": "Upload your passport, transcripts and more above.",
+      "documentFallback": "Document"
+    },
+    "invoices": {
+      "title": "Fees & receipts",
+      "subtitle": "Your tuition invoices and payments",
+      "emptyTitle": "No invoices yet",
+      "paid": "Paid",
+      "outstanding": "Outstanding",
+      "receipts": "Receipts",
+      "preparing": "Preparing…",
+      "downloadPdf": "Download PDF"
+    },
+    "visa": {
+      "title": "Visa",
+      "emptyTitle": "No visa case yet",
+      "emptyHint": "Your visa case opens once your admission is confirmed.",
+      "currentStatus": "Current status",
+      "milestoneAppointment": "Appointment",
+      "milestoneSubmitted": "Submitted",
+      "milestoneDecision": "Decision",
+      "milestoneTravelReady": "Travel ready",
+      "documentChecklist": "Document checklist",
+      "optionalSuffix": " (optional)"
+    }
+  },
+  "agentPortal": {
+    "home": {
+      "greeting": "Hello, {{name}}",
+      "greetingFallback": "there",
+      "subtitle": "Your CAS partner portal",
+      "applyForStudent": "Apply for a student",
+      "governmentScholarship": "Government scholarship application",
+      "students": "Students",
+      "awaitingPayout": "Awaiting payout",
+      "earningsToDate": "Earnings to date",
+      "paidAmount": "{{amount}} paid",
+      "stillToCome": "{{amount}} still to come",
+      "recentStudents": "Recent students",
+      "appCount_one": "{{count}} app",
+      "appCount_other": "{{count}} apps",
+      "noStudentsYet": "No students yet."
+    },
+    "students": {
+      "title": "My students",
+      "subtitle": "Students you have referred to CAS",
+      "newApplication": "New application",
+      "emptyTitle": "No students yet",
+      "emptyHint": "Students you submit will appear here.",
+      "appCount_one": "{{count}} app",
+      "appCount_other": "{{count}} apps",
+      "apply": "Apply",
+      "paginationRange": "{{from}}–{{to}} of {{total}}",
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "commissions": {
+      "title": "My earnings",
+      "subtitle": "Your commission share on CAS placements",
+      "awaitingPayout": "Awaiting payout",
+      "paidToDate": "Paid to date",
+      "preparing": "Preparing…",
+      "downloadStatement": "Download statement (PDF)",
+      "emptyTitle": "No earnings yet",
+      "emptyHint": "Your share appears once a placement's commission is received."
+    },
+    "picker": {
+      "prompt": "Choose the student you are applying for.",
+      "searchPlaceholder": "Search by name or student code",
+      "emptyMatchTitle": "No matching students",
+      "emptyTitle": "No students yet",
+      "emptyMatchHint": "Try a different name or code.",
+      "emptyHint": "Students you refer to CAS will appear here.",
+      "appCount_one": "{{count}} app",
+      "appCount_other": "{{count}} apps",
+      "paginationRange": "{{from}}–{{to}} of {{total}}",
+      "prev": "Prev",
+      "next": "Next"
+    }
+  },
+  "wizard": {
+    "brand": {
+      "studyInChina": "CAS · Study in China",
+      "partnerPortal": "CAS · Partner portal"
+    },
+    "applyTitle": "Application form",
+    "scholarshipTitle": "Government scholarship",
+    "agentApplyTitle": "Apply for a student",
+    "steps": {
+      "student": "Student",
+      "course": "Course",
+      "scholarship": "Scholarship",
+      "preferences": "Preferences",
+      "personal": "Personal",
+      "background": "Background",
+      "documents": "Documents",
+      "review": "Review"
+    },
+    "buttons": {
+      "back": "Back",
+      "continue": "Continue",
+      "saveAddDocuments": "Save & add documents",
+      "reviewApplication": "Review application",
+      "uploadAllRequired": "Upload all required documents",
+      "submitApplication": "Submit application"
+    },
+    "common": {
+      "select": "Select"
+    },
+    "errors": {
+      "couldNotStartYours": "Could not start your application.",
+      "couldNotStart": "Could not start the application.",
+      "couldNotSubmit": "Could not submit. Please try again."
+    },
+    "degrees": {
+      "mbbs": {
+        "label": "MBBS",
+        "hint": "Bachelor of Medicine"
+      },
+      "bds": {
+        "label": "BDS",
+        "hint": "Bachelor of Dental Surgery"
+      },
+      "bs": {
+        "label": "Bachelor (BS)",
+        "hint": "Undergraduate degree"
+      },
+      "master": {
+        "label": "Master",
+        "hint": "Postgraduate degree"
+      },
+      "phd": {
+        "label": "PhD",
+        "hint": "Doctoral degree"
+      },
+      "diploma": {
+        "label": "Diploma",
+        "hint": "Short qualification"
+      }
+    },
+    "funding": {
+      "self": {
+        "label": "Self-funded",
+        "hint": "Pay tuition yourself"
+      },
+      "scholarship": {
+        "label": "Scholarship",
+        "hint": "Full scholarship"
+      },
+      "partial": {
+        "label": "Partial scholarship",
+        "hint": "Partial support"
+      }
+    },
+    "levels": {
+      "bachelor": {
+        "label": "Bachelor / BS",
+        "hint": "Undergraduate"
+      },
+      "master": {
+        "label": "Master",
+        "hint": "Postgraduate"
+      },
+      "phd": {
+        "label": "PhD",
+        "hint": "Doctoral"
+      }
+    },
+    "profile": {
+      "personalDetails": "Personal details",
+      "dateOfBirth": "Date of birth",
+      "placeOfBirth": "Place of birth",
+      "nationality": "Nationality",
+      "selectCountry": "Select country",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "maritalStatus": "Marital status",
+      "single": "Single",
+      "married": "Married",
+      "phone": "Phone",
+      "religion": "Religion (optional)",
+      "chineseName": "Chinese name (optional)",
+      "nativeLanguage": "Native language (optional)",
+      "contact": "Contact",
+      "alternateEmail": "Alternate email (optional)",
+      "wechatId": "WeChat ID (optional)",
+      "skypeId": "Skype ID (optional)",
+      "passport": "Passport",
+      "passportNo": "Passport no.",
+      "issueDate": "Issue date",
+      "expiryDate": "Expiry date",
+      "englishProficiency": "English proficiency",
+      "testTaken": "Test taken",
+      "ielts": "IELTS",
+      "toefl": "TOEFL",
+      "pteAcademic": "PTE Academic",
+      "duolingo": "Duolingo",
+      "noneNotTaken": "None / not taken",
+      "overallScore": "Overall score",
+      "scoreExample": "e.g. 6.5",
+      "testDate": "Test date",
+      "address": "Address",
+      "permanentAddress": "Permanent address",
+      "currentAddress": "Current address",
+      "city": "City",
+      "postalCode": "Postal code"
+    },
+    "background": {
+      "family": "Family",
+      "remove": "Remove",
+      "name": "Name",
+      "occupation": "Occupation",
+      "phone": "Phone",
+      "relation": "Relation",
+      "addGuardian": "Add guardian",
+      "emergencyContact": "Emergency contact",
+      "emergencyHint": "Someone we can reach in an emergency (kept confidential).",
+      "fullName": "Full name",
+      "email": "Email",
+      "address": "Address",
+      "mostRecentEducation": "Most recent education",
+      "degreeQualification": "Degree / qualification",
+      "degreeExample": "e.g. FSc Pre-Medical",
+      "institution": "Institution",
+      "boardUniversity": "Board / university",
+      "completionYear": "Completion year",
+      "grade": "Grade / %",
+      "gradeExample": "e.g. 88%",
+      "addAnother": "Add another"
+    },
+    "documents": {
+      "uploadClear": "Upload a clear",
+      "uploadEachDoc": "photo/scan of each document. Application",
+      "noDocsRequired": "No documents are required.",
+      "onlyJpg": "Only JPG images are accepted.",
+      "uploadFailed": "Upload failed. Please try again.",
+      "replace": "Replace",
+      "upload": "Upload"
+    },
+    "customFields": {
+      "additionalQuestions": "Additional questions"
+    },
+    "course": {
+      "whichDegree": "Which degree?",
+      "howFund": "How will you fund it?",
+      "checkingOptions": "Checking options…",
+      "noScholarshipsForDegree": "No scholarships are currently offered for this degree — self-funded only.",
+      "availablePrograms": "Available programs",
+      "findingPrograms": "Finding programs…",
+      "couldNotLoadPrograms": "Could not load programs. Go back and try again.",
+      "noProgramsMatch": "No programs match this combination yet. Try a different degree or funding option.",
+      "durationMonths": "{{months}} months",
+      "tuitionPerYear": "Tuition {{amount}}/yr",
+      "hostelPerYear": "Hostel {{amount}}/yr",
+      "moeListed": "MoE-listed",
+      "serviceFee": "CAS service fee: {{amount}}",
+      "intake": "Intake",
+      "chooseIntake": "Choose an intake (optional)",
+      "applyBy": "apply by {{date}}",
+      "scholarship": "Scholarship",
+      "chooseScholarship": "Choose a scholarship",
+      "noScholarshipsListed": "No scholarships listed for this university."
+    },
+    "review": {
+      "summary": "Summary",
+      "reference": "Reference",
+      "serviceFeeLabel": "CAS service fee:",
+      "documentsAttached": "{{count}} document(s) attached.",
+      "declaration": "I declare that the information provided is true and correct to the best of my knowledge, and I authorise CAS to process this application for admission and visa purposes.",
+      "agentDeclaration": "I confirm {{name}} has authorised CAS to process this application on their behalf, and that the information provided is true and correct to the best of my knowledge.",
+      "theStudent": "the student"
+    },
+    "scholarship": {
+      "chooseScholarship": "Choose a scholarship",
+      "loadingScholarships": "Loading scholarships…",
+      "noneOpen": "No government scholarships are open right now.",
+      "coversTitle": "What this scholarship covers ({{level}})",
+      "tuitionAfter": "Tuition after",
+      "hostelAfter": "Hostel after",
+      "stipendMonthly": "Stipend / mo",
+      "enrolsAt": "Enrols at: {{names}}",
+      "documentsAttachedApproval": "{{count}} document(s) attached · subject to CAS approval.",
+      "declaration": "I declare that the information provided is true and correct, and I authorise CAS to process this scholarship application on my behalf.",
+      "agentDeclaration": "I confirm {{name}} has authorised CAS to process this government-scholarship application on their behalf, and that the information provided is true and correct."
+    },
+    "preferences": {
+      "intro": "Pick up to 3 majors (and, optionally, a preferred university). Subject to CAS approval.",
+      "preferenceN": "Preference {{n}}",
+      "removePreference": "Remove preference",
+      "major": "Major",
+      "chooseMajor": "Choose a major",
+      "preferredUniversity": "Preferred university (optional)",
+      "anyUniversity": "Any university",
+      "addPreference": "Add preference"
+    }
   }
 }

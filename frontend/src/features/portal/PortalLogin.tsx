@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
@@ -14,14 +15,10 @@ import { ApiError } from "@/lib/api"
 import { usePortalAuthStore, type PortalKind } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
 
-const schema = z.object({
-  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-})
-
-type Values = z.infer<typeof schema>
+type Values = { email: string; password: string }
 
 export default function PortalLogin() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const token = usePortalAuthStore((s) => s.token)
   const kindInStore = usePortalAuthStore((s) => s.kind)
@@ -31,6 +28,15 @@ export default function PortalLogin() {
   useEffect(() => {
     if (token && kindInStore) navigate(`/portal/${kindInStore}`, { replace: true })
   }, [token, kindInStore, navigate])
+
+  const schema = useMemo(
+    () =>
+      z.object({
+        email: z.string().min(1, t("portal.errorEmailRequired")).email(t("portal.errorEmailInvalid")),
+        password: z.string().min(1, t("portal.errorPasswordRequired")),
+      }),
+    [t],
+  )
 
   const {
     register,
@@ -65,7 +71,7 @@ export default function PortalLogin() {
         type: "server",
         message: error instanceof ApiError && error.status === 403
           ? error.message
-          : "Unable to reach the server. Please try again.",
+          : t("portal.errorServerUnreachable"),
       })
     },
   })
@@ -76,11 +82,11 @@ export default function PortalLogin() {
         <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto mb-8 h-14 w-auto" />
 
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h1 className="text-lg font-semibold text-cas-navy">Portal sign in</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Access your CAS records</p>
+          <h1 className="text-lg font-semibold text-cas-navy">{t("portal.loginTitle")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("portal.loginSubtitle")}</p>
 
           {/* Audience toggle */}
-          <div role="tablist" aria-label="Portal type" className="mt-4 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
+          <div role="tablist" aria-label={t("portal.portalTypeAria")} className="mt-4 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
             {(["student", "agent"] as const).map((k) => (
               <button
                 key={k}
@@ -93,7 +99,7 @@ export default function PortalLogin() {
                   kind === k ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground",
                 )}
               >
-                {k}
+                {t(k === "student" ? "portal.roleStudent" : "portal.roleAgent")}
               </button>
             ))}
           </div>
@@ -106,27 +112,27 @@ export default function PortalLogin() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("portal.email")}</Label>
               <Input id="email" type="email" autoComplete="email" inputMode="email"
                 aria-invalid={errors.email ? true : undefined} {...register("email")} />
               {errors.email && <p role="alert" className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("portal.password")}</Label>
               <Input id="password" type="password" autoComplete="current-password"
                 aria-invalid={errors.password ? true : undefined} {...register("password")} />
               {errors.password && <p role="alert" className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
 
             <Button type="submit" className="h-11 w-full" disabled={mutation.isPending}>
-              {mutation.isPending ? "Signing in…" : "Sign in"}
+              {mutation.isPending ? t("portal.signingIn") : t("portal.signIn")}
             </Button>
           </form>
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} CAS — Consultancy for Abroad Study
+          {t("portal.copyright", { year: new Date().getFullYear() })}
         </p>
       </div>
     </main>

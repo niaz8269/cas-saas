@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { FileText, Plus } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,7 @@ import {
 import { APPLICATION_BADGE, label } from "@/features/portal/status"
 
 export default function StudentApplications() {
+  const { t } = useTranslation()
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["student", "applications"],
     queryFn: getStudentApplications,
@@ -22,17 +24,17 @@ export default function StudentApplications() {
 
   return (
     <div>
-      <PageTitle title="My applications" subtitle="Track each application's progress" />
+      <PageTitle title={t("studentPortal.applications.title")} subtitle={t("studentPortal.applications.subtitle")} />
 
       <Button asChild className="mb-4 h-11 w-full">
-        <Link to="/portal/student/apply"><Plus className="size-4" /> Start a new application</Link>
+        <Link to="/portal/student/apply"><Plus className="size-4" /> {t("studentPortal.applications.startNewApplication")}</Link>
       </Button>
 
       {isPending && <ListSkeleton rows={3} />}
       {isError && <LoadError onRetry={refetch} />}
 
       {data && data.data.length === 0 && (
-        <EmptyState icon={<FileText className="mx-auto size-8" />} title="No applications yet" />
+        <EmptyState icon={<FileText className="mx-auto size-8" />} title={t("studentPortal.applications.emptyTitle")} />
       )}
 
       <div className="space-y-3">
@@ -49,8 +51,8 @@ export default function StudentApplications() {
 
             {app.offers && app.offers.length > 0 && (
               <div className="mt-3 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
-                Offer received{app.offers[0].reference_no ? ` · ${app.offers[0].reference_no}` : ""}
-                {app.offers[0].expiry_date ? ` · valid to ${new Date(app.offers[0].expiry_date).toLocaleDateString()}` : ""}
+                {t("studentPortal.applications.offerReceived")}{app.offers[0].reference_no ? t("studentPortal.applications.offerReference", { reference: app.offers[0].reference_no }) : ""}
+                {app.offers[0].expiry_date ? t("studentPortal.applications.offerValidTo", { date: new Date(app.offers[0].expiry_date).toLocaleDateString() }) : ""}
               </div>
             )}
 

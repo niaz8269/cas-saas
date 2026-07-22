@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Download, Wallet } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { getAgentCommissions, getAgentStatementPdf } from "@/features/portal/api"
@@ -14,6 +15,7 @@ import {
 import { PAYABLE_BADGE, money } from "@/features/portal/status"
 
 export default function AgentCommissions() {
+  const { t } = useTranslation()
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["agent", "commissions", { page: 1 }],
     queryFn: () => getAgentCommissions(),
@@ -33,15 +35,15 @@ export default function AgentCommissions() {
 
   return (
     <div>
-      <PageTitle title="My earnings" subtitle="Your commission share on CAS placements" />
+      <PageTitle title={t("agentPortal.commissions.title")} subtitle={t("agentPortal.commissions.subtitle")} />
 
       <div className="mb-4 grid grid-cols-2 gap-3">
         <PortalCard>
-          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Awaiting payout</p>
+          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.commissions.awaitingPayout")}</p>
           <p className="mt-1 text-xl font-semibold tabular-nums text-cas-navy">{money(payable)}</p>
         </PortalCard>
         <PortalCard>
-          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Paid to date</p>
+          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.commissions.paidToDate")}</p>
           <p className="mt-1 text-xl font-semibold tabular-nums text-green-700">{money(paid)}</p>
         </PortalCard>
       </div>
@@ -55,7 +57,7 @@ export default function AgentCommissions() {
           onClick={() => statement.mutate()}
         >
           <Download className="size-4" />
-          {statement.isPending ? "Preparing…" : "Download statement (PDF)"}
+          {statement.isPending ? t("agentPortal.commissions.preparing") : t("agentPortal.commissions.downloadStatement")}
         </Button>
       )}
 
@@ -63,8 +65,8 @@ export default function AgentCommissions() {
       {isError && <LoadError onRetry={refetch} />}
 
       {data && data.data.length === 0 && (
-        <EmptyState icon={<Wallet className="mx-auto size-8" />} title="No earnings yet"
-          hint="Your share appears once a placement's commission is received." />
+        <EmptyState icon={<Wallet className="mx-auto size-8" />} title={t("agentPortal.commissions.emptyTitle")}
+          hint={t("agentPortal.commissions.emptyHint")} />
       )}
 
       <div className="space-y-2">

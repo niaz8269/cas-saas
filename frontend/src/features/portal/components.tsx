@@ -1,8 +1,9 @@
 import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { label } from "@/features/portal/status"
+import { label, STATUS_LABEL_KEY } from "@/features/portal/status"
 import { cn } from "@/lib/utils"
 
 export function PageTitle({ title, subtitle }: { title: string; subtitle?: string }) {
@@ -15,9 +16,11 @@ export function PageTitle({ title, subtitle }: { title: string; subtitle?: strin
 }
 
 export function StatusBadge({ status, map }: { status: string; map: Record<string, string> }) {
+  const { t } = useTranslation()
+  const key = STATUS_LABEL_KEY[status]
   return (
     <Badge variant="outline" className={cn("border-transparent capitalize", map[status] ?? "bg-muted text-muted-foreground")}>
-      {label(status)}
+      {key ? t(key) : label(status)}
     </Badge>
   )
 }
@@ -50,11 +53,12 @@ export function EmptyState({ icon, title, hint }: { icon: ReactNode; title: stri
 }
 
 export function LoadError({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation()
   return (
     <div className="rounded-xl border bg-card p-8 text-center shadow-sm">
-      <p className="text-sm text-destructive">Something went wrong.</p>
+      <p className="text-sm text-destructive">{t("portal.loadErrorMessage")}</p>
       <button type="button" onClick={onRetry} className="mt-3 text-sm font-medium text-cas-navy underline">
-        Try again
+        {t("portal.retry")}
       </button>
     </div>
   )

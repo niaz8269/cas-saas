@@ -1,5 +1,41 @@
 export const label = (status: string) => status.replace(/_/g, " ")
 
+/**
+ * Status code → i18n key (portalStatus namespace). The badge display labels are
+ * translated at the render site — see `StatusBadge` in components.tsx — while the
+ * status CODE values below remain unchanged. Unknown codes fall back to `label()`.
+ */
+export const STATUS_LABEL_KEY: Record<string, string> = {
+  draft: "portalStatus.draft",
+  under_review: "portalStatus.underReview",
+  documents_pending: "portalStatus.documentsPending",
+  submitted: "portalStatus.submitted",
+  offer_received: "portalStatus.offerReceived",
+  accepted: "portalStatus.accepted",
+  rejected: "portalStatus.rejected",
+  withdrawn: "portalStatus.withdrawn",
+  deferred: "portalStatus.deferred",
+  not_started: "portalStatus.notStarted",
+  documents_collection: "portalStatus.documentsCollection",
+  appointment_booked: "portalStatus.appointmentBooked",
+  approved: "portalStatus.approved",
+  travel_ready: "portalStatus.travelReady",
+  issued: "portalStatus.issued",
+  partially_paid: "portalStatus.partiallyPaid",
+  paid: "portalStatus.paid",
+  cancelled: "portalStatus.cancelled",
+  overdue: "portalStatus.overdue",
+  active: "portalStatus.active",
+  in_process: "portalStatus.inProcess",
+  enrolled: "portalStatus.enrolled",
+  arrived: "portalStatus.arrived",
+  inactive: "portalStatus.inactive",
+  pending: "portalStatus.pending",
+  verified: "portalStatus.verified",
+  received: "portalStatus.received",
+  payable: "portalStatus.payable",
+}
+
 export const money = (value: string | number | null | undefined, currency?: string | null) =>
   value == null ? "—" : `${Number(value).toLocaleString()} ${currency ?? ""}`.trim()
 

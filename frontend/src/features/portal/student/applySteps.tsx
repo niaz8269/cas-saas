@@ -1,5 +1,6 @@
 import { Check, GraduationCap, Loader2, Plus, ShieldCheck, Upload, X } from "lucide-react"
 import { useState, type ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -65,98 +66,99 @@ export function ProfileStep({ profile, countries, onChange }: {
   countries: CountryRow[]
   onChange: (k: string, v: string) => void
 }) {
+  const { t } = useTranslation()
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => onChange(k, e.target.value)
   const hasTest = !!profile.english_test && profile.english_test !== "None"
 
   return (
     <div className="space-y-4">
       <PortalCard className="space-y-3">
-        <SectionTitle>Personal details</SectionTitle>
+        <SectionTitle>{t("wizard.profile.personalDetails")}</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Date of birth"><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
-          <Field label="Place of birth"><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
-          <Field label="Nationality">
+          <Field label={t("wizard.profile.dateOfBirth")}><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
+          <Field label={t("wizard.profile.placeOfBirth")}><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
+          <Field label={t("wizard.profile.nationality")}>
             <Select value={profile.country_id ?? ""} onValueChange={(v) => onChange("country_id", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Select country" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.profile.selectCountry")} /></SelectTrigger>
               <SelectContent>
                 {countries.map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Gender">
+          <Field label={t("wizard.profile.gender")}>
             <Select value={profile.gender ?? ""} onValueChange={(v) => onChange("gender", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="male">{t("wizard.profile.male")}</SelectItem>
+                <SelectItem value="female">{t("wizard.profile.female")}</SelectItem>
+                <SelectItem value="other">{t("wizard.profile.other")}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Marital status">
+          <Field label={t("wizard.profile.maritalStatus")}>
             <Select value={profile.marital_status ?? ""} onValueChange={(v) => onChange("marital_status", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="single">Single</SelectItem>
-                <SelectItem value="married">Married</SelectItem>
+                <SelectItem value="single">{t("wizard.profile.single")}</SelectItem>
+                <SelectItem value="married">{t("wizard.profile.married")}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Phone"><Input value={profile.phone ?? ""} onChange={set("phone")} /></Field>
-          <Field label="Religion (optional)"><Input value={profile.religion ?? ""} onChange={set("religion")} /></Field>
-          <Field label="Chinese name (optional)"><Input value={profile.chinese_name ?? ""} onChange={set("chinese_name")} /></Field>
-          <Field label="Native language (optional)"><Input value={profile.native_language ?? ""} onChange={set("native_language")} /></Field>
+          <Field label={t("wizard.profile.phone")}><Input value={profile.phone ?? ""} onChange={set("phone")} /></Field>
+          <Field label={t("wizard.profile.religion")}><Input value={profile.religion ?? ""} onChange={set("religion")} /></Field>
+          <Field label={t("wizard.profile.chineseName")}><Input value={profile.chinese_name ?? ""} onChange={set("chinese_name")} /></Field>
+          <Field label={t("wizard.profile.nativeLanguage")}><Input value={profile.native_language ?? ""} onChange={set("native_language")} /></Field>
         </div>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>Contact</SectionTitle>
+        <SectionTitle>{t("wizard.profile.contact")}</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Alternate email (optional)"><Input type="email" value={profile.alternate_email ?? ""} onChange={set("alternate_email")} /></Field>
+          <Field label={t("wizard.profile.alternateEmail")}><Input type="email" value={profile.alternate_email ?? ""} onChange={set("alternate_email")} /></Field>
           <div />
-          <Field label="WeChat ID (optional)"><Input value={profile.wechat_id ?? ""} onChange={set("wechat_id")} /></Field>
-          <Field label="Skype ID (optional)"><Input value={profile.skype_id ?? ""} onChange={set("skype_id")} /></Field>
+          <Field label={t("wizard.profile.wechatId")}><Input value={profile.wechat_id ?? ""} onChange={set("wechat_id")} /></Field>
+          <Field label={t("wizard.profile.skypeId")}><Input value={profile.skype_id ?? ""} onChange={set("skype_id")} /></Field>
         </div>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>Passport</SectionTitle>
+        <SectionTitle>{t("wizard.profile.passport")}</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Passport no."><Input value={profile.passport_no ?? ""} onChange={set("passport_no")} /></Field>
+          <Field label={t("wizard.profile.passportNo")}><Input value={profile.passport_no ?? ""} onChange={set("passport_no")} /></Field>
           <div />
-          <Field label="Issue date"><Input type="date" value={profile.passport_issue_date ?? ""} onChange={set("passport_issue_date")} /></Field>
-          <Field label="Expiry date"><Input type="date" value={profile.passport_expiry_date ?? ""} onChange={set("passport_expiry_date")} /></Field>
+          <Field label={t("wizard.profile.issueDate")}><Input type="date" value={profile.passport_issue_date ?? ""} onChange={set("passport_issue_date")} /></Field>
+          <Field label={t("wizard.profile.expiryDate")}><Input type="date" value={profile.passport_expiry_date ?? ""} onChange={set("passport_expiry_date")} /></Field>
         </div>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>English proficiency</SectionTitle>
+        <SectionTitle>{t("wizard.profile.englishProficiency")}</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Test taken">
+          <Field label={t("wizard.profile.testTaken")}>
             <Select value={profile.english_test ?? ""} onValueChange={(v) => onChange("english_test", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="IELTS">IELTS</SelectItem>
-                <SelectItem value="TOEFL">TOEFL</SelectItem>
-                <SelectItem value="PTE Academic">PTE Academic</SelectItem>
-                <SelectItem value="Duolingo">Duolingo</SelectItem>
-                <SelectItem value="None">None / not taken</SelectItem>
+                <SelectItem value="IELTS">{t("wizard.profile.ielts")}</SelectItem>
+                <SelectItem value="TOEFL">{t("wizard.profile.toefl")}</SelectItem>
+                <SelectItem value="PTE Academic">{t("wizard.profile.pteAcademic")}</SelectItem>
+                <SelectItem value="Duolingo">{t("wizard.profile.duolingo")}</SelectItem>
+                <SelectItem value="None">{t("wizard.profile.noneNotTaken")}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          {hasTest && <Field label="Overall score"><Input value={profile.english_test_score ?? ""} onChange={set("english_test_score")} placeholder="e.g. 6.5" /></Field>}
-          {hasTest && <Field label="Test date"><Input type="date" value={profile.english_test_date ?? ""} onChange={set("english_test_date")} /></Field>}
+          {hasTest && <Field label={t("wizard.profile.overallScore")}><Input value={profile.english_test_score ?? ""} onChange={set("english_test_score")} placeholder={t("wizard.profile.scoreExample")} /></Field>}
+          {hasTest && <Field label={t("wizard.profile.testDate")}><Input type="date" value={profile.english_test_date ?? ""} onChange={set("english_test_date")} /></Field>}
         </div>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>Address</SectionTitle>
+        <SectionTitle>{t("wizard.profile.address")}</SectionTitle>
         <div className="space-y-3">
-          <Field label="Permanent address"><Input value={profile.permanent_address ?? ""} onChange={set("permanent_address")} /></Field>
-          <Field label="Current address"><Input value={profile.current_address ?? ""} onChange={set("current_address")} /></Field>
+          <Field label={t("wizard.profile.permanentAddress")}><Input value={profile.permanent_address ?? ""} onChange={set("permanent_address")} /></Field>
+          <Field label={t("wizard.profile.currentAddress")}><Input value={profile.current_address ?? ""} onChange={set("current_address")} /></Field>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="City"><Input value={profile.city ?? ""} onChange={set("city")} /></Field>
-            <Field label="Postal code"><Input value={profile.postal_code ?? ""} onChange={set("postal_code")} /></Field>
+            <Field label={t("wizard.profile.city")}><Input value={profile.city ?? ""} onChange={set("city")} /></Field>
+            <Field label={t("wizard.profile.postalCode")}><Input value={profile.postal_code ?? ""} onChange={set("postal_code")} /></Field>
           </div>
         </div>
       </PortalCard>
@@ -174,6 +176,7 @@ export function BackgroundStep(props: {
   onEducation: (e: WizardEducation[]) => void
   onEmergency: (g: WizardGuardian) => void
 }) {
+  const { t } = useTranslation()
   const { guardians, education, emergency } = props
 
   const setGuardian = (i: number, k: keyof WizardGuardian, v: string) =>
@@ -187,22 +190,22 @@ export function BackgroundStep(props: {
   return (
     <div className="space-y-4">
       <PortalCard className="space-y-3">
-        <SectionTitle>Family</SectionTitle>
+        <SectionTitle>{t("wizard.background.family")}</SectionTitle>
         {guardians.map((g, i) => (
           <div key={i} className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{g.relation}</span>
               {i > 1 && (
-                <button type="button" onClick={() => props.onGuardians(guardians.filter((_, idx) => idx !== i))} aria-label="Remove">
+                <button type="button" onClick={() => props.onGuardians(guardians.filter((_, idx) => idx !== i))} aria-label={t("wizard.background.remove")}>
                   <X className="size-4 text-muted-foreground" />
                 </button>
               )}
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Field label="Name"><Input value={g.name} onChange={(e) => setGuardian(i, "name", e.target.value)} /></Field>
-              <Field label="Occupation"><Input value={g.occupation ?? ""} onChange={(e) => setGuardian(i, "occupation", e.target.value)} /></Field>
-              <Field label="Phone"><Input value={g.phone ?? ""} onChange={(e) => setGuardian(i, "phone", e.target.value)} /></Field>
-              {i > 1 && <Field label="Relation"><Input value={g.relation} onChange={(e) => setGuardian(i, "relation", e.target.value)} /></Field>}
+              <Field label={t("wizard.background.name")}><Input value={g.name} onChange={(e) => setGuardian(i, "name", e.target.value)} /></Field>
+              <Field label={t("wizard.background.occupation")}><Input value={g.occupation ?? ""} onChange={(e) => setGuardian(i, "occupation", e.target.value)} /></Field>
+              <Field label={t("wizard.background.phone")}><Input value={g.phone ?? ""} onChange={(e) => setGuardian(i, "phone", e.target.value)} /></Field>
+              {i > 1 && <Field label={t("wizard.background.relation")}><Input value={g.relation} onChange={(e) => setGuardian(i, "relation", e.target.value)} /></Field>}
             </div>
           </div>
         ))}
@@ -212,38 +215,38 @@ export function BackgroundStep(props: {
           className="w-full"
           onClick={() => props.onGuardians([...guardians, { relation: "guardian", name: "" }])}
         >
-          <Plus className="size-4" /> Add guardian
+          <Plus className="size-4" /> {t("wizard.background.addGuardian")}
         </Button>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>Emergency contact</SectionTitle>
-        <p className="text-xs text-muted-foreground">Someone we can reach in an emergency (kept confidential).</p>
+        <SectionTitle>{t("wizard.background.emergencyContact")}</SectionTitle>
+        <p className="text-xs text-muted-foreground">{t("wizard.background.emergencyHint")}</p>
         <div className="grid grid-cols-2 gap-2">
-          <Field label="Full name"><Input value={emergency.name} onChange={(e) => setEmerg("name", e.target.value)} /></Field>
-          <Field label="Phone"><Input value={emergency.phone ?? ""} onChange={(e) => setEmerg("phone", e.target.value)} /></Field>
-          <Field label="Email"><Input value={emergency.email ?? ""} onChange={(e) => setEmerg("email", e.target.value)} /></Field>
-          <Field label="Address"><Input value={emergency.address ?? ""} onChange={(e) => setEmerg("address", e.target.value)} /></Field>
+          <Field label={t("wizard.background.fullName")}><Input value={emergency.name} onChange={(e) => setEmerg("name", e.target.value)} /></Field>
+          <Field label={t("wizard.background.phone")}><Input value={emergency.phone ?? ""} onChange={(e) => setEmerg("phone", e.target.value)} /></Field>
+          <Field label={t("wizard.background.email")}><Input value={emergency.email ?? ""} onChange={(e) => setEmerg("email", e.target.value)} /></Field>
+          <Field label={t("wizard.background.address")}><Input value={emergency.address ?? ""} onChange={(e) => setEmerg("address", e.target.value)} /></Field>
         </div>
       </PortalCard>
 
       <PortalCard className="space-y-3">
-        <SectionTitle>Most recent education</SectionTitle>
+        <SectionTitle>{t("wizard.background.mostRecentEducation")}</SectionTitle>
         {education.map((e, i) => (
           <div key={i} className="space-y-2 rounded-lg border p-3">
             {i > 0 && (
               <div className="flex justify-end">
-                <button type="button" onClick={() => props.onEducation(education.filter((_, idx) => idx !== i))} aria-label="Remove">
+                <button type="button" onClick={() => props.onEducation(education.filter((_, idx) => idx !== i))} aria-label={t("wizard.background.remove")}>
                   <X className="size-4 text-muted-foreground" />
                 </button>
               </div>
             )}
-            <Field label="Degree / qualification"><Input value={e.degree_name} onChange={(ev) => setEdu(i, "degree_name", ev.target.value)} placeholder="e.g. FSc Pre-Medical" /></Field>
+            <Field label={t("wizard.background.degreeQualification")}><Input value={e.degree_name} onChange={(ev) => setEdu(i, "degree_name", ev.target.value)} placeholder={t("wizard.background.degreeExample")} /></Field>
             <div className="grid grid-cols-2 gap-2">
-              <Field label="Institution"><Input value={e.institution ?? ""} onChange={(ev) => setEdu(i, "institution", ev.target.value)} /></Field>
-              <Field label="Board / university"><Input value={e.board_or_university ?? ""} onChange={(ev) => setEdu(i, "board_or_university", ev.target.value)} /></Field>
-              <Field label="Completion year"><Input inputMode="numeric" value={e.end_year ? String(e.end_year) : ""} onChange={(ev) => setEdu(i, "end_year", ev.target.value)} /></Field>
-              <Field label="Grade / %"><Input value={e.grade_value ?? ""} onChange={(ev) => setEdu(i, "grade_value", ev.target.value)} placeholder="e.g. 88%" /></Field>
+              <Field label={t("wizard.background.institution")}><Input value={e.institution ?? ""} onChange={(ev) => setEdu(i, "institution", ev.target.value)} /></Field>
+              <Field label={t("wizard.background.boardUniversity")}><Input value={e.board_or_university ?? ""} onChange={(ev) => setEdu(i, "board_or_university", ev.target.value)} /></Field>
+              <Field label={t("wizard.background.completionYear")}><Input inputMode="numeric" value={e.end_year ? String(e.end_year) : ""} onChange={(ev) => setEdu(i, "end_year", ev.target.value)} /></Field>
+              <Field label={t("wizard.background.grade")}><Input value={e.grade_value ?? ""} onChange={(ev) => setEdu(i, "grade_value", ev.target.value)} placeholder={t("wizard.background.gradeExample")} /></Field>
             </div>
           </div>
         ))}
@@ -253,7 +256,7 @@ export function BackgroundStep(props: {
           className="w-full"
           onClick={() => props.onEducation([...education, { ...EMPTY_EDUCATION }])}
         >
-          <Plus className="size-4" /> Add another
+          <Plus className="size-4" /> {t("wizard.background.addAnother")}
         </Button>
       </PortalCard>
     </div>
@@ -270,15 +273,16 @@ export function DocumentsStep(props: {
   /** Which portal is uploading — selects the /{kind}/applications path. */
   kind?: PortalKind
 }) {
+  const { t } = useTranslation()
   const { draft, uploaded, kind = "student" } = props
 
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Upload a clear <strong>JPG</strong> photo/scan of each document. Application <strong>{draft.application_code}</strong>.
+        {t("wizard.documents.uploadClear")} <strong>JPG</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.
       </p>
       {draft.required_documents.length === 0 && (
-        <PortalCard><p className="text-sm text-muted-foreground">No documents are required.</p></PortalCard>
+        <PortalCard><p className="text-sm text-muted-foreground">{t("wizard.documents.noDocsRequired")}</p></PortalCard>
       )}
       {draft.required_documents.map((doc) => (
         <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name}
@@ -297,12 +301,13 @@ function DocumentRow(props: {
   onUploaded: (typeId: number, name: string) => void
   onError: (msg: string) => void
 }) {
+  const { t } = useTranslation()
   const [pending, setPending] = useState(false)
 
   const onFile = async (file: File | undefined) => {
     if (!file) return
     if (file.type !== "image/jpeg") {
-      props.onError("Only JPG images are accepted.")
+      props.onError(t("wizard.documents.onlyJpg"))
 
       return
     }
@@ -311,7 +316,7 @@ function DocumentRow(props: {
       await uploadApplicationDocument(props.kind, props.applicationId, props.docTypeId, file)
       props.onUploaded(props.docTypeId, file.name)
     } catch (err) {
-      props.onError(err instanceof ApiError ? err.message : "Upload failed. Please try again.")
+      props.onError(err instanceof ApiError ? err.message : t("wizard.documents.uploadFailed"))
     } finally {
       setPending(false)
     }
@@ -333,7 +338,7 @@ function DocumentRow(props: {
         props.uploadedName ? "text-muted-foreground" : "bg-cas-navy text-white",
       )}>
         {pending ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
-        {props.uploadedName ? "Replace" : "Upload"}
+        {props.uploadedName ? t("wizard.documents.replace") : t("wizard.documents.upload")}
         <input type="file" accept=".jpg,.jpeg,image/jpeg" className="hidden" disabled={pending}
           onChange={(e) => onFile(e.target.files?.[0])} />
       </label>
@@ -383,16 +388,18 @@ export function CustomFieldsCard({ fields, answers, onChange }: {
   answers: Record<string, string>
   onChange: (key: string, value: string) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <PortalCard className="space-y-3">
-      <SectionTitle>Additional questions</SectionTitle>
+      <SectionTitle>{t("wizard.customFields.additionalQuestions")}</SectionTitle>
       {fields.map((f) => (
         <Field key={f.key} label={f.required ? `${f.label} *` : f.label}>
           {f.type === "textarea" ? (
             <Textarea aria-label={f.label} value={answers[f.key] ?? ""} onChange={(e) => onChange(f.key, e.target.value)} />
           ) : f.type === "select" ? (
             <Select value={answers[f.key] ?? ""} onValueChange={(v) => onChange(f.key, v)}>
-              <SelectTrigger aria-label={f.label} className="bg-background"><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger aria-label={f.label} className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>
               <SelectContent>
                 {f.options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
               </SelectContent>
@@ -432,6 +439,7 @@ export function CourseStep(props: {
   onScholarship: (id: string) => void
   onCustomAnswer: (key: string, value: string) => void
 }) {
+  const { t } = useTranslation()
   const { degree, funding, program, programs, loading, failed, fundingAvailable, fundingLoading } = props
 
   const fundingTiles = FUNDING.filter((f) => f.value === "self" || fundingAvailable?.[f.value])
@@ -440,28 +448,28 @@ export function CourseStep(props: {
   return (
     <div className="space-y-4">
       <div>
-        <p className="mb-2 text-sm font-medium">Which degree?</p>
+        <p className="mb-2 text-sm font-medium">{t("wizard.course.whichDegree")}</p>
         <div className="grid grid-cols-2 gap-2">
           {DEGREES.map((d) => (
-            <Tile key={d.value} active={degree === d.value} label={d.label} hint={d.hint} onClick={() => props.onDegree(d.value)} />
+            <Tile key={d.value} active={degree === d.value} label={t(d.labelKey)} hint={t(d.hintKey)} onClick={() => props.onDegree(d.value)} />
           ))}
         </div>
       </div>
 
       {degree && (
         <div>
-          <p className="mb-2 text-sm font-medium">How will you fund it?</p>
+          <p className="mb-2 text-sm font-medium">{t("wizard.course.howFund")}</p>
           {fundingLoading && !fundingAvailable ? (
-            <p className="text-sm text-muted-foreground">Checking options…</p>
+            <p className="text-sm text-muted-foreground">{t("wizard.course.checkingOptions")}</p>
           ) : (
             <>
               <div className="grid grid-cols-1 gap-2">
                 {fundingTiles.map((f) => (
-                  <Tile key={f.value} active={funding === f.value} label={f.label} hint={f.hint} onClick={() => props.onFunding(f.value)} />
+                  <Tile key={f.value} active={funding === f.value} label={t(f.labelKey)} hint={t(f.hintKey)} onClick={() => props.onFunding(f.value)} />
                 ))}
               </div>
               {noScholarships && (
-                <p className="mt-2 text-xs text-muted-foreground">No scholarships are currently offered for this degree — self-funded only.</p>
+                <p className="mt-2 text-xs text-muted-foreground">{t("wizard.course.noScholarshipsForDegree")}</p>
               )}
             </>
           )}
@@ -470,12 +478,12 @@ export function CourseStep(props: {
 
       {degree && funding && (
         <div>
-          <p className="mb-2 text-sm font-medium">Available programs</p>
-          {loading && <p className="text-sm text-muted-foreground">Finding programs…</p>}
-          {failed && <p className="text-sm text-destructive">Could not load programs. Go back and try again.</p>}
+          <p className="mb-2 text-sm font-medium">{t("wizard.course.availablePrograms")}</p>
+          {loading && <p className="text-sm text-muted-foreground">{t("wizard.course.findingPrograms")}</p>}
+          {failed && <p className="text-sm text-destructive">{t("wizard.course.couldNotLoadPrograms")}</p>}
           {!loading && !failed && programs.length === 0 && (
             <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
-              No programs match this combination yet. Try a different degree or funding option.
+              {t("wizard.course.noProgramsMatch")}
             </p>
           )}
           <div className="space-y-2">
@@ -503,14 +511,14 @@ export function CourseStep(props: {
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
                     {p.teaching_language && <Chip>{p.teaching_language}</Chip>}
-                    {p.duration_months && <Chip>{p.duration_months} months</Chip>}
-                    {p.tuition_fee != null && <Chip>Tuition {money(p.tuition_fee, p.currency)}/yr</Chip>}
-                    {p.hostel_fee != null && <Chip>Hostel {money(p.hostel_fee, p.currency)}/yr</Chip>}
-                    {p.university.moe_listed && <Chip>MoE-listed</Chip>}
+                    {p.duration_months && <Chip>{t("wizard.course.durationMonths", { months: p.duration_months })}</Chip>}
+                    {p.tuition_fee != null && <Chip>{t("wizard.course.tuitionPerYear", { amount: money(p.tuition_fee, p.currency) })}</Chip>}
+                    {p.hostel_fee != null && <Chip>{t("wizard.course.hostelPerYear", { amount: money(p.hostel_fee, p.currency) })}</Chip>}
+                    {p.university.moe_listed && <Chip>{t("wizard.course.moeListed")}</Chip>}
                   </div>
                   {p.service_charge && (
                     <p className="mt-2 text-xs font-medium text-cas-navy">
-                      CAS service fee: {money(p.service_charge.amount, p.service_charge.currency)}
+                      {t("wizard.course.serviceFee", { amount: money(p.service_charge.amount, p.service_charge.currency) })}
                     </p>
                   )}
                 </button>
@@ -524,13 +532,13 @@ export function CourseStep(props: {
         <div className="space-y-3 rounded-xl border bg-subtle p-4">
           {program.intakes.length > 0 && (
             <div>
-              <Label className="text-sm">Intake</Label>
+              <Label className="text-sm">{t("wizard.course.intake")}</Label>
               <Select value={props.intakeId} onValueChange={props.onIntake}>
-                <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder="Choose an intake (optional)" /></SelectTrigger>
+                <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder={t("wizard.course.chooseIntake")} /></SelectTrigger>
                 <SelectContent>
                   {program.intakes.map((i) => (
                     <SelectItem key={i.id} value={String(i.id)}>
-                      {i.name}{i.application_deadline ? ` · apply by ${new Date(i.application_deadline).toLocaleDateString()}` : ""}
+                      {i.name}{i.application_deadline ? ` · ${t("wizard.course.applyBy", { date: new Date(i.application_deadline).toLocaleDateString() })}` : ""}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -540,10 +548,10 @@ export function CourseStep(props: {
 
           {funding !== "self" && (
             <div>
-              <Label className="text-sm">Scholarship</Label>
+              <Label className="text-sm">{t("wizard.course.scholarship")}</Label>
               {program.scholarships.length > 0 ? (
                 <Select value={props.scholarshipId} onValueChange={props.onScholarship}>
-                  <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder="Choose a scholarship" /></SelectTrigger>
+                  <SelectTrigger className="mt-1 bg-background"><SelectValue placeholder={t("wizard.course.chooseScholarship")} /></SelectTrigger>
                   <SelectContent>
                     {program.scholarships.map((s) => (
                       <SelectItem key={s.id} value={String(s.id)}>
@@ -553,7 +561,7 @@ export function CourseStep(props: {
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="mt-1 text-sm text-muted-foreground">No scholarships listed for this university.</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t("wizard.course.noScholarshipsListed")}</p>
               )}
             </div>
           )}
@@ -577,21 +585,23 @@ export function ReviewStep({ program, draft, agreed, onAgreed, declaration }: {
   /** Overrides the default (student self-apply) declaration wording. */
   declaration?: ReactNode
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-4">
       <PortalCard className="space-y-3">
-        <SectionTitle>Summary</SectionTitle>
+        <SectionTitle>{t("wizard.review.summary")}</SectionTitle>
         <div className="flex items-center gap-2 text-cas-navy">
           <GraduationCap className="size-5" />
           <p className="font-medium">{program?.name}</p>
         </div>
         <p className="text-sm text-muted-foreground">{program?.university.name}{program?.university.city ? ` · ${program.university.city}` : ""}</p>
         <div className="rounded-lg bg-subtle p-3 text-sm">
-          <p>Reference <strong>{draft.application_code}</strong></p>
+          <p>{t("wizard.review.reference")} <strong>{draft.application_code}</strong></p>
           {program?.service_charge && (
-            <p className="mt-1">CAS service fee: <strong>{money(program.service_charge.amount, program.service_charge.currency)}</strong></p>
+            <p className="mt-1">{t("wizard.review.serviceFeeLabel")} <strong>{money(program.service_charge.amount, program.service_charge.currency)}</strong></p>
           )}
-          <p className="mt-1 text-muted-foreground">{draft.required_documents.length} document(s) attached.</p>
+          <p className="mt-1 text-muted-foreground">{t("wizard.review.documentsAttached", { count: draft.required_documents.length })}</p>
         </div>
       </PortalCard>
 
@@ -599,7 +609,7 @@ export function ReviewStep({ program, draft, agreed, onAgreed, declaration }: {
         <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />
         <span className="flex items-start gap-2 text-sm text-muted-foreground">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-cas-navy" />
-          {declaration ?? "I declare that the information provided is true and correct to the best of my knowledge, and I authorise CAS to process this application for admission and visa purposes."}
+          {declaration ?? t("wizard.review.declaration")}
         </span>
       </label>
     </div>

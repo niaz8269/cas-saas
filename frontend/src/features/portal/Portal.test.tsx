@@ -169,7 +169,8 @@ it("shows a student application with its offer banner", async () => {
   renderWithProviders(<StudentApplications />)
 
   expect(await screen.findByText("MBBS")).toBeInTheDocument()
-  expect(screen.getByText(/Offer received/)).toBeInTheDocument()
+  // "Offer received" now appears both as the status badge and in the offer line.
+  expect(screen.getAllByText(/Offer received/).length).toBeGreaterThan(0)
 })
 
 it("downloads a student invoice as a brokered PDF", async () => {

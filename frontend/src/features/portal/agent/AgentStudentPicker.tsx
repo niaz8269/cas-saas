@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Check, GraduationCap, Search } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +23,7 @@ export function AgentStudentPicker({ selectedId, onSelect }: {
   selectedId: number | null
   onSelect: (s: PickedStudent) => void
 }) {
+  const { t } = useTranslation()
   const [term, setTerm] = useState("")
   const [page, setPage] = useState(1)
 
@@ -33,14 +35,14 @@ export function AgentStudentPicker({ selectedId, onSelect }: {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">Choose the student you are applying for.</p>
+      <p className="text-sm text-muted-foreground">{t("agentPortal.picker.prompt")}</p>
 
       <div className="relative">
         <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           value={term}
           onChange={(e) => { setTerm(e.target.value); setPage(1) }}
-          placeholder="Search by name or student code"
+          placeholder={t("agentPortal.picker.searchPlaceholder")}
           className="pl-9"
         />
       </div>
@@ -51,8 +53,8 @@ export function AgentStudentPicker({ selectedId, onSelect }: {
       {data && data.data.length === 0 && (
         <EmptyState
           icon={<GraduationCap className="mx-auto size-8" />}
-          title={term ? "No matching students" : "No students yet"}
-          hint={term ? "Try a different name or code." : "Students you refer to CAS will appear here."}
+          title={term ? t("agentPortal.picker.emptyMatchTitle") : t("agentPortal.picker.emptyTitle")}
+          hint={term ? t("agentPortal.picker.emptyMatchHint") : t("agentPortal.picker.emptyHint")}
         />
       )}
 
@@ -74,7 +76,7 @@ export function AgentStudentPicker({ selectedId, onSelect }: {
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">{s.full_name}</p>
                   <p className="font-mono text-xs text-muted-foreground">
-                    {s.student_code}{s.country ? ` · ${s.country}` : ""} · {s.applications_count} app(s)
+                    {s.student_code}{s.country ? ` · ${s.country}` : ""} · {t("agentPortal.picker.appCount", { count: s.applications_count })}
                   </p>
                 </div>
                 {active && <Check className="size-5 shrink-0 text-cas-navy" />}
@@ -86,10 +88,10 @@ export function AgentStudentPicker({ selectedId, onSelect }: {
 
       {data && data.meta.last_page > 1 && (
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>{data.meta.from}–{data.meta.to} of {data.meta.total}</span>
+          <span>{t("agentPortal.picker.paginationRange", { from: data.meta.from, to: data.meta.to, total: data.meta.total })}</span>
           <div className="flex gap-2">
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Prev</Button>
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page >= data.meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
+            <Button variant="secondary" size="sm" disabled={data.meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>{t("agentPortal.picker.prev")}</Button>
+            <Button variant="secondary" size="sm" disabled={data.meta.current_page >= data.meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("agentPortal.picker.next")}</Button>
           </div>
         </div>
       )}

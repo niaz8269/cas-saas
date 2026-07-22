@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Check, ChevronLeft, Loader2 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -31,9 +32,10 @@ import {
 } from "@/features/portal/student/scholarshipSteps"
 import { ApiError } from "@/lib/api"
 
-const STEPS = ["Scholarship", "Preferences", "Personal", "Background", "Documents", "Review"]
+const STEPS = ["wizard.steps.scholarship", "wizard.steps.preferences", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
 
 export default function StudentScholarshipWizard() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -70,13 +72,13 @@ export default function StudentScholarshipWizard() {
       education: education.filter((e) => e.degree_name.trim() !== ""),
     }),
     onSuccess: (res) => { setDraft(res.data); setError(null); setStep(4) },
-    onError: (err) => setError(err instanceof ApiError ? err.message : "Could not start your application."),
+    onError: (err) => setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotStartYours")),
   })
 
   const submit = useMutation({
     mutationFn: () => submitStudentApplication(draft!.id),
     onSuccess: () => navigate("/portal/student/applications", { replace: true }),
-    onError: (err) => setError(err instanceof ApiError ? err.message : "Could not submit. Please try again."),
+    onError: (err) => setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotSubmit")),
   })
 
   const goNext = () => {
@@ -103,18 +105,18 @@ export default function StudentScholarshipWizard() {
       <div className="overflow-hidden rounded-xl border bg-cas-navy shadow-sm">
         <div className="flex items-center gap-2 px-4 py-3">
           {step > 0 && step < 5 && (
-            <button type="button" onClick={goBack} className="text-white/70 hover:text-white" aria-label="Back">
+            <button type="button" onClick={goBack} className="text-white/70 hover:text-white" aria-label={t("wizard.buttons.back")}>
               <ChevronLeft className="size-5" />
             </button>
           )}
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.15em] text-cas-gold uppercase">CAS · Study in China</p>
-            <h1 className="text-lg font-semibold text-white">Government scholarship</h1>
+            <p className="text-[11px] font-semibold tracking-[0.15em] text-cas-gold uppercase">{t("wizard.brand.studyInChina")}</p>
+            <h1 className="text-lg font-semibold text-white">{t("wizard.scholarshipTitle")}</h1>
           </div>
         </div>
       </div>
 
-      <Stepper steps={STEPS} step={step} />
+      <Stepper steps={STEPS.map((k) => t(k))} step={step} />
 
       {error && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>}
 
@@ -161,24 +163,24 @@ export default function StudentScholarshipWizard() {
       )}
 
       <div className="flex gap-2">
-        {step === 0 && <Button className="h-11 w-full" disabled={!canLeaveScholarship} onClick={goNext}>Continue</Button>}
-        {step === 1 && <Button className="h-11 w-full" disabled={!hasPreference} onClick={goNext}>Continue</Button>}
-        {step === 2 && <Button className="h-11 w-full" onClick={goNext}>Continue</Button>}
+        {step === 0 && <Button className="h-11 w-full" disabled={!canLeaveScholarship} onClick={goNext}>{t("wizard.buttons.continue")}</Button>}
+        {step === 1 && <Button className="h-11 w-full" disabled={!hasPreference} onClick={goNext}>{t("wizard.buttons.continue")}</Button>}
+        {step === 2 && <Button className="h-11 w-full" onClick={goNext}>{t("wizard.buttons.continue")}</Button>}
         {step === 3 && (
           <Button className="h-11 w-full" disabled={createDraft.isPending} onClick={goNext}>
             {createDraft.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-            {draft ? "Continue" : "Save & add documents"}
+            {draft ? t("wizard.buttons.continue") : t("wizard.buttons.saveAddDocuments")}
           </Button>
         )}
         {step === 4 && (
           <Button className="h-11 w-full" disabled={!allDocsUploaded} onClick={() => setStep(5)}>
-            {allDocsUploaded ? "Review application" : "Upload all required documents"}
+            {allDocsUploaded ? t("wizard.buttons.reviewApplication") : t("wizard.buttons.uploadAllRequired")}
           </Button>
         )}
         {step === 5 && (
           <Button className="h-11 w-full" disabled={submit.isPending || !agreed} onClick={() => submit.mutate()}>
             {submit.isPending ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
-            Submit application
+            {t("wizard.buttons.submitApplication")}
           </Button>
         )}
       </div>

@@ -14,8 +14,10 @@ import {
 } from "@/features/portal/components"
 import { STUDENT_BADGE } from "@/features/portal/status"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export default function AgentStudents() {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["agent", "students", { page }],
@@ -26,9 +28,9 @@ export default function AgentStudents() {
   return (
     <div>
       <div className="mb-4 flex items-start justify-between gap-3">
-        <PageTitle title="My students" subtitle="Students you have referred to CAS" />
+        <PageTitle title={t("agentPortal.students.title")} subtitle={t("agentPortal.students.subtitle")} />
         <Button asChild size="sm" className="shrink-0">
-          <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> New application</Link>
+          <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> {t("agentPortal.students.newApplication")}</Link>
         </Button>
       </div>
 
@@ -36,8 +38,8 @@ export default function AgentStudents() {
       {isError && <LoadError onRetry={refetch} />}
 
       {data && data.data.length === 0 && (
-        <EmptyState icon={<GraduationCap className="mx-auto size-8" />} title="No students yet"
-          hint="Students you submit will appear here." />
+        <EmptyState icon={<GraduationCap className="mx-auto size-8" />} title={t("agentPortal.students.emptyTitle")}
+          hint={t("agentPortal.students.emptyHint")} />
       )}
 
       <div className="space-y-2">
@@ -46,14 +48,14 @@ export default function AgentStudents() {
             <div className="min-w-0">
               <p className="truncate text-sm font-medium">{s.full_name}</p>
               <p className="font-mono text-xs text-muted-foreground">
-                {s.student_code}{s.country ? ` · ${s.country}` : ""} · {s.applications_count} app(s)
+                {s.student_code}{s.country ? ` · ${s.country}` : ""} · {t("agentPortal.students.appCount", { count: s.applications_count })}
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <StatusBadge status={s.status} map={STUDENT_BADGE} />
               <Button asChild variant="secondary" size="sm" className="gap-1">
                 <Link to={`/portal/agent/apply?student=${s.id}&name=${encodeURIComponent(s.full_name)}`}>
-                  <FilePlus2 className="size-4" /> Apply
+                  <FilePlus2 className="size-4" /> {t("agentPortal.students.apply")}
                 </Link>
               </Button>
             </div>
@@ -63,10 +65,10 @@ export default function AgentStudents() {
 
       {data && data.meta.last_page > 1 && (
         <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-          <span>{data.meta.from}–{data.meta.to} of {data.meta.total}</span>
+          <span>{t("agentPortal.students.paginationRange", { from: data.meta.from, to: data.meta.to, total: data.meta.total })}</span>
           <div className="flex gap-2">
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>Prev</Button>
-            <Button variant="secondary" size="sm" disabled={data.meta.current_page >= data.meta.last_page} onClick={() => setPage((p) => p + 1)}>Next</Button>
+            <Button variant="secondary" size="sm" disabled={data.meta.current_page <= 1} onClick={() => setPage((p) => p - 1)}>{t("agentPortal.students.prev")}</Button>
+            <Button variant="secondary" size="sm" disabled={data.meta.current_page >= data.meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("agentPortal.students.next")}</Button>
           </div>
         </div>
       )}
