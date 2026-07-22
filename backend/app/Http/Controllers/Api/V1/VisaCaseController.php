@@ -11,6 +11,7 @@ use App\Http\Resources\VisaChecklistItemResource;
 use App\Models\User;
 use App\Models\VisaCase;
 use App\Models\VisaChecklistItem;
+use App\Services\Comms\NotificationService;
 use App\Services\Visa\VisaWorkflow;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -111,11 +112,28 @@ class VisaCaseController extends Controller
         return response()->json(['data' => $officers]);
     }
 
-    public function assign(AssignVisaOfficerRequest $request, VisaCase $visaCase): VisaCaseResource
-    {
+    public function assign(
+        AssignVisaOfficerRequest $request,
+        VisaCase $visaCase,
+        NotificationService $notifications,
+    ): VisaCaseResource {
         $this->authorize('update', $visaCase);
 
-        $visaCase->update(['assigned_visa_officer_id' => $request->integer('user_id')]);
+        $officerId = $request->integer('user_id');
+        $visaCase->update(['assigned_visa_officer_id' => $officerId]);
+
+        // Let the officer know a case landed on their desk (skip self-assign).
+        if ($officerId !== $request->user()->id) {
+            $visaCase->loadMissing('student:id,first_name,last_name');
+            $notifications->push(
+                $officerId,
+                'visa.assigned',
+                'Visa case assigned to you',
+                "You were assigned the visa case for {$visaCase->student?->full_name}.",
+                entityType: 'visa_case',
+                entityId: $visaCase->id,
+            );
+        }
 
         return new VisaCaseResource($visaCase->load(self::LIST_RELATIONS));
     }

@@ -125,8 +125,10 @@ class ApplicationWorkflow
                 ]);
             }
 
-            // Milestone results ping the student's counselor's bell (§5.9).
-            if (in_array($to, ['offer_received', 'accepted', 'rejected'], true)) {
+            // Milestone results ping the student's counselor's bell (§5.9) —
+            // including submission to the university, so the counselor knows
+            // the file left CAS's hands.
+            if (in_array($to, ['submitted', 'offer_received', 'accepted', 'rejected'], true)) {
                 $application->loadMissing('student:id,first_name,last_name,assigned_counselor_id');
                 app(NotificationService::class)->push(
                     $application->student?->assigned_counselor_id,
@@ -146,6 +148,18 @@ class ApplicationWorkflow
                     ->onApplicationAccepted($application, $actor);
                 app(VisaWorkflow::class)
                     ->openCase($application, $actor);
+
+                // Finance now has an invoice + commission to work; alert the
+                // whole desk rather than a single assignee.
+                $application->loadMissing('student:id,first_name,last_name');
+                app(NotificationService::class)->pushToRoles(
+                    ['Finance'],
+                    'application.accepted',
+                    'Invoice & commission ready',
+                    "{$application->application_code} was accepted — first-year tuition invoice and expected commission are ready for {$application->student?->full_name}.",
+                    entityType: 'application',
+                    entityId: $application->id,
+                );
             }
 
             // Declarative automations react to the same transition (§5.9).

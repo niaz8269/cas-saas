@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\VisaCase;
 use App\Models\VisaStatusHistory;
 use App\Services\Comms\AutomationEngine;
+use App\Services\Comms\NotificationService;
 use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use Illuminate\Support\Facades\DB;
@@ -65,10 +66,16 @@ class VisaWorkflow
             return $existing;
         }
 
-        return DB::transaction(function () use ($application, $actor) {
+        // Route the fresh case straight to the least-loaded visa officer so it
+        // never sits ownerless after acceptance (null if none exist — a
+        // global-scope officer still sees it in their queue).
+        $officer = $this->pickVisaOfficer();
+
+        return DB::transaction(function () use ($application, $actor, $officer) {
             $case = VisaCase::create([
                 'application_id' => $application->id,
                 'student_id' => $application->student_id,
+                'assigned_visa_officer_id' => $officer?->id,
                 'status' => 'not_started',
             ]);
 
@@ -87,8 +94,51 @@ class VisaWorkflow
                 'created_at' => now(),
             ]);
 
+            if ($officer !== null) {
+                $application->loadMissing('student:id,first_name,last_name');
+                app(NotificationService::class)->push(
+                    $officer->id,
+                    'visa.opened',
+                    'New visa case assigned',
+                    "A visa case opened for {$application->student?->full_name} ({$application->application_code}) and was assigned to you.",
+                    entityType: 'visa_case',
+                    entityId: $case->id,
+                );
+            }
+
             return $case;
         });
+    }
+
+    /**
+     * The visa officer to own a fresh case: the visa.manage.global holder
+     * (directly or via a role) with the fewest open (non-travel_ready)
+     * cases, so work spreads evenly. Mirrors the Admissions routing. Null
+     * if none exist.
+     */
+    private function pickVisaOfficer(): ?User
+    {
+        $officerIds = User::query()
+            ->where(fn ($q) => $q
+                ->whereHas('permissions', fn ($p) => $p->where('name', 'visa.manage.global'))
+                ->orWhereHas('roles.permissions', fn ($p) => $p->where('name', 'visa.manage.global')))
+            ->orderBy('id')
+            ->pluck('id');
+
+        if ($officerIds->isEmpty()) {
+            return null;
+        }
+
+        $load = VisaCase::query()
+            ->whereIn('assigned_visa_officer_id', $officerIds->all())
+            ->where('status', '!=', 'travel_ready')
+            ->selectRaw('assigned_visa_officer_id, COUNT(*) as open_count')
+            ->groupBy('assigned_visa_officer_id')
+            ->pluck('open_count', 'assigned_visa_officer_id');
+
+        $chosenId = $officerIds->sortBy(fn ($id) => $load[$id] ?? 0)->first();
+
+        return User::find($chosenId);
     }
 
     /**

@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Portal\StudentPresignRequest;
 use App\Http\Requests\Portal\StudentStoreDocumentRequest;
 use App\Http\Resources\Portal\StudentDocumentResource;
+use App\Models\Application;
 use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Student;
+use App\Services\Comms\NotificationService;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -63,7 +65,37 @@ class StudentDocumentController extends Controller
             $request->ip(),
         );
 
-        return new StudentDocumentResource($document->load('type:id,name,category'));
+        $this->notifyAssignedOfficers($student, $document->load('type:id,name,category'));
+
+        return new StudentDocumentResource($document);
+    }
+
+    /**
+     * Ping the Admissions officer(s) handling this student's in-flight
+     * applications that a fresh document arrived — so a requested file
+     * doesn't sit unnoticed in a queue.
+     */
+    private function notifyAssignedOfficers(Student $student, Document $document): void
+    {
+        $officerIds = Application::query()
+            ->where('student_id', $student->id)
+            ->whereIn('status', ['under_review', 'documents_pending'])
+            ->whereNotNull('assigned_admissions_id')
+            ->distinct()
+            ->pluck('assigned_admissions_id');
+
+        $notifications = app(NotificationService::class);
+
+        foreach ($officerIds as $officerId) {
+            $notifications->push(
+                $officerId,
+                'document.uploaded',
+                'New document uploaded',
+                "{$student->full_name} uploaded {$document->type?->name}.",
+                entityType: 'student',
+                entityId: $student->id,
+            );
+        }
     }
 
     /**

@@ -168,18 +168,15 @@ class PortalApplicationService
     /** Notify Management / Super Admin of a new submission (excluding the officer). */
     private function notifyManagers(Application $application, ?int $excludeUserId): void
     {
-        User::query()
-            ->whereHas('roles', fn ($q) => $q->whereIn('name', ['Super Admin', 'Management']))
-            ->when($excludeUserId !== null, fn ($q) => $q->whereKeyNot($excludeUserId))
-            ->pluck('id')
-            ->each(fn ($id) => $this->notifications->push(
-                $id,
-                'application.submitted',
-                'New application submitted',
-                "{$application->application_code} was submitted and routed to Admissions.",
-                entityType: 'application',
-                entityId: $application->id,
-            ));
+        $this->notifications->pushToRoles(
+            ['Super Admin', 'Management'],
+            'application.submitted',
+            'New application submitted',
+            "{$application->application_code} was submitted and routed to Admissions.",
+            excludeUserId: $excludeUserId,
+            entityType: 'application',
+            entityId: $application->id,
+        );
     }
 
     /**
