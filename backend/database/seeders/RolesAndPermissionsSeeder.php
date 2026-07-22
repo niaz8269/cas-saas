@@ -37,6 +37,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'finance.view.global',
             'commission.view.global',
             'visa.view.global',
+            'agents.view.global',
             'reports.view.global',
         ],
         'Admin' => [ // Admin / Operations — full on every module (§8.2)
@@ -53,6 +54,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'visa.view.global', 'visa.manage.global',
             'reports.view.global',
             'users.manage.global',
+            'agents.view.global', 'agents.manage.global',
             'settings.manage.global',
         ],
         'Counselor' => [

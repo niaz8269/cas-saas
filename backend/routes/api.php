@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AgentPayableController;
 use App\Http\Controllers\Api\V1\ApiSourceController;
 use App\Http\Controllers\Api\V1\ApplicationController;
@@ -171,6 +172,14 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:users.manage.global,staff');
         Route::get('roles/matrix', [RoleController::class, 'matrix'])
             ->middleware('permission:users.manage.global,staff');
+
+        // Agent/partner accounts — the self-registration approval queue
+        Route::get('agents', [AgentController::class, 'index'])
+            ->middleware('permission:agents.view.global,staff');
+        Route::post('agents/{agent}/approve', [AgentController::class, 'approve'])
+            ->middleware('permission:agents.manage.global,staff');
+        Route::post('agents/{agent}/reject', [AgentController::class, 'reject'])
+            ->middleware('permission:agents.manage.global,staff');
 
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
