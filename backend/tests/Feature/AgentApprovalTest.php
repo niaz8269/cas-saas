@@ -1,7 +1,10 @@
 <?php
 
+use App\Mail\AgentApprovedMail;
+use App\Mail\AgentRejectedMail;
 use App\Models\Agent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 
 uses(RefreshDatabase::class);
 
@@ -18,26 +21,30 @@ it('lists partner requests (filterable by status) for a permitted admin', functi
         ->assertJsonPath('data.0.status', 'pending');
 });
 
-it('approves a pending partner request so the agent can sign in', function () {
+it('approves a pending partner request and emails the agent', function () {
+    Mail::fake();
     actingAsStaffWith(['agents.manage.global']);
-    $agent = Agent::factory()->create(['status' => 'pending']);
+    $agent = Agent::factory()->create(['status' => 'pending', 'email' => 'partner@example.com']);
 
     $this->postJson("/api/v1/agents/{$agent->id}/approve")
         ->assertOk()
         ->assertJsonPath('data.status', 'active');
 
     expect($agent->fresh()->status)->toBe('active');
+    Mail::assertSent(AgentApprovedMail::class, fn (AgentApprovedMail $m) => $m->hasTo('partner@example.com'));
 });
 
-it('rejects a pending partner request', function () {
+it('rejects a pending partner request and emails the agent', function () {
+    Mail::fake();
     actingAsStaffWith(['agents.manage.global']);
-    $agent = Agent::factory()->create(['status' => 'pending']);
+    $agent = Agent::factory()->create(['status' => 'pending', 'email' => 'partner@example.com']);
 
     $this->postJson("/api/v1/agents/{$agent->id}/reject")
         ->assertOk()
         ->assertJsonPath('data.status', 'rejected');
 
     expect($agent->fresh()->status)->toBe('rejected');
+    Mail::assertSent(AgentRejectedMail::class, fn (AgentRejectedMail $m) => $m->hasTo('partner@example.com'));
 });
 
 it('will not approve an agent that is not pending', function () {

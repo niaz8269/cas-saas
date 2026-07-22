@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AgentRequestResource;
+use App\Mail\AgentApprovedMail;
+use App\Mail\AgentRejectedMail;
 use App\Models\Agent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Admin management of agent/partner accounts — chiefly the approval queue for
@@ -41,6 +44,10 @@ class AgentController extends Controller
 
         $agent->update(['status' => 'active']);
 
+        if ($agent->email) {
+            Mail::to($agent->email)->send(new AgentApprovedMail($agent));
+        }
+
         return new AgentRequestResource($agent->load('country'));
     }
 
@@ -50,6 +57,10 @@ class AgentController extends Controller
         abort_unless($agent->status === 'pending', 409, 'Only a pending request can be rejected.');
 
         $agent->update(['status' => 'rejected']);
+
+        if ($agent->email) {
+            Mail::to($agent->email)->send(new AgentRejectedMail($agent));
+        }
 
         return new AgentRequestResource($agent->load('country'));
     }
