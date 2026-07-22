@@ -36,6 +36,22 @@ export const portalLogin = (kind: PortalKind, payload: { email: string; password
 export const portalLogout = (kind: PortalKind) =>
   portalApi<{ message: string }>(`/${kind}/auth/logout`, { method: "POST" })
 
+export interface StudentRegisterPayload {
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  password_confirmation: string
+  phone?: string
+}
+
+/** Public student self-registration; on success the student is signed in. */
+export const portalRegister = (payload: StudentRegisterPayload) =>
+  portalApi<{ token: string; token_type: string; student: StudentProfileData }>(
+    "/student/auth/register",
+    { method: "POST", body: JSON.stringify({ ...payload, device_name: "cas-student-portal" }) },
+  )
+
 // ── Agent reads ──────────────────────────────────────────────────────────
 
 export interface Paginated<T> {

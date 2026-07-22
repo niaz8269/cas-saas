@@ -948,7 +948,25 @@
     "errorPasswordRequired": "Password is required",
     "errorServerUnreachable": "Unable to reach the server. Please try again.",
     "loadErrorMessage": "Something went wrong.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "newStudent": "New student?",
+    "createAccount": "Create an account",
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Start your journey to study in China",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone (optional)",
+      "confirmPassword": "Confirm password",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "errorFirstName": "First name is required",
+      "errorLastName": "Last name is required",
+      "errorPasswordMin": "Use at least 8 characters",
+      "errorPasswordMatch": "Passwords don't match"
+    }
   },
   "portalStatus": {
     "draft": "Draft",

@@ -960,7 +960,25 @@
     "errorPasswordRequired": "كلمة المرور مطلوبة",
     "errorServerUnreachable": "تعذّر الوصول إلى الخادم. يرجى المحاولة مرة أخرى.",
     "loadErrorMessage": "حدث خطأ ما.",
-    "retry": "حاول مرة أخرى"
+    "retry": "حاول مرة أخرى",
+    "newStudent": "طالب جديد؟",
+    "createAccount": "إنشاء حساب",
+    "register": {
+      "title": "أنشئ حسابك",
+      "subtitle": "ابدأ رحلتك للدراسة في الصين",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "phone": "الهاتف (اختياري)",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "submit": "إنشاء حساب",
+      "submitting": "جارٍ إنشاء الحساب…",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "errorFirstName": "الاسم الأول مطلوب",
+      "errorLastName": "اسم العائلة مطلوب",
+      "errorPasswordMin": "استخدم 8 أحرف على الأقل",
+      "errorPasswordMatch": "كلمتا المرور غير متطابقتين"
+    }
   },
   "portalStatus": {
     "draft": "مسودة",

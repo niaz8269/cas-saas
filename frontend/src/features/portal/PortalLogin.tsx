@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -130,6 +130,13 @@ export default function PortalLogin() {
               {mutation.isPending ? t("portal.signingIn") : t("portal.signIn")}
             </Button>
           </form>
+
+          {kind === "student" && (
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              {t("portal.newStudent")}{" "}
+              <Link to="/portal/register" className="font-medium text-cas-navy hover:underline">{t("portal.createAccount")}</Link>
+            </p>
+          )}
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">

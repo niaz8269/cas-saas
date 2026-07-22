@@ -29,6 +29,7 @@ import ReportsPage from "@/features/dashboard/ReportsPage"
 import VisaCaseDetailPage from "@/features/visa/VisaCaseDetailPage"
 import VisaCasesPage from "@/features/visa/VisaCasesPage"
 import PortalLogin from "@/features/portal/PortalLogin"
+import PortalRegister from "@/features/portal/PortalRegister"
 import PortalShell from "@/features/portal/PortalShell"
 import RequirePortalAuth from "@/features/portal/RequirePortalAuth"
 import AgentHome from "@/features/portal/agent/AgentHome"
@@ -105,6 +106,7 @@ const router = createBrowserRouter([
 
   // Mobile-first portals (agent + student) — separate token + shell (M7)
   { path: "/portal/login", element: <PortalLogin /> },
+  { path: "/portal/register", element: <PortalRegister /> },
   {
     element: <RequirePortalAuth />,
     children: [

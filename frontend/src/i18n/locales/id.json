@@ -948,7 +948,25 @@
     "errorPasswordRequired": "Kata sandi wajib diisi",
     "errorServerUnreachable": "Tidak dapat menghubungi server. Silakan coba lagi.",
     "loadErrorMessage": "Terjadi kesalahan.",
-    "retry": "Coba lagi"
+    "retry": "Coba lagi",
+    "newStudent": "Siswa baru?",
+    "createAccount": "Buat akun",
+    "register": {
+      "title": "Buat akun Anda",
+      "subtitle": "Mulai perjalanan Anda kuliah di Tiongkok",
+      "firstName": "Nama depan",
+      "lastName": "Nama belakang",
+      "phone": "Telepon (opsional)",
+      "confirmPassword": "Konfirmasi kata sandi",
+      "submit": "Buat akun",
+      "submitting": "Membuat akun…",
+      "haveAccount": "Sudah punya akun?",
+      "signIn": "Masuk",
+      "errorFirstName": "Nama depan wajib diisi",
+      "errorLastName": "Nama belakang wajib diisi",
+      "errorPasswordMin": "Gunakan minimal 8 karakter",
+      "errorPasswordMatch": "Kata sandi tidak cocok"
+    }
   },
   "portalStatus": {
     "draft": "Draf",

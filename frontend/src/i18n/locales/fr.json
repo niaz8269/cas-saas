@@ -948,7 +948,25 @@
     "errorPasswordRequired": "Le mot de passe est obligatoire",
     "errorServerUnreachable": "Impossible de joindre le serveur. Veuillez réessayer.",
     "loadErrorMessage": "Une erreur est survenue.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "newStudent": "Nouvel étudiant ?",
+    "createAccount": "Créer un compte",
+    "register": {
+      "title": "Créez votre compte",
+      "subtitle": "Commencez votre parcours d'études en Chine",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phone": "Téléphone (facultatif)",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Créer un compte",
+      "submitting": "Création du compte…",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "errorFirstName": "Le prénom est requis",
+      "errorLastName": "Le nom est requis",
+      "errorPasswordMin": "Utilisez au moins 8 caractères",
+      "errorPasswordMatch": "Les mots de passe ne correspondent pas"
+    }
   },
   "portalStatus": {
     "draft": "Brouillon",

@@ -6,6 +6,7 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
 import PortalLogin from "./PortalLogin"
+import PortalRegister from "./PortalRegister"
 import RequirePortalAuth from "./RequirePortalAuth"
 import AgentCommissions from "./agent/AgentCommissions"
 import StudentApplications from "./student/StudentApplications"
@@ -43,6 +44,57 @@ it("logs a student in through the portal toggle and stores the token", async () 
 
   await waitFor(() => expect(usePortalAuthStore.getState().token).toBe("portal-token"))
   expect(usePortalAuthStore.getState().kind).toBe("student")
+})
+
+it("registers a new student, stores the token, and sends the payload", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockResolvedValue(
+    jsonResponse({
+      token: "reg-token",
+      token_type: "Bearer",
+      student: { id: 9, student_code: "STU-2026-00009", full_name: "Ali Raza", email: "ali@x.com", status: "active" },
+    }, 201),
+  )
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(
+    <Routes>
+      <Route path="/portal/register" element={<PortalRegister />} />
+      <Route path="/portal/student" element={<div>Student home</div>} />
+    </Routes>,
+    { route: "/portal/register" },
+  )
+
+  await user.type(screen.getByLabelText("First name"), "Ali")
+  await user.type(screen.getByLabelText("Last name"), "Raza")
+  await user.type(screen.getByLabelText("Email"), "ali@x.com")
+  await user.type(screen.getByLabelText("Password"), "secret1234")
+  await user.type(screen.getByLabelText("Confirm password"), "secret1234")
+  await user.click(screen.getByRole("button", { name: "Create account" }))
+
+  await waitFor(() => expect(usePortalAuthStore.getState().token).toBe("reg-token"))
+  expect(usePortalAuthStore.getState().kind).toBe("student")
+  const call = fetchMock.mock.calls.find(([u]) => u === "/api/v1/student/auth/register")!
+  const body = JSON.parse((call[1] as RequestInit).body as string)
+  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", email: "ali@x.com", password: "secret1234", password_confirmation: "secret1234" })
+})
+
+it("blocks registration when the passwords don't match", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn()
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<PortalRegister />, { route: "/portal/register" })
+
+  await user.type(screen.getByLabelText("First name"), "Ali")
+  await user.type(screen.getByLabelText("Last name"), "Raza")
+  await user.type(screen.getByLabelText("Email"), "ali@x.com")
+  await user.type(screen.getByLabelText("Password"), "secret1234")
+  await user.type(screen.getByLabelText("Confirm password"), "different1")
+  await user.click(screen.getByRole("button", { name: "Create account" }))
+
+  expect(await screen.findByText("Passwords don't match")).toBeInTheDocument()
+  expect(fetchMock).not.toHaveBeenCalled()
 })
 
 it("surfaces an inactive-account 403 on the portal login", async () => {

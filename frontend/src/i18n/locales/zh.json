@@ -948,7 +948,25 @@
     "errorPasswordRequired": "请输入密码",
     "errorServerUnreachable": "无法连接服务器，请重试。",
     "loadErrorMessage": "出错了。",
-    "retry": "重试"
+    "retry": "重试",
+    "newStudent": "新学生？",
+    "createAccount": "创建账户",
+    "register": {
+      "title": "创建您的账户",
+      "subtitle": "开启您的留学中国之旅",
+      "firstName": "名",
+      "lastName": "姓",
+      "phone": "电话（选填）",
+      "confirmPassword": "确认密码",
+      "submit": "创建账户",
+      "submitting": "正在创建账户…",
+      "haveAccount": "已有账户？",
+      "signIn": "登录",
+      "errorFirstName": "请填写名",
+      "errorLastName": "请填写姓",
+      "errorPasswordMin": "至少使用 8 个字符",
+      "errorPasswordMatch": "两次输入的密码不一致"
+    }
   },
   "portalStatus": {
     "draft": "草稿",
