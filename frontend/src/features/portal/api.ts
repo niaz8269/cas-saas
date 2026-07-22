@@ -40,9 +40,9 @@ export interface StudentRegisterPayload {
   first_name: string
   last_name: string
   email: string
+  phone: string
   password: string
   password_confirmation: string
-  phone?: string
 }
 
 /** Public student self-registration; on success the student is signed in. */
@@ -51,6 +51,29 @@ export const portalRegister = (payload: StudentRegisterPayload) =>
     "/student/auth/register",
     { method: "POST", body: JSON.stringify({ ...payload, device_name: "cas-student-portal" }) },
   )
+
+export interface AgentRegisterPayload {
+  company_name: string
+  contact_name: string
+  email: string
+  phone: string
+  website: string
+  address: string
+  country_id: number
+  password: string
+  password_confirmation: string
+}
+
+/** Public agent/partner registration; creates a PENDING request (no token). */
+export const agentRegister = (payload: AgentRegisterPayload) =>
+  portalApi<{ message: string; code: string }>(
+    "/agent/auth/register",
+    { method: "POST", body: JSON.stringify(payload) },
+  )
+
+/** Countries for the public sign-up forms (no auth required). */
+export const getPublicCountries = () =>
+  portalApi<{ data: CountryRow[] }>("/public/countries")
 
 // ── Agent reads ──────────────────────────────────────────────────────────
 

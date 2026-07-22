@@ -68,6 +68,7 @@ it("registers a new student, stores the token, and sends the payload", async () 
   await user.type(screen.getByLabelText("First name"), "Ali")
   await user.type(screen.getByLabelText("Last name"), "Raza")
   await user.type(screen.getByLabelText("Email"), "ali@x.com")
+  await user.type(screen.getByLabelText("Phone"), "+92 300 1234567")
   await user.type(screen.getByLabelText("Password"), "secret1234")
   await user.type(screen.getByLabelText("Confirm password"), "secret1234")
   await user.click(screen.getByRole("button", { name: "Create account" }))
@@ -76,7 +77,43 @@ it("registers a new student, stores the token, and sends the payload", async () 
   expect(usePortalAuthStore.getState().kind).toBe("student")
   const call = fetchMock.mock.calls.find(([u]) => u === "/api/v1/student/auth/register")!
   const body = JSON.parse((call[1] as RequestInit).body as string)
-  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", email: "ali@x.com", password: "secret1234", password_confirmation: "secret1234" })
+  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", email: "ali@x.com", phone: "+92 300 1234567", password: "secret1234", password_confirmation: "secret1234" })
+})
+
+it("submits an agent partner application and shows the pending screen", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if (url.includes("/public/countries")) return Promise.resolve(jsonResponse({ data: [{ id: 1, name: "Pakistan", iso2: "PK" }] }))
+    if (url.includes("/agent/auth/register")) return Promise.resolve(jsonResponse({ message: "ok", code: "PENDING_APPROVAL" }, 201))
+
+    return Promise.resolve(jsonResponse({}, 200))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<PortalRegister />, { route: "/portal/register" })
+
+  // Switch to the agent/partner tab.
+  await user.click(screen.getByRole("tab", { name: "Agent" }))
+
+  await user.type(screen.getByLabelText("Company / agency name"), "Bright Future")
+  await user.type(screen.getByLabelText("Contact person"), "Sara Khan")
+  await user.type(screen.getByLabelText("Email"), "partner@x.com")
+  await user.type(screen.getByLabelText("Phone"), "+92 300 0000000")
+  await user.type(screen.getByLabelText("Website"), "https://bright.example")
+  await user.click(screen.getByLabelText("Country"))
+  await user.click(await screen.findByRole("option", { name: "Pakistan" }))
+  await user.type(screen.getByLabelText("Business address"), "12 Mall Road")
+  await user.type(screen.getByLabelText("Password"), "secret1234")
+  await user.type(screen.getByLabelText("Confirm password"), "secret1234")
+  await user.click(screen.getByRole("button", { name: "Submit application" }))
+
+  expect(await screen.findByText("Application received")).toBeInTheDocument()
+  const call = fetchMock.mock.calls.find(([u]) => String(u).includes("/agent/auth/register"))!
+  const body = JSON.parse((call[1] as RequestInit).body as string)
+  expect(body).toMatchObject({ company_name: "Bright Future", contact_name: "Sara Khan", email: "partner@x.com", website: "https://bright.example", country_id: 1, address: "12 Mall Road" })
+  // A pending partner is never signed in.
+  expect(usePortalAuthStore.getState().token).toBeNull()
 })
 
 it("blocks registration when the passwords don't match", async () => {
@@ -89,6 +126,7 @@ it("blocks registration when the passwords don't match", async () => {
   await user.type(screen.getByLabelText("First name"), "Ali")
   await user.type(screen.getByLabelText("Last name"), "Raza")
   await user.type(screen.getByLabelText("Email"), "ali@x.com")
+  await user.type(screen.getByLabelText("Phone"), "+92 300 1234567")
   await user.type(screen.getByLabelText("Password"), "secret1234")
   await user.type(screen.getByLabelText("Confirm password"), "different1")
   await user.click(screen.getByRole("button", { name: "Create account" }))

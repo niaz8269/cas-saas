@@ -66,6 +66,8 @@ Route::prefix('v1')->group(function () {
         Route::get('programs', [PublicCatalogController::class, 'programs']);
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
+        // Reference data for the public sign-up forms (student/agent registration)
+        Route::get('countries', [CountryController::class, 'index']);
     });
 
     // Public website enquiry form → lead (tighter throttle)

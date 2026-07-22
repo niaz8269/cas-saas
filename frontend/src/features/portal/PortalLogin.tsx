@@ -131,12 +131,10 @@ export default function PortalLogin() {
             </Button>
           </form>
 
-          {kind === "student" && (
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              {t("portal.newStudent")}{" "}
-              <Link to="/portal/register" className="font-medium text-cas-navy hover:underline">{t("portal.createAccount")}</Link>
-            </p>
-          )}
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            {t("portal.newStudent")}{" "}
+            <Link to="/portal/register" className="font-medium text-cas-navy hover:underline">{t("portal.createAccount")}</Link>
+          </p>
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
