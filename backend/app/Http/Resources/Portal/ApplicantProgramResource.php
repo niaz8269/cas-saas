@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Portal;
 
 use App\Models\Program;
+use App\Services\Admissions\ApplicationCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,17 +29,9 @@ class ApplicantProgramResource extends JsonResource
             'hostel_fee' => $this->hostel_fee,
             'currency' => $this->currency,
             'service_charge' => $this->applicant_service_charge,
-            'custom_fields' => collect($this->requirements['fields'] ?? [])
-                ->filter(fn ($f) => is_array($f) && ! empty($f['key']) && ! empty($f['label'])
-                    && in_array($f['type'] ?? null, ['text', 'textarea', 'number', 'date', 'select'], true))
-                ->map(fn ($f) => [
-                    'key' => (string) $f['key'],
-                    'label' => (string) $f['label'],
-                    'type' => (string) $f['type'],
-                    'required' => (bool) ($f['required'] ?? false),
-                    'options' => array_values(array_filter((array) ($f['options'] ?? []), fn ($o) => is_string($o) && $o !== '')),
-                ])
-                ->values(),
+            // Custom fields come from the university's application form when it
+            // defines one, otherwise the program's — resolved centrally.
+            'custom_fields' => app(ApplicationCatalog::class)->customFields($this->resource),
             'university' => [
                 'id' => $this->university->id,
                 'name' => $this->university->name,

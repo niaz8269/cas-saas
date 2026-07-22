@@ -42,7 +42,7 @@ class StoreProgramRequest extends FormRequest
             'requirements.fields' => ['nullable', 'array', 'max:30'],
             'requirements.fields.*.key' => ['required', 'string', 'max:60', 'regex:/^[a-z][a-z0-9_]*$/', 'distinct'],
             'requirements.fields.*.label' => ['required', 'string', 'max:120'],
-            'requirements.fields.*.type' => ['required', Rule::in(['text', 'textarea', 'number', 'date', 'select'])],
+            'requirements.fields.*.type' => ['required', Rule::in(['text', 'textarea', 'number', 'date', 'select', 'radio'])],
             'requirements.fields.*.required' => ['boolean'],
             'requirements.fields.*.options' => ['nullable', 'array'],
             'requirements.fields.*.options.*' => ['string', 'max:120'],

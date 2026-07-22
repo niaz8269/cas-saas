@@ -53,7 +53,7 @@ class ApplicationCatalog
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
             ->where(fn ($q) => $this->applyDegree($q, $degree))
             ->with([
-                'university:id,name,slug,city,moe_listed,logo_path,country_id',
+                'university:id,name,slug,city,moe_listed,logo_path,country_id,application_form',
                 'university.country:id,name',
                 'intakes' => fn ($q) => $q->where('status', 'open')->orderBy('application_deadline'),
             ])
@@ -149,7 +149,12 @@ class ApplicationCatalog
      */
     public function requiredDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
     {
-        $types = $this->resolveTypes($program?->requirements['documents'] ?? []);
+        // A university's own form (when defined) overrides the program's docs.
+        $uniDocs = $this->universityForm($program)['documents'] ?? null;
+        $docIds = is_array($uniDocs) && $uniDocs !== []
+            ? $uniDocs
+            : ($program?->requirements['documents'] ?? []);
+        $types = $this->resolveTypes($docIds);
 
         if ($types->isEmpty()) {
             $types = DocumentType::whereIn('name', self::GENERAL_DOCUMENTS)->get();
@@ -162,8 +167,22 @@ class ApplicationCatalog
         return $types->unique('id')->sortBy('name')->values();
     }
 
-    /** The field types the admin can attach to a course (report item 11). */
-    public const FIELD_TYPES = ['text', 'textarea', 'number', 'date', 'select'];
+    /** The field types the admin can attach to a course/university (report item 11). */
+    public const FIELD_TYPES = ['text', 'textarea', 'number', 'date', 'select', 'radio'];
+
+    /**
+     * The application-form config defined on a program's university, or []. When
+     * a university defines a form, it drives the wizard's custom fields +
+     * required documents for every program at that university.
+     *
+     * @return array<string, mixed>
+     */
+    private function universityForm(?Program $program): array
+    {
+        $form = $program?->university?->application_form;
+
+        return is_array($form) ? $form : [];
+    }
 
     /**
      * The admin-defined custom application fields for a program: a normalised
@@ -174,7 +193,13 @@ class ApplicationCatalog
      */
     public function customFields(?Program $program): array
     {
-        return collect($program?->requirements['fields'] ?? [])
+        // A university's own form (when defined) overrides the program's fields.
+        $uniFields = $this->universityForm($program)['fields'] ?? null;
+        $fields = is_array($uniFields) && $uniFields !== []
+            ? $uniFields
+            : ($program?->requirements['fields'] ?? []);
+
+        return collect($fields)
             ->filter(fn ($f) => is_array($f)
                 && ! empty($f['key'])
                 && ! empty($f['label'])
@@ -222,7 +247,7 @@ class ApplicationCatalog
             $rules["custom_fields.{$key}"] = match ($field['type']) {
                 'number' => [$presence, 'numeric'],
                 'date' => [$presence, 'date'],
-                'select' => [$presence, 'string', Rule::in($field['options'])],
+                'select', 'radio' => [$presence, 'string', Rule::in($field['options'])],
                 'textarea' => [$presence, 'string', 'max:5000'],
                 default => [$presence, 'string', 'max:1000'],
             };

@@ -31,6 +31,7 @@ class University extends Model
         'about',
         'apply_link',
         'requirements',
+        'application_form',
         'representative_professor',
     ];
 
@@ -39,6 +40,7 @@ class University extends Model
         return [
             'moe_listed' => 'boolean',
             'requirements' => 'array',
+            'application_form' => 'array',
             'representative_professor' => 'array',
         ];
     }

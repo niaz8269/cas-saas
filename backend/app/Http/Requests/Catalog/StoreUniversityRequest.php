@@ -34,6 +34,18 @@ class StoreUniversityRequest extends FormRequest
             'about' => ['nullable', 'string', 'max:20000'],
             'requirements' => ['nullable', 'array'],
             'requirements.*' => ['string', 'max:255'],
+            // Per-university application form: required documents + custom fields
+            // the student fills when applying to this university.
+            'application_form' => ['nullable', 'array'],
+            'application_form.documents' => ['nullable', 'array'],
+            'application_form.documents.*' => ['integer', Rule::exists('document_types', 'id')],
+            'application_form.fields' => ['nullable', 'array', 'max:30'],
+            'application_form.fields.*.key' => ['required', 'string', 'max:60', 'regex:/^[a-z][a-z0-9_]*$/', 'distinct'],
+            'application_form.fields.*.label' => ['required', 'string', 'max:120'],
+            'application_form.fields.*.type' => ['required', Rule::in(['text', 'textarea', 'number', 'date', 'select', 'radio'])],
+            'application_form.fields.*.required' => ['boolean'],
+            'application_form.fields.*.options' => ['nullable', 'array'],
+            'application_form.fields.*.options.*' => ['string', 'max:120'],
             'representative_professor' => ['nullable', 'array'],
             'representative_professor.name' => ['nullable', 'string', 'max:150'],
             'representative_professor.title' => ['nullable', 'string', 'max:150'],

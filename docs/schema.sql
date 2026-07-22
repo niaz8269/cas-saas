@@ -646,6 +646,12 @@ ALTER TABLE universities
   ADD COLUMN representative_professor JSON NULL,
   ADD UNIQUE KEY uq_universities_slug (slug);
 
+-- ADDENDUM (ADR-0011): per-university application-form config
+-- ({ fields:[{key,label,type,required,options}], documents:[doc_type_id] }).
+-- When set, drives the submission wizard's custom fields + required documents.
+ALTER TABLE universities
+  ADD COLUMN application_form JSON NULL AFTER requirements;
+
 -- ADDENDUM (ADR-0007): scholarship website content fields.
 ALTER TABLE scholarships
   ADD COLUMN slug         VARCHAR(190) NULL AFTER name,
