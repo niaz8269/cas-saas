@@ -4,7 +4,7 @@ import { type ReactNode, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { getSiteScholarships, type SiteProgram, type SiteUniversityCard } from "@/features/site/api"
+import { getSiteScholarships, getSitePosts, type SiteProgram, type SiteUniversityCard } from "@/features/site/api"
 import { cn } from "@/lib/utils"
 
 // Display labels are i18n keys resolved at render (report — 5-language support).
@@ -56,11 +56,17 @@ export default function HeroUpdates({ universities, programs }: { universities: 
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<TabKey>("universities")
 
-  // Scholarships load lazily — only when the panel is first opened.
+  // Scholarships + latest posts load lazily — only when the panel is first opened.
   const scholarships = useQuery({
     queryKey: ["site-scholarships", "hero-updates"],
     queryFn: () => getSiteScholarships({}),
     enabled: open,
+  })
+  const posts = useQuery({
+    queryKey: ["site-posts", "hero-updates"],
+    queryFn: () => getSitePosts({}),
+    enabled: open,
+    staleTime: 60_000,
   })
 
   // Rolling "last application" date (~2 months out) so rows never read as stale.
@@ -135,9 +141,21 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                 ))
                 : <Note>{t("heroUpdates.noScholarships")}</Note>)}
 
-            {tab === "news" && NEW_STORIES.map(([titleKey, to]) => (
-              <Row key={titleKey} to={to} left={t(titleKey)} right={t("heroUpdates.updated", { date: lastApp })} />
-            ))}
+            {tab === "news" && (posts.isPending
+              ? <Note>{t("heroUpdates.loading")}</Note>
+              : posts.data?.data.length
+                ? posts.data.data.slice(0, 8).map((p) => (
+                  <Row
+                    key={p.id}
+                    to={`/site/news/${p.slug}`}
+                    left={p.title}
+                    right={t("heroUpdates.updated", { date: p.published_at ? fmtDate(p.published_at) : lastApp })}
+                  />
+                ))
+                // Fall back to the curated stories when nothing is published yet.
+                : NEW_STORIES.map(([titleKey, to]) => (
+                  <Row key={titleKey} to={to} left={t(titleKey)} right={t("heroUpdates.updated", { date: lastApp })} />
+                )))}
           </div>
         </div>
       )}
