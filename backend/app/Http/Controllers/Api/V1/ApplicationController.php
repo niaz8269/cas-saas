@@ -12,6 +12,7 @@ use App\Http\Resources\ApplicationResource;
 use App\Http\Resources\OfferResource;
 use App\Models\Application;
 use App\Models\Offer;
+use App\Services\Admissions\ApplicationCatalog;
 use App\Services\Admissions\ApplicationWorkflow;
 use App\Support\BrandAssets;
 use App\Support\CsvExport;
@@ -115,8 +116,10 @@ class ApplicationController extends Controller
 
         $application->load([
             'university:id,name,code',
-            'program:id,name,level',
-            'scholarship:id,name',
+            // requirements + the program's university form drive the doc checklist.
+            'program:id,name,level,university_id,requirements',
+            'program.university:id,application_form',
+            'scholarship:id,name,criteria',
             'source:id,name',
             'admissionsOfficer:id,name',
             'intake:id,name',
@@ -128,8 +131,14 @@ class ApplicationController extends Controller
             'student.education',
         ])->loadCount('documents');
 
+        $required = app(ApplicationCatalog::class)
+            ->requiredDocuments($application->program, $application->scholarship);
+
         return (new ApplicationResource($application))->additional([
             'checklist' => [
+                // The full resolved set the applicant was asked for (baseline +
+                // course extras), so the admin checklist matches the wizard.
+                'required' => $required->map(fn ($t) => ['id' => $t->id, 'name' => $t->name])->values(),
                 'missing' => $workflow->missingChecklist($application)->values(),
             ],
         ]);

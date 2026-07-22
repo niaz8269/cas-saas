@@ -6,7 +6,6 @@ use App\Exceptions\ChecklistIncompleteException;
 use App\Models\Activity;
 use App\Models\Application;
 use App\Models\ApplicationStatusHistory;
-use App\Models\DocumentType;
 use App\Models\User;
 use App\Services\Comms\AutomationEngine;
 use App\Services\Comms\NotificationService;
@@ -174,7 +173,13 @@ class ApplicationWorkflow
      */
     public function missingChecklist(Application $application): Collection
     {
-        $required = DocumentType::requiredFor('application')->pluck('name', 'id');
+        $application->loadMissing('program', 'scholarship');
+
+        // Same resolution the student wizard + submit-check use, so the admin
+        // checklist never disagrees with what the applicant was asked for.
+        $required = app(ApplicationCatalog::class)
+            ->requiredDocuments($application->program, $application->scholarship)
+            ->pluck('name', 'id');
 
         if ($required->isEmpty()) {
             return collect();

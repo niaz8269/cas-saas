@@ -149,13 +149,19 @@ class ApplicationCatalog
      */
     public function requiredDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
     {
-        // A university's own form (when defined) overrides the program's docs.
+        // Global baseline: every application needs the document types flagged
+        // required_for 'application' (the same set the admin checklist uses).
+        $types = DocumentType::requiredFor('application')->get();
+
+        // Plus the course-specific set — a university's own form (when defined)
+        // overrides the program's. Merged on top of the baseline.
         $uniDocs = $this->universityForm($program)['documents'] ?? null;
-        $docIds = is_array($uniDocs) && $uniDocs !== []
+        $courseDocIds = is_array($uniDocs) && $uniDocs !== []
             ? $uniDocs
             : ($program?->requirements['documents'] ?? []);
-        $types = $this->resolveTypes($docIds);
+        $types = $types->concat($this->resolveTypes($courseDocIds));
 
+        // Ultimate fallback when nothing is flagged or configured anywhere.
         if ($types->isEmpty()) {
             $types = DocumentType::whereIn('name', self::GENERAL_DOCUMENTS)->get();
         }
