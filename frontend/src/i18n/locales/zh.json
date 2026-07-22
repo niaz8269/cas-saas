@@ -922,5 +922,393 @@
       "min": "分",
       "sec": "秒"
     }
+  },
+  "portal": {
+    "navHome": "首页",
+    "navStudents": "学生",
+    "navApply": "申请",
+    "navEarnings": "收益",
+    "navApps": "申请",
+    "navVisa": "签证",
+    "navFees": "费用",
+    "navDocs": "文件",
+    "signOut": "退出登录",
+    "loginTitle": "门户登录",
+    "loginSubtitle": "查看您的 CAS 记录",
+    "portalTypeAria": "门户类型",
+    "roleStudent": "学生",
+    "roleAgent": "代理",
+    "email": "邮箱",
+    "password": "密码",
+    "signIn": "登录",
+    "signingIn": "正在登录…",
+    "copyright": "© {{year}} CAS — 留学咨询服务",
+    "errorEmailRequired": "请输入邮箱",
+    "errorEmailInvalid": "请输入有效的邮箱地址",
+    "errorPasswordRequired": "请输入密码",
+    "errorServerUnreachable": "无法连接服务器，请重试。",
+    "loadErrorMessage": "出错了。",
+    "retry": "重试"
+  },
+  "portalStatus": {
+    "draft": "草稿",
+    "underReview": "审核中",
+    "documentsPending": "待补充文件",
+    "submitted": "已提交",
+    "offerReceived": "已收到录取",
+    "accepted": "已接受",
+    "rejected": "已拒绝",
+    "withdrawn": "已撤回",
+    "deferred": "已延期",
+    "notStarted": "未开始",
+    "documentsCollection": "文件收集中",
+    "appointmentBooked": "已预约",
+    "approved": "已批准",
+    "travelReady": "可出行",
+    "issued": "已签发",
+    "partiallyPaid": "部分付款",
+    "paid": "已付款",
+    "cancelled": "已取消",
+    "overdue": "已逾期",
+    "active": "进行中",
+    "inProcess": "处理中",
+    "enrolled": "已注册",
+    "arrived": "已抵达",
+    "inactive": "未激活",
+    "pending": "待处理",
+    "verified": "已核验",
+    "received": "已收到",
+    "payable": "待付款"
+  },
+  "studentPortal": {
+    "home": {
+      "greeting": "你好，{{name}}",
+      "greetingFallbackName": "同学",
+      "studentCode": "学号 {{code}}",
+      "startNewApplication": "开始新申请",
+      "applyScholarship": "申请政府奖学金",
+      "latestApplication": "最新申请",
+      "applications": "申请",
+      "outstandingFees": "待缴费用",
+      "visaStatus": "签证状态",
+      "uploadDocs": "上传文件"
+    },
+    "applications": {
+      "title": "我的申请",
+      "subtitle": "跟踪每份申请的进度",
+      "startNewApplication": "开始新申请",
+      "emptyTitle": "暂无申请",
+      "offerReceived": "已收到录取",
+      "offerReference": " · {{reference}}",
+      "offerValidTo": " · 有效期至 {{date}}"
+    },
+    "documents": {
+      "title": "文件",
+      "subtitle": "上传并查看您的文件",
+      "addDocument": "添加文件",
+      "documentTypeAria": "文件类型",
+      "choosePlaceholder": "选择文件类型",
+      "uploading": "正在上传…",
+      "chooseUpload": "选择文件并上传",
+      "uploadFailed": "上传失败，请重试。",
+      "fileTooLarge": "文件大小不得超过 25 MB。",
+      "emptyTitle": "暂无文件",
+      "emptyHint": "在上方上传您的护照、成绩单等文件。",
+      "documentFallback": "文件"
+    },
+    "invoices": {
+      "title": "费用与收据",
+      "subtitle": "您的学费账单与付款记录",
+      "emptyTitle": "暂无账单",
+      "paid": "已付款",
+      "outstanding": "待缴",
+      "receipts": "收据",
+      "preparing": "正在准备…",
+      "downloadPdf": "下载 PDF"
+    },
+    "visa": {
+      "title": "签证",
+      "emptyTitle": "暂无签证案件",
+      "emptyHint": "录取确认后，您的签证案件将会开启。",
+      "currentStatus": "当前状态",
+      "milestoneAppointment": "预约",
+      "milestoneSubmitted": "已提交",
+      "milestoneDecision": "结果",
+      "milestoneTravelReady": "可出行",
+      "documentChecklist": "文件清单",
+      "optionalSuffix": "（可选）"
+    }
+  },
+  "agentPortal": {
+    "home": {
+      "greeting": "您好，{{name}}",
+      "greetingFallback": "您好",
+      "subtitle": "您的 CAS 合作伙伴门户",
+      "applyForStudent": "为学生申请",
+      "governmentScholarship": "政府奖学金申请",
+      "students": "学生",
+      "awaitingPayout": "待结算",
+      "earningsToDate": "累计收益",
+      "paidAmount": "已支付 {{amount}}",
+      "stillToCome": "待支付 {{amount}}",
+      "recentStudents": "最近的学生",
+      "appCount_one": "{{count}} 份申请",
+      "appCount_other": "{{count}} 份申请",
+      "noStudentsYet": "暂无学生。"
+    },
+    "students": {
+      "title": "我的学生",
+      "subtitle": "您推荐给 CAS 的学生",
+      "newApplication": "新建申请",
+      "emptyTitle": "暂无学生",
+      "emptyHint": "您提交的学生将显示在这里。",
+      "appCount_one": "{{count}} 份申请",
+      "appCount_other": "{{count}} 份申请",
+      "apply": "申请",
+      "paginationRange": "第 {{from}}–{{to}} 条，共 {{total}} 条",
+      "prev": "上一页",
+      "next": "下一页"
+    },
+    "commissions": {
+      "title": "我的收益",
+      "subtitle": "您在 CAS 录取中的佣金分成",
+      "awaitingPayout": "待结算",
+      "paidToDate": "累计已付",
+      "preparing": "正在准备…",
+      "downloadStatement": "下载对账单（PDF）",
+      "emptyTitle": "暂无收益",
+      "emptyHint": "收到某笔录取的佣金后，您的分成将显示在这里。"
+    },
+    "picker": {
+      "prompt": "请选择您要为其申请的学生。",
+      "searchPlaceholder": "按姓名或学号搜索",
+      "emptyMatchTitle": "没有匹配的学生",
+      "emptyTitle": "暂无学生",
+      "emptyMatchHint": "请尝试其他姓名或学号。",
+      "emptyHint": "您推荐给 CAS 的学生将显示在这里。",
+      "appCount_one": "{{count}} 份申请",
+      "appCount_other": "{{count}} 份申请",
+      "paginationRange": "第 {{from}}–{{to}} 条，共 {{total}} 条",
+      "prev": "上一页",
+      "next": "下一页"
+    }
+  },
+  "wizard": {
+    "brand": {
+      "studyInChina": "CAS · 留学中国",
+      "partnerPortal": "CAS · 合作伙伴门户"
+    },
+    "applyTitle": "申请表",
+    "scholarshipTitle": "政府奖学金",
+    "agentApplyTitle": "为学生申请",
+    "steps": {
+      "student": "学生",
+      "course": "课程",
+      "scholarship": "奖学金",
+      "preferences": "志愿",
+      "personal": "个人信息",
+      "background": "背景",
+      "documents": "文件",
+      "review": "核对"
+    },
+    "buttons": {
+      "back": "返回",
+      "continue": "继续",
+      "saveAddDocuments": "保存并添加文件",
+      "reviewApplication": "核对申请",
+      "uploadAllRequired": "上传所有必需文件",
+      "submitApplication": "提交申请"
+    },
+    "common": {
+      "select": "选择"
+    },
+    "errors": {
+      "couldNotStartYours": "无法开始您的申请。",
+      "couldNotStart": "无法开始申请。",
+      "couldNotSubmit": "提交失败，请重试。"
+    },
+    "degrees": {
+      "mbbs": {
+        "label": "MBBS",
+        "hint": "临床医学学士"
+      },
+      "bds": {
+        "label": "BDS",
+        "hint": "口腔医学学士"
+      },
+      "bs": {
+        "label": "学士（BS）",
+        "hint": "本科学位"
+      },
+      "master": {
+        "label": "硕士",
+        "hint": "研究生学位"
+      },
+      "phd": {
+        "label": "博士",
+        "hint": "博士学位"
+      },
+      "diploma": {
+        "label": "文凭",
+        "hint": "短期资格证书"
+      }
+    },
+    "funding": {
+      "self": {
+        "label": "自费",
+        "hint": "自行支付学费"
+      },
+      "scholarship": {
+        "label": "奖学金",
+        "hint": "全额奖学金"
+      },
+      "partial": {
+        "label": "部分奖学金",
+        "hint": "部分资助"
+      }
+    },
+    "levels": {
+      "bachelor": {
+        "label": "学士 / BS",
+        "hint": "本科"
+      },
+      "master": {
+        "label": "硕士",
+        "hint": "研究生"
+      },
+      "phd": {
+        "label": "博士",
+        "hint": "博士"
+      }
+    },
+    "profile": {
+      "personalDetails": "个人详情",
+      "dateOfBirth": "出生日期",
+      "placeOfBirth": "出生地",
+      "nationality": "国籍",
+      "selectCountry": "选择国家",
+      "gender": "性别",
+      "male": "男",
+      "female": "女",
+      "other": "其他",
+      "maritalStatus": "婚姻状况",
+      "single": "未婚",
+      "married": "已婚",
+      "phone": "电话",
+      "religion": "宗教（可选）",
+      "chineseName": "中文名（可选）",
+      "nativeLanguage": "母语（可选）",
+      "contact": "联系方式",
+      "alternateEmail": "备用邮箱（可选）",
+      "wechatId": "WeChat 号（可选）",
+      "skypeId": "Skype 号（可选）",
+      "passport": "护照",
+      "passportNo": "护照号",
+      "issueDate": "签发日期",
+      "expiryDate": "有效期至",
+      "englishProficiency": "英语水平",
+      "testTaken": "所考的考试",
+      "ielts": "IELTS",
+      "toefl": "TOEFL",
+      "pteAcademic": "PTE Academic",
+      "duolingo": "Duolingo",
+      "noneNotTaken": "无 / 未参加考试",
+      "overallScore": "总分",
+      "scoreExample": "例如 6.5",
+      "testDate": "考试日期",
+      "address": "地址",
+      "permanentAddress": "永久地址",
+      "currentAddress": "现居地址",
+      "city": "城市",
+      "postalCode": "邮政编码"
+    },
+    "background": {
+      "family": "家庭",
+      "remove": "移除",
+      "name": "姓名",
+      "occupation": "职业",
+      "phone": "电话",
+      "relation": "关系",
+      "addGuardian": "添加监护人",
+      "emergencyContact": "紧急联系人",
+      "emergencyHint": "紧急情况下我们可以联系的人（信息严格保密）。",
+      "fullName": "全名",
+      "email": "邮箱",
+      "address": "地址",
+      "mostRecentEducation": "最近的教育经历",
+      "degreeQualification": "学位 / 学历",
+      "degreeExample": "例如 高中理科（预医学方向）",
+      "institution": "院校",
+      "boardUniversity": "考试委员会 / 大学",
+      "completionYear": "毕业年份",
+      "grade": "成绩 / 百分比",
+      "gradeExample": "例如 88%",
+      "addAnother": "再添加一项"
+    },
+    "documents": {
+      "uploadClear": "请上传清晰的",
+      "uploadEachDoc": "每份文件的照片/扫描件。申请",
+      "noDocsRequired": "无需上传文件。",
+      "onlyJpg": "仅接受 JPG 格式图片。",
+      "uploadFailed": "上传失败，请重试。",
+      "replace": "替换",
+      "upload": "上传"
+    },
+    "customFields": {
+      "additionalQuestions": "补充问题"
+    },
+    "course": {
+      "whichDegree": "选择哪种学位？",
+      "howFund": "您将如何支付费用？",
+      "checkingOptions": "正在查询选项…",
+      "noScholarshipsForDegree": "该学位目前不提供奖学金——仅限自费。",
+      "availablePrograms": "可选专业",
+      "findingPrograms": "正在查找专业…",
+      "couldNotLoadPrograms": "无法加载专业，请返回后重试。",
+      "noProgramsMatch": "暂无符合该组合的专业。请尝试其他学位或资助方式。",
+      "durationMonths": "{{months}} 个月",
+      "tuitionPerYear": "学费 {{amount}}/年",
+      "hostelPerYear": "住宿 {{amount}}/年",
+      "moeListed": "教育部认可",
+      "serviceFee": "CAS 服务费：{{amount}}",
+      "intake": "入学批次",
+      "chooseIntake": "选择入学批次（可选）",
+      "applyBy": "申请截止 {{date}}",
+      "scholarship": "奖学金",
+      "chooseScholarship": "选择奖学金",
+      "noScholarshipsListed": "该大学暂无奖学金。"
+    },
+    "review": {
+      "summary": "摘要",
+      "reference": "参考编号",
+      "serviceFeeLabel": "CAS 服务费：",
+      "documentsAttached": "已附上 {{count}} 份文件。",
+      "declaration": "本人声明所提供的信息真实无误，据本人所知均属正确，并授权 CAS 处理本次入学及签证申请。",
+      "agentDeclaration": "本人确认 {{name}} 已授权 CAS 代为处理本次申请，且所提供的信息真实无误，据本人所知均属正确。",
+      "theStudent": "该学生"
+    },
+    "scholarship": {
+      "chooseScholarship": "选择奖学金",
+      "loadingScholarships": "正在加载奖学金…",
+      "noneOpen": "目前没有开放申请的政府奖学金。",
+      "coversTitle": "该奖学金涵盖内容（{{level}}）",
+      "tuitionAfter": "减免后学费",
+      "hostelAfter": "减免后住宿费",
+      "stipendMonthly": "每月补助",
+      "enrolsAt": "就读院校：{{names}}",
+      "documentsAttachedApproval": "已附上 {{count}} 份文件 · 须经 CAS 审批。",
+      "declaration": "本人声明所提供的信息真实无误，并授权 CAS 代为处理本次奖学金申请。",
+      "agentDeclaration": "本人确认 {{name}} 已授权 CAS 代为处理本次政府奖学金申请，且所提供的信息真实无误。"
+    },
+    "preferences": {
+      "intro": "最多可选择 3 个专业（并可选填一所意向大学）。须经 CAS 审批。",
+      "preferenceN": "志愿 {{n}}",
+      "removePreference": "移除志愿",
+      "major": "专业",
+      "chooseMajor": "选择专业",
+      "preferredUniversity": "意向大学（可选）",
+      "anyUniversity": "任意大学",
+      "addPreference": "添加志愿"
+    }
   }
 }

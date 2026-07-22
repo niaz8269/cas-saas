@@ -922,5 +922,393 @@
       "min": "Min",
       "sec": "Sec"
     }
+  },
+  "portal": {
+    "navHome": "Accueil",
+    "navStudents": "Étudiants",
+    "navApply": "Postuler",
+    "navEarnings": "Revenus",
+    "navApps": "Candidatures",
+    "navVisa": "Visa",
+    "navFees": "Frais",
+    "navDocs": "Docs",
+    "signOut": "Se déconnecter",
+    "loginTitle": "Connexion au portail",
+    "loginSubtitle": "Accédez à vos dossiers CAS",
+    "portalTypeAria": "Type de portail",
+    "roleStudent": "Étudiant",
+    "roleAgent": "Agent",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "signIn": "Se connecter",
+    "signingIn": "Connexion…",
+    "copyright": "© {{year}} CAS — Consultancy for Abroad Study",
+    "errorEmailRequired": "L'e-mail est obligatoire",
+    "errorEmailInvalid": "Saisissez une adresse e-mail valide",
+    "errorPasswordRequired": "Le mot de passe est obligatoire",
+    "errorServerUnreachable": "Impossible de joindre le serveur. Veuillez réessayer.",
+    "loadErrorMessage": "Une erreur est survenue.",
+    "retry": "Réessayer"
+  },
+  "portalStatus": {
+    "draft": "Brouillon",
+    "underReview": "En cours d'examen",
+    "documentsPending": "Documents en attente",
+    "submitted": "Soumis",
+    "offerReceived": "Offre reçue",
+    "accepted": "Accepté",
+    "rejected": "Rejeté",
+    "withdrawn": "Retiré",
+    "deferred": "Reporté",
+    "notStarted": "Non commencé",
+    "documentsCollection": "Collecte des documents",
+    "appointmentBooked": "Rendez-vous pris",
+    "approved": "Approuvé",
+    "travelReady": "Prêt au départ",
+    "issued": "Délivré",
+    "partiallyPaid": "Partiellement payé",
+    "paid": "Payé",
+    "cancelled": "Annulé",
+    "overdue": "En retard",
+    "active": "Actif",
+    "inProcess": "En traitement",
+    "enrolled": "Inscrit",
+    "arrived": "Arrivé",
+    "inactive": "Inactif",
+    "pending": "En attente",
+    "verified": "Vérifié",
+    "received": "Reçu",
+    "payable": "À payer"
+  },
+  "studentPortal": {
+    "home": {
+      "greeting": "Bonjour, {{name}}",
+      "greetingFallbackName": "cher étudiant",
+      "studentCode": "Étudiant {{code}}",
+      "startNewApplication": "Commencer une nouvelle candidature",
+      "applyScholarship": "Demander une bourse d'État",
+      "latestApplication": "Dernière candidature",
+      "applications": "Candidatures",
+      "outstandingFees": "Frais impayés",
+      "visaStatus": "Statut du visa",
+      "uploadDocs": "Téléverser des documents"
+    },
+    "applications": {
+      "title": "Mes candidatures",
+      "subtitle": "Suivez la progression de chaque candidature",
+      "startNewApplication": "Commencer une nouvelle candidature",
+      "emptyTitle": "Aucune candidature pour le moment",
+      "offerReceived": "Offre reçue",
+      "offerReference": " · {{reference}}",
+      "offerValidTo": " · valable jusqu'au {{date}}"
+    },
+    "documents": {
+      "title": "Documents",
+      "subtitle": "Téléversez et consultez vos documents",
+      "addDocument": "Ajouter un document",
+      "documentTypeAria": "Type de document",
+      "choosePlaceholder": "Choisissez un type de document",
+      "uploading": "Téléversement…",
+      "chooseUpload": "Choisir un fichier et téléverser",
+      "uploadFailed": "Échec du téléversement. Veuillez réessayer.",
+      "fileTooLarge": "Les fichiers ne doivent pas dépasser 25 Mo.",
+      "emptyTitle": "Aucun document pour le moment",
+      "emptyHint": "Téléversez votre passeport, vos relevés de notes et bien plus ci-dessus.",
+      "documentFallback": "Document"
+    },
+    "invoices": {
+      "title": "Frais et reçus",
+      "subtitle": "Vos factures de scolarité et vos paiements",
+      "emptyTitle": "Aucune facture pour le moment",
+      "paid": "Payé",
+      "outstanding": "Restant dû",
+      "receipts": "Reçus",
+      "preparing": "Préparation…",
+      "downloadPdf": "Télécharger le PDF"
+    },
+    "visa": {
+      "title": "Visa",
+      "emptyTitle": "Aucun dossier de visa pour le moment",
+      "emptyHint": "Votre dossier de visa s'ouvre une fois votre admission confirmée.",
+      "currentStatus": "Statut actuel",
+      "milestoneAppointment": "Rendez-vous",
+      "milestoneSubmitted": "Soumis",
+      "milestoneDecision": "Décision",
+      "milestoneTravelReady": "Prêt au départ",
+      "documentChecklist": "Liste des documents",
+      "optionalSuffix": " (facultatif)"
+    }
+  },
+  "agentPortal": {
+    "home": {
+      "greeting": "Bonjour, {{name}}",
+      "greetingFallback": "cher partenaire",
+      "subtitle": "Votre portail partenaire CAS",
+      "applyForStudent": "Postuler pour un étudiant",
+      "governmentScholarship": "Demande de bourse d'État",
+      "students": "Étudiants",
+      "awaitingPayout": "En attente de versement",
+      "earningsToDate": "Revenus à ce jour",
+      "paidAmount": "{{amount}} versés",
+      "stillToCome": "{{amount}} à venir",
+      "recentStudents": "Étudiants récents",
+      "appCount_one": "{{count}} candidature",
+      "appCount_other": "{{count}} candidatures",
+      "noStudentsYet": "Aucun étudiant pour le moment."
+    },
+    "students": {
+      "title": "Mes étudiants",
+      "subtitle": "Étudiants que vous avez recommandés à CAS",
+      "newApplication": "Nouvelle candidature",
+      "emptyTitle": "Aucun étudiant pour le moment",
+      "emptyHint": "Les étudiants que vous soumettez apparaîtront ici.",
+      "appCount_one": "{{count}} candidature",
+      "appCount_other": "{{count}} candidatures",
+      "apply": "Postuler",
+      "paginationRange": "{{from}}–{{to}} sur {{total}}",
+      "prev": "Préc.",
+      "next": "Suiv."
+    },
+    "commissions": {
+      "title": "Mes revenus",
+      "subtitle": "Votre part de commission sur les placements CAS",
+      "awaitingPayout": "En attente de versement",
+      "paidToDate": "Versé à ce jour",
+      "preparing": "Préparation…",
+      "downloadStatement": "Télécharger le relevé (PDF)",
+      "emptyTitle": "Aucun revenu pour le moment",
+      "emptyHint": "Votre part apparaît une fois la commission d'un placement reçue."
+    },
+    "picker": {
+      "prompt": "Choisissez l'étudiant pour lequel vous postulez.",
+      "searchPlaceholder": "Rechercher par nom ou code étudiant",
+      "emptyMatchTitle": "Aucun étudiant correspondant",
+      "emptyTitle": "Aucun étudiant pour le moment",
+      "emptyMatchHint": "Essayez un autre nom ou code.",
+      "emptyHint": "Les étudiants que vous recommandez à CAS apparaîtront ici.",
+      "appCount_one": "{{count}} candidature",
+      "appCount_other": "{{count}} candidatures",
+      "paginationRange": "{{from}}–{{to}} sur {{total}}",
+      "prev": "Préc.",
+      "next": "Suiv."
+    }
+  },
+  "wizard": {
+    "brand": {
+      "studyInChina": "CAS · Étudier en Chine",
+      "partnerPortal": "CAS · Portail partenaire"
+    },
+    "applyTitle": "Formulaire de candidature",
+    "scholarshipTitle": "Bourse d'État",
+    "agentApplyTitle": "Postuler pour un étudiant",
+    "steps": {
+      "student": "Étudiant",
+      "course": "Formation",
+      "scholarship": "Bourse",
+      "preferences": "Préférences",
+      "personal": "Personnel",
+      "background": "Parcours",
+      "documents": "Documents",
+      "review": "Vérification"
+    },
+    "buttons": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "saveAddDocuments": "Enregistrer et ajouter des documents",
+      "reviewApplication": "Vérifier la candidature",
+      "uploadAllRequired": "Téléverser tous les documents requis",
+      "submitApplication": "Soumettre la candidature"
+    },
+    "common": {
+      "select": "Sélectionner"
+    },
+    "errors": {
+      "couldNotStartYours": "Impossible de démarrer votre candidature.",
+      "couldNotStart": "Impossible de démarrer la candidature.",
+      "couldNotSubmit": "Échec de l'envoi. Veuillez réessayer."
+    },
+    "degrees": {
+      "mbbs": {
+        "label": "MBBS",
+        "hint": "Licence de médecine"
+      },
+      "bds": {
+        "label": "BDS",
+        "hint": "Licence de chirurgie dentaire"
+      },
+      "bs": {
+        "label": "Licence (BS)",
+        "hint": "Diplôme de premier cycle"
+      },
+      "master": {
+        "label": "Master",
+        "hint": "Diplôme de deuxième cycle"
+      },
+      "phd": {
+        "label": "Doctorat",
+        "hint": "Diplôme de doctorat"
+      },
+      "diploma": {
+        "label": "Diplôme",
+        "hint": "Qualification courte"
+      }
+    },
+    "funding": {
+      "self": {
+        "label": "Autofinancé",
+        "hint": "Payez vous-même vos frais de scolarité"
+      },
+      "scholarship": {
+        "label": "Bourse",
+        "hint": "Bourse complète"
+      },
+      "partial": {
+        "label": "Bourse partielle",
+        "hint": "Aide partielle"
+      }
+    },
+    "levels": {
+      "bachelor": {
+        "label": "Licence / BS",
+        "hint": "Premier cycle"
+      },
+      "master": {
+        "label": "Master",
+        "hint": "Deuxième cycle"
+      },
+      "phd": {
+        "label": "Doctorat",
+        "hint": "Troisième cycle"
+      }
+    },
+    "profile": {
+      "personalDetails": "Informations personnelles",
+      "dateOfBirth": "Date de naissance",
+      "placeOfBirth": "Lieu de naissance",
+      "nationality": "Nationalité",
+      "selectCountry": "Sélectionnez un pays",
+      "gender": "Sexe",
+      "male": "Masculin",
+      "female": "Féminin",
+      "other": "Autre",
+      "maritalStatus": "État civil",
+      "single": "Célibataire",
+      "married": "Marié(e)",
+      "phone": "Téléphone",
+      "religion": "Religion (facultatif)",
+      "chineseName": "Nom chinois (facultatif)",
+      "nativeLanguage": "Langue maternelle (facultatif)",
+      "contact": "Coordonnées",
+      "alternateEmail": "Adresse e-mail secondaire (facultatif)",
+      "wechatId": "Identifiant WeChat (facultatif)",
+      "skypeId": "Identifiant Skype (facultatif)",
+      "passport": "Passeport",
+      "passportNo": "N° de passeport",
+      "issueDate": "Date de délivrance",
+      "expiryDate": "Date d'expiration",
+      "englishProficiency": "Niveau d'anglais",
+      "testTaken": "Test passé",
+      "ielts": "IELTS",
+      "toefl": "TOEFL",
+      "pteAcademic": "PTE Academic",
+      "duolingo": "Duolingo",
+      "noneNotTaken": "Aucun / non passé",
+      "overallScore": "Score global",
+      "scoreExample": "p. ex. 6,5",
+      "testDate": "Date du test",
+      "address": "Adresse",
+      "permanentAddress": "Adresse permanente",
+      "currentAddress": "Adresse actuelle",
+      "city": "Ville",
+      "postalCode": "Code postal"
+    },
+    "background": {
+      "family": "Famille",
+      "remove": "Supprimer",
+      "name": "Nom",
+      "occupation": "Profession",
+      "phone": "Téléphone",
+      "relation": "Lien de parenté",
+      "addGuardian": "Ajouter un tuteur",
+      "emergencyContact": "Contact d'urgence",
+      "emergencyHint": "Une personne que nous pouvons joindre en cas d'urgence (information confidentielle).",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "address": "Adresse",
+      "mostRecentEducation": "Formation la plus récente",
+      "degreeQualification": "Diplôme / qualification",
+      "degreeExample": "p. ex. FSc Pre-Medical",
+      "institution": "Établissement",
+      "boardUniversity": "Conseil / université",
+      "completionYear": "Année d'obtention",
+      "grade": "Note / %",
+      "gradeExample": "p. ex. 88 %",
+      "addAnother": "Ajouter un autre"
+    },
+    "documents": {
+      "uploadClear": "Téléversez une photo/un scan net",
+      "uploadEachDoc": "de chaque document. Candidature",
+      "noDocsRequired": "Aucun document n'est requis.",
+      "onlyJpg": "Seules les images JPG sont acceptées.",
+      "uploadFailed": "Échec du téléversement. Veuillez réessayer.",
+      "replace": "Remplacer",
+      "upload": "Téléverser"
+    },
+    "customFields": {
+      "additionalQuestions": "Questions supplémentaires"
+    },
+    "course": {
+      "whichDegree": "Quel diplôme ?",
+      "howFund": "Comment allez-vous le financer ?",
+      "checkingOptions": "Vérification des options…",
+      "noScholarshipsForDegree": "Aucune bourse n'est actuellement proposée pour ce diplôme — autofinancement uniquement.",
+      "availablePrograms": "Programmes disponibles",
+      "findingPrograms": "Recherche de programmes…",
+      "couldNotLoadPrograms": "Impossible de charger les programmes. Revenez en arrière et réessayez.",
+      "noProgramsMatch": "Aucun programme ne correspond encore à cette combinaison. Essayez un autre diplôme ou une autre option de financement.",
+      "durationMonths": "{{months}} mois",
+      "tuitionPerYear": "Scolarité {{amount}}/an",
+      "hostelPerYear": "Hébergement {{amount}}/an",
+      "moeListed": "Référencé MoE",
+      "serviceFee": "Frais de service CAS : {{amount}}",
+      "intake": "Session",
+      "chooseIntake": "Choisissez une session (facultatif)",
+      "applyBy": "candidature avant le {{date}}",
+      "scholarship": "Bourse",
+      "chooseScholarship": "Choisissez une bourse",
+      "noScholarshipsListed": "Aucune bourse répertoriée pour cette université."
+    },
+    "review": {
+      "summary": "Résumé",
+      "reference": "Référence",
+      "serviceFeeLabel": "Frais de service CAS :",
+      "documentsAttached": "{{count}} document(s) joint(s).",
+      "declaration": "Je déclare que les informations fournies sont véridiques et exactes au mieux de ma connaissance, et j'autorise CAS à traiter cette candidature à des fins d'admission et de visa.",
+      "agentDeclaration": "Je confirme que {{name}} a autorisé CAS à traiter cette candidature en son nom, et que les informations fournies sont véridiques et exactes au mieux de ma connaissance.",
+      "theStudent": "l'étudiant"
+    },
+    "scholarship": {
+      "chooseScholarship": "Choisissez une bourse",
+      "loadingScholarships": "Chargement des bourses…",
+      "noneOpen": "Aucune bourse d'État n'est ouverte pour le moment.",
+      "coversTitle": "Ce que couvre cette bourse ({{level}})",
+      "tuitionAfter": "Scolarité après",
+      "hostelAfter": "Hébergement après",
+      "stipendMonthly": "Allocation / mois",
+      "enrolsAt": "Inscription à : {{names}}",
+      "documentsAttachedApproval": "{{count}} document(s) joint(s) · sous réserve d'approbation de CAS.",
+      "declaration": "Je déclare que les informations fournies sont véridiques et exactes, et j'autorise CAS à traiter cette demande de bourse en mon nom.",
+      "agentDeclaration": "Je confirme que {{name}} a autorisé CAS à traiter cette demande de bourse d'État en son nom, et que les informations fournies sont véridiques et exactes."
+    },
+    "preferences": {
+      "intro": "Choisissez jusqu'à 3 spécialités (et, éventuellement, une université préférée). Sous réserve d'approbation de CAS.",
+      "preferenceN": "Préférence {{n}}",
+      "removePreference": "Supprimer la préférence",
+      "major": "Spécialité",
+      "chooseMajor": "Choisissez une spécialité",
+      "preferredUniversity": "Université préférée (facultatif)",
+      "anyUniversity": "N'importe quelle université",
+      "addPreference": "Ajouter une préférence"
+    }
   }
 }

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { portalLogin, type AgentProfileData, type StudentProfileData } from "@/features/portal/api"
+import { langDef } from "@/i18n/languages"
 import { ApiError } from "@/lib/api"
 import { usePortalAuthStore, type PortalKind } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
@@ -18,7 +19,7 @@ import { cn } from "@/lib/utils"
 type Values = { email: string; password: string }
 
 export default function PortalLogin() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const token = usePortalAuthStore((s) => s.token)
   const kindInStore = usePortalAuthStore((s) => s.kind)
@@ -77,7 +78,7 @@ export default function PortalLogin() {
   })
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center bg-subtle p-6">
+    <main dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col items-center justify-center bg-subtle p-6">
       <div className="w-full max-w-sm">
         <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto mb-8 h-14 w-auto" />
 

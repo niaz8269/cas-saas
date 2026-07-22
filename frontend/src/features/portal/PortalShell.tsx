@@ -15,6 +15,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
 import { portalLogout } from "@/features/portal/api"
+import { langDef } from "@/i18n/languages"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
 
@@ -42,7 +43,7 @@ const STUDENT_NAV: PortalNavItem[] = [
 ]
 
 export default function PortalShell() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const kind = usePortalAuthStore((s) => s.kind)
   const profile = usePortalAuthStore((s) => s.profile)
@@ -59,7 +60,7 @@ export default function PortalShell() {
   })
 
   return (
-    <div className="flex min-h-dvh flex-col bg-subtle">
+    <div dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col bg-subtle">
       {/* Header */}
       <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-card px-4 py-3">
         <img src={casLogo} alt="CAS" className="h-8 w-auto" />

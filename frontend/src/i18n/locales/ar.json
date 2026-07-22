@@ -934,5 +934,405 @@
       "min": "دقائق",
       "sec": "ثوانٍ"
     }
+  },
+  "portal": {
+    "navHome": "الرئيسية",
+    "navStudents": "الطلاب",
+    "navApply": "تقديم طلب",
+    "navEarnings": "الأرباح",
+    "navApps": "الطلبات",
+    "navVisa": "التأشيرة",
+    "navFees": "الرسوم",
+    "navDocs": "المستندات",
+    "signOut": "تسجيل الخروج",
+    "loginTitle": "تسجيل الدخول إلى البوابة",
+    "loginSubtitle": "الوصول إلى سجلاتك في CAS",
+    "portalTypeAria": "نوع البوابة",
+    "roleStudent": "طالب",
+    "roleAgent": "وكيل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "copyright": "© {{year}} CAS — الاستشارات للدراسة في الخارج",
+    "errorEmailRequired": "البريد الإلكتروني مطلوب",
+    "errorEmailInvalid": "أدخل عنوان بريد إلكتروني صالحًا",
+    "errorPasswordRequired": "كلمة المرور مطلوبة",
+    "errorServerUnreachable": "تعذّر الوصول إلى الخادم. يرجى المحاولة مرة أخرى.",
+    "loadErrorMessage": "حدث خطأ ما.",
+    "retry": "حاول مرة أخرى"
+  },
+  "portalStatus": {
+    "draft": "مسودة",
+    "underReview": "قيد المراجعة",
+    "documentsPending": "بانتظار المستندات",
+    "submitted": "تم الإرسال",
+    "offerReceived": "تم استلام العرض",
+    "accepted": "مقبول",
+    "rejected": "مرفوض",
+    "withdrawn": "مسحوب",
+    "deferred": "مؤجل",
+    "notStarted": "لم يبدأ",
+    "documentsCollection": "جمع المستندات",
+    "appointmentBooked": "تم حجز الموعد",
+    "approved": "معتمد",
+    "travelReady": "جاهز للسفر",
+    "issued": "صادر",
+    "partiallyPaid": "مدفوع جزئيًا",
+    "paid": "مدفوع",
+    "cancelled": "ملغى",
+    "overdue": "متأخر",
+    "active": "نشط",
+    "inProcess": "قيد المعالجة",
+    "enrolled": "مُسجَّل",
+    "arrived": "وصل",
+    "inactive": "غير نشط",
+    "pending": "قيد الانتظار",
+    "verified": "موثّق",
+    "received": "مستلم",
+    "payable": "مستحق الدفع"
+  },
+  "studentPortal": {
+    "home": {
+      "greeting": "مرحبًا، {{name}}",
+      "greetingFallbackName": "عزيزي الطالب",
+      "studentCode": "الطالب {{code}}",
+      "startNewApplication": "بدء طلب جديد",
+      "applyScholarship": "التقديم على منحة حكومية",
+      "latestApplication": "أحدث طلب",
+      "applications": "الطلبات",
+      "outstandingFees": "الرسوم المستحقة",
+      "visaStatus": "حالة التأشيرة",
+      "uploadDocs": "رفع المستندات"
+    },
+    "applications": {
+      "title": "طلباتي",
+      "subtitle": "تتبّع تقدّم كل طلب",
+      "startNewApplication": "بدء طلب جديد",
+      "emptyTitle": "لا توجد طلبات بعد",
+      "offerReceived": "تم استلام العرض",
+      "offerReference": " · {{reference}}",
+      "offerValidTo": " · صالح حتى {{date}}"
+    },
+    "documents": {
+      "title": "المستندات",
+      "subtitle": "ارفع مستنداتك وراجعها",
+      "addDocument": "إضافة مستند",
+      "documentTypeAria": "نوع المستند",
+      "choosePlaceholder": "اختر نوع المستند",
+      "uploading": "جارٍ الرفع…",
+      "chooseUpload": "اختر ملفًا وارفعه",
+      "uploadFailed": "فشل الرفع. يرجى المحاولة مرة أخرى.",
+      "fileTooLarge": "يجب ألا تتجاوز الملفات 25 ميغابايت.",
+      "emptyTitle": "لا توجد مستندات بعد",
+      "emptyHint": "ارفع جواز سفرك وكشوف الدرجات والمزيد أعلاه.",
+      "documentFallback": "مستند"
+    },
+    "invoices": {
+      "title": "الرسوم والإيصالات",
+      "subtitle": "فواتير الرسوم الدراسية ومدفوعاتك",
+      "emptyTitle": "لا توجد فواتير بعد",
+      "paid": "مدفوع",
+      "outstanding": "المستحق",
+      "receipts": "الإيصالات",
+      "preparing": "جارٍ التحضير…",
+      "downloadPdf": "تنزيل ملف PDF"
+    },
+    "visa": {
+      "title": "التأشيرة",
+      "emptyTitle": "لا توجد حالة تأشيرة بعد",
+      "emptyHint": "تُفتح حالة تأشيرتك بمجرد تأكيد قبولك.",
+      "currentStatus": "الحالة الحالية",
+      "milestoneAppointment": "الموعد",
+      "milestoneSubmitted": "تم الإرسال",
+      "milestoneDecision": "القرار",
+      "milestoneTravelReady": "جاهز للسفر",
+      "documentChecklist": "قائمة المستندات المطلوبة",
+      "optionalSuffix": " (اختياري)"
+    }
+  },
+  "agentPortal": {
+    "home": {
+      "greeting": "مرحبًا، {{name}}",
+      "greetingFallback": "عزيزي الوكيل",
+      "subtitle": "بوابة شركاء CAS الخاصة بك",
+      "applyForStudent": "التقديم نيابة عن طالب",
+      "governmentScholarship": "طلب منحة حكومية",
+      "students": "الطلاب",
+      "awaitingPayout": "بانتظار الصرف",
+      "earningsToDate": "الأرباح حتى الآن",
+      "paidAmount": "{{amount}} مدفوعة",
+      "stillToCome": "{{amount}} مستحقة لاحقًا",
+      "recentStudents": "الطلاب الأخيرون",
+      "appCount_zero": "لا توجد طلبات",
+      "appCount_one": "طلب واحد",
+      "appCount_two": "طلبان",
+      "appCount_few": "{{count}} طلبات",
+      "appCount_many": "{{count}} طلبًا",
+      "appCount_other": "{{count}} طلب",
+      "noStudentsYet": "لا يوجد طلاب بعد."
+    },
+    "students": {
+      "title": "طلابي",
+      "subtitle": "الطلاب الذين أحلتهم إلى CAS",
+      "newApplication": "طلب جديد",
+      "emptyTitle": "لا يوجد طلاب بعد",
+      "emptyHint": "سيظهر هنا الطلاب الذين تقدّمهم.",
+      "appCount_zero": "لا توجد طلبات",
+      "appCount_one": "طلب واحد",
+      "appCount_two": "طلبان",
+      "appCount_few": "{{count}} طلبات",
+      "appCount_many": "{{count}} طلبًا",
+      "appCount_other": "{{count}} طلب",
+      "apply": "تقديم طلب",
+      "paginationRange": "{{from}}–{{to}} من {{total}}",
+      "prev": "السابق",
+      "next": "التالي"
+    },
+    "commissions": {
+      "title": "أرباحي",
+      "subtitle": "حصتك من العمولة على قبولات CAS",
+      "awaitingPayout": "بانتظار الصرف",
+      "paidToDate": "المدفوع حتى الآن",
+      "preparing": "جارٍ التحضير…",
+      "downloadStatement": "تنزيل كشف الحساب (PDF)",
+      "emptyTitle": "لا توجد أرباح بعد",
+      "emptyHint": "تظهر حصتك بمجرد استلام عمولة القبول."
+    },
+    "picker": {
+      "prompt": "اختر الطالب الذي تقدّم الطلب نيابة عنه.",
+      "searchPlaceholder": "ابحث بالاسم أو رمز الطالب",
+      "emptyMatchTitle": "لا يوجد طلاب مطابقون",
+      "emptyTitle": "لا يوجد طلاب بعد",
+      "emptyMatchHint": "جرّب اسمًا أو رمزًا مختلفًا.",
+      "emptyHint": "سيظهر هنا الطلاب الذين تحيلهم إلى CAS.",
+      "appCount_zero": "لا توجد طلبات",
+      "appCount_one": "طلب واحد",
+      "appCount_two": "طلبان",
+      "appCount_few": "{{count}} طلبات",
+      "appCount_many": "{{count}} طلبًا",
+      "appCount_other": "{{count}} طلب",
+      "paginationRange": "{{from}}–{{to}} من {{total}}",
+      "prev": "السابق",
+      "next": "التالي"
+    }
+  },
+  "wizard": {
+    "brand": {
+      "studyInChina": "CAS · الدراسة في الصين",
+      "partnerPortal": "CAS · بوابة الشركاء"
+    },
+    "applyTitle": "نموذج الطلب",
+    "scholarshipTitle": "المنحة الحكومية",
+    "agentApplyTitle": "التقديم نيابة عن طالب",
+    "steps": {
+      "student": "الطالب",
+      "course": "البرنامج",
+      "scholarship": "المنحة",
+      "preferences": "التفضيلات",
+      "personal": "البيانات الشخصية",
+      "background": "الخلفية",
+      "documents": "المستندات",
+      "review": "المراجعة"
+    },
+    "buttons": {
+      "back": "رجوع",
+      "continue": "متابعة",
+      "saveAddDocuments": "حفظ وإضافة المستندات",
+      "reviewApplication": "مراجعة الطلب",
+      "uploadAllRequired": "ارفع جميع المستندات المطلوبة",
+      "submitApplication": "إرسال الطلب"
+    },
+    "common": {
+      "select": "اختيار"
+    },
+    "errors": {
+      "couldNotStartYours": "تعذّر بدء طلبك.",
+      "couldNotStart": "تعذّر بدء الطلب.",
+      "couldNotSubmit": "تعذّر الإرسال. يرجى المحاولة مرة أخرى."
+    },
+    "degrees": {
+      "mbbs": {
+        "label": "MBBS",
+        "hint": "بكالوريوس الطب"
+      },
+      "bds": {
+        "label": "BDS",
+        "hint": "بكالوريوس جراحة الأسنان"
+      },
+      "bs": {
+        "label": "بكالوريوس (BS)",
+        "hint": "درجة جامعية أولى"
+      },
+      "master": {
+        "label": "ماجستير",
+        "hint": "درجة دراسات عليا"
+      },
+      "phd": {
+        "label": "دكتوراه",
+        "hint": "درجة الدكتوراه"
+      },
+      "diploma": {
+        "label": "دبلوم",
+        "hint": "مؤهل قصير"
+      }
+    },
+    "funding": {
+      "self": {
+        "label": "تمويل ذاتي",
+        "hint": "تدفع الرسوم الدراسية بنفسك"
+      },
+      "scholarship": {
+        "label": "منحة",
+        "hint": "منحة كاملة"
+      },
+      "partial": {
+        "label": "منحة جزئية",
+        "hint": "دعم جزئي"
+      }
+    },
+    "levels": {
+      "bachelor": {
+        "label": "بكالوريوس / BS",
+        "hint": "درجة جامعية أولى"
+      },
+      "master": {
+        "label": "ماجستير",
+        "hint": "دراسات عليا"
+      },
+      "phd": {
+        "label": "دكتوراه",
+        "hint": "درجة الدكتوراه"
+      }
+    },
+    "profile": {
+      "personalDetails": "البيانات الشخصية",
+      "dateOfBirth": "تاريخ الميلاد",
+      "placeOfBirth": "مكان الميلاد",
+      "nationality": "الجنسية",
+      "selectCountry": "اختر الدولة",
+      "gender": "الجنس",
+      "male": "ذكر",
+      "female": "أنثى",
+      "other": "آخر",
+      "maritalStatus": "الحالة الاجتماعية",
+      "single": "أعزب",
+      "married": "متزوج",
+      "phone": "الهاتف",
+      "religion": "الديانة (اختياري)",
+      "chineseName": "الاسم الصيني (اختياري)",
+      "nativeLanguage": "اللغة الأم (اختياري)",
+      "contact": "بيانات التواصل",
+      "alternateEmail": "بريد إلكتروني بديل (اختياري)",
+      "wechatId": "معرّف WeChat (اختياري)",
+      "skypeId": "معرّف Skype (اختياري)",
+      "passport": "جواز السفر",
+      "passportNo": "رقم جواز السفر",
+      "issueDate": "تاريخ الإصدار",
+      "expiryDate": "تاريخ الانتهاء",
+      "englishProficiency": "إتقان اللغة الإنجليزية",
+      "testTaken": "الاختبار المُجتاز",
+      "ielts": "IELTS",
+      "toefl": "TOEFL",
+      "pteAcademic": "PTE Academic",
+      "duolingo": "Duolingo",
+      "noneNotTaken": "لا شيء / لم يُجرَ",
+      "overallScore": "الدرجة الإجمالية",
+      "scoreExample": "مثال: 6.5",
+      "testDate": "تاريخ الاختبار",
+      "address": "العنوان",
+      "permanentAddress": "العنوان الدائم",
+      "currentAddress": "العنوان الحالي",
+      "city": "المدينة",
+      "postalCode": "الرمز البريدي"
+    },
+    "background": {
+      "family": "العائلة",
+      "remove": "إزالة",
+      "name": "الاسم",
+      "occupation": "المهنة",
+      "phone": "الهاتف",
+      "relation": "صلة القرابة",
+      "addGuardian": "إضافة ولي أمر",
+      "emergencyContact": "جهة الاتصال في حالات الطوارئ",
+      "emergencyHint": "شخص يمكننا التواصل معه في حالات الطوارئ (يبقى سريًا).",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "address": "العنوان",
+      "mostRecentEducation": "أحدث مؤهل تعليمي",
+      "degreeQualification": "الدرجة / المؤهل",
+      "degreeExample": "مثال: الثانوية العامة القسم العلمي",
+      "institution": "المؤسسة التعليمية",
+      "boardUniversity": "الهيئة / الجامعة",
+      "completionYear": "سنة التخرج",
+      "grade": "المعدل / %",
+      "gradeExample": "مثال: 88%",
+      "addAnother": "إضافة آخر"
+    },
+    "documents": {
+      "uploadClear": "ارفع صورة واضحة",
+      "uploadEachDoc": "صورة/مسحًا ضوئيًا واضحًا لكل مستند. الطلب",
+      "noDocsRequired": "لا توجد مستندات مطلوبة.",
+      "onlyJpg": "يُقبل فقط صور بصيغة JPG.",
+      "uploadFailed": "فشل الرفع. يرجى المحاولة مرة أخرى.",
+      "replace": "استبدال",
+      "upload": "رفع"
+    },
+    "customFields": {
+      "additionalQuestions": "أسئلة إضافية"
+    },
+    "course": {
+      "whichDegree": "أي درجة علمية؟",
+      "howFund": "كيف ستموّل دراستك؟",
+      "checkingOptions": "جارٍ التحقق من الخيارات…",
+      "noScholarshipsForDegree": "لا توجد منح متاحة حاليًا لهذه الدرجة — التمويل الذاتي فقط.",
+      "availablePrograms": "البرامج المتاحة",
+      "findingPrograms": "جارٍ البحث عن البرامج…",
+      "couldNotLoadPrograms": "تعذّر تحميل البرامج. عُد وحاول مرة أخرى.",
+      "noProgramsMatch": "لا توجد برامج مطابقة لهذا المزيج حتى الآن. جرّب درجة علمية أو خيار تمويل مختلفًا.",
+      "durationMonths": "{{months}} أشهر",
+      "tuitionPerYear": "الرسوم الدراسية {{amount}}/سنويًا",
+      "hostelPerYear": "السكن {{amount}}/سنويًا",
+      "moeListed": "مُدرَج لدى وزارة التعليم",
+      "serviceFee": "رسوم خدمة CAS: {{amount}}",
+      "intake": "فترة القبول",
+      "chooseIntake": "اختر فترة قبول (اختياري)",
+      "applyBy": "التقديم قبل {{date}}",
+      "scholarship": "المنحة",
+      "chooseScholarship": "اختر منحة",
+      "noScholarshipsListed": "لا توجد منح مدرجة لهذه الجامعة."
+    },
+    "review": {
+      "summary": "الملخّص",
+      "reference": "الرقم المرجعي",
+      "serviceFeeLabel": "رسوم خدمة CAS:",
+      "documentsAttached": "تم إرفاق {{count}} مستند.",
+      "declaration": "أقرّ بأن المعلومات المقدَّمة صحيحة ودقيقة على حدّ علمي، وأفوّض CAS بمعالجة هذا الطلب لأغراض القبول والتأشيرة.",
+      "agentDeclaration": "أؤكّد أن {{name}} قد فوّض CAS بمعالجة هذا الطلب نيابةً عنه، وأن المعلومات المقدَّمة صحيحة ودقيقة على حدّ علمي.",
+      "theStudent": "الطالب"
+    },
+    "scholarship": {
+      "chooseScholarship": "اختر منحة",
+      "loadingScholarships": "جارٍ تحميل المنح…",
+      "noneOpen": "لا توجد منح حكومية متاحة حاليًا.",
+      "coversTitle": "ما تغطّيه هذه المنحة ({{level}})",
+      "tuitionAfter": "الرسوم الدراسية بعد الخصم",
+      "hostelAfter": "السكن بعد الخصم",
+      "stipendMonthly": "المخصص / شهريًا",
+      "enrolsAt": "الالتحاق في: {{names}}",
+      "documentsAttachedApproval": "تم إرفاق {{count}} مستند · رهنًا بموافقة CAS.",
+      "declaration": "أقرّ بأن المعلومات المقدَّمة صحيحة ودقيقة، وأفوّض CAS بمعالجة طلب المنحة هذا نيابةً عني.",
+      "agentDeclaration": "أؤكّد أن {{name}} قد فوّض CAS بمعالجة طلب المنحة الحكومية هذا نيابةً عنه، وأن المعلومات المقدَّمة صحيحة ودقيقة."
+    },
+    "preferences": {
+      "intro": "اختر ما يصل إلى 3 تخصصات (واختياريًا جامعة مفضّلة). رهنًا بموافقة CAS.",
+      "preferenceN": "التفضيل {{n}}",
+      "removePreference": "إزالة التفضيل",
+      "major": "التخصص",
+      "chooseMajor": "اختر تخصصًا",
+      "preferredUniversity": "الجامعة المفضّلة (اختياري)",
+      "anyUniversity": "أي جامعة",
+      "addPreference": "إضافة تفضيل"
+    }
   }
 }

@@ -922,5 +922,393 @@
       "min": "Menit",
       "sec": "Detik"
     }
+  },
+  "portal": {
+    "navHome": "Beranda",
+    "navStudents": "Siswa",
+    "navApply": "Ajukan",
+    "navEarnings": "Pendapatan",
+    "navApps": "Aplikasi",
+    "navVisa": "Visa",
+    "navFees": "Biaya",
+    "navDocs": "Dokumen",
+    "signOut": "Keluar",
+    "loginTitle": "Masuk ke portal",
+    "loginSubtitle": "Akses catatan CAS Anda",
+    "portalTypeAria": "Jenis portal",
+    "roleStudent": "Siswa",
+    "roleAgent": "Agen",
+    "email": "Email",
+    "password": "Kata sandi",
+    "signIn": "Masuk",
+    "signingIn": "Sedang masuk…",
+    "copyright": "© {{year}} CAS — Consultancy for Abroad Study",
+    "errorEmailRequired": "Email wajib diisi",
+    "errorEmailInvalid": "Masukkan alamat email yang valid",
+    "errorPasswordRequired": "Kata sandi wajib diisi",
+    "errorServerUnreachable": "Tidak dapat menghubungi server. Silakan coba lagi.",
+    "loadErrorMessage": "Terjadi kesalahan.",
+    "retry": "Coba lagi"
+  },
+  "portalStatus": {
+    "draft": "Draf",
+    "underReview": "Sedang ditinjau",
+    "documentsPending": "Dokumen tertunda",
+    "submitted": "Terkirim",
+    "offerReceived": "Tawaran diterima",
+    "accepted": "Diterima",
+    "rejected": "Ditolak",
+    "withdrawn": "Ditarik",
+    "deferred": "Ditangguhkan",
+    "notStarted": "Belum dimulai",
+    "documentsCollection": "Pengumpulan dokumen",
+    "appointmentBooked": "Janji temu dipesan",
+    "approved": "Disetujui",
+    "travelReady": "Siap berangkat",
+    "issued": "Diterbitkan",
+    "partiallyPaid": "Dibayar sebagian",
+    "paid": "Lunas",
+    "cancelled": "Dibatalkan",
+    "overdue": "Terlambat",
+    "active": "Aktif",
+    "inProcess": "Dalam proses",
+    "enrolled": "Terdaftar",
+    "arrived": "Telah tiba",
+    "inactive": "Tidak aktif",
+    "pending": "Tertunda",
+    "verified": "Terverifikasi",
+    "received": "Sudah diterima",
+    "payable": "Harus dibayar"
+  },
+  "studentPortal": {
+    "home": {
+      "greeting": "Hai, {{name}}",
+      "greetingFallbackName": "Sobat",
+      "studentCode": "Siswa {{code}}",
+      "startNewApplication": "Mulai aplikasi baru",
+      "applyScholarship": "Ajukan Beasiswa Pemerintah",
+      "latestApplication": "Aplikasi terbaru",
+      "applications": "Aplikasi",
+      "outstandingFees": "Biaya tertunggak",
+      "visaStatus": "Status visa",
+      "uploadDocs": "Unggah dokumen"
+    },
+    "applications": {
+      "title": "Aplikasi saya",
+      "subtitle": "Lacak progres setiap aplikasi",
+      "startNewApplication": "Mulai aplikasi baru",
+      "emptyTitle": "Belum ada aplikasi",
+      "offerReceived": "Tawaran diterima",
+      "offerReference": " · {{reference}}",
+      "offerValidTo": " · berlaku hingga {{date}}"
+    },
+    "documents": {
+      "title": "Dokumen",
+      "subtitle": "Unggah dan tinjau dokumen Anda",
+      "addDocument": "Tambah dokumen",
+      "documentTypeAria": "Jenis dokumen",
+      "choosePlaceholder": "Pilih jenis dokumen",
+      "uploading": "Mengunggah…",
+      "chooseUpload": "Pilih file & unggah",
+      "uploadFailed": "Unggahan gagal. Silakan coba lagi.",
+      "fileTooLarge": "Ukuran file tidak boleh melebihi 25 MB.",
+      "emptyTitle": "Belum ada dokumen",
+      "emptyHint": "Unggah paspor, transkrip, dan lainnya di atas.",
+      "documentFallback": "Dokumen"
+    },
+    "invoices": {
+      "title": "Biaya & kwitansi",
+      "subtitle": "Faktur uang kuliah dan pembayaran Anda",
+      "emptyTitle": "Belum ada faktur",
+      "paid": "Lunas",
+      "outstanding": "Tertunggak",
+      "receipts": "Kwitansi",
+      "preparing": "Menyiapkan…",
+      "downloadPdf": "Unduh PDF"
+    },
+    "visa": {
+      "title": "Visa",
+      "emptyTitle": "Belum ada kasus visa",
+      "emptyHint": "Kasus visa Anda dibuka setelah penerimaan Anda dikonfirmasi.",
+      "currentStatus": "Status saat ini",
+      "milestoneAppointment": "Janji temu",
+      "milestoneSubmitted": "Terkirim",
+      "milestoneDecision": "Keputusan",
+      "milestoneTravelReady": "Siap berangkat",
+      "documentChecklist": "Daftar periksa dokumen",
+      "optionalSuffix": " (opsional)"
+    }
+  },
+  "agentPortal": {
+    "home": {
+      "greeting": "Halo, {{name}}",
+      "greetingFallback": "Sobat",
+      "subtitle": "Portal mitra CAS Anda",
+      "applyForStudent": "Ajukan untuk siswa",
+      "governmentScholarship": "Aplikasi beasiswa pemerintah",
+      "students": "Siswa",
+      "awaitingPayout": "Menunggu pencairan",
+      "earningsToDate": "Pendapatan hingga kini",
+      "paidAmount": "{{amount}} dibayar",
+      "stillToCome": "{{amount}} masih akan diterima",
+      "recentStudents": "Siswa terbaru",
+      "appCount_one": "{{count}} aplikasi",
+      "appCount_other": "{{count}} aplikasi",
+      "noStudentsYet": "Belum ada siswa."
+    },
+    "students": {
+      "title": "Siswa saya",
+      "subtitle": "Siswa yang Anda rujuk ke CAS",
+      "newApplication": "Aplikasi baru",
+      "emptyTitle": "Belum ada siswa",
+      "emptyHint": "Siswa yang Anda ajukan akan muncul di sini.",
+      "appCount_one": "{{count}} aplikasi",
+      "appCount_other": "{{count}} aplikasi",
+      "apply": "Ajukan",
+      "paginationRange": "{{from}}–{{to}} dari {{total}}",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya"
+    },
+    "commissions": {
+      "title": "Pendapatan saya",
+      "subtitle": "Bagian komisi Anda atas penempatan CAS",
+      "awaitingPayout": "Menunggu pencairan",
+      "paidToDate": "Dibayar hingga kini",
+      "preparing": "Menyiapkan…",
+      "downloadStatement": "Unduh laporan (PDF)",
+      "emptyTitle": "Belum ada pendapatan",
+      "emptyHint": "Bagian Anda muncul setelah komisi penempatan diterima."
+    },
+    "picker": {
+      "prompt": "Pilih siswa yang Anda ajukan.",
+      "searchPlaceholder": "Cari berdasarkan nama atau kode siswa",
+      "emptyMatchTitle": "Tidak ada siswa yang cocok",
+      "emptyTitle": "Belum ada siswa",
+      "emptyMatchHint": "Coba nama atau kode lain.",
+      "emptyHint": "Siswa yang Anda rujuk ke CAS akan muncul di sini.",
+      "appCount_one": "{{count}} aplikasi",
+      "appCount_other": "{{count}} aplikasi",
+      "paginationRange": "{{from}}–{{to}} dari {{total}}",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya"
+    }
+  },
+  "wizard": {
+    "brand": {
+      "studyInChina": "CAS · Kuliah di Tiongkok",
+      "partnerPortal": "CAS · Portal mitra"
+    },
+    "applyTitle": "Formulir aplikasi",
+    "scholarshipTitle": "Beasiswa pemerintah",
+    "agentApplyTitle": "Ajukan untuk siswa",
+    "steps": {
+      "student": "Siswa",
+      "course": "Program",
+      "scholarship": "Beasiswa",
+      "preferences": "Preferensi",
+      "personal": "Pribadi",
+      "background": "Latar belakang",
+      "documents": "Dokumen",
+      "review": "Tinjau"
+    },
+    "buttons": {
+      "back": "Kembali",
+      "continue": "Lanjutkan",
+      "saveAddDocuments": "Simpan & tambah dokumen",
+      "reviewApplication": "Tinjau aplikasi",
+      "uploadAllRequired": "Unggah semua dokumen yang diperlukan",
+      "submitApplication": "Kirim aplikasi"
+    },
+    "common": {
+      "select": "Pilih"
+    },
+    "errors": {
+      "couldNotStartYours": "Tidak dapat memulai aplikasi Anda.",
+      "couldNotStart": "Tidak dapat memulai aplikasi.",
+      "couldNotSubmit": "Tidak dapat mengirim. Silakan coba lagi."
+    },
+    "degrees": {
+      "mbbs": {
+        "label": "MBBS",
+        "hint": "Sarjana Kedokteran"
+      },
+      "bds": {
+        "label": "BDS",
+        "hint": "Sarjana Kedokteran Gigi"
+      },
+      "bs": {
+        "label": "Sarjana (BS)",
+        "hint": "Gelar sarjana"
+      },
+      "master": {
+        "label": "Magister",
+        "hint": "Gelar pascasarjana"
+      },
+      "phd": {
+        "label": "PhD",
+        "hint": "Gelar doktor"
+      },
+      "diploma": {
+        "label": "Diploma",
+        "hint": "Kualifikasi singkat"
+      }
+    },
+    "funding": {
+      "self": {
+        "label": "Biaya sendiri",
+        "hint": "Bayar uang kuliah sendiri"
+      },
+      "scholarship": {
+        "label": "Beasiswa",
+        "hint": "Beasiswa penuh"
+      },
+      "partial": {
+        "label": "Beasiswa sebagian",
+        "hint": "Dukungan sebagian"
+      }
+    },
+    "levels": {
+      "bachelor": {
+        "label": "Sarjana / BS",
+        "hint": "Program sarjana"
+      },
+      "master": {
+        "label": "Magister",
+        "hint": "Pascasarjana"
+      },
+      "phd": {
+        "label": "PhD",
+        "hint": "Doktoral"
+      }
+    },
+    "profile": {
+      "personalDetails": "Data pribadi",
+      "dateOfBirth": "Tanggal lahir",
+      "placeOfBirth": "Tempat lahir",
+      "nationality": "Kewarganegaraan",
+      "selectCountry": "Pilih negara",
+      "gender": "Jenis kelamin",
+      "male": "Laki-laki",
+      "female": "Perempuan",
+      "other": "Lainnya",
+      "maritalStatus": "Status pernikahan",
+      "single": "Belum menikah",
+      "married": "Menikah",
+      "phone": "Telepon",
+      "religion": "Agama (opsional)",
+      "chineseName": "Nama Tionghoa (opsional)",
+      "nativeLanguage": "Bahasa ibu (opsional)",
+      "contact": "Kontak",
+      "alternateEmail": "Email alternatif (opsional)",
+      "wechatId": "ID WeChat (opsional)",
+      "skypeId": "ID Skype (opsional)",
+      "passport": "Paspor",
+      "passportNo": "Nomor paspor",
+      "issueDate": "Tanggal terbit",
+      "expiryDate": "Tanggal kedaluwarsa",
+      "englishProficiency": "Kemampuan bahasa Inggris",
+      "testTaken": "Tes yang diambil",
+      "ielts": "IELTS",
+      "toefl": "TOEFL",
+      "pteAcademic": "PTE Academic",
+      "duolingo": "Duolingo",
+      "noneNotTaken": "Tidak ada / belum diambil",
+      "overallScore": "Skor keseluruhan",
+      "scoreExample": "mis. 6.5",
+      "testDate": "Tanggal tes",
+      "address": "Alamat",
+      "permanentAddress": "Alamat tetap",
+      "currentAddress": "Alamat saat ini",
+      "city": "Kota",
+      "postalCode": "Kode pos"
+    },
+    "background": {
+      "family": "Keluarga",
+      "remove": "Hapus",
+      "name": "Nama",
+      "occupation": "Pekerjaan",
+      "phone": "Telepon",
+      "relation": "Hubungan",
+      "addGuardian": "Tambah wali",
+      "emergencyContact": "Kontak darurat",
+      "emergencyHint": "Seseorang yang dapat kami hubungi dalam keadaan darurat (dirahasiakan).",
+      "fullName": "Nama lengkap",
+      "email": "Email",
+      "address": "Alamat",
+      "mostRecentEducation": "Pendidikan terakhir",
+      "degreeQualification": "Gelar / kualifikasi",
+      "degreeExample": "mis. FSc Pre-Medical",
+      "institution": "Institusi",
+      "boardUniversity": "Dewan / universitas",
+      "completionYear": "Tahun kelulusan",
+      "grade": "Nilai / %",
+      "gradeExample": "mis. 88%",
+      "addAnother": "Tambah lagi"
+    },
+    "documents": {
+      "uploadClear": "Unggah foto/pindaian yang jelas",
+      "uploadEachDoc": "dari setiap dokumen. Aplikasi",
+      "noDocsRequired": "Tidak ada dokumen yang diperlukan.",
+      "onlyJpg": "Hanya gambar JPG yang diterima.",
+      "uploadFailed": "Unggahan gagal. Silakan coba lagi.",
+      "replace": "Ganti",
+      "upload": "Unggah"
+    },
+    "customFields": {
+      "additionalQuestions": "Pertanyaan tambahan"
+    },
+    "course": {
+      "whichDegree": "Gelar apa?",
+      "howFund": "Bagaimana Anda akan membiayainya?",
+      "checkingOptions": "Memeriksa opsi…",
+      "noScholarshipsForDegree": "Saat ini tidak ada beasiswa yang ditawarkan untuk gelar ini — hanya biaya sendiri.",
+      "availablePrograms": "Program yang tersedia",
+      "findingPrograms": "Mencari program…",
+      "couldNotLoadPrograms": "Tidak dapat memuat program. Kembali dan coba lagi.",
+      "noProgramsMatch": "Belum ada program yang cocok dengan kombinasi ini. Coba gelar atau opsi pembiayaan lain.",
+      "durationMonths": "{{months}} bulan",
+      "tuitionPerYear": "Uang kuliah {{amount}}/thn",
+      "hostelPerYear": "Asrama {{amount}}/thn",
+      "moeListed": "Terdaftar MoE",
+      "serviceFee": "Biaya layanan CAS: {{amount}}",
+      "intake": "Periode masuk",
+      "chooseIntake": "Pilih periode masuk (opsional)",
+      "applyBy": "daftar sebelum {{date}}",
+      "scholarship": "Beasiswa",
+      "chooseScholarship": "Pilih beasiswa",
+      "noScholarshipsListed": "Tidak ada beasiswa yang terdaftar untuk universitas ini."
+    },
+    "review": {
+      "summary": "Ringkasan",
+      "reference": "Referensi",
+      "serviceFeeLabel": "Biaya layanan CAS:",
+      "documentsAttached": "{{count}} dokumen terlampir.",
+      "declaration": "Saya menyatakan bahwa informasi yang diberikan benar dan akurat sepanjang pengetahuan saya, dan saya memberi wewenang kepada CAS untuk memproses aplikasi ini untuk keperluan penerimaan dan visa.",
+      "agentDeclaration": "Saya mengonfirmasi bahwa {{name}} telah memberi wewenang kepada CAS untuk memproses aplikasi ini atas namanya, dan bahwa informasi yang diberikan benar dan akurat sepanjang pengetahuan saya.",
+      "theStudent": "siswa tersebut"
+    },
+    "scholarship": {
+      "chooseScholarship": "Pilih beasiswa",
+      "loadingScholarships": "Memuat beasiswa…",
+      "noneOpen": "Tidak ada beasiswa pemerintah yang dibuka saat ini.",
+      "coversTitle": "Yang ditanggung beasiswa ini ({{level}})",
+      "tuitionAfter": "Uang kuliah setelahnya",
+      "hostelAfter": "Asrama setelahnya",
+      "stipendMonthly": "Tunjangan / bln",
+      "enrolsAt": "Terdaftar di: {{names}}",
+      "documentsAttachedApproval": "{{count}} dokumen terlampir · tergantung persetujuan CAS.",
+      "declaration": "Saya menyatakan bahwa informasi yang diberikan benar dan akurat, dan saya memberi wewenang kepada CAS untuk memproses aplikasi beasiswa ini atas nama saya.",
+      "agentDeclaration": "Saya mengonfirmasi bahwa {{name}} telah memberi wewenang kepada CAS untuk memproses aplikasi beasiswa pemerintah ini atas namanya, dan bahwa informasi yang diberikan benar dan akurat."
+    },
+    "preferences": {
+      "intro": "Pilih hingga 3 jurusan (dan, jika mau, universitas pilihan). Tergantung persetujuan CAS.",
+      "preferenceN": "Preferensi {{n}}",
+      "removePreference": "Hapus preferensi",
+      "major": "Jurusan",
+      "chooseMajor": "Pilih jurusan",
+      "preferredUniversity": "Universitas pilihan (opsional)",
+      "anyUniversity": "Universitas mana saja",
+      "addPreference": "Tambah preferensi"
+    }
   }
 }
