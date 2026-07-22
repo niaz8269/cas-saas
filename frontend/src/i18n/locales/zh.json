@@ -1336,6 +1336,11 @@
       "reference": "参考编号",
       "serviceFeeLabel": "CAS 服务费：",
       "documentsAttached": "已附上 {{count}} 份文件。",
+      "yourDetails": "您的信息",
+      "background": "家庭与教育",
+      "documents": "文件",
+      "view": "查看",
+      "notUploaded": "未上传",
       "declaration": "本人声明所提供的信息真实无误，据本人所知均属正确，并授权 CAS 处理本次入学及签证申请。",
       "agentDeclaration": "本人确认 {{name}} 已授权 CAS 代为处理本次申请，且所提供的信息真实无误，据本人所知均属正确。",
       "theStudent": "该学生"

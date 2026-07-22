@@ -1336,6 +1336,11 @@
       "reference": "Référence",
       "serviceFeeLabel": "Frais de service CAS :",
       "documentsAttached": "{{count}} document(s) joint(s).",
+      "yourDetails": "Vos informations",
+      "background": "Famille et éducation",
+      "documents": "Documents",
+      "view": "Voir",
+      "notUploaded": "Non téléversé",
       "declaration": "Je déclare que les informations fournies sont véridiques et exactes au mieux de ma connaissance, et j'autorise CAS à traiter cette candidature à des fins d'admission et de visa.",
       "agentDeclaration": "Je confirme que {{name}} a autorisé CAS à traiter cette candidature en son nom, et que les informations fournies sont véridiques et exactes au mieux de ma connaissance.",
       "theStudent": "l'étudiant"

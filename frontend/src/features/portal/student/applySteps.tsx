@@ -268,7 +268,7 @@ export function BackgroundStep(props: {
 export function DocumentsStep(props: {
   draft: DraftApplication
   uploaded: Record<number, string>
-  onUploaded: (typeId: number, name: string) => void
+  onUploaded: (typeId: number, name: string, previewUrl?: string) => void
   onError: (msg: string) => void
   /** Which portal is uploading — selects the /{kind}/applications path. */
   kind?: PortalKind
@@ -298,7 +298,7 @@ function DocumentRow(props: {
   docTypeId: number
   name: string
   uploadedName?: string
-  onUploaded: (typeId: number, name: string) => void
+  onUploaded: (typeId: number, name: string, previewUrl?: string) => void
   onError: (msg: string) => void
 }) {
   const { t } = useTranslation()
@@ -314,7 +314,8 @@ function DocumentRow(props: {
     setPending(true)
     try {
       await uploadApplicationDocument(props.kind, props.applicationId, props.docTypeId, file)
-      props.onUploaded(props.docTypeId, file.name)
+      // A local object URL lets the applicant preview it on the review step.
+      props.onUploaded(props.docTypeId, file.name, URL.createObjectURL(file))
     } catch (err) {
       props.onError(err instanceof ApiError ? err.message : t("wizard.documents.uploadFailed"))
     } finally {
@@ -593,15 +594,25 @@ export function CourseStep(props: {
 
 // ── Review step (final summary + declaration) ────────────────────────────────
 
-export function ReviewStep({ program, draft, agreed, onAgreed, declaration }: {
+export function ReviewStep({ program, draft, agreed, onAgreed, declaration, profile, guardians, education, uploaded, previews }: {
   program: WizardProgram | null
   draft: DraftApplication
   agreed: boolean
   onAgreed: (v: boolean) => void
   /** Overrides the default (student self-apply) declaration wording. */
   declaration?: ReactNode
+  /** When provided, the review also shows the applicant's details + documents. */
+  profile?: Profile
+  guardians?: WizardGuardian[]
+  education?: WizardEducation[]
+  uploaded?: Record<number, string>
+  previews?: Record<number, string>
 }) {
   const { t } = useTranslation()
+  const profileEntries = Object.entries(profile ?? {}).filter(([, v]) => v != null && String(v).trim() !== "")
+  const filledGuardians = (guardians ?? []).filter((g) => g.name.trim() !== "")
+  const filledEducation = (education ?? []).filter((e) => e.degree_name.trim() !== "")
+  const attachedCount = uploaded ? Object.keys(uploaded).length : draft.required_documents.length
 
   return (
     <div className="space-y-4">
@@ -617,9 +628,69 @@ export function ReviewStep({ program, draft, agreed, onAgreed, declaration }: {
           {program?.service_charge && (
             <p className="mt-1">{t("wizard.review.serviceFeeLabel")} <strong>{money(program.service_charge.amount, program.service_charge.currency)}</strong></p>
           )}
-          <p className="mt-1 text-muted-foreground">{t("wizard.review.documentsAttached", { count: draft.required_documents.length })}</p>
+          <p className="mt-1 text-muted-foreground">{t("wizard.review.documentsAttached", { count: attachedCount })}</p>
         </div>
       </PortalCard>
+
+      {profileEntries.length > 0 && (
+        <PortalCard className="space-y-3">
+          <SectionTitle>{t("wizard.review.yourDetails")}</SectionTitle>
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+            {profileEntries.map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-xs text-muted-foreground capitalize">{k.replace(/_/g, " ")}</dt>
+                <dd className="font-medium break-words">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </PortalCard>
+      )}
+
+      {(filledGuardians.length > 0 || filledEducation.length > 0) && (
+        <PortalCard className="space-y-2">
+          <SectionTitle>{t("wizard.review.background")}</SectionTitle>
+          {filledGuardians.map((g, i) => (
+            <p key={`g${i}`} className="text-sm">
+              <span className="capitalize text-muted-foreground">{g.relation}: </span>
+              <span className="font-medium">{g.name}</span>{g.phone ? ` · ${g.phone}` : ""}
+            </p>
+          ))}
+          {filledEducation.map((e, i) => (
+            <p key={`e${i}`} className="text-sm">
+              <span className="font-medium">{e.degree_name}</span>
+              {e.institution || e.board_or_university ? ` · ${e.institution ?? e.board_or_university}` : ""}
+              {e.end_year ? ` · ${e.end_year}` : ""}
+            </p>
+          ))}
+        </PortalCard>
+      )}
+
+      {uploaded && (
+        <PortalCard className="space-y-2">
+          <SectionTitle>{t("wizard.review.documents")}</SectionTitle>
+          {draft.required_documents.map((doc) => {
+            const name = uploaded[doc.id]
+            const preview = previews?.[doc.id]
+
+            return (
+              <div key={doc.id} className="flex items-center justify-between gap-2 text-sm">
+                <div className="flex min-w-0 items-center gap-2">
+                  {name
+                    ? <Check className="size-4 shrink-0 text-success" />
+                    : <span className="size-4 shrink-0 rounded-full border" aria-hidden="true" />}
+                  <span className="min-w-0 truncate">
+                    <span className="font-medium">{doc.name}</span>
+                    {name && <span className="ml-1 text-xs text-muted-foreground">— {name}</span>}
+                  </span>
+                </div>
+                {preview
+                  ? <a href={preview} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-medium text-cas-navy hover:underline">{t("wizard.review.view")}</a>
+                  : !name && <span className="shrink-0 text-xs text-muted-foreground">{t("wizard.review.notUploaded")}</span>}
+              </div>
+            )
+          })}
+        </PortalCard>
+      )}
 
       <label className="flex cursor-pointer items-start gap-3 rounded-xl border bg-card p-4 shadow-sm">
         <input type="checkbox" checked={agreed} onChange={(e) => onAgreed(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-cas-navy" />

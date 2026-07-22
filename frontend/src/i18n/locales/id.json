@@ -1336,6 +1336,11 @@
       "reference": "Referensi",
       "serviceFeeLabel": "Biaya layanan CAS:",
       "documentsAttached": "{{count}} dokumen terlampir.",
+      "yourDetails": "Detail Anda",
+      "background": "Keluarga & pendidikan",
+      "documents": "Dokumen",
+      "view": "Lihat",
+      "notUploaded": "Belum diunggah",
       "declaration": "Saya menyatakan bahwa informasi yang diberikan benar dan akurat sepanjang pengetahuan saya, dan saya memberi wewenang kepada CAS untuk memproses aplikasi ini untuk keperluan penerimaan dan visa.",
       "agentDeclaration": "Saya mengonfirmasi bahwa {{name}} telah memberi wewenang kepada CAS untuk memproses aplikasi ini atas namanya, dan bahwa informasi yang diberikan benar dan akurat sepanjang pengetahuan saya.",
       "theStudent": "siswa tersebut"

@@ -1333,6 +1333,11 @@
       "reference": "Reference",
       "serviceFeeLabel": "CAS service fee:",
       "documentsAttached": "{{count}} document(s) attached.",
+      "yourDetails": "Your details",
+      "background": "Family & education",
+      "documents": "Documents",
+      "view": "View",
+      "notUploaded": "Not uploaded",
       "declaration": "I declare that the information provided is true and correct to the best of my knowledge, and I authorise CAS to process this application for admission and visa purposes.",
       "agentDeclaration": "I confirm {{name}} has authorised CAS to process this application on their behalf, and that the information provided is true and correct to the best of my knowledge.",
       "theStudent": "the student"

@@ -63,6 +63,7 @@ export default function StudentApplyWizard() {
   // Draft + uploads
   const [draft, setDraft] = useState<DraftApplication | null>(null)
   const [uploaded, setUploaded] = useState<Record<number, string>>({})
+  const [previews, setPreviews] = useState<Record<number, string>>({})
   const [agreed, setAgreed] = useState(false)
 
   const availability = useQuery({
@@ -96,6 +97,7 @@ export default function StudentApplyWizard() {
   const resetDraft = () => {
     setDraft(null)
     setUploaded({})
+    setPreviews({})
   }
 
   const createDraft = useMutation({
@@ -222,13 +224,26 @@ export default function StudentApplyWizard() {
         <DocumentsStep
           draft={draft}
           uploaded={uploaded}
-          onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))}
+          onUploaded={(typeId, name, previewUrl) => {
+            setUploaded((u) => ({ ...u, [typeId]: name }))
+            if (previewUrl) setPreviews((p) => ({ ...p, [typeId]: previewUrl }))
+          }}
           onError={setError}
         />
       )}
 
       {step === 4 && draft && (
-        <ReviewStep program={program} draft={draft} agreed={agreed} onAgreed={setAgreed} />
+        <ReviewStep
+          program={program}
+          draft={draft}
+          agreed={agreed}
+          onAgreed={setAgreed}
+          profile={profile}
+          guardians={[...guardians, emergency]}
+          education={education}
+          uploaded={uploaded}
+          previews={previews}
+        />
       )}
 
       {/* Footer actions */}
