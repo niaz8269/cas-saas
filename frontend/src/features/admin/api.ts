@@ -89,6 +89,61 @@ export const approveAgentRequest = (id: number) =>
 export const rejectAgentRequest = (id: number) =>
   api<{ data: AgentRequest }>(`/agents/${id}/reject`, { method: "POST" })
 
+// ── Content: blogs / news / events ─────────────────────────────────────────
+
+export type PostType = "news" | "blog" | "event"
+
+export interface Post {
+  id: number
+  type: PostType
+  title: string
+  slug: string
+  excerpt: string | null
+  body: string | null
+  cover_image_url: string | null
+  category: string | null
+  status: string
+  published_at: string | null
+  author: string | null
+  event_date: string | null
+  location: string | null
+  register_url: string | null
+  created_at: string | null
+  updated_at: string | null
+}
+
+export interface PostWritePayload {
+  type: PostType
+  title: string
+  slug?: string | null
+  excerpt?: string | null
+  body?: string | null
+  cover_image_path?: string | null
+  category?: string | null
+  status?: string
+  published_at?: string | null
+  event_date?: string | null
+  location?: string | null
+  register_url?: string | null
+}
+
+export const listPosts = (params: { type?: string; status?: string; q?: string; page?: number } = {}) =>
+  api<Paginated<Post>>(`/posts${qs({
+    "filter[type]": params.type,
+    "filter[status]": params.status,
+    "q": params.q,
+    "page": params.page && params.page > 1 ? params.page : undefined,
+  })}`)
+
+export const createPost = (payload: PostWritePayload) =>
+  api<{ data: Post }>("/posts", { method: "POST", body: JSON.stringify(payload) })
+
+export const updatePost = (id: number, payload: Partial<PostWritePayload>) =>
+  api<{ data: Post }>(`/posts/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deletePost = (id: number) =>
+  api<void>(`/posts/${id}`, { method: "DELETE" })
+
 export const updateUser = (id: number, payload: Partial<UserWritePayload>) =>
   api<{ data: StaffUser }>(`/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 
