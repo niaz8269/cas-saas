@@ -111,6 +111,8 @@ Route::prefix('v1')->group(function () {
     Route::prefix('student')->group(function () {
         Route::post('auth/login', [StudentAuthController::class, 'login'])
             ->middleware('throttle:login');
+        Route::post('auth/register', [StudentAuthController::class, 'register'])
+            ->middleware('throttle:login');
 
         Route::middleware('auth:student')->group(function () {
             Route::post('auth/logout', [StudentAuthController::class, 'logout']);
