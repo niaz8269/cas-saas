@@ -25,6 +25,7 @@ export interface University {
   nearest_airport: string | null
   about: string | null
   requirements: string[]
+  application_form?: ApplicationForm | null
   representative_professor: RepresentativeProfessor | null
   country?: { id: number; name: string; iso2: string }
   programs_count?: number
@@ -80,6 +81,7 @@ export interface UniversityPayload {
   nearest_airport?: string
   about?: string
   requirements?: string[]
+  application_form?: ApplicationForm | null
   representative_professor?: RepresentativeProfessor | null
 }
 
@@ -146,7 +148,7 @@ export interface ProgramSections {
   intro_video?: boolean
 }
 
-export type ProgramFieldType = "text" | "textarea" | "number" | "date" | "select"
+export type ProgramFieldType = "text" | "textarea" | "number" | "date" | "select" | "radio"
 
 export interface ProgramCustomField {
   key: string
@@ -154,6 +156,12 @@ export interface ProgramCustomField {
   type: ProgramFieldType
   required?: boolean
   options?: string[]
+}
+
+/** Per-university application form: custom fields + required document type ids. */
+export interface ApplicationForm {
+  fields?: ProgramCustomField[] | null
+  documents?: number[] | null
 }
 
 export interface ProgramRequirements {

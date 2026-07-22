@@ -15,12 +15,24 @@ const UNI: University = {
   representative_professor: { name: "Prof. Li Wei", title: "Dean", photo: null, photo_url: null },
 }
 
+/** Route /document-types to `docs`; every other request → a fresh `main`. */
+function stubFetch(main: () => Response, docs: unknown[] = []) {
+  const fn = vi.fn((url: RequestInfo | URL) =>
+    Promise.resolve(String(url).includes("/document-types") ? jsonResponse({ data: docs }) : main()),
+  )
+  vi.stubGlobal("fetch", fn)
+
+  return fn
+}
+
+const uniCall = (fn: ReturnType<typeof vi.fn>, path = "/api/v1/universities") =>
+  fn.mock.calls.find((c) => c[0] === path)!
+
 beforeEach(() => vi.restoreAllMocks())
 
 it("creates a university with content fields", async () => {
   const user = userEvent.setup()
-  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ data: { ...UNI, id: 2 } }, 201))
-  vi.stubGlobal("fetch", fetchMock)
+  const fetchMock = stubFetch(() => jsonResponse({ data: { ...UNI, id: 2 } }, 201))
 
   renderWithProviders(<UniversityFormDialog open onOpenChange={() => {}} />)
 
@@ -32,14 +44,34 @@ it("creates a university with content fields", async () => {
   await user.click(screen.getByRole("button", { name: "Create university" }))
 
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/universities", expect.objectContaining({ method: "POST" })))
-  const body = JSON.parse((fetchMock.mock.calls[0][1] as RequestInit).body as string)
+  const body = JSON.parse((uniCall(fetchMock)[1] as RequestInit).body as string)
   expect(body).toMatchObject({ name: "Dalian Medical University", code: "DMU", requirements: ["High school diploma"] })
+})
+
+it("saves an application form (document + custom field) on the university", async () => {
+  const user = userEvent.setup()
+  const fetchMock = stubFetch(() => jsonResponse({ data: { ...UNI, id: 2 } }, 201), [{ id: 3, name: "Passport" }])
+
+  renderWithProviders(<UniversityFormDialog open onOpenChange={() => {}} />)
+
+  await user.type(screen.getByLabelText("Name"), "Peking University")
+  await user.type(screen.getByLabelText("Code"), "pku")
+
+  // Application form: require the Passport document + add a custom question.
+  await user.click(await screen.findByLabelText("Passport"))
+  await user.click(screen.getByRole("button", { name: "Add field" }))
+  await user.type(screen.getByLabelText("Field 1 label"), "Preferred major")
+  await user.click(screen.getByRole("button", { name: "Create university" }))
+
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/universities", expect.objectContaining({ method: "POST" })))
+  const body = JSON.parse((uniCall(fetchMock)[1] as RequestInit).body as string)
+  expect(body.application_form.documents).toEqual([3])
+  expect(body.application_form.fields[0]).toMatchObject({ key: "preferred_major", label: "Preferred major", type: "text" })
 })
 
 it("edits an existing university (PATCH, pre-filled)", async () => {
   const user = userEvent.setup()
-  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ data: UNI }))
-  vi.stubGlobal("fetch", fetchMock)
+  const fetchMock = stubFetch(() => jsonResponse({ data: UNI }))
 
   renderWithProviders(<UniversityFormDialog open onOpenChange={() => {}} university={UNI} />)
 
@@ -54,8 +86,9 @@ it("edits an existing university (PATCH, pre-filled)", async () => {
 
 it("surfaces a server validation error", async () => {
   const user = userEvent.setup()
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(
-    jsonResponse({ message: "The code has already been taken.", errors: { code: ["The code has already been taken."] }, code: "VALIDATION_ERROR" }, 422),
+  stubFetch(() => jsonResponse(
+    { message: "The code has already been taken.", errors: { code: ["The code has already been taken."] }, code: "VALIDATION_ERROR" },
+    422,
   ))
 
   renderWithProviders(<UniversityFormDialog open onOpenChange={() => {}} />)

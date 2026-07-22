@@ -397,6 +397,22 @@ export function CustomFieldsCard({ fields, answers, onChange }: {
         <Field key={f.key} label={f.required ? `${f.label} *` : f.label}>
           {f.type === "textarea" ? (
             <Textarea aria-label={f.label} value={answers[f.key] ?? ""} onChange={(e) => onChange(f.key, e.target.value)} />
+          ) : f.type === "radio" ? (
+            <div role="radiogroup" aria-label={f.label} className="flex flex-wrap gap-x-4 gap-y-1.5">
+              {f.options.map((o) => (
+                <label key={o} className="flex items-center gap-1.5 text-sm">
+                  <input
+                    type="radio"
+                    className="size-4 accent-cas-navy"
+                    name={f.key}
+                    value={o}
+                    checked={answers[f.key] === o}
+                    onChange={() => onChange(f.key, o)}
+                  />
+                  {o}
+                </label>
+              ))}
+            </div>
           ) : f.type === "select" ? (
             <Select value={answers[f.key] ?? ""} onValueChange={(v) => onChange(f.key, v)}>
               <SelectTrigger aria-label={f.label} className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>

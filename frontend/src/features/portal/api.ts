@@ -256,7 +256,7 @@ export interface WizardScholarship {
 export interface PortalCustomField {
   key: string
   label: string
-  type: "text" | "textarea" | "number" | "date" | "select"
+  type: "text" | "textarea" | "number" | "date" | "select" | "radio"
   required: boolean
   options: string[]
 }

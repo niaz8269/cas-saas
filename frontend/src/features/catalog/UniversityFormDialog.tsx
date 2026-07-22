@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Plus, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -19,12 +19,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { listDocumentTypes } from "@/features/admissions/api"
 import {
   createUniversity,
   updateUniversity,
+  type ApplicationForm,
   type University,
   type UniversityPayload,
 } from "@/features/catalog/api"
+import { buildFields, parseFields, type EditableField } from "@/features/catalog/dialogs/applicationForm"
+import { CustomFieldsBuilder, DocumentPicker } from "@/features/catalog/dialogs/applicationFormControls"
 import { ApiError } from "@/lib/api"
 
 const schema = z.object({
@@ -99,6 +103,14 @@ function toPayload(v: Values): UniversityPayload {
   }
 }
 
+/** The admin-built application form, or null when nothing is configured. */
+function buildApplicationForm(fields: EditableField[], documents: number[]): ApplicationForm | null {
+  const built = buildFields(fields)
+  if (built.length === 0 && documents.length === 0) return null
+
+  return { fields: built, documents }
+}
+
 export default function UniversityFormDialog({
   open,
   onOpenChange,
@@ -121,6 +133,13 @@ export default function UniversityFormDialog({
   const [coverPreview, setCoverPreview] = useState<string | null>(null)
   const [repPhotoPreview, setRepPhotoPreview] = useState<string | null>(null)
 
+  // Application form the student fills when applying to this university.
+  const [reqDocs, setReqDocs] = useState<number[]>([])
+  const [reqFields, setReqFields] = useState<EditableField[]>([])
+  const docTypes = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes, enabled: open })
+  const toggleDoc = (id: number) =>
+    setReqDocs((docs) => (docs.includes(id) ? docs.filter((x) => x !== id) : [...docs, id]))
+
   // Reset the form whenever the dialog opens (so edit loads fresh values).
   useEffect(() => {
     if (open) {
@@ -128,6 +147,8 @@ export default function UniversityFormDialog({
       setLogoPreview(university?.logo_url ?? null)
       setCoverPreview(university?.cover_url ?? null)
       setRepPhotoPreview(university?.representative_professor?.photo_url ?? null)
+      setReqDocs((university?.application_form?.documents ?? []).filter((d): d is number => typeof d === "number"))
+      setReqFields(parseFields(university?.application_form?.fields))
     }
   }, [open, university, reset])
 
@@ -164,7 +185,11 @@ export default function UniversityFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit((v) => mutation.mutate(toPayload(v)))} noValidate className="space-y-5">
+        <form
+          onSubmit={handleSubmit((v) => mutation.mutate({ ...toPayload(v), application_form: buildApplicationForm(reqFields, reqDocs) }))}
+          noValidate
+          className="space-y-5"
+        >
           {errors.root && (
             <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>
           )}
@@ -247,6 +272,24 @@ export default function UniversityFormDialog({
                   </Button>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Application form — what the student fills when applying here */}
+          <div className="rounded-lg border p-3">
+            <Label>Application form</Label>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              What every applicant to this university fills in — shown in the apply wizard, overriding the per-program form.
+            </p>
+
+            <div className="mt-3">
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">Required documents</p>
+              <DocumentPicker docTypes={docTypes.data?.data ?? []} selected={reqDocs} onToggle={toggleDoc} />
+            </div>
+
+            <div className="mt-3">
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">Custom fields (inputs, radio buttons…)</p>
+              <CustomFieldsBuilder value={reqFields} onChange={setReqFields} />
             </div>
           </div>
 
