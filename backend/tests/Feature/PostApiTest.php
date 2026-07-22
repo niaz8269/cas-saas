@@ -29,6 +29,16 @@ it('creates a post, sanitizes the body, and stamps publish + author', function (
         ->and($post->body)->not->toContain('javascript:');
 });
 
+it('exposes the raw cover path and a resolved cover URL to the admin', function () {
+    actingAsStaffWith(['content.view.global']);
+    $post = Post::factory()->create(['cover_image_path' => 'https://cdn.example/cover.webp']);
+
+    $this->getJson("/api/v1/posts/{$post->id}")
+        ->assertOk()
+        ->assertJsonPath('data.cover_image_path', 'https://cdn.example/cover.webp')
+        ->assertJsonPath('data.cover_image_url', 'https://cdn.example/cover.webp');
+});
+
 it('requires an event date for events', function () {
     actingAsStaffWith(['content.manage.global']);
 
@@ -94,4 +104,12 @@ it('shows a published post by slug with its body, but hides drafts', function ()
         ->assertJsonPath('data.body', '<p>Body here</p>');
 
     $this->getJson("/api/v1/public/posts/{$draft->slug}")->assertNotFound();
+});
+
+it('resolves the public cover image URL (external URLs pass through)', function () {
+    Post::factory()->create(['slug' => 'with-cover', 'cover_image_path' => 'https://cdn.example/x.webp']);
+
+    $this->getJson('/api/v1/public/posts/with-cover')
+        ->assertOk()
+        ->assertJsonPath('data.cover_image_url', 'https://cdn.example/x.webp');
 });

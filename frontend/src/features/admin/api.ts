@@ -100,6 +100,7 @@ export interface Post {
   slug: string
   excerpt: string | null
   body: string | null
+  cover_image_path: string | null
   cover_image_url: string | null
   category: string | null
   status: string
@@ -143,6 +144,17 @@ export const updatePost = (id: number, payload: Partial<PostWritePayload>) =>
 
 export const deletePost = (id: number) =>
   api<void>(`/posts/${id}`, { method: "DELETE" })
+
+/**
+ * Upload an image (cover photo). The server resizes it, converts to WebP and
+ * stores it; `path` is the value to persist on the record, `url` is a preview.
+ */
+export const uploadImage = (file: File) => {
+  const form = new FormData()
+  form.append("image", file)
+
+  return api<{ path: string; url: string }>("/uploads/images", { method: "POST", body: form })
+}
 
 export const updateUser = (id: number, payload: Partial<UserWritePayload>) =>
   api<{ data: StaffUser }>(`/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) })

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Post;
+use App\Services\Media\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,7 +27,7 @@ class PublicPostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'body' => $this->when(array_key_exists('body', $this->resource->getAttributes()), fn () => $this->body),
-            'cover_image_url' => $this->cover_image_path,
+            'cover_image_url' => app(ImageService::class)->url($this->cover_image_path),
             'category' => $this->category,
             'published_at' => $this->published_at?->toIso8601String(),
             'author' => $this->whenLoaded('author', fn () => $this->author?->name),

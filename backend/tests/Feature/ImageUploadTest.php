@@ -35,6 +35,17 @@ it('converts an uploaded image to webp and stores it', function () {
         ->and(substr($bytes, 8, 4))->toBe('WEBP');
 });
 
+it('lets a content manager upload a cover image', function () {
+    actingAsStaffWith(['content.manage.global']);
+    Storage::fake('s3');
+
+    $this->postJson('/api/v1/uploads/images', [
+        'image' => UploadedFile::fake()->image('cover.png', 400, 300),
+    ])
+        ->assertOk()
+        ->assertJsonPath('path', fn ($path) => str_ends_with((string) $path, '.webp'));
+});
+
 it('rejects a non-image or oversized upload', function () {
     actingAsStaffWith(['universities.manage.global']);
     Storage::fake('s3');

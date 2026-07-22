@@ -232,9 +232,9 @@ Route::prefix('v1')->group(function () {
         Route::post('error-logs/{errorLog}/resolve', [ErrorLogController::class, 'resolve'])
             ->middleware('permission:settings.manage.global,staff');
 
-        // Catalog image upload (WebP conversion) — catalog managers
+        // Image upload (WebP conversion + resize) — catalog + content managers
         Route::post('uploads/images', [UploadController::class, 'image'])
-            ->middleware('permission:universities.manage.global|scholarships.manage.global,staff');
+            ->middleware('permission:universities.manage.global|scholarships.manage.global|content.manage.global,staff');
 
         // In-app notifications (own feed)
         Route::get('notifications', [NotificationController::class, 'index']);

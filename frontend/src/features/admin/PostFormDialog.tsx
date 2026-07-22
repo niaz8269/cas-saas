@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import RichTextEditor from "@/components/RichTextEditor"
-import { createPost, updatePost, type Post, type PostWritePayload } from "@/features/admin/api"
+import { createPost, updatePost, uploadImage, type Post, type PostWritePayload } from "@/features/admin/api"
 import { ApiError } from "@/lib/api"
 
 const baseSchema = z.object({
@@ -62,7 +62,7 @@ function toValues(p?: Post): Values {
     slug: p?.slug ?? "",
     category: p?.category ?? "",
     excerpt: p?.excerpt ?? "",
-    cover_image_path: p?.cover_image_url ?? "",
+    cover_image_path: p?.cover_image_path ?? "",
     status: (p?.status as Values["status"]) ?? "draft",
     event_date: toLocalInput(p?.event_date ?? null),
     location: p?.location ?? "",
@@ -78,6 +78,8 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
   const queryClient = useQueryClient()
   const isEdit = Boolean(post)
   const [body, setBody] = useState(post?.body ?? "")
+  const [coverPreview, setCoverPreview] = useState(post?.cover_image_url ?? "")
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { register, handleSubmit, reset, setError, setValue, watch, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(post) })
@@ -86,9 +88,20 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
     if (!open) return
     reset(toValues(post))
     setBody(post?.body ?? "")
+    setCoverPreview(post?.cover_image_url ?? "")
   }, [open, post, reset])
 
   const type = watch("type")
+  const coverPath = watch("cover_image_path")
+  const coverSrc = coverPath?.startsWith("http") ? coverPath : coverPreview
+
+  const upload = useMutation({
+    mutationFn: uploadImage,
+    onSuccess: (res) => {
+      setValue("cover_image_path", res.path, { shouldDirty: true, shouldValidate: true })
+      setCoverPreview(res.url)
+    },
+  })
 
   const mutation = useMutation({
     mutationFn: (v: Values) => {
@@ -178,8 +191,52 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="post-cover">Cover image URL (optional)</Label>
-              <Input id="post-cover" placeholder="https://…" {...register("cover_image_path")} />
+              <Label>Cover image (optional)</Label>
+              {coverSrc && (
+                <img src={coverSrc} alt="Cover preview" className="h-36 w-full rounded-lg border border-line object-cover" />
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) upload.mutate(file)
+                  e.target.value = ""
+                }}
+              />
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  disabled={upload.isPending}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {upload.isPending ? "Uploading…" : coverSrc ? "Replace image" : "Upload image"}
+                </Button>
+                {(coverPath || coverPreview) && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setValue("cover_image_path", "", { shouldDirty: true })
+                      setCoverPreview("")
+                    }}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+              <Input placeholder="…or paste an image URL" {...register("cover_image_path")} />
+              <p className="text-xs text-muted-foreground">Auto-resized and converted to WebP on upload. JPEG/PNG/WebP, max 5 MB.</p>
+              {upload.isError && (
+                <p role="alert" className="text-sm text-destructive">
+                  {upload.error instanceof ApiError ? upload.error.message : "Upload failed."}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
