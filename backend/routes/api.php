@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AgentPayableController;
+use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\ApiSourceController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AuditLogController;
@@ -68,6 +70,9 @@ Route::prefix('v1')->group(function () {
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
         // Reference data for the public sign-up forms (student/agent registration)
         Route::get('countries', [CountryController::class, 'index']);
+        // Content: blogs / news / events (published only)
+        Route::get('posts', [PublicPostController::class, 'index']);
+        Route::get('posts/{slug}', [PublicPostController::class, 'show']);
     });
 
     // Public website enquiry form → lead (tighter throttle)
@@ -182,6 +187,18 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:agents.manage.global,staff');
         Route::post('agents/{agent}/reject', [AgentController::class, 'reject'])
             ->middleware('permission:agents.manage.global,staff');
+
+        // Content: blogs / news / events
+        Route::get('posts', [PostController::class, 'index'])
+            ->middleware('permission:content.view.global,staff');
+        Route::post('posts', [PostController::class, 'store'])
+            ->middleware('permission:content.manage.global,staff');
+        Route::get('posts/{post}', [PostController::class, 'show'])
+            ->middleware('permission:content.view.global,staff');
+        Route::match(['put', 'patch'], 'posts/{post}', [PostController::class, 'update'])
+            ->middleware('permission:content.manage.global,staff');
+        Route::delete('posts/{post}', [PostController::class, 'destroy'])
+            ->middleware('permission:content.manage.global,staff');
 
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])

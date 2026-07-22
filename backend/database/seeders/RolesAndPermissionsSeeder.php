@@ -38,6 +38,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'commission.view.global',
             'visa.view.global',
             'agents.view.global',
+            'content.view.global',
             'reports.view.global',
         ],
         'Admin' => [ // Admin / Operations — full on every module (§8.2)
@@ -55,6 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'reports.view.global',
             'users.manage.global',
             'agents.view.global', 'agents.manage.global',
+            'content.view.global', 'content.manage.global',
             'settings.manage.global',
         ],
         'Counselor' => [
@@ -103,6 +105,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'Marketing' => [
             'dashboard.view.department',
             'leads.view.global', 'leads.create.global',
+            'content.view.global', 'content.manage.global',
             'reports.view.own',
         ],
     ];

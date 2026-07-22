@@ -850,4 +850,24 @@ CREATE TABLE error_logs (
   KEY idx_error_logs_resolved (resolved_at),
   KEY idx_error_logs_last_seen (last_seen_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Content system: blogs / news / events (unified, `type` discriminator).
+CREATE TABLE posts (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(20) NOT NULL DEFAULT 'news',        -- news|blog|event
+  title VARCHAR(200) NOT NULL,
+  slug VARCHAR(220) NOT NULL,
+  excerpt VARCHAR(500) NULL,
+  body LONGTEXT NULL,                              -- sanitized HTML
+  cover_image_path VARCHAR(255) NULL,
+  category VARCHAR(80) NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'draft',      -- draft|published
+  published_at TIMESTAMP NULL,
+  author_id BIGINT UNSIGNED NULL,
+  event_date TIMESTAMP NULL, location VARCHAR(180) NULL, register_url VARCHAR(255) NULL,  -- events only
+  created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL, deleted_at TIMESTAMP NULL,
+  UNIQUE KEY uq_posts_slug (slug),
+  KEY idx_posts_type_status (type, status, published_at),
+  CONSTRAINT fk_posts_author FOREIGN KEY (author_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- =========================== END OF SCHEMA ===========================
