@@ -9,7 +9,7 @@ import RequireAuth from "./RequireAuth"
 function renderGuarded(route = "/") {
   return renderWithProviders(
     <Routes>
-      <Route path="/login" element={<div>LOGIN PAGE</div>} />
+      <Route path="/admin" element={<div>LOGIN PAGE</div>} />
       <Route element={<RequireAuth />}>
         <Route path="/" element={<div>PROTECTED</div>} />
       </Route>
@@ -22,7 +22,7 @@ beforeEach(() => {
   useAuthStore.setState({ token: null, user: null })
 })
 
-it("redirects unauthenticated visitors to /login", () => {
+it("redirects unauthenticated visitors to /admin", () => {
   renderGuarded()
 
   expect(screen.getByText("LOGIN PAGE")).toBeInTheDocument()

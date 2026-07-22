@@ -17,7 +17,7 @@ export function useLogout() {
     mutationFn: logout,
     onSettled: () => {
       clearAuth()
-      navigate("/login", { replace: true })
+      navigate("/admin", { replace: true })
     },
   })
 }

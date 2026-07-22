@@ -201,7 +201,7 @@ export default function SiteLayout() {
 
             <div className="flex shrink-0 items-center gap-3">
               <LanguageSwitcher className="hidden sm:block" />
-              <Link to="/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+              <Link to="/portal/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
                 <LogIn className="size-4" /> <span className="hidden sm:inline">{t("header.signIn")}</span>
               </Link>
               <NotificationBell />
@@ -283,7 +283,7 @@ export default function SiteLayout() {
               <li><Link to="/site/services#visa" className="hover:text-white">{t("footer.serviceVisa")}</Link></li>
               <li><Link to="/site/services#scholarships" className="hover:text-white">{t("footer.serviceScholarships")}</Link></li>
               <li><Link to="/site/about?section=story" className="hover:text-white">{t("footer.serviceAbout")}</Link></li>
-              <li><Link to="/login?role=staff" className="hover:text-white">{t("footer.serviceStaffLogin")}</Link></li>
+              <li><Link to="/admin" className="hover:text-white">{t("footer.serviceStaffLogin")}</Link></li>
             </ul>
           </div>
 

@@ -10,10 +10,10 @@ import LoginPage from "./LoginPage"
 function renderLogin() {
   return renderWithProviders(
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/admin" element={<LoginPage />} />
       <Route path="/" element={<div>DASHBOARD</div>} />
     </Routes>,
-    { route: "/login" },
+    { route: "/admin" },
   )
 }
 

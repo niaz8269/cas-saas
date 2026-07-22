@@ -4,7 +4,7 @@ import "@/i18n"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 
 import ErrorBoundary from "@/components/ErrorBoundary"
 import AppShell from "@/components/layout/AppShell"
@@ -81,7 +81,10 @@ const queryClient = new QueryClient({
 })
 
 const router = createBrowserRouter([
-  { path: "/login", element: <LoginPage /> },
+  // Staff/admin sign in lives at /admin; the public login/register is the
+  // student/agent portal. /login stays as a redirect for old links.
+  { path: "/admin", element: <LoginPage /> },
+  { path: "/login", element: <Navigate to="/admin" replace /> },
 
   // Public website preview (unauthenticated) — consumes the public API
   {
