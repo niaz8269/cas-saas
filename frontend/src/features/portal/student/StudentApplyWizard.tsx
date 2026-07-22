@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { Check, ChevronLeft, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -28,6 +28,7 @@ import {
   ReviewStep,
   Stepper,
 } from "@/features/portal/student/applySteps"
+import { getSiteUniversity } from "@/features/site/api"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.course", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -35,6 +36,10 @@ const STEPS = ["wizard.steps.course", "wizard.steps.personal", "wizard.steps.bac
 export default function StudentApplyWizard() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  // When arriving from a university's "Apply" button, the course list is scoped
+  // to that university (?university=<slug>).
+  const universitySlug = searchParams.get("university")
   const [step, setStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -67,6 +72,20 @@ export default function StudentApplyWizard() {
   })
 
   const countries = useQuery({ queryKey: ["apply", "countries"], queryFn: getCountries })
+
+  // Resolve the scoped university's name for the banner (public endpoint).
+  const scopedUniversity = useQuery({
+    queryKey: ["apply", "scoped-university", universitySlug],
+    queryFn: () => getSiteUniversity(universitySlug!),
+    enabled: !!universitySlug,
+  })
+  const scopedUniversityName = scopedUniversity.data?.data.name ?? null
+
+  // Only offer this university's programs when the flow is scoped to it.
+  const availablePrograms = availability.data?.data ?? []
+  const programs = universitySlug
+    ? availablePrograms.filter((p) => p.university.slug === universitySlug)
+    : availablePrograms
 
   const fundingOpts = useQuery({
     queryKey: ["apply", "funding-options", degree],
@@ -148,6 +167,12 @@ export default function StudentApplyWizard() {
 
       <Stepper steps={STEPS.map((k) => t(k))} step={step} />
 
+      {universitySlug && scopedUniversityName && (
+        <p className="rounded-md bg-cas-navy-50 px-3 py-2 text-sm font-medium text-cas-navy">
+          {t("wizard.applyingToUniversity", { name: scopedUniversityName })}
+        </p>
+      )}
+
       {error && (
         <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
       )}
@@ -159,7 +184,7 @@ export default function StudentApplyWizard() {
           program={program}
           intakeId={intakeId}
           scholarshipId={scholarshipId}
-          programs={availability.data?.data ?? []}
+          programs={programs}
           loading={availability.isFetching}
           failed={availability.isError}
           fundingAvailable={fundingOpts.data?.data}

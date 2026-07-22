@@ -1148,6 +1148,7 @@
       "partnerPortal": "CAS · Partner portal"
     },
     "applyTitle": "Application form",
+    "applyingToUniversity": "Applying to {{name}}",
     "scholarshipTitle": "Government scholarship",
     "agentApplyTitle": "Apply for a student",
     "steps": {

@@ -1175,6 +1175,7 @@
       "partnerPortal": "CAS · بوابة الشركاء"
     },
     "applyTitle": "نموذج الطلب",
+    "applyingToUniversity": "التقديم إلى {{name}}",
     "scholarshipTitle": "المنحة الحكومية",
     "agentApplyTitle": "التقديم نيابة عن طالب",
     "steps": {

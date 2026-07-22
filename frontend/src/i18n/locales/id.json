@@ -1151,6 +1151,7 @@
       "partnerPortal": "CAS · Portal mitra"
     },
     "applyTitle": "Formulir aplikasi",
+    "applyingToUniversity": "Mendaftar ke {{name}}",
     "scholarshipTitle": "Beasiswa pemerintah",
     "agentApplyTitle": "Ajukan untuk siswa",
     "steps": {

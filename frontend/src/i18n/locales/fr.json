@@ -1151,6 +1151,7 @@
       "partnerPortal": "CAS · Portail partenaire"
     },
     "applyTitle": "Formulaire de candidature",
+    "applyingToUniversity": "Candidature à {{name}}",
     "scholarshipTitle": "Bourse d'État",
     "agentApplyTitle": "Postuler pour un étudiant",
     "steps": {

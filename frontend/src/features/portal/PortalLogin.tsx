@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -18,17 +18,24 @@ import { cn } from "@/lib/utils"
 
 type Values = { email: string; password: string }
 
+/** Only honour a same-origin absolute path as the post-login redirect. */
+function safeRedirect(value: string | null): string | null {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : null
+}
+
 export default function PortalLogin() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirect = safeRedirect(searchParams.get("redirect"))
   const token = usePortalAuthStore((s) => s.token)
   const kindInStore = usePortalAuthStore((s) => s.kind)
   const setAuth = usePortalAuthStore((s) => s.setAuth)
   const [kind, setKind] = useState<PortalKind>("student")
 
   useEffect(() => {
-    if (token && kindInStore) navigate(`/portal/${kindInStore}`, { replace: true })
-  }, [token, kindInStore, navigate])
+    if (token && kindInStore) navigate(redirect ?? `/portal/${kindInStore}`, { replace: true })
+  }, [token, kindInStore, navigate, redirect])
 
   const schema = useMemo(
     () =>
@@ -56,7 +63,7 @@ export default function PortalLogin() {
         const s = response.student as StudentProfileData
         setAuth(response.token, "student", { id: s.id, name: s.full_name, email: s.email, status: s.status, code: s.student_code })
       }
-      navigate(`/portal/${kind}`, { replace: true })
+      navigate(redirect ?? `/portal/${kind}`, { replace: true })
     },
     onError: (error) => {
       if (error instanceof ApiError && error.status === 422) {

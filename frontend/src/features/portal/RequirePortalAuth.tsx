@@ -10,10 +10,11 @@ import { usePortalAuthStore } from "@/stores/portalAuth"
 export default function RequirePortalAuth() {
   const token = usePortalAuthStore((s) => s.token)
   const kind = usePortalAuthStore((s) => s.kind)
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   if (!token || !kind) {
-    return <Navigate to="/portal/login" replace />
+    // Preserve the intended destination so login can return the user to it.
+    return <Navigate to={`/portal/login?redirect=${encodeURIComponent(pathname + search)}`} replace />
   }
 
   const area = pathname.startsWith("/portal/agent") ? "agent" : "student"

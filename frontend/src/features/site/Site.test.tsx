@@ -270,9 +270,10 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
   expect(screen.getByText("China MoE-listed")).toBeInTheDocument()
   expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
-  // Future-dated intake shows a live countdown; apply link in the header.
+  // Future-dated intake shows a live countdown; header "Apply now" is now a
+  // login-gated button into CAS's own application form (not an external link).
   expect(screen.getByText(/days left/)).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /Apply now/ })).toHaveAttribute("href", "https://apply.jlmu.cn")
+  expect(screen.getByRole("button", { name: /Apply now/ })).toBeInTheDocument()
 
   // Programs tab.
   await user.click(screen.getByRole("button", { name: /Programs/ }))

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import {
   ArrowLeft,
+  ArrowRight,
   Award,
   CalendarClock,
   CalendarDays,
@@ -22,6 +23,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversity, type SiteIntake, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
+import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
@@ -130,11 +132,9 @@ export default function SiteUniversity() {
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <a href="#enquire" className="inline-flex h-11 items-center gap-1.5 rounded-sm border bg-background px-5 text-sm font-semibold text-cas-navy hover:bg-muted">{t("university.enquire")}</a>
-              {u.apply_link && (
-                <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-red px-5 text-sm font-bold text-white shadow-sm hover:bg-cas-red-600">
-                  {t("university.applyNow")} <ExternalLink className="size-4" />
-                </a>
-              )}
+              <ApplyButton universitySlug={u.slug} className="inline-flex h-11 items-center gap-1.5 rounded-sm bg-cas-red px-5 text-sm font-bold text-white shadow-sm hover:bg-cas-red-600">
+                {t("university.applyNow")} <ArrowRight className="size-4" />
+              </ApplyButton>
             </div>
           </div>
 
@@ -263,7 +263,7 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
-            {p.apply_link && <a href={p.apply_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ExternalLink className="size-3" /></a>}
+            <ApplyButton universitySlug={u.slug} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
           </div>
         </div>
       ))}
@@ -341,11 +341,9 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
           <p className="mt-0.5 text-sm text-white/80">{t("university.readyToApplyBody")}</p>
         </div>
         <div className="flex gap-2">
-          {u.apply_link && (
-            <a href={u.apply_link} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-red px-4 text-sm font-semibold text-white hover:bg-cas-red-600">
-              {t("university.applyNow")} <ExternalLink className="size-4" />
-            </a>
-          )}
+          <ApplyButton universitySlug={u.slug} className="inline-flex h-10 items-center gap-1.5 rounded-sm bg-cas-red px-4 text-sm font-semibold text-white hover:bg-cas-red-600">
+            {t("university.applyNow")} <ArrowRight className="size-4" />
+          </ApplyButton>
           <a href="#enquire" className="inline-flex h-10 items-center rounded-sm border border-white/25 px-4 text-sm font-semibold hover:bg-white/10">{t("university.enquire")}</a>
         </div>
       </div>

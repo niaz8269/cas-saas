@@ -1151,6 +1151,7 @@
       "partnerPortal": "CAS · 合作伙伴门户"
     },
     "applyTitle": "申请表",
+    "applyingToUniversity": "正在申请 {{name}}",
     "scholarshipTitle": "政府奖学金",
     "agentApplyTitle": "为学生申请",
     "steps": {
