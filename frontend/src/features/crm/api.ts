@@ -72,6 +72,7 @@ export interface LeadListParams {
   status?: string
   form_type?: string
   page?: number
+  per_page?: number
 }
 
 export function listLeads(params: LeadListParams = {}) {
@@ -80,6 +81,7 @@ export function listLeads(params: LeadListParams = {}) {
   if (params.status) search.set("filter[status]", params.status)
   if (params.form_type) search.set("filter[form_type]", params.form_type)
   if (params.page && params.page > 1) search.set("page", String(params.page))
+  if (params.per_page) search.set("per_page", String(params.per_page))
   const qs = search.toString()
 
   return api<Paginated<LeadListItem>>(`/leads${qs ? `?${qs}` : ""}`)

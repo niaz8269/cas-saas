@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Filter, Search } from "lucide-react"
+import { Columns3, Filter, List, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -26,6 +26,7 @@ import {
 import { useCan } from "@/features/auth/useCan"
 import AddLeadDialog from "@/features/crm/AddLeadDialog"
 import { listLeads } from "@/features/crm/api"
+import LeadPipelineBoard from "@/features/crm/LeadPipelineBoard"
 import LeadRowActions from "@/features/crm/LeadRowActions"
 import { LEAD_FORM_TYPES, LEAD_STATUS_BADGE, LEAD_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
@@ -54,6 +55,7 @@ export default function LeadsPage() {
   const [status, setStatus] = useState<string>("all")
   const [formType, setFormType] = useState<string>("all")
   const [page, setPage] = useState(1)
+  const [view, setView] = useState<"table" | "board">("table")
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -93,23 +95,25 @@ export default function LeadsPage() {
           />
         </div>
 
-        <Select
-          value={status}
-          onValueChange={(value) => {
-            setStatus(value)
-            setPage(1)
-          }}
-        >
-          <SelectTrigger className="w-40 bg-background" aria-label="Filter by status">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {LEAD_STATUSES.map((s) => (
-              <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {view === "table" && (
+          <Select
+            value={status}
+            onValueChange={(value) => {
+              setStatus(value)
+              setPage(1)
+            }}
+          >
+            <SelectTrigger className="w-40 bg-background" aria-label="Filter by status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              {LEAD_STATUSES.map((s) => (
+                <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         <Select
           value={formType}
@@ -130,11 +134,33 @@ export default function LeadsPage() {
         </Select>
 
         <div className="ml-auto flex items-center gap-2">
+          <div className="flex rounded-md border bg-background p-0.5">
+            {([
+              ["table", List, "Table"],
+              ["board", Columns3, "Board"],
+            ] as const).map(([key, Icon, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setView(key)}
+                aria-pressed={view === key}
+                className={cn(
+                  "flex items-center gap-1.5 rounded px-2.5 py-1 text-sm transition-colors",
+                  view === key ? "bg-cas-navy-50 font-medium text-cas-navy" : "text-muted-foreground hover:text-ink",
+                )}
+              >
+                <Icon className="size-4" /> {label}
+              </button>
+            ))}
+          </div>
           <ExportButton path={`/leads/export${leadExportQuery(q, status, formType)}`} filename="leads.csv" />
           {canCreate && <AddLeadDialog />}
         </div>
       </div>
 
+      {view === "board" ? (
+        <LeadPipelineBoard q={q || undefined} formType={formType === "all" ? undefined : formType} />
+      ) : (
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
         <Table>
           <TableHeader className="bg-subtle">
@@ -255,6 +281,7 @@ export default function LeadsPage() {
           </div>
         )}
       </div>
+      )}
     </div>
   )
 }
