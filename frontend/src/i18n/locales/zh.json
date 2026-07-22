@@ -1,1 +1,926 @@
-{}
+{
+  "language": {
+    "select": "选择语言"
+  },
+  "nav": {
+    "whyCas": "为什么选择 CAS",
+    "studyInChina": "留学中国",
+    "universities": "院校",
+    "programs": "专业",
+    "pricing": "价格",
+    "partner": "合作伙伴",
+    "scholarships": "奖学金",
+    "freeStudyPlan": "免费留学方案",
+    "news": "资讯"
+  },
+  "whyCasMenu": {
+    "universities": "200+ 所院校",
+    "programs": "5,000+ 个专业",
+    "scholarships": "500+ 项奖学金",
+    "cities": "50+ 座城市",
+    "localServices": "本地服务",
+    "howItWorks": "服务流程",
+    "learningCenter": "学习中心"
+  },
+  "header": {
+    "promoFreeApplyText": "在 CAS 浏览免申请费院校",
+    "promoScholarshipsText": "2026 年全额奖学金——尽早申请",
+    "learnMore": "了解更多",
+    "signIn": "登录",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "notifications": "通知",
+    "previousNotification": "上一条通知",
+    "nextNotification": "下一条通知",
+    "close": "关闭",
+    "learnMoreArrow": "了解更多 »"
+  },
+  "footer": {
+    "blurb": "CAS——留学咨询机构（Consultancy for Abroad Study）——自 2012 年起，作为教育部认可院校的官方授权代理，为学生提供前往中国一流大学深造的指导。",
+    "explore": "探索",
+    "exploreUniversities": "院校",
+    "explorePrograms": "专业",
+    "exploreScholarships": "奖学金",
+    "exploreWhyChina": "为什么选择中国",
+    "exploreNews": "资讯与动态",
+    "services": "服务",
+    "serviceAdmission": "录取服务",
+    "serviceVisa": "签证协助",
+    "serviceScholarships": "奖学金协助",
+    "serviceAbout": "关于 CAS",
+    "serviceStaffLogin": "员工登录",
+    "getInTouch": "联系我们",
+    "whatsappUs": "WhatsApp 联系",
+    "freeConsultation": "免费咨询",
+    "rights": "© {{year}} CAS Education。保留所有权利。",
+    "authorized": "自 2012 年起的官方授权代理。"
+  },
+  "components": {
+    "moeListed": "教育部认可",
+    "programCount_one": "{{count}} 个专业",
+    "programCount_other": "{{count}} 个专业",
+    "view": "查看"
+  },
+  "universities": {
+    "pageTitle": "中国院校",
+    "pageSubtitle": "浏览教育部认可院校，了解它们的专业、招生批次和奖学金。",
+    "seoDescription": "浏览中国教育部认可院校。比较它们的专业、招生批次和奖学金，并通过 CAS 申请。",
+    "eyebrowPartnerNetwork": "合作院校网络",
+    "sortedBy": "按{{label}}排序",
+    "sortNameLabel": "A–Z",
+    "sortProgramsLabel": "专业最多",
+    "sortNewestLabel": "最新",
+    "topicMoeEyebrow": "全球认可",
+    "topicMoeTitle": "教育部认可院校",
+    "topicMoeSubtitle": "官方认可的院校，其学位在全球范围内有效。",
+    "topicNoCscaEyebrow": "招生录取",
+    "topicNoCscaTitle": "免 CSCA 院校",
+    "topicNoCscaSubtitle": "无需参加 CSCA 考试即可录取国际学生的院校。",
+    "topicDeadlinesEyebrow": "尽快申请",
+    "topicDeadlinesTitle": "截止较晚的院校",
+    "topicDeadlinesSubtitle": "即将到来的招生批次仍在开放——请在名额招满前申请。",
+    "topicFreeApplyEyebrow": "免申请费",
+    "topicFreeApplyTitle": "免申请费院校",
+    "topicFreeApplySubtitle": "通过 CAS 申请指定院校，无需缴纳申请费。",
+    "topicMedicalEyebrow": "医学",
+    "topicMedicalTitle": "医学院校",
+    "topicMedicalSubtitle": "中国 MBBS、口腔医学、护理和药学领域的顶尖院校。",
+    "searchPlaceholder": "搜索院校或城市…",
+    "searchAriaLabel": "搜索院校",
+    "filterByCityAriaLabel": "按城市筛选",
+    "allCities": "全部城市",
+    "moeListedOnly": "仅教育部认可",
+    "loadError": "暂时无法加载院校信息。",
+    "emptyTitle": "未找到院校",
+    "emptyHint": "请尝试其他搜索，或清除筛选条件。",
+    "previous": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {{current}} 页，共 {{total}} 页"
+  },
+  "university": {
+    "seoTitle": "{{name}} — 专业与奖学金",
+    "seoTitleFallback": "中国院校",
+    "seoDescription": "{{name}}{{location}} — 了解专业、招生批次和奖学金{{moe}}，并通过 CAS 申请。",
+    "seoDescriptionLocation": "（{{city}}）",
+    "seoDescriptionMoe": "，该院校为教育部认可院校",
+    "seoDescriptionFallback": "了解中国教育部认可院校的专业、招生批次和奖学金。",
+    "notAvailable": "该院校暂不可用。",
+    "backToUniversities": "返回院校列表",
+    "allUniversities": "全部院校",
+    "logoAlt": "{{name}} 标志",
+    "moeListedBadge": "中国教育部认可",
+    "enquire": "咨询",
+    "applyNow": "立即申请",
+    "nextIntakePrefix": "下一批招生",
+    "nextIntakeCloses": "——{{date}} 截止",
+    "daysLeft_one": "还剩 {{count}} 天",
+    "daysLeft_other": "还剩 {{count}} 天",
+    "tabOverview": "概览",
+    "tabPrograms": "专业",
+    "tabProgramsCount": "专业（{{count}}）",
+    "tabIntakes": "招生批次",
+    "tabScholarships": "奖学金",
+    "tabAdmission": "录取",
+    "factLocation": "所在地",
+    "factMoeListed": "教育部认可",
+    "factNearestAirport": "最近机场",
+    "factPrograms": "专业",
+    "yes": "是",
+    "repHeading": "您的 CAS 顾问",
+    "programsEmpty": "专业信息即将上线——欢迎咨询，我们会为您提供当前的专业列表。",
+    "durationMonths": " · {{count}} 个月",
+    "perYear": "/年",
+    "apply": "申请",
+    "intakesEmpty": "招生日期即将公布。",
+    "allPrograms": "全部专业",
+    "seatsCount": " · {{count}} 个名额",
+    "applyBy": "申请截止",
+    "rollingAdmission": "滚动录取",
+    "scholarshipsEmpty": "暂无奖学金信息——欢迎向 CAS 顾问咨询适合您的选择。",
+    "deadlineLabel": "截止日期 {{date}}",
+    "howToApply": "如何申请",
+    "admissionRequirements": "录取要求",
+    "requirementsFallback": "各专业要求不尽相同——欢迎向 CAS 顾问咨询您所申专业的具体材料清单。",
+    "readyToApply": "准备好申请了吗？",
+    "readyToApplyBody": "CAS 将为您准备并提交申请。"
+  },
+  "programs": {
+    "seoTitle": "寻找留学中国的专业",
+    "seoDescription": "搜索留学中国的专业——MBBS、工程、商科等——覆盖各合作院校。可按学位层次、授课语言和预算筛选。",
+    "eyebrow": "专业查询",
+    "title": "找到适合你的专业",
+    "subtitle": "搜索各合作院校的专业，并按层次、授课语言和预算筛选。",
+    "searchPlaceholder": "例如 MBBS、工程…",
+    "searchAria": "搜索专业",
+    "levelAria": "层次",
+    "languageAria": "授课语言",
+    "maxFeePlaceholder": "每年学费上限",
+    "maxFeeAria": "每年学费上限",
+    "levelAll": "全部层次",
+    "levelBachelor": "本科",
+    "levelMaster": "硕士",
+    "levelPhd": "博士",
+    "langAny": "任意语言",
+    "langEnglish": "英语",
+    "langChinese": "中文",
+    "feeOnRequest": "学费请咨询",
+    "perYear": "{{amount}} {{currency}}/年",
+    "months": "{{count}} 个月",
+    "loadError": "暂时无法加载专业信息。",
+    "emptyTitle": "没有符合筛选条件的专业",
+    "emptyBody": "请尝试放宽搜索范围或清除某个筛选条件。",
+    "viewDetails": "查看详情 →",
+    "previous": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {{current}} 页，共 {{last}} 页"
+  },
+  "scholarships": {
+    "seoTitle": "留学中国奖学金",
+    "seoDescription": "留学中国的奖学金——政府、省级和院校奖学金，全额与部分资助均有。查看资助范围和截止日期，并通过 CAS 申请。",
+    "eyebrow": "资助",
+    "title": "奖学金与资助",
+    "subtitle": "我们的合作院校提供全额和部分奖学金。我们帮助你找到并申请符合条件的奖学金。",
+    "searchPlaceholder": "搜索奖学金…",
+    "searchAria": "搜索奖学金",
+    "typeAria": "按奖学金类型筛选",
+    "allTypes": "全部类型",
+    "loadError": "暂时无法加载奖学金信息。",
+    "emptyTitle": "未找到奖学金",
+    "emptyBody": "请尝试其他搜索。",
+    "applyBy": "{{date}} 前申请",
+    "previous": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {{current}} 页，共 {{last}} 页"
+  },
+  "cities": {
+    "seoTitle": "按城市留学中国——北京、上海及更多",
+    "seoDescription": "按城市浏览中国留学目的地，了解每座城市的教育部认可院校，并获得 CAS 的全程申请支持。",
+    "eyebrow": "目的地",
+    "title": "按城市留学中国",
+    "subtitle": "从首都到沿海——选择一座城市，探索它的教育部认可院校。",
+    "loadError": "暂时无法加载目的地信息。",
+    "emptyTitle": "暂无目的地",
+    "universityCount_one": "{{count}} 所院校",
+    "universityCount_other": "{{count}} 所院校",
+    "exploreUniversities": "探索院校",
+    "view": "查看"
+  },
+  "about": {
+    "seoTitle": "关于 CAS",
+    "seoDescription": "关于 CAS——留学咨询机构（Consultancy for Abroad Study）。自 2012 年起作为官方授权代理，为学生申请中国教育部认可院校提供服务。",
+    "headerEyebrow": "我们的故事",
+    "headerTitle": "关于 CAS",
+    "headerSubtitle": "CAS——留学咨询机构（Consultancy for Abroad Study）——帮助来自世界各地的学生就读中国各地的教育部认可院校。我们全程为你服务：选择合适的专业、递交申请、争取奖学金，并在签证和抵达阶段为你提供支持。",
+    "statYears": "年经验",
+    "statStudents": "成功申请学生",
+    "statPartners": "合作院校",
+    "statSupport": "申请支持",
+    "whyTitle": "为什么留学中国",
+    "whySubtitle": "世界一流的教育与真正的机会——费用却只是零头。",
+    "whyPoint1": "世界排名靠前的教育部认可院校",
+    "whyPoint2": "涵盖医学、工程和商科的英语授课学位",
+    "whyPoint3": "学费和生活成本亲民，奖学金丰厚",
+    "whyPoint4": "快速崛起的科研、产业与机遇中心",
+    "helpTitle": "我们如何帮助你",
+    "helpSubtitle": "从首次咨询到开学第一天，一条清晰、有支持的路径。",
+    "stepLabel": "第 {{number}} 步",
+    "stepChooseTitle": "选择",
+    "stepChooseBody": "我们为你匹配符合你目标、成绩和预算的院校和专业。",
+    "stepApplyTitle": "申请",
+    "stepApplyBody": "我们为你准备材料，并代你递交一份完整、准确的申请。",
+    "stepOfferTitle": "录取",
+    "stepOfferBody": "获得录取通知，符合条件者还可获得奖学金。",
+    "stepArriveTitle": "抵达",
+    "stepArriveBody": "我们指导你办理签证、安排行程和注册，让你落地即可开始学习。",
+    "missionLabel": "我们的使命",
+    "missionText": "——让每一位与我们合作的学生，都能简单、透明、成功地实现赴华留学。",
+    "ctaTitle": "让我们一起规划你的旅程",
+    "ctaSubtitle": "与 CAS 顾问聊聊你的选择——免费且无任何义务。",
+    "ctaButton": "联系我们"
+  },
+  "pricing": {
+    "seoTitle": "价格——留学中国的透明费用",
+    "seoDescription": "CAS 的收费方式：免费咨询和留学方案，任何收费服务均事先明确报价。绝无隐藏费用。",
+    "headerEyebrow": "清晰透明，学生优先",
+    "headerTitle": "简单、透明的价格",
+    "headerSubtitle": "每位学生的方案各不相同，因此我们先免费提供服务，其余部分明确报价——在你决定之前，你始终清楚费用。",
+    "howTitle": "我们的收费方式",
+    "principleFreeTitle": "免费开始",
+    "principleFreeBody": "你的首次咨询和一份个性化留学方案——包括院校和奖学金候选名单——完全免费。",
+    "principleTransparentTitle": "透明报价",
+    "principleTransparentBody": "如某项服务收费，你会在决定前看到清晰、逐项列明的报价。绝无任何隐藏费用。",
+    "principleOnlyPayTitle": "只为所需付费",
+    "principleOnlyPayBody": "可以选择完整套餐，也可以只选你想要的部分。你的顾问会根据你的方案量身定制服务——以及费用。",
+    "freeBadge": "免费",
+    "freeCardTitle": "开始阶段",
+    "free1": "与顾问的初次咨询",
+    "free2": "个性化留学方案",
+    "free3": "院校与专业候选名单",
+    "free4": "奖学金匹配指导",
+    "quotedBadge": "事先报价",
+    "quotedCardTitle": "可选服务",
+    "quoted1": "申请办理与材料审核",
+    "quoted2": "签证（JW202 / 录取通知书）协助",
+    "quoted3": "住宿预订",
+    "quoted4": "机场接机与行前支持",
+    "quoted5": "认证文件翻译",
+    "ctaTitle": "想要一份个性化报价？",
+    "ctaSubtitle": "先从免费留学方案开始——我们会为你提供清晰的后续步骤和费用。",
+    "ctaButton": "获取免费留学方案"
+  },
+  "partner": {
+    "seoTitle": "与 CAS 合作——代理与招生合作",
+    "seoDescription": "与 CAS 合作，将学生输送至中国院校：200+ 所教育部认可院校、有竞争力的佣金、实时合作伙伴门户和专属支持。",
+    "headerEyebrow": "面向代理机构与招生方",
+    "headerTitle": "与 CAS 合作",
+    "headerSubtitle": "通过授权代理，让你的学生进入中国顶尖院校——配备实时合作伙伴门户、有竞争力的佣金，以及在每一步支持你的团队。",
+    "becomePartner": "成为合作伙伴",
+    "whyTitle": "为什么与我们合作",
+    "whySubtitle": "通往留学中国的一个可信渠道。",
+    "benefitUniversitiesTitle": "200+ 所院校",
+    "benefitUniversitiesBody": "通过一个可信渠道，将学生推荐至中国各地的教育部认可院校。",
+    "benefitCommissionsTitle": "有竞争力的佣金",
+    "benefitCommissionsBody": "每一次成功录取都能获得佣金，透明追踪，按清晰的时间表结算。",
+    "benefitPortalTitle": "实时合作伙伴门户",
+    "benefitPortalBody": "递交并追踪每一份申请，实时查看状态变化，在一个平台管理你的所有学生。",
+    "benefitMarketingTitle": "营销支持",
+    "benefitMarketingBody": "获取最新的专业列表、招生截止日期和联合品牌材料，助你招生。",
+    "benefitAuthorizedTitle": "自 2012 年起获授权",
+    "benefitAuthorizedBody": "与一家成熟的、经院校授权的代理合作，拥有出色的签证和录取业绩。",
+    "benefitTeamTitle": "专属合作团队",
+    "benefitTeamBody": "指定的 CAS 联系人从首次咨询到抵达，全程支持你和你的学生。",
+    "howTitle": "合作流程",
+    "step1Title": "申请合作",
+    "step1Body": "告诉我们你的机构以及你服务的学生群体。",
+    "step2Title": "完成入驻",
+    "step2Body": "我们为你开通合作伙伴门户权限，并带领你的团队熟悉流程。",
+    "step3Title": "推荐并获益",
+    "step3Body": "递交申请，实时追踪，每一次成功录取都能获得佣金。",
+    "ctaTitle": "准备好携手合作了吗？",
+    "ctaSubtitle": "告诉我们你的机构情况，我们将为你建立合作关系。"
+  },
+  "services": {
+    "seoTitle": "我们的服务",
+    "seoDescription": "CAS 的留学中国服务——录取服务、签证协助、奖学金帮助、机场接机和在校支持，全程无忧。",
+    "eyebrow": "全程支持",
+    "title": "我们的服务",
+    "subtitle": "从首次咨询到开学第一天——乃至此后——CAS 在你留学中国的每一步都为你提供支持。",
+    "whatWeDoTitle": "我们为你做的",
+    "whatWeDoSubtitle": "由一个团队全程负责，让每个环节都不掉链子。",
+    "whyChooseTitle": "为什么选择 CAS",
+    "whyChooseSubtitle": "在你赴华旅程的每一步，都有可信、透明的支持。",
+    "ctaTitle": "不知从何开始？",
+    "ctaSubtitle": "预约免费咨询，我们将为你梳理各种选择。",
+    "ctaButton": "免费咨询",
+    "items": {
+      "admission": {
+        "title": "录取服务",
+        "body": "我们为你筛选合适的院校和专业，准备你的申请材料，并代你递交一份完整、准确的申请。"
+      },
+      "visa": {
+        "title": "签证协助",
+        "body": "全程协助办理 JW202、录取通知书和学生签证——过往通过率很高。"
+      },
+      "airportPickup": {
+        "title": "机场接机",
+        "body": "CAS 代表在你抵达时接机，帮助你安全顺利地前往校园。"
+      },
+      "onCampus": {
+        "title": "在校支持",
+        "body": "抵达后的持续帮助——注册、住宿、银行开户以及日常问题。"
+      },
+      "scholarship": {
+        "title": "奖学金协助",
+        "body": "我们为你匹配政府、省级和院校奖学金，并帮助你按时申请。"
+      },
+      "language": {
+        "title": "中文语言基础",
+        "body": "提供 HSK 和预科选择方面的指导，让你为在中国的学习和生活做好准备。"
+      }
+    },
+    "stats": {
+      "yearsExperience": "年经验",
+      "studentsPlaced": "成功申请学生",
+      "universityPartners": "合作院校",
+      "visaSuccessRate": "签证成功率"
+    },
+    "why": {
+      "authorizedAgent": {
+        "title": "官方授权代理",
+        "body": "自 2012 年起直接与院校合作——你的申请交由可信、负责任的团队处理。"
+      },
+      "freeToStart": {
+        "title": "免费开始，收费清晰",
+        "body": "你的咨询和留学方案免费；任何服务费用都会事先报价，绝无隐藏费用。"
+      },
+      "dedicatedAdvisor": {
+        "title": "专属顾问一对一",
+        "body": "单一联系人从你首次咨询直至抵达，全程为你提供指导。"
+      },
+      "fastApplications": {
+        "title": "快速、完整的申请",
+        "body": "我们一次就把所有材料准备正确，让你不会因重复递交而错过招生批次。"
+      },
+      "admissionRecord": {
+        "title": "出色的录取业绩",
+        "body": "在帮助学生获得录取和签证方面，拥有过硬的成功业绩。"
+      },
+      "supportAfterArrival": {
+        "title": "抵达后的支持",
+        "body": "机场接机、注册和安顿帮助——我们的服务不止于录取通知书。"
+      }
+    }
+  },
+  "whyChina": {
+    "seoTitle": "为什么留学中国",
+    "seoDescription": "为什么留学中国——世界排名靠前的教育部认可院校、英语授课学位、亲民的学费和丰厚的奖学金。",
+    "eyebrow": "世界一流的教育",
+    "title": "为什么留学中国",
+    "subtitle": "中国已成为全球领先的国际学生留学目的地之一——集顶尖院校、亲民费用、丰厚奖学金和真正的机会于一体。",
+    "reasonsTitle": "学生选择中国的理由",
+    "reasonsSubtitle": "这些让它成为当今最明智的留学决定之一。",
+    "ctaTitle": "准备好探索你的选择了吗？",
+    "ctaSubtitle": "浏览我们各合作院校的专业，找到最适合你的那一个。",
+    "ctaButton": "找到适合你的专业",
+    "stats": {
+      "students": {
+        "value": "50 万+",
+        "label": "国际学生"
+      },
+      "english": {
+        "value": "英语",
+        "label": "授课专业"
+      },
+      "scholarships": {
+        "value": "奖学金",
+        "label": "广泛提供"
+      },
+      "recognition": {
+        "value": "全球",
+        "label": "学位认可"
+      }
+    },
+    "reasons": {
+      "worldRanked": {
+        "title": "世界排名靠前的院校",
+        "body": "就读教育部认可、全球排名靠前、举世公认的院校。"
+      },
+      "englishTaught": {
+        "title": "英语授课学位",
+        "body": "医学、工程、商科等领域均有全英语授课学位——入学无需中文基础。"
+      },
+      "affordable": {
+        "title": "亲民且有资助",
+        "body": "学费和生活成本低廉，另有丰厚的政府、省级和院校奖学金。"
+      },
+      "opportunity": {
+        "title": "机遇与产业",
+        "body": "在全球最大的经济体之一学习，真正接触科研和产业。"
+      },
+      "culture": {
+        "title": "丰富的文化与安全",
+        "body": "现代、安全的城市，深厚的文化底蕴，以及庞大、友好的国际学生群体。"
+      },
+      "recognised": {
+        "title": "全球认可的学位",
+        "body": "学历获得世界各地雇主和执业资格机构的认可。"
+      }
+    }
+  },
+  "contact": {
+    "seoTitle": "联系与免费咨询",
+    "seoDescription": "就留学中国联系 CAS 获取免费咨询。在院校、专业、奖学金、录取和签证方面获得专业指导。",
+    "eyebrow": "我们随时为你提供帮助",
+    "title": "联系我们",
+    "subtitle": "申请免费咨询，CAS 顾问将为你梳理各种选择。",
+    "talkToUs": "与我们交流",
+    "website": "网站",
+    "emailLabel": "邮箱",
+    "whatsapp": "WhatsApp",
+    "whatsappHelp": "按城市提供——请向我们咨询离你最近的顾问",
+    "offices": "办公室",
+    "officeList": {
+      "headOffice": {
+        "city": "总部",
+        "detail": "中国北京"
+      },
+      "islamabad": {
+        "city": "伊斯兰堡",
+        "detail": "巴基斯坦"
+      }
+    }
+  },
+  "faq": {
+    "seoTitle": "常见问题——与 CAS 一起留学中国",
+    "seoDescription": "关于与 CAS 一起留学中国的常见问题解答：选择院校和专业、奖学金、申请、学生签证、抵达支持和费用。",
+    "eyebrow": "帮助中心",
+    "title": "常见问题",
+    "subtitle": "关于与 CAS 一起留学中国，你需要了解的一切——从选择院校到签证、奖学金和费用。",
+    "ctaTitle": "还有疑问？",
+    "ctaSubtitle": "获取免费留学方案，CAS 顾问会针对你的情况解答一切。",
+    "ctaButton": "获取免费留学方案",
+    "studyingInChina": {
+      "title": "留学中国",
+      "q1": "为什么留学中国？",
+      "a1": "中国拥有教育部认可院校、日益丰富的英语授课学位、亲民的学费和生活成本，以及丰厚的奖学金——学历还获得全球认可。",
+      "q2": "我可以用英语学习吗？",
+      "a2": "可以。许多院校提供全英语授课的完整学位，尤其在医学、工程和商科领域。同时也有中文授课专业和语言预科选择。",
+      "q3": "我需要会说中文吗？",
+      "a3": "英语授课专业不需要。中文授课专业可能需要 HSK 成绩；如有需要，我们可以就预科年或语言课程为你提供建议。",
+      "q4": "这些学位在国际上被认可吗？",
+      "a4": "CAS 与教育部认可院校合作，其学位获得广泛认可。具体认可情况因国家和职业而异，请就你的目标国家咨询你的顾问。"
+    },
+    "choosing": {
+      "title": "选择院校与专业",
+      "q1": "我该如何选择合适的院校和专业？",
+      "a1": "先从免费留学方案开始——告诉我们你的目标、预算和偏好，CAS 顾问会为你发送一份个性化候选名单。你也可以在本站浏览并筛选院校、专业和奖学金。",
+      "q2": "我可以申请哪些专业？",
+      "a2": "本科、硕士和博士学位，以及非学位和中文语言课程——涵盖医学（MBBS）、工程、商科、计算机科学等领域。",
+      "q3": "“教育部认可”是什么意思？",
+      "a3": "这意味着教育部已批准该院校招收国际学生。CAS 专注于教育部认可院校，你可以通过每个院校页面上的标识来识别它们。"
+    },
+    "scholarships": {
+      "title": "奖学金",
+      "q1": "有哪些奖学金可以申请？",
+      "a1": "政府（CSC）、省级和院校奖学金——既有全额（学费、住宿和生活津贴），也有部分资助。可申请的奖学金因院校、专业和招生批次而异。",
+      "q2": "我符合奖学金申请条件吗？",
+      "a2": "是否符合条件取决于你的成绩、学位层次、国籍和具体奖学金。你的 CAS 顾问会为你匹配最有把握获得的奖学金。",
+      "q3": "CAS 会帮助申请奖学金吗？",
+      "a3": "会——我们帮助你确定合适的奖学金、准备材料，并在申请院校的同时按时递交。"
+    },
+    "applying": {
+      "title": "通过 CAS 申请",
+      "q1": "申请流程是怎样的？",
+      "a1": "留学方案 → 候选名单 → 准备材料 → CAS 递交申请 → 你收到录取 → 签证支持 → 抵达支持。由一个团队全程负责。",
+      "q2": "我需要哪些材料？",
+      "a2": "通常包括护照、学业成绩单和证书、护照照片，并视专业而定可能需要语言证书以及体检或无犯罪记录证明。你的顾问会给你一份精确的材料清单。",
+      "q3": "需要多长时间？",
+      "a3": "因院校和招生批次而异——从申请到录取通常为几周到几个月。在招生窗口早期申请可以获得最多的选择。",
+      "q4": "咨询真的免费吗？",
+      "a4": "是的。你的初次咨询和留学方案免费且无任何义务。任何收费服务都会事先明确报价——详见我们的价格页面。"
+    },
+    "visa": {
+      "title": "签证与抵达",
+      "q1": "我该如何办理学生签证？",
+      "a1": "被录取后，院校会签发录取通知书和 JW202 表；随后你在中国大使馆或领事馆申请学生（X）签证。CAS 会指导你完成每一步。",
+      "q2": "抵达后 CAS 会为我提供支持吗？",
+      "a2": "会——机场接机、协助院校注册、住宿和安顿，都属于我们全程服务的一部分。"
+    },
+    "fees": {
+      "title": "费用与付款",
+      "q1": "留学中国要花多少钱？",
+      "a1": "这取决于院校、城市和专业——学费加生活成本。告诉我们你的方案，我们会给你一份清晰的个性化估算。",
+      "q2": "CAS 如何收费？",
+      "a2": "你的咨询和留学方案免费。如某项服务收费，你会在决定前看到逐项列明的报价——绝无隐藏费用。"
+    }
+  },
+  "news": {
+    "seoTitle": "资讯与动态",
+    "seoDescription": "来自 CAS 的资讯与动态——招生截止日期、奖学金开放和合作院校公告，助你留学中国。",
+    "headerEyebrow": "资讯与资源",
+    "headerTitle": "CAS 最新动态",
+    "headerSubtitle": "招生截止日期和奖学金开放，以及帮助你规划留学中国的指南。",
+    "latestUpdatesTitle": "最新动态",
+    "guidesTitle": "指南与资源",
+    "guidesSubtitle": "规划留学中国你需要知道的一切。",
+    "learnMore": "了解更多",
+    "readGuide": "阅读指南",
+    "updates": {
+      "intake": {
+        "date": "2026 年 1 月",
+        "tag": "招生批次",
+        "title": "2026 年 3 月招生申请现已开放",
+        "body": "我们各合作院校的 2026 年春季招生申请现已开放。早申请者可优先挑选专业和奖学金。"
+      },
+      "scholarships": {
+        "date": "2026 年 1 月",
+        "tag": "奖学金",
+        "title": "CSC 与省级奖学金现已开始接受申请",
+        "body": "中国政府（CSC）和省级奖学金覆盖全额或部分学费——另有每月生活津贴——现向符合条件的学生开放。"
+      },
+      "universities": {
+        "date": "2025 年 12 月",
+        "tag": "院校",
+        "title": "目录新增合作院校",
+        "body": "我们扩充了教育部认可合作院校名单，新增了更多英语授课的医学和工程专业。"
+      }
+    },
+    "guides": {
+      "apply": {
+        "title": "如何申请，逐步详解",
+        "body": "从选择专业到递交一份完整的申请——整个流程一次讲清。"
+      },
+      "visa": {
+        "title": "你的学生签证详解",
+        "body": "JW202 和录取通知书是什么，以及 X 签证流程如何运作。"
+      },
+      "scholarships": {
+        "title": "中国的奖学金",
+        "body": "政府、省级和院校奖学金——谁符合条件，以及如何申请。"
+      },
+      "costs": {
+        "title": "留学中国的费用",
+        "body": "学费和生活成本，以及 CAS 透明的收费方式如何运作。"
+      },
+      "mbbs": {
+        "title": "在中国学习 MBBS",
+        "body": "在认可院校就读英语授课医学学位——CAS 的一条热门路径。"
+      },
+      "university": {
+        "title": "选择合适的院校",
+        "body": "如何权衡城市、排名、语言和预算，找到最适合你的院校。"
+      }
+    }
+  },
+  "studyPlan": {
+    "badge": "免费 · 仅需 3 分钟",
+    "title": "获取你的免费留学方案",
+    "subtitle": "回答几个问题，CAS 顾问会为你发送一份个性化的院校、专业和奖学金候选名单——免费，无任何义务。",
+    "optional": "选填",
+    "noPreference": "无偏好",
+    "fieldNotSure": "还不确定",
+    "matchNote": "我们会根据你的回答，为你匹配教育部认可院校和奖学金。",
+    "back": "返回",
+    "continue": "继续",
+    "sending": "发送中…",
+    "submit": "获取我的留学方案",
+    "steps": {
+      "goal": "你的目标",
+      "preferences": "偏好",
+      "details": "你的信息"
+    },
+    "q": {
+      "study": "你想学什么？",
+      "field": "学习领域",
+      "intake": "你想什么时候入学？",
+      "funding": "你将如何支付学费？",
+      "city": "偏好城市",
+      "grade": "当前平均成绩",
+      "name": "姓名",
+      "nationality": "国籍",
+      "email": "邮箱",
+      "phone": "电话 / WhatsApp"
+    },
+    "levels": {
+      "bachelor": "本科",
+      "master": "硕士",
+      "phd": "博士",
+      "nonDegree": "非学位",
+      "chinese": "中文语言"
+    },
+    "fields": {
+      "medicine": "医学 / MBBS",
+      "engineering": "工程",
+      "business": "商科与 MBA",
+      "computerScience": "计算机科学",
+      "naturalSciences": "自然科学",
+      "humanities": "人文与艺术",
+      "law": "法学",
+      "education": "教育学",
+      "agriculture": "农学",
+      "other": "其他"
+    },
+    "intakes": {
+      "spring2026": "2026 年春季",
+      "autumn2026": "2026 年秋季",
+      "spring2027": "2027 年春季",
+      "autumn2027": "2027 年秋季",
+      "flexible": "时间灵活"
+    },
+    "funding": {
+      "selfFunded": "自费",
+      "scholarship": "希望申请奖学金"
+    },
+    "cities": {
+      "any": "任意城市",
+      "beijing": "北京",
+      "shanghai": "上海",
+      "guangzhou": "广州",
+      "nanjing": "南京",
+      "hangzhou": "杭州",
+      "wuhan": "武汉",
+      "chongqing": "重庆",
+      "other": "其他"
+    },
+    "grades": {
+      "g90": "90–100%",
+      "g80": "80–89%",
+      "g70": "70–79%",
+      "g60": "60–69%",
+      "below60": "60% 以下",
+      "preferNotToSay": "不愿透露"
+    },
+    "errors": {
+      "chooseStudy": "请选择你想学的内容。",
+      "name": "请告诉我们你的姓名。",
+      "contact": "请填写邮箱或电话号码，以便我们与你联系。"
+    },
+    "success": {
+      "title": "你的留学方案正在发送中",
+      "body": "谢谢你，{{name}}。CAS 顾问将审阅你的目标，并在一个工作日内回复你，为你匹配院校、专业和奖学金。",
+      "browse": "同时浏览院校 →"
+    }
+  },
+  "reviews": {
+    "heading": "来自我们学生的评价",
+    "subheading": "来自 50+ 个国家的学生信赖 CAS 陪伴他们的旅程。",
+    "playVideo": "播放学生故事视频",
+    "mapAlt": "遍布世界各地的学生",
+    "reviewFrom": "来自 {{name}}（{{country}}）的评价",
+    "closeVideo": "关闭视频",
+    "close": "关闭",
+    "videoTitle": "CAS——留学中国"
+  },
+  "heroUpdates": {
+    "tabUniversities": "院校动态",
+    "tabPrograms": "专业动态",
+    "tabScholarships": "最新奖学金",
+    "tabNews": "新故事",
+    "storyMarchIntake": "2026 年 3 月招生现已在各合作院校开放",
+    "storyCscScholarships": "CSC 与省级奖学金正在接受申请",
+    "storyNewMoe": "新增教育部认可院校",
+    "storyMbbsGuide": "如何准备一份出色的 MBBS 申请",
+    "storyVisaGuide": "学生签证指南：材料与时间线",
+    "showUpdates": "显示最新动态",
+    "hideUpdates": "隐藏最新动态",
+    "lastApplication": "最近申请：{{date}}",
+    "noUniversities": "暂无可显示的院校。",
+    "noPrograms": "暂无可显示的专业。",
+    "loading": "加载中…",
+    "scholarshipFallback": "奖学金",
+    "deadline": "截止日期：{{date}}",
+    "openNow": "现已开放",
+    "noScholarships": "暂无可显示的奖学金。",
+    "updated": "更新于 {{date}}"
+  },
+  "helpDock": {
+    "hereToHelpLine1": "我们随时",
+    "hereToHelpLine2": "为你提供帮助",
+    "counsellorCathy": "Cathy",
+    "counsellorJayla": "Jayla",
+    "counsellorJoe": "Joe",
+    "wechatLabel": "微信：",
+    "whatsappTelLabel": "WhatsApp/电话：",
+    "wechatQrAlt": "微信二维码",
+    "wechat": "微信",
+    "customPlan": "获取定制申请方案",
+    "leaveMessage": "留言",
+    "backToTop": "返回顶部",
+    "showHelpBar": "显示帮助栏",
+    "help": "帮助",
+    "talkToCounsellor": "咨询顾问",
+    "close": "关闭",
+    "freeGuidance": "免费指导——我们通常在一天内回复。",
+    "whatsapp": "WhatsApp",
+    "chatNow": "立即与我们交流",
+    "callUs": "致电我们",
+    "email": "邮箱",
+    "freeStudyPlan": "获取免费留学方案 →",
+    "leaveAMessage": "留言",
+    "message": "留言内容"
+  },
+  "megaMenu": {
+    "browseEverything": "浏览全部",
+    "colDestinations": "目的地",
+    "allDestinations": "全部目的地",
+    "studyBeijing": "在北京留学",
+    "studyShanghai": "在上海留学",
+    "studyWuhan": "在武汉留学",
+    "studyNanjing": "在南京留学",
+    "studyHangzhou": "在杭州留学",
+    "studyDalian": "在大连留学",
+    "colUniversities": "院校",
+    "allUniversities": "全部院校",
+    "moeListed": "教育部认可院校",
+    "medical": "医学院校",
+    "engineering": "工程院校",
+    "technology": "理工院校",
+    "normal": "师范院校",
+    "colPrograms": "专业",
+    "allPrograms": "全部专业",
+    "programMbbs": "在中国学习 MBBS",
+    "programEngineering": "工程专业",
+    "programBusiness": "商科与 MBA",
+    "programBachelor": "本科学位",
+    "programMaster": "硕士学位",
+    "programPhd": "博士",
+    "colScholarships": "奖学金",
+    "allScholarships": "全部奖学金",
+    "scholarshipFull": "全额奖学金",
+    "scholarshipPartial": "部分奖学金",
+    "scholarshipUniversity": "院校奖学金",
+    "scholarshipGovernment": "政府（CSC）",
+    "scholarshipProvincial": "省级奖学金",
+    "colAbout": "关于",
+    "contactUs": "联系我们",
+    "aboutCas": "关于 CAS",
+    "ourServices": "我们的服务",
+    "whyChina": "为什么留学中国",
+    "faq": "常见问题",
+    "news": "资讯与动态",
+    "freeStudyPlan": "获取免费留学方案",
+    "notSure": "不知从何开始？",
+    "freeConsultation": "获取免费咨询 »"
+  },
+  "enquiry": {
+    "title": "咨询",
+    "titleAbout": "咨询 {{name}}",
+    "subtitle": "留下你的信息，CAS 顾问将指导你完成后续步骤。",
+    "thankYou": "谢谢你！",
+    "thankYouBody": "CAS 顾问将很快与你联系。",
+    "errorGeneric": "出了点问题。请重试。",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "邮箱",
+    "phone": "电话",
+    "message": "留言内容",
+    "messagePlaceholder": "告诉我们你感兴趣的内容…",
+    "sending": "发送中…",
+    "send": "发送咨询"
+  },
+  "leadPanel": {
+    "thankYou": "谢谢你！",
+    "thankYouBody": "CAS 顾问将很快与你联系。",
+    "title": "留言",
+    "subtitle": "免费指导——我们在一天内回复。",
+    "errorGeneric": "出了点问题。请重试。",
+    "yourName": "你的姓名",
+    "email": "邮箱",
+    "messagePlaceholder": "你想学什么？",
+    "messageAria": "留言内容",
+    "sending": "发送中…",
+    "send": "发送留言",
+    "freeNoObligation": "免费 · 无任何义务"
+  },
+  "home": {
+    "seo": {
+      "title": "留学中国——院校、专业与奖学金",
+      "description": "与 CAS 一起留学中国，自 2012 年起的官方授权代理。在教育部认可院校找到 MBBS、工程和商科专业，享受奖学金和从申请到抵达的全程支持。"
+    },
+    "hero": {
+      "title": "留学中国",
+      "featuredUniPrograms": "{{name}}：英语授课专业",
+      "moePrograms": "教育部认可院校：英语授课专业"
+    },
+    "search": {
+      "placeholder": "输入院校或专业名称",
+      "ariaSearchField": "搜索院校或专业",
+      "ariaSearchButton": "搜索"
+    },
+    "popularSearches": {
+      "chineseLanguage": "中文语言课程",
+      "mbbs": "MBBS",
+      "internationalTrade": "国际贸易学士",
+      "engineering": "工程"
+    },
+    "weekly": {
+      "title": "每周专业推荐",
+      "featuredUniversity": "推荐院校",
+      "limitedSeats": "名额有限",
+      "language": "语言",
+      "englishDefault": "英语",
+      "level": "层次",
+      "tuition": "学费",
+      "moeListed": "教育部认可院校",
+      "fullSupport": "CAS 提供全程申请和签证支持",
+      "applicationsCloseIn": "申请截止倒计时",
+      "applyForSeat": "申请名额"
+    },
+    "money": {
+      "onRequest": "请咨询",
+      "perYear": "{{amount}} {{currency}}/年"
+    },
+    "highlights": {
+      "title": "精选亮点",
+      "subtitle": "精心挑选的留学中国路径。",
+      "learnMore": "了解更多",
+      "medicalTitle": "全球认可的医学学位",
+      "medicalBody": "在举世公认的教育部认可院校学习 MBBS。",
+      "medicalTag": "MBBS",
+      "deadlinesTitle": "截止较晚的院校",
+      "deadlinesBody": "即将到来的招生批次仍在开放——请在名额招满前申请。",
+      "deadlinesTag": "截止日期",
+      "noCscaTitle": "免 CSCA 院校",
+      "noCscaBody": "无需 CSCA 考试即可录取国际学生的院校。",
+      "noCscaTag": "招生录取",
+      "languageTitle": "中文语言预科",
+      "languageBody": "预科年课程，为你在中国的学习和生活做好准备。",
+      "languageTag": "语言",
+      "fastTrackTitle": "快速通道申请",
+      "fastTrackBody": "对通过 CAS 递交的完整申请优先处理。",
+      "fastTrackTag": "快速通道",
+      "freeApplyTitle": "免申请费院校",
+      "freeApplyBody": "通过 CAS 申请指定院校，无需缴纳申请费。",
+      "freeApplyTag": "免申请费",
+      "valueTitle": "高性价比院校",
+      "valueBody": "优质教育，学费和生活成本亲民。",
+      "valueTag": "高性价比",
+      "fullScholarshipTitle": "全额奖学金院校",
+      "fullScholarshipBody": "向符合条件的学生提供全额学费奖学金的院校。",
+      "fullScholarshipTag": "奖学金",
+      "partialScholarshipTitle": "部分奖学金院校",
+      "partialScholarshipBody": "提供部分奖学金和每月生活津贴的院校。",
+      "partialScholarshipTag": "奖学金"
+    },
+    "outstanding": {
+      "title": "热门专业",
+      "subtitle": "学生正在申请的热门专业。",
+      "viewAll": "查看全部专业"
+    },
+    "featured": {
+      "title": "精选内容",
+      "guideBadge": "指南",
+      "guideTitle": "留学中国：国际学生完整指南",
+      "guideBody": "关于院校、专业、奖学金、签证和在中国生活的一切。",
+      "readGuide": "阅读指南",
+      "tabs": {
+        "latest": "最新话题",
+        "questions": "常见问题",
+        "trending": "热门"
+      },
+      "latest": {
+        "marchIntake": "2026 年 3 月招生现已在各合作院校开放",
+        "cscScholarships": "CSC 与省级奖学金正在接受申请",
+        "newMoe": "新增教育部认可院校",
+        "mbbsGuide": "如何准备一份出色的 MBBS 申请"
+      },
+      "questions": {
+        "recognition": "中国的 MBBS 在我的国家被认可吗？",
+        "costs": "学费和生活成本是多少？",
+        "csca": "哪些院校不需要 CSCA 考试？",
+        "scholarship": "我该如何申请奖学金？"
+      },
+      "trending": {
+        "mbbsEnglish": "英语授课学习 MBBS",
+        "engineering": "中国的工程专业",
+        "business": "商科与 MBA 专业",
+        "fullTuition": "全额学费奖学金"
+      }
+    },
+    "watch": {
+      "title": "观看与学习",
+      "subtitle": "来自 CAS 的指南和学生故事。",
+      "applyHelp": "CAS 如何帮助你申请",
+      "studentLife": "国际学生的生活",
+      "choosingProgram": "选择合适的专业"
+    },
+    "more": {
+      "title": "更多中国院校",
+      "viewAll": "查看全部",
+      "emptyText": "我们的合作院校等你来探索。",
+      "browseAll": "浏览全部"
+    },
+    "cta": {
+      "title": "搜索院校和专业",
+      "subtitle": "几分钟内找到适合你的专业——或预约免费咨询，我们将为你提供指导。",
+      "findProgram": "找到适合你的专业",
+      "freeConsultation": "免费咨询"
+    },
+    "countdown": {
+      "days": "天",
+      "hrs": "时",
+      "min": "分",
+      "sec": "秒"
+    }
+  }
+}

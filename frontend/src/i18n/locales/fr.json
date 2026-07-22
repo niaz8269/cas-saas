@@ -1,1 +1,926 @@
-{}
+{
+  "language": {
+    "select": "Choisir la langue"
+  },
+  "nav": {
+    "whyCas": "Pourquoi CAS",
+    "studyInChina": "Étudier en Chine",
+    "universities": "Universités",
+    "programs": "Programmes",
+    "pricing": "Tarifs",
+    "partner": "Partenaire",
+    "scholarships": "Bourses",
+    "freeStudyPlan": "Plan d'études gratuit",
+    "news": "Actualités"
+  },
+  "whyCasMenu": {
+    "universities": "200+ universités",
+    "programs": "5 000+ programmes",
+    "scholarships": "500+ bourses",
+    "cities": "50+ villes",
+    "localServices": "Services locaux",
+    "howItWorks": "Comment ça marche",
+    "learningCenter": "Centre d'apprentissage"
+  },
+  "header": {
+    "promoFreeApplyText": "Découvrez les universités à candidature gratuite sur CAS",
+    "promoScholarshipsText": "Bourses entièrement financées pour 2026 — candidatez tôt",
+    "learnMore": "En savoir plus",
+    "signIn": "SE CONNECTER",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "notifications": "Notifications",
+    "previousNotification": "Notification précédente",
+    "nextNotification": "Notification suivante",
+    "close": "Fermer",
+    "learnMoreArrow": "En savoir plus »"
+  },
+  "footer": {
+    "blurb": "CAS — Consultancy for Abroad Study — accompagne les étudiants vers des universités chinoises de renommée mondiale depuis 2012, en tant qu'agent officiel agréé des établissements listés par le Ministère de l'Éducation.",
+    "explore": "Explorer",
+    "exploreUniversities": "Universités",
+    "explorePrograms": "Programmes",
+    "exploreScholarships": "Bourses",
+    "exploreWhyChina": "Pourquoi la Chine",
+    "exploreNews": "Actualités et mises à jour",
+    "services": "Services",
+    "serviceAdmission": "Service d'admission",
+    "serviceVisa": "Assistance visa",
+    "serviceScholarships": "Assistance aux bourses",
+    "serviceAbout": "À propos de CAS",
+    "serviceStaffLogin": "Connexion du personnel",
+    "getInTouch": "Nous contacter",
+    "whatsappUs": "Écrivez-nous sur WhatsApp",
+    "freeConsultation": "Consultation gratuite",
+    "rights": "© {{year}} CAS Education. Tous droits réservés.",
+    "authorized": "Agent officiel agréé depuis 2012."
+  },
+  "components": {
+    "moeListed": "Listée par le MoE",
+    "programCount_one": "{{count}} programme",
+    "programCount_other": "{{count}} programmes",
+    "view": "Voir"
+  },
+  "universities": {
+    "pageTitle": "Universités en Chine",
+    "pageSubtitle": "Parcourez les universités listées par le Ministère de l'Éducation et découvrez leurs programmes, leurs rentrées et leurs bourses.",
+    "seoDescription": "Parcourez les universités chinoises listées par le Ministère de l'Éducation. Comparez leurs programmes, leurs rentrées et leurs bourses et candidatez avec CAS.",
+    "eyebrowPartnerNetwork": "Réseau de partenaires",
+    "sortedBy": "Trié par {{label}}",
+    "sortNameLabel": "A–Z",
+    "sortProgramsLabel": "Le plus de programmes",
+    "sortNewestLabel": "Les plus récentes",
+    "topicMoeEyebrow": "Reconnues dans le monde entier",
+    "topicMoeTitle": "Universités listées par le Ministère de l'Éducation",
+    "topicMoeSubtitle": "Universités officiellement reconnues dont les diplômes sont valables dans le monde entier.",
+    "topicNoCscaEyebrow": "Admissions",
+    "topicNoCscaTitle": "Universités sans CSCA",
+    "topicNoCscaSubtitle": "Universités qui admettent les étudiants internationaux sans passer le test CSCA.",
+    "topicDeadlinesEyebrow": "Candidatez vite",
+    "topicDeadlinesTitle": "Universités aux échéances tardives",
+    "topicDeadlinesSubtitle": "Encore ouvertes pour la prochaine rentrée — candidatez avant que les places ne soient prises.",
+    "topicFreeApplyEyebrow": "Candidature gratuite",
+    "topicFreeApplyTitle": "Universités à candidature gratuite",
+    "topicFreeApplySubtitle": "Candidatez à des universités sélectionnées sans frais de dossier via CAS.",
+    "topicMedicalEyebrow": "Médecine",
+    "topicMedicalTitle": "Universités de médecine",
+    "topicMedicalSubtitle": "Les meilleures universités pour le MBBS, la dentisterie, les soins infirmiers et la pharmacie en Chine.",
+    "searchPlaceholder": "Rechercher des universités ou des villes…",
+    "searchAriaLabel": "Rechercher des universités",
+    "filterByCityAriaLabel": "Filtrer par ville",
+    "allCities": "Toutes les villes",
+    "moeListedOnly": "Listées par le MoE uniquement",
+    "loadError": "Impossible de charger les universités pour le moment.",
+    "emptyTitle": "Aucune université trouvée",
+    "emptyHint": "Essayez une autre recherche ou effacez le filtre.",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {{current}} sur {{total}}"
+  },
+  "university": {
+    "seoTitle": "{{name}} — Programmes et bourses",
+    "seoTitleFallback": "Université en Chine",
+    "seoDescription": "{{name}}{{location}} — découvrez les programmes, les rentrées et les bourses{{moe}}, et candidatez avec CAS.",
+    "seoDescriptionLocation": " à {{city}}",
+    "seoDescriptionMoe": " dans cette université listée par le Ministère de l'Éducation",
+    "seoDescriptionFallback": "Découvrez les programmes, les rentrées et les bourses des universités chinoises listées par le Ministère de l'Éducation.",
+    "notAvailable": "Cette université n'est pas disponible.",
+    "backToUniversities": "Retour aux universités",
+    "allUniversities": "Toutes les universités",
+    "logoAlt": "Logo de {{name}}",
+    "moeListedBadge": "Listée par le MoE chinois",
+    "enquire": "Se renseigner",
+    "applyNow": "Candidater maintenant",
+    "nextIntakePrefix": "Prochaine rentrée",
+    "nextIntakeCloses": "— clôture le {{date}}",
+    "daysLeft_one": "{{count}} jour restant",
+    "daysLeft_other": "{{count}} jours restants",
+    "tabOverview": "Aperçu",
+    "tabPrograms": "Programmes",
+    "tabProgramsCount": "Programmes ({{count}})",
+    "tabIntakes": "Rentrées",
+    "tabScholarships": "Bourses",
+    "tabAdmission": "Admission",
+    "factLocation": "Lieu",
+    "factMoeListed": "Listée par le MoE",
+    "factNearestAirport": "Aéroport le plus proche",
+    "factPrograms": "Programmes",
+    "yes": "Oui",
+    "repHeading": "Votre représentant CAS",
+    "programsEmpty": "Les programmes seront bientôt listés — renseignez-vous et nous vous communiquerons la liste actuelle.",
+    "durationMonths": " · {{count}} mois",
+    "perYear": "/an",
+    "apply": "Candidater",
+    "intakesEmpty": "Les dates de rentrée seront bientôt annoncées.",
+    "allPrograms": "Tous les programmes",
+    "seatsCount": " · {{count}} places",
+    "applyBy": "Candidater avant le",
+    "rollingAdmission": "Admission continue",
+    "scholarshipsEmpty": "Aucune bourse listée pour le moment — demandez à un conseiller CAS quelles sont vos options.",
+    "deadlineLabel": "Échéance {{date}}",
+    "howToApply": "Comment candidater",
+    "admissionRequirements": "Conditions d'admission",
+    "requirementsFallback": "Les conditions varient selon le programme — demandez à un conseiller CAS la liste exacte pour votre cursus.",
+    "readyToApply": "Prêt à candidater ?",
+    "readyToApplyBody": "CAS prépare et soumet votre candidature à votre place."
+  },
+  "programs": {
+    "seoTitle": "Trouvez des programmes pour étudier en Chine",
+    "seoDescription": "Recherchez des programmes pour étudier en Chine — MBBS, ingénierie, commerce et plus encore — dans nos universités partenaires. Filtrez par niveau de diplôme, langue d'enseignement et budget.",
+    "eyebrow": "Recherche de programmes",
+    "title": "Trouvez votre programme",
+    "subtitle": "Recherchez des programmes dans toutes les universités partenaires et filtrez par niveau, langue d'enseignement et budget.",
+    "searchPlaceholder": "ex. MBBS, ingénierie…",
+    "searchAria": "Rechercher des programmes",
+    "levelAria": "Niveau",
+    "languageAria": "Langue d'enseignement",
+    "maxFeePlaceholder": "Frais de scolarité max / an",
+    "maxFeeAria": "Frais de scolarité maximum par an",
+    "levelAll": "Tous les niveaux",
+    "levelBachelor": "Licence",
+    "levelMaster": "Master",
+    "levelPhd": "Doctorat",
+    "langAny": "Toutes les langues",
+    "langEnglish": "Anglais",
+    "langChinese": "Chinois",
+    "feeOnRequest": "Frais sur demande",
+    "perYear": "{{amount}} {{currency}}/an",
+    "months": "{{count}} mois",
+    "loadError": "Impossible de charger les programmes pour le moment.",
+    "emptyTitle": "Aucun programme ne correspond à vos filtres",
+    "emptyBody": "Essayez d'élargir votre recherche ou d'effacer un filtre.",
+    "viewDetails": "Voir les détails →",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {{current}} sur {{last}}"
+  },
+  "scholarships": {
+    "seoTitle": "Bourses pour étudier en Chine",
+    "seoDescription": "Bourses pour étudier en Chine — aides gouvernementales, provinciales et universitaires, complètes et partielles. Vérifiez la couverture et les échéances et candidatez avec CAS.",
+    "eyebrow": "Financement",
+    "title": "Bourses et financement",
+    "subtitle": "Aides complètes et partielles proposées par nos universités partenaires. Nous vous aidons à trouver celles auxquelles vous êtes éligible et à y candidater.",
+    "searchPlaceholder": "Rechercher des bourses…",
+    "searchAria": "Rechercher des bourses",
+    "typeAria": "Filtrer par type de bourse",
+    "allTypes": "Tous les types",
+    "loadError": "Impossible de charger les bourses pour le moment.",
+    "emptyTitle": "Aucune bourse trouvée",
+    "emptyBody": "Essayez une autre recherche.",
+    "applyBy": "Candidater avant le {{date}}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {{current}} sur {{last}}"
+  },
+  "cities": {
+    "seoTitle": "Étudier en Chine par ville — Pékin, Shanghai et plus",
+    "seoDescription": "Parcourez les destinations d'études chinoises par ville et découvrez les universités listées par le Ministère de l'Éducation dans chacune, avec un accompagnement complet de CAS pour votre candidature.",
+    "eyebrow": "Destinations",
+    "title": "Étudier en Chine par ville",
+    "subtitle": "De la capitale à la côte — choisissez une ville et découvrez ses universités listées par le Ministère de l'Éducation.",
+    "loadError": "Impossible de charger les destinations pour le moment.",
+    "emptyTitle": "Aucune destination listée pour le moment",
+    "universityCount_one": "{{count}} université",
+    "universityCount_other": "{{count}} universités",
+    "exploreUniversities": "Explorer les universités",
+    "view": "Voir"
+  },
+  "about": {
+    "seoTitle": "À propos de CAS",
+    "seoDescription": "À propos de CAS — Consultancy for Abroad Study. Un agent officiel agréé qui place des étudiants dans des universités chinoises listées par le Ministère de l'Éducation depuis 2012.",
+    "headerEyebrow": "Notre histoire",
+    "headerTitle": "À propos de CAS",
+    "headerSubtitle": "CAS — Consultancy for Abroad Study — aide les étudiants du monde entier à étudier dans des universités listées par le Ministère de l'Éducation à travers la Chine. Nous prenons en charge l'ensemble du parcours : choisir le bon programme, candidater, obtenir des bourses et vous accompagner tout au long du visa et de l'arrivée.",
+    "statYears": "Années d'expérience",
+    "statStudents": "Étudiants placés",
+    "statPartners": "Universités partenaires",
+    "statSupport": "Accompagnement des candidatures",
+    "whyTitle": "Pourquoi étudier en Chine",
+    "whySubtitle": "Une éducation de classe mondiale avec de réelles opportunités — pour une fraction du coût.",
+    "whyPoint1": "Universités classées mondialement et listées par le Ministère de l'Éducation",
+    "whyPoint2": "Diplômes enseignés en anglais en médecine, ingénierie et commerce",
+    "whyPoint3": "Frais de scolarité et coût de la vie abordables avec des bourses généreuses",
+    "whyPoint4": "Un pôle en pleine croissance pour la recherche, l'industrie et les opportunités",
+    "helpTitle": "Comment nous aidons",
+    "helpSubtitle": "Un parcours clair et accompagné, de la première demande à votre premier jour de cours.",
+    "stepLabel": "Étape {{number}}",
+    "stepChooseTitle": "Choisir",
+    "stepChooseBody": "Nous vous orientons vers les universités et les programmes qui correspondent à vos objectifs, à vos résultats et à votre budget.",
+    "stepApplyTitle": "Candidater",
+    "stepApplyBody": "Nous préparons vos documents et soumettons pour vous une candidature complète et correcte.",
+    "stepOfferTitle": "Offre",
+    "stepOfferBody": "Recevez votre offre d'admission et, si vous y êtes éligible, une bourse.",
+    "stepArriveTitle": "Arriver",
+    "stepArriveBody": "Nous vous guidons pour le visa, le voyage et l'inscription afin que vous arriviez prêt à commencer.",
+    "missionLabel": "Notre mission",
+    "missionText": "— rendre les études en Chine simples, transparentes et réussies pour chaque étudiant que nous accompagnons.",
+    "ctaTitle": "Planifions votre parcours",
+    "ctaSubtitle": "Parlez à un conseiller CAS de vos options — c'est gratuit et sans engagement.",
+    "ctaButton": "Nous contacter"
+  },
+  "pricing": {
+    "seoTitle": "Tarifs — Des frais transparents pour étudier en Chine",
+    "seoDescription": "Comment fonctionne la tarification de CAS : une consultation et un plan d'études gratuits, avec tout service payant clairement chiffré à l'avance. Aucun frais caché.",
+    "headerEyebrow": "Clair et centré sur l'étudiant",
+    "headerTitle": "Une tarification simple et transparente",
+    "headerSubtitle": "Le plan de chaque étudiant est différent, c'est pourquoi nous commençons gratuitement et chiffrons clairement tout ce qui va au-delà — vous connaîtrez toujours le coût avant de vous engager.",
+    "howTitle": "Comment fonctionne notre tarification",
+    "principleFreeTitle": "Gratuit pour commencer",
+    "principleFreeBody": "Votre première consultation et un plan d'études personnalisé — comprenant une présélection d'universités et de bourses — ne coûtent rien.",
+    "principleTransparentTitle": "Tarifé en toute transparence",
+    "principleTransparentBody": "Lorsqu'un service a un coût, vous recevez un devis clair et détaillé avant de vous engager. Aucun frais caché, jamais.",
+    "principleOnlyPayTitle": "Ne payez que ce dont vous avez besoin",
+    "principleOnlyPayBody": "Choisissez la formule complète ou seulement les parties que vous souhaitez. Votre conseiller adapte l'accompagnement — et le coût — à votre plan.",
+    "freeBadge": "Gratuit",
+    "freeCardTitle": "Pour commencer",
+    "free1": "Consultation initiale avec un conseiller",
+    "free2": "Plan d'études personnalisé",
+    "free3": "Présélection d'universités et de programmes",
+    "free4": "Accompagnement pour trouver des bourses adaptées",
+    "quotedBadge": "Chiffré à l'avance",
+    "quotedCardTitle": "Services optionnels",
+    "quoted1": "Gestion de la candidature et vérification des documents",
+    "quoted2": "Assistance visa (JW202 / lettre d'admission)",
+    "quoted3": "Réservation d'hébergement",
+    "quoted4": "Accueil à l'aéroport et accompagnement avant le départ",
+    "quoted5": "Traduction certifiée de documents",
+    "ctaTitle": "Vous souhaitez un devis personnalisé ?",
+    "ctaSubtitle": "Commencez par un plan d'études gratuit — nous vous recontacterons avec des étapes et des coûts clairs.",
+    "ctaButton": "Obtenir un plan d'études gratuit"
+  },
+  "partner": {
+    "seoTitle": "Devenez partenaire de CAS — Coopération d'agences et de recrutement",
+    "seoDescription": "Devenez partenaire de CAS pour placer des étudiants dans les universités chinoises : 200+ universités listées par le MoE, des commissions compétitives, un portail partenaire en temps réel et un accompagnement dédié.",
+    "headerEyebrow": "Pour les agences et les recruteurs",
+    "headerTitle": "Devenez partenaire de CAS",
+    "headerSubtitle": "Donnez à vos étudiants accès aux meilleures universités de Chine via un agent agréé — avec un portail partenaire en direct, des commissions compétitives et une équipe qui vous accompagne à chaque étape.",
+    "becomePartner": "Devenir partenaire",
+    "whyTitle": "Pourquoi devenir partenaire",
+    "whySubtitle": "Un canal unique et fiable vers les études en Chine.",
+    "benefitUniversitiesTitle": "200+ universités",
+    "benefitUniversitiesBody": "Orientez vos étudiants vers des universités listées par le Ministère de l'Éducation à travers la Chine par un seul canal de confiance.",
+    "benefitCommissionsTitle": "Commissions compétitives",
+    "benefitCommissionsBody": "Gagnez sur chaque placement réussi, suivi en toute transparence et payé selon un calendrier clair.",
+    "benefitPortalTitle": "Un portail partenaire en temps réel",
+    "benefitPortalBody": "Soumettez et suivez chaque candidature, voyez les changements de statut en direct et gérez vos étudiants au même endroit.",
+    "benefitMarketingTitle": "Support marketing",
+    "benefitMarketingBody": "Accédez à des listes de programmes à jour, aux échéances de rentrée et à des supports co-brandés pour vous aider à recruter.",
+    "benefitAuthorizedTitle": "Agréé depuis 2012",
+    "benefitAuthorizedBody": "Travaillez avec un agent établi et agréé par les universités, doté d'un solide historique en matière de visas et d'admissions.",
+    "benefitTeamTitle": "Équipe partenaire dédiée",
+    "benefitTeamBody": "Un contact CAS attitré vous accompagne, vous et vos étudiants, de la première demande à l'arrivée.",
+    "howTitle": "Comment ça marche",
+    "step1Title": "Candidater comme partenaire",
+    "step1Body": "Parlez-nous de votre agence et des étudiants que vous accompagnez.",
+    "step2Title": "Être intégré",
+    "step2Body": "Nous configurons votre accès au portail partenaire et guidons votre équipe à travers le processus.",
+    "step3Title": "Orienter et gagner",
+    "step3Body": "Soumettez des candidatures, suivez-les en direct et gagnez sur chaque placement réussi.",
+    "ctaTitle": "Prêt à travailler ensemble ?",
+    "ctaSubtitle": "Parlez-nous de votre agence et nous mettrons en place votre partenariat."
+  },
+  "services": {
+    "seoTitle": "Nos services",
+    "seoDescription": "Les services de CAS pour étudier en Chine — service d'admission, assistance visa, aide aux bourses, accueil à l'aéroport et accompagnement sur le campus, de bout en bout.",
+    "eyebrow": "Accompagnement de bout en bout",
+    "title": "Nos services",
+    "subtitle": "De votre première demande à votre premier jour de cours — et au-delà — CAS vous accompagne à chaque étape de vos études en Chine.",
+    "whatWeDoTitle": "Ce que nous faisons pour vous",
+    "whatWeDoSubtitle": "Une seule équipe gère tout le parcours, pour que rien ne passe entre les mailles du filet.",
+    "whyChooseTitle": "Pourquoi choisir CAS",
+    "whyChooseSubtitle": "Un accompagnement fiable et transparent à chaque étape de votre parcours vers la Chine.",
+    "ctaTitle": "Vous ne savez pas par où commencer ?",
+    "ctaSubtitle": "Réservez une consultation gratuite et nous établirons ensemble vos options.",
+    "ctaButton": "Consultation gratuite",
+    "items": {
+      "admission": {
+        "title": "Service d'admission",
+        "body": "Nous présélectionnons les bonnes universités et les bons programmes, préparons votre dossier et soumettons pour vous une candidature complète et correcte."
+      },
+      "visa": {
+        "title": "Assistance visa",
+        "body": "Un accompagnement complet pour votre JW202, votre lettre d'admission et votre visa étudiant — avec un historique de taux d'approbation élevés."
+      },
+      "airportPickup": {
+        "title": "Accueil à l'aéroport",
+        "body": "Un représentant CAS vous accueille à votre arrivée et vous aide à rejoindre le campus en toute sécurité et sans encombre."
+      },
+      "onCampus": {
+        "title": "Accompagnement sur le campus",
+        "body": "Une aide continue après votre arrivée — inscription, hébergement, démarches bancaires et questions du quotidien."
+      },
+      "scholarship": {
+        "title": "Assistance aux bourses",
+        "body": "Nous vous mettons en relation avec des bourses gouvernementales, provinciales et universitaires et vous aidons à candidater dans les temps."
+      },
+      "language": {
+        "title": "Formation de base en langue chinoise",
+        "body": "Des conseils sur le HSK et les options d'année préparatoire pour que vous soyez prêt pour les études et la vie en Chine."
+      }
+    },
+    "stats": {
+      "yearsExperience": "Années d'expérience",
+      "studentsPlaced": "Étudiants placés",
+      "universityPartners": "Universités partenaires",
+      "visaSuccessRate": "Taux de réussite des visas"
+    },
+    "why": {
+      "authorizedAgent": {
+        "title": "Agent officiel agréé",
+        "body": "En collaboration directe avec les universités depuis 2012 — votre candidature est entre des mains fiables et responsables."
+      },
+      "freeToStart": {
+        "title": "Gratuit au départ, clair ensuite",
+        "body": "Votre consultation et votre plan d'études sont gratuits ; tout frais de service est chiffré à l'avance, sans frais caché."
+      },
+      "dedicatedAdvisor": {
+        "title": "Un conseiller dédié",
+        "body": "Un interlocuteur unique vous guide de votre première demande jusqu'à votre arrivée."
+      },
+      "fastApplications": {
+        "title": "Des candidatures rapides et complètes",
+        "body": "Nous préparons tout correctement du premier coup, pour que vous ne perdiez pas une rentrée à cause de nouveaux envois."
+      },
+      "admissionRecord": {
+        "title": "Un solide historique d'admissions",
+        "body": "Un historique éprouvé pour faire admettre les étudiants et les préparer au visa."
+      },
+      "supportAfterArrival": {
+        "title": "Un accompagnement après votre arrivée",
+        "body": "Accueil à l'aéroport, inscription et aide à l'installation — nous ne nous arrêtons pas à la lettre d'admission."
+      }
+    }
+  },
+  "whyChina": {
+    "seoTitle": "Pourquoi étudier en Chine",
+    "seoDescription": "Pourquoi étudier en Chine — des universités classées mondialement et listées par le Ministère de l'Éducation, des diplômes enseignés en anglais, des frais de scolarité abordables et des bourses généreuses.",
+    "eyebrow": "Une éducation de classe mondiale",
+    "title": "Pourquoi étudier en Chine",
+    "subtitle": "La Chine est devenue l'une des principales destinations au monde pour les étudiants internationaux — alliant universités de premier plan, coûts abordables, bourses généreuses et réelles opportunités.",
+    "reasonsTitle": "Les raisons pour lesquelles les étudiants choisissent la Chine",
+    "reasonsSubtitle": "Ce qui en fait l'une des décisions d'études à l'étranger les plus judicieuses aujourd'hui.",
+    "ctaTitle": "Prêt à explorer vos options ?",
+    "ctaSubtitle": "Parcourez les programmes de nos universités partenaires et trouvez celui qui vous convient.",
+    "ctaButton": "Trouvez votre programme",
+    "stats": {
+      "students": {
+        "value": "500K+",
+        "label": "Étudiants internationaux"
+      },
+      "english": {
+        "value": "Anglais",
+        "label": "Programmes enseignés"
+      },
+      "scholarships": {
+        "value": "Bourses",
+        "label": "Largement disponibles"
+      },
+      "recognition": {
+        "value": "Mondiale",
+        "label": "Reconnaissance des diplômes"
+      }
+    },
+    "reasons": {
+      "worldRanked": {
+        "title": "Universités classées mondialement",
+        "body": "Étudiez dans des établissements listés par le Ministère de l'Éducation et classés mondialement, reconnus dans le monde entier."
+      },
+      "englishTaught": {
+        "title": "Diplômes enseignés en anglais",
+        "body": "Des diplômes complets enseignés en anglais en médecine, ingénierie, commerce et plus encore — aucun chinois requis pour commencer."
+      },
+      "affordable": {
+        "title": "Abordable et financé",
+        "body": "Frais de scolarité et coût de la vie faibles, ainsi que des bourses généreuses gouvernementales, provinciales et universitaires."
+      },
+      "opportunity": {
+        "title": "Opportunités et industrie",
+        "body": "Étudiez dans l'une des plus grandes économies du monde, avec une véritable exposition à la recherche et à l'industrie."
+      },
+      "culture": {
+        "title": "Culture riche et sécurité",
+        "body": "Des villes modernes et sûres, dotées d'une culture profonde et d'une communauté d'étudiants internationaux vaste et accueillante."
+      },
+      "recognised": {
+        "title": "Des diplômes reconnus mondialement",
+        "body": "Des qualifications acceptées par les employeurs et les organismes de certification du monde entier."
+      }
+    }
+  },
+  "contact": {
+    "seoTitle": "Contact et consultation gratuite",
+    "seoDescription": "Contactez CAS pour une consultation gratuite sur les études en Chine. Bénéficiez de conseils d'experts sur les universités, les programmes, les bourses, l'admission et les visas.",
+    "eyebrow": "Nous sommes là pour vous aider",
+    "title": "Nous contacter",
+    "subtitle": "Demandez une consultation gratuite et un conseiller CAS vous guidera à travers vos options.",
+    "talkToUs": "Parlez-nous",
+    "website": "Site web",
+    "emailLabel": "E-mail",
+    "whatsapp": "WhatsApp",
+    "whatsappHelp": "Disponible par ville — demandez-nous le conseiller le plus proche de chez vous",
+    "offices": "Bureaux",
+    "officeList": {
+      "headOffice": {
+        "city": "Siège social",
+        "detail": "Pékin, Chine"
+      },
+      "islamabad": {
+        "city": "Islamabad",
+        "detail": "Pakistan"
+      }
+    }
+  },
+  "faq": {
+    "seoTitle": "FAQ — Étudier en Chine avec CAS",
+    "seoDescription": "Réponses aux questions fréquentes sur les études en Chine avec CAS : choisir une université et un programme, les bourses, candidater, les visas étudiants, l'accompagnement à l'arrivée et les frais.",
+    "eyebrow": "Centre d'aide",
+    "title": "Questions fréquentes",
+    "subtitle": "Tout ce que vous devez savoir sur les études en Chine avec CAS — du choix d'une université aux visas, bourses et frais.",
+    "ctaTitle": "Vous avez encore des questions ?",
+    "ctaSubtitle": "Obtenez un plan d'études gratuit et un conseiller CAS répondra à tout selon votre situation.",
+    "ctaButton": "Obtenir un plan d'études gratuit",
+    "studyingInChina": {
+      "title": "Étudier en Chine",
+      "q1": "Pourquoi étudier en Chine ?",
+      "a1": "La Chine propose des universités listées par le Ministère de l'Éducation, une offre croissante de diplômes enseignés en anglais, des frais de scolarité et un coût de la vie abordables, et des bourses généreuses — avec des qualifications reconnues mondialement.",
+      "q2": "Puis-je étudier en anglais ?",
+      "a2": "Oui. De nombreuses universités proposent des diplômes complets entièrement enseignés en anglais, notamment en médecine, en ingénierie et en commerce. Des programmes enseignés en chinois et des options de formation de base en langue sont également disponibles.",
+      "q3": "Dois-je parler chinois ?",
+      "a3": "Pas pour les programmes enseignés en anglais. Pour les programmes enseignés en chinois, une qualification HSK peut être requise ; nous pouvons vous conseiller sur une année préparatoire ou un programme de langue si nécessaire.",
+      "q4": "Les diplômes sont-ils reconnus à l'international ?",
+      "a4": "CAS travaille avec des universités listées par le Ministère de l'Éducation dont les diplômes sont largement reconnus. Les modalités de reconnaissance varient selon le pays et la profession, alors interrogez votre conseiller sur votre pays cible."
+    },
+    "choosing": {
+      "title": "Choisir une université et un programme",
+      "q1": "Comment choisir la bonne université et le bon programme ?",
+      "a1": "Commencez par un plan d'études gratuit — indiquez-nous votre objectif, votre budget et vos préférences, et un conseiller CAS vous envoie une présélection personnalisée. Vous pouvez aussi parcourir et filtrer les universités, programmes et bourses sur ce site.",
+      "q2": "À quels programmes puis-je candidater ?",
+      "a2": "Licences, masters et doctorats, ainsi que des programmes non diplômants et de langue chinoise — dans des domaines tels que la médecine (MBBS), l'ingénierie, le commerce, l'informatique et plus encore.",
+      "q3": "Que signifie « listée par le MoE » ?",
+      "a3": "Cela signifie que le Ministère de l'Éducation a autorisé l'université à inscrire des étudiants internationaux. CAS se concentre sur les universités listées par le MoE, que vous pouvez identifier grâce au badge présent sur chaque page d'université."
+    },
+    "scholarships": {
+      "title": "Bourses",
+      "q1": "Quelles bourses sont disponibles ?",
+      "a1": "Des bourses gouvernementales (CSC), provinciales et universitaires — à la fois complètes (frais de scolarité, hébergement et allocation) et partielles. La disponibilité varie selon l'université, le programme et la rentrée.",
+      "q2": "Suis-je éligible à une bourse ?",
+      "a2": "L'éligibilité dépend de vos résultats, de votre niveau, de votre nationalité et de la bourse concernée. Votre conseiller CAS vous met en relation avec les bourses que vous avez le plus de chances d'obtenir.",
+      "q3": "CAS aide-t-il pour les candidatures aux bourses ?",
+      "a3": "Oui — nous vous aidons à identifier les bourses adaptées, à préparer les documents et à les soumettre à temps en même temps que votre candidature universitaire."
+    },
+    "applying": {
+      "title": "Candidater avec CAS",
+      "q1": "Comment fonctionne le processus de candidature ?",
+      "a1": "Plan d'études → présélection → préparation de vos documents → CAS soumet votre candidature → vous recevez une offre → assistance visa → accompagnement à l'arrivée. Une seule équipe gère tout le parcours.",
+      "q2": "Quels documents me faudra-t-il ?",
+      "a2": "En général votre passeport, vos relevés de notes et diplômes, des photos d'identité et, selon le programme, un certificat de langue et des examens médicaux ou un extrait de casier judiciaire. Votre conseiller vous fournit une liste exacte.",
+      "q3": "Combien de temps cela prend-il ?",
+      "a3": "Cela varie selon l'université et la rentrée — souvent de quelques semaines à deux mois entre la candidature et l'offre. Candidater tôt dans la fenêtre de rentrée vous offre le plus d'options.",
+      "q4": "La consultation est-elle vraiment gratuite ?",
+      "a4": "Oui. Votre consultation initiale et votre plan d'études sont gratuits et sans engagement. Tout service payant est chiffré clairement à l'avance — consultez notre page des tarifs."
+    },
+    "visa": {
+      "title": "Visa et arrivée",
+      "q1": "Comment obtenir un visa étudiant ?",
+      "a1": "Une fois admis, l'université délivre une lettre d'admission et un formulaire JW202 ; vous demandez ensuite un visa étudiant (X) auprès d'une ambassade ou d'un consulat de Chine. CAS vous guide à chaque étape.",
+      "q2": "CAS m'accompagne-t-il après mon arrivée ?",
+      "a2": "Oui — l'accueil à l'aéroport, l'aide à l'inscription universitaire, l'hébergement et l'installation font partie de notre accompagnement de bout en bout."
+    },
+    "fees": {
+      "title": "Frais et paiements",
+      "q1": "Combien coûtent les études en Chine ?",
+      "a1": "Cela dépend de l'université, de la ville et du programme — frais de scolarité et coût de la vie. Indiquez-nous votre plan et nous vous donnerons une estimation claire et personnalisée.",
+      "q2": "Que facture CAS ?",
+      "a2": "Votre consultation et votre plan d'études sont gratuits. Lorsqu'un service a un coût, vous recevez un devis détaillé avant de vous engager — il n'y a aucun frais caché."
+    }
+  },
+  "news": {
+    "seoTitle": "Actualités et mises à jour",
+    "seoDescription": "Actualités et mises à jour de CAS — échéances de rentrée, ouvertures de bourses et annonces des universités partenaires pour étudier en Chine.",
+    "headerEyebrow": "Actualités et ressources",
+    "headerTitle": "Les dernières nouvelles de CAS",
+    "headerSubtitle": "Échéances de rentrée et ouvertures de bourses, ainsi que des guides pour vous aider à planifier vos études en Chine.",
+    "latestUpdatesTitle": "Dernières mises à jour",
+    "guidesTitle": "Guides et ressources",
+    "guidesSubtitle": "Tout ce que vous devez savoir pour planifier vos études en Chine.",
+    "learnMore": "En savoir plus",
+    "readGuide": "Lire le guide",
+    "updates": {
+      "intake": {
+        "date": "Janvier 2026",
+        "tag": "Rentrées",
+        "title": "Les candidatures pour la rentrée de mars 2026 sont ouvertes",
+        "body": "Les candidatures pour la rentrée du printemps 2026 sont désormais ouvertes dans nos universités partenaires. Les premiers candidats ont le choix prioritaire des programmes et des bourses."
+      },
+      "scholarships": {
+        "date": "Janvier 2026",
+        "tag": "Bourses",
+        "title": "Les bourses CSC et provinciales acceptent désormais les candidatures",
+        "body": "Les bourses du gouvernement chinois (CSC) et provinciales couvrant tout ou partie des frais de scolarité — plus une allocation mensuelle — sont ouvertes aux étudiants éligibles."
+      },
+      "universities": {
+        "date": "Décembre 2025",
+        "tag": "Universités",
+        "title": "De nouvelles universités partenaires ajoutées au catalogue",
+        "body": "Nous avons élargi notre liste d'universités partenaires listées par le Ministère de l'Éducation, en ajoutant davantage de programmes de médecine et d'ingénierie enseignés en anglais."
+      }
+    },
+    "guides": {
+      "apply": {
+        "title": "Comment candidater, étape par étape",
+        "body": "Du choix d'un programme à la soumission d'une candidature complète — l'ensemble du processus expliqué."
+      },
+      "visa": {
+        "title": "Votre visa étudiant, expliqué",
+        "body": "Ce que sont le JW202 et la lettre d'admission, et comment fonctionne la procédure de visa X."
+      },
+      "scholarships": {
+        "title": "Les bourses en Chine",
+        "body": "Aides gouvernementales, provinciales et universitaires — qui y est éligible et comment candidater."
+      },
+      "costs": {
+        "title": "Ce que coûtent les études en Chine",
+        "body": "Frais de scolarité et coût de la vie, et comment fonctionne la tarification transparente de CAS."
+      },
+      "mbbs": {
+        "title": "Étudier le MBBS en Chine",
+        "body": "Des diplômes de médecine enseignés en anglais dans des universités reconnues — une voie populaire avec CAS."
+      },
+      "university": {
+        "title": "Choisir la bonne université",
+        "body": "Comment évaluer la ville, le classement, la langue et le budget pour trouver ce qui vous convient le mieux."
+      }
+    }
+  },
+  "studyPlan": {
+    "badge": "Gratuit · prend 3 minutes",
+    "title": "Obtenez votre plan d'études gratuit",
+    "subtitle": "Répondez à quelques questions et un conseiller CAS vous enverra une présélection personnalisée d'universités, de programmes et de bourses — sans frais, sans engagement.",
+    "optional": "Facultatif",
+    "noPreference": "Sans préférence",
+    "fieldNotSure": "Pas encore sûr",
+    "matchNote": "Nous vous mettrons en relation avec des universités et des bourses listées par le Ministère de l'Éducation en fonction de vos réponses.",
+    "back": "Retour",
+    "continue": "Continuer",
+    "sending": "Envoi…",
+    "submit": "Obtenir mon plan d'études",
+    "steps": {
+      "goal": "Votre objectif",
+      "preferences": "Préférences",
+      "details": "Vos informations"
+    },
+    "q": {
+      "study": "Que souhaiteriez-vous étudier ?",
+      "field": "Domaine d'études",
+      "intake": "Quand souhaitez-vous commencer ?",
+      "funding": "Comment financerez-vous vos études ?",
+      "city": "Ville préférée",
+      "grade": "Moyenne actuelle",
+      "name": "Nom complet",
+      "nationality": "Nationalité",
+      "email": "E-mail",
+      "phone": "Téléphone / WhatsApp"
+    },
+    "levels": {
+      "bachelor": "Licence",
+      "master": "Master",
+      "phd": "Doctorat / PhD",
+      "nonDegree": "Non diplômant",
+      "chinese": "Langue chinoise"
+    },
+    "fields": {
+      "medicine": "Médecine / MBBS",
+      "engineering": "Ingénierie",
+      "business": "Commerce et MBA",
+      "computerScience": "Informatique",
+      "naturalSciences": "Sciences naturelles",
+      "humanities": "Sciences humaines et arts",
+      "law": "Droit",
+      "education": "Éducation",
+      "agriculture": "Agriculture",
+      "other": "Autre"
+    },
+    "intakes": {
+      "spring2026": "Printemps 2026",
+      "autumn2026": "Automne 2026",
+      "spring2027": "Printemps 2027",
+      "autumn2027": "Automne 2027",
+      "flexible": "Flexible"
+    },
+    "funding": {
+      "selfFunded": "Autofinancé",
+      "scholarship": "À la recherche d'une bourse"
+    },
+    "cities": {
+      "any": "N'importe quelle ville",
+      "beijing": "Pékin",
+      "shanghai": "Shanghai",
+      "guangzhou": "Canton",
+      "nanjing": "Nankin",
+      "hangzhou": "Hangzhou",
+      "wuhan": "Wuhan",
+      "chongqing": "Chongqing",
+      "other": "Autre"
+    },
+    "grades": {
+      "g90": "90–100 %",
+      "g80": "80–89 %",
+      "g70": "70–79 %",
+      "g60": "60–69 %",
+      "below60": "Moins de 60 %",
+      "preferNotToSay": "Je préfère ne pas répondre"
+    },
+    "errors": {
+      "chooseStudy": "Veuillez choisir ce que vous souhaitez étudier.",
+      "name": "Veuillez nous indiquer votre nom.",
+      "contact": "Ajoutez un e-mail ou un numéro de téléphone pour que nous puissions vous joindre."
+    },
+    "success": {
+      "title": "Votre plan d'études est en route",
+      "body": "Merci, {{name}}. Un conseiller CAS examinera vos objectifs et vous recontactera sous un jour ouvré avec des universités, des programmes et des bourses correspondant à votre profil.",
+      "browse": "Parcourir les universités en attendant →"
+    }
+  },
+  "reviews": {
+    "heading": "Les avis de nos étudiants",
+    "subheading": "Des étudiants de plus de 50 pays confient leur parcours à CAS.",
+    "playVideo": "Lire la vidéo des témoignages d'étudiants",
+    "mapAlt": "Des étudiants à travers le monde",
+    "reviewFrom": "Avis de {{name}}, {{country}}",
+    "closeVideo": "Fermer la vidéo",
+    "close": "Fermer",
+    "videoTitle": "CAS — Étudier en Chine"
+  },
+  "heroUpdates": {
+    "tabUniversities": "Actualités des universités",
+    "tabPrograms": "Actualités des programmes",
+    "tabScholarships": "Dernières bourses",
+    "tabNews": "Nouveaux articles",
+    "storyMarchIntake": "La rentrée de mars 2026 est désormais ouverte dans les universités partenaires",
+    "storyCscScholarships": "Les bourses CSC et provinciales acceptent les candidatures",
+    "storyNewMoe": "De nouvelles universités listées par le Ministère de l'Éducation ajoutées",
+    "storyMbbsGuide": "Comment préparer une candidature MBBS solide",
+    "storyVisaGuide": "Guide du visa étudiant : documents et calendrier",
+    "showUpdates": "Afficher les dernières mises à jour",
+    "hideUpdates": "Masquer les dernières mises à jour",
+    "lastApplication": "Dernière candidature : {{date}}",
+    "noUniversities": "Aucune université à afficher pour le moment.",
+    "noPrograms": "Aucun programme à afficher pour le moment.",
+    "loading": "Chargement…",
+    "scholarshipFallback": "Bourse",
+    "deadline": "Échéance : {{date}}",
+    "openNow": "Ouvert maintenant",
+    "noScholarships": "Aucune bourse à afficher pour le moment.",
+    "updated": "Mis à jour le {{date}}"
+  },
+  "helpDock": {
+    "hereToHelpLine1": "Nous sommes là",
+    "hereToHelpLine2": "pour vous aider",
+    "counsellorCathy": "Cathy",
+    "counsellorJayla": "Jayla",
+    "counsellorJoe": "Joe",
+    "wechatLabel": "WeChat :",
+    "whatsappTelLabel": "WhatsApp/Tél. :",
+    "wechatQrAlt": "QR code WeChat",
+    "wechat": "WeChat",
+    "customPlan": "Obtenir un plan de candidature personnalisé",
+    "leaveMessage": "Laisser un message",
+    "backToTop": "Retour en haut",
+    "showHelpBar": "Afficher la barre d'aide",
+    "help": "AIDE",
+    "talkToCounsellor": "Parler à un conseiller",
+    "close": "Fermer",
+    "freeGuidance": "Conseils gratuits — nous répondons généralement sous un jour.",
+    "whatsapp": "WhatsApp",
+    "chatNow": "Discutez avec nous maintenant",
+    "callUs": "Appelez-nous",
+    "email": "E-mail",
+    "freeStudyPlan": "Obtenir un plan d'études gratuit →",
+    "leaveAMessage": "Laisser un message",
+    "message": "Message"
+  },
+  "megaMenu": {
+    "browseEverything": "Tout parcourir",
+    "colDestinations": "Destinations",
+    "allDestinations": "Toutes les destinations",
+    "studyBeijing": "Étudier à Pékin",
+    "studyShanghai": "Étudier à Shanghai",
+    "studyWuhan": "Étudier à Wuhan",
+    "studyNanjing": "Étudier à Nankin",
+    "studyHangzhou": "Étudier à Hangzhou",
+    "studyDalian": "Étudier à Dalian",
+    "colUniversities": "Universités",
+    "allUniversities": "Toutes les universités",
+    "moeListed": "Universités listées par le MoE",
+    "medical": "Universités de médecine",
+    "engineering": "Universités d'ingénierie",
+    "technology": "Universités de technologie",
+    "normal": "Universités normales",
+    "colPrograms": "Programmes",
+    "allPrograms": "Tous les programmes",
+    "programMbbs": "Étudier le MBBS en Chine",
+    "programEngineering": "Programmes d'ingénierie",
+    "programBusiness": "Commerce et MBA",
+    "programBachelor": "Diplômes de licence",
+    "programMaster": "Diplômes de master",
+    "programPhd": "Doctorat / PhD",
+    "colScholarships": "Bourses",
+    "allScholarships": "Toutes les bourses",
+    "scholarshipFull": "Bourses complètes",
+    "scholarshipPartial": "Bourses partielles",
+    "scholarshipUniversity": "Bourses universitaires",
+    "scholarshipGovernment": "Gouvernementales (CSC)",
+    "scholarshipProvincial": "Bourses provinciales",
+    "colAbout": "À propos",
+    "contactUs": "Nous contacter",
+    "aboutCas": "À propos de CAS",
+    "ourServices": "Nos services",
+    "whyChina": "Pourquoi étudier en Chine",
+    "faq": "FAQ",
+    "news": "Actualités et mises à jour",
+    "freeStudyPlan": "Obtenir un plan d'études gratuit",
+    "notSure": "Vous ne savez pas par où commencer ?",
+    "freeConsultation": "Obtenir une consultation gratuite »"
+  },
+  "enquiry": {
+    "title": "Se renseigner",
+    "titleAbout": "Se renseigner sur {{name}}",
+    "subtitle": "Laissez vos coordonnées et un conseiller CAS vous guidera à travers les prochaines étapes.",
+    "thankYou": "Merci !",
+    "thankYouBody": "Un conseiller CAS vous contactera sous peu.",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "message": "Message",
+    "messagePlaceholder": "Dites-nous ce qui vous intéresse…",
+    "sending": "Envoi…",
+    "send": "Envoyer la demande"
+  },
+  "leadPanel": {
+    "thankYou": "Merci !",
+    "thankYouBody": "Un conseiller CAS vous contactera sous peu.",
+    "title": "Laisser un message",
+    "subtitle": "Conseils gratuits — nous répondons sous un jour.",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
+    "yourName": "Votre nom",
+    "email": "E-mail",
+    "messagePlaceholder": "Que souhaiteriez-vous étudier ?",
+    "messageAria": "Message",
+    "sending": "Envoi…",
+    "send": "Envoyer le message",
+    "freeNoObligation": "Gratuit · sans engagement"
+  },
+  "home": {
+    "seo": {
+      "title": "Étudier en Chine — Universités, programmes et bourses",
+      "description": "Étudiez en Chine avec CAS, un agent officiel agréé depuis 2012. Trouvez des programmes de MBBS, d'ingénierie et de commerce dans des universités listées par le Ministère de l'Éducation, avec des bourses et un accompagnement complet de la candidature à l'arrivée."
+    },
+    "hero": {
+      "title": "Étudier en Chine",
+      "featuredUniPrograms": "{{name}} : programmes enseignés en anglais",
+      "moePrograms": "Universités listées par le Ministère de l'Éducation : programmes enseignés en anglais"
+    },
+    "search": {
+      "placeholder": "SAISISSEZ LE NOM D'UNE UNIVERSITÉ OU D'UN PROGRAMME",
+      "ariaSearchField": "Rechercher des universités ou des programmes",
+      "ariaSearchButton": "Rechercher"
+    },
+    "popularSearches": {
+      "chineseLanguage": "Programme de langue chinoise",
+      "mbbs": "MBBS",
+      "internationalTrade": "Licence en commerce international",
+      "engineering": "Ingénierie"
+    },
+    "weekly": {
+      "title": "Programmes de la semaine",
+      "featuredUniversity": "Université à la une",
+      "limitedSeats": "Places limitées",
+      "language": "Langue",
+      "englishDefault": "Anglais",
+      "level": "Niveau",
+      "tuition": "Frais de scolarité",
+      "moeListed": "Université listée par le Ministère de l'Éducation",
+      "fullSupport": "Accompagnement complet de la candidature et du visa par CAS",
+      "applicationsCloseIn": "Les candidatures clôturent dans",
+      "applyForSeat": "Candidater pour une place"
+    },
+    "money": {
+      "onRequest": "Sur demande",
+      "perYear": "{{amount}} {{currency}}/an"
+    },
+    "highlights": {
+      "title": "À la une",
+      "subtitle": "Des parcours soigneusement sélectionnés pour étudier en Chine.",
+      "learnMore": "En savoir plus",
+      "medicalTitle": "Des diplômes de médecine reconnus mondialement",
+      "medicalBody": "Étudiez le MBBS dans des universités listées par le Ministère de l'Éducation et reconnues dans le monde entier.",
+      "medicalTag": "MBBS",
+      "deadlinesTitle": "Universités aux échéances tardives",
+      "deadlinesBody": "Encore ouvertes pour la prochaine rentrée — candidatez avant que les places ne soient prises.",
+      "deadlinesTag": "Échéances",
+      "noCscaTitle": "Universités sans CSCA",
+      "noCscaBody": "Universités qui admettent les étudiants internationaux sans le test CSCA.",
+      "noCscaTag": "Admissions",
+      "languageTitle": "Formations de base en langue chinoise",
+      "languageBody": "Des programmes d'année préparatoire pour vous préparer aux études et à la vie en Chine.",
+      "languageTag": "Langue",
+      "fastTrackTitle": "Candidatures accélérées",
+      "fastTrackBody": "Traitement prioritaire des candidatures complètes soumises via CAS.",
+      "fastTrackTag": "Accéléré",
+      "freeApplyTitle": "Universités à candidature gratuite",
+      "freeApplyBody": "Candidatez à des universités sélectionnées sans frais de dossier via CAS.",
+      "freeApplyTag": "Candidature gratuite",
+      "valueTitle": "Universités au budget accessible",
+      "valueBody": "Une éducation de qualité avec des frais de scolarité et un coût de la vie abordables.",
+      "valueTag": "Bon rapport qualité-prix",
+      "fullScholarshipTitle": "Universités à bourse complète",
+      "fullScholarshipBody": "Des universités offrant des bourses couvrant l'intégralité des frais de scolarité aux étudiants éligibles.",
+      "fullScholarshipTag": "Bourse",
+      "partialScholarshipTitle": "Universités à bourse partielle",
+      "partialScholarshipBody": "Des universités offrant des aides partielles et des allocations mensuelles.",
+      "partialScholarshipTag": "Bourse"
+    },
+    "outstanding": {
+      "title": "Programmes remarquables",
+      "subtitle": "Les programmes populaires auxquels les étudiants candidatent en ce moment.",
+      "viewAll": "Voir tous les programmes"
+    },
+    "featured": {
+      "title": "Contenu à la une",
+      "guideBadge": "Guide",
+      "guideTitle": "Étudier en Chine : le guide complet pour les étudiants internationaux",
+      "guideBody": "Tout sur les universités, les programmes, les bourses, les visas et la vie en Chine.",
+      "readGuide": "Lire le guide",
+      "tabs": {
+        "latest": "Derniers sujets",
+        "questions": "Questions fréquentes",
+        "trending": "Tendances"
+      },
+      "latest": {
+        "marchIntake": "La rentrée de mars 2026 est désormais ouverte dans les universités partenaires",
+        "cscScholarships": "Les bourses CSC et provinciales acceptent les candidatures",
+        "newMoe": "De nouvelles universités listées par le Ministère de l'Éducation ajoutées",
+        "mbbsGuide": "Comment préparer une candidature MBBS solide"
+      },
+      "questions": {
+        "recognition": "Un MBBS obtenu en Chine est-il reconnu dans mon pays ?",
+        "costs": "Quels sont les frais de scolarité et le coût de la vie ?",
+        "csca": "Quelles universités ne requièrent pas le test CSCA ?",
+        "scholarship": "Comment candidater à une bourse ?"
+      },
+      "trending": {
+        "mbbsEnglish": "Étudier le MBBS en anglais",
+        "engineering": "Programmes d'ingénierie en Chine",
+        "business": "Programmes de commerce et MBA",
+        "fullTuition": "Bourses couvrant l'intégralité des frais de scolarité"
+      }
+    },
+    "watch": {
+      "title": "Regarder et apprendre",
+      "subtitle": "Guides et témoignages d'étudiants de CAS.",
+      "applyHelp": "Comment CAS vous aide à candidater",
+      "studentLife": "La vie d'étudiant international",
+      "choosingProgram": "Choisir le bon programme"
+    },
+    "more": {
+      "title": "Plus d'universités en Chine",
+      "viewAll": "Voir tout",
+      "emptyText": "Nos universités partenaires n'attendent que d'être explorées.",
+      "browseAll": "Tout parcourir"
+    },
+    "cta": {
+      "title": "Recherchez des universités et des programmes",
+      "subtitle": "Trouvez votre programme en quelques minutes — ou réservez une consultation gratuite et nous vous guiderons.",
+      "findProgram": "Trouvez votre programme",
+      "freeConsultation": "Consultation gratuite"
+    },
+    "countdown": {
+      "days": "Jours",
+      "hrs": "Hrs",
+      "min": "Min",
+      "sec": "Sec"
+    }
+  }
+}

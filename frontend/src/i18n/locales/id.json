@@ -1,1 +1,926 @@
-{}
+{
+  "language": {
+    "select": "Pilih bahasa"
+  },
+  "nav": {
+    "whyCas": "Mengapa CAS",
+    "studyInChina": "Kuliah di Tiongkok",
+    "universities": "Universitas",
+    "programs": "Program",
+    "pricing": "Harga",
+    "partner": "Mitra",
+    "scholarships": "Beasiswa",
+    "freeStudyPlan": "Rencana studi gratis",
+    "news": "Berita"
+  },
+  "whyCasMenu": {
+    "universities": "200+ Universitas",
+    "programs": "5.000+ Program",
+    "scholarships": "500+ Beasiswa",
+    "cities": "50+ Kota",
+    "localServices": "Layanan Lokal",
+    "howItWorks": "Cara Kerjanya",
+    "learningCenter": "Pusat Pembelajaran"
+  },
+  "header": {
+    "promoFreeApplyText": "Jelajahi Universitas Bebas Biaya Pendaftaran di CAS",
+    "promoScholarshipsText": "Beasiswa penuh untuk 2026 — daftar lebih awal",
+    "learnMore": "Selengkapnya",
+    "signIn": "MASUK",
+    "openMenu": "Buka menu",
+    "closeMenu": "Tutup menu",
+    "notifications": "Notifikasi",
+    "previousNotification": "Notifikasi sebelumnya",
+    "nextNotification": "Notifikasi berikutnya",
+    "close": "Tutup",
+    "learnMoreArrow": "Selengkapnya »"
+  },
+  "footer": {
+    "blurb": "CAS — Consultancy for Abroad Study — telah membimbing para pelajar menuju universitas kelas dunia di Tiongkok sejak 2012, sebagai agen resmi berwenang untuk institusi yang terdaftar di Kementerian Pendidikan.",
+    "explore": "Jelajahi",
+    "exploreUniversities": "Universitas",
+    "explorePrograms": "Program",
+    "exploreScholarships": "Beasiswa",
+    "exploreWhyChina": "Mengapa Tiongkok",
+    "exploreNews": "Berita & pembaruan",
+    "services": "Layanan",
+    "serviceAdmission": "Layanan penerimaan",
+    "serviceVisa": "Bantuan visa",
+    "serviceScholarships": "Bantuan beasiswa",
+    "serviceAbout": "Tentang CAS",
+    "serviceStaffLogin": "Login staf",
+    "getInTouch": "Hubungi kami",
+    "whatsappUs": "WhatsApp kami",
+    "freeConsultation": "Konsultasi gratis",
+    "rights": "© {{year}} CAS Education. Seluruh hak cipta dilindungi.",
+    "authorized": "Agen resmi berwenang sejak 2012."
+  },
+  "components": {
+    "moeListed": "Terdaftar di Kemendikbud",
+    "programCount_one": "{{count}} program",
+    "programCount_other": "{{count}} program",
+    "view": "Lihat"
+  },
+  "universities": {
+    "pageTitle": "Universitas di Tiongkok",
+    "pageSubtitle": "Jelajahi universitas yang terdaftar di Kementerian Pendidikan dan lihat program, periode masuk, serta beasiswanya.",
+    "seoDescription": "Jelajahi universitas di Tiongkok yang terdaftar di Kementerian Pendidikan. Bandingkan program, periode masuk, dan beasiswanya, lalu daftar bersama CAS.",
+    "eyebrowPartnerNetwork": "Jaringan mitra",
+    "sortedBy": "Diurutkan berdasarkan {{label}}",
+    "sortNameLabel": "A–Z",
+    "sortProgramsLabel": "Program terbanyak",
+    "sortNewestLabel": "Terbaru",
+    "topicMoeEyebrow": "Diakui di seluruh dunia",
+    "topicMoeTitle": "Universitas yang terdaftar di Kementerian Pendidikan",
+    "topicMoeSubtitle": "Universitas yang diakui secara resmi dengan gelar yang berlaku di seluruh dunia.",
+    "topicNoCscaEyebrow": "Penerimaan",
+    "topicNoCscaTitle": "Universitas tanpa CSCA",
+    "topicNoCscaSubtitle": "Universitas yang menerima mahasiswa internasional tanpa mengikuti tes CSCA.",
+    "topicDeadlinesEyebrow": "Segera daftar",
+    "topicDeadlinesTitle": "Universitas dengan batas waktu akhir",
+    "topicDeadlinesSubtitle": "Masih terbuka untuk periode masuk mendatang — daftar sebelum kursi terisi penuh.",
+    "topicFreeApplyEyebrow": "Bebas biaya pendaftaran",
+    "topicFreeApplyTitle": "Universitas bebas biaya pendaftaran",
+    "topicFreeApplySubtitle": "Daftar ke universitas tertentu tanpa biaya pendaftaran melalui CAS.",
+    "topicMedicalEyebrow": "Kedokteran",
+    "topicMedicalTitle": "Universitas kedokteran",
+    "topicMedicalSubtitle": "Universitas terkemuka untuk MBBS, kedokteran gigi, keperawatan, dan farmasi di Tiongkok.",
+    "searchPlaceholder": "Cari universitas atau kota…",
+    "searchAriaLabel": "Cari universitas",
+    "filterByCityAriaLabel": "Saring berdasarkan kota",
+    "allCities": "Semua kota",
+    "moeListedOnly": "Hanya yang terdaftar di Kemendikbud",
+    "loadError": "Tidak dapat memuat universitas saat ini.",
+    "emptyTitle": "Universitas tidak ditemukan",
+    "emptyHint": "Coba pencarian lain atau hapus filter.",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "pageOf": "Halaman {{current}} dari {{total}}"
+  },
+  "university": {
+    "seoTitle": "{{name}} — Program & Beasiswa",
+    "seoTitleFallback": "Universitas di Tiongkok",
+    "seoDescription": "{{name}}{{location}} — jelajahi program, periode masuk, dan beasiswa{{moe}}, lalu daftar bersama CAS.",
+    "seoDescriptionLocation": " di {{city}}",
+    "seoDescriptionMoe": " di universitas yang terdaftar di Kementerian Pendidikan ini",
+    "seoDescriptionFallback": "Jelajahi program, periode masuk, dan beasiswa di universitas Tiongkok yang terdaftar di Kementerian Pendidikan.",
+    "notAvailable": "Universitas ini tidak tersedia.",
+    "backToUniversities": "Kembali ke universitas",
+    "allUniversities": "Semua universitas",
+    "logoAlt": "Logo {{name}}",
+    "moeListedBadge": "Terdaftar di Kemendikbud Tiongkok",
+    "enquire": "Tanya",
+    "applyNow": "Daftar sekarang",
+    "nextIntakePrefix": "Periode masuk berikutnya",
+    "nextIntakeCloses": "— ditutup {{date}}",
+    "daysLeft_one": "{{count}} hari lagi",
+    "daysLeft_other": "{{count}} hari lagi",
+    "tabOverview": "Ringkasan",
+    "tabPrograms": "Program",
+    "tabProgramsCount": "Program ({{count}})",
+    "tabIntakes": "Periode Masuk",
+    "tabScholarships": "Beasiswa",
+    "tabAdmission": "Penerimaan",
+    "factLocation": "Lokasi",
+    "factMoeListed": "Terdaftar di Kemendikbud",
+    "factNearestAirport": "Bandara terdekat",
+    "factPrograms": "Program",
+    "yes": "Ya",
+    "repHeading": "Perwakilan CAS Anda",
+    "programsEmpty": "Program akan segera ditampilkan — tanyakan kepada kami dan kami akan membagikan daftar terkini.",
+    "durationMonths": " · {{count}} bulan",
+    "perYear": "/thn",
+    "apply": "Daftar",
+    "intakesEmpty": "Tanggal periode masuk akan segera diumumkan.",
+    "allPrograms": "Semua program",
+    "seatsCount": " · {{count}} kursi",
+    "applyBy": "Daftar paling lambat",
+    "rollingAdmission": "Penerimaan berkelanjutan",
+    "scholarshipsEmpty": "Belum ada beasiswa yang tercantum — tanyakan pilihan Anda kepada penasihat CAS.",
+    "deadlineLabel": "Batas waktu {{date}}",
+    "howToApply": "Cara mendaftar",
+    "admissionRequirements": "Persyaratan penerimaan",
+    "requirementsFallback": "Persyaratan berbeda-beda tiap program — tanyakan penasihat CAS untuk daftar lengkap yang tepat bagi jurusan Anda.",
+    "readyToApply": "Siap mendaftar?",
+    "readyToApplyBody": "CAS menyiapkan dan mengirimkan lamaran Anda untuk Anda."
+  },
+  "programs": {
+    "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
+    "seoDescription": "Cari program untuk kuliah di Tiongkok — MBBS, teknik, bisnis, dan lainnya — di berbagai universitas mitra. Saring berdasarkan jenjang gelar, bahasa pengantar, dan anggaran.",
+    "eyebrow": "Pencari program",
+    "title": "Temukan program Anda",
+    "subtitle": "Cari program di seluruh universitas mitra dan saring berdasarkan jenjang, bahasa pengantar, dan anggaran.",
+    "searchPlaceholder": "mis. MBBS, Teknik…",
+    "searchAria": "Cari program",
+    "levelAria": "Jenjang",
+    "languageAria": "Bahasa pengantar",
+    "maxFeePlaceholder": "Biaya kuliah maks / tahun",
+    "maxFeeAria": "Biaya kuliah maksimum per tahun",
+    "levelAll": "Semua jenjang",
+    "levelBachelor": "Sarjana",
+    "levelMaster": "Magister",
+    "levelPhd": "Doktor",
+    "langAny": "Bahasa apa saja",
+    "langEnglish": "Inggris",
+    "langChinese": "Mandarin",
+    "feeOnRequest": "Biaya atas permintaan",
+    "perYear": "{{amount}} {{currency}}/thn",
+    "months": "{{count}} bulan",
+    "loadError": "Tidak dapat memuat program saat ini.",
+    "emptyTitle": "Tidak ada program yang cocok dengan filter Anda",
+    "emptyBody": "Coba perluas pencarian atau hapus filter.",
+    "viewDetails": "Lihat detail →",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "pageOf": "Halaman {{current}} dari {{last}}"
+  },
+  "scholarships": {
+    "seoTitle": "Beasiswa untuk Kuliah di Tiongkok",
+    "seoDescription": "Beasiswa untuk kuliah di Tiongkok — beasiswa pemerintah, provinsi, dan universitas, penuh maupun sebagian. Cek cakupan dan batas waktu, lalu daftar bersama CAS.",
+    "eyebrow": "Pendanaan",
+    "title": "Beasiswa & pendanaan",
+    "subtitle": "Beasiswa penuh dan sebagian yang ditawarkan oleh universitas mitra kami. Kami membantu Anda menemukan dan mendaftar beasiswa yang sesuai dengan kualifikasi Anda.",
+    "searchPlaceholder": "Cari beasiswa…",
+    "searchAria": "Cari beasiswa",
+    "typeAria": "Saring berdasarkan jenis beasiswa",
+    "allTypes": "Semua jenis",
+    "loadError": "Tidak dapat memuat beasiswa saat ini.",
+    "emptyTitle": "Beasiswa tidak ditemukan",
+    "emptyBody": "Coba pencarian lain.",
+    "applyBy": "Daftar paling lambat {{date}}",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "pageOf": "Halaman {{current}} dari {{last}}"
+  },
+  "cities": {
+    "seoTitle": "Kuliah di Tiongkok berdasarkan Kota — Beijing, Shanghai & Lainnya",
+    "seoDescription": "Jelajahi tujuan studi di Tiongkok berdasarkan kota dan lihat universitas yang terdaftar di Kementerian Pendidikan di setiap kota, dengan dukungan pendaftaran penuh dari CAS.",
+    "eyebrow": "Tujuan",
+    "title": "Kuliah di Tiongkok berdasarkan kota",
+    "subtitle": "Dari ibu kota hingga pesisir — pilih kota dan jelajahi universitasnya yang terdaftar di Kementerian Pendidikan.",
+    "loadError": "Tidak dapat memuat tujuan saat ini.",
+    "emptyTitle": "Belum ada tujuan yang tercantum",
+    "universityCount_one": "{{count}} universitas",
+    "universityCount_other": "{{count}} universitas",
+    "exploreUniversities": "Jelajahi universitas",
+    "view": "Lihat"
+  },
+  "about": {
+    "seoTitle": "Tentang CAS",
+    "seoDescription": "Tentang CAS — Consultancy for Abroad Study. Agen resmi berwenang yang menempatkan pelajar ke universitas di Tiongkok yang terdaftar di Kementerian Pendidikan sejak 2012.",
+    "headerEyebrow": "Kisah kami",
+    "headerTitle": "Tentang CAS",
+    "headerSubtitle": "CAS — Consultancy for Abroad Study — membantu pelajar dari seluruh dunia untuk kuliah di universitas yang terdaftar di Kementerian Pendidikan di seluruh Tiongkok. Kami menangani seluruh perjalanan: memilih program yang tepat, mendaftar, memperoleh beasiswa, serta mendampingi Anda selama proses visa dan kedatangan.",
+    "statYears": "Tahun pengalaman",
+    "statStudents": "Pelajar ditempatkan",
+    "statPartners": "Universitas mitra",
+    "statSupport": "Dukungan pendaftaran",
+    "whyTitle": "Mengapa kuliah di Tiongkok",
+    "whySubtitle": "Pendidikan kelas dunia dengan peluang nyata — dengan biaya yang jauh lebih terjangkau.",
+    "whyPoint1": "Universitas berperingkat dunia dan terdaftar di Kementerian Pendidikan",
+    "whyPoint2": "Gelar berbahasa Inggris di bidang kedokteran, teknik, dan bisnis",
+    "whyPoint3": "Biaya kuliah dan hidup yang terjangkau dengan beasiswa yang melimpah",
+    "whyPoint4": "Pusat riset, industri, dan peluang yang berkembang pesat",
+    "helpTitle": "Bagaimana kami membantu",
+    "helpSubtitle": "Jalur yang jelas dan terdampingi dari pertanyaan pertama hingga hari pertama kuliah Anda.",
+    "stepLabel": "Langkah {{number}}",
+    "stepChooseTitle": "Pilih",
+    "stepChooseBody": "Kami mencocokkan Anda dengan universitas dan program yang sesuai dengan tujuan, nilai, dan anggaran Anda.",
+    "stepApplyTitle": "Daftar",
+    "stepApplyBody": "Kami menyiapkan dokumen Anda dan mengirimkan lamaran yang lengkap dan benar atas nama Anda.",
+    "stepOfferTitle": "Penawaran",
+    "stepOfferBody": "Terima surat penerimaan Anda dan, jika memenuhi syarat, sebuah beasiswa.",
+    "stepArriveTitle": "Tiba",
+    "stepArriveBody": "Kami memandu Anda melalui visa, perjalanan, dan pendaftaran ulang sehingga Anda tiba dengan siap memulai.",
+    "missionLabel": "Misi kami",
+    "missionText": "— membuat kuliah di luar negeri di Tiongkok menjadi sederhana, transparan, dan sukses bagi setiap pelajar yang kami dampingi.",
+    "ctaTitle": "Mari rencanakan perjalanan Anda",
+    "ctaSubtitle": "Bicaralah dengan konselor CAS tentang pilihan Anda — gratis dan tanpa kewajiban apa pun.",
+    "ctaButton": "Hubungi kami"
+  },
+  "pricing": {
+    "seoTitle": "Harga — Biaya Transparan untuk Kuliah di Tiongkok",
+    "seoDescription": "Cara kerja harga CAS: konsultasi dan rencana studi gratis, dengan setiap layanan berbayar yang ditawarkan dengan jelas dan di muka. Tanpa biaya tersembunyi.",
+    "headerEyebrow": "Jelas & mengutamakan pelajar",
+    "headerTitle": "Harga yang sederhana dan transparan",
+    "headerSubtitle": "Rencana setiap pelajar berbeda, jadi kami memulai secara gratis dan memberikan penawaran yang jelas untuk apa pun di luar itu — Anda akan selalu tahu biayanya sebelum memutuskan.",
+    "howTitle": "Cara kerja harga kami",
+    "principleFreeTitle": "Gratis untuk memulai",
+    "principleFreeBody": "Konsultasi pertama dan rencana studi yang dipersonalisasi Anda — termasuk daftar singkat universitas dan beasiswa — tidak dikenakan biaya.",
+    "principleTransparentTitle": "Harga yang transparan",
+    "principleTransparentBody": "Bila suatu layanan dikenakan biaya, Anda akan melihat penawaran yang jelas dan terperinci sebelum memutuskan. Tanpa biaya tersembunyi, selamanya.",
+    "principleOnlyPayTitle": "Bayar hanya untuk yang Anda butuhkan",
+    "principleOnlyPayBody": "Ambil paket lengkap atau hanya bagian yang Anda inginkan. Penasihat Anda menyesuaikan dukungan — dan biayanya — dengan rencana Anda.",
+    "freeBadge": "Gratis",
+    "freeCardTitle": "Memulai",
+    "free1": "Konsultasi awal dengan penasihat",
+    "free2": "Rencana studi yang dipersonalisasi",
+    "free3": "Penyusunan daftar singkat universitas & program",
+    "free4": "Panduan pencocokan beasiswa",
+    "quotedBadge": "Ditawarkan di muka",
+    "quotedCardTitle": "Layanan opsional",
+    "quoted1": "Penanganan lamaran & tinjauan dokumen",
+    "quoted2": "Bantuan visa (JW202 / surat penerimaan)",
+    "quoted3": "Pemesanan akomodasi",
+    "quoted4": "Penjemputan bandara & dukungan sebelum keberangkatan",
+    "quoted5": "Terjemahan dokumen bersertifikat",
+    "ctaTitle": "Ingin penawaran yang dipersonalisasi?",
+    "ctaSubtitle": "Mulailah dengan rencana studi gratis — kami akan menindaklanjuti dengan langkah dan biaya yang jelas.",
+    "ctaButton": "Dapatkan rencana studi gratis"
+  },
+  "partner": {
+    "seoTitle": "Bermitra dengan CAS — Kerja Sama Agensi & Rekrutmen",
+    "seoDescription": "Bermitra dengan CAS untuk menempatkan pelajar ke universitas di Tiongkok: 200+ universitas terdaftar di Kemendikbud, komisi kompetitif, portal mitra waktu nyata, dan dukungan khusus.",
+    "headerEyebrow": "Untuk agensi & perekrut",
+    "headerTitle": "Bermitra dengan CAS",
+    "headerSubtitle": "Berikan akses kepada pelajar Anda ke universitas terbaik Tiongkok melalui agen resmi berwenang — dengan portal mitra langsung, komisi kompetitif, dan tim yang mendukung Anda di setiap langkah.",
+    "becomePartner": "Jadi mitra",
+    "whyTitle": "Mengapa bermitra dengan kami",
+    "whySubtitle": "Satu saluran tepercaya menuju kuliah di Tiongkok.",
+    "benefitUniversitiesTitle": "200+ universitas",
+    "benefitUniversitiesBody": "Rujuk pelajar ke universitas di seluruh Tiongkok yang terdaftar di Kementerian Pendidikan melalui satu saluran tepercaya.",
+    "benefitCommissionsTitle": "Komisi kompetitif",
+    "benefitCommissionsBody": "Dapatkan penghasilan dari setiap penempatan yang berhasil, dilacak secara transparan dan dibayarkan sesuai jadwal yang jelas.",
+    "benefitPortalTitle": "Portal mitra waktu nyata",
+    "benefitPortalBody": "Kirim dan lacak setiap lamaran, lihat perubahan status secara langsung, dan kelola pelajar Anda di satu tempat.",
+    "benefitMarketingTitle": "Dukungan pemasaran",
+    "benefitMarketingBody": "Akses daftar program terkini, batas waktu periode masuk, dan materi berlabel bersama untuk membantu Anda merekrut.",
+    "benefitAuthorizedTitle": "Berwenang sejak 2012",
+    "benefitAuthorizedBody": "Bekerja dengan agen mapan yang berwenang dari universitas dengan rekam jejak visa dan penerimaan yang kuat.",
+    "benefitTeamTitle": "Tim mitra khusus",
+    "benefitTeamBody": "Kontak CAS yang ditunjuk mendukung Anda dan pelajar Anda dari pertanyaan pertama hingga kedatangan.",
+    "howTitle": "Cara kerjanya",
+    "step1Title": "Ajukan kemitraan",
+    "step1Body": "Ceritakan kepada kami tentang agensi Anda dan para pelajar yang Anda dampingi.",
+    "step2Title": "Ikuti onboarding",
+    "step2Body": "Kami menyiapkan akses portal mitra Anda dan memandu tim Anda melalui prosesnya.",
+    "step3Title": "Rujuk & dapatkan penghasilan",
+    "step3Body": "Kirim lamaran, lacak secara langsung, dan dapatkan penghasilan dari setiap penempatan yang berhasil.",
+    "ctaTitle": "Siap bekerja sama?",
+    "ctaSubtitle": "Ceritakan kepada kami tentang agensi Anda dan kami akan menyiapkan kemitraan Anda."
+  },
+  "services": {
+    "seoTitle": "Layanan Kami",
+    "seoDescription": "Layanan CAS untuk kuliah di Tiongkok — layanan penerimaan, bantuan visa, bantuan beasiswa, penjemputan bandara, dan dukungan di kampus, dari awal hingga akhir.",
+    "eyebrow": "Dukungan menyeluruh",
+    "title": "Layanan kami",
+    "subtitle": "Dari pertanyaan pertama hingga hari pertama kuliah Anda — dan seterusnya — CAS mendukung Anda di setiap langkah kuliah di Tiongkok.",
+    "whatWeDoTitle": "Apa yang kami lakukan untuk Anda",
+    "whatWeDoSubtitle": "Satu tim menangani seluruh perjalanan, sehingga tidak ada yang terlewat.",
+    "whyChooseTitle": "Mengapa memilih CAS",
+    "whyChooseSubtitle": "Dukungan yang tepercaya dan transparan di setiap langkah perjalanan Anda ke Tiongkok.",
+    "ctaTitle": "Tidak yakin harus mulai dari mana?",
+    "ctaSubtitle": "Pesan konsultasi gratis dan kami akan memetakan pilihan Anda.",
+    "ctaButton": "Konsultasi gratis",
+    "items": {
+      "admission": {
+        "title": "Layanan penerimaan",
+        "body": "Kami menyusun daftar singkat universitas dan program yang tepat, menyiapkan berkas Anda, dan mengirimkan lamaran yang lengkap dan benar atas nama Anda."
+      },
+      "visa": {
+        "title": "Bantuan visa",
+        "body": "Dukungan penuh untuk JW202, surat penerimaan, dan visa pelajar Anda — dengan rekam jejak tingkat persetujuan yang tinggi."
+      },
+      "airportPickup": {
+        "title": "Penjemputan bandara",
+        "body": "Perwakilan CAS menyambut Anda saat tiba dan membantu Anda menuju kampus dengan aman dan lancar."
+      },
+      "onCampus": {
+        "title": "Dukungan di kampus",
+        "body": "Bantuan berkelanjutan setelah Anda tiba — pendaftaran, akomodasi, perbankan, dan pertanyaan sehari-hari."
+      },
+      "scholarship": {
+        "title": "Bantuan beasiswa",
+        "body": "Kami mencocokkan Anda dengan beasiswa pemerintah, provinsi, dan universitas serta membantu Anda mendaftar tepat waktu."
+      },
+      "language": {
+        "title": "Dasar bahasa Mandarin",
+        "body": "Panduan tentang HSK dan pilihan tahun persiapan agar Anda siap untuk studi dan kehidupan di Tiongkok."
+      }
+    },
+    "stats": {
+      "yearsExperience": "Tahun pengalaman",
+      "studentsPlaced": "Pelajar ditempatkan",
+      "universityPartners": "Universitas mitra",
+      "visaSuccessRate": "Tingkat keberhasilan visa"
+    },
+    "why": {
+      "authorizedAgent": {
+        "title": "Agen resmi berwenang",
+        "body": "Bekerja langsung dengan universitas sejak 2012 — lamaran Anda berada di tangan yang tepercaya dan bertanggung jawab."
+      },
+      "freeToStart": {
+        "title": "Gratis untuk memulai, jelas setelahnya",
+        "body": "Konsultasi dan rencana studi Anda gratis; setiap biaya layanan ditawarkan di muka tanpa biaya tersembunyi."
+      },
+      "dedicatedAdvisor": {
+        "title": "Satu penasihat khusus",
+        "body": "Satu titik kontak memandu Anda dari pertanyaan pertama hingga kedatangan."
+      },
+      "fastApplications": {
+        "title": "Lamaran yang cepat dan lengkap",
+        "body": "Kami menyiapkan semuanya dengan benar sejak awal, sehingga Anda tidak kehilangan periode masuk karena pengiriman ulang."
+      },
+      "admissionRecord": {
+        "title": "Rekam jejak penerimaan yang kuat",
+        "body": "Rekam jejak yang terbukti dalam membuat pelajar diterima dan siap visa."
+      },
+      "supportAfterArrival": {
+        "title": "Dukungan setelah Anda tiba",
+        "body": "Penjemputan bandara, pendaftaran, dan bantuan menetap — kami tidak berhenti pada surat penerimaan."
+      }
+    }
+  },
+  "whyChina": {
+    "seoTitle": "Mengapa Kuliah di Tiongkok",
+    "seoDescription": "Mengapa kuliah di Tiongkok — universitas berperingkat dunia yang terdaftar di Kementerian Pendidikan, gelar berbahasa Inggris, biaya kuliah terjangkau, dan beasiswa yang melimpah.",
+    "eyebrow": "Pendidikan kelas dunia",
+    "title": "Mengapa kuliah di Tiongkok",
+    "subtitle": "Tiongkok telah menjadi salah satu tujuan utama dunia bagi mahasiswa internasional — memadukan universitas terbaik, biaya terjangkau, beasiswa melimpah, dan peluang nyata.",
+    "reasonsTitle": "Alasan pelajar memilih Tiongkok",
+    "reasonsSubtitle": "Apa yang menjadikannya salah satu keputusan studi luar negeri terbijak saat ini.",
+    "ctaTitle": "Siap menjelajahi pilihan Anda?",
+    "ctaSubtitle": "Jelajahi program di seluruh universitas mitra kami dan temukan yang cocok untuk Anda.",
+    "ctaButton": "Temukan program Anda",
+    "stats": {
+      "students": {
+        "value": "500 rb+",
+        "label": "Mahasiswa internasional"
+      },
+      "english": {
+        "value": "Inggris",
+        "label": "Program berbahasa"
+      },
+      "scholarships": {
+        "value": "Beasiswa",
+        "label": "Tersedia luas"
+      },
+      "recognition": {
+        "value": "Global",
+        "label": "Pengakuan gelar"
+      }
+    },
+    "reasons": {
+      "worldRanked": {
+        "title": "Universitas berperingkat dunia",
+        "body": "Kuliah di institusi yang terdaftar di Kementerian Pendidikan dan berperingkat global yang diakui di seluruh dunia."
+      },
+      "englishTaught": {
+        "title": "Gelar berbahasa Inggris",
+        "body": "Gelar penuh yang diajarkan dalam bahasa Inggris di bidang kedokteran, teknik, bisnis, dan lainnya — tanpa perlu bahasa Mandarin untuk memulai."
+      },
+      "affordable": {
+        "title": "Terjangkau & didanai",
+        "body": "Biaya kuliah dan hidup yang rendah, ditambah beasiswa pemerintah, provinsi, dan universitas yang melimpah."
+      },
+      "opportunity": {
+        "title": "Peluang & industri",
+        "body": "Kuliah di salah satu ekonomi terbesar dunia, dengan paparan nyata terhadap riset dan industri."
+      },
+      "culture": {
+        "title": "Budaya kaya & keamanan",
+        "body": "Kota-kota modern dan aman dengan budaya yang mendalam serta komunitas mahasiswa internasional yang besar dan ramah."
+      },
+      "recognised": {
+        "title": "Gelar yang diakui global",
+        "body": "Kualifikasi yang diterima oleh pemberi kerja dan lembaga lisensi di seluruh dunia."
+      }
+    }
+  },
+  "contact": {
+    "seoTitle": "Kontak & Konsultasi Gratis",
+    "seoDescription": "Hubungi CAS untuk konsultasi gratis tentang kuliah di Tiongkok. Dapatkan panduan ahli tentang universitas, program, beasiswa, penerimaan, dan visa.",
+    "eyebrow": "Kami siap membantu",
+    "title": "Hubungi kami",
+    "subtitle": "Ajukan konsultasi gratis dan konselor CAS akan memandu Anda melalui pilihan-pilihan Anda.",
+    "talkToUs": "Bicara dengan kami",
+    "website": "Situs web",
+    "emailLabel": "Email",
+    "whatsapp": "WhatsApp",
+    "whatsappHelp": "Tersedia per kota — tanyakan kepada kami penasihat terdekat Anda",
+    "offices": "Kantor",
+    "officeList": {
+      "headOffice": {
+        "city": "Kantor Pusat",
+        "detail": "Beijing, Tiongkok"
+      },
+      "islamabad": {
+        "city": "Islamabad",
+        "detail": "Pakistan"
+      }
+    }
+  },
+  "faq": {
+    "seoTitle": "FAQ — Kuliah di Tiongkok bersama CAS",
+    "seoDescription": "Jawaban atas pertanyaan umum tentang kuliah di Tiongkok bersama CAS: memilih universitas dan program, beasiswa, mendaftar, visa pelajar, dukungan kedatangan, dan biaya.",
+    "eyebrow": "Pusat bantuan",
+    "title": "Pertanyaan yang sering diajukan",
+    "subtitle": "Semua yang perlu Anda ketahui tentang kuliah di Tiongkok bersama CAS — dari memilih universitas hingga visa, beasiswa, dan biaya.",
+    "ctaTitle": "Masih ada pertanyaan?",
+    "ctaSubtitle": "Dapatkan rencana studi gratis dan penasihat CAS akan menjawab segalanya sesuai situasi Anda.",
+    "ctaButton": "Dapatkan rencana studi gratis",
+    "studyingInChina": {
+      "title": "Kuliah di Tiongkok",
+      "q1": "Mengapa kuliah di Tiongkok?",
+      "a1": "Tiongkok menawarkan universitas yang terdaftar di Kementerian Pendidikan, ragam gelar berbahasa Inggris yang terus bertambah, biaya kuliah dan hidup yang terjangkau, serta beasiswa yang melimpah — dengan kualifikasi yang diakui secara global.",
+      "q2": "Bisakah saya kuliah dalam bahasa Inggris?",
+      "a2": "Ya. Banyak universitas menawarkan gelar penuh yang diajarkan sepenuhnya dalam bahasa Inggris, terutama di bidang kedokteran, teknik, dan bisnis. Program berbahasa Mandarin dan pilihan tahun persiapan bahasa juga tersedia.",
+      "q3": "Apakah saya perlu berbahasa Mandarin?",
+      "a3": "Tidak untuk program berbahasa Inggris. Untuk program berbahasa Mandarin, Anda mungkin memerlukan kualifikasi HSK; kami dapat memberi saran tentang tahun persiapan atau program bahasa jika diperlukan.",
+      "q4": "Apakah gelarnya diakui secara internasional?",
+      "a4": "CAS bekerja dengan universitas yang terdaftar di Kementerian Pendidikan yang gelarnya diakui secara luas. Rincian pengakuan berbeda-beda menurut negara dan profesi, jadi tanyakan kepada penasihat Anda tentang negara tujuan Anda."
+    },
+    "choosing": {
+      "title": "Memilih universitas & program",
+      "q1": "Bagaimana cara memilih universitas dan program yang tepat?",
+      "a1": "Mulailah dengan rencana studi gratis — beri tahu kami tujuan, anggaran, dan preferensi Anda, lalu penasihat CAS akan mengirimkan daftar singkat yang dipersonalisasi. Anda juga dapat menjelajahi dan menyaring universitas, program, dan beasiswa di situs ini.",
+      "q2": "Program apa saja yang bisa saya daftar?",
+      "a2": "Gelar sarjana, magister, dan doktoral serta program nongelar dan bahasa Mandarin — di berbagai bidang termasuk kedokteran (MBBS), teknik, bisnis, ilmu komputer, dan lainnya.",
+      "q3": "Apa arti “terdaftar di Kemendikbud”?",
+      "a3": "Artinya Kementerian Pendidikan telah menyetujui universitas tersebut untuk menerima mahasiswa internasional. CAS berfokus pada universitas yang terdaftar di Kemendikbud, yang dapat Anda kenali dari lencana di setiap halaman universitas."
+    },
+    "scholarships": {
+      "title": "Beasiswa",
+      "q1": "Beasiswa apa saja yang tersedia?",
+      "a1": "Beasiswa pemerintah (CSC), provinsi, dan universitas — baik penuh (biaya kuliah, akomodasi, dan tunjangan) maupun sebagian. Ketersediaan berbeda-beda menurut universitas, program, dan periode masuk.",
+      "q2": "Apakah saya memenuhi syarat untuk beasiswa?",
+      "a2": "Kelayakan bergantung pada nilai, jenjang, kewarganegaraan, dan beasiswa tertentu. Penasihat CAS Anda mencocokkan Anda dengan beasiswa yang paling berpeluang Anda menangkan.",
+      "q3": "Apakah CAS membantu pendaftaran beasiswa?",
+      "a3": "Ya — kami membantu Anda mengidentifikasi beasiswa yang sesuai, menyiapkan dokumen, dan mengirimkannya tepat waktu bersama lamaran universitas Anda."
+    },
+    "applying": {
+      "title": "Mendaftar bersama CAS",
+      "q1": "Bagaimana proses pendaftarannya bekerja?",
+      "a1": "Rencana studi → daftar singkat → siapkan dokumen Anda → CAS mengirimkan lamaran Anda → Anda menerima penawaran → dukungan visa → dukungan kedatangan. Satu tim menangani seluruh perjalanan.",
+      "q2": "Dokumen apa saja yang saya butuhkan?",
+      "a2": "Biasanya paspor, transkrip dan ijazah akademik, foto paspor, dan, tergantung programnya, sertifikat bahasa serta pemeriksaan medis atau kepolisian. Penasihat Anda memberikan daftar lengkap yang tepat.",
+      "q3": "Berapa lama waktunya?",
+      "a3": "Berbeda-beda menurut universitas dan periode masuk — sering kali beberapa minggu hingga beberapa bulan dari lamaran hingga penawaran. Mendaftar lebih awal dalam periode masuk memberi Anda pilihan terbanyak.",
+      "q4": "Apakah konsultasinya benar-benar gratis?",
+      "a4": "Ya. Konsultasi awal dan rencana studi Anda gratis tanpa kewajiban. Setiap layanan berbayar ditawarkan dengan jelas di muka — lihat halaman harga kami."
+    },
+    "visa": {
+      "title": "Visa & kedatangan",
+      "q1": "Bagaimana cara mendapatkan visa pelajar?",
+      "a1": "Setelah Anda diterima, universitas menerbitkan surat penerimaan dan formulir JW202; kemudian Anda mengajukan visa pelajar (X) di kedutaan atau konsulat Tiongkok. CAS memandu Anda melalui setiap langkah.",
+      "q2": "Apakah CAS mendukung saya setelah tiba?",
+      "a2": "Ya — penjemputan bandara, bantuan pendaftaran ulang universitas, akomodasi, dan menetap merupakan bagian dari dukungan menyeluruh kami."
+    },
+    "fees": {
+      "title": "Biaya & pembayaran",
+      "q1": "Berapa biaya kuliah di Tiongkok?",
+      "a1": "Bergantung pada universitas, kota, dan program — biaya kuliah ditambah biaya hidup. Beri tahu kami rencana Anda dan kami akan memberikan estimasi yang jelas dan dipersonalisasi.",
+      "q2": "Berapa biaya yang dikenakan CAS?",
+      "a2": "Konsultasi dan rencana studi Anda gratis. Bila suatu layanan dikenakan biaya, Anda akan melihat penawaran terperinci sebelum memutuskan — tanpa biaya tersembunyi."
+    }
+  },
+  "news": {
+    "seoTitle": "Berita & Pembaruan",
+    "seoDescription": "Berita dan pembaruan dari CAS — batas waktu periode masuk, pembukaan beasiswa, dan pengumuman universitas mitra untuk kuliah di Tiongkok.",
+    "headerEyebrow": "Berita & sumber daya",
+    "headerTitle": "Terbaru dari CAS",
+    "headerSubtitle": "Batas waktu periode masuk dan pembukaan beasiswa, ditambah panduan untuk membantu Anda merencanakan studi di Tiongkok.",
+    "latestUpdatesTitle": "Pembaruan terbaru",
+    "guidesTitle": "Panduan & sumber daya",
+    "guidesSubtitle": "Semua yang perlu Anda ketahui untuk merencanakan studi di Tiongkok.",
+    "learnMore": "Selengkapnya",
+    "readGuide": "Baca panduan",
+    "updates": {
+      "intake": {
+        "date": "Januari 2026",
+        "tag": "Periode Masuk",
+        "title": "Pendaftaran periode masuk Maret 2026 telah dibuka",
+        "body": "Pendaftaran untuk periode masuk Musim Semi 2026 kini telah dibuka di seluruh universitas mitra kami. Pendaftar awal mendapatkan pilihan program dan beasiswa terlebih dahulu."
+      },
+      "scholarships": {
+        "date": "Januari 2026",
+        "tag": "Beasiswa",
+        "title": "Beasiswa CSC & provinsi kini menerima pendaftaran",
+        "body": "Beasiswa Pemerintah Tiongkok (CSC) dan provinsi yang mencakup biaya kuliah penuh atau sebagian — ditambah tunjangan bulanan — terbuka untuk pelajar yang memenuhi syarat."
+      },
+      "universities": {
+        "date": "Desember 2025",
+        "tag": "Universitas",
+        "title": "Universitas mitra baru ditambahkan ke katalog",
+        "body": "Kami telah memperluas daftar universitas mitra yang terdaftar di Kementerian Pendidikan, dengan menambahkan lebih banyak program kedokteran dan teknik berbahasa Inggris."
+      }
+    },
+    "guides": {
+      "apply": {
+        "title": "Cara mendaftar, langkah demi langkah",
+        "body": "Dari memilih program hingga mengirimkan lamaran yang lengkap — seluruh prosesnya dijelaskan."
+      },
+      "visa": {
+        "title": "Visa pelajar Anda, dijelaskan",
+        "body": "Apa itu JW202 dan surat penerimaan, serta bagaimana proses visa-X bekerja."
+      },
+      "scholarships": {
+        "title": "Beasiswa di Tiongkok",
+        "body": "Beasiswa pemerintah, provinsi, dan universitas — siapa yang memenuhi syarat dan cara mendaftar."
+      },
+      "costs": {
+        "title": "Biaya kuliah di Tiongkok",
+        "body": "Biaya kuliah dan hidup, serta cara kerja harga transparan CAS."
+      },
+      "mbbs": {
+        "title": "Kuliah MBBS di Tiongkok",
+        "body": "Gelar kedokteran berbahasa Inggris di universitas yang diakui — jalur populer bersama CAS."
+      },
+      "university": {
+        "title": "Memilih universitas yang tepat",
+        "body": "Cara mempertimbangkan kota, peringkat, bahasa, dan anggaran untuk menemukan yang paling cocok bagi Anda."
+      }
+    }
+  },
+  "studyPlan": {
+    "badge": "Gratis · butuh 3 menit",
+    "title": "Dapatkan rencana studi gratis Anda",
+    "subtitle": "Jawab beberapa pertanyaan dan penasihat CAS akan mengirimkan daftar singkat universitas, program, dan beasiswa yang dipersonalisasi untuk Anda — tanpa biaya, tanpa kewajiban.",
+    "optional": "Opsional",
+    "noPreference": "Tidak ada preferensi",
+    "fieldNotSure": "Belum yakin",
+    "matchNote": "Kami akan mencocokkan Anda dengan universitas dan beasiswa yang terdaftar di Kementerian Pendidikan berdasarkan jawaban Anda.",
+    "back": "Kembali",
+    "continue": "Lanjut",
+    "sending": "Mengirim…",
+    "submit": "Dapatkan rencana studi saya",
+    "steps": {
+      "goal": "Tujuan Anda",
+      "preferences": "Preferensi",
+      "details": "Detail Anda"
+    },
+    "q": {
+      "study": "Apa yang ingin Anda pelajari?",
+      "field": "Bidang studi",
+      "intake": "Kapan Anda ingin memulai?",
+      "funding": "Bagaimana Anda akan mendanai studi Anda?",
+      "city": "Kota pilihan",
+      "grade": "Nilai rata-rata saat ini",
+      "name": "Nama lengkap",
+      "nationality": "Kewarganegaraan",
+      "email": "Email",
+      "phone": "Telepon / WhatsApp"
+    },
+    "levels": {
+      "bachelor": "Sarjana",
+      "master": "Magister",
+      "phd": "PhD / Doktoral",
+      "nonDegree": "Nongelar",
+      "chinese": "Bahasa Mandarin"
+    },
+    "fields": {
+      "medicine": "Kedokteran / MBBS",
+      "engineering": "Teknik",
+      "business": "Bisnis & MBA",
+      "computerScience": "Ilmu Komputer",
+      "naturalSciences": "Ilmu Alam",
+      "humanities": "Humaniora & Seni",
+      "law": "Hukum",
+      "education": "Pendidikan",
+      "agriculture": "Pertanian",
+      "other": "Lainnya"
+    },
+    "intakes": {
+      "spring2026": "Musim Semi 2026",
+      "autumn2026": "Musim Gugur 2026",
+      "spring2027": "Musim Semi 2027",
+      "autumn2027": "Musim Gugur 2027",
+      "flexible": "Fleksibel"
+    },
+    "funding": {
+      "selfFunded": "Dana pribadi",
+      "scholarship": "Mencari beasiswa"
+    },
+    "cities": {
+      "any": "Kota apa saja",
+      "beijing": "Beijing",
+      "shanghai": "Shanghai",
+      "guangzhou": "Guangzhou",
+      "nanjing": "Nanjing",
+      "hangzhou": "Hangzhou",
+      "wuhan": "Wuhan",
+      "chongqing": "Chongqing",
+      "other": "Lainnya"
+    },
+    "grades": {
+      "g90": "90–100%",
+      "g80": "80–89%",
+      "g70": "70–79%",
+      "g60": "60–69%",
+      "below60": "Di bawah 60%",
+      "preferNotToSay": "Memilih untuk tidak menjawab"
+    },
+    "errors": {
+      "chooseStudy": "Silakan pilih apa yang ingin Anda pelajari.",
+      "name": "Silakan beri tahu kami nama Anda.",
+      "contact": "Tambahkan email atau nomor telepon agar kami dapat menghubungi Anda."
+    },
+    "success": {
+      "title": "Rencana studi Anda sedang dalam perjalanan",
+      "body": "Terima kasih, {{name}}. Penasihat CAS akan meninjau tujuan Anda dan menghubungi Anda kembali dalam satu hari kerja dengan universitas, program, dan beasiswa yang cocok.",
+      "browse": "Sementara itu, jelajahi universitas →"
+    }
+  },
+  "reviews": {
+    "heading": "Ulasan dari para pelajar kami",
+    "subheading": "Pelajar dari 50+ negara mempercayakan perjalanan mereka kepada CAS.",
+    "playVideo": "Putar video kisah pelajar",
+    "mapAlt": "Pelajar di seluruh dunia",
+    "reviewFrom": "Ulasan dari {{name}}, {{country}}",
+    "closeVideo": "Tutup video",
+    "close": "Tutup",
+    "videoTitle": "CAS — Kuliah di Tiongkok"
+  },
+  "heroUpdates": {
+    "tabUniversities": "Pembaruan Universitas",
+    "tabPrograms": "Pembaruan Program",
+    "tabScholarships": "Beasiswa Terbaru",
+    "tabNews": "Kisah Baru",
+    "storyMarchIntake": "Periode masuk Maret 2026 kini dibuka di seluruh universitas mitra",
+    "storyCscScholarships": "Beasiswa CSC & provinsi menerima pendaftaran",
+    "storyNewMoe": "Universitas baru yang terdaftar di Kementerian Pendidikan telah ditambahkan",
+    "storyMbbsGuide": "Cara menyiapkan lamaran MBBS yang kuat",
+    "storyVisaGuide": "Panduan visa pelajar: dokumen dan lini masa",
+    "showUpdates": "Tampilkan pembaruan terbaru",
+    "hideUpdates": "Sembunyikan pembaruan terbaru",
+    "lastApplication": "Lamaran terakhir: {{date}}",
+    "noUniversities": "Belum ada universitas untuk ditampilkan.",
+    "noPrograms": "Belum ada program untuk ditampilkan.",
+    "loading": "Memuat…",
+    "scholarshipFallback": "Beasiswa",
+    "deadline": "Batas waktu: {{date}}",
+    "openNow": "Buka sekarang",
+    "noScholarships": "Belum ada beasiswa untuk ditampilkan.",
+    "updated": "Diperbarui {{date}}"
+  },
+  "helpDock": {
+    "hereToHelpLine1": "Kami di sini",
+    "hereToHelpLine2": "untuk membantu",
+    "counsellorCathy": "Cathy",
+    "counsellorJayla": "Jayla",
+    "counsellorJoe": "Joe",
+    "wechatLabel": "WeChat:",
+    "whatsappTelLabel": "WhatsApp/Tel:",
+    "wechatQrAlt": "Kode QR WeChat",
+    "wechat": "WeChat",
+    "customPlan": "Dapatkan Rencana Pendaftaran Khusus",
+    "leaveMessage": "Tinggalkan Pesan",
+    "backToTop": "Kembali ke atas",
+    "showHelpBar": "Tampilkan bilah bantuan",
+    "help": "BANTUAN",
+    "talkToCounsellor": "Bicara dengan konselor",
+    "close": "Tutup",
+    "freeGuidance": "Panduan gratis — kami biasanya membalas dalam satu hari.",
+    "whatsapp": "WhatsApp",
+    "chatNow": "Ngobrol dengan kami sekarang",
+    "callUs": "Telepon kami",
+    "email": "Email",
+    "freeStudyPlan": "Dapatkan rencana studi gratis →",
+    "leaveAMessage": "Tinggalkan pesan",
+    "message": "Pesan"
+  },
+  "megaMenu": {
+    "browseEverything": "Jelajahi semuanya",
+    "colDestinations": "Tujuan",
+    "allDestinations": "Semua tujuan",
+    "studyBeijing": "Kuliah di Beijing",
+    "studyShanghai": "Kuliah di Shanghai",
+    "studyWuhan": "Kuliah di Wuhan",
+    "studyNanjing": "Kuliah di Nanjing",
+    "studyHangzhou": "Kuliah di Hangzhou",
+    "studyDalian": "Kuliah di Dalian",
+    "colUniversities": "Universitas",
+    "allUniversities": "Semua universitas",
+    "moeListed": "Universitas terdaftar di Kemendikbud",
+    "medical": "Universitas kedokteran",
+    "engineering": "Universitas teknik",
+    "technology": "Universitas teknologi",
+    "normal": "Universitas keguruan",
+    "colPrograms": "Program",
+    "allPrograms": "Semua program",
+    "programMbbs": "Kuliah MBBS di Tiongkok",
+    "programEngineering": "Program teknik",
+    "programBusiness": "Bisnis & MBA",
+    "programBachelor": "Gelar sarjana",
+    "programMaster": "Gelar magister",
+    "programPhd": "PhD / Doktoral",
+    "colScholarships": "Beasiswa",
+    "allScholarships": "Semua beasiswa",
+    "scholarshipFull": "Beasiswa penuh",
+    "scholarshipPartial": "Beasiswa sebagian",
+    "scholarshipUniversity": "Beasiswa universitas",
+    "scholarshipGovernment": "Pemerintah (CSC)",
+    "scholarshipProvincial": "Beasiswa provinsi",
+    "colAbout": "Tentang",
+    "contactUs": "Hubungi kami",
+    "aboutCas": "Tentang CAS",
+    "ourServices": "Layanan kami",
+    "whyChina": "Mengapa kuliah di Tiongkok",
+    "faq": "FAQ",
+    "news": "Berita & pembaruan",
+    "freeStudyPlan": "Dapatkan rencana studi gratis",
+    "notSure": "Tidak yakin harus mulai dari mana?",
+    "freeConsultation": "Dapatkan konsultasi gratis »"
+  },
+  "enquiry": {
+    "title": "Tanya",
+    "titleAbout": "Tanya tentang {{name}}",
+    "subtitle": "Tinggalkan detail Anda dan penasihat CAS akan memandu Anda melalui langkah berikutnya.",
+    "thankYou": "Terima kasih!",
+    "thankYouBody": "Penasihat CAS akan segera menghubungi Anda.",
+    "errorGeneric": "Terjadi kesalahan. Silakan coba lagi.",
+    "firstName": "Nama depan",
+    "lastName": "Nama belakang",
+    "email": "Email",
+    "phone": "Telepon",
+    "message": "Pesan",
+    "messagePlaceholder": "Beri tahu kami apa yang Anda minati…",
+    "sending": "Mengirim…",
+    "send": "Kirim pertanyaan"
+  },
+  "leadPanel": {
+    "thankYou": "Terima kasih!",
+    "thankYouBody": "Penasihat CAS akan segera menghubungi Anda.",
+    "title": "Tinggalkan pesan",
+    "subtitle": "Panduan gratis — kami membalas dalam satu hari.",
+    "errorGeneric": "Terjadi kesalahan. Silakan coba lagi.",
+    "yourName": "Nama Anda",
+    "email": "Email",
+    "messagePlaceholder": "Apa yang ingin Anda pelajari?",
+    "messageAria": "Pesan",
+    "sending": "Mengirim…",
+    "send": "Kirim pesan",
+    "freeNoObligation": "Gratis · tanpa kewajiban"
+  },
+  "home": {
+    "seo": {
+      "title": "Kuliah di Tiongkok — Universitas, Program & Beasiswa",
+      "description": "Kuliah di Tiongkok bersama CAS, agen resmi berwenang sejak 2012. Temukan program MBBS, teknik, dan bisnis di universitas yang terdaftar di Kementerian Pendidikan, dengan beasiswa serta dukungan penuh dari pendaftaran hingga kedatangan."
+    },
+    "hero": {
+      "title": "Kuliah di Tiongkok",
+      "featuredUniPrograms": "{{name}} : Program Berbahasa Inggris",
+      "moePrograms": "Universitas yang terdaftar di Kementerian Pendidikan : Program Berbahasa Inggris"
+    },
+    "search": {
+      "placeholder": "MASUKKAN NAMA UNIVERSITAS ATAU PROGRAM",
+      "ariaSearchField": "Cari universitas atau program",
+      "ariaSearchButton": "Cari"
+    },
+    "popularSearches": {
+      "chineseLanguage": "Program Bahasa Mandarin",
+      "mbbs": "MBBS",
+      "internationalTrade": "S1 Perdagangan Internasional",
+      "engineering": "Teknik"
+    },
+    "weekly": {
+      "title": "Program Mingguan",
+      "featuredUniversity": "Universitas Unggulan",
+      "limitedSeats": "Kursi terbatas",
+      "language": "Bahasa",
+      "englishDefault": "Inggris",
+      "level": "Jenjang",
+      "tuition": "Biaya kuliah",
+      "moeListed": "Universitas yang terdaftar di Kementerian Pendidikan",
+      "fullSupport": "Dukungan penuh pendaftaran dan visa dari CAS",
+      "applicationsCloseIn": "Pendaftaran ditutup dalam",
+      "applyForSeat": "Daftar untuk mendapatkan kursi"
+    },
+    "money": {
+      "onRequest": "Atas permintaan",
+      "perYear": "{{amount}} {{currency}}/thn"
+    },
+    "highlights": {
+      "title": "Sorotan",
+      "subtitle": "Jalur pilihan menuju kuliah di Tiongkok.",
+      "learnMore": "Selengkapnya",
+      "medicalTitle": "Gelar kedokteran yang diakui global",
+      "medicalBody": "Kuliah MBBS di universitas yang terdaftar di Kementerian Pendidikan dan diakui di seluruh dunia.",
+      "medicalTag": "MBBS",
+      "deadlinesTitle": "Universitas dengan batas waktu akhir",
+      "deadlinesBody": "Masih terbuka untuk periode masuk mendatang — daftar sebelum kursi terisi penuh.",
+      "deadlinesTag": "Batas Waktu",
+      "noCscaTitle": "Universitas tanpa CSCA",
+      "noCscaBody": "Universitas yang menerima mahasiswa internasional tanpa tes CSCA.",
+      "noCscaTag": "Penerimaan",
+      "languageTitle": "Dasar bahasa Mandarin",
+      "languageBody": "Program tahun persiapan untuk mempersiapkan Anda menghadapi studi dan kehidupan di Tiongkok.",
+      "languageTag": "Bahasa",
+      "fastTrackTitle": "Pendaftaran jalur cepat",
+      "fastTrackBody": "Pemrosesan prioritas untuk lamaran lengkap yang dikirimkan melalui CAS.",
+      "fastTrackTag": "Jalur Cepat",
+      "freeApplyTitle": "Universitas bebas biaya pendaftaran",
+      "freeApplyBody": "Daftar ke universitas tertentu tanpa biaya pendaftaran melalui CAS.",
+      "freeApplyTag": "Pendaftaran Gratis",
+      "valueTitle": "Universitas ramah anggaran",
+      "valueBody": "Pendidikan berkualitas dengan biaya kuliah dan hidup yang terjangkau.",
+      "valueTag": "Nilai Terbaik",
+      "fullScholarshipTitle": "Universitas beasiswa penuh",
+      "fullScholarshipBody": "Universitas yang menawarkan beasiswa biaya kuliah penuh kepada pelajar yang memenuhi syarat.",
+      "fullScholarshipTag": "Beasiswa",
+      "partialScholarshipTitle": "Universitas beasiswa sebagian",
+      "partialScholarshipBody": "Universitas yang menawarkan beasiswa sebagian dan tunjangan bulanan.",
+      "partialScholarshipTag": "Beasiswa"
+    },
+    "outstanding": {
+      "title": "Program unggulan",
+      "subtitle": "Program populer yang sedang didaftar para pelajar saat ini.",
+      "viewAll": "Lihat semua program"
+    },
+    "featured": {
+      "title": "Konten unggulan",
+      "guideBadge": "Panduan",
+      "guideTitle": "Kuliah di Tiongkok: panduan lengkap untuk mahasiswa internasional",
+      "guideBody": "Semua tentang universitas, program, beasiswa, visa, dan kehidupan di Tiongkok.",
+      "readGuide": "Baca panduan",
+      "tabs": {
+        "latest": "Topik terbaru",
+        "questions": "Pertanyaan umum",
+        "trending": "Sedang tren"
+      },
+      "latest": {
+        "marchIntake": "Periode masuk Maret 2026 kini dibuka di seluruh universitas mitra",
+        "cscScholarships": "Beasiswa CSC & provinsi menerima pendaftaran",
+        "newMoe": "Universitas baru yang terdaftar di Kementerian Pendidikan telah ditambahkan",
+        "mbbsGuide": "Cara menyiapkan lamaran MBBS yang kuat"
+      },
+      "questions": {
+        "recognition": "Apakah MBBS dari Tiongkok diakui di negara saya?",
+        "costs": "Berapa biaya kuliah dan biaya hidupnya?",
+        "csca": "Universitas mana yang tidak mewajibkan tes CSCA?",
+        "scholarship": "Bagaimana cara saya mendaftar beasiswa?"
+      },
+      "trending": {
+        "mbbsEnglish": "Kuliah MBBS dalam bahasa Inggris",
+        "engineering": "Program teknik di Tiongkok",
+        "business": "Program Bisnis & MBA",
+        "fullTuition": "Beasiswa biaya kuliah penuh"
+      }
+    },
+    "watch": {
+      "title": "Tonton & pelajari",
+      "subtitle": "Panduan dan kisah pelajar dari CAS.",
+      "applyHelp": "Bagaimana CAS membantu Anda mendaftar",
+      "studentLife": "Kehidupan sebagai mahasiswa internasional",
+      "choosingProgram": "Memilih program yang tepat"
+    },
+    "more": {
+      "title": "Universitas lainnya di Tiongkok",
+      "viewAll": "Lihat semua",
+      "emptyText": "Universitas mitra kami siap untuk dijelajahi.",
+      "browseAll": "Jelajahi semua"
+    },
+    "cta": {
+      "title": "Cari universitas dan program",
+      "subtitle": "Temukan program Anda dalam hitungan menit — atau pesan konsultasi gratis dan kami akan memandu Anda.",
+      "findProgram": "Temukan program Anda",
+      "freeConsultation": "Konsultasi gratis"
+    },
+    "countdown": {
+      "days": "Hari",
+      "hrs": "Jam",
+      "min": "Menit",
+      "sec": "Detik"
+    }
+  }
+}

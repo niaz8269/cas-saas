@@ -25,7 +25,12 @@ it("opens the flag menu, lists the other languages, and switches to RTL Arabic",
   expect(langDef(i18n.language).dir).toBe("rtl")
 })
 
-it("falls back to English for untranslated keys", () => {
-  // The stub locales are empty; a known key must still resolve to English.
-  expect(i18n.getFixedT("id")("header.signIn")).toBe("SIGN IN")
+it("uses English as the fallback for keys missing in a locale", () => {
+  // A key present only in English must resolve to English in any locale
+  // (so a not-yet-translated key never renders as a raw key or a blank).
+  i18n.addResource("en", "translation", "test.fallbackOnly", "Fallback text")
+  expect(i18n.getFixedT("id")("test.fallbackOnly")).toBe("Fallback text")
+
+  // And a real, translated key resolves to that locale's value.
+  expect(i18n.getFixedT("id")("header.signIn")).not.toBe("SIGN IN")
 })

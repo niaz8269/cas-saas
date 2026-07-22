@@ -32,7 +32,8 @@ i18n
     supportedLngs: ["en", "zh", "ar", "fr", "id"],
     returnEmptyString: false,
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["querystring", "localStorage", "navigator"],
+      lookupQuerystring: "lng",
       caches: ["localStorage"],
       lookupLocalStorage: LANG_STORAGE_KEY,
     },
