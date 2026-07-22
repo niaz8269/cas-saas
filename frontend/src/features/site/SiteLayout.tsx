@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query"
 import { Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -5,6 +6,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
 import casLogoWhite from "@/assets/cas-logo-white.png"
+import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
@@ -105,13 +107,24 @@ const NOTIFICATIONS: { title: string; body: string; to: string }[] = [
   { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS&src=bell" },
 ]
 
-/** Notifications bell with a popup you can page through (reference behaviour). */
+/** Notifications bell with a popup you can page through (reference behaviour).
+ *  Shows the latest published posts, falling back to the static list when the
+ *  CMS has nothing yet. */
 function NotificationBell() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [idx, setIdx] = useState(0)
-  const n = NOTIFICATIONS.length
-  const item = NOTIFICATIONS[idx]
+
+  const posts = useQuery({ queryKey: ["site-posts", "bell"], queryFn: () => getSitePosts({}), staleTime: 60_000 })
+  const live = (posts.data?.data ?? []).slice(0, 5).map((p) => ({
+    title: p.title,
+    body: p.excerpt ?? "",
+    to: `/site/news/${p.slug}`,
+  }))
+  const items = live.length > 0 ? live : NOTIFICATIONS
+
+  const n = items.length
+  const item = items[Math.min(idx, n - 1)]
   const go = (d: number) => setIdx((i) => (i + d + n) % n)
 
   return (
