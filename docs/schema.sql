@@ -166,11 +166,13 @@ CREATE TABLE agents (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   agent_code VARCHAR(40) NOT NULL,
   name VARCHAR(180) NOT NULL,
+  contact_name VARCHAR(150) NULL,                -- partner signup: contact person
   type VARCHAR(20) NOT NULL DEFAULT 'partner',   -- partner|sub|sub_sub
   parent_agent_id BIGINT UNSIGNED NULL,
   email VARCHAR(190) NULL, phone VARCHAR(30) NULL,
+  website VARCHAR(190) NULL, address VARCHAR(255) NULL,  -- partner signup
   country_id BIGINT UNSIGNED NULL,
-  status VARCHAR(20) NOT NULL DEFAULT 'active',
+  status VARCHAR(20) NOT NULL DEFAULT 'active',   -- active|pending|rejected|inactive
   created_at TIMESTAMP NULL, updated_at TIMESTAMP NULL, deleted_at TIMESTAMP NULL,
   UNIQUE KEY uq_agents_code (agent_code),
   KEY idx_agents_parent (parent_agent_id),

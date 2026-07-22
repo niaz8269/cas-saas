@@ -12,6 +12,7 @@ function registerPayload(array $overrides = []): array
         'first_name' => 'Ali',
         'last_name' => 'Raza',
         'email' => 'ali@example.com',
+        'phone' => '+92 300 1234567',
         'password' => 'secret1234',
         'password_confirmation' => 'secret1234',
     ], $overrides);
@@ -60,12 +61,12 @@ it('requires a confirmed password of at least 8 characters', function () {
     expect(Student::count())->toBe(0);
 });
 
-it('requires first name, last name and a valid email', function () {
+it('requires first name, last name, phone and a valid email', function () {
     $this->postJson('/api/v1/student/auth/register', [
         'email' => 'not-an-email',
         'password' => 'secret1234',
         'password_confirmation' => 'secret1234',
     ])
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['first_name', 'last_name', 'email']);
+        ->assertJsonValidationErrors(['first_name', 'last_name', 'phone', 'email']);
 });

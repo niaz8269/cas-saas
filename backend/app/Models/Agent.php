@@ -24,10 +24,13 @@ class Agent extends Authenticatable
     protected $fillable = [
         'agent_code',
         'name',
+        'contact_name',
         'type',
         'parent_agent_id',
         'email',
         'phone',
+        'website',
+        'address',
         'country_id',
         'status',
     ];
@@ -40,6 +43,20 @@ class Agent extends Authenticatable
             'password' => 'hashed',
             'last_login_at' => 'datetime',
         ];
+    }
+
+    /** Next AGT-{year}-{5-digit} code; retries on the (rare) collision. */
+    public static function nextCode(): string
+    {
+        $year = now()->year;
+        $sequence = static::withTrashed()->count() + 1;
+
+        do {
+            $code = sprintf('AGT-%d-%05d', $year, $sequence);
+            $sequence++;
+        } while (static::withTrashed()->where('agent_code', $code)->exists());
+
+        return $code;
     }
 
     public function parent(): BelongsTo

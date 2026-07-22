@@ -79,6 +79,8 @@ Route::prefix('v1')->group(function () {
     Route::prefix('agent')->group(function () {
         Route::post('auth/login', [AgentAuthController::class, 'login'])
             ->middleware('throttle:login');
+        Route::post('auth/register', [AgentAuthController::class, 'register'])
+            ->middleware('throttle:login');
 
         Route::middleware('auth:agent')->group(function () {
             Route::post('auth/logout', [AgentAuthController::class, 'logout']);
