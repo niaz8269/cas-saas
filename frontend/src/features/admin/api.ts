@@ -59,6 +59,36 @@ export interface UserWritePayload {
 export const createUser = (payload: UserWritePayload) =>
   api<{ data: StaffUser }>("/users", { method: "POST", body: JSON.stringify(payload) })
 
+// ── Agent / partner requests ───────────────────────────────────────────────
+
+export interface AgentRequest {
+  id: number
+  agent_code: string
+  company_name: string
+  contact_name: string | null
+  type: string
+  email: string | null
+  phone: string | null
+  website: string | null
+  address: string | null
+  country: string | null
+  status: string
+  created_at: string | null
+}
+
+export const listAgentRequests = (params: { status?: string; q?: string; page?: number } = {}) =>
+  api<Paginated<AgentRequest>>(`/agents${qs({
+    "filter[status]": params.status,
+    "q": params.q,
+    "page": params.page && params.page > 1 ? params.page : undefined,
+  })}`)
+
+export const approveAgentRequest = (id: number) =>
+  api<{ data: AgentRequest }>(`/agents/${id}/approve`, { method: "POST" })
+
+export const rejectAgentRequest = (id: number) =>
+  api<{ data: AgentRequest }>(`/agents/${id}/reject`, { method: "POST" })
+
 export const updateUser = (id: number, payload: Partial<UserWritePayload>) =>
   api<{ data: StaffUser }>(`/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 

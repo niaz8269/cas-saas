@@ -6,6 +6,7 @@ import {
   Filter,
   GraduationCap,
   HandCoins,
+  Handshake,
   KeyRound,
   LayoutDashboard,
   ListChecks,
@@ -74,6 +75,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "System",
     items: [
       { title: "Users", to: "/users", icon: UserCog, module: "users" },
+      { title: "Partner requests", to: "/partner-requests", icon: Handshake, module: "agents" },
       { title: "Integrations", to: "/integrations", icon: KeyRound, module: "settings" },
       { title: "Error monitor", to: "/error-log", icon: Siren, module: "settings" },
       { title: "Settings", to: "/settings", icon: Settings, module: "settings" },
