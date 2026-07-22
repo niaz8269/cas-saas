@@ -514,6 +514,12 @@
       "a2": "Your consultation and study plan are free. Where a service has a fee, you'll see an itemised quote before you commit — there are no hidden charges."
     }
   },
+  "post": {
+    "back": "Back to news",
+    "register": "Register",
+    "notFoundTitle": "Post not found",
+    "notFoundBody": "This post may have been unpublished or the link is incorrect."
+  },
   "news": {
     "seoTitle": "News & Updates",
     "seoDescription": "News and updates from CAS — intake deadlines, scholarship openings and partner-university announcements for studying in China.",
@@ -525,6 +531,12 @@
     "guidesSubtitle": "Everything you need to know to plan your studies in China.",
     "learnMore": "Learn more",
     "readGuide": "Read guide",
+    "readMore": "Read more",
+    "loadError": "Couldn't load posts right now.",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "Check back soon for the latest news, guides and events.",
+    "tab": { "all": "All", "news": "News", "blog": "Blog", "event": "Events" },
+    "type": { "news": "News", "blog": "Blog", "event": "Event" },
     "updates": {
       "intake": {
         "date": "January 2026",

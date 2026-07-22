@@ -570,6 +570,21 @@
         "title": "选择合适的院校",
         "body": "如何权衡城市、排名、语言和预算，找到最适合你的院校。"
       }
+    },
+    "readMore": "阅读更多",
+    "loadError": "暂时无法加载内容。",
+    "emptyTitle": "暂无内容",
+    "emptyBody": "请稍后再来查看最新的新闻、指南和活动。",
+    "tab": {
+      "all": "全部",
+      "news": "新闻",
+      "blog": "博客",
+      "event": "活动"
+    },
+    "type": {
+      "news": "新闻",
+      "blog": "博客",
+      "event": "活动"
     }
   },
   "studyPlan": {
@@ -1347,5 +1362,11 @@
       "anyUniversity": "任意大学",
       "addPreference": "添加志愿"
     }
+  },
+  "post": {
+    "back": "返回新闻",
+    "register": "报名",
+    "notFoundTitle": "未找到文章",
+    "notFoundBody": "该文章可能已取消发布，或链接有误。"
   }
 }

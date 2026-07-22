@@ -153,6 +153,37 @@ export function getSiteScholarships(params: { q?: string; type?: string; page?: 
   return siteApi<Paginated<SiteScholarship> & { types?: string[] }>(`/public/scholarships${qs ? `?${qs}` : ""}`)
 }
 
+// ── Content: blogs / news / events ─────────────────────────────────────────
+
+export interface SitePost {
+  id: number
+  type: "news" | "blog" | "event"
+  title: string
+  slug: string
+  excerpt: string | null
+  body?: string | null
+  cover_image_url: string | null
+  category: string | null
+  published_at: string | null
+  author: string | null
+  event_date: string | null
+  location: string | null
+  register_url: string | null
+}
+
+export function getSitePosts(params: { type?: string; q?: string; page?: number } = {}) {
+  const search = new URLSearchParams()
+  if (params.type) search.set("type", params.type)
+  if (params.q) search.set("q", params.q)
+  if (params.page && params.page > 1) search.set("page", String(params.page))
+  const qs = search.toString()
+
+  return siteApi<Paginated<SitePost>>(`/public/posts${qs ? `?${qs}` : ""}`)
+}
+
+export const getSitePost = (slug: string) =>
+  siteApi<{ data: SitePost }>(`/public/posts/${slug}`)
+
 export interface EnquiryPayload {
   first_name: string
   last_name?: string

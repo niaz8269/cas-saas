@@ -570,6 +570,21 @@
         "title": "Choisir la bonne université",
         "body": "Comment évaluer la ville, le classement, la langue et le budget pour trouver ce qui vous convient le mieux."
       }
+    },
+    "readMore": "Lire la suite",
+    "loadError": "Impossible de charger le contenu pour le moment.",
+    "emptyTitle": "Rien pour l'instant",
+    "emptyBody": "Revenez bientôt pour les dernières actualités, guides et événements.",
+    "tab": {
+      "all": "Tout",
+      "news": "Actualités",
+      "blog": "Blog",
+      "event": "Événements"
+    },
+    "type": {
+      "news": "Actualité",
+      "blog": "Blog",
+      "event": "Événement"
     }
   },
   "studyPlan": {
@@ -1347,5 +1362,11 @@
       "anyUniversity": "N'importe quelle université",
       "addPreference": "Ajouter une préférence"
     }
+  },
+  "post": {
+    "back": "Retour aux actualités",
+    "register": "S'inscrire",
+    "notFoundTitle": "Article introuvable",
+    "notFoundBody": "Cet article a peut-être été dépublié ou le lien est incorrect."
   }
 }

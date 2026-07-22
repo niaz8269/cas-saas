@@ -570,6 +570,21 @@
         "title": "Memilih universitas yang tepat",
         "body": "Cara mempertimbangkan kota, peringkat, bahasa, dan anggaran untuk menemukan yang paling cocok bagi Anda."
       }
+    },
+    "readMore": "Baca selengkapnya",
+    "loadError": "Tidak dapat memuat konten saat ini.",
+    "emptyTitle": "Belum ada apa pun",
+    "emptyBody": "Nantikan berita, panduan, dan acara terbaru.",
+    "tab": {
+      "all": "Semua",
+      "news": "Berita",
+      "blog": "Blog",
+      "event": "Acara"
+    },
+    "type": {
+      "news": "Berita",
+      "blog": "Blog",
+      "event": "Acara"
     }
   },
   "studyPlan": {
@@ -1347,5 +1362,11 @@
       "anyUniversity": "Universitas mana saja",
       "addPreference": "Tambah preferensi"
     }
+  },
+  "post": {
+    "back": "Kembali ke berita",
+    "register": "Daftar",
+    "notFoundTitle": "Pos tidak ditemukan",
+    "notFoundBody": "Pos ini mungkin telah dibatalkan penerbitannya atau tautannya salah."
   }
 }
