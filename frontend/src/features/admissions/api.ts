@@ -133,7 +133,7 @@ export function listApplications(
 }
 
 export const getApplication = (id: number | string) =>
-  api<{ data: ApplicationListItem; checklist: { missing: string[] } }>(`/applications/${id}`)
+  api<{ data: ApplicationListItem; checklist: { required: { id: number; name: string }[]; missing: string[] } }>(`/applications/${id}`)
 
 export const transitionApplication = (id: number | string, status: string, note?: string) =>
   api<{ data: ApplicationListItem }>(`/applications/${id}/transition`, {

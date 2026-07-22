@@ -361,9 +361,6 @@ export default function ApplicationDetailPage() {
   const app = application.data.data
   const checklistMissing = missing.length > 0 ? missing : application.data.checklist?.missing ?? []
   const docs = documents.data?.data ?? []
-  const requiredTypes = (types.data?.data ?? []).filter((type) =>
-    type.required_for?.includes("application"),
-  )
 
   const latestByType = new Map<number, DocumentItem>()
   for (const doc of docs) {
@@ -371,6 +368,18 @@ export default function ApplicationDetailPage() {
       latestByType.set(doc.type.id, doc)
     }
   }
+
+  // The resolved required set for THIS application (baseline + course extras),
+  // matching exactly what the applicant was asked for; enriched with sensitivity.
+  const typesById = new Map((types.data?.data ?? []).map((t) => [t.id, t]))
+  const requiredTypes = (application.data.checklist?.required ?? []).map((r) => ({
+    id: r.id,
+    name: r.name,
+    is_sensitive: typesById.get(r.id)?.is_sensitive ?? false,
+  }))
+  const requiredIds = new Set(requiredTypes.map((t) => t.id))
+  // Anything the applicant uploaded that isn't one of the required types.
+  const otherDocs = [...latestByType.values()].filter((d) => d.type && !requiredIds.has(d.type.id))
 
   const nextMoves = (APPLICATION_TRANSITIONS[app.status] ?? []).filter((s) => s !== "withdrawn")
   const canWithdraw = (APPLICATION_TRANSITIONS[app.status] ?? []).includes("withdrawn")
@@ -583,6 +592,39 @@ export default function ApplicationDetailPage() {
             })}
             {requiredTypes.length === 0 && (
               <p className="py-6 text-sm text-muted-foreground">No required document types configured.</p>
+            )}
+
+            {otherDocs.length > 0 && (
+              <div className="py-3">
+                <p className="mb-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">Other uploaded documents</p>
+                <div className="divide-y">
+                  {otherDocs.map((doc) => (
+                    <div key={doc.id} className="flex items-center justify-between gap-3 py-2">
+                      <div>
+                        <p className="text-sm font-medium">{doc.type?.name ?? "Document"}</p>
+                        <p className="text-xs text-muted-foreground">{doc.file_name} · v{doc.version}</p>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Badge variant="outline" className={cn("border-transparent capitalize", DOCUMENT_STATUS_BADGE[doc.status])}>
+                          {doc.status}
+                        </Badge>
+                        <Button
+                          size="sm" variant="ghost" aria-label={`Download ${doc.type?.name ?? doc.file_name}`}
+                          onClick={() => documentAction.mutate({ action: "download", docId: doc.id })}
+                        >
+                          <Download className="size-4" />
+                        </Button>
+                        {canVerify && doc.status === "pending" && (
+                          <>
+                            <Button size="sm" variant="secondary" onClick={() => documentAction.mutate({ action: "verify", docId: doc.id })}>Verify</Button>
+                            <Button size="sm" variant="ghost" className="text-cas-red" onClick={() => documentAction.mutate({ action: "reject", docId: doc.id })}>Reject</Button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </section>
