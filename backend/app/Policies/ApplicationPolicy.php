@@ -22,7 +22,10 @@ class ApplicationPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('applications.create.global');
+        // Scope-aware: a global creator (Admissions/Ops) may create for anyone;
+        // an assigned creator (Counselor) is narrowed to their own students by
+        // StoreApplicationRequest's student_id rule.
+        return $this->scopes->resolve($user, 'applications', 'create') !== null;
     }
 
     public function update(User $user, Application $application): bool

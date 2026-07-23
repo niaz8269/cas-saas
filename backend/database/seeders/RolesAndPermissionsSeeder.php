@@ -63,7 +63,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'dashboard.view.assigned',
             'leads.view.assigned', 'leads.create.assigned', 'leads.update.assigned', 'leads.convert.assigned',
             'students.view.assigned', 'students.update.assigned',
-            'applications.view.assigned',
+            // Counselors drive their own caseload's applications (create + advance
+            // + record the offer response) — scoped to their assigned students.
+            'applications.view.assigned', 'applications.create.assigned', 'applications.update.assigned',
             'universities.view.global',
             'scholarships.view.global',
             'documents.view.assigned', 'documents.upload.assigned',
@@ -89,6 +91,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'students.view.global',
             'applications.view.global',
             'documents.view.global',
+            // Read the catalog so invoices/commissions can reference programs.
+            'universities.view.global', 'scholarships.view.global',
             'finance.view.global', 'finance.manage.global',
             'commission.view.global', 'commission.manage.global',
             'visa.view.global',
@@ -99,12 +103,15 @@ class RolesAndPermissionsSeeder extends Seeder
             'students.view.global',
             'applications.view.global',
             'documents.view.global', 'documents.upload.global', 'documents.verify.global',
+            'universities.view.global', 'scholarships.view.global',
             'visa.view.global', 'visa.manage.global',
             'reports.view.own',
         ],
         'Marketing' => [
             'dashboard.view.department',
-            'leads.view.global', 'leads.create.global',
+            // Marketing owns lead intake end to end: create AND work them
+            // (notes, status) — not just pour them in.
+            'leads.view.global', 'leads.create.global', 'leads.update.global',
             'content.view.global', 'content.manage.global',
             'reports.view.own',
         ],
