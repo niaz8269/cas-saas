@@ -178,6 +178,7 @@ export default function LeadDetailPage() {
           <Field label="Email" value={lead.email} />
           <Field label="Phone" value={lead.phone} />
           <Field label="Country" value={lead.country?.name} />
+          <Field label="Source" value={lead.marketing_source?.name} />
           <Field label="Source website" value={lead.website_source?.domain} />
           <Field label="Campaign" value={lead.campaign?.name} />
           <Field label="Intake route" value={lead.intake_route} />

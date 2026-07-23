@@ -14,6 +14,7 @@ export interface LeadListItem {
   form_fields: Record<string, string>
   message: string | null
   country?: { id: number; name: string; iso2: string }
+  marketing_source?: { id: number; name: string } | null
   website_source?: { id: number; domain: string } | null
   campaign?: { id: number; name: string } | null
   assignee?: { id: number; name: string } | null

@@ -126,7 +126,7 @@ class LeadController extends Controller
         $this->authorize('view', $lead);
 
         return new LeadResource(
-            $lead->load(['country:id,name,iso2', 'websiteSource:id,domain', 'campaign:id,name', 'assignee:id,name']),
+            $lead->load(['country:id,name,iso2', 'marketingSource:id,name', 'websiteSource:id,domain', 'campaign:id,name', 'assignee:id,name']),
         );
     }
 

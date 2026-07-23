@@ -31,6 +31,9 @@ class LeadResource extends JsonResource
             'country' => $this->whenLoaded('country', fn () => [
                 'id' => $this->country->id, 'name' => $this->country->name, 'iso2' => $this->country->iso2,
             ]),
+            'marketing_source' => $this->whenLoaded('marketingSource', fn () => $this->marketingSource ? [
+                'id' => $this->marketingSource->id, 'name' => $this->marketingSource->name,
+            ] : null),
             'website_source' => $this->whenLoaded('websiteSource', fn () => $this->websiteSource ? [
                 'id' => $this->websiteSource->id, 'domain' => $this->websiteSource->domain,
             ] : null),
