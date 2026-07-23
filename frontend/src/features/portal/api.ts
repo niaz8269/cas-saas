@@ -21,11 +21,17 @@ export interface StudentProfileData {
   last_name: string
   full_name: string
   email: string | null
+  email_verified: boolean
   phone: string | null
   status: string
   country?: { id: number; name: string } | null
   last_login_at: string | null
 }
+
+export const getStudentProfile = () => portalApi<{ data: StudentProfileData }>("/student/auth/me")
+
+export const resendStudentVerification = () =>
+  portalApi<{ message: string }>("/student/auth/verification/resend", { method: "POST" })
 
 export const portalLogin = (kind: PortalKind, payload: { email: string; password: string }) =>
   portalApi<{ token: string; token_type: string } & Record<string, unknown>>(

@@ -16,6 +16,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import casLogo from "@/assets/cas-logo.png"
 import { portalLogout } from "@/features/portal/api"
 import PortalNotificationBell from "@/features/portal/PortalNotificationBell"
+import StudentVerifyBanner from "@/features/portal/StudentVerifyBanner"
 import { langDef } from "@/i18n/languages"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
@@ -81,6 +82,8 @@ export default function PortalShell() {
           </button>
         </div>
       </header>
+
+      <StudentVerifyBanner />
 
       {/* Content */}
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 pt-4 pb-24">

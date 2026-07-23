@@ -948,6 +948,12 @@
     "navFees": "Biaya",
     "navDocs": "Dokumen",
     "signOut": "Keluar",
+    "verifyEmail": {
+      "body": "Harap verifikasi email Anda — kami telah mengirimkan tautan.",
+      "resent": "Email verifikasi terkirim — periksa kotak masuk Anda.",
+      "resend": "Kirim ulang",
+      "refresh": "Saya sudah verifikasi"
+    },
     "notifications": {
       "title": "Notifikasi",
       "markAll": "Tandai semua dibaca",

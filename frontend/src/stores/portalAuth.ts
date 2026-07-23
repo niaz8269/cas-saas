@@ -10,6 +10,8 @@ export interface PortalProfile {
   status: string
   /** agent | student, echoed for display */
   code: string
+  /** students only — whether they've confirmed their email */
+  email_verified?: boolean
 }
 
 interface PortalAuthState {

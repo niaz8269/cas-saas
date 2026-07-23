@@ -945,6 +945,12 @@
     "navFees": "Fees",
     "navDocs": "Docs",
     "signOut": "Sign out",
+    "verifyEmail": {
+      "body": "Please verify your email — we've sent you a link.",
+      "resent": "Verification email sent — check your inbox.",
+      "resend": "Resend",
+      "refresh": "I've verified"
+    },
     "notifications": {
       "title": "Notifications",
       "markAll": "Mark all read",

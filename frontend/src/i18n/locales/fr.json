@@ -948,6 +948,12 @@
     "navFees": "Frais",
     "navDocs": "Docs",
     "signOut": "Se déconnecter",
+    "verifyEmail": {
+      "body": "Veuillez vérifier votre e-mail — nous vous avons envoyé un lien.",
+      "resent": "E-mail de vérification envoyé — vérifiez votre boîte de réception.",
+      "resend": "Renvoyer",
+      "refresh": "J'ai vérifié"
+    },
     "notifications": {
       "title": "Notifications",
       "markAll": "Tout marquer comme lu",

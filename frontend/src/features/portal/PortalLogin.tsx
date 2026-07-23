@@ -61,7 +61,7 @@ export default function PortalLogin() {
         setAuth(response.token, "agent", { id: a.id, name: a.name, email: a.email, status: a.status, code: a.agent_code })
       } else {
         const s = response.student as StudentProfileData
-        setAuth(response.token, "student", { id: s.id, name: s.full_name, email: s.email, status: s.status, code: s.student_code })
+        setAuth(response.token, "student", { id: s.id, name: s.full_name, email: s.email, status: s.status, code: s.student_code, email_verified: s.email_verified })
       }
       navigate(redirect ?? `/portal/${kind}`, { replace: true })
     },

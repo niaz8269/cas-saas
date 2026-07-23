@@ -948,6 +948,12 @@
     "navFees": "费用",
     "navDocs": "文件",
     "signOut": "退出登录",
+    "verifyEmail": {
+      "body": "请验证您的邮箱——我们已向您发送了验证链接。",
+      "resent": "验证邮件已发送，请查收。",
+      "resend": "重新发送",
+      "refresh": "我已验证"
+    },
     "notifications": {
       "title": "通知",
       "markAll": "全部标为已读",

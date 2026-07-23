@@ -132,7 +132,7 @@ function StudentForm() {
     mutationFn: (v: StudentValues) => portalRegister(v),
     onSuccess: (res) => {
       const s = res.student
-      setAuth(res.token, "student", { id: s.id, name: s.full_name, email: s.email, status: s.status, code: s.student_code })
+      setAuth(res.token, "student", { id: s.id, name: s.full_name, email: s.email, status: s.status, code: s.student_code, email_verified: s.email_verified })
       navigate("/portal/student", { replace: true })
     },
     onError: (e) => applyServerErrors<StudentValues>(e, STUDENT_FIELDS, setError, t("portal.errorServerUnreachable")),
