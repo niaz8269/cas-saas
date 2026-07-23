@@ -101,6 +101,7 @@ class AutomationEngine
             [
                 'program' => $context['program'] ?? null,
                 'university' => $context['university'] ?? null,
+                'document' => $context['document'] ?? null,
                 'body' => $action['body'] ?? null,
             ],
             null, // system actor

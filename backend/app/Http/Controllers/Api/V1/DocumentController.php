@@ -10,6 +10,7 @@ use App\Models\Application;
 use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Student;
+use App\Services\Comms\AutomationEngine;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -88,6 +89,8 @@ class DocumentController extends Controller
         $document->update(['status' => 'verified', 'verified_by' => $request->user()->id]);
         $this->documents->log($document, $request->user()->id, 'view', $request->ip());
 
+        $this->notifyStudentOfDocument($document, 'verified');
+
         return new DocumentResource($document->load(['type', 'verifier']));
     }
 
@@ -97,7 +100,36 @@ class DocumentController extends Controller
 
         $document->update(['status' => 'rejected', 'verified_by' => $request->user()->id]);
 
+        $this->notifyStudentOfDocument($document, 'rejected');
+
         return new DocumentResource($document->load(['type', 'verifier']));
+    }
+
+    /**
+     * Fire a document.status automation event so the applicant is told to
+     * re-upload a rejected file (or that one was verified) — without it, a
+     * rejection leaves the student with no signal to act on. Resolves the
+     * student whether the document hangs off them directly or an application.
+     */
+    private function notifyStudentOfDocument(Document $document, string $to): void
+    {
+        $document->loadMissing('type:id,name');
+
+        $studentId = match ($document->documentable_type) {
+            Student::class => $document->documentable_id,
+            Application::class => Application::whereKey($document->documentable_id)->value('student_id'),
+            default => null,
+        };
+
+        if ($studentId === null) {
+            return;
+        }
+
+        app(AutomationEngine::class)->dispatch('document.status', [
+            'to' => $to,
+            'student_id' => $studentId,
+            'document' => $document->type?->name,
+        ]);
     }
 
     /**
