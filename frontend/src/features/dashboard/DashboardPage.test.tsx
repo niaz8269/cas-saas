@@ -6,10 +6,18 @@ import type { AuthUser } from "@/types/auth"
 
 import DashboardPage from "./DashboardPage"
 
-function makeUser(): AuthUser {
+// Management holds read access across every module (matches the seeded role),
+// so the executive dashboard shows all sections.
+const MANAGEMENT_PERMS = [
+  "dashboard.view.global", "leads.view.global", "students.view.global",
+  "applications.view.global", "commission.view.global", "finance.view.global",
+  "visa.view.global",
+]
+
+function makeUser(permissions: string[] = MANAGEMENT_PERMS, roles = ["Management"]): AuthUser {
   return {
     id: 1, name: "Demo Manager", email: "management@cas.moe", phone: null,
-    status: "active", roles: ["Management"], permissions: ["dashboard.view.global"], last_login_at: null,
+    status: "active", roles, permissions, last_login_at: null,
   }
 }
 
@@ -44,6 +52,23 @@ it("renders the live KPI cards from the analytics API", async () => {
   // Visa summary now renders on the executive dashboard.
   expect(screen.getByText("Visa cases")).toBeInTheDocument()
   expect(screen.getByText("Travel Ready")).toBeInTheDocument()
+})
+
+it("tailors sections to the role — Marketing sees leads, not finance or visa", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["dashboard.view.department", "leads.view.global"], ["Marketing"]),
+  })
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ data: DASHBOARD })))
+
+  renderWithProviders(<DashboardPage />)
+
+  expect(await screen.findByText("33")).toBeInTheDocument() // leads KPI
+  expect(screen.getByText("12.1%")).toBeInTheDocument() // conversion
+  // No finance / visa / commission sections for Marketing.
+  expect(screen.queryByText("Tuition receivables")).not.toBeInTheDocument()
+  expect(screen.queryByText("Visa cases")).not.toBeInTheDocument()
+  expect(screen.queryByText("Commission received")).not.toBeInTheDocument()
 })
 
 it("shows an error state when the dashboard fails", async () => {

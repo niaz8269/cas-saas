@@ -24,6 +24,7 @@ import { Link } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getExecutiveDashboard } from "@/features/dashboard/api"
 import { listTasks } from "@/features/tasks/api"
+import { canAccessModule } from "@/lib/navigation"
 import { useAuthStore } from "@/stores/auth"
 import { cn } from "@/lib/utils"
 
@@ -122,6 +123,10 @@ export default function DashboardPage() {
   const user = useAuthStore((state) => state.user)
   const firstName = user?.name.split(" ")[0] ?? "there"
 
+  // Only surface the sections this role can actually act on — a Visa officer
+  // or Marketer shouldn't face finance/commission cards they can't use.
+  const show = (module: string) => canAccessModule(user, module)
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard", "executive"],
     queryFn: getExecutiveDashboard,
@@ -165,16 +170,20 @@ export default function DashboardPage() {
       {d && (
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <KpiCard icon={Users} label="Leads" value={String(d.leads.total)} sub={`${d.leads.converted} converted`} />
-            <KpiCard icon={TrendingUp} label="Conversion" value={`${d.leads.conversion_rate}%`} sub="lead → student" />
-            <KpiCard icon={GraduationCap} label="Students" value={String(d.students.total)} />
-            <KpiCard icon={FileText} label="Open applications" value={String(d.applications.open)} sub={`${d.applications.total} total`} />
-            <KpiCard icon={Banknote} label="Commission received" value={money(d.commissions.received_total, d.commissions.currency)} sub={`${money(d.commissions.expected_total, d.commissions.currency)} expected`} />
+            {[
+              show("leads") && <KpiCard key="leads" icon={Users} label="Leads" value={String(d.leads.total)} sub={`${d.leads.converted} converted`} />,
+              show("leads") && <KpiCard key="conversion" icon={TrendingUp} label="Conversion" value={`${d.leads.conversion_rate}%`} sub="lead → student" />,
+              show("students") && <KpiCard key="students" icon={GraduationCap} label="Students" value={String(d.students.total)} />,
+              show("applications") && <KpiCard key="applications" icon={FileText} label="Open applications" value={String(d.applications.open)} sub={`${d.applications.total} total`} />,
+              show("commission") && <KpiCard key="commission" icon={Banknote} label="Commission received" value={money(d.commissions.received_total, d.commissions.currency)} sub={`${money(d.commissions.expected_total, d.commissions.currency)} expected`} />,
+            ].filter(Boolean)}
           </div>
 
           <MyTasksCard />
 
+          {(show("leads") || show("commission")) && (
           <div className="grid gap-4 lg:grid-cols-2">
+            {show("leads") && (
             <ChartCard title="Lead funnel">
               {leadSeries.length === 0 ? (
                 <p className="pt-16 text-center text-sm text-muted-foreground">No leads yet.</p>
@@ -194,7 +203,9 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               )}
             </ChartCard>
+            )}
 
+            {show("commission") && (
             <ChartCard title="Commission pipeline">
               {commissionSeries.length === 0 ? (
                 <p className="pt-16 text-center text-sm text-muted-foreground">No commissions yet.</p>
@@ -212,9 +223,12 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               )}
             </ChartCard>
+            )}
           </div>
+          )}
 
           {/* Receivables */}
+          {show("finance") && (
           <div className="rounded-xl border bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-[15px] font-semibold">Tuition receivables</h3>
@@ -238,8 +252,10 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Visa cases */}
+          {show("visa") && (
           <div className="rounded-xl border bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-[15px] font-semibold">Visa cases</h3>
@@ -258,6 +274,7 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+          )}
         </>
       )}
     </div>
