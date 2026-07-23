@@ -839,6 +839,11 @@ ALTER TABLE notifications
   ADD CONSTRAINT fk_notifications_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
   ADD CONSTRAINT fk_notifications_agent FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE CASCADE;
 
+-- ADDENDUM (ADR-0013): email verification for student self-signup. A nullable
+-- stamp (null = unverified); confirmed via a signed link emailed on register.
+ALTER TABLE students
+  ADD COLUMN email_verified_at TIMESTAMP NULL AFTER email;
+
 -- Captured server errors for the admin error monitor, grouped by fingerprint
 -- (class+file+line) with an occurrence count and last-seen timestamp.
 CREATE TABLE error_logs (

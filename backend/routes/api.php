@@ -132,10 +132,17 @@ Route::prefix('v1')->group(function () {
             ->middleware('throttle:login');
         Route::post('auth/register', [StudentAuthController::class, 'register'])
             ->middleware('throttle:login');
+        // Email verification: the signed link from the verification email
+        // (public — the signature is the auth).
+        Route::get('auth/verify/{id}/{hash}', [StudentAuthController::class, 'verify'])
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('student.verify');
 
         Route::middleware('auth:student')->group(function () {
             Route::post('auth/logout', [StudentAuthController::class, 'logout']);
             Route::get('auth/me', [StudentAuthController::class, 'me']);
+            Route::post('auth/verification/resend', [StudentAuthController::class, 'resendVerification'])
+                ->middleware('throttle:6,1');
             // Application wizard — browsing (static segments precede any
             // future applications/{application} routes).
             Route::get('countries', [StudentApplicationController::class, 'countries']);

@@ -71,7 +71,24 @@ class Student extends Authenticatable
             'english_test_date' => 'date',
             'password' => 'hashed',
             'last_login_at' => 'datetime',
+            'email_verified_at' => 'datetime',
         ];
+    }
+
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified_at !== null;
+    }
+
+    public function markEmailAsVerified(): void
+    {
+        $this->forceFill(['email_verified_at' => now()])->save();
+    }
+
+    /** The value hashed into the verification link (detects an email change). */
+    public function verificationHash(): string
+    {
+        return sha1($this->email);
     }
 
     /** Next STU-{year}-{5-digit} code; retries on the (rare) collision. */

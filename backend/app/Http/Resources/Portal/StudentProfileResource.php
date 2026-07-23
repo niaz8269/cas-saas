@@ -26,6 +26,7 @@ class StudentProfileResource extends JsonResource
             'last_name' => $this->last_name,
             'full_name' => $this->full_name,
             'email' => $this->email,
+            'email_verified' => $this->email_verified_at !== null,
             'phone' => $this->phone,
             'status' => $this->status,
             'country' => $this->whenLoaded('country', fn () => $this->country ? [
