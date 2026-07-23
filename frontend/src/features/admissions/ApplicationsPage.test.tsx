@@ -64,7 +64,16 @@ function stubFetch(detailOverrides: Record<string, unknown> = {}) {
       if (url.includes("/document-types")) return Promise.resolve(jsonResponse(TYPES))
       if (url.includes("/documents")) return Promise.resolve(jsonResponse(DOCS))
       if (url.includes("/applications/21")) {
-        return Promise.resolve(jsonResponse({ data: { ...APPLICATION, ...detailOverrides }, checklist: { missing: ["Academic Transcript"] } }))
+        return Promise.resolve(jsonResponse({
+          data: { ...APPLICATION, ...detailOverrides },
+          checklist: {
+            // The resolved required set the component renders the checklist from
+            // (baseline + course extras) — Passport is uploaded/verified,
+            // Academic Transcript is still missing.
+            required: [{ id: 1, name: "Passport" }, { id: 2, name: "Academic Transcript" }],
+            missing: ["Academic Transcript"],
+          },
+        }))
       }
       return Promise.resolve(
         jsonResponse({ data: [APPLICATION], meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 } }),

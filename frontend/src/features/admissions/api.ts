@@ -231,3 +231,6 @@ export const verifyDocument = (id: number) =>
 
 export const rejectDocument = (id: number) =>
   api<{ data: DocumentItem }>(`/documents/${id}/reject`, { method: "POST", body: JSON.stringify({}) })
+
+export const deleteDocument = (id: number) =>
+  api<{ message: string }>(`/documents/${id}`, { method: "DELETE" })

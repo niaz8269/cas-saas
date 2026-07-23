@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Check, Download, FileText, FileUp, Plus, UserCog } from "lucide-react"
+import { ArrowLeft, Check, Download, FileText, FileUp, Plus, Trash2, UserCog } from "lucide-react"
 import { useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -24,6 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import {
+  deleteDocument,
   downloadDocument,
   getApplication,
   getOfferLetter,
@@ -216,12 +217,15 @@ export default function ApplicationDetailPage() {
   const canUpdate = can("applications.update.global") || can("applications.update.assigned")
   const canUpload = can("documents.upload.global") || can("documents.upload.assigned")
   const canVerify = can("documents.verify.global")
+  const canDelete = can("documents.delete.global")
 
   const [actionError, setActionError] = useState<string | null>(null)
   const [missing, setMissing] = useState<string[]>([])
   const [offerOpen, setOfferOpen] = useState(false)
   const [offerType, setOfferType] = useState("conditional")
   const [offerRef, setOfferRef] = useState("")
+  const [offerIssued, setOfferIssued] = useState("")
+  const [offerExpiry, setOfferExpiry] = useState("")
   const [uploadTypeId, setUploadTypeId] = useState<number | null>(null)
   const [reassignOpen, setReassignOpen] = useState(false)
   const [selectedOfficer, setSelectedOfficer] = useState<string>("")
@@ -297,10 +301,18 @@ export default function ApplicationDetailPage() {
   })
 
   const offerMutation = useMutation({
-    mutationFn: () => storeOffer(id, { offer_type: offerType, reference_no: offerRef || null }),
+    mutationFn: () =>
+      storeOffer(id, {
+        offer_type: offerType,
+        reference_no: offerRef || null,
+        issued_date: offerIssued || null,
+        expiry_date: offerExpiry || null,
+      }),
     onSuccess: () => {
       setOfferOpen(false)
       setOfferRef("")
+      setOfferIssued("")
+      setOfferExpiry("")
       invalidate()
     },
     onError: (error) =>
@@ -331,7 +343,7 @@ export default function ApplicationDetailPage() {
   })
 
   const documentAction = useMutation({
-    mutationFn: async ({ action, docId }: { action: "download" | "verify" | "reject"; docId: number }) => {
+    mutationFn: async ({ action, docId }: { action: "download" | "verify" | "reject" | "delete"; docId: number }) => {
       if (action === "download") {
         const { url } = await downloadDocument(docId)
         window.open(url, "_blank", "noopener")
@@ -339,11 +351,18 @@ export default function ApplicationDetailPage() {
       }
       if (action === "verify") await verifyDocument(docId)
       if (action === "reject") await rejectDocument(docId)
+      if (action === "delete") await deleteDocument(docId)
     },
     onSuccess: invalidate,
     onError: (error) =>
       setActionError(error instanceof ApiError ? error.message : "Document action failed."),
   })
+
+  const confirmDeleteDoc = (docId: number, name: string) => {
+    if (window.confirm(`Delete "${name}"? This can be restored by an administrator.`)) {
+      documentAction.mutate({ action: "delete", docId })
+    }
+  }
 
   if (application.isPending) return <Skeleton className="h-72 w-full rounded-xl" />
 
@@ -586,6 +605,15 @@ export default function ApplicationDetailPage() {
                         {uploadMutation.isPending && uploadTypeId === type.id ? "Uploading…" : doc ? "Replace" : "Upload"}
                       </Button>
                     )}
+                    {doc && canDelete && (
+                      <Button
+                        size="sm" variant="ghost" className="text-cas-red"
+                        aria-label={`Delete ${type.name}`}
+                        onClick={() => confirmDeleteDoc(doc.id, type.name)}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               )
@@ -619,6 +647,15 @@ export default function ApplicationDetailPage() {
                             <Button size="sm" variant="secondary" onClick={() => documentAction.mutate({ action: "verify", docId: doc.id })}>Verify</Button>
                             <Button size="sm" variant="ghost" className="text-cas-red" onClick={() => documentAction.mutate({ action: "reject", docId: doc.id })}>Reject</Button>
                           </>
+                        )}
+                        {canDelete && (
+                          <Button
+                            size="sm" variant="ghost" className="text-cas-red"
+                            aria-label={`Delete ${doc.type?.name ?? doc.file_name}`}
+                            onClick={() => confirmDeleteDoc(doc.id, doc.type?.name ?? doc.file_name)}
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
                         )}
                       </div>
                     </div>
@@ -733,6 +770,16 @@ export default function ApplicationDetailPage() {
             <div className="space-y-1.5">
               <Label htmlFor="offer-ref">Reference no.</Label>
               <Input id="offer-ref" value={offerRef} onChange={(e) => setOfferRef(e.target.value)} placeholder="OFR-2026-…" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="offer-issued">Issued</Label>
+                <Input id="offer-issued" type="date" value={offerIssued} onChange={(e) => setOfferIssued(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="offer-expiry">Expires</Label>
+                <Input id="offer-expiry" type="date" value={offerExpiry} onChange={(e) => setOfferExpiry(e.target.value)} />
+              </div>
             </div>
           </div>
           <DialogFooter>
