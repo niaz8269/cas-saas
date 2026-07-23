@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Textarea } from "@/components/ui/textarea"
 import { useCan } from "@/features/auth/useCan"
 import {
   deleteDocument,
@@ -226,6 +227,9 @@ export default function ApplicationDetailPage() {
   const [offerRef, setOfferRef] = useState("")
   const [offerIssued, setOfferIssued] = useState("")
   const [offerExpiry, setOfferExpiry] = useState("")
+  // A consequential transition (reject/withdraw) opens a reason prompt first.
+  const [noteFor, setNoteFor] = useState<string | null>(null)
+  const [noteText, setNoteText] = useState("")
   const [uploadTypeId, setUploadTypeId] = useState<number | null>(null)
   const [reassignOpen, setReassignOpen] = useState(false)
   const [selectedOfficer, setSelectedOfficer] = useState<string>("")
@@ -247,10 +251,12 @@ export default function ApplicationDetailPage() {
   }
 
   const transitionMutation = useMutation({
-    mutationFn: (status: string) => transitionApplication(id, status),
+    mutationFn: ({ status, note }: { status: string; note?: string }) => transitionApplication(id, status, note),
     onSuccess: () => {
       setActionError(null)
       setMissing([])
+      setNoteFor(null)
+      setNoteText("")
       invalidate()
     },
     onError: (error) => {
@@ -408,6 +414,17 @@ export default function ApplicationDetailPage() {
     fileInputRef.current?.click()
   }
 
+  // Reject/withdraw ask for a reason (recorded in the status history);
+  // routine forward moves stay one-click.
+  const requestTransition = (status: string) => {
+    if (status === "rejected" || status === "withdrawn") {
+      setNoteText("")
+      setNoteFor(status)
+    } else {
+      transitionMutation.mutate({ status })
+    }
+  }
+
   return (
     <div className="space-y-4">
       {/* hidden file input for the checklist uploads */}
@@ -507,7 +524,7 @@ export default function ApplicationDetailPage() {
                 size="sm"
                 variant={["rejected"].includes(move) ? "destructive" : "default"}
                 disabled={transitionMutation.isPending}
-                onClick={() => transitionMutation.mutate(move)}
+                onClick={() => requestTransition(move)}
                 className="capitalize"
               >
                 {statusLabel(move)}
@@ -524,7 +541,7 @@ export default function ApplicationDetailPage() {
                 variant="ghost"
                 className="text-muted-foreground"
                 disabled={transitionMutation.isPending}
-                onClick={() => transitionMutation.mutate("withdrawn")}
+                onClick={() => requestTransition("withdrawn")}
               >
                 Withdraw
               </Button>
@@ -818,6 +835,35 @@ export default function ApplicationDetailPage() {
             </Button>
             <Button disabled={reassignMutation.isPending} onClick={() => reassignMutation.mutate()}>
               {reassignMutation.isPending ? "Saving…" : "Save"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reason prompt for a reject / withdraw */}
+      <Dialog open={noteFor !== null} onOpenChange={(v) => { if (!v) setNoteFor(null) }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="capitalize">{noteFor === "rejected" ? "Reject application" : "Withdraw application"}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-1.5">
+            <Label htmlFor="transition-note">Reason (optional)</Label>
+            <Textarea
+              id="transition-note"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              placeholder="Add a short reason for the record…"
+              rows={3}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setNoteFor(null)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              disabled={transitionMutation.isPending}
+              onClick={() => noteFor && transitionMutation.mutate({ status: noteFor, note: noteText.trim() || undefined })}
+            >
+              {transitionMutation.isPending ? "Working…" : noteFor === "rejected" ? "Reject" : "Withdraw"}
             </Button>
           </DialogFooter>
         </DialogContent>

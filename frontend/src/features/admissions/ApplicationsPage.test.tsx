@@ -147,6 +147,31 @@ it("renders stepper, checklist states and history for updaters", async () => {
   expect(screen.getByText(/draft →/)).toBeInTheDocument()
 })
 
+it("prompts for a reason when rejecting and records it in the transition", async () => {
+  useAuthStore.setState({
+    token: "t",
+    user: makeUser(["applications.view.global", "applications.update.global", "documents.view.global"]),
+  })
+  stubFetch()
+  const user = userEvent.setup()
+
+  renderDetail()
+  await screen.findByText("APP-2026-00021")
+
+  await user.click(screen.getByRole("button", { name: "rejected" }))
+
+  const dialog = await screen.findByRole("dialog")
+  await user.type(within(dialog).getByLabelText(/Reason/), "Ineligible GPA")
+  await user.click(within(dialog).getByRole("button", { name: "Reject" }))
+
+  await waitFor(() => {
+    const calls = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls
+    const transition = calls.find(([u, i]) => String(u).includes("/transition") && (i as RequestInit)?.method === "POST")
+    expect(transition).toBeTruthy()
+    expect(JSON.parse((transition![1] as RequestInit).body as string)).toMatchObject({ status: "rejected", note: "Ineligible GPA" })
+  })
+})
+
 it("renders the full ingested applicant profile", async () => {
   useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global", "documents.view.global"]) })
   stubFetch({
