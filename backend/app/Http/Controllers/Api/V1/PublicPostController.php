@@ -16,7 +16,7 @@ class PublicPostController extends Controller
 {
     /** List columns — deliberately excludes `body`. */
     private const LIST_COLUMNS = [
-        'id', 'type', 'title', 'slug', 'excerpt', 'cover_image_path',
+        'id', 'type', 'title', 'slug', 'excerpt', 'translations', 'cover_image_path',
         'category', 'published_at', 'author_id', 'event_date', 'location', 'register_url',
     ];
 

@@ -24,12 +24,17 @@ class Post extends Model
 
     public const TYPES = ['news', 'blog', 'event'];
 
+    /** Site languages a post can be translated into (base columns = default). */
+    public const LOCALES = ['en', 'zh', 'ar', 'fr', 'id'];
+
     protected $fillable = [
         'type',
         'title',
         'slug',
         'excerpt',
         'body',
+        'translations',
+        'body_translations',
         'cover_image_path',
         'category',
         'status',
@@ -45,7 +50,51 @@ class Post extends Model
         return [
             'published_at' => 'datetime',
             'event_date' => 'datetime',
+            'translations' => 'array',
+            'body_translations' => 'array',
         ];
+    }
+
+    /**
+     * Title/excerpt/body for a locale, falling back to the base columns when a
+     * translation (or a field within it) is absent. `body` resolves from the
+     * separate body_translations map, which the list query does not load.
+     *
+     * @return array{title: ?string, excerpt: ?string, body: ?string}
+     */
+    public function localized(?string $locale): array
+    {
+        $meta = $locale ? ($this->translations[$locale] ?? []) : [];
+        $body = $locale ? ($this->body_translations[$locale] ?? null) : null;
+
+        return [
+            'title' => $meta['title'] ?? $this->title,
+            'excerpt' => $meta['excerpt'] ?? $this->excerpt,
+            'body' => $body ?? $this->body,
+        ];
+    }
+
+    /**
+     * The two translation columns recombined into one editable map
+     * ({locale: {title, excerpt, body}}) for the admin editor.
+     *
+     * @return array<string, array<string, ?string>>
+     */
+    public function editorTranslations(): array
+    {
+        $meta = $this->translations ?? [];
+        $bodies = $this->body_translations ?? [];
+        $merged = [];
+
+        foreach (array_unique([...array_keys($meta), ...array_keys($bodies)]) as $locale) {
+            $merged[$locale] = [
+                'title' => $meta[$locale]['title'] ?? null,
+                'excerpt' => $meta[$locale]['excerpt'] ?? null,
+                'body' => $bodies[$locale] ?? null,
+            ];
+        }
+
+        return $merged;
     }
 
     protected static function booted(): void

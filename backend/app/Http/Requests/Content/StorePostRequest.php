@@ -24,6 +24,12 @@ class StorePostRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:220', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $this->slugUnique()],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['nullable', 'string'],
+            // Per-locale overrides (unknown locale keys are dropped server-side).
+            'translations' => ['nullable', 'array'],
+            'translations.*' => ['array'],
+            'translations.*.title' => ['nullable', 'string', 'max:200'],
+            'translations.*.excerpt' => ['nullable', 'string', 'max:500'],
+            'translations.*.body' => ['nullable', 'string'],
             'cover_image_path' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:80'],
             'status' => ['sometimes', Rule::in(['draft', 'published'])],

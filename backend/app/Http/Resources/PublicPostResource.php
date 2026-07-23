@@ -20,13 +20,18 @@ class PublicPostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $lang = $request->query('lang');
+        $localized = $this->localized(is_string($lang) && in_array($lang, Post::LOCALES, true) ? $lang : null);
+
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'title' => $this->title,
+            'title' => $localized['title'],
             'slug' => $this->slug,
-            'excerpt' => $this->excerpt,
-            'body' => $this->when(array_key_exists('body', $this->resource->getAttributes()), fn () => $this->body),
+            'excerpt' => $localized['excerpt'],
+            // body_translations is loaded only on the detail endpoint, so the
+            // localized body resolves there; the list keeps omitting it.
+            'body' => $this->when(array_key_exists('body', $this->resource->getAttributes()), fn () => $localized['body']),
             'cover_image_url' => app(ImageService::class)->url($this->cover_image_path),
             'category' => $this->category,
             'published_at' => $this->published_at?->toIso8601String(),

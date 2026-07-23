@@ -844,6 +844,14 @@ ALTER TABLE notifications
 ALTER TABLE students
   ADD COLUMN email_verified_at TIMESTAMP NULL AFTER email;
 
+-- ADDENDUM (ADR-0014): multilingual post content. Base columns stay the
+-- default/fallback; per-locale overrides in two JSON columns — `translations`
+-- (title+excerpt, loaded on the public list) and `body_translations` (HTML,
+-- detail only) so the list keeps omitting the heavy body.
+ALTER TABLE posts
+  ADD COLUMN translations      JSON NULL AFTER body,
+  ADD COLUMN body_translations JSON NULL AFTER translations;
+
 -- Captured server errors for the admin error monitor, grouped by fingerprint
 -- (class+file+line) with an occurrence count and last-seen timestamp.
 CREATE TABLE error_logs (

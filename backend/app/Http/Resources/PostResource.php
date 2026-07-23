@@ -26,6 +26,7 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
             'body' => $this->body,
+            'translations' => (object) $this->editorTranslations(),
             'cover_image_path' => $this->cover_image_path,
             'cover_image_url' => app(ImageService::class)->url($this->cover_image_path),
             'category' => $this->category,

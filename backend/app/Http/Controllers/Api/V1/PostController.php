@@ -76,6 +76,12 @@ class PostController extends Controller
             $data['body'] = $this->sanitizer->clean($data['body']);
         }
 
+        if (array_key_exists('translations', $data)) {
+            [$meta, $bodies] = $this->splitTranslations((array) ($data['translations'] ?? []));
+            $data['translations'] = $meta ?: null;
+            $data['body_translations'] = $bodies ?: null;
+        }
+
         $publishing = ($data['status'] ?? $post?->status) === 'published';
         if ($publishing && empty($data['published_at']) && empty($post?->published_at)) {
             $data['published_at'] = now();
@@ -86,5 +92,41 @@ class PostController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Split a {locale: {title, excerpt, body}} input into the two storage
+     * columns: lightweight title/excerpt vs sanitized HTML bodies. Unknown
+     * locale keys are dropped (deny-by-default); the base language uses the
+     * primary columns, not a translation.
+     *
+     * @param  array<string, mixed>  $translations
+     * @return array{0: array<string, array<string, string>>, 1: array<string, string>}
+     */
+    private function splitTranslations(array $translations): array
+    {
+        $meta = [];
+        $bodies = [];
+
+        foreach ($translations as $locale => $fields) {
+            if (! in_array($locale, Post::LOCALES, true) || ! is_array($fields)) {
+                continue;
+            }
+
+            $entry = array_filter([
+                'title' => $fields['title'] ?? null,
+                'excerpt' => $fields['excerpt'] ?? null,
+            ], fn ($v) => is_string($v) && $v !== '');
+
+            if ($entry !== []) {
+                $meta[$locale] = $entry;
+            }
+
+            if (! empty($fields['body'])) {
+                $bodies[$locale] = $this->sanitizer->clean($fields['body']);
+            }
+        }
+
+        return [$meta, $bodies];
     }
 }
