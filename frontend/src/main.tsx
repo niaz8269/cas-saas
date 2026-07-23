@@ -62,6 +62,7 @@ import SiteWhyChina from "@/features/site/SiteWhyChina"
 import SiteNews from "@/features/site/SiteNews"
 import SitePostDetail from "@/features/site/SitePostDetail"
 import ContentPage from "@/features/admin/ContentPage"
+import MarketingPage from "@/features/marketing/MarketingPage"
 import PartnerRequestsPage from "@/features/admin/PartnerRequestsPage"
 import UsersPage from "@/features/admin/UsersPage"
 import SettingsPage from "@/features/admin/SettingsPage"
@@ -165,6 +166,7 @@ const router = createBrowserRouter([
           { path: "/users", element: <UsersPage /> },
           { path: "/partner-requests", element: <PartnerRequestsPage /> },
           { path: "/content", element: <ContentPage /> },
+          { path: "/campaigns", element: <MarketingPage /> },
           { path: "/integrations", element: <IntegrationsPage /> },
           { path: "/error-log", element: <ErrorLogPage /> },
           { path: "/settings", element: <SettingsPage /> },
