@@ -19,6 +19,7 @@ class Post extends Model
 {
     /** @use HasFactory<PostFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     public const TYPES = ['news', 'blog', 'event'];

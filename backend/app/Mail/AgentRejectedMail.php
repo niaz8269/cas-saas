@@ -24,7 +24,7 @@ class AgentRejectedMail extends Mailable
         return $this->subject('Update on your CAS partner application')
             ->html(
                 "<p>Dear {$name},</p>"
-                ."<p>Thank you for your interest in partnering with CAS.</p>"
+                .'<p>Thank you for your interest in partnering with CAS.</p>'
                 ."<p>After reviewing your application for <strong>{$company}</strong>, we're unable to approve it at this time.</p>"
                 ."<p>If you'd like more information, please get in touch with our team.</p>"
                 .'<p>— CAS Education</p>',

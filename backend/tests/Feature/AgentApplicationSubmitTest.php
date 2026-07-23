@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Agent;
 use App\Models\Application;
 use App\Models\Student;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -92,7 +93,7 @@ it('submits the agent draft to CAS once documents are complete', function () {
 it('never touches another agent\'s application', function () {
     actingAsAgent();
     $theirs = Application::factory()->create([
-        'agent_id' => \App\Models\Agent::factory()->create()->id,
+        'agent_id' => Agent::factory()->create()->id,
         'status' => 'draft',
     ]);
 

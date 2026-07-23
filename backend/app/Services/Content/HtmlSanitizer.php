@@ -16,7 +16,7 @@ class HtmlSanitizer
 
     public function __construct()
     {
-        $config = (new HtmlSanitizerConfig())
+        $config = (new HtmlSanitizerConfig)
             ->allowSafeElements()               // headings, p, lists, a, strong/em, blockquote, code, pre, img, tables…
             ->allowRelativeLinks()
             ->allowLinkSchemes(['https', 'http', 'mailto'])

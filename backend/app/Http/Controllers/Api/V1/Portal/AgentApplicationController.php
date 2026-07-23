@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Services\Admissions\ApplicationCatalog;
 use App\Services\Admissions\PortalApplicationService;
 use App\Services\Documents\DocumentService;
+use App\Services\Finance\FeeScheduleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
  * shared apply flow ({@see HandlesPortalApplications}); the agent picks one of
  * their OWN students, sees the AGENT service-charge tier, and the draft is
  * attributed to the agent (agent_id), so Finance later bills the agent tier
- * automatically ({@see \App\Services\Finance\FeeScheduleService}).
+ * automatically ({@see FeeScheduleService}).
  */
 class AgentApplicationController extends Controller
 {
