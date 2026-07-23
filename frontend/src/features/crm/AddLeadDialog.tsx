@@ -49,7 +49,7 @@ export default function AddLeadDialog() {
 
   const canAssign = can("leads.assign.global")
   const sources = useQuery({ queryKey: ["lead-sources"], queryFn: listLeadSources, enabled: open })
-  const staff = useQuery({ queryKey: ["staff"], queryFn: listStaff, enabled: open && canAssign })
+  const staff = useQuery({ queryKey: ["staff"], queryFn: () => listStaff(), enabled: open && canAssign })
 
   const set = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }))
 

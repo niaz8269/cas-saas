@@ -47,7 +47,7 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
 
   const staffQuery = useQuery({
     queryKey: ["staff-directory"],
-    queryFn: listStaff,
+    queryFn: () => listStaff(),
     enabled: assignOpen,
   })
 

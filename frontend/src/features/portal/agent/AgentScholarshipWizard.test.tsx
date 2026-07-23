@@ -76,7 +76,7 @@ it("applies for a government scholarship on behalf of an owned student", async (
   )
 
   const createCall = fetchMock.mock.calls.find(
-    ([u, i]: [RequestInfo | URL, RequestInit?]) => u === "/api/v1/agent/scholarship-applications" && (i as RequestInit)?.method === "POST",
+    (call) => call[0] === "/api/v1/agent/scholarship-applications" && (call[1] as RequestInit)?.method === "POST",
   )!
   const body = JSON.parse((createCall[1] as RequestInit).body as string)
   expect(body).toMatchObject({ student_id: 7, scholarship_id: 8, level: "bachelor" })

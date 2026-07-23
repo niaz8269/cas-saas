@@ -88,7 +88,8 @@ export default function ApiSourceFormDialog({
 
   const programs = useQuery({
     queryKey: ["programs", { university: universityId }],
-    queryFn: () => listPrograms(universityId),
+    // Guarded by `enabled` below — universityId is set whenever this runs.
+    queryFn: () => listPrograms(universityId!),
     enabled: open && Boolean(universityId),
     placeholderData: keepPreviousData,
   })

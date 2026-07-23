@@ -62,8 +62,12 @@ export default function LeadPipelineBoard({ q, formType }: { q?: string; formTyp
   })
 
   const move = useMutation({
-    mutationFn: ({ id, to }: { id: number; from: string; to: string }) =>
-      to === "converted" ? convertLead(id) : updateLead(id, { status: to }),
+    mutationFn: async ({ id, to }: { id: number; from: string; to: string }) => {
+      // Return nothing — a converted lead and an updated lead have different
+      // shapes; the board only cares that the move succeeded (onSettled refetches).
+      if (to === "converted") await convertLead(id)
+      else await updateLead(id, { status: to })
+    },
     // Optimistically move the card between the two affected columns.
     onMutate: async ({ id, from, to }) => {
       await queryClient.cancelQueries({ queryKey: ["leads", "board"] })

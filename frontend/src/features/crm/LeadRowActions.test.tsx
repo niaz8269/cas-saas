@@ -31,6 +31,8 @@ const LEAD: LeadListItem = {
   phone: "+923001234567",
   status: "assigned",
   intake_route: "info",
+  form_type: null,
+  form_fields: {},
   message: null,
   country: { id: 1, name: "Pakistan", iso2: "PK" },
   website_source: null,

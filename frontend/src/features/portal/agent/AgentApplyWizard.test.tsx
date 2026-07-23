@@ -75,7 +75,7 @@ it("applies for one of the agent's own students and sends student_id in the draf
   )
 
   const createCall = fetchMock.mock.calls.find(
-    ([u, i]: [RequestInfo | URL, RequestInit?]) => u === "/api/v1/agent/applications" && (i as RequestInit)?.method === "POST",
+    (call) => call[0] === "/api/v1/agent/applications" && (call[1] as RequestInit)?.method === "POST",
   )!
   const body = JSON.parse((createCall[1] as RequestInit).body as string)
   expect(body).toMatchObject({ student_id: 7, program_id: 3, funding: "self" })

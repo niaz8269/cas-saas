@@ -82,7 +82,7 @@ it("registers a new student, stores the token, and sends the payload", async () 
 
 it("submits an agent partner application and shows the pending screen", async () => {
   const user = userEvent.setup()
-  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL) => {
     const url = String(input)
     if (url.includes("/public/countries")) return Promise.resolve(jsonResponse({ data: [{ id: 1, name: "Pakistan", iso2: "PK" }] }))
     if (url.includes("/agent/auth/register")) return Promise.resolve(jsonResponse({ message: "ok", code: "PENDING_APPROVAL" }, 201))

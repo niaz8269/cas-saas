@@ -56,7 +56,7 @@ export default function LeadDetailPage() {
 
   const staffQuery = useQuery({
     queryKey: ["staff-directory"],
-    queryFn: listStaff,
+    queryFn: () => listStaff(),
     enabled: assignOpen,
   })
 

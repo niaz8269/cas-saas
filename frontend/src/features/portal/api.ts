@@ -333,6 +333,7 @@ export interface WizardGuardian {
   occupation?: string
   phone?: string
   email?: string
+  address?: string
 }
 
 export interface WizardEducation {
