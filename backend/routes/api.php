@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\BranchController;
+use App\Http\Controllers\Api\V1\CampaignController;
 use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CountryController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\MarketingSourceController;
 use App\Http\Controllers\Api\V1\MessageTemplateController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentApplicationController;
@@ -210,6 +212,12 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:content.manage.global,staff');
         Route::delete('posts/{post}', [PostController::class, 'destroy'])
             ->middleware('permission:content.manage.global,staff');
+
+        // Marketing: campaigns + lead-source management (policy-gated on
+        // marketing.view/manage).
+        Route::apiResource('campaigns', CampaignController::class);
+        Route::apiResource('marketing-sources', MarketingSourceController::class)
+            ->parameters(['marketing-sources' => 'marketingSource']);
 
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
