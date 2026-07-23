@@ -489,6 +489,29 @@ export const createScholarshipApplicationFor = (
 export const createScholarshipApplication = (payload: ScholarshipApplicationPayload) =>
   createScholarshipApplicationFor("student", payload)
 
+// ── In-app notifications (portal feed) ─────────────────────────────────────
+
+export interface PortalNotification {
+  id: number
+  type: string
+  title: string | null
+  body: string | null
+  read_at: string | null
+  created_at: string | null
+}
+
+export const listPortalNotifications = (kind: PortalKind) =>
+  portalApi<{ data: PortalNotification[]; meta: { unread: number } }>(`/${kind}/notifications`)
+
+export const getPortalUnreadCount = (kind: PortalKind) =>
+  portalApi<{ unread: number }>(`/${kind}/notifications/unread-count`)
+
+export const markPortalNotificationRead = (kind: PortalKind, id: number) =>
+  portalApi<{ data: PortalNotification }>(`/${kind}/notifications/${id}/read`, { method: "POST" })
+
+export const markAllPortalNotificationsRead = (kind: PortalKind) =>
+  portalApi<{ unread: number }>(`/${kind}/notifications/read-all`, { method: "POST" })
+
 function query(params: Record<string, string | number | undefined>): string {
   const search = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {

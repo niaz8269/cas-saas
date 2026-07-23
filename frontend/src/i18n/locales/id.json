@@ -948,6 +948,14 @@
     "navFees": "Biaya",
     "navDocs": "Dokumen",
     "signOut": "Keluar",
+    "notifications": {
+      "title": "Notifikasi",
+      "markAll": "Tandai semua dibaca",
+      "empty": "Semua sudah terbaca.",
+      "loading": "Memuat…",
+      "aria": "Notifikasi",
+      "ariaUnread": "Notifikasi, {{count}} belum dibaca"
+    },
     "loginTitle": "Masuk ke portal",
     "loginSubtitle": "Akses catatan CAS Anda",
     "portalTypeAria": "Jenis portal",

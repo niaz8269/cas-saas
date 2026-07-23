@@ -948,6 +948,14 @@
     "navFees": "Frais",
     "navDocs": "Docs",
     "signOut": "Se déconnecter",
+    "notifications": {
+      "title": "Notifications",
+      "markAll": "Tout marquer comme lu",
+      "empty": "Vous êtes à jour.",
+      "loading": "Chargement…",
+      "aria": "Notifications",
+      "ariaUnread": "Notifications, {{count}} non lues"
+    },
     "loginTitle": "Connexion au portail",
     "loginSubtitle": "Accédez à vos dossiers CAS",
     "portalTypeAria": "Type de portail",

@@ -948,6 +948,14 @@
     "navFees": "费用",
     "navDocs": "文件",
     "signOut": "退出登录",
+    "notifications": {
+      "title": "通知",
+      "markAll": "全部标为已读",
+      "empty": "暂无新通知。",
+      "loading": "加载中…",
+      "aria": "通知",
+      "ariaUnread": "通知，{{count}} 条未读"
+    },
     "loginTitle": "门户登录",
     "loginSubtitle": "查看您的 CAS 记录",
     "portalTypeAria": "门户类型",

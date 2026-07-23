@@ -945,6 +945,14 @@
     "navFees": "Fees",
     "navDocs": "Docs",
     "signOut": "Sign out",
+    "notifications": {
+      "title": "Notifications",
+      "markAll": "Mark all read",
+      "empty": "You're all caught up.",
+      "loading": "Loading…",
+      "aria": "Notifications",
+      "ariaUnread": "Notifications, {{count}} unread"
+    },
     "loginTitle": "Portal sign in",
     "loginSubtitle": "Access your CAS records",
     "portalTypeAria": "Portal type",

@@ -15,6 +15,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom"
 
 import casLogo from "@/assets/cas-logo.png"
 import { portalLogout } from "@/features/portal/api"
+import PortalNotificationBell from "@/features/portal/PortalNotificationBell"
 import { langDef } from "@/i18n/languages"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
@@ -64,7 +65,8 @@ export default function PortalShell() {
       {/* Header */}
       <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-card px-4 py-3">
         <img src={casLogo} alt="CAS" className="h-8 w-auto" />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <PortalNotificationBell kind={kind ?? "student"} />
           <div className="text-right leading-tight">
             <p className="max-w-40 truncate text-sm font-medium">{profile?.name}</p>
             <p className="font-mono text-[11px] text-muted-foreground">{profile?.code}</p>

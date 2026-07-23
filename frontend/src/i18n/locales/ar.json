@@ -960,6 +960,14 @@
     "navFees": "الرسوم",
     "navDocs": "المستندات",
     "signOut": "تسجيل الخروج",
+    "notifications": {
+      "title": "الإشعارات",
+      "markAll": "تحديد الكل كمقروء",
+      "empty": "لا يوجد جديد.",
+      "loading": "جارٍ التحميل…",
+      "aria": "الإشعارات",
+      "ariaUnread": "الإشعارات، {{count}} غير مقروءة"
+    },
     "loginTitle": "تسجيل الدخول إلى البوابة",
     "loginSubtitle": "الوصول إلى سجلاتك في CAS",
     "portalTypeAria": "نوع البوابة",
