@@ -827,6 +827,18 @@ ALTER TABLE activities
   ADD KEY idx_activities_lead (lead_id, created_at),
   ADD CONSTRAINT fk_activities_lead FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE SET NULL;
 
+-- ADDENDUM (ADR-0012): give the student & agent portals an in-app notification
+-- feed. `notifications` was staff-only (user_id → users); add nullable
+-- student_id / agent_id recipients so one feed table serves all three guards
+-- (exactly one of user_id/student_id/agent_id is set per row).
+ALTER TABLE notifications
+  ADD COLUMN student_id BIGINT UNSIGNED NULL AFTER user_id,
+  ADD COLUMN agent_id   BIGINT UNSIGNED NULL AFTER student_id,
+  ADD KEY idx_notifications_student (student_id, read_at),
+  ADD KEY idx_notifications_agent (agent_id, read_at),
+  ADD CONSTRAINT fk_notifications_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  ADD CONSTRAINT fk_notifications_agent FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE CASCADE;
+
 -- Captured server errors for the admin error monitor, grouped by fingerprint
 -- (class+file+line) with an occurrence count and last-seen timestamp.
 CREATE TABLE error_logs (

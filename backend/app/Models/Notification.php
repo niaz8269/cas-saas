@@ -20,6 +20,8 @@ class Notification extends Model
 
     protected $fillable = [
         'user_id',
+        'student_id',
+        'agent_id',
         'type',
         'title',
         'body',
@@ -42,5 +44,15 @@ class Notification extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(Agent::class);
     }
 }

@@ -12,6 +12,7 @@ use App\Models\VisaCase;
 use App\Models\VisaStatusHistory;
 use App\Services\Comms\AutomationEngine;
 use App\Services\Comms\NotificationService;
+use App\Services\Comms\PortalNotifier;
 use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use Illuminate\Support\Facades\DB;
@@ -200,6 +201,14 @@ class VisaWorkflow
                 'student_id' => $case->student_id,
                 'counselor_id' => $case->student?->assigned_counselor_id,
             ]);
+
+            // Applicant-facing in-app feed (student + filing agent) on a decision.
+            if (in_array($to, ['approved', 'rejected'], true)) {
+                $case->loadMissing('application:id,application_code,student_id,agent_id');
+                if ($case->application !== null) {
+                    app(PortalNotifier::class)->visa($case->application, $to);
+                }
+            }
 
             return $case->refresh();
         });

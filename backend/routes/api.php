@@ -2,17 +2,17 @@
 
 use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AgentPayableController;
-use App\Http\Controllers\Api\V1\PostController;
-use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\ApiSourceController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
+use App\Http\Controllers\Api\V1\BranchController;
 use App\Http\Controllers\Api\V1\CommissionController;
 use App\Http\Controllers\Api\V1\CommunicationController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\DepartmentController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\ErrorLogController;
 use App\Http\Controllers\Api\V1\GuardianController;
@@ -26,18 +26,19 @@ use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
+use App\Http\Controllers\Api\V1\Portal\PortalNotificationController;
 use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
+use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
+use App\Http\Controllers\Api\V1\PublicPostController;
+use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SearchController;
-use App\Http\Controllers\Api\V1\BranchController;
-use App\Http\Controllers\Api\V1\DepartmentController;
-use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\StaffController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TaskController;
@@ -114,6 +115,11 @@ Route::prefix('v1')->group(function () {
             Route::get('applications', [AgentPortalController::class, 'applications']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
+            // In-app notification feed.
+            Route::get('notifications', [PortalNotificationController::class, 'index']);
+            Route::get('notifications/unread-count', [PortalNotificationController::class, 'unreadCount']);
+            Route::post('notifications/read-all', [PortalNotificationController::class, 'markAllRead']);
+            Route::post('notifications/{notification}/read', [PortalNotificationController::class, 'markRead']);
         });
     });
 
@@ -149,6 +155,11 @@ Route::prefix('v1')->group(function () {
             Route::post('documents/presign', [StudentDocumentController::class, 'presign']);
             Route::post('documents', [StudentDocumentController::class, 'store']);
             Route::get('documents/{document}/download', [StudentDocumentController::class, 'download']);
+            // In-app notification feed.
+            Route::get('notifications', [PortalNotificationController::class, 'index']);
+            Route::get('notifications/unread-count', [PortalNotificationController::class, 'unreadCount']);
+            Route::post('notifications/read-all', [PortalNotificationController::class, 'markAllRead']);
+            Route::post('notifications/{notification}/read', [PortalNotificationController::class, 'markRead']);
         });
     });
 

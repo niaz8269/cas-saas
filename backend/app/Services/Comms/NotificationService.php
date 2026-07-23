@@ -24,12 +24,53 @@ class NotificationService
         ?string $entityType = null,
         ?int $entityId = null,
     ): ?Notification {
-        if ($userId === null) {
+        return $this->create(['user_id' => $userId], $type, $title, $body, $channels, $entityType, $entityId);
+    }
+
+    /** Raise an in-app notification for a student (portal feed). */
+    public function pushToStudent(
+        ?int $studentId,
+        string $type,
+        string $title,
+        ?string $body = null,
+        ?string $entityType = null,
+        ?int $entityId = null,
+    ): ?Notification {
+        return $this->create(['student_id' => $studentId], $type, $title, $body, ['in_app'], $entityType, $entityId);
+    }
+
+    /** Raise an in-app notification for an agent (portal feed). */
+    public function pushToAgent(
+        ?int $agentId,
+        string $type,
+        string $title,
+        ?string $body = null,
+        ?string $entityType = null,
+        ?int $entityId = null,
+    ): ?Notification {
+        return $this->create(['agent_id' => $agentId], $type, $title, $body, ['in_app'], $entityType, $entityId);
+    }
+
+    /**
+     * @param  array<string, int|null>  $recipient  one of user_id/student_id/agent_id
+     * @param  list<string>  $channels
+     */
+    private function create(
+        array $recipient,
+        string $type,
+        string $title,
+        ?string $body,
+        array $channels,
+        ?string $entityType,
+        ?int $entityId,
+    ): ?Notification {
+        // No recipient → nothing to notify (e.g. a student with no counselor).
+        if (array_values($recipient)[0] === null) {
             return null;
         }
 
         return Notification::create([
-            'user_id' => $userId,
+            ...$recipient,
             'type' => $type,
             'title' => $title,
             'body' => $body,

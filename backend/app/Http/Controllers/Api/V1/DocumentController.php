@@ -11,6 +11,7 @@ use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Student;
 use App\Services\Comms\AutomationEngine;
+use App\Services\Comms\PortalNotifier;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -130,6 +131,9 @@ class DocumentController extends Controller
             'student_id' => $studentId,
             'document' => $document->type?->name,
         ]);
+
+        // Durable in-app feed entry for the student portal.
+        app(PortalNotifier::class)->document($studentId, $to, $document->type?->name);
     }
 
     /** Soft-delete a document (Admin/Ops only; recoverable, audit-logged). */

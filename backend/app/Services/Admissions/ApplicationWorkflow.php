@@ -9,6 +9,7 @@ use App\Models\ApplicationStatusHistory;
 use App\Models\User;
 use App\Services\Comms\AutomationEngine;
 use App\Services\Comms\NotificationService;
+use App\Services\Comms\PortalNotifier;
 use App\Services\Comms\WorkflowLog;
 use App\Services\Finance\CommissionEngine;
 use App\Services\Visa\VisaWorkflow;
@@ -141,6 +142,10 @@ class ApplicationWorkflow
                     entityId: $application->id,
                 );
             }
+
+            // Applicant-facing in-app feed (student + filing agent). Ignores
+            // statuses that don't concern the applicant.
+            app(PortalNotifier::class)->application($application, $to);
 
             if ($to === 'accepted') {
                 // Acceptance opens the money trail: first-year tuition
