@@ -52,9 +52,10 @@ function Note({ children }: { children: ReactNode }) {
  * across universities, programs, scholarships and stories.
  */
 export default function HeroUpdates({ universities, programs }: { universities: SiteUniversityCard[]; programs: SiteProgram[] }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<TabKey>("universities")
+  const lang = i18n.language.slice(0, 2)
 
   // Scholarships + latest posts load lazily — only when the panel is first opened.
   const scholarships = useQuery({
@@ -63,8 +64,8 @@ export default function HeroUpdates({ universities, programs }: { universities: 
     enabled: open,
   })
   const posts = useQuery({
-    queryKey: ["site-posts", "hero-updates"],
-    queryFn: () => getSitePosts({}),
+    queryKey: ["site-posts", "hero-updates", lang],
+    queryFn: () => getSitePosts({ lang }),
     enabled: open,
     staleTime: 60_000,
   })

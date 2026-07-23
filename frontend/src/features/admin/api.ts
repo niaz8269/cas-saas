@@ -93,6 +93,14 @@ export const rejectAgentRequest = (id: number) =>
 
 export type PostType = "news" | "blog" | "event"
 
+/** Site languages a post can be translated into (the base fields are the default). */
+export const POST_LOCALES = ["en", "zh", "ar", "fr", "id"] as const
+export type PostLocale = (typeof POST_LOCALES)[number]
+
+export type PostTranslations = Partial<
+  Record<PostLocale, { title?: string | null; excerpt?: string | null; body?: string | null }>
+>
+
 export interface Post {
   id: number
   type: PostType
@@ -100,6 +108,7 @@ export interface Post {
   slug: string
   excerpt: string | null
   body: string | null
+  translations?: PostTranslations
   cover_image_path: string | null
   cover_image_url: string | null
   category: string | null
@@ -119,6 +128,7 @@ export interface PostWritePayload {
   slug?: string | null
   excerpt?: string | null
   body?: string | null
+  translations?: PostTranslations
   cover_image_path?: string | null
   category?: string | null
   status?: string

@@ -48,6 +48,36 @@ it("lists posts and creates a new one", async () => {
   expect(body).toMatchObject({ type: "news", title: "My new post", status: "draft" })
 })
 
+it("captures a translation when the content language is switched", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    const method = (init?.method ?? "GET").toUpperCase()
+    if (method === "POST" && url.includes("/posts")) return Promise.resolve(jsonResponse({ data: { ...POST, id: 99 } }, 201))
+
+    return Promise.resolve(jsonResponse(LIST))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<ContentPage />)
+  await screen.findByText("Study in China 2026")
+
+  await user.click(screen.getByRole("button", { name: /New post/ }))
+  await user.type(screen.getByLabelText("Title"), "English title")
+
+  // Switch to Chinese and enter a translated title.
+  await user.click(screen.getByRole("button", { name: "中文" }))
+  await user.type(screen.getByLabelText("Title"), "中文标题")
+
+  await user.click(screen.getByRole("button", { name: "Create post" }))
+
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/posts", expect.objectContaining({ method: "POST" })))
+  const call = fetchMock.mock.calls.find(([u, i]) => u === "/api/v1/posts" && (i as RequestInit)?.method === "POST")!
+  const body = JSON.parse((call[1] as RequestInit).body as string)
+  expect(body.title).toBe("English title")
+  expect(body.translations.zh.title).toBe("中文标题")
+})
+
 it("hides create/edit controls without the manage permission", async () => {
   useAuthStore.setState({ token: "t", user: makeUser(["content.view.global"]) })
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))

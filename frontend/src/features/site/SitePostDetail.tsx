@@ -21,10 +21,11 @@ const PROSE = "text-[15px] leading-relaxed text-foreground/90 [&_h2]:mt-6 [&_h2]
 export default function SitePostDetail() {
   const { t, i18n } = useTranslation()
   const { slug = "" } = useParams()
+  const lang = i18n.language.slice(0, 2)
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["site-post", slug],
-    queryFn: () => getSitePost(slug),
+    queryKey: ["site-post", slug, lang],
+    queryFn: () => getSitePost(slug, lang),
     retry: (count, err) => !(err instanceof SiteApiError && err.status === 404) && count < 2,
   })
   const post = data?.data

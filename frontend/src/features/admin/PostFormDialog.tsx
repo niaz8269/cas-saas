@@ -23,8 +23,13 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import RichTextEditor from "@/components/RichTextEditor"
-import { createPost, updatePost, uploadImage, type Post, type PostWritePayload } from "@/features/admin/api"
+import { createPost, updatePost, uploadImage, POST_LOCALES, type Post, type PostLocale, type PostTranslations, type PostWritePayload } from "@/features/admin/api"
 import { ApiError } from "@/lib/api"
+import { cn } from "@/lib/utils"
+
+const LANG_LABELS: Record<PostLocale, string> = {
+  en: "English", zh: "中文", ar: "العربية", fr: "Français", id: "Indonesia",
+}
 
 const baseSchema = z.object({
   type: z.enum(["news", "blog", "event"]),
@@ -80,6 +85,13 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
   const [body, setBody] = useState(post?.body ?? "")
   const [coverPreview, setCoverPreview] = useState(post?.cover_image_url ?? "")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // Title/excerpt/body are per-language; "en" edits the base fields, the rest
+  // edit the `translations` map.
+  const [lang, setLang] = useState<PostLocale>("en")
+  const [translations, setTranslations] = useState<PostTranslations>(post?.translations ?? {})
+
+  const setTr = (field: "title" | "excerpt" | "body", value: string) =>
+    setTranslations((t) => ({ ...t, [lang]: { ...t[lang], [field]: value } }))
 
   const { register, handleSubmit, reset, setError, setValue, watch, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(post) })
@@ -89,6 +101,8 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
     reset(toValues(post))
     setBody(post?.body ?? "")
     setCoverPreview(post?.cover_image_url ?? "")
+    setTranslations(post?.translations ?? {})
+    setLang("en")
   }, [open, post, reset])
 
   const type = watch("type")
@@ -114,6 +128,7 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
         cover_image_path: v.cover_image_path || null,
         status: v.status,
         body: body || null,
+        translations: Object.keys(translations).length ? translations : undefined,
         event_date: v.type === "event" ? v.event_date || null : null,
         location: v.type === "event" ? v.location || null : null,
         register_url: v.type === "event" ? v.register_url || null : null,
@@ -172,9 +187,41 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
               </div>
             </div>
 
+            {/* Content-language switcher — scopes the title, excerpt and body. */}
+            <div className="space-y-1.5">
+              <Label>Content language</Label>
+              <div className="flex w-fit flex-wrap gap-1 rounded-lg border bg-card p-1">
+                {POST_LOCALES.map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setLang(l)}
+                    className={cn(
+                      "rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
+                      lang === l ? "bg-cas-navy text-white" : "text-muted-foreground hover:bg-subtle",
+                    )}
+                  >
+                    {LANG_LABELS[l]}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                English is the default shown when a translation is missing. Slug, cover and dates are shared across languages.
+              </p>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="post-title">Title</Label>
-              <Input id="post-title" {...register("title")} />
+              {lang === "en" ? (
+                <Input id="post-title" {...register("title")} />
+              ) : (
+                <Input
+                  id="post-title"
+                  value={translations[lang]?.title ?? ""}
+                  onChange={(e) => setTr("title", e.target.value)}
+                  placeholder={watch("title")}
+                />
+              )}
               {errors.title && <p role="alert" className="text-sm text-destructive">{errors.title.message}</p>}
             </div>
 
@@ -241,7 +288,16 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
 
             <div className="space-y-2">
               <Label htmlFor="post-excerpt">Excerpt (optional)</Label>
-              <Textarea id="post-excerpt" rows={2} {...register("excerpt")} />
+              {lang === "en" ? (
+                <Textarea id="post-excerpt" rows={2} {...register("excerpt")} />
+              ) : (
+                <Textarea
+                  id="post-excerpt"
+                  rows={2}
+                  value={translations[lang]?.excerpt ?? ""}
+                  onChange={(e) => setTr("excerpt", e.target.value)}
+                />
+              )}
             </div>
 
             {type === "event" && (
@@ -264,7 +320,11 @@ export default function PostFormDialog({ post, open, onOpenChange }: {
 
             <div className="space-y-2">
               <Label>Body</Label>
-              <RichTextEditor key={post?.id ?? "new"} value={body} onChange={setBody} />
+              <RichTextEditor
+                key={`${post?.id ?? "new"}-${lang}`}
+                value={lang === "en" ? body : translations[lang]?.body ?? ""}
+                onChange={(v) => (lang === "en" ? setBody(v) : setTr("body", v))}
+              />
             </div>
           </div>
 

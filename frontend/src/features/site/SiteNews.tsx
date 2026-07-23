@@ -61,8 +61,9 @@ function PostCard({ post }: { post: SitePost }) {
 }
 
 export default function SiteNews() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [tab, setTab] = useState<(typeof TABS)[number]>("all")
+  const lang = i18n.language.slice(0, 2)
 
   useSeo({
     title: t("news.seoTitle"),
@@ -71,8 +72,8 @@ export default function SiteNews() {
   })
 
   const posts = useQuery({
-    queryKey: ["site-posts", tab],
-    queryFn: () => getSitePosts({ type: tab === "all" ? undefined : tab }),
+    queryKey: ["site-posts", tab, lang],
+    queryFn: () => getSitePosts({ type: tab === "all" ? undefined : tab, lang }),
   })
 
   const items = posts.data?.data ?? []

@@ -171,18 +171,19 @@ export interface SitePost {
   register_url: string | null
 }
 
-export function getSitePosts(params: { type?: string; q?: string; page?: number } = {}) {
+export function getSitePosts(params: { type?: string; q?: string; page?: number; lang?: string } = {}) {
   const search = new URLSearchParams()
   if (params.type) search.set("type", params.type)
   if (params.q) search.set("q", params.q)
   if (params.page && params.page > 1) search.set("page", String(params.page))
+  if (params.lang) search.set("lang", params.lang)
   const qs = search.toString()
 
   return siteApi<Paginated<SitePost>>(`/public/posts${qs ? `?${qs}` : ""}`)
 }
 
-export const getSitePost = (slug: string) =>
-  siteApi<{ data: SitePost }>(`/public/posts/${slug}`)
+export const getSitePost = (slug: string, lang?: string) =>
+  siteApi<{ data: SitePost }>(`/public/posts/${slug}${lang ? `?lang=${lang}` : ""}`)
 
 export interface EnquiryPayload {
   first_name: string
