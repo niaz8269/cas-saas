@@ -258,6 +258,7 @@ Route::prefix('v1')->group(function () {
         Route::post('leads/{lead}/convert', [LeadController::class, 'convert']);
         Route::get('leads/{lead}/timeline', [LeadController::class, 'timeline']);
         Route::post('leads/{lead}/notes', [LeadController::class, 'addNote']);
+        Route::delete('leads/{lead}', [LeadController::class, 'destroy']);
         Route::get('students', [StudentController::class, 'index']);
         Route::post('students', [StudentController::class, 'store']);
         Route::get('students/{student}', [StudentController::class, 'show']);
@@ -265,6 +266,7 @@ Route::prefix('v1')->group(function () {
         Route::get('students/{student}/timeline', [StudentController::class, 'timeline']);
         Route::get('students/{student}/tasks', [StudentController::class, 'tasks']);
         Route::post('students/{student}/notes', [StudentController::class, 'addNote']);
+        Route::delete('students/{student}', [StudentController::class, 'destroy']);
         Route::get('students/{student}/documents', [DocumentController::class, 'forStudent']);
         Route::get('students/{student}/communications', [CommunicationController::class, 'index']);
         Route::post('students/{student}/communications', [CommunicationController::class, 'store']);
@@ -283,6 +285,7 @@ Route::prefix('v1')->group(function () {
         Route::post('applications/{application}/offers/{offer}/respond', [ApplicationController::class, 'respondToOffer']);
         Route::get('applications/{application}/offers/{offer}/letter', [ApplicationController::class, 'offerLetter']);
         Route::get('applications/{application}/documents', [DocumentController::class, 'forApplication']);
+        Route::delete('applications/{application}', [ApplicationController::class, 'destroy']);
 
         // Documents (pre-signed, access-logged)
         Route::get('document-types', [DocumentController::class, 'types']);
@@ -291,6 +294,7 @@ Route::prefix('v1')->group(function () {
         Route::get('documents/{document}/download', [DocumentController::class, 'download']);
         Route::post('documents/{document}/verify', [DocumentController::class, 'verify']);
         Route::post('documents/{document}/reject', [DocumentController::class, 'reject']);
+        Route::delete('documents/{document}', [DocumentController::class, 'destroy']);
 
         // Finance & commission
         Route::get('invoices', [InvoiceController::class, 'index']);

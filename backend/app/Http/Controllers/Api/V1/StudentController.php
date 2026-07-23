@@ -11,6 +11,7 @@ use App\Http\Resources\StudentResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Activity;
 use App\Models\Student;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -71,6 +72,16 @@ class StudentController extends Controller
         $student->update([...$request->validated(), 'updated_by' => $request->user()->id]);
 
         return new StudentResource($student->load(['country:id,name,iso2', 'branch:id,name,code', 'counselor:id,name']));
+    }
+
+    /** Soft-delete a student (Admin/Ops only; recoverable, audit-logged). */
+    public function destroy(Student $student): JsonResponse
+    {
+        $this->authorize('delete', $student);
+
+        $student->delete();
+
+        return response()->json(['message' => 'Student deleted.']);
     }
 
     /**

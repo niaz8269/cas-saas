@@ -33,6 +33,11 @@ class ApplicationPolicy
         return $this->withinScope($user, $application, $this->scopes->resolve($user, 'applications', 'update'));
     }
 
+    public function delete(User $user, Application $application): bool
+    {
+        return $user->can('applications.delete.global');
+    }
+
     private function withinScope(User $user, Application $application, ?string $scope): bool
     {
         return match ($scope) {

@@ -35,6 +35,11 @@ class LeadPolicy
         return $user->can('leads.assign.global');
     }
 
+    public function delete(User $user, Lead $lead): bool
+    {
+        return $user->can('leads.delete.global');
+    }
+
     public function convert(User $user, Lead $lead): bool
     {
         if (! $user->can('leads.convert.assigned')) {

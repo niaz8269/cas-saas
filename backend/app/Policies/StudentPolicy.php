@@ -30,6 +30,11 @@ class StudentPolicy
         return $this->withinScope($user, $student, $this->scopes->resolve($user, 'students', 'update'));
     }
 
+    public function delete(User $user, Student $student): bool
+    {
+        return $user->can('students.delete.global');
+    }
+
     private function withinScope(User $user, Student $student, ?string $scope): bool
     {
         return match ($scope) {

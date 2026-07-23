@@ -18,6 +18,7 @@ use App\Support\BrandAssets;
 use App\Support\CsvExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -151,6 +152,16 @@ class ApplicationController extends Controller
         $application->update([...$request->validated(), 'updated_by' => $request->user()->id]);
 
         return new ApplicationResource($application->load(self::LIST_RELATIONS));
+    }
+
+    /** Soft-delete an application (Admin/Ops only; recoverable, audit-logged). */
+    public function destroy(Application $application): JsonResponse
+    {
+        $this->authorize('delete', $application);
+
+        $application->delete();
+
+        return response()->json(['message' => 'Application deleted.']);
     }
 
     public function transition(

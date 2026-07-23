@@ -132,6 +132,16 @@ class DocumentController extends Controller
         ]);
     }
 
+    /** Soft-delete a document (Admin/Ops only; recoverable, audit-logged). */
+    public function destroy(Document $document): JsonResponse
+    {
+        $this->authorize('delete', $document);
+
+        $document->delete();
+
+        return response()->json(['message' => 'Document deleted.']);
+    }
+
     /**
      * Reference list of document types (checklist configuration).
      */

@@ -151,6 +151,16 @@ class LeadController extends Controller
         return new LeadResource($lead->load('assignee:id,name'));
     }
 
+    /** Soft-delete a lead (Admin/Ops only; recoverable, audit-logged). */
+    public function destroy(Lead $lead): JsonResponse
+    {
+        $this->authorize('delete', $lead);
+
+        $lead->delete();
+
+        return response()->json(['message' => 'Lead deleted.']);
+    }
+
     /** Activity timeline for the lead, newest first. */
     public function timeline(Request $request, Lead $lead): AnonymousResourceCollection
     {
