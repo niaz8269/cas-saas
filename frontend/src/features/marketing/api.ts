@@ -62,3 +62,30 @@ export const updateMarketingSource = (id: number, payload: MarketingSourcePayloa
 
 export const deleteMarketingSource = (id: number) =>
   api<void>(`/marketing-sources/${id}`, { method: "DELETE" })
+
+// ── Website sources (lead-attribution domains) ──────────────────────────────
+
+export interface WebsiteSource {
+  id: number
+  domain: string
+  university_focus: string | null
+  api_source_id: number | null
+  is_active: boolean
+}
+
+export interface WebsiteSourcePayload {
+  domain: string
+  university_focus?: string | null
+  is_active?: boolean
+}
+
+export const listWebsiteSources = () => api<Paginated<WebsiteSource>>("/website-sources?per_page=100")
+
+export const createWebsiteSource = (payload: WebsiteSourcePayload) =>
+  api<{ data: WebsiteSource }>("/website-sources", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateWebsiteSource = (id: number, payload: WebsiteSourcePayload) =>
+  api<{ data: WebsiteSource }>(`/website-sources/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deleteWebsiteSource = (id: number) =>
+  api<void>(`/website-sources/${id}`, { method: "DELETE" })

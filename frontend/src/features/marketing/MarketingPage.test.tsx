@@ -18,6 +18,9 @@ function stubFetch() {
     "fetch",
     vi.fn().mockImplementation((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.includes("/website-sources")) {
+        return Promise.resolve(jsonResponse({ data: [{ id: 5, domain: "study-abroad.pk", university_focus: "Jilin Medical", api_source_id: null, is_active: true }], meta: META }))
+      }
       if (url.includes("/marketing-sources")) {
         return Promise.resolve(jsonResponse({ data: [{ id: 1, name: "Facebook Ads", channel: "social", is_active: true, campaigns_count: 2 }], meta: META }))
       }
@@ -43,6 +46,11 @@ it("lists campaigns and switches to the sources tab", async () => {
 
   expect(await screen.findByRole("button", { name: /New source/ })).toBeInTheDocument()
   expect(screen.getByText("social")).toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: "Websites" }))
+
+  expect(await screen.findByText("study-abroad.pk")).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: /New website/ })).toBeInTheDocument()
 })
 
 it("hides management actions for a view-only viewer", async () => {

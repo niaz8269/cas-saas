@@ -33,14 +33,19 @@ import { useCan } from "@/features/auth/useCan"
 import {
   createCampaign,
   createMarketingSource,
+  createWebsiteSource,
   deleteCampaign,
   deleteMarketingSource,
+  deleteWebsiteSource,
   listCampaigns,
   listMarketingSources,
+  listWebsiteSources,
   updateCampaign,
   updateMarketingSource,
+  updateWebsiteSource,
   type Campaign,
   type MarketingSource,
+  type WebsiteSource,
 } from "@/features/marketing/api"
 import { cn } from "@/lib/utils"
 
@@ -370,12 +375,151 @@ function SourcesTab({ canManage }: { canManage: boolean }) {
   )
 }
 
+// ── Website source create / edit ────────────────────────────────────────────
+
+function WebsiteDialog({
+  source,
+  open,
+  onOpenChange,
+}: {
+  source?: WebsiteSource
+  open: boolean
+  onOpenChange: (v: boolean) => void
+}) {
+  const queryClient = useQueryClient()
+  const [form, setForm] = useState({ domain: "", university_focus: "", is_active: "true" })
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    setError(null)
+    setForm({ domain: source?.domain ?? "", university_focus: source?.university_focus ?? "", is_active: source ? String(source.is_active) : "true" })
+  }, [open, source])
+
+  const save = useMutation({
+    mutationFn: () => {
+      const payload = { domain: form.domain.trim(), university_focus: form.university_focus || null, is_active: form.is_active === "true" }
+
+      return source ? updateWebsiteSource(source.id, payload) : createWebsiteSource(payload)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["website-sources"] })
+      onOpenChange(false)
+    },
+    onError: () => setError("Couldn't save — the domain may already be registered."),
+  })
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-sm">
+        <DialogHeader><DialogTitle>{source ? "Edit website" : "New website"}</DialogTitle></DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="w-domain">Domain</Label>
+            <Input id="w-domain" value={form.domain} onChange={(e) => setForm((f) => ({ ...f, domain: e.target.value }))} placeholder="study-abroad.pk" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="w-focus">University focus</Label>
+            <Input id="w-focus" value={form.university_focus} onChange={(e) => setForm((f) => ({ ...f, university_focus: e.target.value }))} placeholder="e.g. Jilin Medical" />
+          </div>
+          <div className="space-y-1.5">
+            <Label>Status</Label>
+            <Select value={form.is_active} onValueChange={(v) => setForm((f) => ({ ...f, is_active: v }))}>
+              <SelectTrigger aria-label="Status"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="true">Active</SelectItem>
+                <SelectItem value="false">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+        </div>
+        <DialogFooter>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button disabled={!form.domain.trim() || save.isPending} onClick={() => save.mutate()}>
+            {save.isPending ? "Saving…" : "Save"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function WebsitesTab({ canManage }: { canManage: boolean }) {
+  const queryClient = useQueryClient()
+  const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<WebsiteSource | undefined>()
+
+  const { data, isPending } = useQuery({ queryKey: ["website-sources"], queryFn: listWebsiteSources })
+  const rows = data?.data ?? []
+
+  const remove = useMutation({
+    mutationFn: (id: number) => deleteWebsiteSource(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["website-sources"] }),
+  })
+
+  return (
+    <>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-xs text-muted-foreground">Domains that send us leads — incoming leads are matched to these for attribution.</p>
+        {canManage && <Button onClick={() => { setEditing(undefined); setOpen(true) }}><Plus className="size-4" /> New website</Button>}
+      </div>
+      <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+        <Table>
+          <TableHeader className="bg-subtle">
+            <TableRow>
+              <TableHead>Domain</TableHead>
+              <TableHead>University focus</TableHead>
+              <TableHead>Status</TableHead>
+              {canManage && <TableHead className="w-24 text-right">Actions</TableHead>}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isPending && Array.from({ length: 4 }).map((_, i) => (
+              <TableRow key={i}>{Array.from({ length: canManage ? 4 : 3 }).map((_, c) => (
+                <TableCell key={c}><Skeleton className="h-4 w-full max-w-28" /></TableCell>
+              ))}</TableRow>
+            ))}
+            {!isPending && rows.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={canManage ? 4 : 3} className="py-12 text-center">
+                  <p className="text-sm font-medium">No websites yet</p>
+                  {canManage && <p className="mt-1 text-sm text-muted-foreground">Register a domain that sends you leads.</p>}
+                </TableCell>
+              </TableRow>
+            )}
+            {rows.map((s) => (
+              <TableRow key={s.id}>
+                <TableCell className="font-medium">{s.domain}</TableCell>
+                <TableCell className="text-muted-foreground">{s.university_focus ?? "—"}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={cn("border-transparent capitalize", s.is_active ? "bg-green-50 text-green-700" : "bg-muted text-muted-foreground")}>
+                    {s.is_active ? "active" : "inactive"}
+                  </Badge>
+                </TableCell>
+                {canManage && (
+                  <TableCell className="text-right">
+                    <Button size="sm" variant="ghost" aria-label={`Edit ${s.domain}`} onClick={() => { setEditing(s); setOpen(true) }}><Pencil className="size-4" /></Button>
+                    <Button size="sm" variant="ghost" className="text-cas-red" aria-label={`Delete ${s.domain}`}
+                      onClick={() => window.confirm(`Delete “${s.domain}”?`) && remove.mutate(s.id)}><Trash2 className="size-4" /></Button>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {canManage && <WebsiteDialog source={editing} open={open} onOpenChange={setOpen} />}
+    </>
+  )
+}
+
 export default function MarketingPage() {
   const can = useCan()
   const canManage = can("marketing.manage.global")
-  const [tab, setTab] = useState<"campaigns" | "sources">("campaigns")
+  const [tab, setTab] = useState<"campaigns" | "sources" | "websites">("campaigns")
 
-  const tabBtn = (key: "campaigns" | "sources", label: string) => (
+  const tabBtn = (key: "campaigns" | "sources" | "websites", label: string) => (
     <button
       type="button"
       onClick={() => setTab(key)}
@@ -398,9 +542,12 @@ export default function MarketingPage() {
       <div className="flex gap-1 rounded-lg border bg-card p-1 shadow-sm w-fit">
         {tabBtn("campaigns", "Campaigns")}
         {tabBtn("sources", "Sources")}
+        {tabBtn("websites", "Websites")}
       </div>
 
-      {tab === "campaigns" ? <CampaignsTab canManage={canManage} /> : <SourcesTab canManage={canManage} />}
+      {tab === "campaigns" && <CampaignsTab canManage={canManage} />}
+      {tab === "sources" && <SourcesTab canManage={canManage} />}
+      {tab === "websites" && <WebsitesTab canManage={canManage} />}
     </div>
   )
 }
