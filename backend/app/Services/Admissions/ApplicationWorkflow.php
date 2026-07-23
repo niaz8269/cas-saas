@@ -26,8 +26,10 @@ class ApplicationWorkflow
     /** @var array<string, list<string>> */
     public const TRANSITIONS = [
         'draft' => ['under_review', 'withdrawn'],
-        'under_review' => ['documents_pending', 'submitted', 'withdrawn'],
-        'documents_pending' => ['under_review', 'submitted', 'withdrawn'],
+        // CAS can decline an application before it ever reaches the university
+        // (ineligible, failed verification) — not only after submission.
+        'under_review' => ['documents_pending', 'submitted', 'rejected', 'withdrawn'],
+        'documents_pending' => ['under_review', 'submitted', 'rejected', 'withdrawn'],
         'submitted' => ['offer_received', 'rejected', 'withdrawn'],
         'offer_received' => ['accepted', 'rejected', 'deferred', 'withdrawn'],
         'deferred' => ['under_review', 'withdrawn'],

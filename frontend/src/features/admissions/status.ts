@@ -12,8 +12,8 @@ export const APPLICATION_LADDER = [
  *  (the API re-validates — this is UI affordance only). */
 export const APPLICATION_TRANSITIONS: Record<string, string[]> = {
   draft: ["under_review", "withdrawn"],
-  under_review: ["documents_pending", "submitted", "withdrawn"],
-  documents_pending: ["under_review", "submitted", "withdrawn"],
+  under_review: ["documents_pending", "submitted", "rejected", "withdrawn"],
+  documents_pending: ["under_review", "submitted", "rejected", "withdrawn"],
   submitted: ["offer_received", "rejected", "withdrawn"],
   offer_received: ["accepted", "rejected", "deferred", "withdrawn"],
   deferred: ["under_review", "withdrawn"],
