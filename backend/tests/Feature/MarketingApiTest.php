@@ -2,6 +2,7 @@
 
 use App\Models\Campaign;
 use App\Models\MarketingSource;
+use App\Models\WebsiteSource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -80,4 +81,38 @@ it('manages marketing sources with a campaign count', function () {
 
     $this->deleteJson("/api/v1/marketing-sources/{$id}")->assertNoContent();
     $this->assertSoftDeleted('marketing_sources', ['id' => $id]);
+});
+
+it('registers a website source so ingested leads can be attributed', function () {
+    actingAsStaffWith(MKT_MANAGE);
+
+    $this->postJson('/api/v1/website-sources', ['domain' => 'study-abroad.pk', 'university_focus' => 'Jilin Medical', 'is_active' => true])
+        ->assertCreated()->assertJsonPath('data.domain', 'study-abroad.pk');
+
+    $this->assertDatabaseHas('website_sources', ['domain' => 'study-abroad.pk']);
+});
+
+it('rejects a duplicate website domain', function () {
+    actingAsStaffWith(MKT_MANAGE);
+    WebsiteSource::factory()->create(['domain' => 'taken.example']);
+
+    $this->postJson('/api/v1/website-sources', ['domain' => 'taken.example'])
+        ->assertStatus(422)->assertJsonValidationErrors(['domain']);
+});
+
+it('updates and deletes a website source', function () {
+    actingAsStaffWith(MKT_MANAGE);
+    $source = WebsiteSource::factory()->create();
+
+    $this->patchJson("/api/v1/website-sources/{$source->id}", ['is_active' => false])
+        ->assertOk()->assertJsonPath('data.is_active', false);
+
+    $this->deleteJson("/api/v1/website-sources/{$source->id}")->assertNoContent();
+    $this->assertDatabaseMissing('website_sources', ['id' => $source->id]);
+});
+
+it('denies website-source writes to a view-only marketer', function () {
+    actingAsStaffWith(['marketing.view.global']);
+
+    $this->postJson('/api/v1/website-sources', ['domain' => 'x.example'])->assertStatus(403);
 });

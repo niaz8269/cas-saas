@@ -50,6 +50,7 @@ use App\Http\Controllers\Api\V1\UniversityController;
 use App\Http\Controllers\Api\V1\UploadController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VisaCaseController;
+use App\Http\Controllers\Api\V1\WebsiteSourceController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -218,6 +219,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('campaigns', CampaignController::class);
         Route::apiResource('marketing-sources', MarketingSourceController::class)
             ->parameters(['marketing-sources' => 'marketingSource']);
+        Route::apiResource('website-sources', WebsiteSourceController::class)
+            ->parameters(['website-sources' => 'websiteSource']);
 
         // Automation rules + message templates (read-only; admin settings)
         Route::get('automation-rules', [AutomationRuleController::class, 'index'])
