@@ -290,6 +290,7 @@ export default function ScholarshipFormDialog({
             <VisibilityMatrix
               sections={[
                 { key: "amount", label: "Award amount" },
+                { key: "coverage", label: "Coverage" },
                 { key: "deadline", label: "Deadline" },
                 { key: "how_to_apply", label: "How to apply" },
               ]}

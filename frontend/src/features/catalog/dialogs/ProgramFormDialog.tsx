@@ -392,7 +392,15 @@ export default function ProgramFormDialog({
               <div>
                 <p className="mb-1.5 text-xs font-medium text-muted-foreground">Public visibility</p>
                 <p className="mb-2 text-xs text-muted-foreground">Who sees the fee on the public site.</p>
-                <VisibilityMatrix sections={[{ key: "fee", label: "Fees & service charge" }]} value={visibility} onChange={setVisibility} />
+                <VisibilityMatrix
+                  sections={[
+                    { key: "tuition_fee", label: "Tuition fee" },
+                    { key: "service_charge", label: "CAS service charge" },
+                    { key: "apply_link", label: "Apply link" },
+                  ]}
+                  value={visibility}
+                  onChange={setVisibility}
+                />
               </div>
             </div>
           </div>

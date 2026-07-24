@@ -60,13 +60,15 @@ it("captures per-audience fee visibility from the matrix", async () => {
   renderWithProviders(<ProgramFormDialog universityId={1} open onOpenChange={() => {}} />)
 
   await user.type(screen.getByLabelText("Name"), "Dentistry")
-  // Open the fee to the public (default is registered-only).
-  await user.click(screen.getByLabelText("Fees & service charge visible to Public"))
+  // Open the tuition fee to the public (default is registered-only); the CAS
+  // service charge stays gated, proving per-field control (ADR-0015).
+  await user.click(screen.getByLabelText("Tuition fee visible to Public"))
   await user.click(screen.getByRole("button", { name: "Add program" }))
 
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/programs", expect.objectContaining({ method: "POST" })))
   const body = JSON.parse((fetchMock.mock.calls.find(([u, i]) => u === "/api/v1/programs" && (i as RequestInit)?.method === "POST")![1] as RequestInit).body as string)
-  expect(body.visibility.fee).toContain("public")
+  expect(body.visibility.tuition_fee).toContain("public")
+  expect(body.visibility.service_charge ?? []).not.toContain("public")
 })
 
 it("sends self-funded and per-scholarship service charges", async () => {
