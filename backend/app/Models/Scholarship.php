@@ -17,7 +17,7 @@ class Scholarship extends Model
     use HasAudienceVisibility, HasFactory, SoftDeletes;
 
     /** Sections whose public visibility an admin can configure per audience. */
-    public const GATEABLE_SECTIONS = ['amount', 'deadline', 'how_to_apply'];
+    public const GATEABLE_SECTIONS = ['amount', 'coverage', 'deadline', 'how_to_apply'];
 
     protected $fillable = [
         'university_id',

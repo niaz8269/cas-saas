@@ -16,8 +16,8 @@ class Program extends Model
     /** @use HasFactory<ProgramFactory> */
     use HasAudienceVisibility, HasFactory, SoftDeletes;
 
-    /** Sections whose public visibility an admin can configure per audience. */
-    public const GATEABLE_SECTIONS = ['fee'];
+    /** Fields whose public visibility an admin can configure per audience (ADR-0015). */
+    public const GATEABLE_SECTIONS = ['tuition_fee', 'service_charge', 'apply_link'];
 
     protected $fillable = [
         'university_id',

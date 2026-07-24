@@ -23,9 +23,11 @@ class PublicProgramResource extends JsonResource
     {
         $audience = $request->attributes->get('audience', 'public');
         $applicant = $audience === 'agent' ? 'agent' : 'student';
-        // Per-record, admin-configurable audience visibility (ADR-0015), with the
-        // registered-only default when unconfigured.
-        $feeVisible = $this->resource->audienceCanSee('fee', $audience);
+        // Per-record, admin-configurable audience visibility (ADR-0015) — each fee
+        // field gated independently, with the registered-only default when unconfigured.
+        $tuitionVisible = $this->resource->audienceCanSee('tuition_fee', $audience);
+        $chargeVisible = $this->resource->audienceCanSee('service_charge', $audience);
+        $applyVisible = $this->resource->audienceCanSee('apply_link', $audience);
 
         return [
             'id' => $this->id,
@@ -35,13 +37,14 @@ class PublicProgramResource extends JsonResource
             'duration_months' => $this->duration_months,
             'currency' => $this->currency,
             'requirements' => $this->requirements,
-            // Fee section — visibility per the record's config; rate follows the role.
-            'fee_locked' => ! $feeVisible,
-            'tuition_fee' => $feeVisible ? $this->tuition_fee : null,
-            'service_charge' => $feeVisible
+            // Fee fields — each visible per the record's config; rate follows the role.
+            // `fee_locked` drives the public "sign in to see fees" prompt.
+            'fee_locked' => ! $tuitionVisible,
+            'tuition_fee' => $tuitionVisible ? $this->tuition_fee : null,
+            'service_charge' => $chargeVisible
                 ? app(ApplicationCatalog::class)->serviceChargeFor($this->resource, $applicant)
                 : null,
-            'apply_link' => $feeVisible ? $this->apply_link : null,
+            'apply_link' => $applyVisible ? $this->apply_link : null,
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,

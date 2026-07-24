@@ -17,8 +17,9 @@ class PublicScholarshipResource extends JsonResource
     public function toArray(Request $request): array
     {
         $audience = $request->attributes->get('audience', 'public');
-        // Per-record, admin-configurable visibility per section (ADR-0015).
+        // Per-record, admin-configurable visibility per field (ADR-0015).
         $amountVisible = $this->resource->audienceCanSee('amount', $audience);
+        $coverageVisible = $this->resource->audienceCanSee('coverage', $audience);
         $deadlineVisible = $this->resource->audienceCanSee('deadline', $audience);
         $howVisible = $this->resource->audienceCanSee('how_to_apply', $audience);
 
@@ -27,11 +28,12 @@ class PublicScholarshipResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'type' => $this->type,
-            'coverage' => $this->coverage,
+            'coverage' => $coverageVisible ? $this->coverage : null,
             'currency' => $this->currency,
             'description' => $this->description,
             'eligibility' => $this->eligibility,
-            // Award specifics — each gated per the record's config.
+            // Award specifics — each gated per the record's config; `details_locked`
+            // drives the public "sign in to see award details" prompt.
             'details_locked' => ! $amountVisible,
             'amount' => $amountVisible ? $this->amount : null,
             'deadline' => $deadlineVisible ? $this->deadline?->toDateString() : null,
