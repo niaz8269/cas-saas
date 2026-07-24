@@ -164,6 +164,8 @@
     "langEnglish": "Inggris",
     "langChinese": "Mandarin",
     "feeOnRequest": "Biaya atas permintaan",
+    "signInForFees": "Masuk untuk melihat biaya",
+    "serviceFee": "+ Biaya layanan CAS: {{amount}} {{currency}}",
     "perYear": "{{amount}} {{currency}}/thn",
     "months": "{{count}} bulan",
     "loadError": "Tidak dapat memuat program saat ini.",

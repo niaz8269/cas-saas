@@ -172,6 +172,8 @@
     "langEnglish": "الإنجليزية",
     "langChinese": "الصينية",
     "feeOnRequest": "الرسوم عند الطلب",
+    "signInForFees": "سجّل الدخول لعرض الرسوم",
+    "serviceFee": "+ رسوم خدمة CAS: {{amount}} {{currency}}",
     "perYear": "{{amount}} {{currency}}/سنة",
     "months": "{{count}} أشهر",
     "loadError": "تعذّر تحميل البرامج الآن.",

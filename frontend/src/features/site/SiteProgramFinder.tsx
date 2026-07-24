@@ -162,7 +162,18 @@ export default function SiteProgramFinder() {
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-              <span className="font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency, t)}</span>
+              {p.fee_locked ? (
+                <Link to="/portal/login" className="text-sm font-semibold text-cas-red hover:underline">{t("programs.signInForFees")}</Link>
+              ) : (
+                <span className="text-right">
+                  <span className="block font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency, t)}</span>
+                  {p.service_charge && (
+                    <span className="block text-xs font-normal text-muted-foreground">
+                      {t("programs.serviceFee", { amount: Number(p.service_charge.amount).toLocaleString(), currency: p.service_charge.currency })}
+                    </span>
+                  )}
+                </span>
+              )}
               {p.university?.slug && (
                 <Link to={`/site/universities/${p.university.slug}`} className="inline-flex h-9 items-center gap-1 rounded-sm bg-cas-navy px-3.5 text-xs font-semibold text-white hover:bg-cas-navy-700">
                   {t("programs.viewDetails")}

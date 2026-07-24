@@ -164,6 +164,8 @@
     "langEnglish": "Anglais",
     "langChinese": "Chinois",
     "feeOnRequest": "Frais sur demande",
+    "signInForFees": "Connectez-vous pour voir les frais",
+    "serviceFee": "+ Frais de service CAS : {{amount}} {{currency}}",
     "perYear": "{{amount}} {{currency}}/an",
     "months": "{{count}} mois",
     "loadError": "Impossible de charger les programmes pour le moment.",

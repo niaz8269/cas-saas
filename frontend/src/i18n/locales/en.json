@@ -164,6 +164,8 @@
     "langEnglish": "English",
     "langChinese": "Chinese",
     "feeOnRequest": "Fee on request",
+    "signInForFees": "Sign in to see fees",
+    "serviceFee": "+ CAS service fee: {{amount}} {{currency}}",
     "perYear": "{{amount}} {{currency}}/yr",
     "months": "{{count}} months",
     "loadError": "Couldn't load programs right now.",

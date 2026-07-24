@@ -57,6 +57,23 @@ it("renders the public universities grid", async () => {
   expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
 })
 
+it("gates program fees for guests and shows the CAS service fee for members", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+    data: [
+      { id: 1, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: null, currency: "CNY", apply_link: null, requirements: null, fee_locked: true, university: { name: "JLMU", slug: "jlmu" } },
+      { id: 2, name: "BDS", level: "bachelor", teaching_language: "English", duration_months: 60, tuition_fee: "40000.00", currency: "CNY", apply_link: null, requirements: null, fee_locked: false, service_charge: { amount: 500, currency: "USD" }, university: { name: "JLMU", slug: "jlmu" } },
+    ],
+    meta: { current_page: 1, last_page: 1, total: 2, from: 1, to: 2 },
+    audience: "student",
+  })))
+
+  renderWithProviders(<SiteProgramFinder />)
+
+  expect(await screen.findByText("MBBS")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Sign in to see fees/i })).toBeInTheDocument()
+  expect(screen.getByText(/CAS service fee/i)).toBeInTheDocument()
+})
+
 it("renders the CUCAS-style home with hero, search and sections", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
 

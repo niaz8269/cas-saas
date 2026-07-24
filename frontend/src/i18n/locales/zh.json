@@ -164,6 +164,8 @@
     "langEnglish": "英语",
     "langChinese": "中文",
     "feeOnRequest": "学费请咨询",
+    "signInForFees": "登录后查看学费",
+    "serviceFee": "+ CAS 服务费：{{amount}} {{currency}}",
     "perYear": "{{amount}} {{currency}}/年",
     "months": "{{count}} 个月",
     "loadError": "暂时无法加载专业信息。",

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
+import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
@@ -13,6 +13,7 @@ import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
 import LanguageSwitcher from "@/i18n/LanguageSwitcher"
 import { cn } from "@/lib/utils"
+import { usePortalAuthStore } from "@/stores/portalAuth"
 
 type NavItemT = { to: string; labelKey: string; dropdown?: [string, string][] }
 
@@ -166,6 +167,12 @@ export default function SiteLayout() {
   const { pathname } = useLocation()
   const isHome = pathname === "/site"
 
+  // Signed-in portal visitors get an "Apply now" CTA straight to their apply
+  // flow instead of the sign-in button.
+  const portalKind = usePortalAuthStore((s) => s.kind)
+  const portalToken = usePortalAuthStore((s) => s.token)
+  const loggedIn = Boolean(portalToken && portalKind)
+
   // Header is transparent over the home hero and turns solid once scrolled
   // (or on any non-home page). The logo stays the real colour mark throughout.
   const [scrolled, setScrolled] = useState(false)
@@ -214,9 +221,15 @@ export default function SiteLayout() {
 
             <div className="flex shrink-0 items-center gap-3">
               <LanguageSwitcher className="hidden sm:block" />
-              <Link to="/portal/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
-                <LogIn className="size-4" /> <span className="hidden sm:inline">{t("header.signIn")}</span>
-              </Link>
+              {loggedIn ? (
+                <Link to={`/portal/${portalKind}/apply`} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                  <ArrowRight className="size-4" /> <span className="hidden sm:inline">{t("header.applyNow")}</span>
+                </Link>
+              ) : (
+                <Link to="/portal/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                  <LogIn className="size-4" /> <span className="hidden sm:inline">{t("header.signIn")}</span>
+                </Link>
+              )}
               <NotificationBell />
               <button
                 type="button"

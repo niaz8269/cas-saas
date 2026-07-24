@@ -1,16 +1,23 @@
+import { useAuthStore } from "@/stores/auth"
+import { usePortalAuthStore } from "@/stores/portalAuth"
+
 /**
- * Public website API client — unauthenticated, hits the /api/v1/public/*
- * endpoints. No bearer token, no auth-clearing on 401 (this is what the
- * real marketing site would consume).
+ * Public website API client. Hits the /api/v1/public/* endpoints. Auth is
+ * OPTIONAL: when a visitor is signed in (portal student/agent, or staff) we
+ * attach their token so the catalog widens the "audience" — role-based fees
+ * and the registered-only specifics. Guests send nothing and see the teaser.
  */
 const BASE = "/api/v1"
 
 async function siteApi<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = usePortalAuthStore.getState().token ?? useAuthStore.getState().token
+
   const response = await fetch(`${BASE}${path}`, {
     ...options,
     headers: {
       Accept: "application/json",
       ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
   })
@@ -53,6 +60,9 @@ export interface SiteProgram {
   apply_link: string | null
   requirements: string[] | null
   university?: SiteUniversityRef
+  // Audience gating (Phase 1): fees are registered-only; rate follows role.
+  fee_locked?: boolean
+  service_charge?: { amount: number; currency: string } | null
 }
 
 export interface SiteIntake {
@@ -78,6 +88,8 @@ export interface SiteScholarship {
   apply_link: string | null
   deadline: string | null
   university?: SiteUniversityRef
+  /** Audience gating (Phase 1): amount/deadline/how-to-apply are registered-only. */
+  details_locked?: boolean
 }
 
 export interface SiteRepProfessor {
@@ -109,6 +121,8 @@ export interface SiteUniversityDetail extends SiteUniversityCard {
   programs: SiteProgram[]
   intakes: SiteIntake[]
   scholarships: SiteScholarship[]
+  /** Audience gating (Phase 1): intake deadlines are registered-only. */
+  deadlines_locked?: boolean
 }
 
 export interface Paginated<T> {
