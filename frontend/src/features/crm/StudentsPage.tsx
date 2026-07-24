@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import ExportButton from "@/components/ExportButton"
+import { SortableHead } from "@/components/SortableHead"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,8 +46,14 @@ export default function StudentsPage() {
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
+  const [sort, setSort] = useState("-created_at")
   const [page, setPage] = useState(1)
   const [newOpen, setNewOpen] = useState(false)
+
+  const changeSort = (next: string) => {
+    setSort(next)
+    setPage(1)
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -58,11 +65,12 @@ export default function StudentsPage() {
   }, [searchInput])
 
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["students", { q, status, page }],
+    queryKey: ["students", { q, status, sort, page }],
     queryFn: () =>
       listStudents({
         q: q || undefined,
         status: status === "all" ? undefined : status,
+        sort,
         page,
       }),
     placeholderData: keepPreviousData,
@@ -119,12 +127,12 @@ export default function StudentsPage() {
         <Table>
           <TableHeader className="bg-subtle">
             <TableRow>
-              <TableHead>Code</TableHead>
-              <TableHead>Student</TableHead>
+              <SortableHead label="Code" field="student_code" sort={sort} onSortChange={changeSort} />
+              <SortableHead label="Student" field="first_name" sort={sort} onSortChange={changeSort} />
               <TableHead>Country</TableHead>
               <TableHead>Branch</TableHead>
               <TableHead>Counselor</TableHead>
-              <TableHead>Status</TableHead>
+              <SortableHead label="Status" field="status" sort={sort} onSortChange={changeSort} />
             </TableRow>
           </TableHeader>
           <TableBody>

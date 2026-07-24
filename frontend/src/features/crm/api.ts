@@ -142,6 +142,8 @@ export interface StudentListParams {
   q?: string
   status?: string
   page?: number
+  /** `field` (asc) or `-field` (desc); allowlisted server-side. */
+  sort?: string
 }
 
 export function listStudents(params: StudentListParams = {}) {
@@ -149,6 +151,7 @@ export function listStudents(params: StudentListParams = {}) {
   if (params.q) search.set("q", params.q)
   if (params.status) search.set("filter[status]", params.status)
   if (params.page && params.page > 1) search.set("page", String(params.page))
+  if (params.sort) search.set("sort", params.sort)
   const qs = search.toString()
 
   return api<Paginated<StudentSummary>>(`/students${qs ? `?${qs}` : ""}`)

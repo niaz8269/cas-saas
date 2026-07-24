@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
@@ -70,6 +70,24 @@ it("lists students with codes and status badges", async () => {
   expect(screen.getByText("in process")).toBeInTheDocument()
   // CSV export control is wired into the list toolbar.
   expect(screen.getByRole("button", { name: /Export/ })).toBeInTheDocument()
+})
+
+it("re-queries with a sort param when a sortable header is clicked", async () => {
+  const user = userEvent.setup()
+  useAuthStore.setState({ token: "t", user: makeUser(["students.view.assigned"]) })
+  const fetchMock = vi.fn().mockResolvedValue(
+    jsonResponse({ data: [STUDENT], meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 } }),
+  )
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<StudentsPage />)
+  await screen.findByText("Ali Khan")
+
+  await user.click(screen.getByRole("button", { name: "Sort by Code" }))
+
+  await waitFor(() =>
+    expect(fetchMock.mock.calls.some(([u]) => String(u).includes("sort=student_code"))).toBe(true),
+  )
 })
 
 function stubProfileFetch() {
