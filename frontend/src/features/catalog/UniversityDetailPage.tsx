@@ -27,6 +27,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import {
+  deleteContact,
   deleteProgram,
   deleteScholarship,
   getUniversity,
@@ -37,11 +38,12 @@ import {
 } from "@/features/catalog/api"
 import { ApiError } from "@/lib/api"
 import AddAgreementDialog from "@/features/catalog/dialogs/AddAgreementDialog"
+import ContactFormDialog from "@/features/catalog/dialogs/ContactFormDialog"
 import ProgramFormDialog from "@/features/catalog/dialogs/ProgramFormDialog"
 import AddIntakeDialog from "@/features/catalog/dialogs/AddIntakeDialog"
 import ScholarshipFormDialog from "@/features/catalog/dialogs/ScholarshipFormDialog"
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
-import type { Intake, Program, Scholarship } from "@/features/catalog/api"
+import type { Intake, Program, Scholarship, UniversityContact } from "@/features/catalog/api"
 import { cn } from "@/lib/utils"
 
 /** Nearest upcoming intake deadline, with whole days remaining. */
@@ -88,19 +90,31 @@ export default function UniversityDetailPage() {
   const canSeeAgreements = canManage || can("commission.view.global")
 
   const queryClient = useQueryClient()
-  const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement">(null)
+  const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement" | "contact">(null)
   const [editOpen, setEditOpen] = useState(false)
   const [editingScholarship, setEditingScholarship] = useState<Scholarship | null>(null)
   const [editingProgram, setEditingProgram] = useState<Program | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<{ kind: "program" | "scholarship"; id: number; name: string } | null>(null)
+  const [editingContact, setEditingContact] = useState<UniversityContact | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<{ kind: "program" | "scholarship" | "contact"; id: number; name: string } | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const deleteMutation = useMutation({
-    mutationFn: () =>
-      deleteTarget!.kind === "program" ? deleteProgram(deleteTarget!.id) : deleteScholarship(deleteTarget!.id),
+    mutationFn: () => {
+      const target = deleteTarget!
+      if (target.kind === "program") return deleteProgram(target.id)
+      if (target.kind === "scholarship") return deleteScholarship(target.id)
+
+      return deleteContact(target.id)
+    },
     onSuccess: () => {
-      const key = deleteTarget!.kind === "program" ? "university-programs" : "university-scholarships"
-      queryClient.invalidateQueries({ queryKey: [key, Number(id)] })
+      // Contacts live on the university detail query; programs/scholarships on their own lists.
+      const key =
+        deleteTarget!.kind === "program"
+          ? (["university-programs", Number(id)] as const)
+          : deleteTarget!.kind === "scholarship"
+            ? (["university-scholarships", Number(id)] as const)
+            : (["university", id] as const)
+      queryClient.invalidateQueries({ queryKey: key })
       setDeleteTarget(null)
       setDeleteError(null)
     },
@@ -275,33 +289,18 @@ export default function UniversityDetailPage() {
             </div>
           )}
 
-          {(rep?.name || uni.contacts.length > 0) && (
+          {rep?.name && (
             <div className="mt-4 flex flex-wrap gap-8 border-t pt-4">
-              {rep?.name && (
-                <div>
-                  <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Representative professor</p>
-                  <div className="mt-2 flex items-center gap-3">
-                    {rep.photo_url && <img src={rep.photo_url} alt={rep.name} className="size-10 rounded-full object-cover" />}
-                    <div>
-                      <p className="text-sm font-medium">{rep.name}</p>
-                      {rep.title && <p className="text-xs text-muted-foreground">{rep.title}</p>}
-                    </div>
+              <div>
+                <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Representative professor</p>
+                <div className="mt-2 flex items-center gap-3">
+                  {rep.photo_url && <img src={rep.photo_url} alt={rep.name} className="size-10 rounded-full object-cover" />}
+                  <div>
+                    <p className="text-sm font-medium">{rep.name}</p>
+                    {rep.title && <p className="text-xs text-muted-foreground">{rep.title}</p>}
                   </div>
                 </div>
-              )}
-              {uni.contacts.length > 0 && (
-                <div>
-                  <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">Contacts</p>
-                  <div className="mt-2 flex flex-wrap gap-6 text-sm">
-                    {uni.contacts.map((contact) => (
-                      <div key={contact.id}>
-                        <p className="font-medium">{contact.name}</p>
-                        <p className="text-muted-foreground">{[contact.role, contact.email].filter(Boolean).join(" · ")}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           )}
         </div>
@@ -439,6 +438,37 @@ export default function UniversityDetailPage() {
         )}
       </Section>
 
+      {/* Contacts */}
+      <Section title="Contacts" action={addButton("Add contact", "contact")}>
+        {uni.contacts.length ? (
+          <ul className="divide-y">
+            {uni.contacts.map((contact) => (
+              <li key={contact.id} className="group flex items-center justify-between gap-3 py-2.5 text-sm">
+                <div className="min-w-0">
+                  <span className="font-medium">{contact.name}</span>
+                  {contact.role && <span className="ml-2 text-xs text-muted-foreground">{contact.role}</span>}
+                  <p className="text-xs text-muted-foreground">
+                    {[contact.email, contact.phone].filter(Boolean).join(" · ") || "—"}
+                  </p>
+                </div>
+                {canManage && (
+                  <div className="flex shrink-0 items-center gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                    <button type="button" aria-label={`Edit ${contact.name}`} onClick={() => setEditingContact(contact)} className="text-muted-foreground hover:text-foreground">
+                      <Pencil className="size-3.5" />
+                    </button>
+                    <button type="button" aria-label={`Delete ${contact.name}`} onClick={() => { setDeleteError(null); setDeleteTarget({ kind: "contact", id: contact.id, name: contact.name }) }} className="text-muted-foreground hover:text-destructive">
+                      <Trash2 className="size-3.5" />
+                    </button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">No contacts yet.</p>
+        )}
+      </Section>
+
       {/* Agreements — only for commission-privileged staff */}
       {canSeeAgreements && (
         <Section title="Commission agreements" action={addButton("Add agreement", "agreement")}>
@@ -475,6 +505,8 @@ export default function UniversityDetailPage() {
       <ScholarshipFormDialog universityId={Number(id)} open={dialog === "scholarship"} onOpenChange={(open) => !open && setDialog(null)} />
       <ScholarshipFormDialog universityId={Number(id)} scholarship={editingScholarship ?? undefined} open={editingScholarship !== null} onOpenChange={(open) => !open && setEditingScholarship(null)} />
       <AddAgreementDialog universityId={Number(id)} programs={programs.data?.data ?? []} open={dialog === "agreement"} onOpenChange={(open) => !open && setDialog(null)} />
+      <ContactFormDialog universityId={Number(id)} open={dialog === "contact"} onOpenChange={(open) => !open && setDialog(null)} />
+      <ContactFormDialog universityId={Number(id)} contact={editingContact ?? undefined} open={editingContact !== null} onOpenChange={(open) => !open && setEditingContact(null)} />
       <UniversityFormDialog open={editOpen} onOpenChange={setEditOpen} university={uni} />
 
       <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>

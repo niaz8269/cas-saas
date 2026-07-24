@@ -131,6 +131,28 @@ export function getUniversity(id: number | string) {
   return api<{ data: UniversityDetail }>(`/universities/${id}`)
 }
 
+export interface ContactPayload {
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+}
+
+export const createContact = (universityId: number | string, payload: ContactPayload) =>
+  api<{ data: UniversityContact }>(`/universities/${universityId}/contacts`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
+export const updateContact = (contactId: number, payload: ContactPayload) =>
+  api<{ data: UniversityContact }>(`/contacts/${contactId}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  })
+
+export const deleteContact = (contactId: number) =>
+  api<undefined>(`/contacts/${contactId}`, { method: "DELETE" })
+
 export interface ServiceChargeTier {
   student?: number | string | null
   agent?: number | string | null

@@ -1,4 +1,5 @@
-import { screen } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
 import { useAuthStore } from "@/stores/auth"
@@ -127,6 +128,41 @@ it("shows agreements and add actions to catalog managers", async () => {
   expect(await screen.findByText("12%")).toBeInTheDocument()
   expect(screen.getByRole("button", { name: /Add program/ })).toBeInTheDocument()
   expect(screen.getByRole("button", { name: /Add agreement/ })).toBeInTheDocument()
+})
+
+it("lets a manager add a university contact", async () => {
+  const user = userEvent.setup()
+  useAuthStore.setState({ token: "token", user: makeUser(["universities.view.global", "universities.manage.global"]) })
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    const url = String(input)
+    if (url.includes("/universities/1")) return Promise.resolve(jsonResponse(UNIVERSITY))
+    return Promise.resolve(jsonResponse(emptyList))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderDetail()
+
+  // Existing contact renders under the managed Contacts section.
+  expect(await screen.findByText("Ms. Zhang Min")).toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: /Add contact/ }))
+  const dialog = await screen.findByRole("dialog")
+  await user.type(within(dialog).getByLabelText("Name"), "Mr. Wang Lei")
+  await user.type(within(dialog).getByLabelText("Email"), "wang@jlmu.cn")
+  await user.type(within(dialog).getByLabelText("Role"), "Admissions")
+  await user.click(within(dialog).getByRole("button", { name: "Add contact" }))
+
+  await waitFor(() =>
+    expect(fetchMock).toHaveBeenCalledWith("/api/v1/universities/1/contacts", expect.objectContaining({ method: "POST" })),
+  )
+  const post = fetchMock.mock.calls.find(
+    ([u, i]) => String(u).endsWith("/universities/1/contacts") && (i as RequestInit)?.method === "POST",
+  )
+  expect(JSON.parse((post![1] as RequestInit).body as string)).toMatchObject({
+    name: "Mr. Wang Lei",
+    email: "wang@jlmu.cn",
+    role: "Admissions",
+  })
 })
 
 it("shows agreements read-only to commission viewers (finance)", async () => {
