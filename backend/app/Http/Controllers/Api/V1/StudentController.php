@@ -12,6 +12,7 @@ use App\Http\Resources\TaskResource;
 use App\Models\Activity;
 use App\Models\Student;
 use App\Support\CsvExport;
+use App\Support\SortQuery;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,9 +25,11 @@ class StudentController extends Controller
     {
         $this->authorize('viewAny', Student::class);
 
-        $students = $this->filteredStudents($request)
-            ->latest()
-            ->paginate(min($request->integer('per_page', 25), 100));
+        $students = SortQuery::apply(
+            $this->filteredStudents($request),
+            $request,
+            ['created_at', 'student_code', 'first_name', 'status'],
+        )->paginate(min($request->integer('per_page', 25), 100));
 
         return StudentResource::collection($students);
     }

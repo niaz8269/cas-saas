@@ -69,6 +69,27 @@ it('searches by student code and passport', function () {
     $this->getJson('/api/v1/students?q=AB1234567')->assertOk()->assertJsonPath('meta.total', 1);
 });
 
+it('sorts the students list by an allowlisted column', function () {
+    actingAsStaffWith(STUDENT_ADMIN_PERMS);
+    Student::factory()->create(['student_code' => 'STU-2026-00002']);
+    Student::factory()->create(['student_code' => 'STU-2026-00001']);
+
+    expect($this->getJson('/api/v1/students?sort=student_code')->assertOk()->json('data.0.student_code'))
+        ->toBe('STU-2026-00001');
+    expect($this->getJson('/api/v1/students?sort=-student_code')->assertOk()->json('data.0.student_code'))
+        ->toBe('STU-2026-00002');
+});
+
+it('ignores a non-allowlisted sort column and falls back to newest first', function () {
+    actingAsStaffWith(STUDENT_ADMIN_PERMS);
+    Student::factory()->create(['created_at' => now()->subDay()]);
+    $newer = Student::factory()->create(['created_at' => now()]);
+
+    // `password` is not allowlisted — it must be ignored, not used to order the query.
+    expect($this->getJson('/api/v1/students?sort=-password')->assertOk()->json('data.0.id'))
+        ->toBe($newer->id);
+});
+
 it('exports the filtered students as CSV', function () {
     actingAsStaffWith(STUDENT_ADMIN_PERMS);
     $wanted = Student::factory()->create(['status' => 'active']);
