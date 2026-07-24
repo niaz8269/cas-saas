@@ -5,6 +5,7 @@ use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\Student;
 use App\Models\University;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -58,6 +59,23 @@ it('honours an agent-only fee config', function () {
     // Agent sees it.
     $agentRes = $this->withToken(tokenFor(Agent::factory()->create()))->getJson('/api/v1/public/programs')->assertOk();
     expect($agentRes->json('data.0.fee_locked'))->toBeFalse();
+});
+
+it('resolves a logged-in staff member to the counselor audience', function () {
+    // Fee opened to counselors only: a staff token unlocks it; guests and
+    // students stay locked out. Proves the staff → counselor audience path.
+    visProgram(['tuition_fee' => ['counselor']]);
+
+    expect($this->getJson('/api/v1/public/programs')->assertOk()->json('data.0.fee_locked'))->toBeTrue();
+
+    $studentRes = $this->withToken(tokenFor(Student::factory()->create()))->getJson('/api/v1/public/programs')->assertOk();
+    expect($studentRes->json('data.0.fee_locked'))->toBeTrue();
+
+    $staffRes = $this->withToken(tokenFor(User::factory()->create()))->getJson('/api/v1/public/programs')->assertOk();
+    expect($staffRes->json('data.0.fee_locked'))->toBeFalse()
+        ->and($staffRes->json('data.0.tuition_fee'))->not->toBeNull()
+        // Staff see the student-tier service charge (AudienceResolver::applicantRate).
+        ->and($staffRes->json('data.0.service_charge.amount'))->toEqual(500);
 });
 
 it('gates each fee field independently (ADR-0015 per-field)', function () {
