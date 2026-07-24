@@ -52,6 +52,23 @@ it("creates a program with numeric fields coerced", async () => {
   expect(body).toMatchObject({ university_id: 1, name: "Nursing", tuition_fee: 26000, level: "bachelor" })
 })
 
+it("captures per-audience fee visibility from the matrix", async () => {
+  const user = userEvent.setup()
+  const fetchMock = withDocTypes(() => Promise.resolve(jsonResponse({ data: { ...PROGRAM, id: 14 } }, 201)))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<ProgramFormDialog universityId={1} open onOpenChange={() => {}} />)
+
+  await user.type(screen.getByLabelText("Name"), "Dentistry")
+  // Open the fee to the public (default is registered-only).
+  await user.click(screen.getByLabelText("Fees & service charge visible to Public"))
+  await user.click(screen.getByRole("button", { name: "Add program" }))
+
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/v1/programs", expect.objectContaining({ method: "POST" })))
+  const body = JSON.parse((fetchMock.mock.calls.find(([u, i]) => u === "/api/v1/programs" && (i as RequestInit)?.method === "POST")![1] as RequestInit).body as string)
+  expect(body.visibility.fee).toContain("public")
+})
+
 it("sends self-funded and per-scholarship service charges", async () => {
   const user = userEvent.setup()
   const fetchMock = withDocTypes(() => Promise.resolve(jsonResponse({ data: { ...PROGRAM, id: 12 } }, 201)))

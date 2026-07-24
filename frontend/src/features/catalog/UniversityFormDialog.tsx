@@ -26,7 +26,9 @@ import {
   type ApplicationForm,
   type University,
   type UniversityPayload,
+  type VisibilityConfig,
 } from "@/features/catalog/api"
+import { VisibilityMatrix } from "@/features/catalog/VisibilityMatrix"
 import { buildFields, parseFields, type EditableField } from "@/features/catalog/dialogs/applicationForm"
 import { CustomFieldsBuilder, DocumentPicker } from "@/features/catalog/dialogs/applicationFormControls"
 import { ApiError } from "@/lib/api"
@@ -136,6 +138,7 @@ export default function UniversityFormDialog({
   // Application form the student fills when applying to this university.
   const [reqDocs, setReqDocs] = useState<number[]>([])
   const [reqFields, setReqFields] = useState<EditableField[]>([])
+  const [visibility, setVisibility] = useState<VisibilityConfig>({})
   const docTypes = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes, enabled: open })
   const toggleDoc = (id: number) =>
     setReqDocs((docs) => (docs.includes(id) ? docs.filter((x) => x !== id) : [...docs, id]))
@@ -149,6 +152,7 @@ export default function UniversityFormDialog({
       setRepPhotoPreview(university?.representative_professor?.photo_url ?? null)
       setReqDocs((university?.application_form?.documents ?? []).filter((d): d is number => typeof d === "number"))
       setReqFields(parseFields(university?.application_form?.fields))
+      setVisibility(university?.visibility ?? {})
     }
   }, [open, university, reset])
 
@@ -186,7 +190,7 @@ export default function UniversityFormDialog({
         </DialogHeader>
 
         <form
-          onSubmit={handleSubmit((v) => mutation.mutate({ ...toPayload(v), application_form: buildApplicationForm(reqFields, reqDocs) }))}
+          onSubmit={handleSubmit((v) => mutation.mutate({ ...toPayload(v), application_form: buildApplicationForm(reqFields, reqDocs), visibility }))}
           noValidate
           className="space-y-5"
         >
@@ -307,6 +311,12 @@ export default function UniversityFormDialog({
                 onChange={(path, url) => { setValue("rep_photo", path); setRepPhotoPreview(url) }}
               />
             </div>
+          </div>
+
+          <div>
+            <Label>Public visibility</Label>
+            <p className="mt-1 mb-2 text-xs text-muted-foreground">Who sees the intake deadlines on the public site.</p>
+            <VisibilityMatrix sections={[{ key: "deadlines", label: "Intake deadlines" }]} value={visibility} onChange={setVisibility} />
           </div>
 
           <DialogFooter>

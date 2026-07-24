@@ -1,5 +1,8 @@
 import { api } from "@/lib/api"
 
+/** Per-record field × audience visibility config (ADR-0015): section → audiences. */
+export type VisibilityConfig = Record<string, string[]>
+
 export interface RepresentativeProfessor {
   name?: string | null
   title?: string | null
@@ -26,6 +29,7 @@ export interface University {
   about: string | null
   requirements: string[]
   application_form?: ApplicationForm | null
+  visibility?: VisibilityConfig
   representative_professor: RepresentativeProfessor | null
   country?: { id: number; name: string; iso2: string }
   programs_count?: number
@@ -82,6 +86,7 @@ export interface UniversityPayload {
   about?: string
   requirements?: string[]
   application_form?: ApplicationForm | null
+  visibility?: VisibilityConfig
   representative_professor?: RepresentativeProfessor | null
 }
 
@@ -185,6 +190,7 @@ export interface Program {
   requirements: ProgramRequirements | null
   service_charges: ServiceCharges | null
   scholarship_ids: number[]
+  visibility?: VisibilityConfig
   status: string
 }
 
@@ -220,6 +226,7 @@ export interface Scholarship {
   deadline: string | null
   benefits: ScholarshipBenefits | null
   university_ids: number[]
+  visibility?: VisibilityConfig
   status: string
 }
 

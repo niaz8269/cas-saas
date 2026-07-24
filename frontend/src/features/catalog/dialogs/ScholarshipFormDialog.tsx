@@ -22,7 +22,9 @@ import {
   updateScholarship,
   type Scholarship,
   type ScholarshipLevelBenefit,
+  type VisibilityConfig,
 } from "@/features/catalog/api"
+import { VisibilityMatrix } from "@/features/catalog/VisibilityMatrix"
 import { ApiError } from "@/lib/api"
 
 const LEVELS = [["bachelor", "Bachelor"], ["master", "Master"], ["phd", "PhD"]] as const
@@ -111,6 +113,7 @@ export default function ScholarshipFormDialog({
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(scholarship) })
 
   const [universityIds, setUniversityIds] = useState<number[]>([])
+  const [visibility, setVisibility] = useState<VisibilityConfig>({})
   const [levelBenefits, setLevelBenefits] = useState<Record<Level, LevelBenefit>>({
     bachelor: emptyBenefit(), master: emptyBenefit(), phd: emptyBenefit(),
   })
@@ -125,6 +128,7 @@ export default function ScholarshipFormDialog({
     if (!open) return
     reset(toValues(scholarship))
     setUniversityIds(scholarship?.university_ids ?? [])
+    setVisibility(scholarship?.visibility ?? {})
     const b = scholarship?.benefits ?? {}
     setLevelBenefits({
       bachelor: { tuition_after: benefitStr(b.bachelor, "tuition_after"), hostel_after: benefitStr(b.bachelor, "hostel_after"), stipend_monthly: benefitStr(b.bachelor, "stipend_monthly") },
@@ -154,6 +158,7 @@ export default function ScholarshipFormDialog({
         eligibility: v.eligibility || null,
         how_to_apply: v.how_to_apply || null,
         apply_link: v.apply_link || null,
+        visibility,
       }
 
       if (isGovernment) {
@@ -277,6 +282,20 @@ export default function ScholarshipFormDialog({
                 <option value="inactive">Inactive</option>
               </select>
             </Field>
+          </div>
+
+          <div>
+            <p className="mb-1.5 text-xs font-medium text-muted-foreground">Public visibility</p>
+            <p className="mb-2 text-xs text-muted-foreground">Who sees each detail on the public site.</p>
+            <VisibilityMatrix
+              sections={[
+                { key: "amount", label: "Award amount" },
+                { key: "deadline", label: "Deadline" },
+                { key: "how_to_apply", label: "How to apply" },
+              ]}
+              value={visibility}
+              onChange={setVisibility}
+            />
           </div>
 
           <DialogFooter>

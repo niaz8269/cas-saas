@@ -31,7 +31,9 @@ import {
   type ProgramRequirements,
   type ProgramSections,
   type ServiceChargeTier,
+  type VisibilityConfig,
 } from "@/features/catalog/api"
+import { VisibilityMatrix } from "@/features/catalog/VisibilityMatrix"
 import { buildFields, parseFields, type EditableField } from "@/features/catalog/dialogs/applicationForm"
 import { CustomFieldsBuilder, DocumentPicker } from "@/features/catalog/dialogs/applicationFormControls"
 import { ApiError } from "@/lib/api"
@@ -154,6 +156,7 @@ export default function ProgramFormDialog({
   const [selfCharge, setSelfCharge] = useState<ChargeTier>(emptyTier())
   const [schCharges, setSchCharges] = useState<Record<number, ChargeTier>>({})
   const [linkedSchIds, setLinkedSchIds] = useState<number[]>([])
+  const [visibility, setVisibility] = useState<VisibilityConfig>({})
 
   const docTypes = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes, enabled: open })
   const scholarships = useQuery({
@@ -179,6 +182,7 @@ export default function ProgramFormDialog({
     }
     setSchCharges(map)
     setLinkedSchIds(program?.scholarship_ids ?? [])
+    setVisibility(program?.visibility ?? {})
   }, [open, program, reset])
 
   const toggleDoc = (id: number) =>
@@ -214,6 +218,7 @@ export default function ProgramFormDialog({
           Object.fromEntries(Object.entries(schCharges).filter(([id]) => linkedSchIds.includes(Number(id)))),
         ),
         scholarship_ids: linkedSchIds,
+        visibility,
       }
 
       return isEdit ? updateProgram(program!.id, payload) : createProgram(payload)
@@ -382,6 +387,12 @@ export default function ProgramFormDialog({
                 <p className="mb-1.5 text-xs font-medium text-muted-foreground">Custom fields</p>
                 <p className="mb-2 text-xs text-muted-foreground">Extra questions the applicant answers for this course.</p>
                 <CustomFieldsBuilder value={reqFields} onChange={setReqFields} />
+              </div>
+
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-muted-foreground">Public visibility</p>
+                <p className="mb-2 text-xs text-muted-foreground">Who sees the fee on the public site.</p>
+                <VisibilityMatrix sections={[{ key: "fee", label: "Fees & service charge" }]} value={visibility} onChange={setVisibility} />
               </div>
             </div>
           </div>
