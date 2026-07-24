@@ -69,6 +69,37 @@ it('searches by student code and passport', function () {
     $this->getJson('/api/v1/students?q=AB1234567')->assertOk()->assertJsonPath('meta.total', 1);
 });
 
+it('exports the filtered students as CSV', function () {
+    actingAsStaffWith(STUDENT_ADMIN_PERMS);
+    $wanted = Student::factory()->create(['status' => 'active']);
+    Student::factory()->create(['status' => 'inactive']); // excluded by the filter
+
+    $response = $this->get('/api/v1/students/export?filter[status]=active');
+
+    $response->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
+    $csv = $response->streamedContent();
+
+    expect($csv)->toContain('Code,Name')                    // header row
+        ->and($csv)->toContain($wanted->student_code)       // matching row present
+        ->and(substr_count($csv, "\n"))->toBe(2);           // header + one data row only
+});
+
+it('scopes the students export to the counselor’s own records', function () {
+    $counselor = actingAsStaffWith(STUDENT_COUNSELOR_PERMS);
+    $mine = Student::factory()->create(['assigned_counselor_id' => $counselor->id]);
+    $theirs = Student::factory()->create(); // another counselor's student
+
+    $csv = $this->get('/api/v1/students/export')->assertOk()->streamedContent();
+
+    expect($csv)->toContain($mine->student_code)
+        ->and($csv)->not->toContain($theirs->student_code);
+});
+
+it('denies the students export without view permission', function () {
+    actingAsStaffWith([]);
+    $this->get('/api/v1/students/export')->assertStatus(403);
+});
+
 it('appends notes to the timeline and reads them back', function () {
     $counselor = actingAsStaffWith(STUDENT_COUNSELOR_PERMS);
     $student = Student::factory()->create(['assigned_counselor_id' => $counselor->id]);

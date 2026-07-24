@@ -289,6 +289,7 @@ Route::prefix('v1')->group(function () {
         Route::post('leads/{lead}/notes', [LeadController::class, 'addNote']);
         Route::delete('leads/{lead}', [LeadController::class, 'destroy']);
         Route::get('students', [StudentController::class, 'index']);
+        Route::get('students/export', [StudentController::class, 'export']); // before {student}
         Route::post('students', [StudentController::class, 'store']);
         Route::get('students/{student}', [StudentController::class, 'show']);
         Route::patch('students/{student}', [StudentController::class, 'update']);

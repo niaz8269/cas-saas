@@ -11,9 +11,12 @@ use App\Http\Resources\StudentResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Activity;
 use App\Models\Student;
+use App\Support\CsvExport;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StudentController extends Controller
 {
@@ -21,7 +24,45 @@ class StudentController extends Controller
     {
         $this->authorize('viewAny', Student::class);
 
-        $students = Student::query()
+        $students = $this->filteredStudents($request)
+            ->latest()
+            ->paginate(min($request->integer('per_page', 25), 100));
+
+        return StudentResource::collection($students);
+    }
+
+    /** Export the filtered, RBAC-scoped students as CSV. */
+    public function export(Request $request): StreamedResponse
+    {
+        $this->authorize('viewAny', Student::class);
+
+        return CsvExport::stream(
+            'students-'.now()->format('Ymd-His').'.csv',
+            $this->filteredStudents($request),
+            ['Code', 'Name', 'Email', 'Phone', 'Passport', 'Status', 'Country', 'Branch', 'Counselor', 'Agent', 'Created'],
+            fn (Student $s) => [
+                $s->student_code,
+                $s->full_name,
+                $s->email,
+                $s->phone,
+                $s->passport_no,
+                $s->status,
+                $s->country?->name,
+                $s->branch?->name,
+                $s->counselor?->name,
+                $s->agent?->name,
+                $s->created_at?->toDateString(),
+            ],
+        );
+    }
+
+    /**
+     * The filtered + RBAC-scoped students query shared by index and export
+     * (no ordering/pagination applied).
+     */
+    private function filteredStudents(Request $request): Builder
+    {
+        return Student::query()
             ->visibleTo($request->user())
             ->with(['country:id,name,iso2', 'branch:id,name,code', 'counselor:id,name', 'agent:id,name,agent_code'])
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
@@ -35,11 +76,7 @@ class StudentController extends Controller
                     ->orWhere('phone', 'like', $term)
                     ->orWhere('passport_no', 'like', $term)
                     ->orWhere('student_code', 'like', $term));
-            })
-            ->latest()
-            ->paginate(min($request->integer('per_page', 25), 100));
-
-        return StudentResource::collection($students);
+            });
     }
 
     public function store(StoreStudentRequest $request): StudentResource
