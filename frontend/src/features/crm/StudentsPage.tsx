@@ -3,6 +3,7 @@ import { GraduationCap, Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import ExportButton from "@/components/ExportButton"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,6 +28,16 @@ import { listStudents } from "@/features/crm/api"
 import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
+
+/** Mirror the visible list filters onto the CSV export request. */
+function studentExportQuery(q: string, status: string): string {
+  const p = new URLSearchParams()
+  if (q) p.set("q", q)
+  if (status !== "all") p.set("filter[status]", status)
+  const s = p.toString()
+
+  return s ? `?${s}` : ""
+}
 
 export default function StudentsPage() {
   const navigate = useNavigate()
@@ -92,11 +103,14 @@ export default function StudentsPage() {
           </SelectContent>
         </Select>
 
-        {can("students.create.global") && (
-          <Button className="ml-auto" onClick={() => setNewOpen(true)}>
-            <Plus className="size-4" /> New student
-          </Button>
-        )}
+        <div className="ml-auto flex items-center gap-3">
+          <ExportButton path={`/students/export${studentExportQuery(q, status)}`} filename="students.csv" />
+          {can("students.create.global") && (
+            <Button onClick={() => setNewOpen(true)}>
+              <Plus className="size-4" /> New student
+            </Button>
+          )}
+        </div>
       </div>
 
       <StudentFormDialog open={newOpen} onOpenChange={setNewOpen} />

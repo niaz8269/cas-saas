@@ -68,6 +68,8 @@ it("lists students with codes and status badges", async () => {
   expect(await screen.findByText("Ali Khan")).toBeInTheDocument()
   expect(screen.getByText("STU-2026-00005")).toBeInTheDocument()
   expect(screen.getByText("in process")).toBeInTheDocument()
+  // CSV export control is wired into the list toolbar.
+  expect(screen.getByRole("button", { name: /Export/ })).toBeInTheDocument()
 })
 
 function stubProfileFetch() {
