@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAudienceVisibility;
 use Database\Factories\ProgramFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Program extends Model
 {
     /** @use HasFactory<ProgramFactory> */
-    use HasFactory, SoftDeletes;
+    use HasAudienceVisibility, HasFactory, SoftDeletes;
+
+    /** Sections whose public visibility an admin can configure per audience. */
+    public const GATEABLE_SECTIONS = ['fee'];
 
     protected $fillable = [
         'university_id',
@@ -27,6 +31,7 @@ class Program extends Model
         'apply_link',
         'requirements',
         'service_charges',
+        'visibility',
         'status',
     ];
 
@@ -38,6 +43,7 @@ class Program extends Model
             'hostel_fee' => 'decimal:2',
             'requirements' => 'array',
             'service_charges' => 'array',
+            'visibility' => 'array',
         ];
     }
 

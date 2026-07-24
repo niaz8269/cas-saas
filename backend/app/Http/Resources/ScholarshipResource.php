@@ -34,6 +34,7 @@ class ScholarshipResource extends JsonResource
             'stipend_monthly' => $this->stipend_monthly,
             'currency' => $this->currency,
             'criteria' => $this->criteria,
+            'visibility' => (object) ($this->visibility ?? []),
             'description' => $this->description,
             'eligibility' => $this->eligibility,
             'how_to_apply' => $this->how_to_apply,

@@ -24,7 +24,8 @@ class PublicUniversityResource extends JsonResource
     {
         $images = app(ImageService::class);
         $rep = $this->representative_professor;
-        $registered = $request->attributes->get('audience', 'public') !== 'public';
+        // Intake deadlines gated per the record's audience config (ADR-0015).
+        $deadlinesVisible = $this->resource->audienceCanSee('deadlines', $request->attributes->get('audience', 'public'));
 
         return [
             'id' => $this->id,
@@ -50,9 +51,9 @@ class PublicUniversityResource extends JsonResource
             // Detail-only nested collections (present when eager-loaded). The
             // intake deadlines are gated to registered users; nested program /
             // scholarship resources gate their own fee/amount specifics.
-            'deadlines_locked' => ! $registered,
+            'deadlines_locked' => ! $deadlinesVisible,
             'programs' => PublicProgramResource::collection($this->whenLoaded('programs')),
-            'intakes' => $registered ? PublicIntakeResource::collection($this->whenLoaded('intakes')) : [],
+            'intakes' => $deadlinesVisible ? PublicIntakeResource::collection($this->whenLoaded('intakes')) : [],
             'scholarships' => PublicScholarshipResource::collection($this->whenLoaded('scholarships')),
         ];
     }

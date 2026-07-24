@@ -38,6 +38,7 @@ class UniversityResource extends JsonResource
             'nearest_airport' => $this->nearest_airport,
             'about' => $this->about,
             'requirements' => $this->requirements ?? [],
+            'visibility' => (object) ($this->visibility ?? []),
             'application_form' => $this->application_form,
             'representative_professor' => $rep ? [
                 'name' => $rep['name'] ?? null,

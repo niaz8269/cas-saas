@@ -16,7 +16,11 @@ class PublicScholarshipResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $registered = $request->attributes->get('audience', 'public') !== 'public';
+        $audience = $request->attributes->get('audience', 'public');
+        // Per-record, admin-configurable visibility per section (ADR-0015).
+        $amountVisible = $this->resource->audienceCanSee('amount', $audience);
+        $deadlineVisible = $this->resource->audienceCanSee('deadline', $audience);
+        $howVisible = $this->resource->audienceCanSee('how_to_apply', $audience);
 
         return [
             'id' => $this->id,
@@ -27,12 +31,12 @@ class PublicScholarshipResource extends JsonResource
             'currency' => $this->currency,
             'description' => $this->description,
             'eligibility' => $this->eligibility,
-            // Award amount, deadline and how-to-apply are registered-only.
-            'details_locked' => ! $registered,
-            'amount' => $registered ? $this->amount : null,
-            'deadline' => $registered ? $this->deadline?->toDateString() : null,
-            'how_to_apply' => $registered ? $this->how_to_apply : null,
-            'apply_link' => $registered ? $this->apply_link : null,
+            // Award specifics — each gated per the record's config.
+            'details_locked' => ! $amountVisible,
+            'amount' => $amountVisible ? $this->amount : null,
+            'deadline' => $deadlineVisible ? $this->deadline?->toDateString() : null,
+            'how_to_apply' => $howVisible ? $this->how_to_apply : null,
+            'apply_link' => $howVisible ? $this->apply_link : null,
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,

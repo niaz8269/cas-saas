@@ -852,6 +852,14 @@ ALTER TABLE posts
   ADD COLUMN translations      JSON NULL AFTER body,
   ADD COLUMN body_translations JSON NULL AFTER translations;
 
+-- ADDENDUM (ADR-0015): audience-aware site, Phase 2 — admin-configurable
+-- field × audience visibility. Per gateable section, the audiences allowed to
+-- see it { "fee": ["student","agent","counselor"], ... }; a section left unset
+-- falls back to the Phase-1 default (registered-only).
+ALTER TABLE universities ADD COLUMN visibility JSON NULL;
+ALTER TABLE programs     ADD COLUMN visibility JSON NULL;
+ALTER TABLE scholarships ADD COLUMN visibility JSON NULL;
+
 -- Captured server errors for the admin error monitor, grouped by fingerprint
 -- (class+file+line) with an occurrence count and last-seen timestamp.
 CREATE TABLE error_logs (

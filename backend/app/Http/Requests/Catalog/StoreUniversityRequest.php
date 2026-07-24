@@ -29,6 +29,10 @@ class StoreUniversityRequest extends FormRequest
             'logo_path' => ['nullable', 'string', 'max:500'],
             'cover_path' => ['nullable', 'string', 'max:500'],
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
+            // Per-audience visibility config (sanitized to gateable sections on save).
+            'visibility' => ['nullable', 'array'],
+            'visibility.*' => ['array'],
+            'visibility.*.*' => ['string', Rule::in(['public', 'student', 'agent', 'counselor'])],
             'moe_listed' => ['sometimes', 'boolean'],
             'nearest_airport' => ['nullable', 'string', 'max:150'],
             'about' => ['nullable', 'string', 'max:20000'],

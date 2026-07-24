@@ -49,6 +49,10 @@ class StoreScholarshipRequest extends FormRequest
             'benefits.*.stipend_monthly' => ['nullable', 'numeric', 'min:0'],
 
             'status' => ['sometimes', Rule::in(['active', 'inactive'])],
+            // Per-audience visibility config (sanitized to gateable sections on save).
+            'visibility' => ['nullable', 'array'],
+            'visibility.*' => ['array'],
+            'visibility.*.*' => ['string', Rule::in(['public', 'student', 'agent', 'counselor'])],
         ];
     }
 }

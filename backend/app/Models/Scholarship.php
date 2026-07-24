@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAudienceVisibility;
 use Database\Factories\ScholarshipFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,10 @@ use Illuminate\Support\Str;
 class Scholarship extends Model
 {
     /** @use HasFactory<ScholarshipFactory> */
-    use HasFactory, SoftDeletes;
+    use HasAudienceVisibility, HasFactory, SoftDeletes;
+
+    /** Sections whose public visibility an admin can configure per audience. */
+    public const GATEABLE_SECTIONS = ['amount', 'deadline', 'how_to_apply'];
 
     protected $fillable = [
         'university_id',
@@ -34,6 +38,7 @@ class Scholarship extends Model
         'apply_link',
         'deadline',
         'benefits',
+        'visibility',
         'status',
     ];
 
@@ -47,6 +52,7 @@ class Scholarship extends Model
             'hostel_after' => 'decimal:2',
             'stipend_monthly' => 'decimal:2',
             'deadline' => 'date',
+            'visibility' => 'array',
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAudienceVisibility;
 use Database\Factories\UniversityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,10 @@ use Illuminate\Support\Str;
 class University extends Model
 {
     /** @use HasFactory<UniversityFactory> */
-    use HasFactory, SoftDeletes;
+    use HasAudienceVisibility, HasFactory, SoftDeletes;
+
+    /** Sections whose public visibility an admin can configure per audience. */
+    public const GATEABLE_SECTIONS = ['deadlines'];
 
     protected $fillable = [
         'name',
@@ -33,6 +37,7 @@ class University extends Model
         'requirements',
         'application_form',
         'representative_professor',
+        'visibility',
     ];
 
     protected function casts(): array
@@ -42,6 +47,7 @@ class University extends Model
             'requirements' => 'array',
             'application_form' => 'array',
             'representative_professor' => 'array',
+            'visibility' => 'array',
         ];
     }
 
