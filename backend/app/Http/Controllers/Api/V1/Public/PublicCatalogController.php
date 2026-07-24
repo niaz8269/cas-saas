@@ -9,19 +9,35 @@ use App\Http\Resources\Public\PublicUniversityResource;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
+use App\Services\Public\AudienceResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Unauthenticated read-only catalog for the public website. Only active
- * universities and their active programs / open intakes / active
- * scholarships are exposed; commission agreements and internal data never
- * appear here.
+ * Read-only catalog for the public website. Only active universities and
+ * their active programs / open intakes / active scholarships are exposed;
+ * commission agreements and internal data never appear. Authentication is
+ * OPTIONAL: a logged-in student/agent/staff token widens the "audience" so
+ * gated specifics (fees, deadlines, service charges) become visible and the
+ * program fee shows the viewer's role rate.
  */
 class PublicCatalogController extends Controller
 {
+    public function __construct(private readonly AudienceResolver $audiences) {}
+
+    /** Resolve the audience for this request and expose it to the resources. */
+    private function audience(Request $request): string
+    {
+        $audience = $this->audiences->resolve($request);
+        $request->attributes->set('audience', $audience);
+
+        return $audience;
+    }
+
     public function universities(Request $request): AnonymousResourceCollection
     {
+        $audience = $this->audience($request);
+
         $universities = University::query()
             ->where('status', 'active')
             ->with('country:id,name,iso2')
@@ -47,11 +63,14 @@ class PublicCatalogController extends Controller
             ->orderBy('city')
             ->pluck('city');
 
-        return PublicUniversityResource::collection($universities)->additional(['cities' => $cities]);
+        return PublicUniversityResource::collection($universities)
+            ->additional(['cities' => $cities, 'audience' => $audience]);
     }
 
-    public function university(string $slug): PublicUniversityResource
+    public function university(Request $request, string $slug): PublicUniversityResource
     {
+        $audience = $this->audience($request);
+
         $university = University::query()
             ->where('status', 'active')
             ->where('slug', $slug)
@@ -63,7 +82,7 @@ class PublicCatalogController extends Controller
             ])
             ->firstOrFail();
 
-        return new PublicUniversityResource($university);
+        return (new PublicUniversityResource($university))->additional(['audience' => $audience]);
     }
 
     /**
@@ -72,6 +91,8 @@ class PublicCatalogController extends Controller
      */
     public function programs(Request $request): AnonymousResourceCollection
     {
+        $audience = $this->audience($request);
+
         $programs = Program::query()
             ->where('status', 'active')
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
@@ -85,12 +106,14 @@ class PublicCatalogController extends Controller
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
 
-        return PublicProgramResource::collection($programs);
+        return PublicProgramResource::collection($programs)->additional(['audience' => $audience]);
     }
 
     /** Active scholarships across all active universities. */
     public function scholarships(Request $request): AnonymousResourceCollection
     {
+        $audience = $this->audience($request);
+
         $scholarships = Scholarship::query()
             ->where('status', 'active')
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
@@ -114,6 +137,7 @@ class PublicCatalogController extends Controller
             ->orderBy('type')
             ->pluck('type');
 
-        return PublicScholarshipResource::collection($scholarships)->additional(['types' => $types]);
+        return PublicScholarshipResource::collection($scholarships)
+            ->additional(['types' => $types, 'audience' => $audience]);
     }
 }

@@ -24,6 +24,7 @@ class PublicUniversityResource extends JsonResource
     {
         $images = app(ImageService::class);
         $rep = $this->representative_professor;
+        $registered = $request->attributes->get('audience', 'public') !== 'public';
 
         return [
             'id' => $this->id,
@@ -46,9 +47,12 @@ class PublicUniversityResource extends JsonResource
                 'photo_url' => $images->url($rep['photo'] ?? null),
             ] : null,
             'programs_count' => $this->whenCounted('programs'),
-            // Detail-only nested collections (present when eager-loaded).
+            // Detail-only nested collections (present when eager-loaded). The
+            // intake deadlines are gated to registered users; nested program /
+            // scholarship resources gate their own fee/amount specifics.
+            'deadlines_locked' => ! $registered,
             'programs' => PublicProgramResource::collection($this->whenLoaded('programs')),
-            'intakes' => PublicIntakeResource::collection($this->whenLoaded('intakes')),
+            'intakes' => $registered ? PublicIntakeResource::collection($this->whenLoaded('intakes')) : [],
             'scholarships' => PublicScholarshipResource::collection($this->whenLoaded('scholarships')),
         ];
     }

@@ -3,6 +3,7 @@
 use App\Models\Intake;
 use App\Models\Program;
 use App\Models\Scholarship;
+use App\Models\Student;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -73,7 +74,11 @@ it('shows a university by slug with only active programs, open intakes and activ
     // A commission agreement must never surface publicly.
     UniversityAgreement::factory()->for($uni)->create();
 
-    $data = $this->getJson('/api/v1/public/universities/jilin-medical-university')
+    // Viewed as a registered user so the (gated) intake deadlines are visible;
+    // this test verifies the active-only filtering of the nested collections.
+    $token = Student::factory()->create()->createToken('t')->plainTextToken;
+
+    $data = $this->withToken($token)->getJson('/api/v1/public/universities/jilin-medical-university')
         ->assertOk()
         ->assertJsonPath('data.name', 'Jilin Medical University')
         ->assertJsonPath('data.requirements', ['IELTS 6.0'])
