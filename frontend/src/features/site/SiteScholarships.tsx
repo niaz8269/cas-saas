@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Award, CalendarClock, School, Search } from "lucide-react"
+import { Award, CalendarClock, Lock, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
@@ -114,6 +114,11 @@ export default function SiteScholarships() {
               )}
               {s.deadline && (
                 <p className="flex items-center gap-1"><CalendarClock className="size-3.5" /> {t("scholarships.applyBy", { date: new Date(s.deadline).toLocaleDateString() })}</p>
+              )}
+              {s.details_locked && (
+                <Link to="/portal/login" className="inline-flex items-center gap-1 font-semibold text-cas-red hover:underline">
+                  <Lock className="size-3.5" /> {t("scholarships.signInForDetails")}
+                </Link>
               )}
             </div>
           </div>

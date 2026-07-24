@@ -305,3 +305,57 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   await user.click(screen.getByRole("button", { name: /Admission/ }))
   expect(screen.getByText("IELTS 6.0")).toBeInTheDocument()
 })
+
+it("gates registered-only detail sections with sign-in prompts (ADR-0015)", async () => {
+  const user = userEvent.setup()
+  const LOCKED = {
+    data: {
+      ...DETAIL.data,
+      // Backend hides gated sections for guests: empty intakes + null fees/amounts + locked flags.
+      intakes: [],
+      deadlines_locked: true,
+      programs: [{ id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: null, currency: "CNY", apply_link: null, requirements: null, fee_locked: true }],
+      scholarships: [{ id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition", amount: null, currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null, apply_link: null, deadline: null, details_locked: true }],
+    },
+  }
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LOCKED)))
+
+  renderWithProviders(
+    <Routes>
+      <Route path="/site/universities/:slug" element={<SiteUniversity />} />
+    </Routes>,
+    { route: "/site/universities/jilin-medical-university" },
+  )
+
+  // Hero deadline chip becomes a sign-in prompt when intake deadlines are gated.
+  expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
+  expect(screen.getAllByRole("link", { name: /Sign in to see intake deadlines/i }).length).toBeGreaterThan(0)
+
+  // Programs tab — fee is replaced by a sign-in prompt.
+  await user.click(screen.getByRole("button", { name: /Programs/ }))
+  expect(screen.getByRole("link", { name: /Sign in to see fees/i })).toBeInTheDocument()
+
+  // Scholarships tab — award specifics are gated.
+  await user.click(screen.getByRole("button", { name: /Scholarships/ }))
+  expect(screen.getByRole("link", { name: /Sign in to see award details/i })).toBeInTheDocument()
+
+  // Intakes tab is still offered and shows the prompt (not hidden entirely).
+  await user.click(screen.getByRole("button", { name: /Intakes/ }))
+  expect(screen.getAllByRole("link", { name: /Sign in to see intake deadlines/i }).length).toBeGreaterThan(0)
+})
+
+it("gates scholarship award details on the listing when locked", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+    data: [{
+      id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition",
+      amount: null, currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null,
+      apply_link: null, deadline: null, details_locked: true, university: { name: "Jilin Medical", slug: "jilin-medical" },
+    }],
+    meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
+  })))
+
+  renderWithProviders(<SiteScholarships />)
+
+  expect(await screen.findByText("Belt & Road Scholarship")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /Sign in to see award details/i })).toBeInTheDocument()
+})

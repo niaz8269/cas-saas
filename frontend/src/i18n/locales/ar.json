@@ -147,6 +147,9 @@
     "scholarshipsEmpty": "لا توجد منح دراسية مدرجة بعد — اسأل مستشار CAS عن خياراتك.",
     "deadlineLabel": "الموعد النهائي {{date}}",
     "howToApply": "كيفية التقديم",
+    "signInForFees": "سجّل الدخول لعرض الرسوم",
+    "signInForDeadlines": "سجّل الدخول لعرض مواعيد التقديم",
+    "signInForAward": "سجّل الدخول لعرض تفاصيل المنحة",
     "admissionRequirements": "متطلبات القبول",
     "requirementsFallback": "تختلف المتطلبات حسب البرنامج — اسأل مستشار CAS عن قائمة المتطلبات الدقيقة لتخصصك.",
     "readyToApply": "هل أنت مستعد للتقديم؟",
@@ -198,6 +201,7 @@
     "emptyTitle": "لم يُعثر على منح دراسية",
     "emptyBody": "جرّب بحثًا مختلفًا.",
     "applyBy": "قدّم قبل {{date}}",
+    "signInForDetails": "سجّل الدخول لعرض تفاصيل المنحة",
     "previous": "السابق",
     "next": "التالي",
     "pageOf": "الصفحة {{current}} من {{last}}"

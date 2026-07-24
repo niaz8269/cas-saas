@@ -139,6 +139,9 @@
     "scholarshipsEmpty": "暂无奖学金信息——欢迎向 CAS 顾问咨询适合您的选择。",
     "deadlineLabel": "截止日期 {{date}}",
     "howToApply": "如何申请",
+    "signInForFees": "登录后查看学费",
+    "signInForDeadlines": "登录后查看入学截止日期",
+    "signInForAward": "登录后查看奖学金详情",
     "admissionRequirements": "录取要求",
     "requirementsFallback": "各专业要求不尽相同——欢迎向 CAS 顾问咨询您所申专业的具体材料清单。",
     "readyToApply": "准备好申请了吗？",
@@ -190,6 +193,7 @@
     "emptyTitle": "未找到奖学金",
     "emptyBody": "请尝试其他搜索。",
     "applyBy": "{{date}} 前申请",
+    "signInForDetails": "登录后查看奖学金详情",
     "previous": "上一页",
     "next": "下一页",
     "pageOf": "第 {{current}} 页，共 {{last}} 页"

@@ -139,6 +139,9 @@
     "scholarshipsEmpty": "Aucune bourse listée pour le moment — demandez à un conseiller CAS quelles sont vos options.",
     "deadlineLabel": "Échéance {{date}}",
     "howToApply": "Comment candidater",
+    "signInForFees": "Connectez-vous pour voir les frais",
+    "signInForDeadlines": "Connectez-vous pour voir les dates limites d'admission",
+    "signInForAward": "Connectez-vous pour voir les détails de la bourse",
     "admissionRequirements": "Conditions d'admission",
     "requirementsFallback": "Les conditions varient selon le programme — demandez à un conseiller CAS la liste exacte pour votre cursus.",
     "readyToApply": "Prêt à candidater ?",
@@ -190,6 +193,7 @@
     "emptyTitle": "Aucune bourse trouvée",
     "emptyBody": "Essayez une autre recherche.",
     "applyBy": "Candidater avant le {{date}}",
+    "signInForDetails": "Connectez-vous pour voir les détails de la bourse",
     "previous": "Précédent",
     "next": "Suivant",
     "pageOf": "Page {{current}} sur {{last}}"

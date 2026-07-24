@@ -139,6 +139,9 @@
     "scholarshipsEmpty": "No scholarships listed yet — ask a CAS advisor about your options.",
     "deadlineLabel": "Deadline {{date}}",
     "howToApply": "How to apply",
+    "signInForFees": "Sign in to see fees",
+    "signInForDeadlines": "Sign in to see intake deadlines",
+    "signInForAward": "Sign in to see award details",
     "admissionRequirements": "Admission requirements",
     "requirementsFallback": "Requirements vary by program — ask a CAS advisor for the exact checklist for your course.",
     "readyToApply": "Ready to apply?",
@@ -190,6 +193,7 @@
     "emptyTitle": "No scholarships found",
     "emptyBody": "Try a different search.",
     "applyBy": "Apply by {{date}}",
+    "signInForDetails": "Sign in to see award details",
     "previous": "Previous",
     "next": "Next",
     "pageOf": "Page {{current}} of {{last}}"

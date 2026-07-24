@@ -10,6 +10,7 @@ import {
   GraduationCap,
   Info,
   Languages,
+  Lock,
   MapPin,
   Plane,
   ShieldCheck,
@@ -147,6 +148,12 @@ export default function SiteUniversity() {
               </span>
             </div>
           )}
+          {!deadline && u.deadlines_locked && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-sm bg-subtle px-3 py-2 text-sm">
+              <CalendarClock className="size-4 text-cas-navy" />
+              <SignInGate label={t("university.signInForDeadlines")} />
+            </div>
+          )}
 
         </div>
       </div>
@@ -167,7 +174,7 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
   const tabs: { key: string; label: string; icon: LucideIcon }[] = [
     { key: "overview", label: t("university.tabOverview"), icon: Info },
     { key: "programs", label: u.programs.length ? t("university.tabProgramsCount", { count: u.programs.length }) : t("university.tabPrograms"), icon: GraduationCap },
-    ...(u.intakes.length ? [{ key: "intakes", label: t("university.tabIntakes"), icon: CalendarDays }] : []),
+    ...(u.intakes.length || u.deadlines_locked ? [{ key: "intakes", label: t("university.tabIntakes"), icon: CalendarDays }] : []),
     ...(u.scholarships.length ? [{ key: "scholarships", label: t("university.tabScholarships"), icon: Award }] : []),
     { key: "admission", label: t("university.tabAdmission"), icon: ClipboardCheck },
   ]
@@ -204,6 +211,15 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
 
 function Empty({ text }: { text: string }) {
   return <p className="rounded-sm border bg-card p-6 text-sm text-muted-foreground shadow-sm">{text}</p>
+}
+
+/** Registered-only content is gated (ADR-0015); prompt the visitor to sign in. */
+function SignInGate({ label, className }: { label: string; className?: string }) {
+  return (
+    <Link to="/portal/login" className={cn("inline-flex items-center gap-1 font-semibold text-cas-red hover:underline", className)}>
+      <Lock className="size-3.5" /> {label}
+    </Link>
+  )
 }
 
 function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
@@ -259,7 +275,18 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
               <h3 className="font-medium">{p.name}</h3>
               <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
             </div>
-            {p.tuition_fee != null && <span className="text-sm font-semibold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency)}<span className="text-xs font-normal text-muted-foreground">{t("university.perYear")}</span></span>}
+            {p.fee_locked ? (
+              <SignInGate label={t("university.signInForFees")} className="text-sm" />
+            ) : p.tuition_fee != null ? (
+              <span className="text-right text-sm font-semibold tabular-nums text-cas-navy">
+                {money(p.tuition_fee, p.currency)}<span className="text-xs font-normal text-muted-foreground">{t("university.perYear")}</span>
+                {p.service_charge && (
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    {t("programs.serviceFee", { amount: Number(p.service_charge.amount).toLocaleString(), currency: p.service_charge.currency })}
+                  </span>
+                )}
+              </span>
+            ) : null}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
@@ -273,6 +300,13 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
 
 function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
   const { t } = useTranslation()
+  if (u.deadlines_locked) {
+    return (
+      <div className="rounded-sm border bg-card p-6 shadow-sm">
+        <SignInGate label={t("university.signInForDeadlines")} />
+      </div>
+    )
+  }
   if (!u.intakes.length) return <Empty text={t("university.intakesEmpty")} />
 
   return (
@@ -312,7 +346,11 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
           <p className="mt-2 text-sm text-muted-foreground">
             {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? t("university.deadlineLabel", { date: new Date(s.deadline).toLocaleDateString() }) : null].filter(Boolean).join(" · ")}
           </p>
-          {s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">{t("university.howToApply")} <ExternalLink className="size-3" /></a>}
+          {s.details_locked ? (
+            <div className="mt-2"><SignInGate label={t("university.signInForAward")} className="text-xs" /></div>
+          ) : (
+            s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">{t("university.howToApply")} <ExternalLink className="size-3" /></a>
+          )}
         </div>
       ))}
     </div>

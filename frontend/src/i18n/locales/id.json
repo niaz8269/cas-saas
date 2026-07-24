@@ -139,6 +139,9 @@
     "scholarshipsEmpty": "Belum ada beasiswa yang tercantum — tanyakan pilihan Anda kepada penasihat CAS.",
     "deadlineLabel": "Batas waktu {{date}}",
     "howToApply": "Cara mendaftar",
+    "signInForFees": "Masuk untuk melihat biaya",
+    "signInForDeadlines": "Masuk untuk melihat tenggat penerimaan",
+    "signInForAward": "Masuk untuk melihat detail beasiswa",
     "admissionRequirements": "Persyaratan penerimaan",
     "requirementsFallback": "Persyaratan berbeda-beda tiap program — tanyakan penasihat CAS untuk daftar lengkap yang tepat bagi jurusan Anda.",
     "readyToApply": "Siap mendaftar?",
@@ -190,6 +193,7 @@
     "emptyTitle": "Beasiswa tidak ditemukan",
     "emptyBody": "Coba pencarian lain.",
     "applyBy": "Daftar paling lambat {{date}}",
+    "signInForDetails": "Masuk untuk melihat detail beasiswa",
     "previous": "Sebelumnya",
     "next": "Berikutnya",
     "pageOf": "Halaman {{current}} dari {{last}}"
