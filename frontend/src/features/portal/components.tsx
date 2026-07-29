@@ -29,6 +29,51 @@ export function PortalCard({ children, className }: { children: ReactNode; class
   return <div className={cn("rounded-xl border bg-card p-4 shadow-sm", className)}>{children}</div>
 }
 
+/**
+ * Initials chip standing in for a person. Decorative — the name it derives
+ * from is always rendered next to it, so it stays out of the accessibility
+ * tree rather than repeating that name to a screen reader.
+ */
+export function Initials({ name, className }: { name: string; className?: string }) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("")
+
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-xs font-semibold text-cas-navy",
+        className,
+      )}
+    >
+      {initials || "?"}
+    </span>
+  )
+}
+
+/** Compact labelled figure for the portal's summary strips. */
+export function StatTile({ label, value, tone = "default" }: {
+  label: string
+  value: ReactNode
+  tone?: "default" | "money" | "positive"
+}) {
+  return (
+    <div className="rounded-xl border bg-card p-3 shadow-sm">
+      <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{label}</p>
+      <p className={cn(
+        "mt-1 truncate text-lg font-semibold tabular-nums",
+        tone === "positive" ? "text-success" : tone === "money" ? "text-cas-navy" : "text-foreground",
+      )}>
+        {value}
+      </p>
+    </div>
+  )
+}
+
 export function ListSkeleton({ rows = 3 }: { rows?: number }) {
   return (
     <div className="space-y-3">

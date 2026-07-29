@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { getAgentCommissions, getAgentStatementPdf } from "@/features/portal/api"
 import {
   EmptyState,
+  Initials,
   ListSkeleton,
   LoadError,
   PageTitle,
@@ -37,14 +38,15 @@ export default function AgentCommissions() {
     <div>
       <PageTitle title={t("agentPortal.commissions.title")} subtitle={t("agentPortal.commissions.subtitle")} />
 
-      <div className="mb-4 grid grid-cols-2 gap-3">
+      {/* The one screen where money is the subject — the brand card carries it. */}
+      <div className="mb-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-cas-navy bg-cas-navy p-4 shadow-sm">
+          <p className="text-[11px] font-medium tracking-wider text-white/70 uppercase">{t("agentPortal.commissions.awaitingPayout")}</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-white">{money(payable)}</p>
+        </div>
         <PortalCard>
-          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.commissions.awaitingPayout")}</p>
-          <p className="mt-1 text-xl font-semibold tabular-nums text-cas-navy">{money(payable)}</p>
-        </PortalCard>
-        <PortalCard>
-          <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.commissions.paidToDate")}</p>
-          <p className="mt-1 text-xl font-semibold tabular-nums text-green-700">{money(paid)}</p>
+          <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.commissions.paidToDate")}</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-success">{money(paid)}</p>
         </PortalCard>
       </div>
 
@@ -71,14 +73,15 @@ export default function AgentCommissions() {
 
       <div className="space-y-2">
         {data?.data.map((p) => (
-          <PortalCard key={p.id} className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
+          <PortalCard key={p.id} className="flex items-center gap-3">
+            <Initials name={p.student?.full_name ?? "?"} />
+            <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{p.student?.full_name ?? "—"}</p>
-              <p className="font-mono text-xs text-muted-foreground">
+              <p className="truncate font-mono text-xs text-muted-foreground">
                 {p.student?.student_code}{p.university ? ` · ${p.university}` : ""}
               </p>
             </div>
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex shrink-0 flex-col items-end gap-1">
               <span className="text-sm font-semibold tabular-nums">{money(p.amount, p.currency)}</span>
               <StatusBadge status={p.status} map={PAYABLE_BADGE} />
             </div>

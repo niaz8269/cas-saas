@@ -63,8 +63,8 @@ export default function PortalShell() {
 
   return (
     <div dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col bg-subtle">
-      {/* Header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-card px-4 py-3">
+      {/* Header — full width above both the desktop rail and the content */}
+      <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-card px-4">
         <img src={casLogo} alt="CAS" className="h-8 w-auto" />
         <div className="flex items-center gap-2">
           <PortalNotificationBell kind={kind ?? "student"} />
@@ -85,13 +85,44 @@ export default function PortalShell() {
 
       <StudentVerifyBanner />
 
-      {/* Content */}
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 pt-4 pb-24">
-        <Outlet />
-      </main>
+      <div className="flex flex-1">
+        {/*
+          Desktop rail (lg+). Below lg the portal stays exactly as designed —
+          mobile-first stacked cards with the bottom tab bar — so the phone
+          experience is untouched and only the wasted desktop width changes.
+        */}
+        <aside
+          aria-label={t("portal.navAria")}
+          className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-60 shrink-0 border-r bg-card px-3 py-4 lg:block"
+        >
+          <ul className="space-y-0.5">
+            {nav.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  end={item.end}
+                  className={({ isActive }) => cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-cas-navy-50 text-cas-navy"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  <item.icon className="size-4 shrink-0" aria-hidden="true" />
+                  {t(item.labelKey)}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-      {/* Bottom nav (mobile-first; centered on wider screens) */}
-      <nav className="fixed inset-x-0 bottom-0 z-10 border-t bg-card/95 backdrop-blur">
+        <main className="mx-auto w-full max-w-2xl flex-1 px-4 pt-4 pb-24 lg:max-w-5xl lg:px-8 lg:pt-6 lg:pb-10">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Bottom nav — mobile and tablet only; the rail replaces it on desktop */}
+      <nav className="fixed inset-x-0 bottom-0 z-10 border-t bg-card/95 backdrop-blur lg:hidden">
         <ul className="mx-auto flex max-w-2xl items-stretch justify-around">
           {nav.map((item) => (
             <li key={item.to} className="flex-1">

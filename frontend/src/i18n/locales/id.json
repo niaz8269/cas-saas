@@ -945,6 +945,7 @@
     }
   },
   "portal": {
+    "navAria": "Bagian portal",
     "navHome": "Beranda",
     "navStudents": "Siswa",
     "navApply": "Ajukan",
@@ -1120,9 +1121,10 @@
       "governmentScholarship": "Aplikasi beasiswa pemerintah",
       "students": "Siswa",
       "awaitingPayout": "Menunggu pencairan",
-      "earningsToDate": "Pendapatan hingga kini",
-      "paidAmount": "{{amount}} dibayar",
-      "stillToCome": "{{amount}} masih akan diterima",
+      "applyHint": "Pilih program dan ajukan atas nama mereka",
+      "addStudentHint": "Daftarkan siswa sebelum mengajukan untuknya",
+      "scholarshipHint": "Beasiswa pemerintah, tanpa program tetap",
+      "viewAll": "Lihat semua",
       "recentStudents": "Siswa terbaru",
       "appCount_one": "{{count}} aplikasi",
       "appCount_other": "{{count}} aplikasi",

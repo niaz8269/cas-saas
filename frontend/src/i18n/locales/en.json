@@ -942,6 +942,7 @@
     }
   },
   "portal": {
+    "navAria": "Portal sections",
     "navHome": "Home",
     "navStudents": "Students",
     "navApply": "Apply",
@@ -1117,9 +1118,10 @@
       "governmentScholarship": "Government scholarship application",
       "students": "Students",
       "awaitingPayout": "Awaiting payout",
-      "earningsToDate": "Earnings to date",
-      "paidAmount": "{{amount}} paid",
-      "stillToCome": "{{amount}} still to come",
+      "applyHint": "Pick a course and submit on their behalf",
+      "addStudentHint": "Register a student before applying for them",
+      "scholarshipHint": "Government scholarships, no fixed course",
+      "viewAll": "View all",
       "recentStudents": "Recent students",
       "appCount_one": "{{count}} app",
       "appCount_other": "{{count}} apps",

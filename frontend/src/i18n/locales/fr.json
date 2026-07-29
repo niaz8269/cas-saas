@@ -945,6 +945,7 @@
     }
   },
   "portal": {
+    "navAria": "Sections du portail",
     "navHome": "Accueil",
     "navStudents": "Étudiants",
     "navApply": "Postuler",
@@ -1120,9 +1121,10 @@
       "governmentScholarship": "Demande de bourse d'État",
       "students": "Étudiants",
       "awaitingPayout": "En attente de versement",
-      "earningsToDate": "Revenus à ce jour",
-      "paidAmount": "{{amount}} versés",
-      "stillToCome": "{{amount}} à venir",
+      "applyHint": "Choisissez une formation et postulez en son nom",
+      "addStudentHint": "Enregistrez un étudiant avant de postuler pour lui",
+      "scholarshipHint": "Bourses d'État, sans formation précise",
+      "viewAll": "Tout voir",
       "recentStudents": "Étudiants récents",
       "appCount_one": "{{count}} candidature",
       "appCount_other": "{{count}} candidatures",

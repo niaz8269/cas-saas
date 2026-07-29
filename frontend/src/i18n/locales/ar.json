@@ -957,6 +957,7 @@
     }
   },
   "portal": {
+    "navAria": "أقسام البوابة",
     "navHome": "الرئيسية",
     "navStudents": "الطلاب",
     "navApply": "تقديم طلب",
@@ -1132,9 +1133,10 @@
       "governmentScholarship": "طلب منحة حكومية",
       "students": "الطلاب",
       "awaitingPayout": "بانتظار الصرف",
-      "earningsToDate": "الأرباح حتى الآن",
-      "paidAmount": "{{amount}} مدفوعة",
-      "stillToCome": "{{amount}} مستحقة لاحقًا",
+      "applyHint": "اختر برنامجًا وقدّم الطلب نيابةً عنه",
+      "addStudentHint": "سجّل الطالب أولًا ثم قدّم له",
+      "scholarshipHint": "منح حكومية، دون برنامج محدّد",
+      "viewAll": "عرض الكل",
       "recentStudents": "الطلاب الأخيرون",
       "appCount_zero": "لا توجد طلبات",
       "appCount_one": "طلب واحد",

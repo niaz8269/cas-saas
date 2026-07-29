@@ -945,6 +945,7 @@
     }
   },
   "portal": {
+    "navAria": "门户导航",
     "navHome": "首页",
     "navStudents": "学生",
     "navApply": "申请",
@@ -1120,9 +1121,10 @@
       "governmentScholarship": "政府奖学金申请",
       "students": "学生",
       "awaitingPayout": "待结算",
-      "earningsToDate": "累计收益",
-      "paidAmount": "已支付 {{amount}}",
-      "stillToCome": "待支付 {{amount}}",
+      "applyHint": "选择课程并代其提交申请",
+      "addStudentHint": "先登记学生，然后为其申请",
+      "scholarshipHint": "政府奖学金，无需指定课程",
+      "viewAll": "查看全部",
       "recentStudents": "最近的学生",
       "appCount_one": "{{count}} 份申请",
       "appCount_other": "{{count}} 份申请",
