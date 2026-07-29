@@ -98,6 +98,10 @@ Route::prefix('v1')->group(function () {
             Route::post('auth/logout', [AgentAuthController::class, 'logout']);
             Route::get('auth/me', [AgentAuthController::class, 'me']);
             Route::get('students', [AgentPortalController::class, 'students']);
+            // Partner submits a student into their own book (§5.7). Throttled:
+            // this writes the permanent student registry.
+            Route::post('students', [AgentPortalController::class, 'storeStudent'])
+                ->middleware('throttle:30,1');
 
             // Apply on behalf of an owned student — browsing then the write
             // path (static segments precede any applications/{application}).

@@ -3,22 +3,28 @@
 namespace App\Http\Controllers\Api\V1\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Portal\AgentStoreStudentRequest;
 use App\Http\Resources\Portal\AgentApplicationResource;
 use App\Http\Resources\Portal\AgentPayableResource;
 use App\Http\Resources\Portal\AgentStudentResource;
+use App\Models\Activity;
 use App\Models\AgentPayable;
 use App\Models\Application;
+use App\Models\Concerns\Auditable;
 use App\Models\Student;
+use App\Services\Leads\DuplicateDetector;
+use App\Services\Leads\LeadIngestionService;
 use App\Support\BrandAssets;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Agent portal reads (report §5.7): strictly the agent's own records.
- * Scope is the authenticated agent from the `agent` guard — no policies
- * or record-scope resolution; the token IS the scope.
+ * Agent portal (report §5.7): strictly the agent's own records — reads, plus
+ * the "submit students" write. Scope is the authenticated agent from the
+ * `agent` guard — no policies or record-scope resolution; the token IS the scope.
  */
 class AgentPortalController extends Controller
 {
@@ -40,6 +46,69 @@ class AgentPortalController extends Controller
             ->paginate(min($request->integer('per_page', 25), 100));
 
         return AgentStudentResource::collection($students);
+    }
+
+    /**
+     * Add a student to the partner's own book (report §5.7 "submit students").
+     *
+     * The student is created directly in the permanent registry, attributed to
+     * the acting agent, so the partner can apply on their behalf immediately.
+     * Because this writes the permanent identity, the same exact-match dedup
+     * the lead intake uses ({@see LeadIngestionService})
+     * guards it: a normalized email / phone / passport hit is refused with 409
+     * rather than forking the identity.
+     *
+     * The audit trail records no actor for portal writes by design
+     * ({@see Auditable}), so attribution is carried by
+     * `students.agent_id` plus a system entry on the student timeline.
+     */
+    public function storeStudent(AgentStoreStudentRequest $request, DuplicateDetector $detector): JsonResponse
+    {
+        $agent = $request->user();
+        $data = $request->validated();
+
+        $email = $detector->normalizeEmail($data['email'] ?? null);
+        $phone = $detector->normalizePhone($data['phone'] ?? null);
+        $passport = $detector->normalizePassport($data['passport_no'] ?? null);
+
+        if ($existing = $detector->findExactStudent($email, $phone, $passport)) {
+            // Only reveal the record when it is already the agent's own —
+            // another partner's student must not leak through this surface.
+            $mine = $existing->agent_id === $agent->id;
+
+            return response()->json([
+                'message' => $mine
+                    ? 'This student is already on your list.'
+                    : 'A student with these details already exists at CAS. Contact your CAS coordinator.',
+                'code' => 'DUPLICATE',
+                'student_id' => $mine ? $existing->id : null,
+            ], 409);
+        }
+
+        $student = Student::create([
+            ...$data,
+            'email' => $email,
+            'phone' => $phone,
+            'passport_no' => $passport,
+            'student_code' => Student::nextCode(),
+            'agent_id' => $agent->id,
+            'status' => 'active',
+        ]);
+
+        Activity::create([
+            'student_id' => $student->id,
+            'user_id' => null, // portal action — no staff actor
+            'type' => 'system',
+            'body' => "Added by partner {$agent->name} ({$agent->agent_code})",
+            'meta' => ['agent_id' => $agent->id],
+            'created_at' => now(),
+        ]);
+
+        return response()->json([
+            'data' => new AgentStudentResource(
+                $student->load('country:id,name')->loadCount('applications'),
+            ),
+        ], 201);
     }
 
     public function applications(Request $request): AnonymousResourceCollection
