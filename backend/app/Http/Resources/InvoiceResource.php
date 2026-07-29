@@ -55,6 +55,16 @@ class InvoiceResource extends JsonResource
                 'received_at' => $payment->received_at?->toIso8601String(),
                 'recorded_by' => $payment->recorder?->name,
             ])),
+            // Proof of payment the applicant filed. `pending` means nobody has
+            // confirmed it yet — on a processing-fee invoice that is what is
+            // holding the student's application.
+            'pending_receipts_count' => $this->whenCounted('pending_receipts_count'),
+            'receipts' => $this->whenLoaded('documents', fn () => $this->documents->map(fn ($doc) => [
+                'id' => $doc->id,
+                'file_name' => $doc->file_name,
+                'status' => $doc->status,
+                'uploaded_at' => $doc->created_at?->toIso8601String(),
+            ])),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

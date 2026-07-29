@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Plus, Receipt, Search } from "lucide-react"
+import { Clock, Plus, Receipt, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -49,6 +49,7 @@ export default function FinancePage() {
   const [q, setQ] = useState("")
   const [status, setStatus] = useState("all")
   const [partyType, setPartyType] = useState("all")
+  const [pendingReceipt, setPendingReceipt] = useState(false)
   const [page, setPage] = useState(1)
   const [newOpen, setNewOpen] = useState(false)
 
@@ -62,17 +63,28 @@ export default function FinancePage() {
   }, [searchInput])
 
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["invoices", { q, status, partyType, page }],
+    queryKey: ["invoices", { q, status, partyType, pendingReceipt, page }],
     queryFn: () =>
       listInvoices({
         q: q || undefined,
         status: status === "all" ? undefined : status,
         party_type: partyType === "all" ? undefined : partyType,
+        pendingReceipt: pendingReceipt || undefined,
         page,
       }),
     placeholderData: keepPreviousData,
   })
 
+  // Standing count for the toggle, independent of the filters in force — a
+  // receipt nobody has confirmed is holding a student's application, so the
+  // number has to stay visible even while Finance is looking at something else.
+  const waiting = useQuery({
+    queryKey: ["invoices", "pending-receipts"],
+    queryFn: () => listInvoices({ pendingReceipt: true }),
+    refetchInterval: 60_000,
+  })
+
+  const waitingCount = waiting.data?.meta.total ?? 0
   const invoices = data?.data ?? []
   const meta = data?.meta
 
@@ -113,6 +125,24 @@ export default function FinancePage() {
             <SelectItem value="university">University</SelectItem>
           </SelectContent>
         </Select>
+
+        <Button
+          type="button"
+          variant={pendingReceipt ? "default" : "secondary"}
+          aria-pressed={pendingReceipt}
+          onClick={() => { setPendingReceipt((on) => !on); setPage(1) }}
+        >
+          <Clock className="size-4" />
+          Receipts to confirm
+          {waitingCount > 0 && (
+            <span className={cn(
+              "ms-1 rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums",
+              pendingReceipt ? "bg-white/20 text-white" : "bg-cas-red text-white",
+            )}>
+              {waitingCount}
+            </span>
+          )}
+        </Button>
 
         <div className="ml-auto flex items-center gap-2">
           <ExportButton path={`/invoices/export${invoiceExportQuery(q, status, partyType)}`} filename="invoices.csv" />
@@ -186,9 +216,17 @@ export default function FinancePage() {
                 <TableCell className="text-right tabular-nums">{money(invoice.total, invoice.currency)}</TableCell>
                 <TableCell className="text-right tabular-nums">{money(invoice.amount_paid, invoice.currency)}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={cn("border-transparent capitalize", INVOICE_STATUS_BADGE[invoice.status])}>
-                    {label(invoice.status)}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className={cn("border-transparent capitalize", INVOICE_STATUS_BADGE[invoice.status])}>
+                      {label(invoice.status)}
+                    </Badge>
+                    {(invoice.pending_receipts_count ?? 0) > 0 && (
+                      <Badge variant="outline" className="border-transparent bg-amber-50 text-warning">
+                        <Clock className="size-3" aria-hidden="true" />
+                        Receipt to confirm
+                      </Badge>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

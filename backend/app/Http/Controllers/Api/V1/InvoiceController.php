@@ -79,6 +79,13 @@ class InvoiceController extends Controller
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('filter.party_type'), fn ($q) => $q->where('party_type', $request->input('filter.party_type')))
             ->when($request->filled('filter.application_id'), fn ($q) => $q->where('application_id', $request->input('filter.application_id')))
+            // Finance's confirmation queue: money a student says they sent and
+            // nobody has checked yet. For a processing fee this is what holds
+            // their application, so it must not sit unnoticed.
+            ->when($request->boolean('filter.pending_receipt'), fn ($q) => $q
+                ->whereNotIn('status', ['paid', 'cancelled'])
+                ->whereHas('documents', fn ($d) => $d->where('status', 'pending')))
+            ->withCount(['documents as pending_receipts_count' => fn ($d) => $d->where('status', 'pending')])
             ->when($request->filled('q'), fn ($q) => $q->where('invoice_no', 'like', '%'.$request->string('q').'%'));
     }
 
@@ -129,6 +136,7 @@ class InvoiceController extends Controller
         $invoice->load([
             'items',
             'payments.recorder:id,name',
+            'documents',
             'application:id,application_code,student_id',
             'application.student:id,first_name,last_name',
         ]);
