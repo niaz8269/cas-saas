@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { FilePlus2, GraduationCap } from "lucide-react"
+import { FilePlus2, GraduationCap, UserPlus } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -29,17 +29,30 @@ export default function AgentStudents() {
     <div>
       <div className="mb-4 flex items-start justify-between gap-3">
         <PageTitle title={t("agentPortal.students.title")} subtitle={t("agentPortal.students.subtitle")} />
-        <Button asChild size="sm" className="shrink-0">
-          <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> {t("agentPortal.students.newApplication")}</Link>
-        </Button>
+        <div className="flex shrink-0 flex-wrap justify-end gap-2">
+          <Button asChild variant="secondary" size="sm">
+            <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> {t("agentPortal.students.newApplication")}</Link>
+          </Button>
+          <Button asChild size="sm">
+            <Link to="/portal/agent/students/new"><UserPlus className="size-4" /> {t("agentPortal.students.addStudent")}</Link>
+          </Button>
+        </div>
       </div>
 
       {isPending && <ListSkeleton rows={4} />}
       {isError && <LoadError onRetry={refetch} />}
 
       {data && data.data.length === 0 && (
-        <EmptyState icon={<GraduationCap className="mx-auto size-8" />} title={t("agentPortal.students.emptyTitle")}
-          hint={t("agentPortal.students.emptyHint")} />
+        <EmptyState
+          icon={<GraduationCap className="mx-auto size-8" />}
+          title={t("agentPortal.students.emptyTitle")}
+          hint={t("agentPortal.students.emptyHint")}
+          action={
+            <Button asChild>
+              <Link to="/portal/agent/students/new"><UserPlus className="size-4" /> {t("agentPortal.students.addStudent")}</Link>
+            </Button>
+          }
+        />
       )}
 
       <div className="space-y-2">

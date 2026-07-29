@@ -122,6 +122,28 @@ export interface AgentPayableRow {
 export const getAgentStudents = (params: { status?: string; page?: number; q?: string } = {}) =>
   portalApi<Paginated<AgentStudentRow>>(`/agent/students${query(params)}`)
 
+export interface AgentCreateStudentPayload {
+  first_name: string
+  last_name: string
+  email?: string
+  phone?: string
+  passport_no?: string
+  dob?: string
+  gender?: "male" | "female" | "other"
+  country_id?: number
+}
+
+/**
+ * Add a student to the partner's own book (report §5.7 "submit students").
+ * The owning agent comes from the token — never the payload. A 409 with
+ * `code: "DUPLICATE"` means the person is already in the CAS registry.
+ */
+export const createAgentStudent = (payload: AgentCreateStudentPayload) =>
+  portalApi<{ data: AgentStudentRow }>("/agent/students", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
 export const getAgentApplications = (params: { status?: string; page?: number } = {}) =>
   portalApi<Paginated<AgentApplicationRow>>(`/agent/applications${query(params)}`)
 

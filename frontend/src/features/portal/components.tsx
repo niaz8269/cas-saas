@@ -42,12 +42,19 @@ export function ListSkeleton({ rows = 3 }: { rows?: number }) {
   )
 }
 
-export function EmptyState({ icon, title, hint }: { icon: ReactNode; title: string; hint?: string }) {
+export function EmptyState({ icon, title, hint, action }: {
+  icon: ReactNode
+  title: string
+  hint?: string
+  /** Optional single primary action — the design system's empty-state CTA. */
+  action?: ReactNode
+}) {
   return (
     <div className="rounded-xl border bg-card p-10 text-center shadow-sm">
       <div className="mx-auto mb-3 text-muted-foreground">{icon}</div>
       <p className="text-sm font-medium">{title}</p>
       {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   )
 }
