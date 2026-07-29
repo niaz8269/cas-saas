@@ -2,19 +2,23 @@
 
 namespace App\Http\Requests\Portal;
 
-use App\Http\Requests\Crm\StoreStudentRequest;
+use App\Http\Requests\Portal\Concerns\ValidatesApplicantData;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 /**
  * Partner "add student" submission (report §5.7 — "submit students").
  *
- * Mirrors the staff {@see StoreStudentRequest} field set.
+ * Identity (the two names + the contact email) plus the SAME applicant record
+ * an application is built from — profile, guardians, prior education — so the
+ * partner enters each fact once and the apply wizard can prefill from it.
+ *
  * `agent_id`, `student_code` and `status` are deliberately absent: they are
  * derived server-side from the acting agent, never accepted from the client.
  */
 class AgentStoreStudentRequest extends FormRequest
 {
+    use ValidatesApplicantData;
+
     public function authorize(): bool
     {
         return true; // scope is the agent guard — the token IS the scope
@@ -29,11 +33,8 @@ class AgentStoreStudentRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:190'],
-            'phone' => ['nullable', 'string', 'max:30'],
-            'passport_no' => ['nullable', 'string', 'max:50'],
-            'dob' => ['nullable', 'date', 'before:today'],
-            'gender' => ['nullable', Rule::in(['male', 'female', 'other'])],
-            'country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
+
+            ...$this->applicantDataRules(),
         ];
     }
 }

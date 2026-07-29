@@ -126,11 +126,10 @@ export interface AgentCreateStudentPayload {
   first_name: string
   last_name: string
   email?: string
-  phone?: string
-  passport_no?: string
-  dob?: string
-  gender?: "male" | "female" | "other"
-  country_id?: number
+  /** Same applicant record the apply wizards post — see AgentStudentDetail. */
+  profile?: Record<string, string>
+  guardians?: WizardGuardian[]
+  education?: WizardEducation[]
 }
 
 /**
@@ -143,6 +142,23 @@ export const createAgentStudent = (payload: AgentCreateStudentPayload) =>
     method: "POST",
     body: JSON.stringify(payload),
   })
+
+/** One of the agent's own students, with the applicant record for prefill. */
+export interface AgentStudentDetail {
+  id: number
+  student_code: string
+  first_name: string
+  last_name: string
+  full_name: string
+  email: string | null
+  status: string
+  profile: Record<string, string | number | null>
+  guardians: WizardGuardian[]
+  education: WizardEducation[]
+}
+
+export const getAgentStudent = (id: number) =>
+  portalApi<{ data: AgentStudentDetail }>(`/agent/students/${id}`)
 
 export const getAgentApplications = (params: { status?: string; page?: number } = {}) =>
   portalApi<Paginated<AgentApplicationRow>>(`/agent/applications${query(params)}`)

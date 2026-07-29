@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Check, ChevronLeft, Loader2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { AgentStudentPicker, type PickedStudent } from "@/features/portal/agent/AgentStudentPicker"
 import {
   createApplication,
+  getAgentStudent,
   getApplyAvailability,
   getApplyCountries,
   getApplyFundingOptions,
@@ -88,6 +89,40 @@ export default function AgentApplyWizard() {
     queryFn: () => getApplyFundingOptions("agent", degree as Degree),
     enabled: step === 1 && !!degree,
   })
+
+  // The applicant record the partner already gave CAS (add-student form, or an
+  // earlier application). Prefilled here so nothing is retyped — and so the
+  // draft posts back what is on file instead of blanks.
+  const applicant = useQuery({
+    queryKey: ["agent", "student", student?.id],
+    queryFn: () => getAgentStudent(student!.id),
+    enabled: !!student,
+  })
+
+  const loadedFor = useRef<number | null>(null)
+
+  useEffect(() => {
+    const data = applicant.data?.data
+    if (!data?.profile || loadedFor.current === data.id) return
+
+    loadedFor.current = data.id
+
+    setProfile(Object.fromEntries(
+      Object.entries(data.profile)
+        .filter(([, v]) => v !== null && v !== "")
+        .map(([k, v]) => [k, String(v)]),
+    ))
+
+    const onFile = data.guardians ?? []
+    // The emergency contact is stored as just another guardian row; split it
+    // back out so BackgroundStep shows it in its own section.
+    const emergencyOnFile = onFile.find((g) => g.relation === "Emergency contact")
+    const family = onFile.filter((g) => g.relation !== "Emergency contact")
+
+    if (family.length) setGuardians(family)
+    if (emergencyOnFile) setEmergency(emergencyOnFile)
+    if (data.education?.length) setEducation(data.education)
+  }, [applicant.data])
 
   const resetDraft = () => {
     setDraft(null)

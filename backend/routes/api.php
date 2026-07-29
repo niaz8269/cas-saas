@@ -102,6 +102,8 @@ Route::prefix('v1')->group(function () {
             // this writes the permanent student registry.
             Route::post('students', [AgentPortalController::class, 'storeStudent'])
                 ->middleware('throttle:30,1');
+            // Full applicant record — what the apply wizard prefills from.
+            Route::get('students/{student}', [AgentPortalController::class, 'showStudent']);
 
             // Apply on behalf of an owned student — browsing then the write
             // path (static segments precede any applications/{application}).

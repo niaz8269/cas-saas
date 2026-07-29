@@ -27,6 +27,7 @@ class PortalApplicationService
         private readonly ApplicationWorkflow $workflow,
         private readonly ApplicationCatalog $catalog,
         private readonly NotificationService $notifications,
+        private readonly ApplicantDataWriter $applicantData,
     ) {}
 
     /**
@@ -46,7 +47,7 @@ class PortalApplicationService
         $customFields = $this->catalog->validateCustomFields($program, $data['custom_fields'] ?? []);
 
         return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId, $customFields) {
-            $this->persistApplicantData($student, $data);
+            $this->applicantData->write($student, $data);
 
             return $this->workflow->create([
                 'student_id' => $student->id,
@@ -72,7 +73,7 @@ class PortalApplicationService
         $scholarship = Scholarship::where('scope', 'government')->findOrFail($data['scholarship_id']);
 
         return DB::transaction(function () use ($student, $data, $scholarship) {
-            $this->persistApplicantData($student, $data);
+            $this->applicantData->write($student, $data);
 
             return $this->workflow->create([
                 'kind' => 'scholarship',
@@ -83,28 +84,6 @@ class PortalApplicationService
                 'agent_id' => $student->agent_id,
             ], null);
         });
-    }
-
-    /** Persist the wizard's profile / guardians / education onto the student. */
-    private function persistApplicantData(Student $student, array $data): void
-    {
-        if (! empty($data['profile'])) {
-            $student->fill($data['profile'])->save();
-        }
-
-        if (array_key_exists('guardians', $data)) {
-            $student->guardians()->delete();
-            foreach ($data['guardians'] as $guardian) {
-                $student->guardians()->create($guardian);
-            }
-        }
-
-        if (array_key_exists('education', $data)) {
-            $student->education()->delete();
-            foreach ($data['education'] as $entry) {
-                $student->education()->create($entry);
-            }
-        }
     }
 
     /**

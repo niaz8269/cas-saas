@@ -25,9 +25,27 @@ function withApi(main: (input: RequestInfo | URL, init?: RequestInit) => Promise
   })
 }
 
+/**
+ * The wizard's shared Field renders a <Label> that is not associated with its
+ * control, so getByLabelText cannot reach ProfileStep / BackgroundStep inputs.
+ * Resolve them through the label's own field wrapper instead.
+ */
+const fieldInput = (label: string, index = 0) => {
+  const wrapper = screen.getAllByText(label)[index].parentElement
+  const input = wrapper?.querySelector("input")
+  if (!input) throw new Error(`no input under the field labelled "${label}"`)
+  return input
+}
+
+const postBody = (mock: ReturnType<typeof vi.fn>) => {
+  const call = mock.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === "POST")
+  expect(call).toBeTruthy()
+  return { url: String(call![0]), body: JSON.parse((call![1] as RequestInit).body as string) }
+}
+
 beforeEach(() => vi.restoreAllMocks())
 
-it("posts only the filled fields and never an agent_id", async () => {
+it("collects the applicant record an application is built from", async () => {
   const user = userEvent.setup()
   const fetchMock = withApi(() => Promise.resolve(jsonResponse(CREATED, 201)))
   vi.stubGlobal("fetch", fetchMock)
@@ -37,18 +55,54 @@ it("posts only the filled fields and never an agent_id", async () => {
   await user.type(screen.getByLabelText("First name"), "Hina")
   await user.type(screen.getByLabelText("Last name"), "Malik")
   await user.type(screen.getByLabelText("Email (optional)"), "hina.malik@example.com")
+
+  // Sections lifted straight from the apply wizard — the partner is asked for
+  // the same facts the application is built from.
+  expect(screen.getByText("Personal details")).toBeInTheDocument()
+  expect(screen.getByText("Family")).toBeInTheDocument()
+  expect(screen.getByText("Most recent education")).toBeInTheDocument()
+
+  await user.type(fieldInput("Place of birth"), "Lahore")
+  await user.type(fieldInput("Passport no."), "AB123456")
+  await user.type(fieldInput("Name"), "Kamran Malik") // the father row
+  await user.type(fieldInput("Degree / qualification"), "FSc Pre-Medical")
+
   await user.click(screen.getByRole("button", { name: "Add student" }))
 
   await waitFor(() => {
-    const post = fetchMock.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === "POST")
-    expect(post).toBeTruthy()
-    expect(String(post![0])).toContain("/agent/students")
+    const { url, body } = postBody(fetchMock)
 
-    const body = JSON.parse((post![1] as RequestInit).body as string)
-    expect(body).toEqual({ first_name: "Hina", last_name: "Malik", email: "hina.malik@example.com" })
-    // blank optionals are dropped, and ownership is never client-supplied
-    expect(body).not.toHaveProperty("phone")
+    expect(url).toContain("/agent/students")
+    expect(body.first_name).toBe("Hina")
+    expect(body.email).toBe("hina.malik@example.com")
+    expect(body.profile).toMatchObject({ place_of_birth: "Lahore", passport_no: "AB123456" })
+    expect(body.guardians).toEqual([{ relation: "father", name: "Kamran Malik" }])
+    expect(body.education[0]).toMatchObject({ degree_name: "FSc Pre-Medical" })
+    // ownership is never client-supplied
     expect(body).not.toHaveProperty("agent_id")
+  })
+// Typing across a form this size is slow under jsdom; the default 5s is tight.
+}, 20_000)
+
+it("drops the answers left blank", async () => {
+  const user = userEvent.setup()
+  const fetchMock = withApi(() => Promise.resolve(jsonResponse(CREATED, 201)))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<AgentAddStudent />, { route: "/portal/agent/students/new" })
+
+  await user.type(screen.getByLabelText("First name"), "Hina")
+  await user.type(screen.getByLabelText("Last name"), "Malik")
+  await user.click(screen.getByRole("button", { name: "Add student" }))
+
+  await waitFor(() => {
+    const { body } = postBody(fetchMock)
+
+    expect(body).not.toHaveProperty("email")
+    expect(body.profile).toEqual({})
+    // the empty father/mother/emergency rows are not sent as blank guardians
+    expect(body.guardians).toEqual([])
+    expect(body.education).toEqual([])
   })
 })
 
@@ -78,8 +132,7 @@ it("shows the server message when the student is already registered", async () =
   await user.type(screen.getByLabelText("Last name"), "Malik")
   await user.click(screen.getByRole("button", { name: "Add student" }))
 
-  const alert = await screen.findByRole("alert")
-  expect(alert).toHaveTextContent("This student is already on your list.")
+  expect(await screen.findByRole("alert")).toHaveTextContent("This student is already on your list.")
 })
 
 it("maps a 422 back onto the offending field", async () => {
@@ -99,4 +152,23 @@ it("maps a 422 back onto the offending field", async () => {
   await user.click(screen.getByRole("button", { name: "Add student" }))
 
   expect(await screen.findByText("The email field must be a valid email address.")).toBeInTheDocument()
+})
+
+it("summarises applicant-record errors that have no field on this screen", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", withApi(() => Promise.resolve(
+    jsonResponse({
+      message: "The given data was invalid.",
+      errors: { "profile.passport_expiry_date": ["The expiry date must be after the issue date."] },
+      code: "VALIDATION_ERROR",
+    }, 422),
+  )))
+
+  renderWithProviders(<AgentAddStudent />, { route: "/portal/agent/students/new" })
+
+  await user.type(screen.getByLabelText("First name"), "Hina")
+  await user.type(screen.getByLabelText("Last name"), "Malik")
+  await user.click(screen.getByRole("button", { name: "Add student" }))
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("The expiry date must be after the issue date.")
 })
