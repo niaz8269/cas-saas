@@ -18,7 +18,7 @@ class InvoiceService
         ?int $applicationId,
         string $currency,
         array $items,
-        User $actor,
+        ?User $actor,
         string $status = 'issued',
         int $dueDays = 30,
     ): Invoice {
@@ -37,7 +37,7 @@ class InvoiceService
                 'status' => $status,
                 'issued_at' => $status === 'draft' ? null : now(),
                 'due_at' => now()->addDays($dueDays),
-                'created_by' => $actor->id,
+                'created_by' => $actor?->id,
             ]);
 
             foreach ($items as $item) {
@@ -64,14 +64,17 @@ class InvoiceService
         User $actor,
         ?string $method = null,
         ?string $reference = null,
+        ?int $documentId = null,
     ): Payment {
-        return DB::transaction(function () use ($invoice, $amount, $actor, $method, $reference) {
+        return DB::transaction(function () use ($invoice, $amount, $actor, $method, $reference, $documentId) {
             $payment = $invoice->payments()->create([
                 'payment_no' => $this->nextNumber('PAY', Payment::class, 'payment_no'),
                 'amount' => $amount,
                 'currency' => $invoice->currency,
                 'method' => $method,
                 'reference' => $reference,
+                // The applicant's own receipt, when the officer confirmed against one.
+                'document_id' => $documentId,
                 'received_at' => now(),
                 'recorded_by' => $actor->id,
             ]);

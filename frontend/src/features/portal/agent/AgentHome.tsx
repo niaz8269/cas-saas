@@ -1,12 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import { Award, GraduationCap, Plus, Wallet } from "lucide-react"
+import { Award, FilePlus2, UserPlus } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button"
 import { getAgentCommissions, getAgentStudents } from "@/features/portal/api"
-import { ListSkeleton, PageTitle, PortalCard } from "@/features/portal/components"
-import { money } from "@/features/portal/status"
+import {
+  ActionCard,
+  Initials,
+  ListSkeleton,
+  PageTitle,
+  PortalCard,
+  StatTile,
+  StatusBadge,
+} from "@/features/portal/components"
+import { money, STUDENT_BADGE } from "@/features/portal/status"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
 export default function AgentHome() {
@@ -20,60 +27,76 @@ export default function AgentHome() {
   const paid = commissions.data?.totals?.paid ?? 0
 
   return (
-    <div className="space-y-4">
-      <PageTitle title={t("agentPortal.home.greeting", { name: profile?.name?.split(" ")[0] ?? t("agentPortal.home.greetingFallback") })} subtitle={t("agentPortal.home.subtitle")} />
+    <div className="space-y-6">
+      <PageTitle
+        title={t("agentPortal.home.greeting", { name: profile?.name?.split(" ")[0] ?? t("agentPortal.home.greetingFallback") })}
+        subtitle={t("agentPortal.home.subtitle")}
+      />
 
-      <Button asChild className="h-12 w-full text-base">
-        <Link to="/portal/agent/apply"><Plus className="size-5" /> {t("agentPortal.home.applyForStudent")}</Link>
-      </Button>
-      <Button asChild variant="secondary" className="h-11 w-full">
-        <Link to="/portal/agent/apply-scholarship"><Award className="size-4" /> {t("agentPortal.home.governmentScholarship")}</Link>
-      </Button>
-
-      <div className="grid grid-cols-2 gap-3">
-        <Link to="/portal/agent/students">
-          <PortalCard>
-            <GraduationCap className="size-5 text-cas-navy" />
-            <p className="mt-2 text-2xl font-semibold tabular-nums">{students.data?.meta.total ?? "—"}</p>
-            <p className="text-xs text-muted-foreground">{t("agentPortal.home.students")}</p>
-          </PortalCard>
-        </Link>
-        <Link to="/portal/agent/commissions">
-          <PortalCard>
-            <Wallet className="size-5 text-cas-navy" />
-            <p className="mt-2 text-2xl font-semibold tabular-nums">{money(payable)}</p>
-            <p className="text-xs text-muted-foreground">{t("agentPortal.home.awaitingPayout")}</p>
-          </PortalCard>
-        </Link>
+      {/* What a partner comes here to do, in the order they do it. */}
+      <div className="grid gap-3 lg:grid-cols-3">
+        <ActionCard
+          to="/portal/agent/apply"
+          icon={FilePlus2}
+          title={t("agentPortal.home.applyForStudent")}
+          hint={t("agentPortal.home.applyHint")}
+          primary
+          className="lg:col-span-3"
+        />
+        <ActionCard
+          to="/portal/agent/students/new"
+          icon={UserPlus}
+          title={t("agentPortal.students.addStudent")}
+          hint={t("agentPortal.home.addStudentHint")}
+        />
+        <ActionCard
+          to="/portal/agent/apply-scholarship"
+          icon={Award}
+          title={t("agentPortal.home.governmentScholarship")}
+          hint={t("agentPortal.home.scholarshipHint")}
+          className="lg:col-span-2"
+        />
       </div>
 
-      <PortalCard>
-        <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("agentPortal.home.earningsToDate")}</p>
-        <p className="mt-1 text-lg font-semibold tabular-nums text-cas-navy">{t("agentPortal.home.paidAmount", { amount: money(paid) })}</p>
-        <p className="text-sm text-muted-foreground tabular-nums">{t("agentPortal.home.stillToCome", { amount: money(payable) })}</p>
-      </PortalCard>
+      <div className="grid grid-cols-3 gap-3">
+        <StatTile label={t("agentPortal.home.students")} value={students.data?.meta.total ?? "—"} />
+        <StatTile label={t("agentPortal.home.awaitingPayout")} value={money(payable)} tone="money" />
+        <StatTile label={t("agentPortal.commissions.paidToDate")} value={money(paid)} tone="positive" />
+      </div>
 
-      <div>
-        <h2 className="mb-2 text-sm font-semibold">{t("agentPortal.home.recentStudents")}</h2>
+      <section>
+        <div className="mb-2 flex items-baseline justify-between">
+          <h2 className="text-sm font-semibold">{t("agentPortal.home.recentStudents")}</h2>
+          <Link to="/portal/agent/students" className="text-xs font-medium text-cas-navy hover:underline">
+            {t("agentPortal.home.viewAll")}
+          </Link>
+        </div>
+
         {students.isPending ? (
           <ListSkeleton rows={3} />
+        ) : students.data?.data.length === 0 ? (
+          <PortalCard>
+            <p className="text-sm text-muted-foreground">{t("agentPortal.home.noStudentsYet")}</p>
+          </PortalCard>
         ) : (
           <div className="space-y-2">
             {students.data?.data.slice(0, 4).map((s) => (
-              <PortalCard key={s.id} className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">{s.full_name}</p>
+              <PortalCard key={s.id} className="flex items-center gap-3">
+                <Initials name={s.full_name} />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{s.full_name}</p>
                   <p className="font-mono text-xs text-muted-foreground">{s.student_code}</p>
                 </div>
-                <span className="text-xs text-muted-foreground">{t("agentPortal.home.appCount", { count: s.applications_count })}</span>
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  {t("agentPortal.home.appCount", { count: s.applications_count })}
+                </span>
+                <StatusBadge status={s.status} map={STUDENT_BADGE} />
               </PortalCard>
             ))}
-            {students.data?.data.length === 0 && (
-              <p className="text-sm text-muted-foreground">{t("agentPortal.home.noStudentsYet")}</p>
-            )}
           </div>
         )}
-      </div>
+      </section>
     </div>
   )
 }
+

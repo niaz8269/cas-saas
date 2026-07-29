@@ -1,5 +1,7 @@
+import { ChevronRight, type LucideIcon } from "lucide-react"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -29,6 +31,96 @@ export function PortalCard({ children, className }: { children: ReactNode; class
   return <div className={cn("rounded-xl border bg-card p-4 shadow-sm", className)}>{children}</div>
 }
 
+/**
+ * Initials chip standing in for a person. Decorative — the name it derives
+ * from is always rendered next to it, so it stays out of the accessibility
+ * tree rather than repeating that name to a screen reader.
+ */
+export function Initials({ name, className }: { name: string; className?: string }) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("")
+
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "flex size-9 shrink-0 items-center justify-center rounded-full bg-cas-navy-50 text-xs font-semibold text-cas-navy",
+        className,
+      )}
+    >
+      {initials || "?"}
+    </span>
+  )
+}
+
+/**
+ * A task, not a button: icon, what it does, and why you'd pick it. Exactly one
+ * card per screen should be `primary` — it carries the brand navy and is the
+ * obvious next step; the rest stay white so the screen reads calm.
+ */
+export function ActionCard({ to, icon: Icon, title, hint, primary, className }: {
+  to: string
+  icon: LucideIcon
+  title: string
+  hint: string
+  primary?: boolean
+  className?: string
+}) {
+  return (
+    <Link
+      to={to}
+      className={cn(
+        "group flex items-center gap-3 rounded-xl border p-4 shadow-sm transition-colors",
+        primary
+          ? "border-cas-navy bg-cas-navy text-white hover:bg-cas-navy-700"
+          : "bg-card hover:border-cas-navy/40",
+        className,
+      )}
+    >
+      <span className={cn(
+        "flex size-10 shrink-0 items-center justify-center rounded-lg",
+        primary ? "bg-white/15 text-white" : "bg-cas-navy-50 text-cas-navy",
+      )}>
+        <Icon className="size-5" aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold">{title}</span>
+        <span className={cn("block truncate text-xs", primary ? "text-white/75" : "text-muted-foreground")}>{hint}</span>
+      </span>
+      <ChevronRight
+        className={cn(
+          "size-4 shrink-0 transition-transform group-hover:translate-x-0.5 rtl:rotate-180",
+          primary ? "text-white/70" : "text-muted-foreground",
+        )}
+        aria-hidden="true"
+      />
+    </Link>
+  )
+}
+
+/** Compact labelled figure for the portal's summary strips. */
+export function StatTile({ label, value, tone = "default" }: {
+  label: string
+  value: ReactNode
+  tone?: "default" | "money" | "positive"
+}) {
+  return (
+    <div className="rounded-xl border bg-card p-3 shadow-sm">
+      <p className="text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{label}</p>
+      <p className={cn(
+        "mt-1 truncate text-lg font-semibold tabular-nums",
+        tone === "positive" ? "text-success" : tone === "money" ? "text-cas-navy" : "text-foreground",
+      )}>
+        {value}
+      </p>
+    </div>
+  )
+}
+
 export function ListSkeleton({ rows = 3 }: { rows?: number }) {
   return (
     <div className="space-y-3">
@@ -42,12 +134,19 @@ export function ListSkeleton({ rows = 3 }: { rows?: number }) {
   )
 }
 
-export function EmptyState({ icon, title, hint }: { icon: ReactNode; title: string; hint?: string }) {
+export function EmptyState({ icon, title, hint, action }: {
+  icon: ReactNode
+  title: string
+  hint?: string
+  /** Optional single primary action — the design system's empty-state CTA. */
+  action?: ReactNode
+}) {
   return (
     <div className="rounded-xl border bg-card p-10 text-center shadow-sm">
       <div className="mx-auto mb-3 text-muted-foreground">{icon}</div>
       <p className="text-sm font-medium">{title}</p>
       {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   )
 }

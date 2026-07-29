@@ -122,6 +122,44 @@ export interface AgentPayableRow {
 export const getAgentStudents = (params: { status?: string; page?: number; q?: string } = {}) =>
   portalApi<Paginated<AgentStudentRow>>(`/agent/students${query(params)}`)
 
+export interface AgentCreateStudentPayload {
+  first_name: string
+  last_name: string
+  email?: string
+  /** Same applicant record the apply wizards post — see AgentStudentDetail. */
+  profile?: Record<string, string>
+  guardians?: WizardGuardian[]
+  education?: WizardEducation[]
+}
+
+/**
+ * Add a student to the partner's own book (report §5.7 "submit students").
+ * The owning agent comes from the token — never the payload. A 409 with
+ * `code: "DUPLICATE"` means the person is already in the CAS registry.
+ */
+export const createAgentStudent = (payload: AgentCreateStudentPayload) =>
+  portalApi<{ data: AgentStudentRow }>("/agent/students", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  })
+
+/** One of the agent's own students, with the applicant record for prefill. */
+export interface AgentStudentDetail {
+  id: number
+  student_code: string
+  first_name: string
+  last_name: string
+  full_name: string
+  email: string | null
+  status: string
+  profile: Record<string, string | number | null>
+  guardians: WizardGuardian[]
+  education: WizardEducation[]
+}
+
+export const getAgentStudent = (id: number) =>
+  portalApi<{ data: AgentStudentDetail }>(`/agent/students/${id}`)
+
 export const getAgentApplications = (params: { status?: string; page?: number } = {}) =>
   portalApi<Paginated<AgentApplicationRow>>(`/agent/applications${query(params)}`)
 
@@ -233,6 +271,58 @@ export async function uploadStudentDocument(
   if (!put.ok) throw new Error("Upload to storage failed.")
 
   const registered = await portalApi<{ data: StudentDocumentRow }>("/student/documents", {
+    method: "POST",
+    body: JSON.stringify({ ...meta, key: presign.key }),
+  })
+
+  return registered.data
+}
+
+// ── Processing fee (funded student applications) ───────────────────────────
+
+export interface FeeReceipt {
+  id: number
+  file_name: string
+  status: string
+  uploaded_at: string | null
+}
+
+export interface ProcessingFeeInvoice {
+  id: number
+  invoice_no: string
+  total: number
+  amount_paid: number
+  currency: string
+  status: string
+  receipts: FeeReceipt[]
+}
+
+export interface ProcessingFeeState {
+  fee: { amount: number; currency: string }
+  /** Bank details / payment link, when Finance has configured them. */
+  instructions: string | null
+  settled: boolean
+  invoice: ProcessingFeeInvoice | null
+}
+
+export const getProcessingFee = () =>
+  portalApi<{ data: ProcessingFeeState }>("/student/processing-fee")
+
+/** Upload proof of payment against the student's own fee invoice. */
+export async function uploadFeeReceipt(invoiceId: number, file: File): Promise<FeeReceipt> {
+  const meta = { file_name: file.name, mime: file.type, size: file.size }
+
+  // Receipts get their own presign: the document type is fixed server-side,
+  // so unlike the general upload the client never names one.
+  const presign = await portalApi<PresignResponse>("/student/receipts/presign", {
+    method: "POST",
+    body: JSON.stringify(meta),
+  })
+
+  const put = await fetch(presign.url, { method: "PUT", headers: presign.headers, body: file })
+  if (!put.ok) throw new Error("Upload to storage failed.")
+
+  const registered = await portalApi<{ data: FeeReceipt }>(`/student/invoices/${invoiceId}/receipt`, {
     method: "POST",
     body: JSON.stringify({ ...meta, key: presign.key }),
   })

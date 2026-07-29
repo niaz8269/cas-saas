@@ -37,7 +37,17 @@ export interface InvoiceItemData {
   due_at: string | null
   items?: InvoiceItemRow[]
   payments?: PaymentRow[]
+  /** Receipts the payer filed that nobody has confirmed yet. */
+  pending_receipts_count?: number
+  receipts?: ReceiptRow[]
   created_at: string | null
+}
+
+export interface ReceiptRow {
+  id: number
+  file_name: string
+  status: string
+  uploaded_at: string | null
 }
 
 export interface CommissionItemData {
@@ -93,11 +103,14 @@ const qs = (params: Record<string, string | number | undefined>) => {
   return s ? `?${s}` : ""
 }
 
-export const listInvoices = (params: { q?: string; status?: string; party_type?: string; page?: number } = {}) =>
+export const listInvoices = (
+  params: { q?: string; status?: string; party_type?: string; pendingReceipt?: boolean; page?: number } = {},
+) =>
   api<Paginated<InvoiceItemData>>(`/invoices${qs({
     "q": params.q,
     "filter[status]": params.status,
     "filter[party_type]": params.party_type,
+    "filter[pending_receipt]": params.pendingReceipt ? "1" : undefined,
     "page": params.page && params.page > 1 ? params.page : undefined,
   })}`)
 

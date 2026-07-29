@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\V1\Portal\PortalNotificationController;
 use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
+use App\Http\Controllers\Api\V1\Portal\StudentFeeReceiptController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -98,6 +99,12 @@ Route::prefix('v1')->group(function () {
             Route::post('auth/logout', [AgentAuthController::class, 'logout']);
             Route::get('auth/me', [AgentAuthController::class, 'me']);
             Route::get('students', [AgentPortalController::class, 'students']);
+            // Partner submits a student into their own book (§5.7). Throttled:
+            // this writes the permanent student registry.
+            Route::post('students', [AgentPortalController::class, 'storeStudent'])
+                ->middleware('throttle:30,1');
+            // Full applicant record — what the apply wizard prefills from.
+            Route::get('students/{student}', [AgentPortalController::class, 'showStudent']);
 
             // Apply on behalf of an owned student — browsing then the write
             // path (static segments precede any applications/{application}).
@@ -159,6 +166,13 @@ Route::prefix('v1')->group(function () {
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
+
+            // One-time scholarship processing fee: what is owed, and the
+            // receipt that puts it in front of Finance.
+            Route::get('processing-fee', [StudentFeeReceiptController::class, 'show']);
+            Route::post('receipts/presign', [StudentFeeReceiptController::class, 'presign']);
+            Route::post('invoices/{invoice}/receipt', [StudentFeeReceiptController::class, 'store'])
+                ->name('student.fee.receipt');
             Route::get('invoices/{invoice}/pdf', [StudentPortalController::class, 'invoicePdf']);
             Route::get('documents', [StudentPortalController::class, 'documents']);
             Route::get('document-types', [StudentPortalController::class, 'documentTypes']);

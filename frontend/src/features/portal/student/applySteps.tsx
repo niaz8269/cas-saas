@@ -74,7 +74,7 @@ export function ProfileStep({ profile, countries, onChange }: {
     <div className="space-y-4">
       <PortalCard className="space-y-3">
         <SectionTitle>{t("wizard.profile.personalDetails")}</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           <Field label={t("wizard.profile.dateOfBirth")}><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
           <Field label={t("wizard.profile.placeOfBirth")}><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
           <Field label={t("wizard.profile.nationality")}>
@@ -113,7 +113,7 @@ export function ProfileStep({ profile, countries, onChange }: {
 
       <PortalCard className="space-y-3">
         <SectionTitle>{t("wizard.profile.contact")}</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           <Field label={t("wizard.profile.alternateEmail")}><Input type="email" value={profile.alternate_email ?? ""} onChange={set("alternate_email")} /></Field>
           <div />
           <Field label={t("wizard.profile.wechatId")}><Input value={profile.wechat_id ?? ""} onChange={set("wechat_id")} /></Field>
@@ -123,7 +123,7 @@ export function ProfileStep({ profile, countries, onChange }: {
 
       <PortalCard className="space-y-3">
         <SectionTitle>{t("wizard.profile.passport")}</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           <Field label={t("wizard.profile.passportNo")}><Input value={profile.passport_no ?? ""} onChange={set("passport_no")} /></Field>
           <div />
           <Field label={t("wizard.profile.issueDate")}><Input type="date" value={profile.passport_issue_date ?? ""} onChange={set("passport_issue_date")} /></Field>
@@ -133,7 +133,7 @@ export function ProfileStep({ profile, countries, onChange }: {
 
       <PortalCard className="space-y-3">
         <SectionTitle>{t("wizard.profile.englishProficiency")}</SectionTitle>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           <Field label={t("wizard.profile.testTaken")}>
             <Select value={profile.english_test ?? ""} onValueChange={(v) => onChange("english_test", v)}>
               <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.common.select")} /></SelectTrigger>
@@ -156,7 +156,7 @@ export function ProfileStep({ profile, countries, onChange }: {
         <div className="space-y-3">
           <Field label={t("wizard.profile.permanentAddress")}><Input value={profile.permanent_address ?? ""} onChange={set("permanent_address")} /></Field>
           <Field label={t("wizard.profile.currentAddress")}><Input value={profile.current_address ?? ""} onChange={set("current_address")} /></Field>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             <Field label={t("wizard.profile.city")}><Input value={profile.city ?? ""} onChange={set("city")} /></Field>
             <Field label={t("wizard.profile.postalCode")}><Input value={profile.postal_code ?? ""} onChange={set("postal_code")} /></Field>
           </div>
@@ -369,12 +369,36 @@ export function Chip({ children }: { children: ReactNode }) {
   return <span className="rounded-full bg-subtle px-2 py-0.5 text-muted-foreground">{children}</span>
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+/**
+ * Labelled wizard control. The label WRAPS its control rather than sitting
+ * beside it: these fields are built generically (Input, Select, …) so there is
+ * no id for `htmlFor` to point at, and without the nesting the label was purely
+ * visual — never announced by a screen reader (CLAUDE.md: proper labels/ARIA).
+ */
+export function Field({ label, group, children }: {
+  label: string
+  /**
+   * Set for composite controls that label their own parts (a radio group, say).
+   * Nesting those inside a <label> would produce nested labels and strip each
+   * option of its accessible name, so the wrapper degrades to a plain caption.
+   */
+  group?: boolean
+  children: ReactNode
+}) {
+  if (group) {
+    return (
+      <div className="space-y-1">
+        <span className="block text-xs text-muted-foreground">{label}</span>
+        {children}
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-1">
-      <Label className="text-xs text-muted-foreground">{label}</Label>
+    <Label className="block space-y-1 font-normal">
+      <span className="block text-xs text-muted-foreground">{label}</span>
       {children}
-    </div>
+    </Label>
   )
 }
 
@@ -395,7 +419,7 @@ export function CustomFieldsCard({ fields, answers, onChange }: {
     <PortalCard className="space-y-3">
       <SectionTitle>{t("wizard.customFields.additionalQuestions")}</SectionTitle>
       {fields.map((f) => (
-        <Field key={f.key} label={f.required ? `${f.label} *` : f.label}>
+        <Field key={f.key} label={f.required ? `${f.label} *` : f.label} group={f.type === "radio"}>
           {f.type === "textarea" ? (
             <Textarea aria-label={f.label} value={answers[f.key] ?? ""} onChange={(e) => onChange(f.key, e.target.value)} />
           ) : f.type === "radio" ? (

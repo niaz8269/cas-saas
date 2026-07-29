@@ -41,7 +41,7 @@ export default function StudentInvoices() {
         <EmptyState icon={<Receipt className="mx-auto size-8" />} title={t("studentPortal.invoices.emptyTitle")} />
       )}
 
-      <div className="space-y-3">
+      <div className="grid gap-3 lg:grid-cols-2">
         {data?.data.map((inv) => {
           const outstanding = Number(inv.total) - Number(inv.amount_paid)
 
@@ -62,7 +62,7 @@ export default function StudentInvoices() {
               {outstanding > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{t("studentPortal.invoices.outstanding")}</span>
-                  <span className="font-medium tabular-nums text-amber-700">{money(outstanding, inv.currency)}</span>
+                  <span className="font-medium tabular-nums text-warning">{money(outstanding, inv.currency)}</span>
                 </div>
               )}
 

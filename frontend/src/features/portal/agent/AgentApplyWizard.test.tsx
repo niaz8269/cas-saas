@@ -21,6 +21,17 @@ const PROGRAM = {
   intakes: [], scholarships: [],
 }
 
+/** The applicant record on file for student 7 — what the wizard prefills from. */
+const DETAIL = {
+  data: {
+    id: 7, student_code: "STU-7", first_name: "Ali", last_name: "Raza", full_name: "Ali Raza",
+    email: "ali@example.com", status: "active",
+    profile: { place_of_birth: "Hyderabad", city: "Karachi", passport_no: "XY987654", dob: "2004-01-09", gender: "male" },
+    guardians: [{ relation: "father", name: "Imran Raza", occupation: "Doctor" }],
+    education: [{ level: "intermediate", degree_name: "FSc Pre-Engineering", institution: "City College" }],
+  },
+}
+
 const DRAFT = {
   data: {
     id: 99, application_code: "APP-99", status: "draft",
@@ -34,6 +45,8 @@ function withAgentApi(main: (input: RequestInfo | URL, init?: RequestInit) => Pr
     const url = String(input)
     const method = (init?.method ?? "GET").toUpperCase()
 
+    // The detail route must be matched before the list route it prefixes.
+    if (method === "GET" && /\/agent\/students\/\d+/.test(url)) return Promise.resolve(jsonResponse(DETAIL))
     if (method === "GET" && url.includes("/agent/students")) return Promise.resolve(jsonResponse(STUDENTS))
     if (method === "GET" && url.includes("/agent/countries")) return Promise.resolve(jsonResponse({ data: [{ id: 1, name: "Pakistan", iso2: "PK" }] }))
     if (method === "GET" && url.includes("/funding-options")) return Promise.resolve(jsonResponse({ data: { self: true, scholarship: false, partial: false } }))
@@ -83,6 +96,43 @@ it("applies for one of the agent's own students and sends student_id in the draf
 
   // Advances to the documents step for the new draft.
   expect(await screen.findByText("Passport")).toBeInTheDocument()
+})
+
+it("prefills the applicant record on file instead of asking for it again", async () => {
+  const user = userEvent.setup()
+  const fetchMock = withAgentApi(() => Promise.resolve(jsonResponse(DRAFT, 201)))
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<AgentApplyWizard />, { route: "/portal/agent/apply?student=7&name=Ali%20Raza" })
+
+  // Course → Personal: the details the partner already gave CAS are there.
+  await user.click(await screen.findByText("Bachelor of Medicine"))
+  await user.click(await screen.findByText("Pay tuition yourself"))
+  await user.click(await screen.findByText("MBBS Clinical"))
+  await user.type(await screen.findByLabelText("Portfolio URL"), "https://folio.example/ali")
+  await user.click(screen.getByRole("button", { name: "Continue" }))
+
+  await waitFor(() => expect(screen.getByDisplayValue("Karachi")).toBeInTheDocument())
+  expect(screen.getByDisplayValue("XY987654")).toBeInTheDocument()
+
+  // Background: family and education come back too.
+  await user.click(screen.getByRole("button", { name: "Continue" }))
+  expect(screen.getByDisplayValue("Imran Raza")).toBeInTheDocument()
+  expect(screen.getByDisplayValue("FSc Pre-Engineering")).toBeInTheDocument()
+
+  // And the draft posts them back, so nothing on file is overwritten by blanks.
+  await user.click(screen.getByRole("button", { name: "Save & add documents" }))
+
+  await waitFor(() => {
+    const call = fetchMock.mock.calls.find(
+      (c) => c[0] === "/api/v1/agent/applications" && (c[1] as RequestInit)?.method === "POST",
+    )!
+    const body = JSON.parse((call[1] as RequestInit).body as string)
+
+    expect(body.profile).toMatchObject({ city: "Karachi", passport_no: "XY987654" })
+    expect(body.guardians).toContainEqual(expect.objectContaining({ name: "Imran Raza" }))
+    expect(body.education).toContainEqual(expect.objectContaining({ degree_name: "FSc Pre-Engineering" }))
+  })
 })
 
 it("pre-selects the student from the ?student= query and skips the picker", async () => {

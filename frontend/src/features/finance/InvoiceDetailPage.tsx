@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Ban, FileText, Plus, Undo2 } from "lucide-react"
+import { ArrowLeft, Ban, Download, FileText, Plus, Undo2 } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
+import { downloadDocument } from "@/features/admissions/api"
 import { getInvoice, getInvoicePdf, recordInvoicePayment, recordInvoiceRefund, voidInvoice } from "@/features/finance/api"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
@@ -95,6 +96,13 @@ export default function InvoiceDetailPage() {
       setTimeout(() => URL.revokeObjectURL(url), 60_000)
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Could not generate the PDF."),
+  })
+
+  // Brokered, access-logged download of a filed receipt.
+  const download = useMutation({
+    mutationFn: (documentId: number) => downloadDocument(documentId),
+    onSuccess: ({ url }) => window.open(url, "_blank", "noopener"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Could not open that receipt."),
   })
 
   if (isPending) return <Skeleton className="h-72 w-full rounded-xl" />
@@ -189,6 +197,45 @@ export default function InvoiceDetailPage() {
             ))}
           </div>
         </section>
+
+        {/*
+          Proof of payment the payer filed. A `pending` receipt on a
+          processing-fee invoice is holding a student's application, so it is
+          shown next to Payments rather than buried in their documents.
+        */}
+        {(invoice.receipts?.length ?? 0) > 0 && (
+          <section className="rounded-xl border bg-card shadow-sm">
+            <header className="border-b px-5 py-3">
+              <h3 className="text-[15px] font-semibold">Receipts filed</h3>
+            </header>
+            <div className="divide-y px-5">
+              {invoice.receipts?.map((receipt) => (
+                <div key={receipt.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{receipt.file_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {receipt.uploaded_at ? new Date(receipt.uploaded_at).toLocaleString() : "—"}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "border-transparent capitalize",
+                        receipt.status === "verified" ? "bg-green-100 text-green-800" : "bg-amber-50 text-warning",
+                      )}
+                    >
+                      {label(receipt.status)}
+                    </Badge>
+                    <Button variant="secondary" size="sm" onClick={() => download.mutate(receipt.id)}>
+                      <Download className="size-4" /> View
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="rounded-xl border bg-card shadow-sm">
           <header className="border-b px-5 py-3"><h3 className="text-[15px] font-semibold">Payments</h3></header>

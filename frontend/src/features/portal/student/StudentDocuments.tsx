@@ -109,12 +109,15 @@ export default function StudentDocuments() {
           hint={t("studentPortal.documents.emptyHint")} />
       )}
 
-      <div className="space-y-2">
+      <div className="grid gap-2 lg:grid-cols-2">
         {documents.data?.data.map((doc) => (
-          <PortalCard key={doc.id} className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
+          <PortalCard key={doc.id} className="flex items-center gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-cas-navy-50 text-cas-navy">
+              <FileText className="size-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{doc.file_name}</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="truncate text-xs text-muted-foreground">
                 {doc.type?.name ?? t("studentPortal.documents.documentFallback")}{doc.uploaded_at ? ` · ${new Date(doc.uploaded_at).toLocaleDateString()}` : ""}
               </p>
             </div>
