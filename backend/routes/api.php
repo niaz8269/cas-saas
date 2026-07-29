@@ -170,7 +170,9 @@ Route::prefix('v1')->group(function () {
             // One-time scholarship processing fee: what is owed, and the
             // receipt that puts it in front of Finance.
             Route::get('processing-fee', [StudentFeeReceiptController::class, 'show']);
-            Route::post('invoices/{invoice}/receipt', [StudentFeeReceiptController::class, 'store']);
+            Route::post('receipts/presign', [StudentFeeReceiptController::class, 'presign']);
+            Route::post('invoices/{invoice}/receipt', [StudentFeeReceiptController::class, 'store'])
+                ->name('student.fee.receipt');
             Route::get('invoices/{invoice}/pdf', [StudentPortalController::class, 'invoicePdf']);
             Route::get('documents', [StudentPortalController::class, 'documents']);
             Route::get('document-types', [StudentPortalController::class, 'documentTypes']);

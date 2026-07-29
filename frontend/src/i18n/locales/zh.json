@@ -1186,6 +1186,32 @@
       "next": "下一页"
     }
   },
+  "fee": {
+    "noticeTitle": "一次性手续费 {{amount}}",
+    "noticeTitleSettled": "您的手续费已缴纳",
+    "noticeBody": "申请奖学金或部分资助课程需缴纳一次性、不可退还的 CAS 手续费 {{amount}}。只需缴纳一次，之后的资助类申请均已涵盖。",
+    "noticeSeparate": "此费用与大学自行收取的申请费无关。",
+    "noticeWhen": "在您的申请填写完成后，我们会请您缴纳。",
+    "noticeSettledBody": "您已缴纳一次性 CAS 手续费，本申请在填写完成后将直接提交。",
+    "noticeAcknowledge": "我已了解，继续",
+    "noticeContinue": "继续",
+    "noticeCancel": "选择其他方式",
+    "invoiceLabel": "手续费账单",
+    "stepBody": "您的申请已填写完成。请缴纳手续费并上传收据，CAS 确认后将为您提交申请。",
+    "howToPay": "缴费方式",
+    "quoteReference": "付款时请注明单号 {{reference}}。",
+    "noInstructions": "缴费信息尚未公布，请联系您的 CAS 顾问了解缴费方式。",
+    "receiptsLabel": "已上传收据",
+    "awaitingConfirmation": "等待确认",
+    "awaitingBody": "CAS 正在核对您的付款，确认后将自动提交您的申请。",
+    "uploadReceipt": "上传付款收据",
+    "uploadAnother": "再上传一张收据",
+    "uploading": "正在上传…",
+    "uploadFailed": "上传失败，请重试。",
+    "doneForNow": "返回我的申请",
+    "settledTitle": "付款已确认",
+    "settledBody": "您的手续费已结清，本申请已提交至 CAS。"
+  },
   "wizard": {
     "brand": {
       "studyInChina": "CAS · 留学中国",

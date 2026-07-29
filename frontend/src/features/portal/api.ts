@@ -278,6 +278,58 @@ export async function uploadStudentDocument(
   return registered.data
 }
 
+// ── Processing fee (funded student applications) ───────────────────────────
+
+export interface FeeReceipt {
+  id: number
+  file_name: string
+  status: string
+  uploaded_at: string | null
+}
+
+export interface ProcessingFeeInvoice {
+  id: number
+  invoice_no: string
+  total: number
+  amount_paid: number
+  currency: string
+  status: string
+  receipts: FeeReceipt[]
+}
+
+export interface ProcessingFeeState {
+  fee: { amount: number; currency: string }
+  /** Bank details / payment link, when Finance has configured them. */
+  instructions: string | null
+  settled: boolean
+  invoice: ProcessingFeeInvoice | null
+}
+
+export const getProcessingFee = () =>
+  portalApi<{ data: ProcessingFeeState }>("/student/processing-fee")
+
+/** Upload proof of payment against the student's own fee invoice. */
+export async function uploadFeeReceipt(invoiceId: number, file: File): Promise<FeeReceipt> {
+  const meta = { file_name: file.name, mime: file.type, size: file.size }
+
+  // Receipts get their own presign: the document type is fixed server-side,
+  // so unlike the general upload the client never names one.
+  const presign = await portalApi<PresignResponse>("/student/receipts/presign", {
+    method: "POST",
+    body: JSON.stringify(meta),
+  })
+
+  const put = await fetch(presign.url, { method: "PUT", headers: presign.headers, body: file })
+  if (!put.ok) throw new Error("Upload to storage failed.")
+
+  const registered = await portalApi<{ data: FeeReceipt }>(`/student/invoices/${invoiceId}/receipt`, {
+    method: "POST",
+    body: JSON.stringify({ ...meta, key: presign.key }),
+  })
+
+  return registered.data
+}
+
 // ── Application wizard (student self-apply) ────────────────────────────────
 
 export type Degree = "master" | "bs" | "mbbs" | "bds" | "phd" | "diploma"

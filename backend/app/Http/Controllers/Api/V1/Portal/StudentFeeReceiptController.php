@@ -43,6 +43,7 @@ class StudentFeeReceiptController extends Controller
         return response()->json([
             'data' => [
                 'fee' => $amount,
+                'instructions' => $this->fee->instructions(),
                 'settled' => $invoice?->status === 'paid',
                 'invoice' => $invoice === null ? null : [
                     'id' => $invoice->id,
@@ -63,6 +64,20 @@ class StudentFeeReceiptController extends Controller
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Short-lived pre-signed PUT under the student's own key prefix. Unlike the
+     * general document presign this takes no document type — a receipt's type
+     * is fixed by the endpoint, never chosen by the client.
+     */
+    public function presign(StudentStoreReceiptRequest $request): JsonResponse
+    {
+        return response()->json($this->documents->presignUpload(
+            $request->user(),
+            $request->string('file_name'),
+            $request->string('mime'),
+        ));
     }
 
     /**

@@ -12,6 +12,7 @@ import {
   getMajors,
   submitStudentApplication,
   type DraftApplication,
+  type ProcessingFeeInvoice,
   type GovScholarship,
   type ScholarshipLevel,
   type ScholarshipPreference,
@@ -30,6 +31,7 @@ import {
   ScholarshipReviewStep,
   ScholarshipStep,
 } from "@/features/portal/student/scholarshipSteps"
+import { ProcessingFeeNotice, ProcessingFeeStep } from "@/features/portal/student/ProcessingFee"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.scholarship", "wizard.steps.preferences", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -39,6 +41,11 @@ export default function StudentScholarshipWizard() {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
+
+  // A government scholarship is funded study by definition, so the one-time
+  // processing fee always applies — the notice opens with the wizard.
+  const [feeAcknowledged, setFeeAcknowledged] = useState(false)
+  const [feeInvoice, setFeeInvoice] = useState<ProcessingFeeInvoice | null>(null)
 
   const [level, setLevel] = useState<ScholarshipLevel | "">("")
   const [scholarship, setScholarship] = useState<GovScholarship | null>(null)
@@ -78,7 +85,16 @@ export default function StudentScholarshipWizard() {
   const submit = useMutation({
     mutationFn: () => submitStudentApplication(draft!.id),
     onSuccess: () => navigate("/portal/student/applications", { replace: true }),
-    onError: (err) => setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotSubmit")),
+    onError: (err) => {
+      if (err instanceof ApiError && err.code === "PROCESSING_FEE_DUE") {
+        setFeeInvoice(err.payload.invoice as ProcessingFeeInvoice)
+        setError(null)
+
+        return
+      }
+
+      setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotSubmit"))
+    },
   })
 
   const goNext = () => {
@@ -117,6 +133,12 @@ export default function StudentScholarshipWizard() {
       </div>
 
       <Stepper steps={STEPS.map((k) => t(k))} step={step} />
+
+      <ProcessingFeeNotice
+        open={!feeAcknowledged}
+        onCancel={() => navigate("/portal/student")}
+        onAcknowledge={() => setFeeAcknowledged(true)}
+      />
 
       {error && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>}
 
@@ -159,7 +181,9 @@ export default function StudentScholarshipWizard() {
       )}
 
       {step === 5 && draft && (
-        <ScholarshipReviewStep scholarship={scholarship} level={level as ScholarshipLevel} preferences={preferences} draft={draft} agreed={agreed} onAgreed={setAgreed} />
+        feeInvoice
+          ? <ProcessingFeeStep invoice={feeInvoice} />
+          : <ScholarshipReviewStep scholarship={scholarship} level={level as ScholarshipLevel} preferences={preferences} draft={draft} agreed={agreed} onAgreed={setAgreed} />
       )}
 
       <div className="flex gap-2">
@@ -177,7 +201,12 @@ export default function StudentScholarshipWizard() {
             {allDocsUploaded ? t("wizard.buttons.reviewApplication") : t("wizard.buttons.uploadAllRequired")}
           </Button>
         )}
-        {step === 5 && (
+        {step === 5 && feeInvoice && (
+          <Button className="h-11 w-full" variant="secondary" onClick={() => navigate("/portal/student/applications")}>
+            {t("fee.doneForNow")}
+          </Button>
+        )}
+        {step === 5 && !feeInvoice && (
           <Button className="h-11 w-full" disabled={submit.isPending || !agreed} onClick={() => submit.mutate()}>
             {submit.isPending ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
             {t("wizard.buttons.submitApplication")}

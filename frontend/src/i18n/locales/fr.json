@@ -1186,6 +1186,32 @@
       "next": "Suiv."
     }
   },
+  "fee": {
+    "noticeTitle": "Frais de dossier uniques de {{amount}}",
+    "noticeTitleSettled": "Vos frais de dossier sont déjà réglés",
+    "noticeBody": "Les candidatures pour une bourse ou un financement partiel entraînent des frais de dossier CAS uniques et non remboursables de {{amount}}. Vous ne les payez qu'une fois : toute candidature financée ultérieure est couverte.",
+    "noticeSeparate": "Ces frais sont distincts de ceux facturés par l'université elle-même.",
+    "noticeWhen": "Ils vous seront demandés à la fin, une fois votre candidature complète.",
+    "noticeSettledBody": "Vous avez déjà réglé les frais de dossier CAS ; cette candidature sera donc soumise dès qu'elle sera complète.",
+    "noticeAcknowledge": "J'ai compris, continuer",
+    "noticeContinue": "Continuer",
+    "noticeCancel": "Choisir une autre option",
+    "invoiceLabel": "Facture des frais de dossier",
+    "stepBody": "Votre candidature est complète. Réglez les frais de dossier et téléversez votre reçu — CAS le confirmera et soumettra votre candidature.",
+    "howToPay": "Comment payer",
+    "quoteReference": "Merci d'indiquer {{reference}} en référence de paiement.",
+    "noInstructions": "Les coordonnées de paiement ne sont pas encore publiées. Contactez votre conseiller CAS.",
+    "receiptsLabel": "Reçus déposés",
+    "awaitingConfirmation": "En attente de confirmation",
+    "awaitingBody": "CAS vérifie votre paiement. Votre candidature sera soumise automatiquement dès confirmation.",
+    "uploadReceipt": "Téléverser le reçu de paiement",
+    "uploadAnother": "Téléverser un autre reçu",
+    "uploading": "Téléversement…",
+    "uploadFailed": "Le téléversement a échoué. Réessayez.",
+    "doneForNow": "Retour à mes candidatures",
+    "settledTitle": "Paiement confirmé",
+    "settledBody": "Vos frais de dossier sont réglés. Cette candidature a été soumise à CAS."
+  },
   "wizard": {
     "brand": {
       "studyInChina": "CAS · Étudier en Chine",

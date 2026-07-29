@@ -24,7 +24,8 @@ class StudentStoreReceiptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'key' => ['required', 'string', 'max:500'],
+            // Absent on the presign call, required when registering the object.
+            'key' => [$this->routeIs('student.fee.receipt') ? 'required' : 'sometimes', 'string', 'max:500'],
             'file_name' => ['required', 'string', 'max:255'],
             'mime' => ['required', Rule::in(DocumentService::ALLOWED_MIMES)],
             'size' => ['required', 'integer', 'min:1', 'max:'.DocumentService::MAX_BYTES],

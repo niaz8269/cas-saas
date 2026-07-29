@@ -1186,6 +1186,32 @@
       "next": "Berikutnya"
     }
   },
+  "fee": {
+    "noticeTitle": "Biaya proses sekali bayar {{amount}}",
+    "noticeTitleSettled": "Biaya proses Anda sudah lunas",
+    "noticeBody": "Pengajuan beasiswa atau pendanaan sebagian dikenakan biaya proses CAS sekali bayar dan tidak dapat dikembalikan sebesar {{amount}}. Cukup sekali — pengajuan berpendanaan berikutnya sudah tercakup.",
+    "noticeSeparate": "Biaya ini terpisah dari biaya pendaftaran yang ditagih universitas.",
+    "noticeWhen": "Kami akan memintanya di akhir, setelah pengajuan Anda lengkap.",
+    "noticeSettledBody": "Anda sudah membayar biaya proses CAS, jadi pengajuan ini langsung dikirim setelah lengkap.",
+    "noticeAcknowledge": "Saya mengerti, lanjutkan",
+    "noticeContinue": "Lanjutkan",
+    "noticeCancel": "Pilih opsi lain",
+    "invoiceLabel": "Tagihan biaya proses",
+    "stepBody": "Pengajuan Anda sudah lengkap. Bayar biaya proses dan unggah bukti bayar — CAS akan mengonfirmasi dan mengirim pengajuan Anda.",
+    "howToPay": "Cara membayar",
+    "quoteReference": "Cantumkan {{reference}} sebagai referensi pembayaran.",
+    "noInstructions": "Detail pembayaran belum tersedia. Hubungi konselor CAS Anda.",
+    "receiptsLabel": "Bukti bayar terkirim",
+    "awaitingConfirmation": "Menunggu konfirmasi",
+    "awaitingBody": "CAS sedang memeriksa pembayaran Anda. Pengajuan dikirim otomatis setelah dikonfirmasi.",
+    "uploadReceipt": "Unggah bukti pembayaran",
+    "uploadAnother": "Unggah bukti lain",
+    "uploading": "Mengunggah…",
+    "uploadFailed": "Unggahan gagal. Silakan coba lagi.",
+    "doneForNow": "Kembali ke pengajuan saya",
+    "settledTitle": "Pembayaran dikonfirmasi",
+    "settledBody": "Biaya proses Anda lunas. Pengajuan ini telah dikirim ke CAS."
+  },
   "wizard": {
     "brand": {
       "studyInChina": "CAS · Kuliah di Tiongkok",

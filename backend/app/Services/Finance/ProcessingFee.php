@@ -33,6 +33,8 @@ class ProcessingFee
 
     private const SETTING_KEY = 'finance.processing_fee';
 
+    private const INSTRUCTIONS_KEY = 'finance.payment_instructions';
+
     private const FALLBACK = ['amount' => 100.0, 'currency' => 'USD'];
 
     public function __construct(private readonly InvoiceService $invoices) {}
@@ -52,6 +54,20 @@ class ProcessingFee
             'amount' => (float) $value['amount'],
             'currency' => strtoupper((string) ($value['currency'] ?? self::FALLBACK['currency'])),
         ];
+    }
+
+    /**
+     * How to pay: free-text bank details or a payment link, set by Finance.
+     * Null until configured — the portal then shows the amount owed and tells
+     * the student to contact CAS, rather than inventing instructions.
+     */
+    public function instructions(): ?string
+    {
+        $value = Setting::query()->where('key', self::INSTRUCTIONS_KEY)->value('value');
+
+        $text = is_array($value) ? ($value['text'] ?? null) : null;
+
+        return is_string($text) && trim($text) !== '' ? trim($text) : null;
     }
 
     /**

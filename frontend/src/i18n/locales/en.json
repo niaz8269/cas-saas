@@ -1183,6 +1183,32 @@
       "next": "Next"
     }
   },
+  "fee": {
+    "noticeTitle": "One-time processing fee of {{amount}}",
+    "noticeTitleSettled": "Your processing fee is already paid",
+    "noticeBody": "Applications for scholarship or partially funded study carry a one-time, non-refundable CAS processing fee of {{amount}}. You pay it once — any later funded application is covered.",
+    "noticeSeparate": "This is separate from any application fee charged by the university itself.",
+    "noticeWhen": "You will be asked for it at the end, once your application is complete.",
+    "noticeSettledBody": "You have already paid the one-time CAS processing fee, so this application will be submitted as soon as it is complete.",
+    "noticeAcknowledge": "I understand, continue",
+    "noticeContinue": "Continue",
+    "noticeCancel": "Choose another option",
+    "invoiceLabel": "Processing fee invoice",
+    "stepBody": "Your application is complete. Pay the processing fee and upload your receipt — CAS will confirm it and submit your application.",
+    "howToPay": "How to pay",
+    "quoteReference": "Please quote {{reference}} as the payment reference.",
+    "noInstructions": "Payment details have not been published yet. Please contact your CAS counselor for how to pay.",
+    "receiptsLabel": "Receipts filed",
+    "awaitingConfirmation": "Awaiting confirmation",
+    "awaitingBody": "CAS is checking your payment. Your application is submitted automatically once it is confirmed.",
+    "uploadReceipt": "Upload payment receipt",
+    "uploadAnother": "Upload another receipt",
+    "uploading": "Uploading…",
+    "uploadFailed": "That upload failed. Please try again.",
+    "doneForNow": "Back to my applications",
+    "settledTitle": "Payment confirmed",
+    "settledBody": "Your processing fee is settled. This application has been submitted to CAS."
+  },
   "wizard": {
     "brand": {
       "studyInChina": "CAS · Study in China",
