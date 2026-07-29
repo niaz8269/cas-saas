@@ -8,15 +8,20 @@ use App\Models\Scholarship;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\Comms\NotificationService;
+use App\Services\Finance\ProcessingFee;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
- * The portal application-submission write path (student self-apply and,
- * later, agent on-behalf). Saves the applicant's profile, creates a draft
- * application with no staff actor, and hands a completed draft to CAS by
- * transitioning draft → under_review once the per-program document
- * checklist is satisfied.
+ * The portal application-submission write path (student self-apply and agent
+ * on-behalf). Saves the applicant's profile, creates a draft application with
+ * no staff actor, and hands a completed draft to CAS by transitioning
+ * draft → under_review once the per-program document checklist is satisfied.
+ *
+ * Funded student applications additionally wait on the one-time processing fee
+ * ({@see ProcessingFee}); Finance confirming the payment releases them.
  */
 class PortalApplicationService
 {
@@ -28,6 +33,7 @@ class PortalApplicationService
         private readonly ApplicationCatalog $catalog,
         private readonly NotificationService $notifications,
         private readonly ApplicantDataWriter $applicantData,
+        private readonly ProcessingFee $processingFee,
     ) {}
 
     /**
@@ -96,6 +102,79 @@ class PortalApplicationService
     {
         abort_unless($application->status === 'draft', 409, 'Only a draft application can be submitted.');
 
+        $missing = $this->missingDocuments($application);
+
+        if ($missing->isNotEmpty()) {
+            throw ValidationException::withMessages([
+                'documents' => 'Please upload: '.$missing->pluck('name')->implode(', ').'.',
+            ]);
+        }
+
+        // Funded study carries a one-time processing fee. The application is
+        // complete but does NOT reach Admissions until Finance confirms the
+        // payment — at which point releaseSettled() submits it automatically.
+        // The invoice is raised here (not earlier) so nobody is billed for an
+        // application they abandoned half-way.
+        if ($this->processingFee->appliesTo($application)
+            && ! $this->processingFee->isSettled($application->student)) {
+            $invoice = $this->processingFee->ensureInvoice($application);
+
+            throw new HttpResponseException(response()->json([
+                'message' => 'A one-time processing fee is payable before this application can be submitted.',
+                'code' => 'PROCESSING_FEE_DUE',
+                'invoice' => [
+                    'id' => $invoice->id,
+                    'invoice_no' => $invoice->invoice_no,
+                    'total' => (float) $invoice->total,
+                    'amount_paid' => (float) $invoice->amount_paid,
+                    'currency' => $invoice->currency,
+                    'status' => $invoice->status,
+                ],
+            ], 409));
+        }
+
+        return $this->handToAdmissions($application);
+    }
+
+    /**
+     * Submit everything that was only waiting on the processing fee. Called
+     * when Finance confirms the payment: the student is not present, so the
+     * applications they already completed are released on their behalf rather
+     * than sitting until they happen to come back and press submit again.
+     *
+     * @return list<Application> the applications actually handed over
+     */
+    public function releaseSettled(Student $student): array
+    {
+        if (! $this->processingFee->isSettled($student)) {
+            return [];
+        }
+
+        $released = [];
+
+        $drafts = Application::query()
+            ->where('student_id', $student->id)
+            ->where('status', 'draft')
+            ->with('program', 'scholarship')
+            ->get()
+            ->filter(fn (Application $a) => $this->processingFee->appliesTo($a));
+
+        foreach ($drafts as $application) {
+            // A draft whose documents are still short simply stays a draft —
+            // the fee is settled, so the student's next submit will go through.
+            if ($this->missingDocuments($application)->isNotEmpty()) {
+                continue;
+            }
+
+            $released[] = $this->handToAdmissions($application);
+        }
+
+        return $released;
+    }
+
+    /** Required documents with no non-rejected upload yet. */
+    private function missingDocuments(Application $application): Collection
+    {
         $application->loadMissing('program', 'scholarship');
 
         $required = $this->catalog->requiredDocuments($application->program, $application->scholarship);
@@ -106,14 +185,12 @@ class PortalApplicationService
             ->filter()
             ->unique();
 
-        $missing = $required->reject(fn ($type) => $covered->contains($type->id));
+        return $required->reject(fn ($type) => $covered->contains($type->id));
+    }
 
-        if ($missing->isNotEmpty()) {
-            throw ValidationException::withMessages([
-                'documents' => 'Please upload: '.$missing->pluck('name')->implode(', ').'.',
-            ]);
-        }
-
+    /** Assign an Admissions officer, move to under_review, and notify. */
+    private function handToAdmissions(Application $application): Application
+    {
         $officer = $this->pickAdmissionsOfficer();
 
         if ($officer !== null) {

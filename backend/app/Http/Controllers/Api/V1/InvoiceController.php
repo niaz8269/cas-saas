@@ -12,9 +12,12 @@ use App\Models\Application;
 use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\University;
+use App\Services\Admissions\PortalApplicationService;
+use App\Services\Comms\NotificationService;
 use App\Services\Finance\FeeScheduleService;
 use App\Services\Finance\InvoicePdfRenderer;
 use App\Services\Finance\InvoiceService;
+use App\Services\Finance\ProcessingFee;
 use App\Support\CsvExport;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -28,6 +31,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoiceController extends Controller
 {
+    public function __construct(private readonly NotificationService $notifications) {}
+
     public function index(Request $request): AnonymousResourceCollection
     {
         $this->authorize('viewAny', Invoice::class);
@@ -137,6 +142,7 @@ class InvoiceController extends Controller
         StoreInvoicePaymentRequest $request,
         Invoice $invoice,
         InvoiceService $service,
+        PortalApplicationService $portalApplications,
     ): InvoiceResource {
         $this->authorize('manage', $invoice);
 
@@ -146,9 +152,49 @@ class InvoiceController extends Controller
             $request->user(),
             $request->input('method'),
             $request->input('reference'),
+            $request->integer('document_id') ?: null,
         );
 
+        $this->releaseFeeBlockedApplications($invoice->refresh(), $portalApplications);
+
         return new InvoiceResource($invoice->refresh()->load(['items', 'payments.recorder:id,name']));
+    }
+
+    /**
+     * Confirming a processing-fee payment is what submits the student's funded
+     * application — they uploaded their receipt and have been waiting on us.
+     * Anything else (tuition, hostel) is untouched by this.
+     */
+    private function releaseFeeBlockedApplications(Invoice $invoice, PortalApplicationService $portalApplications): void
+    {
+        if ($invoice->status !== 'paid' || $invoice->party_type !== 'student') {
+            return;
+        }
+
+        $isProcessingFee = $invoice->items()
+            ->where('fee_type', ProcessingFee::FEE_TYPE)
+            ->exists();
+
+        if (! $isProcessingFee) {
+            return;
+        }
+
+        $student = Student::find($invoice->party_id);
+
+        if ($student === null) {
+            return;
+        }
+
+        foreach ($portalApplications->releaseSettled($student) as $application) {
+            $this->notifications->pushToStudent(
+                $student->id,
+                'application.submitted',
+                'Application submitted',
+                "Your payment was confirmed and {$application->application_code} has been submitted to CAS Admissions.",
+                entityType: 'application',
+                entityId: $application->id,
+            );
+        }
     }
 
     /**

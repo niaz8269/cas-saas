@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\V1\Portal\PortalNotificationController;
 use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
+use App\Http\Controllers\Api\V1\Portal\StudentFeeReceiptController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -165,6 +166,11 @@ Route::prefix('v1')->group(function () {
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
+
+            // One-time scholarship processing fee: what is owed, and the
+            // receipt that puts it in front of Finance.
+            Route::get('processing-fee', [StudentFeeReceiptController::class, 'show']);
+            Route::post('invoices/{invoice}/receipt', [StudentFeeReceiptController::class, 'store']);
             Route::get('invoices/{invoice}/pdf', [StudentPortalController::class, 'invoicePdf']);
             Route::get('documents', [StudentPortalController::class, 'documents']);
             Route::get('document-types', [StudentPortalController::class, 'documentTypes']);

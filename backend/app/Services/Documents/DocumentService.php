@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\Document;
 use App\Models\DocumentAccessLog;
 use App\Models\DocumentType;
+use App\Models\Invoice;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,7 @@ class DocumentService
      * staff-only, matching the verified_by FK intent).
      */
     public function register(
-        Application|Student $documentable,
+        Application|Student|Invoice $documentable,
         DocumentType $type,
         string $key,
         string $fileName,

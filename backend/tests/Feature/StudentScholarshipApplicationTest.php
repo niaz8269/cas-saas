@@ -66,7 +66,7 @@ it('allows at most three preferences', function () {
     ])->assertStatus(422)->assertJsonValidationErrors('preferences');
 });
 
-it('submits a scholarship application to Admissions once documents are attached', function () {
+it('holds a documents-complete scholarship application for the processing fee', function () {
     $student = actingAsStudentPortal();
     $gov = Scholarship::factory()->create(['scope' => 'government', 'university_id' => null, 'status' => 'active']);
     $passport = DocumentType::factory()->create(['name' => 'Passport']); // part of the general set
@@ -83,7 +83,11 @@ it('submits a scholarship application to Admissions once documents are attached'
         'file_name' => 'passport.jpg', 'mime' => 'image/jpeg', 'size' => 1000,
     ])->assertCreated();
 
+    // Funded study: complete, but waiting on the one-time processing fee.
     $this->postJson("/api/v1/student/applications/{$id}/submit")
-        ->assertOk()
-        ->assertJsonPath('data.status', 'under_review');
+        ->assertStatus(409)
+        ->assertJsonPath('code', 'PROCESSING_FEE_DUE')
+        ->assertJsonPath('invoice.total', 100);
+
+    expect(Application::find($id)->status)->toBe('draft');
 });
