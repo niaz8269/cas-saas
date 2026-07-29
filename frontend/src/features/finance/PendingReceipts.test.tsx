@@ -31,7 +31,7 @@ beforeEach(() => {
   vi.restoreAllMocks()
   useAuthStore.setState({
     token: "t",
-    user: { id: 1, name: "Fin", email: "f@cas.moe", status: "active", roles: [], permissions: ["finance.view.global"] },
+    user: { id: 1, name: "Fin", email: "f@cas.moe", phone: null, status: "active", roles: [], permissions: ["finance.view.global"], last_login_at: null },
   })
 })
 
