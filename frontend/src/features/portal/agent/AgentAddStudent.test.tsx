@@ -26,16 +26,11 @@ function withApi(main: (input: RequestInfo | URL, init?: RequestInit) => Promise
 }
 
 /**
- * The wizard's shared Field renders a <Label> that is not associated with its
- * control, so getByLabelText cannot reach ProfileStep / BackgroundStep inputs.
- * Resolve them through the label's own field wrapper instead.
+ * Reached by label, which also pins the wizard Field's accessible name — the
+ * labels used to be visual only, unreachable by a screen reader. Several
+ * labels (Name, Phone) repeat across guardian rows, hence the index.
  */
-const fieldInput = (label: string, index = 0) => {
-  const wrapper = screen.getAllByText(label)[index].parentElement
-  const input = wrapper?.querySelector("input")
-  if (!input) throw new Error(`no input under the field labelled "${label}"`)
-  return input
-}
+const fieldInput = (label: string, index = 0) => screen.getAllByLabelText(label)[index]
 
 const postBody = (mock: ReturnType<typeof vi.fn>) => {
   const call = mock.mock.calls.find(([, init]) => (init as RequestInit | undefined)?.method === "POST")

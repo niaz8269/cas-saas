@@ -1,12 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import { Award, ChevronRight, FilePlus2, UserPlus, type LucideIcon } from "lucide-react"
+import { Award, FilePlus2, UserPlus } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { getAgentCommissions, getAgentStudents } from "@/features/portal/api"
-import { Initials, ListSkeleton, PageTitle, PortalCard, StatTile, StatusBadge } from "@/features/portal/components"
+import {
+  ActionCard,
+  Initials,
+  ListSkeleton,
+  PageTitle,
+  PortalCard,
+  StatTile,
+  StatusBadge,
+} from "@/features/portal/components"
 import { money, STUDENT_BADGE } from "@/features/portal/status"
-import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
 export default function AgentHome() {
@@ -93,44 +100,3 @@ export default function AgentHome() {
   )
 }
 
-/**
- * A task, not a button: icon, what it does, and why you'd pick it. The one
- * primary card carries the brand navy; the rest stay white so the screen has
- * a single obvious next step.
- */
-function ActionCard({ to, icon: Icon, title, hint, primary, className }: {
-  to: string
-  icon: LucideIcon
-  title: string
-  hint: string
-  primary?: boolean
-  className?: string
-}) {
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "group flex items-center gap-3 rounded-xl border p-4 shadow-sm transition-colors",
-        primary
-          ? "border-cas-navy bg-cas-navy text-white hover:bg-cas-navy-700"
-          : "bg-card hover:border-cas-navy/40",
-        className,
-      )}
-    >
-      <span className={cn(
-        "flex size-10 shrink-0 items-center justify-center rounded-lg",
-        primary ? "bg-white/15 text-white" : "bg-cas-navy-50 text-cas-navy",
-      )}>
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold">{title}</span>
-        <span className={cn("block truncate text-xs", primary ? "text-white/75" : "text-muted-foreground")}>{hint}</span>
-      </span>
-      <ChevronRight className={cn(
-        "size-4 shrink-0 transition-transform group-hover:translate-x-0.5 rtl:rotate-180",
-        primary ? "text-white/70" : "text-muted-foreground",
-      )} aria-hidden="true" />
-    </Link>
-  )
-}
