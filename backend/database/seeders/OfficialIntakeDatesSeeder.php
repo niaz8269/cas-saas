@@ -105,6 +105,11 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Beijing Normal University', 'Autumn 2026 undergraduate (closed)', '2025-11-15', '2026-03-15', 'closed', 'https://admission-is.bnu.edu.cn/zsxm/bkxm/jz2/index.html'],
             ['Renmin University of China', 'Autumn 2026 Chinese-taught undergraduate (closed; listing, unconfirmed)', '2026-01-01', '2026-03-31', 'closed', 'http://iso.ruc.edu.cn/docs/2025-11/f79cdb88f9d74a9d9905712db70b3a3f.pdf'],
             ['Nankai University', 'Autumn 2026 undergraduate (closed; third-party copy, unconfirmed)', '2025-10-20', '2026-06-30', 'closed', 'https://study.dongzong.my/wp-content/uploads/2026/01/Undergraduate-Programs-of-Nankai-University-for-International-Students-2026.pdf'],
+            ['Shanghai University', 'Autumn 2026 undergraduate (closed)', '2025-11-20', '2026-06-30', 'closed', 'https://apply.shu.edu.cn/upload/shangda/9/5/f/2026-2027学年上海大学国际本科生招生简章.pdf'],
+            ['East China University of Science and Technology', 'Autumn 2026 undergraduate, self-sponsored (closed)', null, '2026-07-10', 'closed', 'https://cie.ecust.edu.cn/notices/514.html'],
+            ['Shanxi University', 'Autumn 2026 intake incl. preparatory program (closed)', '2025-12-01', '2026-06-30', 'closed', 'https://siee.sxu.edu.cn/ggtz/1e8561eeda91453d821f6aa246dbf1a4.htm'],
+            ['Zhejiang Sci-Tech University', 'Autumn intake (annual: apply by 31 May each year)', null, '2027-05-31', 'open', 'https://admission.zstu.edu.cn/En/ApplicationInfo/252'],
+            ['Southwest Jiaotong University', 'Autumn 2026 self-funded intake (closed; listing, unconfirmed)', null, '2026-06-30', 'closed', 'https://sie.swjtu.edu.cn/info/1014/3082.htm'],
         ];
     }
 }
