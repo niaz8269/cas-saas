@@ -83,6 +83,13 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Soochow University', 'Autumn 2026 undergraduate, last batch (closed; listing, unconfirmed)', null, '2026-06-15', 'closed', 'http://apply.international.suda.edu.cn/apply_en/28005/list.htm'],
             ['Shantou University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-05-31', 'closed', 'https://www.china-admissions.com/blog/sumc-deadline-may-31-2026/'],
             ['Ningxia Medical University', 'Autumn intake: apply before 30 July each year (third-party, unconfirmed)', null, '2027-07-30', 'open', 'https://wentchina.com/ningxia-medical-university-prospectus-for/'],
+            ['Guangxi Medical University', 'Autumn intake (annual schedule: apply 1 Jan – 15 Aug)', '2027-01-01', '2027-08-15', 'open', 'https://gjy.gxmu.edu.cn/en/NN/Notice/t224270.html'],
+            ['Nantong University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-06-30', 'open', 'https://www.globaladmissions.com/program/mbbs/pBNTUBVW0'],
+            ['Ningbo University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-08-20', 'open', 'https://www.globaladmissions.com/program/mbbs/pBNBU2CC0'],
+            ['Southern Medical University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-06-30', 'open', 'https://www.globaladmissions.com/program/mbbs/pBSMU7LV0'],
+            ['Tianjin Medical University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://applyforchina.com/2025/01/24/china-medical-university/'],
+            ['Shihezi University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://mdmsenquiry.com/shihezi-university/'],
+            ['Yangzhou University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/yangzhou-university/'],
         ];
     }
 }
