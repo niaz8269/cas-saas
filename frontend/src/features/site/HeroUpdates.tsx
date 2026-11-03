@@ -17,13 +17,8 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"]
 
 // [titleKey, to] — title is an i18n key resolved at render; the URL stays literal.
-const NEW_STORIES: [string, string][] = [
-  ["heroUpdates.storyMarchIntake", "/site/news?post=march-2026-intake"],
-  ["heroUpdates.storyCscScholarships", "/site/news?post=csc-scholarships"],
-  ["heroUpdates.storyNewMoe", "/site/news?post=new-moe-universities"],
-  ["heroUpdates.storyMbbsGuide", "/site/news?post=mbbs-application-guide"],
-  ["heroUpdates.storyVisaGuide", "/site/news?post=student-visa-guide"],
-]
+// No placeholder stories: only published posts are listed.
+const NEW_STORIES: [string, string][] = []
 
 const STOPWORDS = new Set(["of", "and", "the", "for", "&", "in", "a"])
 // Auto-abbreviation from a name's significant words: "Beijing Institute of Technology" → "BIT".
@@ -123,7 +118,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                 <Row
                   key={p.id}
                   to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
-                  left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level}</span></span></>}
+                  left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level.replace("_", "-")}</span></span></>}
                   right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))

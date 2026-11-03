@@ -24,9 +24,10 @@ function renderShell() {
   return renderWithProviders(
     <Routes>
       <Route element={<AppShell />}>
-        <Route path="/" element={<div>PAGE CONTENT</div>} />
+        <Route path="/dashboard" element={<div>PAGE CONTENT</div>} />
       </Route>
     </Routes>,
+    { route: "/dashboard" },
   )
 }
 

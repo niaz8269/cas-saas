@@ -16,11 +16,9 @@ import { cn } from "@/lib/utils"
 // framed university lists (backend has no topic flags yet, so these set the
 // heading + the closest real filter — MoE and/or a keyword).
 // eyebrow/title/subtitle are i18n keys resolved at render; q stays a query value.
-const TOPICS: Record<string, { eyebrow: string; title: string; subtitle: string; moe?: boolean; q?: string }> = {
-  moe: { eyebrow: "universities.topicMoeEyebrow", title: "universities.topicMoeTitle", subtitle: "universities.topicMoeSubtitle", moe: true },
-  "no-csca": { eyebrow: "universities.topicNoCscaEyebrow", title: "universities.topicNoCscaTitle", subtitle: "universities.topicNoCscaSubtitle", moe: true },
-  deadlines: { eyebrow: "universities.topicDeadlinesEyebrow", title: "universities.topicDeadlinesTitle", subtitle: "universities.topicDeadlinesSubtitle" },
-  "free-apply": { eyebrow: "universities.topicFreeApplyEyebrow", title: "universities.topicFreeApplyTitle", subtitle: "universities.topicFreeApplySubtitle", moe: true },
+const TOPICS: Record<string, { eyebrow: string; title: string; subtitle: string; q?: string; openIntake?: boolean }> = {
+  // Universities with an admission window that is currently open or upcoming.
+  deadlines: { eyebrow: "universities.topicDeadlinesEyebrow", title: "universities.topicDeadlinesTitle", subtitle: "universities.topicDeadlinesSubtitle", openIntake: true },
   medical: { eyebrow: "universities.topicMedicalEyebrow", title: "universities.topicMedicalTitle", subtitle: "universities.topicMedicalSubtitle", q: "Medical" },
 }
 
@@ -46,7 +44,8 @@ export default function SiteUniversities() {
 
   const [searchInput, setSearchInput] = useState(params.get("q") ?? topic?.q ?? "")
   const [q, setQ] = useState(params.get("q") ?? topic?.q ?? "")
-  const [moe, setMoe] = useState(params.get("moe") === "1" || !!topic?.moe)
+  const [moe, setMoe] = useState(params.get("moe") === "1")
+  const openIntake = !!topic?.openIntake
   const [city, setCity] = useState(params.get("city") ?? "")
   const [page, setPage] = useState(1)
 
@@ -57,8 +56,8 @@ export default function SiteUniversities() {
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
-    queryKey: ["site-universities", { q, moe, city, page }],
-    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, page }),
+    queryKey: ["site-universities", { q, moe, city, page, openIntake }],
+    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, openIntake, page }),
     placeholderData: keepPreviousData,
   })
 

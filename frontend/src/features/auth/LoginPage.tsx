@@ -36,7 +36,7 @@ export default function LoginPage() {
   const token = useAuthStore((state) => state.token)
   const setAuth = useAuthStore((state) => state.setAuth)
 
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/"
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/dashboard"
 
   // Already signed in? Skip the form.
   useEffect(() => {

@@ -3,25 +3,17 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 
 // CAS's own channels (mirrors the footer) — never the reference's.
-const PHONE = "+8618041566030"
-const PHONE_DISPLAY = "+86 180 4156 6030"
-const WHATSAPP = "https://wa.me/8618041566030"
-const EMAIL = "info@cas.moe"
+const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnquiry: EMAIL, wechat: WECHAT_ID } = CONTACT
 
-const avatar = (n: number) => `https://i.pravatar.cc/96?img=${n}`
 // Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
 const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
 
-// Counsellor faces shown in the help bar (placeholders — swap for real staff).
-// Display name is an i18n key resolved at render (report — 5-language support).
-const COUNSELLORS = [
-  { nameKey: "helpDock.counsellorCathy", img: 1 },
-  { nameKey: "helpDock.counsellorJayla", img: 9 },
-  { nameKey: "helpDock.counsellorJoe", img: 13 },
-]
+// The single contact entry in the help bar (CAS admissions — no staff photos).
+const CONTACTS = [{ nameKey: "helpDock.talkToCounsellor" }]
 
 // Show the bar once the visitor scrolls past the hero (~480px).
 const HERO_THRESHOLD = 480
@@ -70,9 +62,9 @@ export default function SiteHelpDock() {
           <span className="text-sm leading-tight font-bold tracking-wide text-cas-red uppercase">{t("helpDock.hereToHelpLine1")}<br />{t("helpDock.hereToHelpLine2")}</span>
           <Divider />
           <div className="flex items-center gap-5">
-            {COUNSELLORS.map((c) => (
+            {CONTACTS.map((c) => (
               <div key={c.nameKey} className="group relative flex cursor-pointer flex-col items-center gap-1">
-                <img src={avatar(c.img)} alt="" className="size-10 rounded-full object-cover ring-2 ring-cas-red/80" />
+                <span className="flex size-10 items-center justify-center rounded-full bg-white/10 ring-2 ring-cas-red/80"><MessageCircle className="size-5" /></span>
                 <span className="text-[11px] text-white/80">{t(c.nameKey)}</span>
 
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
@@ -83,19 +75,19 @@ export default function SiteHelpDock() {
                     <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
                     <div className="flex items-start gap-4">
                       <div className="flex shrink-0 flex-col items-center gap-1.5">
-                        <img src={avatar(c.img)} alt="" className="size-14 rounded-full object-cover ring-2 ring-cas-red/70" />
+                        <span className="flex size-14 items-center justify-center rounded-full bg-cas-navy/10 ring-2 ring-cas-red/70"><MessageCircle className="size-6" /></span>
                         <span className="text-sm font-semibold text-cas-red-600">{t(c.nameKey)}</span>
                       </div>
                       <div className="space-y-2.5 text-sm leading-tight">
-                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{WECHAT_ID}</p></div>
                         <div>
                           <p className="font-semibold">{t("helpDock.whatsappTelLabel")}</p>
                           <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
                         </div>
                       </div>
                       <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
-                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.wechatQrAlt")} width={92} height={92} className="rounded" />
-                        <span className="text-xs text-muted-foreground">{t("helpDock.wechat")}</span>
+                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
+                        <span className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</span>
                       </div>
                     </div>
                   </div>

@@ -25,6 +25,10 @@ export interface University {
   cover_url: string | null
   status: "active" | "inactive"
   moe_listed: boolean
+  moe_mbbs_year?: string | null
+  moe_mbbs_source_url?: string | null
+  cover_source_url?: string | null
+  guide_links?: [string, string][]
   nearest_airport: string | null
   about: string | null
   requirements: string[]
@@ -226,6 +230,8 @@ export interface Intake {
   application_deadline: string | null
   seats: number | null
   status: string
+  source_url?: string | null
+  verified_on?: string | null
 }
 
 export interface Scholarship {
@@ -234,6 +240,7 @@ export interface Scholarship {
   name: string
   slug: string | null
   scope: "university" | "government"
+  source_url?: string | null
   type: string | null
   coverage: string | null
   amount: string | number | null

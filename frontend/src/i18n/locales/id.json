@@ -23,8 +23,8 @@
     "learningCenter": "Pusat Pembelajaran"
   },
   "header": {
-    "promoFreeApplyText": "Jelajahi Universitas Bebas Biaya Pendaftaran di CAS",
-    "promoScholarshipsText": "Beasiswa penuh untuk 2026 — daftar lebih awal",
+    "promoFreeApplyText": "Jelajahi universitas dan tanggal penerimaan di CAS",
+    "promoScholarshipsText": "Lihat beasiswa dan jadwal pendaftarannya",
     "learnMore": "Selengkapnya",
     "signIn": "MASUK",
     "openMenu": "Buka menu",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "Penerimaan",
     "topicNoCscaTitle": "Universitas tanpa CSCA",
     "topicNoCscaSubtitle": "Universitas yang menerima mahasiswa internasional tanpa mengikuti tes CSCA.",
-    "topicDeadlinesEyebrow": "Segera daftar",
-    "topicDeadlinesTitle": "Universitas dengan batas waktu akhir",
-    "topicDeadlinesSubtitle": "Masih terbuka untuk periode masuk mendatang — daftar sebelum kursi terisi penuh.",
+    "topicDeadlinesEyebrow": "Daftar segera",
+    "topicDeadlinesTitle": "Universitas dengan jadwal penerimaan yang sedang dibuka",
+    "topicDeadlinesSubtitle": "Universitas dengan jadwal pendaftaran terpublikasi yang sedang dibuka atau akan segera dibuka.",
     "topicFreeApplyEyebrow": "Bebas biaya pendaftaran",
     "topicFreeApplyTitle": "Universitas bebas biaya pendaftaran",
     "topicFreeApplySubtitle": "Daftar ke universitas tertentu tanpa biaya pendaftaran melalui CAS.",
@@ -145,7 +145,19 @@
     "admissionRequirements": "Persyaratan penerimaan",
     "requirementsFallback": "Persyaratan berbeda-beda tiap program — tanyakan penasihat CAS untuk daftar lengkap yang tepat bagi jurusan Anda.",
     "readyToApply": "Siap mendaftar?",
-    "readyToApplyBody": "CAS menyiapkan dan mengirimkan lamaran Anda untuk Anda."
+    "readyToApplyBody": "CAS menyiapkan dan mengirimkan lamaran Anda untuk Anda.",
+    "tabGuide": "Panduan",
+    "guideEmpty": "Belum ada panduan yang diterbitkan untuk universitas ini.",
+    "guideSources": "Sumber resmi",
+    "cscListed": "Beasiswa CSC tersedia",
+    "showMorePrograms": "Tampilkan lebih banyak ({{shown}} dari {{total}})",
+    "locationPhoto": "Foto lokasi (bukan kampus)",
+    "photoCredit": "Foto",
+    "photoSource": "sumber",
+    "factFounded": "Didirikan",
+    "factType": "Jenis",
+    "factStudents": "Mahasiswa",
+    "wikipediaCredit": "Fakta dan pengantar dari"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
@@ -390,20 +402,20 @@
     "ctaButton": "Temukan program Anda",
     "stats": {
       "students": {
-        "value": "500 rb+",
-        "label": "Mahasiswa internasional"
+        "value": "304",
+        "label": "Universitas dalam katalog"
       },
       "english": {
-        "value": "Inggris",
-        "label": "Program berbahasa"
+        "value": "13,000+",
+        "label": "Program berbahasa Inggris"
       },
       "scholarships": {
-        "value": "Beasiswa",
-        "label": "Tersedia luas"
+        "value": "50,000+",
+        "label": "Program terdaftar beasiswa CSC"
       },
       "recognition": {
-        "value": "Global",
-        "label": "Pengakuan gelar"
+        "value": "43",
+        "label": "Universitas MBBS yang disetujui MoE (2026–27)"
       }
     },
     "reasons": {
@@ -646,7 +658,9 @@
       "autumn2026": "Musim Gugur 2026",
       "spring2027": "Musim Semi 2027",
       "autumn2027": "Musim Gugur 2027",
-      "flexible": "Fleksibel"
+      "flexible": "Fleksibel",
+      "spring2028": "Musim Semi 2028",
+      "autumn2028": "Musim Gugur 2028"
     },
     "funding": {
       "selfFunded": "Dana pribadi",
@@ -855,17 +869,17 @@
       "title": "Sorotan",
       "subtitle": "Jalur pilihan menuju kuliah di Tiongkok.",
       "learnMore": "Selengkapnya",
-      "medicalTitle": "Gelar kedokteran yang diakui global",
-      "medicalBody": "Kuliah MBBS di universitas yang terdaftar di Kementerian Pendidikan dan diakui di seluruh dunia.",
+      "medicalTitle": "Universitas MBBS disetujui MoE",
+      "medicalBody": "Universitas dalam daftar Kementerian Pendidikan 2026–27 untuk MBBS berbahasa Inggris.",
       "medicalTag": "MBBS",
-      "deadlinesTitle": "Universitas dengan batas waktu akhir",
-      "deadlinesBody": "Masih terbuka untuk periode masuk mendatang — daftar sebelum kursi terisi penuh.",
+      "deadlinesTitle": "Pendaftaran dibuka",
+      "deadlinesBody": "Universitas dengan masa penerimaan yang sedang dibuka.",
       "deadlinesTag": "Batas Waktu",
       "noCscaTitle": "Universitas tanpa CSCA",
       "noCscaBody": "Universitas yang menerima mahasiswa internasional tanpa tes CSCA.",
       "noCscaTag": "Penerimaan",
-      "languageTitle": "Dasar bahasa Mandarin",
-      "languageBody": "Program tahun persiapan untuk mempersiapkan Anda menghadapi studi dan kehidupan di Tiongkok.",
+      "languageTitle": "Program berbahasa Mandarin",
+      "languageBody": "Telusuri program yang diajarkan dalam bahasa Mandarin.",
       "languageTag": "Bahasa",
       "fastTrackTitle": "Pendaftaran jalur cepat",
       "fastTrackBody": "Pemrosesan prioritas untuk lamaran lengkap yang dikirimkan melalui CAS.",
@@ -873,8 +887,8 @@
       "freeApplyTitle": "Universitas bebas biaya pendaftaran",
       "freeApplyBody": "Daftar ke universitas tertentu tanpa biaya pendaftaran melalui CAS.",
       "freeApplyTag": "Pendaftaran Gratis",
-      "valueTitle": "Universitas ramah anggaran",
-      "valueBody": "Pendidikan berkualitas dengan biaya kuliah dan hidup yang terjangkau.",
+      "valueTitle": "Program di bawah CNY 20.000 per tahun",
+      "valueBody": "Saring daftar program menurut biaya kuliah tahunan.",
       "valueTag": "Nilai Terbaik",
       "fullScholarshipTitle": "Universitas beasiswa penuh",
       "fullScholarshipBody": "Universitas yang menawarkan beasiswa biaya kuliah penuh kepada pelajar yang memenuhi syarat.",
@@ -897,7 +911,7 @@
       "tabs": {
         "latest": "Topik terbaru",
         "questions": "Pertanyaan umum",
-        "trending": "Sedang tren"
+        "trending": "Jelajahi"
       },
       "latest": {
         "marchIntake": "Periode masuk Maret 2026 kini dibuka di seluruh universitas mitra",
@@ -1441,5 +1455,18 @@
     "register": "Daftar",
     "notFoundTitle": "Pos tidak ditemukan",
     "notFoundBody": "Pos ini mungkin telah dibatalkan penerbitannya atau tautannya salah."
+  },
+  "admissionWindow": {
+    "opens": "Dibuka {{date}}",
+    "opened": "Dibuka sejak {{date}}",
+    "openTbd": "Tanggal pembukaan akan diumumkan",
+    "closes": "Ditutup {{date}}",
+    "closedOn": "Ditutup pada {{date}}",
+    "closeTbd": "Tanggal penutupan akan diumumkan",
+    "source": "Pengumuman universitas",
+    "checked": "diperiksa {{date}}",
+    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya.",
+    "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
+    "sourceSas": "Daftar SAS"
   }
 }

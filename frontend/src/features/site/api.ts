@@ -52,12 +52,13 @@ export interface SiteUniversityRef {
 export interface SiteProgram {
   id: number
   name: string
+  name_zh?: string | null
+  csc_listed?: boolean
   level: string
   teaching_language: string | null
   duration_months: number | null
   tuition_fee: string | number | null
   currency: string | null
-  apply_link: string | null
   requirements: string[] | null
   university?: SiteUniversityRef
   // Audience gating (Phase 1): fees are registered-only; rate follows role.
@@ -69,7 +70,11 @@ export interface SiteIntake {
   id: number
   name: string
   start_date: string | null
+  application_open_date: string | null
   application_deadline: string | null
+  source_kind: string | null
+  verified_on: string | null
+  status?: string
   seats: number | null
   program: string | null
 }
@@ -85,8 +90,10 @@ export interface SiteScholarship {
   description: string | null
   eligibility: string | null
   how_to_apply: string | null
-  apply_link: string | null
   deadline: string | null
+  application_open_date: string | null
+  source_kind: string | null
+  verified_on: string | null
   university?: SiteUniversityRef
   /** Audience gating (Phase 1): amount/deadline/how-to-apply are registered-only. */
   details_locked?: boolean
@@ -98,18 +105,36 @@ export interface SiteRepProfessor {
   photo_url: string | null
 }
 
+export interface SiteGuideBlock {
+  h: string
+  t: string[]
+}
+
+export interface SiteGuide {
+  blocks: SiteGuideBlock[]
+  links: [string, string][]
+}
+
 export interface SiteUniversityCard {
   id: number
   name: string
+  name_zh?: string | null
   slug: string | null
   city: string | null
+  province?: string | null
   address: string | null
   country: string | null
-  website: string | null
-  apply_link: string | null
   logo_url: string | null
   cover_url: string | null
+  cover_credit?: string | null
+  /** True when the cover is a photo of the city because no campus photo was available. */
+  cover_is_city?: boolean
+  founded_year?: number | null
+  institution_type?: string | null
+  student_count?: string | null
+  wikipedia_url?: string | null
   moe_listed: boolean
+  moe_mbbs_year?: string | null
   nearest_airport: string | null
   about: string | null
   requirements: string[]
@@ -118,6 +143,7 @@ export interface SiteUniversityCard {
 }
 
 export interface SiteUniversityDetail extends SiteUniversityCard {
+  guide?: SiteGuide | null
   programs: SiteProgram[]
   intakes: SiteIntake[]
   scholarships: SiteScholarship[]
@@ -130,11 +156,12 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; page?: number; perPage?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; openIntake?: boolean; page?: number; perPage?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.moe) search.set("filter[moe_listed]", "1")
   if (params.city) search.set("filter[city]", params.city)
+  if (params.openIntake) search.set("filter[open_intake]", "1")
   if (params.perPage) search.set("per_page", String(params.perPage))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
@@ -145,12 +172,13 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
 export const getSiteUniversity = (slug: string) =>
   siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
 
-export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; page?: number } = {}) {
+export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.level) search.set("filter[level]", params.level)
   if (params.language) search.set("filter[language]", params.language)
   if (params.maxFee) search.set("filter[max_fee]", params.maxFee)
+  if (params.openIntake) search.set("filter[open_intake]", "1")
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 

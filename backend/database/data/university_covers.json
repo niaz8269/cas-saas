@@ -1,0 +1,815 @@
+{
+"source": "Wikidata P18 + Wikimedia Commons (licences checked 2026-11-03)",
+"covers": {
+"beijing-institute-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Main_gate_of_Beijing_Institute_of_Technology_main_campus_%2820210523072112%29.jpg/1280px-Main_gate_of_Beijing_Institute_of_Technology_main_campus_%2820210523072112%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_gate_of_Beijing_Institute_of_Technology_main_campus_%2820210523072112%29.jpg"
+},
+"anhui-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gate_of_AHNU.jpg/1280px-Gate_of_AHNU.jpg",
+"credit": "Warren Leywon, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_AHNU.jpg"
+},
+"anhui-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/7/70/Anhui_University_South_Gate.jpg",
+"credit": "Nat Krause at English Wikipedia, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Anhui_University_South_Gate.jpg"
+},
+"anshan-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Anshan_Normal_University_teaching_buildings.jpg/1280px-Anshan_Normal_University_teaching_buildings.jpg",
+"credit": "Rincewind42, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Anshan_Normal_University_teaching_buildings.jpg"
+},
+"beijing-film-academy": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Gate_of_Beijing_Film_Academy_%2820220728152655%29.jpg/1280px-Gate_of_Beijing_Film_Academy_%2820220728152655%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_Beijing_Film_Academy_%2820220728152655%29.jpg"
+},
+"beijing-foreign-studies-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/BFSU_West_Campus_%2820220624091809%29.jpg/1280px-BFSU_West_Campus_%2820220624091809%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:BFSU_West_Campus_%2820220624091809%29.jpg"
+},
+"beijing-forestry-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Beijing_Forestry_University_%2853670020%29.jpeg/1280px-Beijing_Forestry_University_%2853670020%29.jpeg",
+"credit": "Shihao Sun, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Beijing_Forestry_University_%2853670020%29.jpeg"
+},
+"beijing-jiaotong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Bjtu_siyuan_building.JPG/1280px-Bjtu_siyuan_building.JPG",
+"credit": "Walter Grassroot, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Bjtu_siyuan_building.JPG"
+},
+"beijing-language-and-culture-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/South_gate_of_BLCU_%2820230206132105%29.jpg/1280px-South_gate_of_BLCU_%2820230206132105%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_BLCU_%2820230206132105%29.jpg"
+},
+"beijing-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/BNU_Gate.jpg/1280px-BNU_Gate.jpg",
+"credit": "Flsxx, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:BNU_Gate.jpg"
+},
+"beijing-sport-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Main_gate_of_Beijing_Sport_University_%2820220801123406%29.jpg/1280px-Main_gate_of_Beijing_Sport_University_%2820220801123406%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_gate_of_Beijing_Sport_University_%2820220801123406%29.jpg"
+},
+"beijing-technology-and-business-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/South_gate_of_BTBU_West_Campus_%2820210426140837%29.jpg/1280px-South_gate_of_BTBU_West_Campus_%2820210426140837%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_BTBU_West_Campus_%2820210426140837%29.jpg"
+},
+"beijing-university-of-chemical-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Beijing_University_of_Chemical_Technology_%2820240125140308%29.jpg/1280px-Beijing_University_of_Chemical_Technology_%2820240125140308%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Beijing_University_of_Chemical_Technology_%2820240125140308%29.jpg"
+},
+"beijing-university-of-chinese-medicine": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Beijing_University_of_Chinese_Medicine_%2820210914135137%29.jpg/1280px-Beijing_University_of_Chinese_Medicine_%2820210914135137%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Beijing_University_of_Chinese_Medicine_%2820210914135137%29.jpg"
+},
+"beijing-university-of-posts-and-telecommunications": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/West_gate_of_BUPT_%2820250305153111%29.jpg/1280px-West_gate_of_BUPT_%2820250305153111%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:West_gate_of_BUPT_%2820250305153111%29.jpg"
+},
+"beijing-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/South_gate_of_Beijing_University_of_Technology_%2820241022154233%29.jpg/1280px-South_gate_of_Beijing_University_of_Technology_%2820241022154233%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_Beijing_University_of_Technology_%2820241022154233%29.jpg"
+},
+"capital-medical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/East_gate_of_Capital_Medical_University_%2820201106165430%29.jpg/1280px-East_gate_of_Capital_Medical_University_%2820201106165430%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:East_gate_of_Capital_Medical_University_%2820201106165430%29.jpg"
+},
+"capital-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/CNU_Main_Campus_%2820220624092409%29.jpg/1280px-CNU_Main_Campus_%2820220624092409%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:CNU_Main_Campus_%2820220624092409%29.jpg"
+},
+"capital-university-of-economics-and-business": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/%E9%A6%96%E9%83%BD%E7%BB%8F%E6%B5%8E%E8%B4%B8%E6%98%93%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8_Front_Gate_of_Capital_University_of_Economics_and_Business%2C_Mar_2018.jpg/1280px-%E9%A6%96%E9%83%BD%E7%BB%8F%E6%B5%8E%E8%B4%B8%E6%98%93%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8_Front_Gate_of_Capital_University_of_Economics_and_Business%2C_Mar_2018.jpg",
+"credit": "颜邯, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E9%A6%96%E9%83%BD%E7%BB%8F%E6%B5%8E%E8%B4%B8%E6%98%93%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8_Front_Gate_of_Capital_University_of_Economics_and_Business%2C_Mar_2018.jpg"
+},
+"capital-university-of-physical-education-and-sports": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Capital_University_of_Physical_Education_and_Sports_%2820240322151621%29.jpg/1280px-Capital_University_of_Physical_Education_and_Sports_%2820240322151621%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Capital_University_of_Physical_Education_and_Sports_%2820240322151621%29.jpg"
+},
+"central-academy-of-fine-arts": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/East_gate_of_CAFA_%2820231207160608%29.jpg/1280px-East_gate_of_CAFA_%2820231207160608%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:East_gate_of_CAFA_%2820231207160608%29.jpg"
+},
+"central-conservatory-of-music": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Central_Conservatory_of_Music_from_the_west_%2820221023154647%29.jpg/1280px-Central_Conservatory_of_Music_from_the_west_%2820221023154647%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Central_Conservatory_of_Music_from_the_west_%2820221023154647%29.jpg"
+},
+"central-south-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Zhongnandaxue.jpg",
+"credit": "Unknown author, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Zhongnandaxue.jpg"
+},
+"central-university-of-finance-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Central_University_of_Finance_and_Economics%2C_Xueyuannanlu_campus_%2820260813150023%29.jpg/1280px-Central_University_of_Finance_and_Economics%2C_Xueyuannanlu_campus_%2820260813150023%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Central_University_of_Finance_and_Economics%2C_Xueyuannanlu_campus_%2820260813150023%29.jpg"
+},
+"changchun-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/2007%E5%B9%B4%E5%8E%9F%E9%95%BF%E6%98%A5%E5%9C%B0%E8%B4%A8%E5%AD%A6%E9%99%A2%E8%A5%BF%E9%97%A8_-_panoramio.jpg/1280px-2007%E5%B9%B4%E5%8E%9F%E9%95%BF%E6%98%A5%E5%9C%B0%E8%B4%A8%E5%AD%A6%E9%99%A2%E8%A5%BF%E9%97%A8_-_panoramio.jpg",
+"credit": "wanghongliu, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:2007%E5%B9%B4%E5%8E%9F%E9%95%BF%E6%98%A5%E5%9C%B0%E8%B4%A8%E5%AD%A6%E9%99%A2%E8%A5%BF%E9%97%A8_-_panoramio.jpg"
+},
+"china-agricultural-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E8%A5%BF%E6%A0%A1%E5%8C%BA%E4%B8%BB%E6%A5%BC.JPG/1280px-%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E8%A5%BF%E6%A0%A1%E5%8C%BA%E4%B8%BB%E6%A5%BC.JPG",
+"credit": "Loong, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E8%A5%BF%E6%A0%A1%E5%8C%BA%E4%B8%BB%E6%A5%BC.JPG"
+},
+"china-foreign-affairs-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Gate_of_China_Foreign_Affairs_University_main_campus_%2820221112164126%29.jpg/1280px-Gate_of_China_Foreign_Affairs_University_main_campus_%2820221112164126%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_China_Foreign_Affairs_University_main_campus_%2820221112164126%29.jpg"
+},
+"china-pharmaceutical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/3/30/Gate_of_China_Pharmaceutical_University.jpg",
+"credit": "FukaiNashi, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_China_Pharmaceutical_University.jpg"
+},
+"china-three-gorges-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/%E4%B8%89%E5%B3%A1%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%B4%A2%E6%BA%AA%E7%9A%84%E5%A4%A7%E5%9D%9D%E5%BE%AE%E7%BC%A9%E6%99%AF%E8%A7%82.jpg/1280px-%E4%B8%89%E5%B3%A1%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%B4%A2%E6%BA%AA%E7%9A%84%E5%A4%A7%E5%9D%9D%E5%BE%AE%E7%BC%A9%E6%99%AF%E8%A7%82.jpg",
+"credit": "Fxqf, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%B8%89%E5%B3%A1%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%B4%A2%E6%BA%AA%E7%9A%84%E5%A4%A7%E5%9D%9D%E5%BE%AE%E7%BC%A9%E6%99%AF%E8%A7%82.jpg"
+},
+"china-university-of-geosciences-beijing": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Jiao_5_in_CUG_Beijing.jpg/1280px-Jiao_5_in_CUG_Beijing.jpg",
+"credit": "Zhangmoon618, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Jiao_5_in_CUG_Beijing.jpg"
+},
+"china-university-of-geosciences-wuhan": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Cug_3.JPG/1280px-Cug_3.JPG",
+"credit": "Zhangmoon618, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Cug_3.JPG"
+},
+"china-university-of-mining-and-technology-beijing": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/East_gate_of_CUMTB_%2820250317114637%29.jpg/1280px-East_gate_of_CUMTB_%2820250317114637%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:East_gate_of_CUMTB_%2820250317114637%29.jpg"
+},
+"china-university-of-petroleum-east-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Huangdao%2C_Qingdao%2C_Shandong%2C_China_-_panoramio_%281234%29.jpg/1280px-Huangdao%2C_Qingdao%2C_Shandong%2C_China_-_panoramio_%281234%29.jpg",
+"credit": "Kobe Bryn, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Huangdao%2C_Qingdao%2C_Shandong%2C_China_-_panoramio_%281234%29.jpg"
+},
+"china-university-of-petroleum-beijing": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/North_gate_of_China_University_of_Petroleum%2C_Beijing_%2820210823161150%29.jpg/1280px-North_gate_of_China_University_of_Petroleum%2C_Beijing_%2820210823161150%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:North_gate_of_China_University_of_Petroleum%2C_Beijing_%2820210823161150%29.jpg"
+},
+"china-university-of-political-science-and-law": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/South_gate_of_CUPL_Changping_Campus_%2820210823161102%29.jpg/1280px-South_gate_of_CUPL_Changping_Campus_%2820210823161102%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_CUPL_Changping_Campus_%2820210823161102%29.jpg"
+},
+"china-youth-university-of-political-studies": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/China_Youth_University_of_Political_Studies_%2820220808154321%29.jpg/1280px-China_Youth_University_of_Political_Studies_%2820220808154321%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:China_Youth_University_of_Political_Studies_%2820220808154321%29.jpg"
+},
+"chongqing-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/THE_LIBRARY_OF_CHONGQING_NORMAL_UNIVERSITY.jpg/1280px-THE_LIBRARY_OF_CHONGQING_NORMAL_UNIVERSITY.jpg",
+"credit": "Geographyinitiative, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:THE_LIBRARY_OF_CHONGQING_NORMAL_UNIVERSITY.jpg"
+},
+"chongqing-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Chongqing_University_Main_Entrance.jpg/1280px-Chongqing_University_Main_Entrance.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Chongqing_University_Main_Entrance.jpg"
+},
+"communication-university-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Main_building_and_train.jpg/1280px-Main_building_and_train.jpg",
+"credit": "祖国必然统一, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_building_and_train.jpg"
+},
+"dali-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Dali_Yunnan_China_Dali-University-03.jpg/1280px-Dali_Yunnan_China_Dali-University-03.jpg",
+"credit": "CEphoto, Uwe Aranas, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Dali_Yunnan_China_Dali-University-03.jpg"
+},
+"dalian-maritime-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/5/59/Dalian_Maritime_Univ-New_Gate.jpg",
+"credit": "Yoshi Canopus, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Dalian_Maritime_Univ-New_Gate.jpg"
+},
+"dalian-university-of-foreign-languages": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Dlufl_library.jpg/1280px-Dlufl_library.jpg",
+"credit": "Wayne lord, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Dlufl_library.jpg"
+},
+"dongbei-university-of-finance-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Dongbei_University_of_Finance_%26_Economy.jpg/1280px-Dongbei_University_of_Finance_%26_Economy.jpg",
+"credit": "Yoshi Canopus, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Dongbei_University_of_Finance_%26_Economy.jpg"
+},
+"donghua-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Jingyue_Lake_at_Songjiang_Campus_of_Donghua_University.jpg/1280px-Jingyue_Lake_at_Songjiang_Campus_of_Donghua_University.jpg",
+"credit": "Njzjz, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Jingyue_Lake_at_Songjiang_Campus_of_Donghua_University.jpg"
+},
+"east-china-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/90/%E5%8D%8E%E4%B8%9C%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6%E6%80%9D%E7%BE%A4%E5%A0%82.jpg",
+"credit": "Baidutieba985, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%8D%8E%E4%B8%9C%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6%E6%80%9D%E7%BE%A4%E5%A0%82.jpg"
+},
+"east-china-university-of-political-science-and-law": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/7/7c/St_Johns_College_Shanghai.jpg",
+"credit": "Unknown author, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:St_Johns_College_Shanghai.jpg"
+},
+"fujian-agriculture-and-forestry-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/East_gate_of_Fujian_Agriculture_and_Forestry_University%2C_Jinshan_Campus_%2820250126173748%29.jpg/1280px-East_gate_of_Fujian_Agriculture_and_Forestry_University%2C_Jinshan_Campus_%2820250126173748%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:East_gate_of_Fujian_Agriculture_and_Forestry_University%2C_Jinshan_Campus_%2820250126173748%29.jpg"
+},
+"fuzhou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Artificial_Lake_in_Fuzhou_University.jpg/1280px-Artificial_Lake_in_Fuzhou_University.jpg",
+"credit": "FradonStar, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Artificial_Lake_in_Fuzhou_University.jpg"
+},
+"guangdong-university-of-foreign-studies": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Guangwai.jpg/1280px-Guangwai.jpg",
+"credit": "Mengyeyue, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Guangwai.jpg"
+},
+"guangxi-minzu-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/%E5%B9%BF%E8%A5%BF%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_%E6%AD%A3%E9%97%A8_-_2026-05-13_02.jpg/1280px-%E5%B9%BF%E8%A5%BF%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_%E6%AD%A3%E9%97%A8_-_2026-05-13_02.jpg",
+"credit": "瑞丽江的河水, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%B9%BF%E8%A5%BF%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_%E6%AD%A3%E9%97%A8_-_2026-05-13_02.jpg"
+},
+"guangxi-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Guangxi_Normal_University_House.jpg/1280px-Guangxi_Normal_University_House.jpg",
+"credit": "Farm, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Guangxi_Normal_University_House.jpg"
+},
+"guizhou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Guizhou_Univ-North_Campus-Library.jpg/1280px-Guizhou_Univ-North_Campus-Library.jpg",
+"credit": "Olemissius at English Wikipedia, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Guizhou_Univ-North_Campus-Library.jpg"
+},
+"hainan-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Hainan_Normal_University%2C_Haikou_Campus_-_01.jpg/1280px-Hainan_Normal_University%2C_Haikou_Campus_-_01.jpg",
+"credit": "Anna Frodesiak, CC0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hainan_Normal_University%2C_Haikou_Campus_-_01.jpg"
+},
+"harbin-engineering-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Library_of_Harbin_Engineering_University.JPG/1280px-Library_of_Harbin_Engineering_University.JPG",
+"credit": "Narjuko, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Library_of_Harbin_Engineering_University.JPG"
+},
+"harbin-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/HarbinNormalUniversityGate.jpg",
+"credit": "Prince Roy, CC BY 2.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:HarbinNormalUniversityGate.jpg"
+},
+"hebei-medical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/%E6%B2%B3%E5%8C%97%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%8D%97%E9%97%A8.jpg/1280px-%E6%B2%B3%E5%8C%97%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%8D%97%E9%97%A8.jpg",
+"credit": "Suginami, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%B2%B3%E5%8C%97%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%8D%97%E9%97%A8.jpg"
+},
+"hebei-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/East_gate_of_Hebei_Normal_University%2C_Yuhua_Campus_%2820260412105735%29.jpg/1280px-East_gate_of_Hebei_Normal_University%2C_Yuhua_Campus_%2820260412105735%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:East_gate_of_Hebei_Normal_University%2C_Yuhua_Campus_%2820260412105735%29.jpg"
+},
+"hebei-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/%E6%B2%B3%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%96%B0%E5%8C%BA.jpg/1280px-%E6%B2%B3%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%96%B0%E5%8C%BA.jpg",
+"credit": "Suginami, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%B2%B3%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%96%B0%E5%8C%BA.jpg"
+},
+"hebei-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Gate_of_HEBUT_%28Beichen%29_2.jpg/1280px-Gate_of_HEBUT_%28Beichen%29_2.jpg",
+"credit": "Vikarna, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_HEBUT_%28Beichen%29_2.jpg"
+},
+"hefei-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/HFUT.jpg/1280px-HFUT.jpg",
+"credit": "Andyljw1992, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:HFUT.jpg"
+},
+"heilongjiang-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Heilongjiang_University.jpg/1280px-Heilongjiang_University.jpg",
+"credit": "Slb nsk, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Heilongjiang_University.jpg"
+},
+"henan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%E6%B2%B3%E5%8D%97%E5%A4%A7%E5%AD%A6%E7%A4%BC%E5%A0%822020.jpg/1280px-%E6%B2%B3%E5%8D%97%E5%A4%A7%E5%AD%A6%E7%A4%BC%E5%A0%822020.jpg",
+"credit": "ScareCriterion12, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%B2%B3%E5%8D%97%E5%A4%A7%E5%AD%A6%E7%A4%BC%E5%A0%822020.jpg"
+},
+"henan-university-of-chinese-medicine": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/20220220_Henan_University_of_Chinese_Medicine.jpg/1280px-20220220_Henan_University_of_Chinese_Medicine.jpg",
+"credit": "Windmemories, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:20220220_Henan_University_of_Chinese_Medicine.jpg"
+},
+"henan-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Henan_University_of_Technology.jpg/1280px-Henan_University_of_Technology.jpg",
+"credit": "ASHillocks, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Henan_University_of_Technology.jpg"
+},
+"hohai-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Building_in_HU2.jpg",
+"credit": "FukaiNashi, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Building_in_HU2.jpg"
+},
+"huaqiao-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Huaqiao_University_20151025.JPG/1280px-Huaqiao_University_20151025.JPG",
+"credit": "BreakdownDiode, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Huaqiao_University_20151025.JPG"
+},
+"huazhong-agricultural-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/f/f6/HZAU-Niaokan.jpg",
+"credit": "Betoseha, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:HZAU-Niaokan.jpg"
+},
+"huazhong-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/HUST-Main-building-4111.jpg/1280px-HUST-Main-building-4111.jpg",
+"credit": "Vmenkov, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:HUST-Main-building-4111.jpg"
+},
+"hubei-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Hubei_University_Gate.jpg/1280px-Hubei_University_Gate.jpg",
+"credit": "Fxqf, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hubei_University_Gate.jpg"
+},
+"hubei-university-of-chinese-medicine": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Hubei_TCM_University.jpg/1280px-Hubei_TCM_University.jpg",
+"credit": "Howchou, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hubei_TCM_University.jpg"
+},
+"hunan-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Hunan_Normal_University_10.JPG/1280px-Hunan_Normal_University_10.JPG",
+"credit": "Huangdan2060, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hunan_Normal_University_10.JPG"
+},
+"hunan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Hunan_University05.jpg/1280px-Hunan_University05.jpg",
+"credit": "Huangdan2060, CC0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hunan_University05.jpg"
+},
+"jiangsu-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Jiangsu_Normal_University.jpg/1280px-Jiangsu_Normal_University.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Jiangsu_Normal_University.jpg"
+},
+"jiangsu-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Jiangsu_University_Mengxi_Campus_2013-04.JPG/1280px-Jiangsu_University_Mengxi_Campus_2013-04.JPG",
+"credit": "猫猫的日记本, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Jiangsu_University_Mengxi_Campus_2013-04.JPG"
+},
+"jinan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Jnu_gate.jpg/1280px-Jnu_gate.jpg",
+"credit": "Onteien, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Jnu_gate.jpg"
+},
+"kunming-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/%E6%98%86%E6%98%8E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A6%E8%8E%B2%E5%8D%8E%E6%A0%A1%E5%8C%BA_-_2025-05-17_02.jpg/1280px-%E6%98%86%E6%98%8E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A6%E8%8E%B2%E5%8D%8E%E6%A0%A1%E5%8C%BA_-_2025-05-17_02.jpg",
+"credit": "瑞丽江的河水, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%98%86%E6%98%8E%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A6%E8%8E%B2%E5%8D%8E%E6%A0%A1%E5%8C%BA_-_2025-05-17_02.jpg"
+},
+"lanzhou-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Lanzhou_University_of_Technology.jpg",
+"credit": "Msood, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Lanzhou_University_of_Technology.jpg"
+},
+"liaoning-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/LNNU_main.JPG/1280px-LNNU_main.JPG",
+"credit": "Paul Louis user:Daduzi, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:LNNU_main.JPG"
+},
+"liaoning-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Huaiyuan_Building_of_Liaoning_University.jpg/1280px-Huaiyuan_Building_of_Liaoning_University.jpg",
+"credit": "阴阳权政, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Huaiyuan_Building_of_Liaoning_University.jpg"
+},
+"minzu-university-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Minzu_University_of_China_%2820170330115818%29.jpg/1280px-Minzu_University_of_China_%2820170330115818%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Minzu_University_of_China_%2820170330115818%29.jpg"
+},
+"nanjing-forestry-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/5th_classroom_building_in_NJFU.jpg/1280px-5th_classroom_building_in_NJFU.jpg",
+"credit": "purewind, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:5th_classroom_building_in_NJFU.jpg"
+},
+"nanjing-medical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/201704_Nanjing_Medical_University_Sir_Run_Run_Hospital.jpg/1280px-201704_Nanjing_Medical_University_Sir_Run_Run_Hospital.jpg",
+"credit": "MNXANL, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:201704_Nanjing_Medical_University_Sir_Run_Run_Hospital.jpg"
+},
+"nanjing-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Main_Gate_of_Nanjing_University_Gulou_Campus_2012-11.JPG/1280px-Main_Gate_of_Nanjing_University_Gulou_Campus_2012-11.JPG",
+"credit": "猫猫的日记本, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_Gate_of_Nanjing_University_Gulou_Campus_2012-11.JPG"
+},
+"nanjing-university-of-aeronautics-and-astronautics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Ming_Palace_Campus_of_Nanjing_University_of_Aeronautics_and_Astronautics.jpg/1280px-Ming_Palace_Campus_of_Nanjing_University_of_Aeronautics_and_Astronautics.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Ming_Palace_Campus_of_Nanjing_University_of_Aeronautics_and_Astronautics.jpg"
+},
+"nanjing-university-of-the-arts": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Nanjing_Arts_Institute.jpg/1280px-Nanjing_Arts_Institute.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Nanjing_Arts_Institute.jpg"
+},
+"nankai-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Main_Building_of_Nankai_University_2015-08-04.jpg/1280px-Main_Building_of_Nankai_University_2015-08-04.jpg",
+"credit": "Amazingloong, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_Building_of_Nankai_University_2015-08-04.jpg"
+},
+"nantong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Nantong_University.jpg/1280px-Nantong_University.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Nantong_University.jpg"
+},
+"north-china-electric-power-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/%E5%8D%8E%E5%8C%97%E7%94%B5%E5%8A%9B%E5%A4%A7%E5%AD%A6%E2%80%94%E6%98%8C%E5%B9%B3%E2%80%94%E5%A4%9C-2017.jpg/1280px-%E5%8D%8E%E5%8C%97%E7%94%B5%E5%8A%9B%E5%A4%A7%E5%AD%A6%E2%80%94%E6%98%8C%E5%B9%B3%E2%80%94%E5%A4%9C-2017.jpg",
+"credit": "Crisduhan, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%8D%8E%E5%8C%97%E7%94%B5%E5%8A%9B%E5%A4%A7%E5%AD%A6%E2%80%94%E6%98%8C%E5%B9%B3%E2%80%94%E5%A4%9C-2017.jpg"
+},
+"north-china-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/North_China_University_of_Technology%2C_south_gate_%2820230222124918%29.jpg/1280px-North_China_University_of_Technology%2C_south_gate_%2820230222124918%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:North_China_University_of_Technology%2C_south_gate_%2820230222124918%29.jpg"
+},
+"northeast-agricultural-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Neau.jpg/1280px-Neau.jpg",
+"credit": "Realwonder, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Neau.jpg"
+},
+"northeast-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Northeast_normal_university_old_campus_entrance_2011_07_22.jpg/1280px-Northeast_normal_university_old_campus_entrance_2011_07_22.jpg",
+"credit": "Rolfmueller, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Northeast_normal_university_old_campus_entrance_2011_07_22.jpg"
+},
+"northeastern-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Northeastern_University_South_Lake_Campus_Gate_in_Shenyang_01.jpg/1280px-Northeastern_University_South_Lake_Campus_Gate_in_Shenyang_01.jpg",
+"credit": "Tomskyhaha, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Northeastern_University_South_Lake_Campus_Gate_in_Shenyang_01.jpg"
+},
+"northwest-af-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WP_20150421_006.jpg/1280px-WP_20150421_006.jpg",
+"credit": "Endurancelei, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:WP_20150421_006.jpg"
+},
+"northwest-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/%E8%A5%BF%E5%8C%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_panoramio.jpg/1280px-%E8%A5%BF%E5%8C%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_panoramio.jpg",
+"credit": "亚东_西安, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E8%A5%BF%E5%8C%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_panoramio.jpg"
+},
+"northwestern-polytechnical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Northwestern_Polytechnical_University_2.jpg/1280px-Northwestern_Polytechnical_University_2.jpg",
+"credit": "星巴克女王, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Northwestern_Polytechnical_University_2.jpg"
+},
+"ocean-university-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E6%B5%B7%E6%B4%8B%E7%A7%91%E6%8A%80%E4%B8%AD%E5%BF%83%E6%A5%BC%E5%8F%8A%E6%95%99%E5%AD%A6%E6%A5%BC.jpg/1280px-%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E6%B5%B7%E6%B4%8B%E7%A7%91%E6%8A%80%E4%B8%AD%E5%BF%83%E6%A5%BC%E5%8F%8A%E6%95%99%E5%AD%A6%E6%A5%BC.jpg",
+"credit": "又黑蜗壳, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E6%B5%B7%E6%B4%8B%E7%A7%91%E6%8A%80%E4%B8%AD%E5%BF%83%E6%A5%BC%E5%8F%8A%E6%95%99%E5%AD%A6%E6%A5%BC.jpg"
+},
+"peking-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/PekingUniversityPic6.jpg/1280px-PekingUniversityPic6.jpg",
+"credit": "galaygobi, CC BY 2.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:PekingUniversityPic6.jpg"
+},
+"qingdao-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Qingdao_University.jpg/1280px-Qingdao_University.jpg",
+"credit": "M. Weitzel, CC BY-SA 2.5, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Qingdao_University.jpg"
+},
+"qingdao-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/QUST_Sifang_Campus_Main_Building.JPG/1280px-QUST_Sifang_Campus_Main_Building.JPG",
+"credit": "Narjuko, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:QUST_Sifang_Campus_Main_Building.JPG"
+},
+"qinghai-minzu-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Buildings_of_the_Qinghai_University_for_Nationalities_-_May_2025.jpg/1280px-Buildings_of_the_Qinghai_University_for_Nationalities_-_May_2025.jpg",
+"credit": "Michał Beim, CC BY 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Buildings_of_the_Qinghai_University_for_Nationalities_-_May_2025.jpg"
+},
+"renmin-university-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/RenminUniversitypic1.jpg/1280px-RenminUniversitypic1.jpg",
+"credit": "chenyingphoto, CC BY 2.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:RenminUniversitypic1.jpg"
+},
+"shaanxi-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/%E9%99%95%E5%B8%88%E5%A4%A7%E9%95%BF%E5%AE%89%E6%A0%A1%E5%8C%BA%E5%8C%97%E9%97%A8.jpg/1280px-%E9%99%95%E5%B8%88%E5%A4%A7%E9%95%BF%E5%AE%89%E6%A0%A1%E5%8C%BA%E5%8C%97%E9%97%A8.jpg",
+"credit": "Liuxingy, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E9%99%95%E5%B8%88%E5%A4%A7%E9%95%BF%E5%AE%89%E6%A0%A1%E5%8C%BA%E5%8C%97%E9%97%A8.jpg"
+},
+"shandong-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Liberary_of_Shandong_Normal_University.jpg/1280px-Liberary_of_Shandong_Normal_University.jpg",
+"credit": "铿锵侠, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Liberary_of_Shandong_Normal_University.jpg"
+},
+"shandong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Qianfoshan_Campus_of_Shandong_University_2010-03.JPG/1280px-Qianfoshan_Campus_of_Shandong_University_2010-03.JPG",
+"credit": "猫猫的日记本, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Qianfoshan_Campus_of_Shandong_University_2010-03.JPG"
+},
+"shanghai-international-studies-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/SISU_gate.jpg/1280px-SISU_gate.jpg",
+"credit": "Flsxx, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:SISU_gate.jpg"
+},
+"shanghai-jiao-tong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Shanghai_Jiao_Tong_University_1.jpg/1280px-Shanghai_Jiao_Tong_University_1.jpg",
+"credit": "Peter Potrowl, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Shanghai_Jiao_Tong_University_1.jpg"
+},
+"shanghai-maritime-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Shanghai_Maritime_University.jpg/1280px-Shanghai_Maritime_University.jpg",
+"credit": "Wcam, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Shanghai_Maritime_University.jpg"
+},
+"shanghai-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Shanghai_Normal_University_%28Xuhui_Campus%29.jpg/1280px-Shanghai_Normal_University_%28Xuhui_Campus%29.jpg",
+"credit": "SSYoung, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Shanghai_Normal_University_%28Xuhui_Campus%29.jpg"
+},
+"shanghai-university-of-finance-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/20260607_%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6_%E6%AD%A6%E4%B8%9C%E8%B7%AF100%E5%8F%B7%E5%A4%A7%E9%97%A8.jpg/1280px-20260607_%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6_%E6%AD%A6%E4%B8%9C%E8%B7%AF100%E5%8F%B7%E5%A4%A7%E9%97%A8.jpg",
+"credit": "MomodaniSakura, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:20260607_%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6_%E6%AD%A6%E4%B8%9C%E8%B7%AF100%E5%8F%B7%E5%A4%A7%E9%97%A8.jpg"
+},
+"shanghai-university-of-international-business-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Campus_photo_of_SUIBE_01.jpg/1280px-Campus_photo_of_SUIBE_01.jpg",
+"credit": "冰纪, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Campus_photo_of_SUIBE_01.jpg"
+},
+"shanghai-university-of-sport": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Shanghai_University_of_Sport_Gate.jpg/1280px-Shanghai_University_of_Sport_Gate.jpg",
+"credit": "Shwangtianyuan, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Shanghai_University_of_Sport_Gate.jpg"
+},
+"shantou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Shantou_University_Auditorium.jpg/1280px-Shantou_University_Auditorium.jpg",
+"credit": "Ferox Seneca, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Shantou_University_Auditorium.jpg"
+},
+"shanxi-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/South_gate_of_Shanxi_University_Wucheng_Campus_%2820241107101203%29.jpg/1280px-South_gate_of_Shanxi_University_Wucheng_Campus_%2820241107101203%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_Shanxi_University_Wucheng_Campus_%2820241107101203%29.jpg"
+},
+"shihezi-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/%E6%96%B0%E7%96%86%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%B8%82%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%A4%A7%E5%AD%A6%E4%B8%AD%E6%A0%A1%E5%8C%BA%E6%A0%A1%E9%97%A8%E5%8F%A3_-_panoramio.jpg/1280px-%E6%96%B0%E7%96%86%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%B8%82%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%A4%A7%E5%AD%A6%E4%B8%AD%E6%A0%A1%E5%8C%BA%E6%A0%A1%E9%97%A8%E5%8F%A3_-_panoramio.jpg",
+"credit": "陈琛, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%96%B0%E7%96%86%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%B8%82%E7%9F%B3%E6%B2%B3%E5%AD%90%E5%A4%A7%E5%AD%A6%E4%B8%AD%E6%A0%A1%E5%8C%BA%E6%A0%A1%E9%97%A8%E5%8F%A3_-_panoramio.jpg"
+},
+"sichuan-international-studies-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/SISU_Chongqing.JPG/1280px-SISU_Chongqing.JPG",
+"credit": "Luxunxun, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:SISU_Chongqing.JPG"
+},
+"soochow-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Gusu%2C_Suzhou%2C_Jiangsu%2C_China_-_panoramio_%28223%29.jpg/1280px-Gusu%2C_Suzhou%2C_Jiangsu%2C_China_-_panoramio_%28223%29.jpg",
+"credit": "song songroov, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gusu%2C_Suzhou%2C_Jiangsu%2C_China_-_panoramio_%28223%29.jpg"
+},
+"south-china-agricultural-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/%E5%8D%8E%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8.jpg/1280px-%E5%8D%8E%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8.jpg",
+"credit": "zsldgjk, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%8D%8E%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E6%AD%A3%E9%97%A8.jpg"
+},
+"south-china-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/South_China_University_of_Technology_South_Gate.jpg/1280px-South_China_University_of_Technology_South_Gate.jpg",
+"credit": "LPS.1, CC0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_China_University_of_Technology_South_Gate.jpg"
+},
+"southeast-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Nanjing_Dongnan_Daxue_2017.11.12_11-06-36.jpg/1280px-Nanjing_Dongnan_Daxue_2017.11.12_11-06-36.jpg",
+"credit": "Zhangzhugang, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Nanjing_Dongnan_Daxue_2017.11.12_11-06-36.jpg"
+},
+"southern-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Main_gate_of_the_South_University_of_Science_and_Technology2.jpg/1280px-Main_gate_of_the_South_University_of_Science_and_Technology2.jpg",
+"credit": "Huangdan2060, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Main_gate_of_the_South_University_of_Science_and_Technology2.jpg"
+},
+"southwest-jiaotong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Southern_Gate_of_Southwest_Jiaotong_University_%28the_Main_Xipu_Campus%29_THE_BACK_SIDE.jpg/1280px-Southern_Gate_of_Southwest_Jiaotong_University_%28the_Main_Xipu_Campus%29_THE_BACK_SIDE.jpg",
+"credit": "Kcx36, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Southern_Gate_of_Southwest_Jiaotong_University_%28the_Main_Xipu_Campus%29_THE_BACK_SIDE.jpg"
+},
+"southwest-medical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Sichuan_medical_university_5.jpg/1280px-Sichuan_medical_university_5.jpg",
+"credit": "Doctorwangzhi, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Sichuan_medical_university_5.jpg"
+},
+"southwest-petroleum-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/%E8%A5%BF%E5%8D%97%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6_-_panoramio.jpg/1280px-%E8%A5%BF%E5%8D%97%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6_-_panoramio.jpg",
+"credit": "张志强（西海山人）, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E8%A5%BF%E5%8D%97%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6_-_panoramio.jpg"
+},
+"southwest-university-of-political-science-and-law": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Southwest_University_of_Political_Science_%26_Law.jpg/1280px-Southwest_University_of_Political_Science_%26_Law.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Southwest_University_of_Political_Science_%26_Law.jpg"
+},
+"sun-yat-sen-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Zhongda_ZH3.jpg/1280px-Zhongda_ZH3.jpg",
+"credit": "Daniel Berthold, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Zhongda_ZH3.jpg"
+},
+"taiyuan-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Taiyuan_University_of_Technology_Yingxi_Campus.jpg/1280px-Taiyuan_University_of_Technology_Yingxi_Campus.jpg",
+"credit": "DukeAnt, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Taiyuan_University_of_Technology_Yingxi_Campus.jpg"
+},
+"the-central-academy-of-drama": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Central_Academy_of_Drama%2C_Changping_campus_%2820220406141856%29.jpg/1280px-Central_Academy_of_Drama%2C_Changping_campus_%2820220406141856%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Central_Academy_of_Drama%2C_Changping_campus_%2820220406141856%29.jpg"
+},
+"tianjin-foreign-studies-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/TFLU4.jpg/1280px-TFLU4.jpg",
+"credit": "Fanghong, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:TFLU4.jpg"
+},
+"tianjin-medical-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/%E5%A4%A9%E6%B4%A5%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%A4%A7%E9%97%A8.jpg/1280px-%E5%A4%A9%E6%B4%A5%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%A4%A7%E9%97%A8.jpg",
+"credit": "Ceoatlas, CC BY 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B4%A5%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6%E5%A4%A7%E9%97%A8.jpg"
+},
+"tianjin-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/TJU_Gate.JPG/1280px-TJU_Gate.JPG",
+"credit": "Flsxx, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:TJU_Gate.JPG"
+},
+"tianjin-university-of-finance-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/TUFE%E6%95%99%E5%AD%A6%E6%A5%BCAB.jpg/1280px-TUFE%E6%95%99%E5%AD%A6%E6%A5%BCAB.jpg",
+"credit": "Ceoatlas, CC BY 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:TUFE%E6%95%99%E5%AD%A6%E6%A5%BCAB.jpg"
+},
+"tianjin-university-of-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/%E5%A4%A9%E6%B4%A5%E7%A7%91%E6%8A%80%E5%A4%A7%E5%AD%A6%E6%B2%B3%E8%A5%BF%E6%A0%A1%E5%8C%BA.jpg/1280px-%E5%A4%A9%E6%B4%A5%E7%A7%91%E6%8A%80%E5%A4%A7%E5%AD%A6%E6%B2%B3%E8%A5%BF%E6%A0%A1%E5%8C%BA.jpg",
+"credit": "Ceoatlas, CC BY 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B4%A5%E7%A7%91%E6%8A%80%E5%A4%A7%E5%AD%A6%E6%B2%B3%E8%A5%BF%E6%A0%A1%E5%8C%BA.jpg"
+},
+"tianjin-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/TUT%E5%8C%97%E9%97%A8.jpg/1280px-TUT%E5%8C%97%E9%97%A8.jpg",
+"credit": "Ceoatlas, CC BY 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:TUT%E5%8C%97%E9%97%A8.jpg"
+},
+"tianjin-university-of-traditional-chinese-medicine": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/%E4%B8%AD%E5%8C%BB%E5%A4%A7%E5%AD%A6%E5%AE%9E%E9%AA%8C%E6%A5%BC_-_panoramio.jpg/1280px-%E4%B8%AD%E5%8C%BB%E5%A4%A7%E5%AD%A6%E5%AE%9E%E9%AA%8C%E6%A5%BC_-_panoramio.jpg",
+"credit": "SwirlyLand, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%8C%BB%E5%A4%A7%E5%AD%A6%E5%AE%9E%E9%AA%8C%E6%A5%BC_-_panoramio.jpg"
+},
+"tibet-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Tibet_University_Auditorium_%282007%29.jpg/1280px-Tibet_University_Auditorium_%282007%29.jpg",
+"credit": "L8rpeace, CC BY 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Tibet_University_Auditorium_%282007%29.jpg"
+},
+"tongji-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Tongjidaxue_Tushuguan.JPG/1280px-Tongjidaxue_Tushuguan.JPG",
+"credit": "Fayhoo, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Tongjidaxue_Tushuguan.JPG"
+},
+"university-of-chinese-academy-of-sciences": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Gate_of_UCAS_Yuquanlu_Campus_%2820230906102500%29.jpg/1280px-Gate_of_UCAS_Yuquanlu_Campus_%2820230906102500%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_UCAS_Yuquanlu_Campus_%2820230906102500%29.jpg"
+},
+"university-of-electronic-science-and-technology-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/UESTC_-_Building_1.jpg/1280px-UESTC_-_Building_1.jpg",
+"credit": "LimSoo-jung, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:UESTC_-_Building_1.jpg"
+},
+"university-of-international-business-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/South_gate_of_UIBE_%2820230215153342%29.jpg/1280px-South_gate_of_UIBE_%2820230215153342%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:South_gate_of_UIBE_%2820230215153342%29.jpg"
+},
+"university-of-science-and-technology-beijing": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/USTB_west_gate.jpg/1280px-USTB_west_gate.jpg",
+"credit": "Ccyber5, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:USTB_west_gate.jpg"
+},
+"university-of-science-and-technology-of-china": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Gate_of_USTC.JPG/1280px-Gate_of_USTC.JPG",
+"credit": "Ryanli, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_of_USTC.JPG"
+},
+"university-of-shanghai-for-science-and-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/7/78/%E4%B8%8A%E6%B5%B7%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A64.jpg",
+"credit": "USST2016, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%B8%8A%E6%B5%B7%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A64.jpg"
+},
+"wuhan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Whu_old_library_1.JPG/1280px-Whu_old_library_1.JPG",
+"credit": "Howchou, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Whu_old_library_1.JPG"
+},
+"xian-jiaotong-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/XJTU_Gate.jpg/1280px-XJTU_Gate.jpg",
+"credit": "Jucember, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:XJTU_Gate.jpg"
+},
+"xian-shiyou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/%E8%A5%BF%E5%AE%89%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6%E9%84%A0%E9%82%91%E6%A0%A1%E5%8C%BA%E4%B8%9C%E5%A4%A7%E9%97%A8_01.jpg/1280px-%E8%A5%BF%E5%AE%89%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6%E9%84%A0%E9%82%91%E6%A0%A1%E5%8C%BA%E4%B8%9C%E5%A4%A7%E9%97%A8_01.jpg",
+"credit": "Liuxingy, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E8%A5%BF%E5%AE%89%E7%9F%B3%E6%B2%B9%E5%A4%A7%E5%AD%A6%E9%84%A0%E9%82%91%E6%A0%A1%E5%8C%BA%E4%B8%9C%E5%A4%A7%E9%97%A8_01.jpg"
+},
+"xiangtan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Xiangtanuniv.jpg/1280px-Xiangtanuniv.jpg",
+"credit": "Unknown author, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Xiangtanuniv.jpg"
+},
+"xinjiang-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/%E6%96%B0%E7%96%86%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6.jpg/1280px-%E6%96%B0%E7%96%86%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6.jpg",
+"credit": "HaziiDozen, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E6%96%B0%E7%96%86%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6.jpg"
+},
+"yanbian-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E5%BB%B6%E8%BE%B9%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%9C%9F%E6%A5%BC_2.jpg/1280px-%E5%BB%B6%E8%BE%B9%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%9C%9F%E6%A5%BC_2.jpg",
+"credit": "EditQ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E5%BB%B6%E8%BE%B9%E5%A4%A7%E5%AD%A6%E6%B1%82%E7%9C%9F%E6%A5%BC_2.jpg"
+},
+"yangzhou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Yangzhou_University.jpg/1280px-Yangzhou_University.jpg",
+"credit": "Zhou Guanhuai, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Yangzhou_University.jpg"
+},
+"yanshan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Gate_1_of_Yanshan_University_East_Campus_%2820240403111932%29.jpg/1280px-Gate_1_of_Yanshan_University_East_Campus_%2820240403111932%29.jpg",
+"credit": "N509FZ, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Gate_1_of_Yanshan_University_East_Campus_%2820240403111932%29.jpg"
+},
+"yunnan-agricultural-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/%E4%BA%91%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6_-_%E8%A5%BF%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2023-06-03.jpg/1280px-%E4%BA%91%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6_-_%E8%A5%BF%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2023-06-03.jpg",
+"credit": "瑞丽江的河水, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6_-_%E8%A5%BF%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2023-06-03.jpg"
+},
+"yunnan-minzu-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/%E4%BA%91%E5%8D%97%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_2025-05-17_02.jpg/1280px-%E4%BA%91%E5%8D%97%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_2025-05-17_02.jpg",
+"credit": "瑞丽江的河水, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97%E6%B0%91%E6%97%8F%E5%A4%A7%E5%AD%A6_-_2025-05-17_02.jpg"
+},
+"yunnan-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E4%BA%91%E5%8D%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_%E4%B8%80%E4%BA%8C%C2%B7%E4%B8%80%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E6%A0%A1%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2025-05-17_03.jpg/1280px-%E4%BA%91%E5%8D%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_%E4%B8%80%E4%BA%8C%C2%B7%E4%B8%80%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E6%A0%A1%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2025-05-17_03.jpg",
+"credit": "瑞丽江的河水, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97%E5%B8%88%E8%8C%83%E5%A4%A7%E5%AD%A6_-_%E4%B8%80%E4%BA%8C%C2%B7%E4%B8%80%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E6%A0%A1%E5%8C%BA%E6%AD%A3%E9%97%A8_-_2025-05-17_03.jpg"
+},
+"yunnan-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Building_-_Yunnan_University_-_DSC02352.JPG/1280px-Building_-_Yunnan_University_-_DSC02352.JPG",
+"credit": "Daderot, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Building_-_Yunnan_University_-_DSC02352.JPG"
+},
+"yunnan-university-of-finance-and-economics": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/%E4%BA%91%E5%8D%97%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6%E9%80%B8%E5%A4%AB%E6%A5%BC.JPG/1280px-%E4%BA%91%E5%8D%97%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6%E9%80%B8%E5%A4%AB%E6%A5%BC.JPG",
+"credit": "Zwpmatthew, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6%E9%80%B8%E5%A4%AB%E6%A5%BC.JPG"
+},
+"zhejiang-normal-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Zhejiang_Normal_University_%28228082775%29.jpg/1280px-Zhejiang_Normal_University_%28228082775%29.jpg",
+"credit": "serapio, CC BY-SA 2.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Zhejiang_Normal_University_%28228082775%29.jpg"
+},
+"zhejiang-ocean-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Zhejiang_Ocean_University_Dinghai_Campus_Gymnasium.JPG/1280px-Zhejiang_Ocean_University_Dinghai_Campus_Gymnasium.JPG",
+"credit": "Maeshima hiroki, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Zhejiang_Ocean_University_Dinghai_Campus_Gymnasium.JPG"
+},
+"zhejiang-sci-tech-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Zhejiang_Sci-Tech_University_1.JPG/1280px-Zhejiang_Sci-Tech_University_1.JPG",
+"credit": "Huandy618, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Zhejiang_Sci-Tech_University_1.JPG"
+},
+"zhejiang-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Hangzhou_Zhijiang_Daxue_20120518-25.jpg/1280px-Hangzhou_Zhijiang_Daxue_20120518-25.jpg",
+"credit": "Zhangzhugang, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Hangzhou_Zhijiang_Daxue_20120518-25.jpg"
+},
+"zhejiang-university-of-technology": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Headquarters_ZJUT.jpg/1280px-Headquarters_ZJUT.jpg",
+"credit": "Billanews, Public domain, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Headquarters_ZJUT.jpg"
+},
+"zhengzhou-university": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Administration_building_of_Zhengzhou_University.jpg/1280px-Administration_building_of_Zhengzhou_University.jpg",
+"credit": "ASHillocks, CC BY-SA 4.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:Administration_building_of_Zhengzhou_University.jpg"
+},
+"zhongnan-university-of-economics-and-law": {
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/The_South_Lake_Campus_of_Zhongnan_University_of_Economics_and_Law.jpg/1280px-The_South_Lake_Campus_of_Zhongnan_University_of_Economics_and_Law.jpg",
+"credit": "Zhangmoon618, CC BY-SA 3.0, via Wikimedia Commons",
+"page": "https://commons.wikimedia.org/wiki/File:The_South_Lake_Campus_of_Zhongnan_University_of_Economics_and_Law.jpg"
+}
+}
+}

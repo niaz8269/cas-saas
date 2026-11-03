@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 
 import { SitePageHeader } from "@/features/site/components"
 import EnquiryForm from "@/features/site/EnquiryForm"
+import { CONTACT } from "@/lib/contact"
 import { useSeo } from "@/lib/seo"
 
 // Display text lives in i18n keys resolved via t() at render (report — 5-language support).
@@ -40,11 +41,11 @@ export default function SiteContact() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 size-5 text-cas-navy" />
-                <span><span className="block font-medium">{t("contact.emailLabel")}</span><a href="mailto:info@cas.moe" className="text-muted-foreground hover:text-cas-navy">info@cas.moe</a></span>
+                <span><span className="block font-medium">{t("contact.emailLabel")}</span><a href={`mailto:${CONTACT.emailEnquiry}`} className="text-muted-foreground hover:text-cas-navy">{CONTACT.emailEnquiry}</a></span>
               </li>
               <li className="flex items-start gap-3">
                 <MessageCircle className="mt-0.5 size-5 text-cas-navy" />
-                <span><span className="block font-medium">{t("contact.whatsapp")}</span><span className="text-muted-foreground">{t("contact.whatsappHelp")}</span></span>
+                <span><span className="block font-medium">{t("contact.whatsapp")}</span><a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-cas-navy">{CONTACT.phoneDisplay}</a></span>
               </li>
             </ul>
           </div>

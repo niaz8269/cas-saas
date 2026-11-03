@@ -44,6 +44,21 @@ docker compose -f docker/compose.yml up -d
 # MinIO → http://localhost:9001
 ```
 
+## Catalog data
+
+The public catalog is seeded, not hard-coded. Every published fact records its source page and the day it was checked.
+
+| Seeder | Holds |
+|---|---|
+| `VerifiedCatalogSeeder` | Hand-verified facts from official university pages: programs, fees, admission windows (opening/closing dates), scholarships. Edit the arrays in the file and bump `VERIFIED_ON`. |
+| `SasCatalogSeeder` | Chinese universities and ~55k programs exported from SAS (`backend/database/data/sas_china_universities.json`), official websites (`university_websites.json`) and Wikimedia Commons campus covers with credits (`university_covers.json`). Never overwrites hand-verified rows. |
+
+Refresh from SAS: run `tools/sas-export.js` in the browser console on `https://sas.cas.moe/universities` (instructions at the top of the file), replace the JSON, then:
+
+```sh
+docker compose -f docker/compose.yml exec app php artisan db:seed --class=SasCatalogSeeder
+```
+
 ## Milestones
 
 M0 Scaffold · M1 Identity/Org/Access · M2 Catalog & Agreements · M3 Lead & Student CRM · M4 Admissions · M5 Finance & Commission · M6 Visa · M7 Portals · M8 Comms & Automation · M9 Analytics

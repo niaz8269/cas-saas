@@ -6,7 +6,7 @@ import {
   CalendarClock,
   CalendarDays,
   ClipboardCheck,
-  ExternalLink,
+  BookOpen,
   GraduationCap,
   Info,
   Languages,
@@ -23,7 +23,8 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSiteUniversity, type SiteIntake, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
+import { AdmissionWindow } from "@/features/site/components"
+import { getSiteUniversity, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { useSeo } from "@/lib/seo"
@@ -33,17 +34,6 @@ const money = (v: string | number | null | undefined, currency?: string | null) 
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()
 
 const levelLabel = (l: string) => l.replace(/\b\w/g, (c) => c.toUpperCase())
-
-function nextDeadline(intakes: SiteIntake[]): { name: string; date: string; daysLeft: number } | null {
-  const now = Date.now()
-  const up = intakes
-    .filter((i) => i.application_deadline)
-    .map((i) => ({ name: i.name, date: i.application_deadline as string, ms: new Date(i.application_deadline as string).getTime() }))
-    .filter((i) => i.ms >= now)
-    .sort((a, b) => a.ms - b.ms)[0]
-
-  return up ? { name: up.name, date: up.date, daysLeft: Math.ceil((up.ms - now) / 86_400_000) } : null
-}
 
 export default function SiteUniversity() {
   const { t } = useTranslation()
@@ -71,7 +61,6 @@ export default function SiteUniversity() {
           "@context": "https://schema.org",
           "@type": "CollegeOrUniversity",
           name: uni.name,
-          ...(uni.website ? { url: uni.website } : {}),
           ...(uni.city ? { address: { "@type": "PostalAddress", addressLocality: uni.city, addressCountry: "CN" } } : {}),
         }
       : undefined,
@@ -91,7 +80,9 @@ export default function SiteUniversity() {
   }
 
   const u = data.data
-  const deadline = nextDeadline(u.intakes)
+  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: !u.cover_is_city } : null
+  const today = new Date().setHours(0, 0, 0, 0)
+  const upcoming = u.intakes.find((i) => i.status !== 'closed' && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
   const rep = u.representative_professor
 
   return (
@@ -104,8 +95,8 @@ export default function SiteUniversity() {
       <div className="overflow-hidden rounded-sm border bg-card shadow-sm">
         {/* Cover — image, or a designed gradient banner when none is available */}
         <div className="relative h-48 overflow-hidden sm:h-60">
-          {u.cover_url ? (
-            <img src={u.cover_url} alt="" className="h-full w-full object-cover" />
+          {cover ? (
+            <img src={cover.src} alt="" className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
@@ -113,6 +104,11 @@ export default function SiteUniversity() {
             </div>
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+          {cover?.credit && (
+            <p className="absolute right-3 bottom-2 left-3 text-right text-[11px] text-white/90">
+              {"own" in cover ? t("university.photoCredit") : t("university.locationPhoto")}: {cover.credit}
+            </p>
+          )}
         </div>
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -120,13 +116,14 @@ export default function SiteUniversity() {
               {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
+                {u.name_zh && <p className="mt-0.5 text-lg text-muted-foreground">{u.name_zh}</p>}
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                  {(u.city || u.country) && <span className="inline-flex items-center gap-1"><MapPin className="size-3.5" /> {[u.city, u.country].filter(Boolean).join(", ")}</span>}
+                  {(u.city || u.country) && <span className="inline-flex items-center gap-1"><MapPin className="size-3.5" /> {[u.city, u.province, u.country].filter(Boolean).join(", ")}</span>}
                   {u.nearest_airport && <span className="inline-flex items-center gap-1"><Plane className="size-3.5" /> {u.nearest_airport}</span>}
                 </div>
                 {u.moe_listed && (
                   <Badge variant="outline" className="mt-3 border-transparent bg-cas-red-50 text-cas-red-600">
-                    <ShieldCheck className="size-3.5" /> {t("university.moeListedBadge")}
+                    <ShieldCheck className="size-3.5" /> {t("university.moeListedBadge")}{u.moe_mbbs_year ? ` ${u.moe_mbbs_year}` : ""}
                   </Badge>
                 )}
               </div>
@@ -139,21 +136,18 @@ export default function SiteUniversity() {
             </div>
           </div>
 
-          {deadline && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-sm bg-subtle px-3 py-2 text-sm">
-              <CalendarClock className="size-4 text-cas-navy" />
-              <span>{t("university.nextIntakePrefix")} <span className="font-medium">{deadline.name}</span> {t("university.nextIntakeCloses", { date: new Date(deadline.date).toLocaleDateString() })}</span>
-              <span className={cn("ml-auto rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums", deadline.daysLeft <= 14 ? "bg-cas-red-50 text-cas-red" : "bg-cas-navy-50 text-cas-navy")}>
-                {t("university.daysLeft", { count: deadline.daysLeft })}
-              </span>
-            </div>
-          )}
-          {!deadline && u.deadlines_locked && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-sm bg-subtle px-3 py-2 text-sm">
-              <CalendarClock className="size-4 text-cas-navy" />
-              <SignInGate label={t("university.signInForDeadlines")} />
-            </div>
-          )}
+          <div className="mt-5 rounded-sm bg-subtle px-3 py-2 text-sm">
+            {upcoming ? (
+              <>
+                <p className="mb-1 font-medium">{upcoming.name}</p>
+                <AdmissionWindow opens={upcoming.application_open_date} closes={upcoming.application_deadline} sourceKind={upcoming.source_kind} verifiedOn={upcoming.verified_on} />
+              </>
+            ) : u.deadlines_locked ? (
+              <p className="flex items-center gap-2"><CalendarClock className="size-4 text-cas-navy" /><SignInGate label={t("university.signInForDeadlines")} /></p>
+            ) : (
+              <p className="flex items-center gap-2"><CalendarClock className="size-4 text-cas-navy" />{t("admissionWindow.nextTbd")}</p>
+            )}
+          </div>
 
         </div>
       </div>
@@ -176,6 +170,7 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
     { key: "programs", label: u.programs.length ? t("university.tabProgramsCount", { count: u.programs.length }) : t("university.tabPrograms"), icon: GraduationCap },
     ...(u.intakes.length || u.deadlines_locked ? [{ key: "intakes", label: t("university.tabIntakes"), icon: CalendarDays }] : []),
     ...(u.scholarships.length ? [{ key: "scholarships", label: t("university.tabScholarships"), icon: Award }] : []),
+    ...(u.guide?.blocks?.length ? [{ key: "guide", label: t("university.tabGuide"), icon: BookOpen }] : []),
     { key: "admission", label: t("university.tabAdmission"), icon: ClipboardCheck },
   ]
   const [tab, setTab] = useState("overview")
@@ -203,6 +198,7 @@ function UniversityTabs({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfe
         {tab === "programs" && <ProgramsPanel u={u} />}
         {tab === "intakes" && <IntakesPanel u={u} />}
         {tab === "scholarships" && <ScholarshipsPanel u={u} />}
+        {tab === "guide" && <GuidePanel u={u} />}
         {tab === "admission" && <AdmissionPanel u={u} />}
       </div>
     </div>
@@ -226,9 +222,12 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
   const { t } = useTranslation()
   const facts: [string, string][] = [
     [t("university.factLocation"), [u.city, u.country].filter(Boolean).join(", ") || "—"],
-    [t("university.factMoeListed"), u.moe_listed ? t("university.yes") : "—"],
+    [t("university.factMoeListed"), u.moe_listed ? t("university.moeApprovedYear", { year: u.moe_mbbs_year ?? "" }) : "—"],
     [t("university.factNearestAirport"), u.nearest_airport || "—"],
     [t("university.factPrograms"), String(u.programs.length)],
+    ...(u.founded_year ? [[t("university.factFounded"), String(u.founded_year)] as [string, string]] : []),
+    ...(u.institution_type ? [[t("university.factType"), u.institution_type] as [string, string]] : []),
+    ...(u.student_count ? [[t("university.factStudents"), u.student_count] as [string, string]] : []),
   ]
 
   return (
@@ -244,6 +243,12 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
       {u.about && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
+          {u.wikipedia_url && (
+            <p className="mt-3 text-[11px] text-muted-foreground">
+              {t("university.wikipediaCredit")}{" "}
+              <a href={u.wikipedia_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">Wikipedia</a> (CC BY-SA 4.0)
+            </p>
+          )}
         </div>
       )}
       {rep?.name && (
@@ -262,17 +267,22 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
   )
 }
 
+const PROGRAMS_PAGE = 24
+
 function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   const { t } = useTranslation()
+  const [shown, setShown] = useState(PROGRAMS_PAGE)
   if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
   return (
+    <div className="space-y-4">
     <div className="grid gap-3 sm:grid-cols-2">
-      {u.programs.map((p) => (
+      {u.programs.slice(0, shown).map((p) => (
         <div key={p.id} className="rounded-sm border bg-card p-4 shadow-sm">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="font-medium">{p.name}</h3>
+              {p.name_zh && <p className="text-xs text-muted-foreground">{p.name_zh}</p>}
               <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
             </div>
             {p.fee_locked ? (
@@ -290,10 +300,22 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
+            {!u.moe_listed && p.level === "bachelor" && p.teaching_language === "English" && /MBBS|Clinical Medicine/i.test(p.name) && (
+              <span className="basis-full text-cas-red-600">{t("university.mbbsNotApproved")}</span>
+            )}
+            {p.csc_listed && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{t("university.cscListed")}</Badge>}
             <ApplyButton universitySlug={u.slug} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
           </div>
         </div>
       ))}
+    </div>
+    {shown < u.programs.length && (
+      <div className="text-center">
+        <Button type="button" variant="outline" onClick={() => setShown((n) => n + PROGRAMS_PAGE * 2)}>
+          {t("university.showMorePrograms", { shown: Math.min(shown, u.programs.length), total: u.programs.length })}
+        </Button>
+      </div>
+    )}
     </div>
   )
 }
@@ -319,9 +341,7 @@ function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
               <p className="text-xs text-muted-foreground">{i.program ?? t("university.allPrograms")}{i.seats ? t("university.seatsCount", { count: i.seats }) : ""}</p>
             </div>
             <div className="text-right text-muted-foreground">
-              {i.application_deadline
-                ? <>{t("university.applyBy")} <span className="font-medium text-cas-navy">{new Date(i.application_deadline).toLocaleDateString()}</span></>
-                : t("university.rollingAdmission")}
+              <AdmissionWindow opens={i.application_open_date} closes={i.application_deadline} sourceKind={i.source_kind} verifiedOn={i.verified_on} />
             </div>
           </li>
         ))}
@@ -343,15 +363,47 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
             {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}
           </div>
           {s.description && <p className="mt-1.5 text-sm text-muted-foreground">{s.description}</p>}
+          <AdmissionWindow className="mt-2" opens={s.application_open_date} closes={s.deadline} sourceKind={s.source_kind} verifiedOn={s.verified_on} />
           <p className="mt-2 text-sm text-muted-foreground">
             {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? t("university.deadlineLabel", { date: new Date(s.deadline).toLocaleDateString() }) : null].filter(Boolean).join(" · ")}
           </p>
-          {s.details_locked ? (
-            <div className="mt-2"><SignInGate label={t("university.signInForAward")} className="text-xs" /></div>
-          ) : (
-            s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">{t("university.howToApply")} <ExternalLink className="size-3" /></a>
-          )}
+          {s.details_locked && <div className="mt-2"><SignInGate label={t("university.signInForAward")} className="text-xs" /></div>}
         </div>
+      ))}
+    </div>
+  )
+}
+
+function GuideTable({ raw }: { raw: string }) {
+  const rows = raw.replace(/^TABLE:\s*/, "").split(" // ").map((r) => r.split(" | "))
+  const [head, ...body] = rows
+
+  return (
+    <div className="overflow-x-auto rounded-sm border">
+      <table className="w-full text-sm">
+        <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
+          <tr>{head.map((c, i) => <th key={i} className="px-3 py-2 font-medium">{c}</th>)}</tr>
+        </thead>
+        <tbody className="divide-y">
+          {body.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} className="px-3 py-2 align-top">{c}</td>)}</tr>)}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function GuidePanel({ u }: { u: SiteUniversityDetail }) {
+  const { t } = useTranslation()
+  const guide = u.guide
+  if (!guide?.blocks?.length) return <Empty text={t("university.guideEmpty")} />
+
+  return (
+    <div className="space-y-5 rounded-sm border bg-card p-6 shadow-sm">
+      {guide.blocks.map((b, i) => (
+        <section key={i} className="space-y-2">
+          {b.h && <h3 className="font-semibold text-cas-navy">{b.h}</h3>}
+          {b.t.map((line, j) => (line.startsWith("TABLE:") ? <GuideTable key={j} raw={line} /> : <p key={j} className="text-sm text-muted-foreground">{line}</p>))}
+        </section>
       ))}
     </div>
   )

@@ -52,7 +52,8 @@ class ImageService
             return null;
         }
 
-        if (Str::startsWith($path, ['http://', 'https://'])) {
+        // External URLs and site-relative public assets (e.g. /logos/x.png) pass through.
+        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
             return $path;
         }
 

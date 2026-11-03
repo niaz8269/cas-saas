@@ -12,6 +12,7 @@ import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
 import LanguageSwitcher from "@/i18n/LanguageSwitcher"
+import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
@@ -25,7 +26,7 @@ const NAV_PRIMARY: NavItemT[] = [
     to: "/site/about",
     labelKey: "nav.whyCas",
     dropdown: [
-      ["whyCasMenu.universities", "/site/universities?moe=1"],
+      ["whyCasMenu.universities", "/site/universities"],
       ["whyCasMenu.programs", "/site/programs?level=bachelor"],
       ["whyCasMenu.scholarships", "/site/scholarships"],
       ["whyCasMenu.cities", "/site/cities"],
@@ -34,7 +35,6 @@ const NAV_PRIMARY: NavItemT[] = [
       ["whyCasMenu.learningCenter", "/site/news?view=guides"],
     ],
   },
-  { to: "/site/why-china", labelKey: "nav.studyInChina" },
   { to: "/site/universities", labelKey: "nav.universities" },
   { to: "/site/programs", labelKey: "nav.programs" },
   { to: "/site/pricing", labelKey: "nav.pricing" },
@@ -50,7 +50,7 @@ const NAV = [
   { to: "/site/news?m=1", labelKey: "nav.news" },
 ]
 
-const WHATSAPP = "https://wa.me/8618041566030"
+const WHATSAPP = CONTACT.whatsapp
 
 /** A desktop nav link that reveals a single-column dropdown on hover, like the
  *  reference's "WHY CUCAS" menu (dashed separators + a caret pointer). */
@@ -101,12 +101,8 @@ function NavItem({ item }: { item: NavItemT }) {
   )
 }
 
-const NOTIFICATIONS: { title: string; body: string; to: string }[] = [
-  { title: "March 2026 intake now open across partner universities", body: "Applications for the March 2026 intake are open at Ministry of Education–listed universities. Apply early to secure your seat and a scholarship.", to: "/site/universities?topic=deadlines&src=bell" },
-  { title: "CSC & provincial scholarships accepting applications", body: "Government (CSC) and provincial scholarships are now accepting applications for the coming academic year. Talk to CAS to check your eligibility.", to: "/site/scholarships?q=CSC&src=bell" },
-  { title: "New Ministry of Education–listed universities added", body: "We've added new MoE-listed universities to our catalogue, with English-taught programs across medicine, engineering and business.", to: "/site/universities?topic=moe&src=bell" },
-  { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS&src=bell" },
-]
+// No placeholder notices: the bell shows only published posts.
+const NOTIFICATIONS: { title: string; body: string; to: string }[] = []
 
 /** Notifications bell with a popup you can page through (reference behaviour).
  *  Shows the latest published posts, falling back to the static list when the
@@ -197,7 +193,7 @@ export default function SiteLayout() {
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
                 <span className="hidden text-cas-navy/75 sm:inline">{t("header.promoFreeApplyText")}</span>
-                <Link to="/site/universities?topic=free-apply&sort=programs" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
                 <span className="text-cas-navy/75">{t("header.promoScholarshipsText")}</span>
@@ -316,8 +312,8 @@ export default function SiteLayout() {
           <div>
             <p className="text-sm font-semibold text-white">{t("footer.getInTouch")}</p>
             <ul className="mt-3 space-y-2 text-sm">
-              <li><a href="tel:+8618041566030" className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> +86 180 4156 6030</a></li>
-              <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
+              <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> {CONTACT.phoneDisplay}</a></li>
+              <li><a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> {CONTACT.emailGeneral}</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> {t("footer.whatsappUs")}</a></li>
             </ul>
             <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-red px-4 py-2 text-sm font-semibold text-white hover:bg-cas-red-600">

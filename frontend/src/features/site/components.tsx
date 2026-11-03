@@ -1,4 +1,4 @@
-import { ArrowUpRight, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowUpRight, CalendarClock, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -23,24 +23,12 @@ function toneFor(seed: number | string): string {
 }
 
 /**
- * Real photo by seed via Lorem Picsum (free, hotlink-friendly, reuse-licensed).
- * Deterministic per seed so each card keeps the same image. Swap these for the
- * client's own / university photos for production.
- */
-function photoUrl(seed: number | string, w: number, h: number): string {
-  return `https://picsum.photos/seed/cas-${String(seed).replace(/\W+/g, "")}/${w}/${h}`
-}
-
-/**
- * A photo image area (real photo via photoUrl), with a soft gradient overlay so
- * badges/labels stay legible — matching the reference's photo-topped cards. The
- * colour tint shows underneath while the photo loads.
+ * A tinted banner area. Only real, supplied images are ever shown on the public
+ * site; where there is none, this renders a plain brand tint — never stock art.
  */
 export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
-      <img src={photoUrl(src, 640, 400)} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/35 via-black/5 to-black/15" />
       {children}
     </div>
   )
@@ -49,6 +37,8 @@ export function PhotoBanner({ src, className, children }: { src: string; classNa
 /** University card shared by the home page and the universities listing. */
 export function UniCard({ u }: { u: SiteUniversityCard }) {
   const { t } = useTranslation()
+  // A campus photo if one is available; otherwise a credited photo of the city (never an unrelated image).
+  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: !u.cover_is_city } : null
 
   return (
     <Link
@@ -56,15 +46,22 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-sm hover:ring-cas-red/40"
     >
       {/* Cover — a designed gradient banner when no image is available */}
-      <div className="relative h-44 overflow-hidden">
-        <img
-          src={u.cover_url || photoUrl(u.id, 600, 320)}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+      <div className={cn("relative h-44 overflow-hidden bg-gradient-to-br", toneFor(u.id))}>
+        {cover && (
+          <>
+            <img
+              src={cover.src}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+            {cover.credit && (
+              <p className="pointer-events-none absolute inset-x-3 bottom-1.5 line-clamp-1 text-[10px] text-white/85">{cover.credit}</p>
+            )}
+          </>
+        )}
         {u.moe_listed && (
           <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-cas-red px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
             <ShieldCheck className="size-3.5" /> {t("components.moeListed")}
@@ -75,13 +72,14 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
           {u.logo_url && (
-            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="size-11 shrink-0 rounded-sm border bg-white object-contain p-0.5 shadow-sm" />
+            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
           )}
           <div className="min-w-0">
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</h3>
-            {[u.city, u.country].filter(Boolean).length > 0 && (
+            {u.name_zh && <p className="text-xs text-muted-foreground">{u.name_zh}</p>}
+            {[u.city, u.province, u.country].filter(Boolean).length > 0 && (
               <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="size-3.5" /> {[u.city, u.country].filter(Boolean).join(", ")}
+                <MapPin className="size-3.5" /> {[u.city, u.province, u.country].filter(Boolean).join(", ")}
               </p>
             )}
           </div>
@@ -142,5 +140,44 @@ export function SiteSection({ title, subtitle, action, children }: {
       {children}
       {action && <div className="mt-9 flex justify-center">{action}</div>}
     </section>
+  )
+}
+
+const fmtDay = (d: string) => new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })
+
+/**
+ * An admission window: when applications open and close, taken from the
+ * university's own published page (named, never linked, on public pages). Never invents a date;
+ * shows "to be announced" when the university has not published one.
+ */
+export function AdmissionWindow({ opens, closes, sourceKind, verifiedOn, className }: {
+  opens?: string | null
+  closes?: string | null
+  sourceKind?: string | null
+  verifiedOn?: string | null
+  className?: string
+}) {
+  const { t } = useTranslation()
+  const today = new Date().setHours(0, 0, 0, 0)
+  const closed = closes ? new Date(closes).getTime() < today : false
+
+  return (
+    <div className={cn("space-y-0.5 text-xs", className)}>
+      <p className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
+        <CalendarClock className="size-3.5 shrink-0 text-cas-navy" />
+        <span>
+          {opens ? t(new Date(opens).getTime() > today ? "admissionWindow.opens" : "admissionWindow.opened", { date: fmtDay(opens) }) : t("admissionWindow.openTbd")}
+        </span>
+        <span className={cn(closed && "font-semibold text-cas-red")}>
+          {closes ? t(closed ? "admissionWindow.closedOn" : "admissionWindow.closes", { date: fmtDay(closes) }) : t("admissionWindow.closeTbd")}
+        </span>
+      </p>
+      {sourceKind && (
+        <p className="pl-5 text-[11px] text-muted-foreground">
+          {t(sourceKind === "cucas" ? "admissionWindow.sourceCucas" : sourceKind === "sas" ? "admissionWindow.sourceSas" : "admissionWindow.source")}
+          {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
+        </p>
+      )}
+    </div>
   )
 }

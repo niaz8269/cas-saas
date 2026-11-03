@@ -56,7 +56,7 @@ it('filters by city and returns the distinct city list', function () {
     expect($response->json('cities'))->toEqual(['Beijing', 'Dalian']);
 });
 
-it('shows a university by slug with only active programs, open intakes and active scholarships', function () {
+it('shows a university by slug with only active programs, open or closed intakes and active scholarships', function () {
     $uni = University::factory()->create([
         'name' => 'Jilin Medical University', 'slug' => 'jilin-medical-university', 'status' => 'active',
         'requirements' => ['IELTS 6.0'],
@@ -87,8 +87,9 @@ it('shows a university by slug with only active programs, open intakes and activ
 
     expect(collect($data['programs'])->pluck('name'))->toEqual(collect(['MBBS']))
         ->and($data['programs'][0]['teaching_language'])->toBe('English')
-        ->and(collect($data['intakes'])->pluck('name'))->toEqual(collect(['Sept 2026']))
-        ->and($data['intakes'][0]['program'])->toBe('MBBS')
+        // Closed windows stay listed (their dates are still useful); only open/closed are public.
+        ->and(collect($data['intakes'])->pluck('status', 'name')->all())->toEqual(['Sept 2026' => 'open', 'Closed' => 'closed'])
+        ->and(collect($data['intakes'])->firstWhere('name', 'Sept 2026')['program'])->toBe('MBBS')
         ->and(collect($data['scholarships'])->pluck('name'))->toEqual(collect(['Merit Award']));
 });
 
@@ -148,4 +149,62 @@ it('filters scholarships by type and returns the distinct type list', function (
         ->assertJsonPath('data.0.name', 'Full Ride');
 
     expect($response->json('types'))->toEqual(['full', 'partial']);
+});
+
+it('filters universities to those with an admission window that is still open', function () {
+    $open = University::factory()->create(['name' => 'Open Uni', 'status' => 'active']);
+    $closed = University::factory()->create(['name' => 'Closed Uni', 'status' => 'active']);
+    $none = University::factory()->create(['name' => 'No Dates Uni', 'status' => 'active']);
+
+    Intake::factory()->for($open)->create(['status' => 'open', 'application_deadline' => now()->addMonth()->toDateString()]);
+    Intake::factory()->for($closed)->create(['status' => 'closed', 'application_deadline' => now()->subMonth()->toDateString()]);
+
+    $this->getJson('/api/v1/public/universities?filter[open_intake]=1')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Open Uni');
+
+    // Without the filter every active university is listed.
+    $this->getJson('/api/v1/public/universities')->assertOk()->assertJsonCount(3, 'data');
+});
+
+it('filters programs to universities with an admission window that is still open', function () {
+    $open = University::factory()->create(['status' => 'active']);
+    $closed = University::factory()->create(['status' => 'active']);
+
+    Program::factory()->for($open)->create(['name' => 'Open Program', 'status' => 'active']);
+    Program::factory()->for($closed)->create(['name' => 'Closed Program', 'status' => 'active']);
+    Intake::factory()->for($open)->create(['status' => 'open', 'application_deadline' => now()->addMonth()->toDateString()]);
+    Intake::factory()->for($closed)->create(['status' => 'closed', 'application_deadline' => now()->subMonth()->toDateString()]);
+
+    $this->getJson('/api/v1/public/programs?filter[open_intake]=1')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Open Program');
+});
+
+it('never exposes official links on the public catalog (admin-only)', function () {
+    $uni = University::factory()->create([
+        'status' => 'active',
+        'website' => 'https://www.example.edu.cn',
+        'apply_link' => 'https://apply.example.edu.cn',
+        'moe_mbbs_source_url' => 'https://example.gov/list.pdf',
+        'cover_source_url' => 'https://commons.wikimedia.org/wiki/File:X.jpg',
+        'guide' => ['blocks' => [], 'links' => [['Notice', 'https://example.edu.cn/n']]],
+        'visibility' => ['deadlines' => ['public']],
+    ]);
+    Intake::factory()->for($uni)->create(['status' => 'open', 'source_url' => 'https://example.edu.cn/intake']);
+    Scholarship::factory()->for($uni)->create(['status' => 'active', 'source_url' => 'https://sas.cas.moe/scholarships/x', 'apply_link' => 'https://example.edu.cn/apply']);
+
+    $bodies = [
+        $this->getJson('/api/v1/public/universities')->assertOk()->getContent(),
+        $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertOk()->getContent(),
+        $this->getJson('/api/v1/public/scholarships')->assertOk()->getContent(),
+    ];
+
+    foreach ($bodies as $body) {
+        expect($body)->not->toContain('example.edu.cn')->not->toContain('example.gov')->not->toContain('sas.cas.moe');
+    }
+
+    $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertJsonPath('data.intakes.0.source_kind', 'official');
 });

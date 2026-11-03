@@ -23,8 +23,8 @@
     "learningCenter": "Learning Center"
   },
   "header": {
-    "promoFreeApplyText": "Browse Free-to-Apply Universities on CAS",
-    "promoScholarshipsText": "Fully-funded scholarships for 2026 — apply early",
+    "promoFreeApplyText": "Browse universities and admission dates on CAS",
+    "promoScholarshipsText": "See scholarships and their application windows",
     "learnMore": "Learn More",
     "signIn": "SIGN IN",
     "openMenu": "Open menu",
@@ -56,7 +56,7 @@
     "authorized": "Official authorized agent since 2012."
   },
   "components": {
-    "moeListed": "MoE Listed",
+    "moeListed": "MoE-approved MBBS",
     "programCount_one": "{{count}} program",
     "programCount_other": "{{count}} programs",
     "view": "View"
@@ -77,8 +77,8 @@
     "topicNoCscaTitle": "No-CSCA universities",
     "topicNoCscaSubtitle": "Universities that admit international students without sitting the CSCA test.",
     "topicDeadlinesEyebrow": "Apply soon",
-    "topicDeadlinesTitle": "Universities with late deadlines",
-    "topicDeadlinesSubtitle": "Still open for the coming intake — apply before the seats fill up.",
+    "topicDeadlinesTitle": "Universities with an open admission window",
+    "topicDeadlinesSubtitle": "Universities with a published application window that is open or coming up.",
     "topicFreeApplyEyebrow": "Free to apply",
     "topicFreeApplyTitle": "Free-application universities",
     "topicFreeApplySubtitle": "Apply to selected universities with no application fee through CAS.",
@@ -89,7 +89,7 @@
     "searchAriaLabel": "Search universities",
     "filterByCityAriaLabel": "Filter by city",
     "allCities": "All cities",
-    "moeListedOnly": "MoE-listed only",
+    "moeListedOnly": "MoE-approved MBBS only",
     "loadError": "Couldn't load universities right now.",
     "emptyTitle": "No universities found",
     "emptyHint": "Try a different search or clear the filter.",
@@ -108,7 +108,7 @@
     "backToUniversities": "Back to universities",
     "allUniversities": "All universities",
     "logoAlt": "{{name}} logo",
-    "moeListedBadge": "China MoE-listed",
+    "moeListedBadge": "MoE-approved for English-taught MBBS",
     "enquire": "Enquire",
     "applyNow": "Apply now",
     "nextIntakePrefix": "Next intake",
@@ -122,7 +122,7 @@
     "tabScholarships": "Scholarships",
     "tabAdmission": "Admission",
     "factLocation": "Location",
-    "factMoeListed": "MoE-listed",
+    "factMoeListed": "MoE-approved for English MBBS",
     "factNearestAirport": "Nearest airport",
     "factPrograms": "Programs",
     "yes": "Yes",
@@ -145,7 +145,21 @@
     "admissionRequirements": "Admission requirements",
     "requirementsFallback": "Requirements vary by program — ask a CAS advisor for the exact checklist for your course.",
     "readyToApply": "Ready to apply?",
-    "readyToApplyBody": "CAS prepares and submits your application for you."
+    "readyToApplyBody": "CAS prepares and submits your application for you.",
+    "tabGuide": "Guide",
+    "guideEmpty": "No guide has been published for this university yet.",
+    "guideSources": "Official sources",
+    "cscListed": "CSC scholarship listed",
+    "showMorePrograms": "Show more ({{shown}} of {{total}})",
+    "locationPhoto": "Location photo (not the campus)",
+    "photoCredit": "Photo",
+    "photoSource": "source",
+    "moeApprovedYear": "Yes — {{year}} list",
+    "mbbsNotApproved": "Not on the Ministry of Education's list of universities approved for English-taught MBBS — confirm with CAS before applying.",
+    "factFounded": "Founded",
+    "factType": "Type",
+    "factStudents": "Students",
+    "wikipediaCredit": "Facts and introduction from"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
@@ -390,20 +404,20 @@
     "ctaButton": "Find your program",
     "stats": {
       "students": {
-        "value": "500K+",
-        "label": "International students"
+        "value": "304",
+        "label": "Universities in our catalog"
       },
       "english": {
-        "value": "English",
-        "label": "Taught programs"
+        "value": "13,000+",
+        "label": "English-taught programs"
       },
       "scholarships": {
-        "value": "Scholarships",
-        "label": "Widely available"
+        "value": "50,000+",
+        "label": "CSC-listed programs"
       },
       "recognition": {
-        "value": "Global",
-        "label": "Degree recognition"
+        "value": "43",
+        "label": "MoE-approved MBBS universities (2026–27)"
       }
     },
     "reasons": {
@@ -541,8 +555,17 @@
     "loadError": "Couldn't load posts right now.",
     "emptyTitle": "Nothing here yet",
     "emptyBody": "Check back soon for the latest news, guides and events.",
-    "tab": { "all": "All", "news": "News", "blog": "Blog", "event": "Events" },
-    "type": { "news": "News", "blog": "Blog", "event": "Event" },
+    "tab": {
+      "all": "All",
+      "news": "News",
+      "blog": "Blog",
+      "event": "Events"
+    },
+    "type": {
+      "news": "News",
+      "blog": "Blog",
+      "event": "Event"
+    },
     "updates": {
       "intake": {
         "date": "January 2026",
@@ -643,7 +666,9 @@
       "autumn2026": "Autumn 2026",
       "spring2027": "Spring 2027",
       "autumn2027": "Autumn 2027",
-      "flexible": "Flexible"
+      "flexible": "Flexible",
+      "spring2028": "Spring 2028",
+      "autumn2028": "Autumn 2028"
     },
     "funding": {
       "selfFunded": "Self-funded",
@@ -749,7 +774,7 @@
     "studyDalian": "Study in Dalian",
     "colUniversities": "Universities",
     "allUniversities": "All universities",
-    "moeListed": "MoE-listed universities",
+    "moeListed": "MoE-approved MBBS universities",
     "medical": "Medical universities",
     "engineering": "Engineering universities",
     "technology": "Technology universities",
@@ -852,17 +877,17 @@
       "title": "Highlights",
       "subtitle": "Handpicked routes into studying in China.",
       "learnMore": "Learn more",
-      "medicalTitle": "Globally recognised medical degrees",
-      "medicalBody": "Study MBBS at Ministry of Education–listed universities recognised worldwide.",
+      "medicalTitle": "MoE-approved MBBS universities",
+      "medicalBody": "Universities on the Ministry of Education's 2026–27 list for English-taught MBBS.",
       "medicalTag": "MBBS",
-      "deadlinesTitle": "Universities with late deadlines",
-      "deadlinesBody": "Still open for the coming intake — apply before the seats fill up.",
+      "deadlinesTitle": "Applications open now",
+      "deadlinesBody": "Universities whose admission window is open right now.",
       "deadlinesTag": "Deadlines",
       "noCscaTitle": "No-CSCA universities",
       "noCscaBody": "Universities that admit international students without the CSCA test.",
       "noCscaTag": "Admissions",
-      "languageTitle": "Chinese-language foundations",
-      "languageBody": "Foundation-year programs to prepare you for study and life in China.",
+      "languageTitle": "Chinese-taught programs",
+      "languageBody": "Browse programs taught in Chinese.",
       "languageTag": "Language",
       "fastTrackTitle": "Fast-track applications",
       "fastTrackBody": "Priority processing for complete applications submitted through CAS.",
@@ -870,8 +895,8 @@
       "freeApplyTitle": "Free-application universities",
       "freeApplyBody": "Apply to selected universities with no application fee through CAS.",
       "freeApplyTag": "Free apply",
-      "valueTitle": "Budget-friendly universities",
-      "valueBody": "Quality education with affordable tuition and living costs.",
+      "valueTitle": "Programs under CNY 20,000 a year",
+      "valueBody": "Filter the program list by annual tuition.",
       "valueTag": "Value",
       "fullScholarshipTitle": "Full-scholarship universities",
       "fullScholarshipBody": "Universities offering full-tuition scholarships to eligible students.",
@@ -881,8 +906,8 @@
       "partialScholarshipTag": "Scholarship"
     },
     "outstanding": {
-      "title": "Outstanding programs",
-      "subtitle": "Popular programs students are applying to right now.",
+      "title": "Programs open for applications",
+      "subtitle": "English-taught programs at universities with an open admission window.",
       "viewAll": "View all programs"
     },
     "featured": {
@@ -894,7 +919,7 @@
       "tabs": {
         "latest": "Latest topics",
         "questions": "Common questions",
-        "trending": "Trending"
+        "trending": "Explore"
       },
       "latest": {
         "marchIntake": "March 2026 intake now open across partner universities",
@@ -1432,5 +1457,18 @@
       "anyUniversity": "Any university",
       "addPreference": "Add preference"
     }
+  },
+  "admissionWindow": {
+    "opens": "Opens {{date}}",
+    "opened": "Opened {{date}}",
+    "openTbd": "Opening date to be announced",
+    "closes": "Closes {{date}}",
+    "closedOn": "Closed {{date}}",
+    "closeTbd": "Closing date to be announced",
+    "source": "University notice",
+    "checked": "checked {{date}}",
+    "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them.",
+    "sourceCucas": "CUCAS listing — confirm with the university",
+    "sourceSas": "SAS listing"
   }
 }

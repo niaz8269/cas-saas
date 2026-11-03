@@ -22,7 +22,9 @@ class Program extends Model
     protected $fillable = [
         'university_id',
         'name',
+        'name_zh',
         'level',
+        'csc_listed',
         'teaching_language',
         'duration_months',
         'tuition_fee',
@@ -38,6 +40,7 @@ class Program extends Model
     protected function casts(): array
     {
         return [
+            'csc_listed' => 'boolean',
             'duration_months' => 'integer',
             'tuition_fee' => 'decimal:2',
             'hostel_fee' => 'decimal:2',

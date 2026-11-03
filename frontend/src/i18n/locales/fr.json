@@ -23,8 +23,8 @@
     "learningCenter": "Centre d'apprentissage"
   },
   "header": {
-    "promoFreeApplyText": "Découvrez les universités à candidature gratuite sur CAS",
-    "promoScholarshipsText": "Bourses entièrement financées pour 2026 — candidatez tôt",
+    "promoFreeApplyText": "Parcourez les universités et les dates d'admission sur CAS",
+    "promoScholarshipsText": "Découvrez les bourses et leurs périodes de candidature",
     "learnMore": "En savoir plus",
     "signIn": "SE CONNECTER",
     "openMenu": "Ouvrir le menu",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "Admissions",
     "topicNoCscaTitle": "Universités sans CSCA",
     "topicNoCscaSubtitle": "Universités qui admettent les étudiants internationaux sans passer le test CSCA.",
-    "topicDeadlinesEyebrow": "Candidatez vite",
-    "topicDeadlinesTitle": "Universités aux échéances tardives",
-    "topicDeadlinesSubtitle": "Encore ouvertes pour la prochaine rentrée — candidatez avant que les places ne soient prises.",
+    "topicDeadlinesEyebrow": "Postulez bientôt",
+    "topicDeadlinesTitle": "Universités avec une période d'admission ouverte",
+    "topicDeadlinesSubtitle": "Universités dont la période de candidature publiée est ouverte ou à venir.",
     "topicFreeApplyEyebrow": "Candidature gratuite",
     "topicFreeApplyTitle": "Universités à candidature gratuite",
     "topicFreeApplySubtitle": "Candidatez à des universités sélectionnées sans frais de dossier via CAS.",
@@ -145,7 +145,19 @@
     "admissionRequirements": "Conditions d'admission",
     "requirementsFallback": "Les conditions varient selon le programme — demandez à un conseiller CAS la liste exacte pour votre cursus.",
     "readyToApply": "Prêt à candidater ?",
-    "readyToApplyBody": "CAS prépare et soumet votre candidature à votre place."
+    "readyToApplyBody": "CAS prépare et soumet votre candidature à votre place.",
+    "tabGuide": "Guide",
+    "guideEmpty": "Aucun guide n'a encore été publié pour cette université.",
+    "guideSources": "Sources officielles",
+    "cscListed": "Bourse CSC disponible",
+    "showMorePrograms": "Afficher plus ({{shown}} sur {{total}})",
+    "locationPhoto": "Photo de localisation (pas du campus)",
+    "photoCredit": "Photo",
+    "photoSource": "source",
+    "factFounded": "Fondée en",
+    "factType": "Type",
+    "factStudents": "Étudiants",
+    "wikipediaCredit": "Faits et introduction issus de"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -390,20 +402,20 @@
     "ctaButton": "Trouvez votre programme",
     "stats": {
       "students": {
-        "value": "500K+",
-        "label": "Étudiants internationaux"
+        "value": "304",
+        "label": "Universités au catalogue"
       },
       "english": {
-        "value": "Anglais",
-        "label": "Programmes enseignés"
+        "value": "13,000+",
+        "label": "Programmes enseignés en anglais"
       },
       "scholarships": {
-        "value": "Bourses",
-        "label": "Largement disponibles"
+        "value": "50,000+",
+        "label": "Programmes inscrits à la bourse CSC"
       },
       "recognition": {
-        "value": "Mondiale",
-        "label": "Reconnaissance des diplômes"
+        "value": "43",
+        "label": "Universités agréées par le MoE pour le MBBS (2026–27)"
       }
     },
     "reasons": {
@@ -646,7 +658,9 @@
       "autumn2026": "Automne 2026",
       "spring2027": "Printemps 2027",
       "autumn2027": "Automne 2027",
-      "flexible": "Flexible"
+      "flexible": "Flexible",
+      "spring2028": "Printemps 2028",
+      "autumn2028": "Automne 2028"
     },
     "funding": {
       "selfFunded": "Autofinancé",
@@ -855,17 +869,17 @@
       "title": "À la une",
       "subtitle": "Des parcours soigneusement sélectionnés pour étudier en Chine.",
       "learnMore": "En savoir plus",
-      "medicalTitle": "Des diplômes de médecine reconnus mondialement",
-      "medicalBody": "Étudiez le MBBS dans des universités listées par le Ministère de l'Éducation et reconnues dans le monde entier.",
+      "medicalTitle": "Universités MBBS agréées par le MoE",
+      "medicalBody": "Universités de la liste 2026–27 du ministère de l'Éducation pour le MBBS en anglais.",
       "medicalTag": "MBBS",
-      "deadlinesTitle": "Universités aux échéances tardives",
-      "deadlinesBody": "Encore ouvertes pour la prochaine rentrée — candidatez avant que les places ne soient prises.",
+      "deadlinesTitle": "Candidatures ouvertes",
+      "deadlinesBody": "Universités dont la période d'admission est ouverte en ce moment.",
       "deadlinesTag": "Échéances",
       "noCscaTitle": "Universités sans CSCA",
       "noCscaBody": "Universités qui admettent les étudiants internationaux sans le test CSCA.",
       "noCscaTag": "Admissions",
-      "languageTitle": "Formations de base en langue chinoise",
-      "languageBody": "Des programmes d'année préparatoire pour vous préparer aux études et à la vie en Chine.",
+      "languageTitle": "Programmes enseignés en chinois",
+      "languageBody": "Parcourez les programmes enseignés en chinois.",
       "languageTag": "Langue",
       "fastTrackTitle": "Candidatures accélérées",
       "fastTrackBody": "Traitement prioritaire des candidatures complètes soumises via CAS.",
@@ -873,8 +887,8 @@
       "freeApplyTitle": "Universités à candidature gratuite",
       "freeApplyBody": "Candidatez à des universités sélectionnées sans frais de dossier via CAS.",
       "freeApplyTag": "Candidature gratuite",
-      "valueTitle": "Universités au budget accessible",
-      "valueBody": "Une éducation de qualité avec des frais de scolarité et un coût de la vie abordables.",
+      "valueTitle": "Programmes à moins de 20 000 CNY par an",
+      "valueBody": "Filtrez la liste des programmes par frais de scolarité annuels.",
       "valueTag": "Bon rapport qualité-prix",
       "fullScholarshipTitle": "Universités à bourse complète",
       "fullScholarshipBody": "Des universités offrant des bourses couvrant l'intégralité des frais de scolarité aux étudiants éligibles.",
@@ -897,7 +911,7 @@
       "tabs": {
         "latest": "Derniers sujets",
         "questions": "Questions fréquentes",
-        "trending": "Tendances"
+        "trending": "Explorer"
       },
       "latest": {
         "marchIntake": "La rentrée de mars 2026 est désormais ouverte dans les universités partenaires",
@@ -1441,5 +1455,18 @@
     "register": "S'inscrire",
     "notFoundTitle": "Article introuvable",
     "notFoundBody": "Cet article a peut-être été dépublié ou le lien est incorrect."
+  },
+  "admissionWindow": {
+    "opens": "Ouverture le {{date}}",
+    "opened": "Ouvert depuis le {{date}}",
+    "openTbd": "Date d'ouverture à annoncer",
+    "closes": "Clôture le {{date}}",
+    "closedOn": "Clos le {{date}}",
+    "closeTbd": "Date de clôture à annoncer",
+    "source": "Avis de l'université",
+    "checked": "vérifié le {{date}}",
+    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer.",
+    "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université",
+    "sourceSas": "Fiche SAS"
   }
 }

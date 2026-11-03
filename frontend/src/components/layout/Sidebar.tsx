@@ -49,7 +49,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   <li key={item.to}>
                     <NavLink
                       to={item.to}
-                      end={item.to === "/"}
+                      end={item.to === "/dashboard"}
                       onClick={onClose}
                       className={({ isActive }) =>
                         cn(

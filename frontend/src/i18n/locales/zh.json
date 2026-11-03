@@ -23,8 +23,8 @@
     "learningCenter": "学习中心"
   },
   "header": {
-    "promoFreeApplyText": "在 CAS 浏览免申请费院校",
-    "promoScholarshipsText": "2026 年全额奖学金——尽早申请",
+    "promoFreeApplyText": "在 CAS 浏览大学和录取日期",
+    "promoScholarshipsText": "查看奖学金及其申请时间",
     "learnMore": "了解更多",
     "signIn": "登录",
     "openMenu": "打开菜单",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "招生录取",
     "topicNoCscaTitle": "免 CSCA 院校",
     "topicNoCscaSubtitle": "无需参加 CSCA 考试即可录取国际学生的院校。",
-    "topicDeadlinesEyebrow": "尽快申请",
-    "topicDeadlinesTitle": "截止较晚的院校",
-    "topicDeadlinesSubtitle": "即将到来的招生批次仍在开放——请在名额招满前申请。",
+    "topicDeadlinesEyebrow": "尽早申请",
+    "topicDeadlinesTitle": "录取窗口开放的大学",
+    "topicDeadlinesSubtitle": "已公布申请时间且目前开放或即将开放的大学。",
     "topicFreeApplyEyebrow": "免申请费",
     "topicFreeApplyTitle": "免申请费院校",
     "topicFreeApplySubtitle": "通过 CAS 申请指定院校，无需缴纳申请费。",
@@ -145,7 +145,19 @@
     "admissionRequirements": "录取要求",
     "requirementsFallback": "各专业要求不尽相同——欢迎向 CAS 顾问咨询您所申专业的具体材料清单。",
     "readyToApply": "准备好申请了吗？",
-    "readyToApplyBody": "CAS 将为您准备并提交申请。"
+    "readyToApplyBody": "CAS 将为您准备并提交申请。",
+    "tabGuide": "指南",
+    "guideEmpty": "该大学暂未发布指南。",
+    "guideSources": "官方来源",
+    "cscListed": "列入中国政府奖学金（CSC）",
+    "showMorePrograms": "显示更多（{{shown}} / {{total}}）",
+    "locationPhoto": "位置照片（非校园）",
+    "photoCredit": "照片",
+    "photoSource": "来源",
+    "factFounded": "创办年份",
+    "factType": "类型",
+    "factStudents": "学生人数",
+    "wikipediaCredit": "事实与简介来源："
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",
@@ -390,20 +402,20 @@
     "ctaButton": "找到适合你的专业",
     "stats": {
       "students": {
-        "value": "50 万+",
-        "label": "国际学生"
+        "value": "304",
+        "label": "目录中的大学"
       },
       "english": {
-        "value": "英语",
-        "label": "授课专业"
+        "value": "13,000+",
+        "label": "英文授课项目"
       },
       "scholarships": {
-        "value": "奖学金",
-        "label": "广泛提供"
+        "value": "50,000+",
+        "label": "列入 CSC 奖学金的项目"
       },
       "recognition": {
-        "value": "全球",
-        "label": "学位认可"
+        "value": "43",
+        "label": "教育部批准的 MBBS 院校（2026–27）"
       }
     },
     "reasons": {
@@ -646,7 +658,9 @@
       "autumn2026": "2026 年秋季",
       "spring2027": "2027 年春季",
       "autumn2027": "2027 年秋季",
-      "flexible": "时间灵活"
+      "flexible": "时间灵活",
+      "spring2028": "2028 年春季",
+      "autumn2028": "2028 年秋季"
     },
     "funding": {
       "selfFunded": "自费",
@@ -855,17 +869,17 @@
       "title": "精选亮点",
       "subtitle": "精心挑选的留学中国路径。",
       "learnMore": "了解更多",
-      "medicalTitle": "全球认可的医学学位",
-      "medicalBody": "在举世公认的教育部认可院校学习 MBBS。",
+      "medicalTitle": "教育部批准的 MBBS 院校",
+      "medicalBody": "列入教育部 2026–27 年英文授课 MBBS 招生名单的院校。",
       "medicalTag": "MBBS",
-      "deadlinesTitle": "截止较晚的院校",
-      "deadlinesBody": "即将到来的招生批次仍在开放——请在名额招满前申请。",
+      "deadlinesTitle": "正在招生",
+      "deadlinesBody": "目前招生窗口开放的大学。",
       "deadlinesTag": "截止日期",
       "noCscaTitle": "免 CSCA 院校",
       "noCscaBody": "无需 CSCA 考试即可录取国际学生的院校。",
       "noCscaTag": "招生录取",
-      "languageTitle": "中文语言预科",
-      "languageBody": "预科年课程，为你在中国的学习和生活做好准备。",
+      "languageTitle": "中文授课项目",
+      "languageBody": "浏览中文授课的项目。",
       "languageTag": "语言",
       "fastTrackTitle": "快速通道申请",
       "fastTrackBody": "对通过 CAS 递交的完整申请优先处理。",
@@ -873,8 +887,8 @@
       "freeApplyTitle": "免申请费院校",
       "freeApplyBody": "通过 CAS 申请指定院校，无需缴纳申请费。",
       "freeApplyTag": "免申请费",
-      "valueTitle": "高性价比院校",
-      "valueBody": "优质教育，学费和生活成本亲民。",
+      "valueTitle": "年学费 2 万元以内的项目",
+      "valueBody": "按年学费筛选项目列表。",
       "valueTag": "高性价比",
       "fullScholarshipTitle": "全额奖学金院校",
       "fullScholarshipBody": "向符合条件的学生提供全额学费奖学金的院校。",
@@ -897,7 +911,7 @@
       "tabs": {
         "latest": "最新话题",
         "questions": "常见问题",
-        "trending": "热门"
+        "trending": "探索"
       },
       "latest": {
         "marchIntake": "2026 年 3 月招生现已在各合作院校开放",
@@ -1441,5 +1455,18 @@
     "register": "报名",
     "notFoundTitle": "未找到文章",
     "notFoundBody": "该文章可能已取消发布，或链接有误。"
+  },
+  "admissionWindow": {
+    "opens": "{{date}} 开始申请",
+    "opened": "已于 {{date}} 开放",
+    "openTbd": "开放日期待公布",
+    "closes": "{{date}} 截止",
+    "closedOn": "已于 {{date}} 截止",
+    "closeTbd": "截止日期待公布",
+    "source": "大学通知",
+    "checked": "{{date}} 核查",
+    "nextTbd": "该大学尚未公布下一批招生日期——请向 CAS 咨询确认。",
+    "sourceCucas": "CUCAS 列表——请向大学确认",
+    "sourceSas": "SAS 收录"
   }
 }

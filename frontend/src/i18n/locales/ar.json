@@ -23,8 +23,8 @@
     "learningCenter": "مركز التعلّم"
   },
   "header": {
-    "promoFreeApplyText": "تصفّح الجامعات ذات التقديم المجاني على CAS",
-    "promoScholarshipsText": "منح دراسية ممولة بالكامل لعام 2026 — قدّم مبكرًا",
+    "promoFreeApplyText": "تصفّح الجامعات ومواعيد القبول عبر CAS",
+    "promoScholarshipsText": "اطّلع على المنح ومواعيد التقديم لها",
     "learnMore": "اعرف المزيد",
     "signIn": "تسجيل الدخول",
     "openMenu": "فتح القائمة",
@@ -81,8 +81,8 @@
     "topicNoCscaTitle": "جامعات بدون اختبار CSCA",
     "topicNoCscaSubtitle": "جامعات تقبل الطلاب الدوليين دون أداء اختبار CSCA.",
     "topicDeadlinesEyebrow": "قدّم قريبًا",
-    "topicDeadlinesTitle": "جامعات بمواعيد نهائية متأخرة",
-    "topicDeadlinesSubtitle": "لا تزال مفتوحة للقبول القادم — قدّم قبل امتلاء المقاعد.",
+    "topicDeadlinesTitle": "جامعات بنافذة قبول مفتوحة",
+    "topicDeadlinesSubtitle": "جامعات لديها نافذة تقديم منشورة مفتوحة حاليًا أو قادمة.",
     "topicFreeApplyEyebrow": "تقديم مجاني",
     "topicFreeApplyTitle": "جامعات ذات تقديم مجاني",
     "topicFreeApplySubtitle": "قدّم إلى جامعات مختارة دون رسوم تقديم عبر CAS.",
@@ -153,7 +153,19 @@
     "admissionRequirements": "متطلبات القبول",
     "requirementsFallback": "تختلف المتطلبات حسب البرنامج — اسأل مستشار CAS عن قائمة المتطلبات الدقيقة لتخصصك.",
     "readyToApply": "هل أنت مستعد للتقديم؟",
-    "readyToApplyBody": "تُعِدّ CAS طلبك وتقدّمه نيابةً عنك."
+    "readyToApplyBody": "تُعِدّ CAS طلبك وتقدّمه نيابةً عنك.",
+    "tabGuide": "الدليل",
+    "guideEmpty": "لم يُنشر دليل لهذه الجامعة بعد.",
+    "guideSources": "المصادر الرسمية",
+    "cscListed": "مدرجة ضمن منحة CSC",
+    "showMorePrograms": "عرض المزيد ({{shown}} من {{total}})",
+    "locationPhoto": "صورة للموقع (وليست للحرم الجامعي)",
+    "photoCredit": "صورة",
+    "photoSource": "المصدر",
+    "factFounded": "سنة التأسيس",
+    "factType": "النوع",
+    "factStudents": "عدد الطلاب",
+    "wikipediaCredit": "الحقائق والمقدمة من"
   },
   "programs": {
     "seoTitle": "ابحث عن برامج للدراسة في الصين",
@@ -402,20 +414,20 @@
     "ctaButton": "ابحث عن برنامجك",
     "stats": {
       "students": {
-        "value": "أكثر من 500 ألف",
-        "label": "طالب دولي"
+        "value": "304",
+        "label": "الجامعات في الدليل"
       },
       "english": {
-        "value": "الإنجليزية",
-        "label": "برامج تُدرَّس بها"
+        "value": "13,000+",
+        "label": "برامج تُدرَّس بالإنجليزية"
       },
       "scholarships": {
-        "value": "منح دراسية",
-        "label": "متاحة على نطاق واسع"
+        "value": "50,000+",
+        "label": "برامج مدرجة في منحة CSC"
       },
       "recognition": {
-        "value": "عالمي",
-        "label": "اعتراف بالدرجات العلمية"
+        "value": "43",
+        "label": "جامعات MBBS المعتمدة من وزارة التعليم (2026–27)"
       }
     },
     "reasons": {
@@ -658,7 +670,9 @@
       "autumn2026": "خريف 2026",
       "spring2027": "ربيع 2027",
       "autumn2027": "خريف 2027",
-      "flexible": "مرن"
+      "flexible": "مرن",
+      "spring2028": "ربيع 2028",
+      "autumn2028": "خريف 2028"
     },
     "funding": {
       "selfFunded": "تمويل ذاتي",
@@ -867,17 +881,17 @@
       "title": "أبرز الفرص",
       "subtitle": "مسارات مختارة بعناية للدراسة في الصين.",
       "learnMore": "اعرف المزيد",
-      "medicalTitle": "درجات طبية معترف بها عالميًا",
-      "medicalBody": "ادرس MBBS في الجامعات المدرجة لدى وزارة التعليم والمعترف بها عالميًا.",
+      "medicalTitle": "جامعات MBBS المعتمدة من وزارة التعليم",
+      "medicalBody": "الجامعات المدرجة في قائمة وزارة التعليم 2026–27 لـ MBBS بالإنجليزية.",
       "medicalTag": "MBBS",
-      "deadlinesTitle": "جامعات بمواعيد نهائية متأخرة",
-      "deadlinesBody": "لا تزال مفتوحة للقبول القادم — قدّم قبل امتلاء المقاعد.",
+      "deadlinesTitle": "التقديم مفتوح الآن",
+      "deadlinesBody": "جامعات فترة القبول فيها مفتوحة الآن.",
       "deadlinesTag": "المواعيد النهائية",
       "noCscaTitle": "جامعات بدون اختبار CSCA",
       "noCscaBody": "جامعات تقبل الطلاب الدوليين دون اختبار CSCA.",
       "noCscaTag": "القبول",
-      "languageTitle": "أساسيات اللغة الصينية",
-      "languageBody": "برامج سنة تأسيسية لتجهيزك للدراسة والحياة في الصين.",
+      "languageTitle": "برامج تُدرَّس بالصينية",
+      "languageBody": "تصفّح البرامج التي تُدرَّس بالصينية.",
       "languageTag": "اللغة",
       "fastTrackTitle": "تقديم سريع المسار",
       "fastTrackBody": "معالجة ذات أولوية للطلبات الكاملة المقدَّمة عبر CAS.",
@@ -885,8 +899,8 @@
       "freeApplyTitle": "جامعات ذات تقديم مجاني",
       "freeApplyBody": "قدّم إلى جامعات مختارة دون رسوم تقديم عبر CAS.",
       "freeApplyTag": "تقديم مجاني",
-      "valueTitle": "جامعات مناسبة للميزانية",
-      "valueBody": "تعليم عالي الجودة برسوم دراسية وتكاليف معيشة ميسورة.",
+      "valueTitle": "برامج بأقل من 20,000 يوان سنويًا",
+      "valueBody": "صفِّ قائمة البرامج حسب الرسوم الدراسية السنوية.",
       "valueTag": "القيمة",
       "fullScholarshipTitle": "جامعات ذات منح كاملة",
       "fullScholarshipBody": "جامعات تقدّم منحًا دراسية كاملة الرسوم للطلاب المؤهلين.",
@@ -909,7 +923,7 @@
       "tabs": {
         "latest": "أحدث المواضيع",
         "questions": "أسئلة شائعة",
-        "trending": "الأكثر رواجًا"
+        "trending": "استكشف"
       },
       "latest": {
         "marchIntake": "فُتح قبول مارس 2026 الآن عبر الجامعات الشريكة",
@@ -1465,5 +1479,18 @@
     "register": "سجّل الآن",
     "notFoundTitle": "المقال غير موجود",
     "notFoundBody": "ربما تم إلغاء نشر هذا المقال أو أن الرابط غير صحيح."
+  },
+  "admissionWindow": {
+    "opens": "يفتح التقديم في {{date}}",
+    "opened": "فُتح التقديم في {{date}}",
+    "openTbd": "سيُعلن تاريخ فتح التقديم",
+    "closes": "يُغلق في {{date}}",
+    "closedOn": "أُغلق في {{date}}",
+    "closeTbd": "سيُعلن تاريخ الإغلاق",
+    "source": "إشعار الجامعة",
+    "checked": "روجع في {{date}}",
+    "nextTbd": "لم تنشر الجامعة مواعيد القبول القادمة بعد — اطلب من CAS تأكيدها.",
+    "sourceCucas": "قائمة CUCAS — تأكد من الجامعة",
+    "sourceSas": "قائمة SAS"
   }
 }

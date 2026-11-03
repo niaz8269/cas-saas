@@ -17,7 +17,10 @@ class Intake extends Model
         'program_id',
         'name',
         'start_date',
+        'application_open_date',
         'application_deadline',
+        'source_url',
+        'verified_on',
         'seats',
         'status',
     ];
@@ -26,7 +29,9 @@ class Intake extends Model
     {
         return [
             'start_date' => 'date',
+            'application_open_date' => 'date',
             'application_deadline' => 'date',
+            'verified_on' => 'date',
             'seats' => 'integer',
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Public;
 
 use App\Models\Scholarship;
+use App\Support\SourceKind;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -37,8 +38,10 @@ class PublicScholarshipResource extends JsonResource
             'details_locked' => ! $amountVisible,
             'amount' => $amountVisible ? $this->amount : null,
             'deadline' => $deadlineVisible ? $this->deadline?->toDateString() : null,
+            'application_open_date' => $deadlineVisible ? $this->application_open_date?->toDateString() : null,
+            'source_kind' => SourceKind::of($this->source_url),
+            'verified_on' => $this->verified_on?->toDateString(),
             'how_to_apply' => $howVisible ? $this->how_to_apply : null,
-            'apply_link' => $howVisible ? $this->apply_link : null,
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,

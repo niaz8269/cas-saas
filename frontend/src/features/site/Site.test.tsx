@@ -39,7 +39,7 @@ const DETAIL = {
     moe_listed: true, nearest_airport: "Changchun (CGQ)", about: "A leading medical university.",
     requirements: ["IELTS 6.0"], representative_professor: { name: "Prof. Li Wei", title: "Dean", photo_url: null }, programs_count: 1,
     programs: [{ id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: "32000.00", currency: "CNY", apply_link: null, requirements: null }],
-    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_deadline: "2030-07-15", seats: 100, program: "MBBS" }],
+    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_open_date: "2029-10-01", application_deadline: "2030-07-15", source_kind: "official", verified_on: "2026-10-30", seats: 100, program: "MBBS" }],
     scholarships: [{ id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition", amount: "30000.00", currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null, apply_link: null, deadline: "2026-06-30" }],
   },
 }
@@ -54,7 +54,8 @@ it("renders the public universities grid", async () => {
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
   expect(screen.getByText("Beta Tech")).toBeInTheDocument()
   expect(screen.getByText("2 programs")).toBeInTheDocument()
-  expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
+  // The MoE toggle filters by the Ministry of Education's approved-MBBS list.
+  expect(screen.getByRole("button", { name: /MoE-approved MBBS only/ })).toBeInTheDocument()
 })
 
 it("gates program fees for guests and shows the CAS service fee for members", async () => {
@@ -84,7 +85,6 @@ it("renders the CUCAS-style home with hero, search and sections", async () => {
   expect(screen.getByLabelText("Search universities or programs")).toBeInTheDocument()
   expect(screen.getByText("Weekly Programs")).toBeInTheDocument()
   expect(screen.getByText("Highlights")).toBeInTheDocument()
-  expect(screen.getByText("Reviews from our students")).toBeInTheDocument()
   // Live data from the public API renders in the university sections.
   expect((await screen.findAllByText("Jilin Medical University")).length).toBeGreaterThan(0)
 })
@@ -159,7 +159,7 @@ it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async ()
     expect(screen.getByText(col)).toBeInTheDocument()
   }
   expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS&src=menu")
-  expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1&src=menu")
+  expect(screen.getByRole("link", { name: "MoE-approved MBBS universities" })).toHaveAttribute("href", "/site/universities?moe=1&src=menu")
 })
 
 it("opens the counsellor widget with CAS's own contact channels", async () => {
@@ -168,9 +168,9 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
 
   await user.click(screen.getByRole("button", { name: "Leave Message" }))
 
-  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8618041566030")
-  expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8618041566030")
-  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:info@cas.moe")
+  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8617640412827")
+  expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
+  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@sas.cas.moe")
 })
 
 it("submits the hero lead panel to the public enquiries endpoint", async () => {
@@ -285,11 +285,15 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
 
   // Fact header + Overview tab (default).
   expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
-  expect(screen.getByText("China MoE-listed")).toBeInTheDocument()
+  expect(screen.getByText("MoE-approved for English-taught MBBS")).toBeInTheDocument()
   expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
-  // Future-dated intake shows a live countdown; header "Apply now" is now a
-  // login-gated button into CAS's own application form (not an external link).
-  expect(screen.getByText(/days left/)).toBeInTheDocument()
+  // Future-dated intake shows its opening and closing dates with the source
+  // link; header "Apply now" is a login-gated button into CAS's own form.
+  expect(screen.getByText(/Opens .*2029/)).toBeInTheDocument()
+  expect(screen.getByText(/Closes .*2030/)).toBeInTheDocument()
+  // Official sources are named but never linked on public pages (admin portal only).
+  expect(screen.queryByRole("link", { name: "University notice" })).not.toBeInTheDocument()
+  expect(document.querySelector('a[href="https://example.edu/notice"]')).toBeNull()
   expect(screen.getByRole("button", { name: /Apply now/ })).toBeInTheDocument()
 
   // Programs tab.

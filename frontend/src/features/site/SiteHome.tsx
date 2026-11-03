@@ -9,27 +9,22 @@ import {
   CheckCircle2,
   Globe2,
   MessageCircle,
-  Play,
   Search,
-  ShieldCheck,
   Wallet,
-  Zap,
   type LucideIcon,
 } from "lucide-react"
 import type { TFunction } from "i18next"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
+import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 import heroBg from "@/assets/b1.webp"
-import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
+import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
-import SiteReviews from "@/features/site/SiteReviews"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
-const DEADLINE = new Date("2026-02-28T23:59:59Z").getTime()
 
 const DOT_GRID = {
   backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
@@ -46,12 +41,9 @@ const POPULAR_SEARCHES: [string, string][] = [
 ]
 
 const HIGHLIGHTS: { titleKey: string; bodyKey: string; to: string; tagKey: string; icon: LucideIcon }[] = [
-  { titleKey: "home.highlights.medicalTitle", bodyKey: "home.highlights.medicalBody", to: "/site/universities?topic=medical", tagKey: "home.highlights.medicalTag", icon: BadgeCheck },
+  { titleKey: "home.highlights.medicalTitle", bodyKey: "home.highlights.medicalBody", to: "/site/universities?moe=1", tagKey: "home.highlights.medicalTag", icon: BadgeCheck },
   { titleKey: "home.highlights.deadlinesTitle", bodyKey: "home.highlights.deadlinesBody", to: "/site/universities?topic=deadlines", tagKey: "home.highlights.deadlinesTag", icon: CalendarClock },
-  { titleKey: "home.highlights.noCscaTitle", bodyKey: "home.highlights.noCscaBody", to: "/site/universities?topic=no-csca", tagKey: "home.highlights.noCscaTag", icon: CheckCircle2 },
   { titleKey: "home.highlights.languageTitle", bodyKey: "home.highlights.languageBody", to: "/site/programs?language=Chinese", tagKey: "home.highlights.languageTag", icon: BookOpen },
-  { titleKey: "home.highlights.fastTrackTitle", bodyKey: "home.highlights.fastTrackBody", to: "/site/services#fast-track", tagKey: "home.highlights.fastTrackTag", icon: Zap },
-  { titleKey: "home.highlights.freeApplyTitle", bodyKey: "home.highlights.freeApplyBody", to: "/site/universities?topic=free-apply", tagKey: "home.highlights.freeApplyTag", icon: ShieldCheck },
   { titleKey: "home.highlights.valueTitle", bodyKey: "home.highlights.valueBody", to: "/site/programs?maxFee=20000", tagKey: "home.highlights.valueTag", icon: Wallet },
   { titleKey: "home.highlights.fullScholarshipTitle", bodyKey: "home.highlights.fullScholarshipBody", to: "/site/scholarships?type=full", tagKey: "home.highlights.fullScholarshipTag", icon: Award },
   { titleKey: "home.highlights.partialScholarshipTitle", bodyKey: "home.highlights.partialScholarshipBody", to: "/site/scholarships?type=partial", tagKey: "home.highlights.partialScholarshipTag", icon: Globe2 },
@@ -59,16 +51,6 @@ const HIGHLIGHTS: { titleKey: string; bodyKey: string; to: string; tagKey: strin
 
 // Tabs carry a stable id plus an i18n labelKey; item titles are i18n keys too.
 const FEATURED: { id: string; labelKey: string; items: { titleKey: string; to: string }[] }[] = [
-  {
-    id: "latest",
-    labelKey: "home.featured.tabs.latest",
-    items: [
-      { titleKey: "home.featured.latest.marchIntake", to: "/site/news" },
-      { titleKey: "home.featured.latest.cscScholarships", to: "/site/scholarships?q=CSC" },
-      { titleKey: "home.featured.latest.newMoe", to: "/site/universities?topic=moe" },
-      { titleKey: "home.featured.latest.mbbsGuide", to: "/site/programs?q=MBBS&level=bachelor" },
-    ],
-  },
   {
     id: "questions",
     labelKey: "home.featured.tabs.questions",
@@ -91,35 +73,6 @@ const FEATURED: { id: string; labelKey: string; items: { titleKey: string; to: s
   },
 ]
 
-function Countdown() {
-  const { t } = useTranslation()
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000)
-
-    return () => clearInterval(id)
-  }, [])
-
-  const diff = Math.max(0, DEADLINE - now)
-  const parts: [number, string][] = [
-    [Math.floor(diff / 86_400_000), "home.countdown.days"],
-    [Math.floor((diff / 3_600_000) % 24), "home.countdown.hrs"],
-    [Math.floor((diff / 60_000) % 60), "home.countdown.min"],
-    [Math.floor((diff / 1_000) % 60), "home.countdown.sec"],
-  ]
-
-  return (
-    <div className="flex gap-2">
-      {parts.map(([v, l]) => (
-        <div key={l} className="flex w-12 flex-col items-center rounded-sm bg-cas-navy px-1 py-1.5 text-white">
-          <span className="text-lg font-bold tabular-nums">{String(v).padStart(2, "0")}</span>
-          <span className="text-[10px] text-white/70 uppercase">{t(l)}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 const money = (t: TFunction, v: string | number | null | undefined, c?: string | null) =>
   v == null ? t("home.money.onRequest") : t("home.money.perYear", { amount: Number(v).toLocaleString(), currency: c ?? "CNY" })
 
@@ -134,15 +87,28 @@ export default function SiteHome() {
 
   const navigate = useNavigate()
   const [term, setTerm] = useState("")
-  const [contentTab, setContentTab] = useState("latest")
+  const [contentTab, setContentTab] = useState("questions")
 
+  // Real data only: featured universities and programs are the ones with a published admission window that is open.
   const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1 }) })
-  const programs = useQuery({ queryKey: ["site-programs", "home"], queryFn: () => getSitePrograms({}) })
+  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, openIntake: true }) })
+  const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
-  const featuredUnis = universities.data?.data.slice(0, 6) ?? []
+  const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
-  const weekly = programs.data?.data[0]
   const outstanding = programs.data?.data.slice(0, 5) ?? []
+
+  // "Weekly program": a different open-window English-taught program each calendar week.
+  const openPrograms = programs.data?.data ?? []
+  const weekNumber = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) / (7 * 86_400_000))
+  const weekly = openPrograms.length ? openPrograms[weekNumber % openPrograms.length] : undefined
+  const weeklyUniversity = useQuery({
+    queryKey: ["site-university", weekly?.university?.slug],
+    queryFn: () => getSiteUniversity(weekly!.university!.slug as string),
+    enabled: !!weekly?.university?.slug,
+  })
+  const today = new Date().setHours(0, 0, 0, 0)
+  const weeklyWindow = weeklyUniversity.data?.data.intakes.find((i) => i.status !== "closed" && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -162,9 +128,9 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-20 text-center">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-28 pb-6 text-center">
           <div className="w-full max-w-5xl">
-            <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
+            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-[4rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
             {featuredUnis[0] ? (
               <Link
                 to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs?ref=featured"}
@@ -180,15 +146,14 @@ export default function SiteHome() {
 
             {/* Ranked featured universities + expander (reference's numbered cards) */}
             {featuredUnis.length > 0 && (
-              <div className="mt-9">
+              <div className="mt-7">
                 <div className="flex flex-wrap items-center justify-center gap-3">
-                  {featuredUnis.slice(0, 3).map((u, i) => (
+                  {featuredUnis.slice(0, 3).map((u) => (
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
                       className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                     >
-                      <span className="absolute top-0 left-0 bg-cas-red px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
                       {u.logo_url
                         ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
                         : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
@@ -243,19 +208,22 @@ export default function SiteHome() {
                     <h3 className="text-lg font-bold text-cas-navy">{weekly.university?.name ?? t("home.weekly.featuredUniversity")}</h3>
                     <p className="text-sm text-muted-foreground">{weekly.name}{weekly.teaching_language ? ` · ${weekly.teaching_language}` : ""}</p>
                   </div>
-                  <span className="rounded-full bg-cas-red-50 px-2.5 py-1 text-[11px] font-semibold text-cas-red">{t("home.weekly.limitedSeats")}</span>
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-3 text-sm">
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.language")}</p><p className="font-semibold">{weekly.teaching_language ?? t("home.weekly.englishDefault")}</p></div>
-                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level}</p></div>
+                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level.replace("_", "-")}</p></div>
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, weekly.tuition_fee, weekly.currency)}</p></div>
                 </div>
+                {weeklyWindow && (
+                  <div className="mt-4 rounded-sm bg-subtle px-3 py-2">
+                    <p className="mb-1 text-sm font-medium">{weeklyWindow.name}</p>
+                    <AdmissionWindow opens={weeklyWindow.application_open_date} closes={weeklyWindow.application_deadline} sourceKind={weeklyWindow.source_kind} verifiedOn={weeklyWindow.verified_on} />
+                  </div>
+                )}
                 <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-red-600" /> {t("home.weekly.moeListed")}</li>
                   <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-red-600" /> {t("home.weekly.fullSupport")}</li>
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-                  <div><p className="mb-1 text-xs text-muted-foreground">{t("home.weekly.applicationsCloseIn")}</p><Countdown /></div>
                   <Link to="/site/study-plan" className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-5 text-sm font-bold text-white hover:bg-cas-red-600">{t("home.weekly.applyForSeat")} <ArrowRight className="size-4" /></Link>
                 </div>
               </>
@@ -296,7 +264,7 @@ export default function SiteHome() {
             {outstanding.map((p, i) => (
               <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?ref=outstanding"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
-                  <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level}</span>
+                  <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level.replace("_", "-")}</span>
                 </PhotoBanner>
                 <div className="p-5">
                   <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-red-600">{p.name}</h3>
@@ -345,23 +313,6 @@ export default function SiteHome() {
           </div>
         </div>
       </SiteSection>
-
-      {/* ── Watch & Learn ────────────────────────────────────── */}
-      <SiteSection title={t("home.watch.title")} subtitle={t("home.watch.subtitle")}>
-        <div className="grid gap-6 sm:grid-cols-3 sm:gap-7">
-          {["home.watch.applyHelp", "home.watch.studentLife", "home.watch.choosingProgram"].map((titleKey, i) => (
-            <div key={titleKey} className="group overflow-hidden rounded-sm border bg-card shadow-sm">
-              <PhotoBanner src={`/images/art-${i + 4}.svg`} className="flex h-48 items-center justify-center">
-                <span className="inline-flex size-14 items-center justify-center rounded-full bg-cas-red text-white shadow-lg transition-transform group-hover:scale-110"><Play className="size-6 fill-current" /></span>
-              </PhotoBanner>
-              <div className="p-5"><h3 className="font-semibold text-cas-navy">{t(titleKey)}</h3></div>
-            </div>
-          ))}
-        </div>
-      </SiteSection>
-
-      {/* ── Reviews (monitor + world-map with hover cards) ───── */}
-      <SiteReviews />
 
       {/* ── More in China ────────────────────────────────────── */}
       <SiteSection title={t("home.more.title")} action={<Link to="/site/universities?sort=name" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-navy hover:text-cas-red-600">{t("home.more.viewAll")} <ArrowRight className="size-4" /></Link>}>
