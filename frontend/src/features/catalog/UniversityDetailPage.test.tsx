@@ -48,12 +48,17 @@ const UNIVERSITY = {
 
 const emptyList = { data: [], meta: { current_page: 1, last_page: 1, per_page: 100, total: 0, from: null, to: null } }
 
-function stubFetchByUrl() {
+function stubFetchByUrl(withOfficialLinks = false) {
   vi.stubGlobal(
     "fetch",
     vi.fn().mockImplementation((input: RequestInfo | URL) => {
       const url = String(input)
-      if (url.includes("/universities/1")) return Promise.resolve(jsonResponse(UNIVERSITY))
+      if (url.includes("/universities/1")) {
+        return Promise.resolve(jsonResponse(withOfficialLinks ? { data: { ...UNIVERSITY.data, moe_mbbs_year: "2026-27", moe_mbbs_source_url: "https://moe.example/list.pdf", guide_links: [["Admission notice", "https://jlmu.example/notice"]] } } : UNIVERSITY))
+      }
+      if (url.includes("/intakes") && withOfficialLinks) {
+        return Promise.resolve(jsonResponse({ ...emptyList, data: [{ id: 30, university_id: 1, program_id: null, program: null, name: "Sept 2027", start_date: null, application_deadline: "2027-06-25", seats: null, status: "open", source_url: "https://jlmu.example/intake" }] }))
+      }
       if (url.includes("/programs")) {
         return Promise.resolve(
           jsonResponse({
@@ -173,4 +178,16 @@ it("shows agreements read-only to commission viewers (finance)", async () => {
 
   expect(await screen.findByText("Commission agreements")).toBeInTheDocument()
   expect(screen.queryByRole("button", { name: /Add agreement/ })).not.toBeInTheDocument()
+})
+
+it("shows official source links to staff (they are admin-only)", async () => {
+  useAuthStore.setState({ token: "token", user: makeUser(["universities.view.global"]) })
+  stubFetchByUrl(true)
+
+  renderDetail()
+
+  expect(await screen.findByRole("heading", { name: "Official links" })).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /MoE English-taught MBBS list 2026-27/ })).toHaveAttribute("href", "https://moe.example/list.pdf")
+  expect(screen.getByRole("link", { name: /Admission notice/ })).toHaveAttribute("href", "https://jlmu.example/notice")
+  expect(await screen.findByRole("link", { name: /Official source/ })).toHaveAttribute("href", "https://jlmu.example/intake")
 })
