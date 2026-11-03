@@ -96,6 +96,8 @@ export interface SiteScholarship {
   application_open_date: string | null
   source_kind: string | null
   verified_on: string | null
+  photo_url?: string | null
+  photo_credit?: string | null
   university?: SiteUniversityRef
   /** Audience gating (Phase 1): amount/deadline/how-to-apply are registered-only. */
   details_locked?: boolean

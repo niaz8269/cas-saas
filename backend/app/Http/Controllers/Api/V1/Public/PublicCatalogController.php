@@ -163,7 +163,7 @@ class PublicCatalogController extends Controller
         $scholarships = Scholarship::query()
             ->where('status', 'active')
             ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
-            ->with('university:id,name,slug')
+            ->with('university:id,name,slug,cover_path,cover_credit')
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('type', 'like', $term));
