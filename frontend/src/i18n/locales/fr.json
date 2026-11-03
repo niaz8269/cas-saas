@@ -23,8 +23,8 @@
     "learningCenter": "Centre d'apprentissage"
   },
   "header": {
-    "promoFreeApplyText": "Découvrez les universités à candidature gratuite sur CAS",
-    "promoScholarshipsText": "Bourses entièrement financées pour 2026 — candidatez tôt",
+    "promoFreeApplyText": "Parcourez les universités et les dates d'admission sur CAS",
+    "promoScholarshipsText": "Découvrez les bourses et leurs périodes de candidature",
     "learnMore": "En savoir plus",
     "signIn": "SE CONNECTER",
     "openMenu": "Ouvrir le menu",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "Admissions",
     "topicNoCscaTitle": "Universités sans CSCA",
     "topicNoCscaSubtitle": "Universités qui admettent les étudiants internationaux sans passer le test CSCA.",
-    "topicDeadlinesEyebrow": "Candidatez vite",
-    "topicDeadlinesTitle": "Universités aux échéances tardives",
-    "topicDeadlinesSubtitle": "Encore ouvertes pour la prochaine rentrée — candidatez avant que les places ne soient prises.",
+    "topicDeadlinesEyebrow": "Postulez bientôt",
+    "topicDeadlinesTitle": "Universités avec une période d'admission ouverte",
+    "topicDeadlinesSubtitle": "Universités dont la période de candidature publiée est ouverte ou à venir.",
     "topicFreeApplyEyebrow": "Candidature gratuite",
     "topicFreeApplyTitle": "Universités à candidature gratuite",
     "topicFreeApplySubtitle": "Candidatez à des universités sélectionnées sans frais de dossier via CAS.",
@@ -145,7 +145,15 @@
     "admissionRequirements": "Conditions d'admission",
     "requirementsFallback": "Les conditions varient selon le programme — demandez à un conseiller CAS la liste exacte pour votre cursus.",
     "readyToApply": "Prêt à candidater ?",
-    "readyToApplyBody": "CAS prépare et soumet votre candidature à votre place."
+    "readyToApplyBody": "CAS prépare et soumet votre candidature à votre place.",
+    "tabGuide": "Guide",
+    "guideEmpty": "Aucun guide n'a encore été publié pour cette université.",
+    "guideSources": "Sources officielles",
+    "cscListed": "Bourse CSC disponible",
+    "showMorePrograms": "Afficher plus ({{shown}} sur {{total}})",
+    "locationPhoto": "Photo de localisation (pas du campus)",
+    "photoCredit": "Photo",
+    "photoSource": "source"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -1441,5 +1449,17 @@
     "register": "S'inscrire",
     "notFoundTitle": "Article introuvable",
     "notFoundBody": "Cet article a peut-être été dépublié ou le lien est incorrect."
+  },
+  "admissionWindow": {
+    "opens": "Ouverture le {{date}}",
+    "opened": "Ouvert depuis le {{date}}",
+    "openTbd": "Date d'ouverture à annoncer",
+    "closes": "Clôture le {{date}}",
+    "closedOn": "Clos le {{date}}",
+    "closeTbd": "Date de clôture à annoncer",
+    "source": "Avis de l'université",
+    "checked": "vérifié le {{date}}",
+    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer.",
+    "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université"
   }
 }

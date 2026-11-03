@@ -23,8 +23,8 @@
     "learningCenter": "Pusat Pembelajaran"
   },
   "header": {
-    "promoFreeApplyText": "Jelajahi Universitas Bebas Biaya Pendaftaran di CAS",
-    "promoScholarshipsText": "Beasiswa penuh untuk 2026 — daftar lebih awal",
+    "promoFreeApplyText": "Jelajahi universitas dan tanggal penerimaan di CAS",
+    "promoScholarshipsText": "Lihat beasiswa dan jadwal pendaftarannya",
     "learnMore": "Selengkapnya",
     "signIn": "MASUK",
     "openMenu": "Buka menu",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "Penerimaan",
     "topicNoCscaTitle": "Universitas tanpa CSCA",
     "topicNoCscaSubtitle": "Universitas yang menerima mahasiswa internasional tanpa mengikuti tes CSCA.",
-    "topicDeadlinesEyebrow": "Segera daftar",
-    "topicDeadlinesTitle": "Universitas dengan batas waktu akhir",
-    "topicDeadlinesSubtitle": "Masih terbuka untuk periode masuk mendatang — daftar sebelum kursi terisi penuh.",
+    "topicDeadlinesEyebrow": "Daftar segera",
+    "topicDeadlinesTitle": "Universitas dengan jadwal penerimaan yang sedang dibuka",
+    "topicDeadlinesSubtitle": "Universitas dengan jadwal pendaftaran terpublikasi yang sedang dibuka atau akan segera dibuka.",
     "topicFreeApplyEyebrow": "Bebas biaya pendaftaran",
     "topicFreeApplyTitle": "Universitas bebas biaya pendaftaran",
     "topicFreeApplySubtitle": "Daftar ke universitas tertentu tanpa biaya pendaftaran melalui CAS.",
@@ -145,7 +145,15 @@
     "admissionRequirements": "Persyaratan penerimaan",
     "requirementsFallback": "Persyaratan berbeda-beda tiap program — tanyakan penasihat CAS untuk daftar lengkap yang tepat bagi jurusan Anda.",
     "readyToApply": "Siap mendaftar?",
-    "readyToApplyBody": "CAS menyiapkan dan mengirimkan lamaran Anda untuk Anda."
+    "readyToApplyBody": "CAS menyiapkan dan mengirimkan lamaran Anda untuk Anda.",
+    "tabGuide": "Panduan",
+    "guideEmpty": "Belum ada panduan yang diterbitkan untuk universitas ini.",
+    "guideSources": "Sumber resmi",
+    "cscListed": "Beasiswa CSC tersedia",
+    "showMorePrograms": "Tampilkan lebih banyak ({{shown}} dari {{total}})",
+    "locationPhoto": "Foto lokasi (bukan kampus)",
+    "photoCredit": "Foto",
+    "photoSource": "sumber"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
@@ -1441,5 +1449,17 @@
     "register": "Daftar",
     "notFoundTitle": "Pos tidak ditemukan",
     "notFoundBody": "Pos ini mungkin telah dibatalkan penerbitannya atau tautannya salah."
+  },
+  "admissionWindow": {
+    "opens": "Dibuka {{date}}",
+    "opened": "Dibuka sejak {{date}}",
+    "openTbd": "Tanggal pembukaan akan diumumkan",
+    "closes": "Ditutup {{date}}",
+    "closedOn": "Ditutup pada {{date}}",
+    "closeTbd": "Tanggal penutupan akan diumumkan",
+    "source": "Pengumuman universitas",
+    "checked": "diperiksa {{date}}",
+    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya.",
+    "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas"
   }
 }

@@ -23,8 +23,8 @@
     "learningCenter": "学习中心"
   },
   "header": {
-    "promoFreeApplyText": "在 CAS 浏览免申请费院校",
-    "promoScholarshipsText": "2026 年全额奖学金——尽早申请",
+    "promoFreeApplyText": "在 CAS 浏览大学和录取日期",
+    "promoScholarshipsText": "查看奖学金及其申请时间",
     "learnMore": "了解更多",
     "signIn": "登录",
     "openMenu": "打开菜单",
@@ -76,9 +76,9 @@
     "topicNoCscaEyebrow": "招生录取",
     "topicNoCscaTitle": "免 CSCA 院校",
     "topicNoCscaSubtitle": "无需参加 CSCA 考试即可录取国际学生的院校。",
-    "topicDeadlinesEyebrow": "尽快申请",
-    "topicDeadlinesTitle": "截止较晚的院校",
-    "topicDeadlinesSubtitle": "即将到来的招生批次仍在开放——请在名额招满前申请。",
+    "topicDeadlinesEyebrow": "尽早申请",
+    "topicDeadlinesTitle": "录取窗口开放的大学",
+    "topicDeadlinesSubtitle": "已公布申请时间且目前开放或即将开放的大学。",
     "topicFreeApplyEyebrow": "免申请费",
     "topicFreeApplyTitle": "免申请费院校",
     "topicFreeApplySubtitle": "通过 CAS 申请指定院校，无需缴纳申请费。",
@@ -145,7 +145,15 @@
     "admissionRequirements": "录取要求",
     "requirementsFallback": "各专业要求不尽相同——欢迎向 CAS 顾问咨询您所申专业的具体材料清单。",
     "readyToApply": "准备好申请了吗？",
-    "readyToApplyBody": "CAS 将为您准备并提交申请。"
+    "readyToApplyBody": "CAS 将为您准备并提交申请。",
+    "tabGuide": "指南",
+    "guideEmpty": "该大学暂未发布指南。",
+    "guideSources": "官方来源",
+    "cscListed": "列入中国政府奖学金（CSC）",
+    "showMorePrograms": "显示更多（{{shown}} / {{total}}）",
+    "locationPhoto": "位置照片（非校园）",
+    "photoCredit": "照片",
+    "photoSource": "来源"
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",
@@ -1441,5 +1449,17 @@
     "register": "报名",
     "notFoundTitle": "未找到文章",
     "notFoundBody": "该文章可能已取消发布，或链接有误。"
+  },
+  "admissionWindow": {
+    "opens": "{{date}} 开始申请",
+    "opened": "已于 {{date}} 开放",
+    "openTbd": "开放日期待公布",
+    "closes": "{{date}} 截止",
+    "closedOn": "已于 {{date}} 截止",
+    "closeTbd": "截止日期待公布",
+    "source": "大学通知",
+    "checked": "{{date}} 核查",
+    "nextTbd": "该大学尚未公布下一批招生日期——请向 CAS 咨询确认。",
+    "sourceCucas": "CUCAS 列表——请向大学确认"
   }
 }
