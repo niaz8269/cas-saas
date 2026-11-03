@@ -53,6 +53,10 @@ class PublicCatalogController extends Controller
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
             ->when($request->boolean('filter.moe_listed'), fn ($q) => $q->where('moe_listed', true))
+            // Universities with a published admission window that has not yet closed.
+            ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('intakes', fn ($i) => $i
+                ->where('status', 'open')
+                ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
 

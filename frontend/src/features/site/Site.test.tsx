@@ -54,7 +54,8 @@ it("renders the public universities grid", async () => {
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
   expect(screen.getByText("Beta Tech")).toBeInTheDocument()
   expect(screen.getByText("2 programs")).toBeInTheDocument()
-  expect(screen.getByRole("button", { name: /MoE-listed only/ })).toBeInTheDocument()
+  // The unverifiable "MoE-listed only" toggle is gone.
+  expect(screen.queryByRole("button", { name: /MoE-listed only/ })).not.toBeInTheDocument()
 })
 
 it("gates program fees for guests and shows the CAS service fee for members", async () => {
@@ -158,7 +159,7 @@ it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async ()
     expect(screen.getByText(col)).toBeInTheDocument()
   }
   expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS&src=menu")
-  expect(screen.getByRole("link", { name: "MoE-listed universities" })).toHaveAttribute("href", "/site/universities?moe=1&src=menu")
+  expect(screen.queryByRole("link", { name: "MoE-listed universities" })).not.toBeInTheDocument()
 })
 
 it("opens the counsellor widget with CAS's own contact channels", async () => {

@@ -150,3 +150,20 @@ it('filters scholarships by type and returns the distinct type list', function (
 
     expect($response->json('types'))->toEqual(['full', 'partial']);
 });
+
+it('filters universities to those with an admission window that is still open', function () {
+    $open = University::factory()->create(['name' => 'Open Uni', 'status' => 'active']);
+    $closed = University::factory()->create(['name' => 'Closed Uni', 'status' => 'active']);
+    $none = University::factory()->create(['name' => 'No Dates Uni', 'status' => 'active']);
+
+    Intake::factory()->for($open)->create(['status' => 'open', 'application_deadline' => now()->addMonth()->toDateString()]);
+    Intake::factory()->for($closed)->create(['status' => 'closed', 'application_deadline' => now()->subMonth()->toDateString()]);
+
+    $this->getJson('/api/v1/public/universities?filter[open_intake]=1')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Open Uni');
+
+    // Without the filter every active university is listed.
+    $this->getJson('/api/v1/public/universities')->assertOk()->assertJsonCount(3, 'data');
+});
