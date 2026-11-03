@@ -56,7 +56,7 @@ it('filters by city and returns the distinct city list', function () {
     expect($response->json('cities'))->toEqual(['Beijing', 'Dalian']);
 });
 
-it('shows a university by slug with only active programs, open intakes and active scholarships', function () {
+it('shows a university by slug with only active programs, open or closed intakes and active scholarships', function () {
     $uni = University::factory()->create([
         'name' => 'Jilin Medical University', 'slug' => 'jilin-medical-university', 'status' => 'active',
         'requirements' => ['IELTS 6.0'],
@@ -87,8 +87,9 @@ it('shows a university by slug with only active programs, open intakes and activ
 
     expect(collect($data['programs'])->pluck('name'))->toEqual(collect(['MBBS']))
         ->and($data['programs'][0]['teaching_language'])->toBe('English')
-        ->and(collect($data['intakes'])->pluck('name'))->toEqual(collect(['Sept 2026']))
-        ->and($data['intakes'][0]['program'])->toBe('MBBS')
+        // Closed windows stay listed (their dates are still useful); only open/closed are public.
+        ->and(collect($data['intakes'])->pluck('status', 'name')->all())->toEqual(['Sept 2026' => 'open', 'Closed' => 'closed'])
+        ->and(collect($data['intakes'])->firstWhere('name', 'Sept 2026')['program'])->toBe('MBBS')
         ->and(collect($data['scholarships'])->pluck('name'))->toEqual(collect(['Merit Award']));
 });
 

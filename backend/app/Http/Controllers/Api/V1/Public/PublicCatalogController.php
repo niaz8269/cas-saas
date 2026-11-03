@@ -46,7 +46,9 @@ class PublicCatalogController extends Controller
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q
                     ->where('name', 'like', $term)
-                    ->orWhere('city', 'like', $term));
+                    ->orWhere('name_zh', 'like', $term)
+                    ->orWhere('city', 'like', $term)
+                    ->orWhere('province', 'like', $term));
             })
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
@@ -77,7 +79,7 @@ class PublicCatalogController extends Controller
             ->with([
                 'country:id,name,iso2',
                 'programs' => fn ($q) => $q->where('status', 'active')->orderBy('name'),
-                'intakes' => fn ($q) => $q->where('status', 'open')->with('program:id,name')->orderBy('application_deadline'),
+                'intakes' => fn ($q) => $q->whereIn('status', ['open', 'closed'])->with('program:id,name')->orderBy('application_deadline'),
                 'scholarships' => fn ($q) => $q->where('status', 'active')->orderBy('name'),
             ])
             ->firstOrFail();
@@ -97,7 +99,7 @@ class PublicCatalogController extends Controller
             ->where('status', 'active')
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
             ->with('university:id,name,slug')
-            ->when($request->filled('q'), fn ($q) => $q->where('name', 'like', '%'.$request->string('q').'%'))
+            ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
             ->when($request->filled('filter.language'), fn ($q) => $q->where('teaching_language', 'like', '%'.$request->input('filter.language').'%'))
             ->when($request->filled('filter.max_fee'), fn ($q) => $q->where('tuition_fee', '<=', (float) $request->input('filter.max_fee')))

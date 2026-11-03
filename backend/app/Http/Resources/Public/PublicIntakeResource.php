@@ -19,7 +19,11 @@ class PublicIntakeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'status' => $this->status,
             'start_date' => $this->start_date?->toDateString() ?? $this->start_date,
+            'application_open_date' => $this->application_open_date?->toDateString(),
+            'source_url' => $this->source_url,
+            'verified_on' => $this->verified_on?->toDateString(),
             'application_deadline' => $this->application_deadline?->toDateString() ?? $this->application_deadline,
             'seats' => $this->seats,
             'program' => $this->whenLoaded('program', fn () => $this->program?->name),

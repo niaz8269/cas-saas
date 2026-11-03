@@ -32,7 +32,9 @@ class PublicProgramResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'name_zh' => $this->name_zh,
             'level' => $this->level,
+            'csc_listed' => $this->csc_listed,
             'teaching_language' => $this->teaching_language,
             'duration_months' => $this->duration_months,
             'currency' => $this->currency,
