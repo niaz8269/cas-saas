@@ -11,7 +11,7 @@ function renderLogin() {
   return renderWithProviders(
     <Routes>
       <Route path="/admin" element={<LoginPage />} />
-      <Route path="/" element={<div>DASHBOARD</div>} />
+      <Route path="/dashboard" element={<div>DASHBOARD</div>} />
     </Routes>,
     { route: "/admin" },
   )

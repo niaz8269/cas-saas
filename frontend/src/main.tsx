@@ -94,6 +94,8 @@ const router = createBrowserRouter([
   {
     element: <SiteLayout />,
     children: [
+      // The public website is the front door; /site stays as an alias for existing links.
+      { path: "/", element: <SiteHome /> },
       { path: "/site", element: <SiteHome /> },
       { path: "/site/universities", element: <SiteUniversities /> },
       { path: "/site/universities/:slug", element: <SiteUniversity /> },
@@ -146,7 +148,7 @@ const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          { path: "/", element: <DashboardPage /> },
+          { path: "/dashboard", element: <DashboardPage /> },
           { path: "/tasks", element: <TasksPage /> },
           { path: "/leads", element: <LeadsPage /> },
           { path: "/leads/:id", element: <LeadDetailPage /> },
