@@ -1492,6 +1492,9 @@
     "loadError": "Couldn't load the credits right now.",
     "city": "city photo",
     "campus": "campus photo",
-    "source": "source"
+    "source": "source",
+    "textTitle": "Text on university pages",
+    "textBody": "Introductions and facts on university pages are adapted from English Wikipedia and licensed CC BY-SA 4.0; the article for each university is linked below.",
+    "textFrom": "text from Wikipedia"
   }
 }

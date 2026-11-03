@@ -112,9 +112,10 @@ export interface SiteRepProfessor {
 export interface SitePhotoCredit {
   university: string
   slug: string
-  credit: string
+  credit: string | null
   source_url: string | null
   kind: "campus" | "city"
+  text_source_url: string | null
 }
 
 export function getSitePhotoCredits() {

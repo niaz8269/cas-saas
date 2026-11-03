@@ -1490,6 +1490,9 @@
     "loadError": "Kredit tidak dapat dimuat saat ini.",
     "city": "foto kota",
     "campus": "foto kampus",
-    "source": "sumber"
+    "source": "sumber",
+    "textTitle": "Teks pada halaman universitas",
+    "textBody": "Pengantar dan fakta pada halaman universitas diadaptasi dari Wikipedia bahasa Inggris dengan lisensi CC BY-SA 4.0; artikel setiap universitas ditautkan di bawah.",
+    "textFrom": "teks dari Wikipedia"
   }
 }

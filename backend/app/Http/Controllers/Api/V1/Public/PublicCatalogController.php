@@ -117,15 +117,16 @@ class PublicCatalogController extends Controller
     {
         $rows = University::query()
             ->where('status', 'active')
-            ->whereNotNull('cover_credit')
+            ->where(fn ($q) => $q->whereNotNull('cover_credit')->orWhereNotNull('wikipedia_url'))
             ->orderBy('name')
-            ->get(['name', 'slug', 'cover_credit', 'cover_source_url', 'cover_is_city'])
+            ->get(['name', 'slug', 'cover_credit', 'cover_source_url', 'cover_is_city', 'wikipedia_url'])
             ->map(fn ($u) => [
                 'university' => $u->name,
                 'slug' => $u->slug,
                 'credit' => $u->cover_credit,
                 'source_url' => $u->cover_source_url,
                 'kind' => $u->cover_is_city ? 'city' : 'campus',
+                'text_source_url' => $u->wikipedia_url,
             ])
             ->values();
 

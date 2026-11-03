@@ -109,7 +109,7 @@ export default function SiteUniversity() {
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
+              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="relative z-10 -mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 {u.name_zh && <p className="mt-0.5 text-lg text-muted-foreground">{u.name_zh}</p>}
@@ -239,12 +239,6 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
       {u.about && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
-          {u.wikipedia_url && (
-            <p className="mt-3 text-[11px] text-muted-foreground">
-              {t("university.wikipediaCredit")}{" "}
-              <a href={u.wikipedia_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">Wikipedia</a> (CC BY-SA 4.0)
-            </p>
-          )}
         </div>
       )}
       {rep?.name && (

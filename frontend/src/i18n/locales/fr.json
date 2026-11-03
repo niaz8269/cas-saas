@@ -1490,6 +1490,9 @@
     "loadError": "Impossible de charger les crédits pour le moment.",
     "city": "photo de la ville",
     "campus": "photo du campus",
-    "source": "source"
+    "source": "source",
+    "textTitle": "Textes des pages d'universités",
+    "textBody": "Les introductions et faits des pages d'universités sont adaptés de Wikipédia en anglais, sous licence CC BY-SA 4.0 ; l'article de chaque université est lié ci-dessous.",
+    "textFrom": "texte de Wikipédia"
   }
 }
