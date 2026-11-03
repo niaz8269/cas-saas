@@ -1,29 +1,17 @@
 <?php
 
-use App\Models\Activity;
-use App\Models\Agent;
-use App\Models\AgentPayable;
-use App\Models\ApiKey;
-use App\Models\Application;
 use App\Models\Branch;
-use App\Models\Commission;
 use App\Models\Country;
 use App\Models\Department;
-use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Intake;
-use App\Models\Invoice;
-use App\Models\Lead;
-use App\Models\Offer;
 use App\Models\Program;
-use App\Models\Student;
+use App\Models\Scholarship;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use App\Models\User;
-use Database\Seeders\AdmissionsSeeder;
-use Database\Seeders\CatalogSeeder;
-use Database\Seeders\CrmSeeder;
-use Database\Seeders\FinanceSeeder;
+use Database\Seeders\SasCatalogSeeder;
+use Database\Seeders\VerifiedCatalogSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
@@ -74,87 +62,38 @@ it('gives finance commission control but no lead management', function () {
         ->and($finance->hasPermissionTo('leads.view.global'))->toBeFalse();
 });
 
-it('seeds the demo catalog with agreements ready for commission math', function () {
-    expect(University::count())->toBeGreaterThanOrEqual(8)
-        ->and(Program::count())->toBeGreaterThanOrEqual(14)
-        ->and(Intake::count())->toBeGreaterThanOrEqual(16)
-        ->and(UniversityAgreement::count())->toBeGreaterThanOrEqual(8);
+it('seeds only verified catalog data, each record carrying its official source', function () {
+    expect(University::count())->toBeGreaterThanOrEqual(300)
+        ->and(Program::count())->toBeGreaterThan(50000)
+        ->and(University::whereNotNull('name_zh')->count())->toBeGreaterThan(290)
+        ->and(Program::where('csc_listed', true)->count())->toBeGreaterThan(0)
+        ->and(Intake::count())->toBeGreaterThan(0)
+        ->and(Scholarship::count())->toBeGreaterThan(0);
 
-    // The JLMU MBBS-specific fixed agreement exists alongside its
-    // university-wide percent agreement (specificity matters in M5).
-    $jlmu = University::where('code', 'JLMU')->firstOrFail();
-    expect($jlmu->agreements()->whereNotNull('program_id')->where('commission_type', 'fixed')->exists())->toBeTrue()
-        ->and($jlmu->agreements()->whereNull('program_id')->where('commission_type', 'percent')->exists())->toBeTrue();
+    // No placeholder content: every published fact names its source page and
+    // the day it was checked, and no university claims an unverified MoE listing.
+    expect(Program::whereNull('source_url')->orWhereNull('verified_on')->count())->toBe(0)
+        ->and(Intake::whereNull('source_url')->orWhereNull('verified_on')->count())->toBe(0)
+        ->and(Scholarship::whereNull('source_url')->orWhereNull('verified_on')->count())->toBe(0)
+        ->and(University::where('moe_listed', true)->count())->toBe(0)
+        ->and(UniversityAgreement::count())->toBe(0);
 
-    // Idempotency: reseeding must not duplicate rows.
-    $before = UniversityAgreement::count();
-    $this->seed(CatalogSeeder::class);
-    expect(UniversityAgreement::count())->toBe($before);
+    // The open date never falls after the close date.
+    expect(Intake::whereColumn('application_open_date', '>', 'application_deadline')->count())->toBe(0)
+        ->and(Scholarship::whereColumn('application_open_date', '>', 'deadline')->count())->toBe(0);
+
+    // Idempotency: reseeding replaces rather than duplicates.
+    $programs = Program::count();
+    $universities = University::count();
+    $this->seed(VerifiedCatalogSeeder::class);
+    $this->seed(SasCatalogSeeder::class);
+    expect(Program::count())->toBe($programs)
+        ->and(University::count())->toBe($universities);
 });
 
-it('seeds a realistic CRM pipeline', function () {
-    $counselor = User::where('email', 'counselor@cas.moe')->firstOrFail();
-
-    expect(Lead::count())->toBeGreaterThanOrEqual(25)
-        ->and(Lead::where('assigned_user_id', $counselor->id)->count())->toBeGreaterThanOrEqual(10)
-        ->and(Lead::where('status', 'duplicate')->whereNotNull('duplicate_of')->exists())->toBeTrue()
-        ->and(Student::count())->toBeGreaterThanOrEqual(10)
-        ->and(Activity::count())->toBeGreaterThanOrEqual(30)
-        ->and(Agent::where('type', 'sub')->whereNotNull('parent_agent_id')->exists())->toBeTrue()
-        ->and(ApiKey::count())->toBeGreaterThanOrEqual(3);
-
-    // Reseeding must not duplicate the pipeline.
-    $leadsBefore = Lead::count();
-    $this->seed(CrmSeeder::class);
-    expect(Lead::count())->toBe($leadsBefore);
-});
-
-it('seeds an admissions pipeline with authentic history chains', function () {
-    expect(DocumentType::count())->toBeGreaterThanOrEqual(7)
-        ->and(DocumentType::requiredFor('application')->count())->toBe(4)
-        ->and(Application::count())->toBeGreaterThanOrEqual(12)
-        ->and(Offer::count())->toBeGreaterThanOrEqual(3)
-        ->and(Document::count())->toBeGreaterThanOrEqual(10);
-
-    // The accepted application walked the full ladder through the workflow.
-    $accepted = Application::where('status', 'accepted')->firstOrFail();
-    expect($accepted->statusHistory()->pluck('to_status')->reverse()->values()->all())
-        ->toBe(['draft', 'under_review', 'submitted', 'offer_received', 'accepted'])
-        ->and($accepted->offers()->count())->toBeGreaterThanOrEqual(1)
-        ->and($accepted->documents()->where('status', 'verified')->count())->toBe(4);
-
-    // Reseeding must not duplicate the pipeline.
-    $before = Application::count();
-    $this->seed(AdmissionsSeeder::class);
-    expect(Application::count())->toBe($before);
-});
-
-it('seeds a received commission with authentic money trail and payables', function () {
-    $received = Commission::where('status', 'received')->firstOrFail();
-
-    // Full immutable ladder.
-    expect($received->statusHistory()->pluck('to_status')->reverse()->values()->all())
-        ->toBe(['expected', 'pending_arrival', 'eligible', 'invoiced', 'received'])
-        ->and((float) $received->received_amount)->toBeGreaterThan(0);
-
-    // University commission invoice exists and is paid.
-    $uniInvoice = Invoice::where('application_id', $received->application_id)
-        ->where('party_type', 'university')->firstOrFail();
-    expect($uniInvoice->status)->toBe('paid');
-
-    // Cascade produced payables for the seeded hierarchy, within bounds.
-    $payables = $received->payables;
-    expect($payables->count())->toBeGreaterThanOrEqual(2)
-        ->and((float) $payables->sum('amount'))->toBeLessThanOrEqual((float) $received->received_amount)
-        ->and($payables->pluck('agent.agent_code'))->toContain('GSP-0001', 'LEL-0002');
-
-    // Receivables realism: a partially paid tuition invoice exists.
-    expect(Invoice::where('party_type', 'student')->where('status', 'partially_paid')->exists())->toBeTrue();
-
-    // Reseeding must not duplicate payables.
-    $before = AgentPayable::count();
-    $this->seed(FinanceSeeder::class);
-    expect(AgentPayable::count())->toBe($before);
+it('seeds the application document checklist', function () {
+    expect(DocumentType::count())->toBe(9)
+        ->and(DocumentType::requiredFor('application')->count())->toBe(4);
 });
 
 it('seeds reference data: countries, departments, branches', function () {

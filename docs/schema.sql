@@ -909,4 +909,33 @@ CREATE TABLE posts (
   KEY idx_posts_type_status (type, status, published_at),
   CONSTRAINT fk_posts_author FOREIGN KEY (author_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- ADDENDUM: admission windows and provenance. Applications have an opening date
+-- as well as a closing date, and every published catalog fact records the
+-- official page it was taken from and the day it was last checked.
+ALTER TABLE intakes
+  ADD COLUMN application_open_date DATE         NULL AFTER start_date,
+  ADD COLUMN source_url            VARCHAR(500) NULL AFTER status,
+  ADD COLUMN verified_on           DATE         NULL AFTER source_url;
+ALTER TABLE scholarships
+  ADD COLUMN application_open_date DATE         NULL AFTER deadline,
+  ADD COLUMN source_url            VARCHAR(500) NULL AFTER apply_link,
+  ADD COLUMN verified_on           DATE         NULL AFTER source_url;
+ALTER TABLE programs
+  ADD COLUMN source_url            VARCHAR(500) NULL AFTER apply_link,
+  ADD COLUMN verified_on           DATE         NULL AFTER source_url;
+
+-- ADDENDUM: Chinese names, province, CSC-listed flag and a structured guide.
+ALTER TABLE universities
+  ADD COLUMN name_zh  VARCHAR(190) NULL AFTER name,
+  ADD COLUMN province VARCHAR(60)  NULL AFTER city,
+  ADD COLUMN guide    JSON         NULL AFTER about;
+ALTER TABLE programs
+  ADD COLUMN name_zh    VARCHAR(190) NULL AFTER name,
+  ADD COLUMN csc_listed TINYINT(1) NOT NULL DEFAULT 0 AFTER level;
+
+-- ADDENDUM: cover photo credit (author/licence) and source page.
+ALTER TABLE universities
+  ADD COLUMN cover_credit     VARCHAR(255) NULL AFTER cover_path,
+  ADD COLUMN cover_source_url VARCHAR(500) NULL AFTER cover_credit;
+
 -- =========================== END OF SCHEMA ===========================

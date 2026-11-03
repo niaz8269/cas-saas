@@ -18,15 +18,11 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             RolesAndPermissionsSeeder::class,
             StaffUserSeeder::class,
-            CatalogSeeder::class,
+            VerifiedCatalogSeeder::class,
+            SasCatalogSeeder::class,
+            DocumentTypeSeeder::class,
             MajorSeeder::class,
-            CrmSeeder::class,
-            AdmissionsSeeder::class,
-            FinanceSeeder::class,
-            VisaSeeder::class,
-            PortalSeeder::class,
             AutomationRuleSeeder::class,
-            DemoEnrichmentSeeder::class,
         ]);
     }
 }

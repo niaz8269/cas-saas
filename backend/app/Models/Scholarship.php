@@ -37,6 +37,9 @@ class Scholarship extends Model
         'how_to_apply',
         'apply_link',
         'deadline',
+        'application_open_date',
+        'source_url',
+        'verified_on',
         'benefits',
         'visibility',
         'status',
@@ -52,6 +55,8 @@ class Scholarship extends Model
             'hostel_after' => 'decimal:2',
             'stipend_monthly' => 'decimal:2',
             'deadline' => 'date',
+            'application_open_date' => 'date',
+            'verified_on' => 'date',
             'visibility' => 'array',
         ];
     }
