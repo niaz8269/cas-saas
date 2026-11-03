@@ -39,7 +39,7 @@ const DETAIL = {
     moe_listed: true, nearest_airport: "Changchun (CGQ)", about: "A leading medical university.",
     requirements: ["IELTS 6.0"], representative_professor: { name: "Prof. Li Wei", title: "Dean", photo_url: null }, programs_count: 1,
     programs: [{ id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: "32000.00", currency: "CNY", apply_link: null, requirements: null }],
-    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_deadline: "2030-07-15", seats: 100, program: "MBBS" }],
+    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_open_date: "2029-10-01", application_deadline: "2030-07-15", source_url: "https://example.edu/notice", verified_on: "2026-10-30", seats: 100, program: "MBBS" }],
     scholarships: [{ id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition", amount: "30000.00", currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null, apply_link: null, deadline: "2026-06-30" }],
   },
 }
@@ -84,7 +84,6 @@ it("renders the CUCAS-style home with hero, search and sections", async () => {
   expect(screen.getByLabelText("Search universities or programs")).toBeInTheDocument()
   expect(screen.getByText("Weekly Programs")).toBeInTheDocument()
   expect(screen.getByText("Highlights")).toBeInTheDocument()
-  expect(screen.getByText("Reviews from our students")).toBeInTheDocument()
   // Live data from the public API renders in the university sections.
   expect((await screen.findAllByText("Jilin Medical University")).length).toBeGreaterThan(0)
 })
@@ -287,9 +286,11 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
   expect(screen.getByText("China MoE-listed")).toBeInTheDocument()
   expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
-  // Future-dated intake shows a live countdown; header "Apply now" is now a
-  // login-gated button into CAS's own application form (not an external link).
-  expect(screen.getByText(/days left/)).toBeInTheDocument()
+  // Future-dated intake shows its opening and closing dates with the source
+  // link; header "Apply now" is a login-gated button into CAS's own form.
+  expect(screen.getByText(/Opens .*2029/)).toBeInTheDocument()
+  expect(screen.getByText(/Closes .*2030/)).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "University notice" })).toHaveAttribute("href", "https://example.edu/notice")
   expect(screen.getByRole("button", { name: /Apply now/ })).toBeInTheDocument()
 
   // Programs tab.

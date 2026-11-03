@@ -101,12 +101,8 @@ function NavItem({ item }: { item: NavItemT }) {
   )
 }
 
-const NOTIFICATIONS: { title: string; body: string; to: string }[] = [
-  { title: "March 2026 intake now open across partner universities", body: "Applications for the March 2026 intake are open at Ministry of Education–listed universities. Apply early to secure your seat and a scholarship.", to: "/site/universities?topic=deadlines&src=bell" },
-  { title: "CSC & provincial scholarships accepting applications", body: "Government (CSC) and provincial scholarships are now accepting applications for the coming academic year. Talk to CAS to check your eligibility.", to: "/site/scholarships?q=CSC&src=bell" },
-  { title: "New Ministry of Education–listed universities added", body: "We've added new MoE-listed universities to our catalogue, with English-taught programs across medicine, engineering and business.", to: "/site/universities?topic=moe&src=bell" },
-  { title: "How to prepare a strong MBBS application", body: "Read our step-by-step guide to preparing a competitive MBBS application for study in China — from documents to deadlines.", to: "/site/programs?q=MBBS&src=bell" },
-]
+// No placeholder notices: the bell shows only published posts.
+const NOTIFICATIONS: { title: string; body: string; to: string }[] = []
 
 /** Notifications bell with a popup you can page through (reference behaviour).
  *  Shows the latest published posts, falling back to the static list when the

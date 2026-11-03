@@ -23,8 +23,8 @@
     "learningCenter": "Learning Center"
   },
   "header": {
-    "promoFreeApplyText": "Browse Free-to-Apply Universities on CAS",
-    "promoScholarshipsText": "Fully-funded scholarships for 2026 — apply early",
+    "promoFreeApplyText": "Browse universities and admission dates on CAS",
+    "promoScholarshipsText": "See scholarships and their application windows",
     "learnMore": "Learn More",
     "signIn": "SIGN IN",
     "openMenu": "Open menu",
@@ -145,7 +145,15 @@
     "admissionRequirements": "Admission requirements",
     "requirementsFallback": "Requirements vary by program — ask a CAS advisor for the exact checklist for your course.",
     "readyToApply": "Ready to apply?",
-    "readyToApplyBody": "CAS prepares and submits your application for you."
+    "readyToApplyBody": "CAS prepares and submits your application for you.",
+    "tabGuide": "Guide",
+    "guideEmpty": "No guide has been published for this university yet.",
+    "guideSources": "Official sources",
+    "cscListed": "CSC scholarship listed",
+    "showMorePrograms": "Show more ({{shown}} of {{total}})",
+    "locationPhoto": "Location photo (not the campus)",
+    "photoCredit": "Photo",
+    "photoSource": "source"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
@@ -541,8 +549,17 @@
     "loadError": "Couldn't load posts right now.",
     "emptyTitle": "Nothing here yet",
     "emptyBody": "Check back soon for the latest news, guides and events.",
-    "tab": { "all": "All", "news": "News", "blog": "Blog", "event": "Events" },
-    "type": { "news": "News", "blog": "Blog", "event": "Event" },
+    "tab": {
+      "all": "All",
+      "news": "News",
+      "blog": "Blog",
+      "event": "Events"
+    },
+    "type": {
+      "news": "News",
+      "blog": "Blog",
+      "event": "Event"
+    },
     "updates": {
       "intake": {
         "date": "January 2026",
@@ -1432,5 +1449,17 @@
       "anyUniversity": "Any university",
       "addPreference": "Add preference"
     }
+  },
+  "admissionWindow": {
+    "opens": "Opens {{date}}",
+    "opened": "Opened {{date}}",
+    "openTbd": "Opening date to be announced",
+    "closes": "Closes {{date}}",
+    "closedOn": "Closed {{date}}",
+    "closeTbd": "Closing date to be announced",
+    "source": "University notice",
+    "checked": "checked {{date}}",
+    "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them.",
+    "sourceCucas": "CUCAS listing — confirm with the university"
   }
 }
