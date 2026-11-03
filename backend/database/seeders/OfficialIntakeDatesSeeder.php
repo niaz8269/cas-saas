@@ -110,6 +110,15 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Shanxi University', 'Autumn 2026 intake incl. preparatory program (closed)', '2025-12-01', '2026-06-30', 'closed', 'https://siee.sxu.edu.cn/ggtz/1e8561eeda91453d821f6aa246dbf1a4.htm'],
             ['Zhejiang Sci-Tech University', 'Autumn intake (annual: apply by 31 May each year)', null, '2027-05-31', 'open', 'https://admission.zstu.edu.cn/En/ApplicationInfo/252'],
             ['Southwest Jiaotong University', 'Autumn 2026 self-funded intake (closed; listing, unconfirmed)', null, '2026-06-30', 'closed', 'https://sie.swjtu.edu.cn/info/1014/3082.htm'],
+            ['Northwest A&F University', 'Autumn 2026 undergraduate (closed; listing, unconfirmed)', null, '2026-05-31', 'closed', 'https://gjs.nwafu.edu.cn/en/ApplicationGuide/82be5f67536e461d93c6c0f2f6a2e819.htm'],
+            ['Beijing Foreign Studies University', 'Autumn 2026 undergraduate (closed; listing, unconfirmed)', '2026-03-10', '2026-06-15', 'closed', 'https://lb.bfsu.edu.cn/info/2612/4701.htm'],
+            ['University of Chinese Academy of Sciences', 'Autumn 2026 master and doctoral, via a CAS institute (closed)', null, '2026-01-31', 'closed', 'https://simm.cas.cn/web/yjsjy/is/notice/202511/t20251111_8009717.html'],
+            ['Tianjin University', 'Autumn 2026 scholarship applications (closed; listing, unconfirmed)', null, '2026-04-01', 'closed', 'https://sie.tju.edu.cn/en/jxj/tjdxjxj/202410/t20241015_323982.html'],
+            ['Tiangong University', 'Autumn 2026 intake, March – June (closed; third-party, unconfirmed)', '2026-03-01', '2026-06-30', 'closed', 'https://wentchina.com/tiangong-university-admission-information/'],
+            ['Hubei University', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/hubei-university/'],
+            ['Southern University of Science and Technology', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/southern-university-of-science-and-technology/'],
+            ['Taiyuan University of Technology', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/taiyuan-university-of-technology/'],
+            ['Xiamen University of Technology', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-10', 'closed', 'https://wentchina.com/2026-xiamen-university-of-technology/'],
         ];
     }
 }
