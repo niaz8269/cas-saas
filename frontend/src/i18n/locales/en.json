@@ -20,7 +20,9 @@
     "cities": "50+ Cities",
     "localServices": "Local Services",
     "howItWorks": "How it Works",
-    "learningCenter": "Learning Center"
+    "learningCenter": "Learning Center",
+    "mbbs": "MBBS in China",
+    "csc": "CSC Scholarship"
   },
   "header": {
     "promoFreeApplyText": "Browse universities and admission dates on CAS",
@@ -54,7 +56,9 @@
     "freeConsultation": "Free consultation",
     "rights": "© {{year}} CAS Education. All rights reserved.",
     "authorized": "Official authorized agent since 2012.",
-    "photoCredits": "Photo credits"
+    "photoCredits": "Photo credits",
+    "exploreMbbs": "MBBS in China",
+    "exploreCsc": "CSC Scholarship"
   },
   "components": {
     "moeListed": "MoE-approved MBBS",
@@ -1500,5 +1504,99 @@
     "textTitle": "Text on university pages",
     "textBody": "Introductions, facts and the overview sections on university pages are adapted from English Wikipedia (the articles of the university, its city and its province) and licensed CC BY-SA 4.0; each university's article is linked below.",
     "textFrom": "text from Wikipedia"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "We couldn't find that page. It may have moved, or the address may be wrong.",
+    "home": "Go to the homepage",
+    "universities": "Browse universities",
+    "programs": "Find a program"
+  },
+  "city": {
+    "seoTitle": "Study in {{city}}: Universities & Programs",
+    "seoTitleFallback": "Study in China by city",
+    "seoDescription": "Study in {{city}}: {{count}} universities for international students, with programs, tuition and application windows.",
+    "title": "Study in {{city}}",
+    "subtitle": "What it is like to study in {{city}}, and the {{count}} universities there that welcome international students.",
+    "universities": "Universities in {{city}}",
+    "allCities": "All cities"
+  },
+  "mbbs": {
+    "seoTitle": "MBBS in China: Approved Universities & Fees",
+    "seoDescription": "The 43 universities approved by China's Ministry of Education to enrol English-taught MBBS students in 2026–27, with tuition, application windows and how to apply.",
+    "eyebrow": "English-taught medicine",
+    "title": "MBBS in China",
+    "subtitle": "The Ministry of Education's approved universities for English-taught MBBS, what you need to apply, and the dates universities have published.",
+    "howTitle": "How the approval list works",
+    "how1": "China's Ministry of Education publishes an annual list of universities approved to enrol international undergraduate students in English-taught Clinical Medicine (MBBS). For 2026–27 the list has 43 universities. A university that is not on the list may not recruit English-taught MBBS students.",
+    "how2": "Check the list before you apply, and confirm with the licensing council of the country where you plan to practise that a degree from the university is accepted. The programs in our catalog run six years (72 months) and are taught in English; their listed tuition is between CNY 26,000 and CNY 50,000 a year.",
+    "listTitle": "{{count}} approved universities",
+    "listSubtitle": "Each page shows programs, fees, application windows and scholarships.",
+    "reqTitle": "Typical admission requirements",
+    "requirements": [
+      "A valid foreign passport; applicants are generally 18 to 25 years old (the exact limit is set by each university).",
+      "A high-school diploma, with strong results in biology, chemistry and physics or mathematics.",
+      "The China Scholastic Competency Assessment (CSCA) result, which bachelor's applicants take before applying.",
+      "Proof of English: IELTS or TOEFL, unless your previous study was taught in English.",
+      "A physical examination form and a police clearance certificate, both issued within six months of applying.",
+      "A personal statement and, where asked, an online interview with the university."
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "How long is an MBBS in China?",
+        "a": "The English-taught MBBS programs in our catalog run six years (72 months), and the final year is normally clinical practice."
+      },
+      {
+        "q": "Which universities can enrol international MBBS students?",
+        "a": "Only universities on the Ministry of Education's annual approved list. For 2026–27 there are 43, all listed on this page."
+      },
+      {
+        "q": "Do I need to speak Chinese?",
+        "a": "No Chinese is needed to start, because teaching is in English. Universities add Chinese language courses because hospital training involves speaking with patients."
+      },
+      {
+        "q": "How much does it cost?",
+        "a": "Tuition for the MBBS programs in our catalog is between CNY 26,000 and CNY 50,000 a year, plus accommodation and living costs. Each university page shows its own fees."
+      },
+      {
+        "q": "When do applications open?",
+        "a": "It differs by university. Many open in the months before the September intake and close between May and August. Each university page lists the window we have found and how reliable the source is."
+      }
+    ],
+    "cta": "Not sure which university suits you? A CAS counselor will shortlist for your grades and budget.",
+    "ctaButton": "Get a free study plan"
+  },
+  "csc": {
+    "seoTitle": "CSC Scholarship: Chinese Government Scholarship Guide",
+    "seoDescription": "How the Chinese Government Scholarship (CSC) works: what it covers, who can apply, how to apply and when, and the China-wide scholarships we list.",
+    "eyebrow": "Chinese Government Scholarship",
+    "title": "CSC Scholarship",
+    "subtitle": "What the Chinese Government Scholarship covers, who can apply, and how and when to apply.",
+    "whatTitle": "What the CSC scholarship is",
+    "what1": "The Chinese Government Scholarship, administered by the China Scholarship Council (CSC), funds international students to study at Chinese universities. You apply online through the CSC Study in China system, normally through the Chinese embassy or consulate in your country (using an agency number) or through a host university, and the category and agency number depend on the route you use.",
+    "coversTitle": "What it can cover",
+    "covers": [
+      "Tuition fees.",
+      "Accommodation, or an accommodation allowance.",
+      "A monthly living stipend.",
+      "Comprehensive medical insurance."
+    ],
+    "whoTitle": "Who can apply",
+    "who1": "Applicants must be non-Chinese citizens in good health who meet the admission requirements of their target university. In the 2026–27 call published for Canada, age limits were under 25 for bachelor's, under 35 for master's and under 40 for doctoral study. Chinese-taught programs needed HSK 3 (bachelor's) or HSK 4 (master's and doctoral), and bachelor's applicants had to take the CSCA. Other countries' calls can differ.",
+    "howTitle": "How to apply",
+    "steps": [
+      "Choose a university and a program that is listed as open to CSC applicants.",
+      "Check your embassy's call: opening dates, deadlines and interview steps differ by country.",
+      "Prepare the documents: passport, certified transcripts and diplomas, study plan, recommendation letters and language certificates.",
+      "Apply online in the CSC Study in China system and submit the university application, usually with the university's pre-admission notice or invitation letter.",
+      "Follow the embassy's or university's instructions for interviews and results."
+    ],
+    "timeTitle": "When to apply",
+    "time1": "Dates depend on your country or route. For the 2026–27 round, Chinese embassy notices opened from late October 2025; one embassy opened applications on 16 February 2026, and the 2026–27 call for Canada closed on 22 February 2026. Check your embassy's notice for the current round.",
+    "listTitle": "China-wide scholarships we list",
+    "cta": "We can match you to CSC-listed programs and help you apply on time.",
+    "allScholarships": "All scholarships",
+    "ctaButton": "Get a free study plan"
   }
 }

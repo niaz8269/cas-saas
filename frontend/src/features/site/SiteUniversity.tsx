@@ -56,14 +56,6 @@ export default function SiteUniversity() {
         })
       : t("university.seoDescriptionFallback"),
     canonicalPath: `/site/universities/${slug}`,
-    jsonLd: uni
-      ? {
-          "@context": "https://schema.org",
-          "@type": "CollegeOrUniversity",
-          name: uni.name,
-          ...(uni.city ? { address: { "@type": "PostalAddress", addressLocality: uni.city, addressCountry: "CN" } } : {}),
-        }
-      : undefined,
   })
 
   if (isPending) return <Skeleton className="h-96 w-full rounded-sm" />
@@ -215,7 +207,7 @@ function SignInGate({ label, className }: { label: string; className?: string })
 }
 
 /** The long Overview: a contents row and the sections (history, campus, city, programs, admission). */
-function OverviewArticle({ sections }: { sections: SiteOverviewSection[] }) {
+export function OverviewArticle({ sections }: { sections: SiteOverviewSection[] }) {
   const { t } = useTranslation()
   const slug = (i: number) => `overview-${i}`
   const toc = sections.map((s, i) => ({ s, i })).filter(({ s }) => s.level === 2)

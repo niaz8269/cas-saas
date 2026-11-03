@@ -226,7 +226,7 @@ it("renders the destinations page from the API city list", async () => {
   renderWithProviders(<SiteCities />)
 
   expect(await screen.findByRole("heading", { name: "Study in China by city", level: 1 })).toBeInTheDocument()
-  expect(await screen.findByRole("link", { name: /Beijing/ })).toHaveAttribute("href", "/site/universities?city=Beijing")
+  expect(await screen.findByRole("link", { name: /Beijing/ })).toHaveAttribute("href", "/site/cities/beijing")
   expect(screen.getByText("27 universities")).toBeInTheDocument()
   expect(screen.getByText("1 university")).toBeInTheDocument()
 })

@@ -118,6 +118,17 @@ export interface SitePhotoCredit {
   text_source_url: string | null
 }
 
+export interface SiteCity {
+  city: string
+  province: string | null
+  sections: SiteOverviewSection[]
+  universities: SiteUniversityCard[]
+}
+
+export function getSiteCity(slug: string) {
+  return siteApi<SiteCity>(`/public/cities/${encodeURIComponent(slug)}`)
+}
+
 export function getSitePhotoCredits() {
   return siteApi<{ data: SitePhotoCredit[] }>("/public/photo-credits")
 }

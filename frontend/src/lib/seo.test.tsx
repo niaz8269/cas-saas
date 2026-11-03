@@ -29,7 +29,7 @@ it("sets the title, description, canonical and Open Graph tags", () => {
     canonicalPath: "/site/programs",
   })
 
-  expect(document.title).toBe("Find Programs to Study in China | CAS — Consultancy for Abroad Study")
+  expect(document.title).toBe("Find Programs to Study in China | CAS")
   expect(document.querySelector('meta[name="description"]')?.getAttribute("content")).toBe("Search programs across partner universities.")
   expect(document.querySelector('link[rel="canonical"]')?.getAttribute("href")).toContain("/site/programs")
   expect(document.querySelector('meta[property="og:title"]')?.getAttribute("content")).toContain("Find Programs")

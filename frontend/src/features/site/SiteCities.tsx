@@ -8,6 +8,8 @@ import { getSiteUniversities } from "@/features/site/api"
 import { PhotoMark, SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
+const citySlug = (c: string) => c.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+
 export default function SiteCities() {
   const { t } = useTranslation()
   useSeo({
@@ -51,7 +53,7 @@ export default function SiteCities() {
           {cities.map(({ city, count, photo_url }) => (
             <Link
               key={city}
-              to={`/site/universities?city=${encodeURIComponent(city)}`}
+              to={`/site/cities/${citySlug(city)}`}
               className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
             >
               <div className="relative flex h-36 items-end overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">

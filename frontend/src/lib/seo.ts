@@ -52,7 +52,7 @@ export function useSeo({ title, description, canonicalPath, image, jsonLd }: Seo
 
   useEffect(() => {
     const base = baseUrl()
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME
+    const fullTitle = title ? `${title} | CAS` : SITE_NAME
     const url = base + (canonicalPath ?? pathname)
     const img = image ?? `${base}/og-image.png`
 
