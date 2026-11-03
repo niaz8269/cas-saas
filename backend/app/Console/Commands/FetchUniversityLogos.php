@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\University;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Pool;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
@@ -40,7 +41,7 @@ class FetchUniversityLogos extends Command
 
             foreach ($chunk as $u) {
                 $page = $pages[$u->slug] ?? null;
-                if (! $page instanceof \Illuminate\Http\Client\Response || ! $page->successful()) {
+                if (! $page instanceof Response || ! $page->successful()) {
                     $this->line("{$u->slug}: page unreachable");
 
                     continue;

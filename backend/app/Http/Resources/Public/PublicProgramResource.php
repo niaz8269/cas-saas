@@ -4,6 +4,7 @@ namespace App\Http\Resources\Public;
 
 use App\Models\Program;
 use App\Services\Admissions\ApplicationCatalog;
+use App\Services\Media\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -48,6 +49,8 @@ class PublicProgramResource extends JsonResource
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,
+                'cover_url' => app(ImageService::class)->url($this->university?->cover_path),
+                'cover_credit' => $this->university?->cover_credit,
             ]),
         ];
     }

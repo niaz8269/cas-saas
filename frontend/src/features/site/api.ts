@@ -47,6 +47,8 @@ export class SiteApiError extends Error {
 export interface SiteUniversityRef {
   name: string
   slug: string | null
+  cover_url?: string | null
+  cover_credit?: string | null
 }
 
 export interface SiteProgram {

@@ -273,7 +273,7 @@ export default function SiteHome() {
             {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
               <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?ref=outstanding"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
+                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} image={p.university?.cover_url ? { src: p.university.cover_url, credit: p.university.cover_credit ?? undefined } : null} className="flex h-32 items-center justify-center">
                   <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level.replace("_", "-")}</span>
                 </PhotoBanner>
                 <div className="p-5">
