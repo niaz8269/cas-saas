@@ -12,6 +12,7 @@ import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
 import LanguageSwitcher from "@/i18n/LanguageSwitcher"
+import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
@@ -50,7 +51,7 @@ const NAV = [
   { to: "/site/news?m=1", labelKey: "nav.news" },
 ]
 
-const WHATSAPP = "https://wa.me/8618041566030"
+const WHATSAPP = CONTACT.whatsapp
 
 /** A desktop nav link that reveals a single-column dropdown on hover, like the
  *  reference's "WHY CUCAS" menu (dashed separators + a caret pointer). */
@@ -312,8 +313,8 @@ export default function SiteLayout() {
           <div>
             <p className="text-sm font-semibold text-white">{t("footer.getInTouch")}</p>
             <ul className="mt-3 space-y-2 text-sm">
-              <li><a href="tel:+8618041566030" className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> +86 180 4156 6030</a></li>
-              <li><a href="mailto:info@cas.moe" className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> info@cas.moe</a></li>
+              <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> {CONTACT.phoneDisplay}</a></li>
+              <li><a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> {CONTACT.emailGeneral}</a></li>
               <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> {t("footer.whatsappUs")}</a></li>
             </ul>
             <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-red px-4 py-2 text-sm font-semibold text-white hover:bg-cas-red-600">

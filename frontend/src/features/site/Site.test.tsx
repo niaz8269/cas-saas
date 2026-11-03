@@ -168,9 +168,9 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
 
   await user.click(screen.getByRole("button", { name: "Leave Message" }))
 
-  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8618041566030")
-  expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8618041566030")
-  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:info@cas.moe")
+  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8617640412827")
+  expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
+  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@sas.cas.moe")
 })
 
 it("submits the hero lead panel to the public enquiries endpoint", async () => {

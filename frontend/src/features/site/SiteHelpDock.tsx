@@ -3,13 +3,11 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 
 // CAS's own channels (mirrors the footer) — never the reference's.
-const PHONE = "+8618041566030"
-const PHONE_DISPLAY = "+86 180 4156 6030"
-const WHATSAPP = "https://wa.me/8618041566030"
-const EMAIL = "info@cas.moe"
+const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnquiry: EMAIL, wechat: WECHAT_ID } = CONTACT
 
 // Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
 const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
@@ -81,15 +79,15 @@ export default function SiteHelpDock() {
                         <span className="text-sm font-semibold text-cas-red-600">{t(c.nameKey)}</span>
                       </div>
                       <div className="space-y-2.5 text-sm leading-tight">
-                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{PHONE_DISPLAY}</p></div>
+                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{WECHAT_ID}</p></div>
                         <div>
                           <p className="font-semibold">{t("helpDock.whatsappTelLabel")}</p>
                           <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
                         </div>
                       </div>
                       <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
-                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.wechatQrAlt")} width={92} height={92} className="rounded" />
-                        <span className="text-xs text-muted-foreground">{t("helpDock.wechat")}</span>
+                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
+                        <span className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</span>
                       </div>
                     </div>
                   </div>
