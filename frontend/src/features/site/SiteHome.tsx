@@ -24,7 +24,7 @@ import heroBg from "@/assets/b1.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
-import { organizationJsonLd, useSeo } from "@/lib/seo"
+import { useSeo } from "@/lib/seo"
 
 
 const DOT_GRID = {
@@ -93,8 +93,7 @@ export default function SiteHome() {
   useSeo({
     title: t("home.seo.title"),
     description: t("home.seo.description"),
-    canonicalPath: "/site",
-    jsonLd: organizationJsonLd(),
+    canonicalPath: "/",
   })
 
   const navigate = useNavigate()

@@ -30,6 +30,8 @@ const NAV_PRIMARY: NavItemT[] = [
       ["whyCasMenu.programs", "/site/programs?level=bachelor"],
       ["whyCasMenu.scholarships", "/site/scholarships"],
       ["whyCasMenu.cities", "/site/cities"],
+      ["whyCasMenu.mbbs", "/site/mbbs-in-china"],
+      ["whyCasMenu.csc", "/site/csc-scholarship"],
       ["whyCasMenu.localServices", "/site/services"],
       ["whyCasMenu.howItWorks", "/site/about?section=process"],
       ["whyCasMenu.learningCenter", "/site/news?view=guides"],
@@ -293,6 +295,8 @@ export default function SiteLayout() {
               <li><Link to="/site/universities?sort=programs" className="hover:text-white">{t("footer.exploreUniversities")}</Link></li>
               <li><Link to="/site/programs?sort=newest" className="hover:text-white">{t("footer.explorePrograms")}</Link></li>
               <li><Link to="/site/scholarships?type=government" className="hover:text-white">{t("footer.exploreScholarships")}</Link></li>
+              <li><Link to="/site/mbbs-in-china" className="hover:text-white">{t("footer.exploreMbbs")}</Link></li>
+              <li><Link to="/site/csc-scholarship" className="hover:text-white">{t("footer.exploreCsc")}</Link></li>
               <li><Link to="/site/why-china?read=intro" className="hover:text-white">{t("footer.exploreWhyChina")}</Link></li>
               <li><Link to="/site/news?view=all" className="hover:text-white">{t("footer.exploreNews")}</Link></li>
               <li><Link to="/site/photo-credits" className="hover:text-white">{t("footer.photoCredits")}</Link></li>

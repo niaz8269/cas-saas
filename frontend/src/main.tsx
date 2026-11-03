@@ -2,49 +2,49 @@ import "./index.css"
 import "@/i18n"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { StrictMode } from "react"
+import { lazy, StrictMode, Suspense } from "react"
 import { createRoot } from "react-dom/client"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 
 import ErrorBoundary from "@/components/ErrorBoundary"
-import AppShell from "@/components/layout/AppShell"
+const AppShell = lazy(() => import("@/components/layout/AppShell"))
 import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
-import ScholarshipsPage from "@/features/catalog/ScholarshipsPage"
-import UniversitiesPage from "@/features/catalog/UniversitiesPage"
-import UniversityDetailPage from "@/features/catalog/UniversityDetailPage"
-import ApplicationDetailPage from "@/features/admissions/ApplicationDetailPage"
-import ApplicationsPage from "@/features/admissions/ApplicationsPage"
-import AgentPayablesPage from "@/features/finance/AgentPayablesPage"
-import CommissionDetailPage from "@/features/finance/CommissionDetailPage"
-import CommissionsPage from "@/features/finance/CommissionsPage"
-import FinancePage from "@/features/finance/FinancePage"
-import InvoiceDetailPage from "@/features/finance/InvoiceDetailPage"
-import LeadDetailPage from "@/features/crm/LeadDetailPage"
-import LeadsPage from "@/features/crm/LeadsPage"
-import StudentProfilePage from "@/features/crm/StudentProfilePage"
-import StudentsPage from "@/features/crm/StudentsPage"
-import DashboardPage from "@/features/dashboard/DashboardPage"
-import ReportsPage from "@/features/dashboard/ReportsPage"
-import VisaCaseDetailPage from "@/features/visa/VisaCaseDetailPage"
-import VisaCasesPage from "@/features/visa/VisaCasesPage"
-import PortalLogin from "@/features/portal/PortalLogin"
-import PortalRegister from "@/features/portal/PortalRegister"
-import PortalShell from "@/features/portal/PortalShell"
-import RequirePortalAuth from "@/features/portal/RequirePortalAuth"
-import AgentHome from "@/features/portal/agent/AgentHome"
-import AgentAddStudent from "@/features/portal/agent/AgentAddStudent"
-import AgentStudents from "@/features/portal/agent/AgentStudents"
-import AgentApplyWizard from "@/features/portal/agent/AgentApplyWizard"
-import AgentScholarshipWizard from "@/features/portal/agent/AgentScholarshipWizard"
-import AgentCommissions from "@/features/portal/agent/AgentCommissions"
-import StudentHome from "@/features/portal/student/StudentHome"
-import StudentApplyWizard from "@/features/portal/student/StudentApplyWizard"
-import StudentScholarshipWizard from "@/features/portal/student/StudentScholarshipWizard"
-import StudentApplications from "@/features/portal/student/StudentApplications"
-import StudentVisa from "@/features/portal/student/StudentVisa"
-import StudentInvoices from "@/features/portal/student/StudentInvoices"
-import StudentDocuments from "@/features/portal/student/StudentDocuments"
+const ScholarshipsPage = lazy(() => import("@/features/catalog/ScholarshipsPage"))
+const UniversitiesPage = lazy(() => import("@/features/catalog/UniversitiesPage"))
+const UniversityDetailPage = lazy(() => import("@/features/catalog/UniversityDetailPage"))
+const ApplicationDetailPage = lazy(() => import("@/features/admissions/ApplicationDetailPage"))
+const ApplicationsPage = lazy(() => import("@/features/admissions/ApplicationsPage"))
+const AgentPayablesPage = lazy(() => import("@/features/finance/AgentPayablesPage"))
+const CommissionDetailPage = lazy(() => import("@/features/finance/CommissionDetailPage"))
+const CommissionsPage = lazy(() => import("@/features/finance/CommissionsPage"))
+const FinancePage = lazy(() => import("@/features/finance/FinancePage"))
+const InvoiceDetailPage = lazy(() => import("@/features/finance/InvoiceDetailPage"))
+const LeadDetailPage = lazy(() => import("@/features/crm/LeadDetailPage"))
+const LeadsPage = lazy(() => import("@/features/crm/LeadsPage"))
+const StudentProfilePage = lazy(() => import("@/features/crm/StudentProfilePage"))
+const StudentsPage = lazy(() => import("@/features/crm/StudentsPage"))
+const DashboardPage = lazy(() => import("@/features/dashboard/DashboardPage"))
+const ReportsPage = lazy(() => import("@/features/dashboard/ReportsPage"))
+const VisaCaseDetailPage = lazy(() => import("@/features/visa/VisaCaseDetailPage"))
+const VisaCasesPage = lazy(() => import("@/features/visa/VisaCasesPage"))
+const PortalLogin = lazy(() => import("@/features/portal/PortalLogin"))
+const PortalRegister = lazy(() => import("@/features/portal/PortalRegister"))
+const PortalShell = lazy(() => import("@/features/portal/PortalShell"))
+const RequirePortalAuth = lazy(() => import("@/features/portal/RequirePortalAuth"))
+const AgentHome = lazy(() => import("@/features/portal/agent/AgentHome"))
+const AgentAddStudent = lazy(() => import("@/features/portal/agent/AgentAddStudent"))
+const AgentStudents = lazy(() => import("@/features/portal/agent/AgentStudents"))
+const AgentApplyWizard = lazy(() => import("@/features/portal/agent/AgentApplyWizard"))
+const AgentScholarshipWizard = lazy(() => import("@/features/portal/agent/AgentScholarshipWizard"))
+const AgentCommissions = lazy(() => import("@/features/portal/agent/AgentCommissions"))
+const StudentHome = lazy(() => import("@/features/portal/student/StudentHome"))
+const StudentApplyWizard = lazy(() => import("@/features/portal/student/StudentApplyWizard"))
+const StudentScholarshipWizard = lazy(() => import("@/features/portal/student/StudentScholarshipWizard"))
+const StudentApplications = lazy(() => import("@/features/portal/student/StudentApplications"))
+const StudentVisa = lazy(() => import("@/features/portal/student/StudentVisa"))
+const StudentInvoices = lazy(() => import("@/features/portal/student/StudentInvoices"))
+const StudentDocuments = lazy(() => import("@/features/portal/student/StudentDocuments"))
 import SiteLayout from "@/features/site/SiteLayout"
 import SiteHome from "@/features/site/SiteHome"
 import SiteUniversities from "@/features/site/SiteUniversities"
@@ -53,6 +53,10 @@ import SiteProgramFinder from "@/features/site/SiteProgramFinder"
 import SiteScholarships from "@/features/site/SiteScholarships"
 import SiteAbout from "@/features/site/SiteAbout"
 import SiteCities from "@/features/site/SiteCities"
+import SiteCity from "@/features/site/SiteCity"
+import SiteMbbs from "@/features/site/SiteMbbs"
+import SiteCsc from "@/features/site/SiteCsc"
+import SiteNotFound from "@/features/site/SiteNotFound"
 import SitePhotoCredits from "@/features/site/SitePhotoCredits"
 import SiteContact from "@/features/site/SiteContact"
 import SiteFAQ from "@/features/site/SiteFAQ"
@@ -63,14 +67,14 @@ import SiteServices from "@/features/site/SiteServices"
 import SiteWhyChina from "@/features/site/SiteWhyChina"
 import SiteNews from "@/features/site/SiteNews"
 import SitePostDetail from "@/features/site/SitePostDetail"
-import ContentPage from "@/features/admin/ContentPage"
-import MarketingPage from "@/features/marketing/MarketingPage"
-import PartnerRequestsPage from "@/features/admin/PartnerRequestsPage"
-import UsersPage from "@/features/admin/UsersPage"
-import SettingsPage from "@/features/admin/SettingsPage"
-import IntegrationsPage from "@/features/admin/IntegrationsPage"
-import ErrorLogPage from "@/features/admin/ErrorLogPage"
-import TasksPage from "@/features/tasks/TasksPage"
+const ContentPage = lazy(() => import("@/features/admin/ContentPage"))
+const MarketingPage = lazy(() => import("@/features/marketing/MarketingPage"))
+const PartnerRequestsPage = lazy(() => import("@/features/admin/PartnerRequestsPage"))
+const UsersPage = lazy(() => import("@/features/admin/UsersPage"))
+const SettingsPage = lazy(() => import("@/features/admin/SettingsPage"))
+const IntegrationsPage = lazy(() => import("@/features/admin/IntegrationsPage"))
+const ErrorLogPage = lazy(() => import("@/features/admin/ErrorLogPage"))
+const TasksPage = lazy(() => import("@/features/tasks/TasksPage"))
 import { initErrorReporting } from "@/lib/errorReporting"
 
 initErrorReporting()
@@ -97,7 +101,7 @@ const router = createBrowserRouter([
     children: [
       // The public website is the front door; /site stays as an alias for existing links.
       { path: "/", element: <SiteHome /> },
-      { path: "/site", element: <SiteHome /> },
+      { path: "/site", element: <Navigate to="/" replace /> },
       { path: "/site/universities", element: <SiteUniversities /> },
       { path: "/site/universities/:slug", element: <SiteUniversity /> },
       { path: "/site/programs", element: <SiteProgramFinder /> },
@@ -113,7 +117,11 @@ const router = createBrowserRouter([
       { path: "/site/partner", element: <SitePartner /> },
       { path: "/site/faq", element: <SiteFAQ /> },
       { path: "/site/cities", element: <SiteCities /> },
+      { path: "/site/cities/:slug", element: <SiteCity /> },
+      { path: "/site/mbbs-in-china", element: <SiteMbbs /> },
+      { path: "/site/csc-scholarship", element: <SiteCsc /> },
       { path: "/site/photo-credits", element: <SitePhotoCredits /> },
+      { path: "/site/*", element: <SiteNotFound /> },
     ],
   },
 
@@ -186,7 +194,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <Suspense fallback={null}><RouterProvider router={router} /></Suspense>
       </QueryClientProvider>
     </ErrorBoundary>
   </StrictMode>,

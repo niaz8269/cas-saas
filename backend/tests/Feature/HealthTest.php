@@ -20,8 +20,8 @@ it('reports per-dependency checks on /ready', function () {
     $response->assertJsonPath('checks.database', 'ok');
 });
 
-it('identifies the API at the root route', function () {
-    $this->getJson('/')
+it('answers on the health route', function () {
+    $this->getJson('/health')
         ->assertOk()
         ->assertJson(['status' => 'ok']);
 });

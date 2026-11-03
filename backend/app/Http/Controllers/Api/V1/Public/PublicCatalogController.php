@@ -14,6 +14,7 @@ use App\Services\Public\AudienceResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Str;
 
 /**
  * Read-only catalog for the public website. Only active universities and
@@ -131,6 +132,32 @@ class PublicCatalogController extends Controller
             ->values();
 
         return response()->json(['data' => $rows]);
+    }
+
+    /** A city landing page: its universities and the city sections of their overviews. */
+    public function city(Request $request, string $slug): JsonResponse
+    {
+        $audience = $this->audience($request);
+        $all = University::query()->where('status', 'active')->whereNotNull('city')->orderBy('name')->get();
+        $city = $all->first(fn ($u) => Str::slug($u->city) === $slug)?->city;
+        abort_unless($city, 404);
+
+        $inCity = $all->filter(fn ($u) => $u->city === $city)->values();
+        $keep = ['Studying in '.$city, 'Geography', 'Climate', 'Economy', 'Culture', 'Education', 'Transport', 'Transportation', 'Cuisine', 'Tourism', 'Demographics'];
+        $sections = [];
+        foreach ($inCity as $u) {
+            $sections = collect($u->overview ?? [])->filter(fn ($s) => in_array($s['h'] ?? '', $keep, true) && ($s['blocks'] ?? []))->values()->all();
+            if (count($sections) >= 3) {
+                break;
+            }
+        }
+
+        return response()->json([
+            'city' => $city,
+            'province' => $inCity->first()->province,
+            'sections' => $sections,
+            'universities' => PublicUniversityResource::collection($inCity)->additional(['audience' => $audience])->toResponse($request)->getData(true)['data'],
+        ]);
     }
 
     public function university(Request $request, string $slug): PublicUniversityResource
