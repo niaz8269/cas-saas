@@ -155,7 +155,11 @@
     "photoCredit": "Photo",
     "photoSource": "source",
     "moeApprovedYear": "Yes — {{year}} list",
-    "mbbsNotApproved": "Not on the Ministry of Education's list of universities approved for English-taught MBBS — confirm with CAS before applying."
+    "mbbsNotApproved": "Not on the Ministry of Education's list of universities approved for English-taught MBBS — confirm with CAS before applying.",
+    "factFounded": "Founded",
+    "factType": "Type",
+    "factStudents": "Students",
+    "wikipediaCredit": "Facts and introduction from"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",

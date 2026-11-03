@@ -24,7 +24,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AdmissionWindow } from "@/features/site/components"
-import { provinceCover } from "@/features/site/provinceCovers"
 import { getSiteUniversity, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
@@ -82,7 +81,7 @@ export default function SiteUniversity() {
   }
 
   const u = data.data
-  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: true } : provinceCover(u.province)
+  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: !u.cover_is_city } : null
   const today = new Date().setHours(0, 0, 0, 0)
   const upcoming = u.intakes.find((i) => i.status !== 'closed' && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
   const rep = u.representative_professor
@@ -227,6 +226,9 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
     [t("university.factMoeListed"), u.moe_listed ? t("university.moeApprovedYear", { year: u.moe_mbbs_year ?? "" }) : "—"],
     [t("university.factNearestAirport"), u.nearest_airport || "—"],
     [t("university.factPrograms"), String(u.programs.length)],
+    ...(u.founded_year ? [[t("university.factFounded"), String(u.founded_year)] as [string, string]] : []),
+    ...(u.institution_type ? [[t("university.factType"), u.institution_type] as [string, string]] : []),
+    ...(u.student_count ? [[t("university.factStudents"), u.student_count] as [string, string]] : []),
   ]
 
   return (
@@ -242,6 +244,12 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
       {u.about && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
+          {u.wikipedia_url && (
+            <p className="mt-3 text-[11px] text-muted-foreground">
+              {t("university.wikipediaCredit")}{" "}
+              <a href={u.wikipedia_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">Wikipedia</a> (CC BY-SA 4.0)
+            </p>
+          )}
         </div>
       )}
       {rep?.name && (

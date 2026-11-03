@@ -89,12 +89,19 @@ it('seeds only verified catalog data, each record carrying its official source',
     // The MoE-approved MBBS universities carry published application windows where an official page states them.
     expect(Intake::whereHas('university', fn ($q) => $q->where('moe_listed', true))->whereNotNull('application_deadline')->count())->toBeGreaterThanOrEqual(15);
 
+    // Wikipedia profile: facts and an introduction for nearly every university, a campus or city photo for almost all.
+    expect(University::whereNotNull('founded_year')->count())->toBeGreaterThan(250)
+        ->and(University::whereNotNull('wikipedia_url')->count())->toBeGreaterThan(280)
+        ->and(University::where(fn ($q) => $q->whereNull('cover_path')->orWhere('cover_path', ''))->count())->toBeLessThan(10)
+        ->and(University::where('cover_is_city', true)->whereNull('cover_credit')->count())->toBe(0);
+
     // Idempotency: reseeding replaces rather than duplicates.
     $programs = Program::count();
     $universities = University::count();
     $this->seed(VerifiedCatalogSeeder::class);
     $this->seed(SasCatalogSeeder::class);
     $this->seed(\Database\Seeders\OfficialIntakeDatesSeeder::class);
+    $this->seed(\Database\Seeders\WikipediaProfileSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });

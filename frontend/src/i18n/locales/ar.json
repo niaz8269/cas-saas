@@ -161,7 +161,11 @@
     "showMorePrograms": "عرض المزيد ({{shown}} من {{total}})",
     "locationPhoto": "صورة للموقع (وليست للحرم الجامعي)",
     "photoCredit": "صورة",
-    "photoSource": "المصدر"
+    "photoSource": "المصدر",
+    "factFounded": "سنة التأسيس",
+    "factType": "النوع",
+    "factStudents": "عدد الطلاب",
+    "wikipediaCredit": "الحقائق والمقدمة من"
   },
   "programs": {
     "seoTitle": "ابحث عن برامج للدراسة في الصين",

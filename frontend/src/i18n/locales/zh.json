@@ -153,7 +153,11 @@
     "showMorePrograms": "显示更多（{{shown}} / {{total}}）",
     "locationPhoto": "位置照片（非校园）",
     "photoCredit": "照片",
-    "photoSource": "来源"
+    "photoSource": "来源",
+    "factFounded": "创办年份",
+    "factType": "类型",
+    "factStudents": "学生人数",
+    "wikipediaCredit": "事实与简介来源："
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",

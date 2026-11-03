@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             StaffUserSeeder::class,
             VerifiedCatalogSeeder::class,
             SasCatalogSeeder::class,
+            WikipediaProfileSeeder::class,
             MoeMbbsSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,

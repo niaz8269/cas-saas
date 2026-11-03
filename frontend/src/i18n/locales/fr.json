@@ -153,7 +153,11 @@
     "showMorePrograms": "Afficher plus ({{shown}} sur {{total}})",
     "locationPhoto": "Photo de localisation (pas du campus)",
     "photoCredit": "Photo",
-    "photoSource": "source"
+    "photoSource": "source",
+    "factFounded": "Fondée en",
+    "factType": "Type",
+    "factStudents": "Étudiants",
+    "wikipediaCredit": "Faits et introduction issus de"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",

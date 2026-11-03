@@ -153,7 +153,11 @@
     "showMorePrograms": "Tampilkan lebih banyak ({{shown}} dari {{total}})",
     "locationPhoto": "Foto lokasi (bukan kampus)",
     "photoCredit": "Foto",
-    "photoSource": "sumber"
+    "photoSource": "sumber",
+    "factFounded": "Didirikan",
+    "factType": "Jenis",
+    "factStudents": "Mahasiswa",
+    "wikipediaCredit": "Fakta dan pengantar dari"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",

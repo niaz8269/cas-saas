@@ -5,7 +5,6 @@ import { Link } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
-import { provinceCover } from "@/features/site/provinceCovers"
 
 // Light, varied placeholder tints — photo-ready image areas that read light &
 // colourful like the reference, instead of heavy dark blocks.
@@ -38,8 +37,8 @@ export function PhotoBanner({ src, className, children }: { src: string; classNa
 /** University card shared by the home page and the universities listing. */
 export function UniCard({ u }: { u: SiteUniversityCard }) {
   const { t } = useTranslation()
-  // The university's own photo if it has one; otherwise a credited location photo.
-  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: true } : provinceCover(u.province)
+  // A campus photo if one is available; otherwise a credited photo of the city (never an unrelated image).
+  const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: !u.cover_is_city } : null
 
   return (
     <Link

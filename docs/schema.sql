@@ -943,4 +943,12 @@ ALTER TABLE universities
   ADD COLUMN moe_mbbs_year       VARCHAR(9)   NULL AFTER moe_listed,
   ADD COLUMN moe_mbbs_source_url VARCHAR(500) NULL AFTER moe_mbbs_year;
 
+-- ADDENDUM: institution facts and the Wikipedia article they came from (CC BY-SA attribution).
+ALTER TABLE universities
+  ADD COLUMN founded_year     SMALLINT UNSIGNED NULL AFTER moe_mbbs_source_url,
+  ADD COLUMN institution_type VARCHAR(40)  NULL AFTER founded_year,
+  ADD COLUMN student_count    VARCHAR(40)  NULL AFTER institution_type,
+  ADD COLUMN wikipedia_url    VARCHAR(500) NULL AFTER student_count,
+  ADD COLUMN cover_is_city    TINYINT(1)   NOT NULL DEFAULT 0 AFTER cover_source_url;
+
 -- =========================== END OF SCHEMA ===========================

@@ -132,6 +132,12 @@ export interface SiteUniversityCard {
   cover_url: string | null
   cover_credit?: string | null
   cover_source_url?: string | null
+  /** True when the cover is a photo of the city because no campus photo was available. */
+  cover_is_city?: boolean
+  founded_year?: number | null
+  institution_type?: string | null
+  student_count?: string | null
+  wikipedia_url?: string | null
   moe_listed: boolean
   moe_mbbs_year?: string | null
   moe_mbbs_source_url?: string | null
