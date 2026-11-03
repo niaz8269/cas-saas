@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SasCatalogSeeder::class,
             UniversityLocationSeeder::class,
             WikipediaProfileSeeder::class,
+            OverviewSeeder::class,
             MoeMbbsSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             AutomationRuleSeeder::class,
             UniversityEmblemSeeder::class,
             MirrorPhotosSeeder::class,
+            CampusPhotoSeeder::class,
             NewsSeeder::class,
         ]);
     }

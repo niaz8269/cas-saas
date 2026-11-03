@@ -167,7 +167,8 @@
       "Program berbahasa Mandarin: sertifikat HSK (tingkat sesuai program). Program berbahasa Inggris: bukti kemampuan bahasa Inggris kecuali pernah belajar dalam bahasa Inggris.",
       "Transkrip akademik tersertifikasi, formulir pemeriksaan kesehatan, dan surat keterangan catatan kepolisian.",
       "CAS memastikan persyaratan, batas waktu, dan biaya yang tepat untuk program Anda sebelum Anda mendaftar."
-    ]
+    ],
+    "overviewContents": "Daftar isi"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
@@ -1492,7 +1493,7 @@
     "campus": "foto kampus",
     "source": "sumber",
     "textTitle": "Teks pada halaman universitas",
-    "textBody": "Pengantar dan fakta pada halaman universitas diadaptasi dari Wikipedia bahasa Inggris dengan lisensi CC BY-SA 4.0; artikel setiap universitas ditautkan di bawah.",
+    "textBody": "Pengantar, fakta, dan bagian ikhtisar pada halaman universitas diadaptasi dari Wikipedia bahasa Inggris (artikel universitas, kota, dan provinsinya) dengan lisensi CC BY-SA 4.0; artikel setiap universitas ditautkan di bawah.",
     "textFrom": "teks dari Wikipedia"
   }
 }

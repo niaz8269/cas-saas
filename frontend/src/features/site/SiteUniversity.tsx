@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AdmissionWindow, PhotoMark } from "@/features/site/components"
-import { getSiteUniversity, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
+import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { useSeo } from "@/lib/seo"
@@ -214,6 +214,53 @@ function SignInGate({ label, className }: { label: string; className?: string })
   )
 }
 
+/** The long Overview: a contents row and the sections (history, campus, city, programs, admission). */
+function OverviewArticle({ sections }: { sections: SiteOverviewSection[] }) {
+  const { t } = useTranslation()
+  const slug = (i: number) => `overview-${i}`
+  const toc = sections.map((s, i) => ({ s, i })).filter(({ s }) => s.level === 2)
+
+  return (
+    <article className="rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+      {toc.length > 3 && (
+        <nav aria-label={t("university.overviewContents")} className="mb-6 flex flex-wrap gap-x-4 gap-y-1.5 border-b pb-4 text-sm">
+          {toc.map(({ s, i }) => (
+            <a key={i} href={`#${slug(i)}`} className="text-cas-navy hover:underline">{s.h}</a>
+          ))}
+        </nav>
+      )}
+      <div className="max-w-3xl space-y-8">
+        {sections.map((s, i) => {
+          const Heading = s.level === 2 ? "h2" : "h3"
+          const groups: ({ t: "p"; x: string } | { t: "ul"; items: string[] })[] = []
+          for (const b of s.blocks) {
+            const last = groups[groups.length - 1]
+            if (b.t === "li") {
+              if (last && last.t === "ul") last.items.push(b.x)
+              else groups.push({ t: "ul", items: [b.x] })
+            } else groups.push({ t: "p", x: b.x })
+          }
+
+          return (
+            <section key={i} id={slug(i)} className={s.level === 2 ? "scroll-mt-24" : "-mt-4 scroll-mt-24"}>
+              <Heading className={s.level === 2 ? "text-lg font-semibold text-cas-navy" : "text-base font-semibold text-foreground"}>{s.h}</Heading>
+              <div className="mt-2 space-y-3 text-sm leading-relaxed text-foreground/90">
+                {groups.map((g, j) => g.t === "p" ? (
+                  <p key={j}>{g.x}</p>
+                ) : (
+                  <ul key={j} className="grid list-disc gap-x-8 gap-y-1 pl-5 sm:grid-cols-2">
+                    {g.items.map((x, k) => <li key={k}>{x}</li>)}
+                  </ul>
+                ))}
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    </article>
+  )
+}
+
 function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
   const { t } = useTranslation()
   const facts: [string, string][] = [
@@ -236,11 +283,13 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
           </div>
         ))}
       </div>
-      {u.about && (
+      {u.overview?.length ? (
+        <OverviewArticle sections={u.overview} />
+      ) : u.about ? (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
         </div>
-      )}
+      ) : null}
       {rep?.name && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <h3 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("university.repHeading")}</h3>

@@ -130,6 +130,12 @@ export interface SiteCityStat {
   photo_is_city: boolean
 }
 
+export interface SiteOverviewSection {
+  h: string
+  level: number
+  blocks: { t: "p" | "li"; x: string }[]
+}
+
 export interface SiteGuideBlock {
   h: string
   t: string[]
@@ -163,6 +169,7 @@ export interface SiteUniversityCard {
   moe_mbbs_year?: string | null
   nearest_airport: string | null
   about: string | null
+  overview?: SiteOverviewSection[] | null
   requirements: string[]
   representative_professor: SiteRepProfessor | null
   programs_count?: number

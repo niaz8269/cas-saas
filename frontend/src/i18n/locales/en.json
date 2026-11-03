@@ -169,7 +169,8 @@
       "Chinese-taught programs: an HSK certificate (the level depends on the program). English-taught programs: proof of English proficiency unless you studied in English.",
       "Certified academic transcripts, a physical examination form and a police clearance certificate.",
       "CAS confirms the exact requirements, deadlines and fees for your course before you apply."
-    ]
+    ],
+    "overviewContents": "Contents"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
@@ -1494,7 +1495,7 @@
     "campus": "campus photo",
     "source": "source",
     "textTitle": "Text on university pages",
-    "textBody": "Introductions and facts on university pages are adapted from English Wikipedia and licensed CC BY-SA 4.0; the article for each university is linked below.",
+    "textBody": "Introductions, facts and the overview sections on university pages are adapted from English Wikipedia (the articles of the university, its city and its province) and licensed CC BY-SA 4.0; each university's article is linked below.",
     "textFrom": "text from Wikipedia"
   }
 }

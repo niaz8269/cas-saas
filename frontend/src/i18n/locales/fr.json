@@ -167,7 +167,8 @@
       "Programmes en chinois : certificat HSK (niveau selon le programme). Programmes en anglais : preuve de niveau d'anglais, sauf études en anglais.",
       "Relevés de notes certifiés, formulaire d'examen médical et casier judiciaire vierge.",
       "CAS confirme les conditions, dates limites et frais exacts de votre cursus avant la candidature."
-    ]
+    ],
+    "overviewContents": "Sommaire"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -1492,7 +1493,7 @@
     "campus": "photo du campus",
     "source": "source",
     "textTitle": "Textes des pages d'universités",
-    "textBody": "Les introductions et faits des pages d'universités sont adaptés de Wikipédia en anglais, sous licence CC BY-SA 4.0 ; l'article de chaque université est lié ci-dessous.",
+    "textBody": "Les introductions, faits et sections de présentation des pages d'universités sont adaptés de Wikipédia en anglais (articles de l'université, de sa ville et de sa province), sous licence CC BY-SA 4.0 ; l'article de chaque université est lié ci-dessous.",
     "textFrom": "texte de Wikipédia"
   }
 }

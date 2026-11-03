@@ -49,6 +49,7 @@ class PublicUniversityResource extends JsonResource
             'wikipedia_url' => $this->wikipedia_url,
             'nearest_airport' => $this->nearest_airport,
             'about' => $this->about,
+            'overview' => $this->overview,
             // Source links in the guide are admin-only.
             'guide' => $this->guide ? array_merge($this->guide, ['links' => []]) : null,
             'requirements' => $this->requirements ?? [],
