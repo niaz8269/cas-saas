@@ -398,20 +398,20 @@
     "ctaButton": "Temukan program Anda",
     "stats": {
       "students": {
-        "value": "500 rb+",
-        "label": "Mahasiswa internasional"
+        "value": "304",
+        "label": "Universitas dalam katalog"
       },
       "english": {
-        "value": "Inggris",
-        "label": "Program berbahasa"
+        "value": "13,000+",
+        "label": "Program berbahasa Inggris"
       },
       "scholarships": {
-        "value": "Beasiswa",
-        "label": "Tersedia luas"
+        "value": "50,000+",
+        "label": "Program terdaftar beasiswa CSC"
       },
       "recognition": {
-        "value": "Global",
-        "label": "Pengakuan gelar"
+        "value": "43",
+        "label": "Universitas MBBS yang disetujui MoE (2026–27)"
       }
     },
     "reasons": {
@@ -654,7 +654,9 @@
       "autumn2026": "Musim Gugur 2026",
       "spring2027": "Musim Semi 2027",
       "autumn2027": "Musim Gugur 2027",
-      "flexible": "Fleksibel"
+      "flexible": "Fleksibel",
+      "spring2028": "Musim Semi 2028",
+      "autumn2028": "Musim Gugur 2028"
     },
     "funding": {
       "selfFunded": "Dana pribadi",

@@ -20,9 +20,9 @@ import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
+import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 import heroBg from "@/assets/b1.webp"
-import { PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
+import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
 
@@ -91,13 +91,26 @@ export default function SiteHome() {
   const [term, setTerm] = useState("")
   const [contentTab, setContentTab] = useState("questions")
 
+  // Real data only: featured universities and programs are the ones with a published admission window that is open.
   const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1 }) })
-  const programs = useQuery({ queryKey: ["site-programs", "home"], queryFn: () => getSitePrograms({}) })
+  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, openIntake: true }) })
+  const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
-  const featuredUnis = universities.data?.data.slice(0, 6) ?? []
+  const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
-  const weekly = programs.data?.data[0]
   const outstanding = programs.data?.data.slice(0, 5) ?? []
+
+  // "Weekly program": a different open-window English-taught program each calendar week.
+  const openPrograms = programs.data?.data ?? []
+  const weekNumber = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) / (7 * 86_400_000))
+  const weekly = openPrograms.length ? openPrograms[weekNumber % openPrograms.length] : undefined
+  const weeklyUniversity = useQuery({
+    queryKey: ["site-university", weekly?.university?.slug],
+    queryFn: () => getSiteUniversity(weekly!.university!.slug as string),
+    enabled: !!weekly?.university?.slug,
+  })
+  const today = new Date().setHours(0, 0, 0, 0)
+  const weeklyWindow = weeklyUniversity.data?.data.intakes.find((i) => i.status !== "closed" && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -137,13 +150,12 @@ export default function SiteHome() {
             {featuredUnis.length > 0 && (
               <div className="mt-9">
                 <div className="flex flex-wrap items-center justify-center gap-3">
-                  {featuredUnis.slice(0, 3).map((u, i) => (
+                  {featuredUnis.slice(0, 3).map((u) => (
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
                       className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                     >
-                      <span className="absolute top-0 left-0 bg-cas-red px-1.5 py-0.5 text-[11px] font-bold text-white">{i + 1}</span>
                       {u.logo_url
                         ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
                         : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
@@ -204,6 +216,12 @@ export default function SiteHome() {
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level}</p></div>
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, weekly.tuition_fee, weekly.currency)}</p></div>
                 </div>
+                {weeklyWindow && (
+                  <div className="mt-4 rounded-sm bg-subtle px-3 py-2">
+                    <p className="mb-1 text-sm font-medium">{weeklyWindow.name}</p>
+                    <AdmissionWindow opens={weeklyWindow.application_open_date} closes={weeklyWindow.application_deadline} sourceUrl={weeklyWindow.source_url} verifiedOn={weeklyWindow.verified_on} />
+                  </div>
+                )}
                 <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-red-600" /> {t("home.weekly.fullSupport")}</li>
                 </ul>

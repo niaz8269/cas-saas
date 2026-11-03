@@ -398,20 +398,20 @@
     "ctaButton": "Trouvez votre programme",
     "stats": {
       "students": {
-        "value": "500K+",
-        "label": "Étudiants internationaux"
+        "value": "304",
+        "label": "Universités au catalogue"
       },
       "english": {
-        "value": "Anglais",
-        "label": "Programmes enseignés"
+        "value": "13,000+",
+        "label": "Programmes enseignés en anglais"
       },
       "scholarships": {
-        "value": "Bourses",
-        "label": "Largement disponibles"
+        "value": "50,000+",
+        "label": "Programmes inscrits à la bourse CSC"
       },
       "recognition": {
-        "value": "Mondiale",
-        "label": "Reconnaissance des diplômes"
+        "value": "43",
+        "label": "Universités agréées par le MoE pour le MBBS (2026–27)"
       }
     },
     "reasons": {
@@ -654,7 +654,9 @@
       "autumn2026": "Automne 2026",
       "spring2027": "Printemps 2027",
       "autumn2027": "Automne 2027",
-      "flexible": "Flexible"
+      "flexible": "Flexible",
+      "spring2028": "Printemps 2028",
+      "autumn2028": "Automne 2028"
     },
     "funding": {
       "selfFunded": "Autofinancé",

@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             VerifiedCatalogSeeder::class,
             SasCatalogSeeder::class,
             MoeMbbsSeeder::class,
+            GovernmentScholarshipSeeder::class,
+            NewsSeeder::class,
             DocumentTypeSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,

@@ -101,10 +101,13 @@ class PublicCatalogController extends Controller
 
         $programs = Program::query()
             ->where('status', 'active')
-            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
             ->with('university:id,name,slug')
             ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
+            ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('university.intakes', fn ($i) => $i
+                ->where('status', 'open')
+                ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
             ->when($request->filled('filter.language'), fn ($q) => $q->where('teaching_language', 'like', '%'.$request->input('filter.language').'%'))
             ->when($request->filled('filter.max_fee'), fn ($q) => $q->where('tuition_fee', '<=', (float) $request->input('filter.max_fee')))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
@@ -122,7 +125,7 @@ class PublicCatalogController extends Controller
 
         $scholarships = Scholarship::query()
             ->where('status', 'active')
-            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
             ->with('university:id,name,slug')
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
@@ -136,7 +139,7 @@ class PublicCatalogController extends Controller
         // Distinct scholarship types for the filter (active + on active universities).
         $types = Scholarship::query()
             ->where('status', 'active')
-            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+            ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
             ->whereNotNull('type')
             ->where('type', '!=', '')
             ->distinct()

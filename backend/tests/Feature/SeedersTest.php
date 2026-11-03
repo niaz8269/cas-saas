@@ -68,7 +68,8 @@ it('seeds only verified catalog data, each record carrying its official source',
         ->and(University::whereNotNull('name_zh')->count())->toBeGreaterThan(290)
         ->and(Program::where('csc_listed', true)->count())->toBeGreaterThan(0)
         ->and(Intake::count())->toBeGreaterThan(0)
-        ->and(Scholarship::count())->toBeGreaterThan(0);
+        ->and(Scholarship::count())->toBeGreaterThan(0)
+        ->and(Scholarship::where('scope', 'government')->whereNull('university_id')->count())->toBe(7);
 
     // No placeholder content: every published fact names its source page and
     // the day it was checked, and the MoE flag mirrors the official list.

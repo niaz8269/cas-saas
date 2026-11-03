@@ -31,10 +31,10 @@ const FIELDS = [
   { value: "Other", labelKey: "studyPlan.fields.other" },
 ]
 const INTAKES = [
-  { value: "Spring 2026", labelKey: "studyPlan.intakes.spring2026" },
-  { value: "Autumn 2026", labelKey: "studyPlan.intakes.autumn2026" },
   { value: "Spring 2027", labelKey: "studyPlan.intakes.spring2027" },
   { value: "Autumn 2027", labelKey: "studyPlan.intakes.autumn2027" },
+  { value: "Spring 2028", labelKey: "studyPlan.intakes.spring2028" },
+  { value: "Autumn 2028", labelKey: "studyPlan.intakes.autumn2028" },
   { value: "Flexible", labelKey: "studyPlan.intakes.flexible" },
 ]
 const FUNDING = [

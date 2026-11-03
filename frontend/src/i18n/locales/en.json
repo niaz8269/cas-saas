@@ -400,20 +400,20 @@
     "ctaButton": "Find your program",
     "stats": {
       "students": {
-        "value": "500K+",
-        "label": "International students"
+        "value": "304",
+        "label": "Universities in our catalog"
       },
       "english": {
-        "value": "English",
-        "label": "Taught programs"
+        "value": "13,000+",
+        "label": "English-taught programs"
       },
       "scholarships": {
-        "value": "Scholarships",
-        "label": "Widely available"
+        "value": "50,000+",
+        "label": "CSC-listed programs"
       },
       "recognition": {
-        "value": "Global",
-        "label": "Degree recognition"
+        "value": "43",
+        "label": "MoE-approved MBBS universities (2026–27)"
       }
     },
     "reasons": {
@@ -662,7 +662,9 @@
       "autumn2026": "Autumn 2026",
       "spring2027": "Spring 2027",
       "autumn2027": "Autumn 2027",
-      "flexible": "Flexible"
+      "flexible": "Flexible",
+      "spring2028": "Spring 2028",
+      "autumn2028": "Autumn 2028"
     },
     "funding": {
       "selfFunded": "Self-funded",
@@ -900,8 +902,8 @@
       "partialScholarshipTag": "Scholarship"
     },
     "outstanding": {
-      "title": "Outstanding programs",
-      "subtitle": "Popular programs students are applying to right now.",
+      "title": "Programs open for applications",
+      "subtitle": "English-taught programs at universities with an open admission window.",
       "viewAll": "View all programs"
     },
     "featured": {

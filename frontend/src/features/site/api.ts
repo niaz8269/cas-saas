@@ -172,12 +172,13 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
 export const getSiteUniversity = (slug: string) =>
   siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
 
-export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; page?: number } = {}) {
+export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.level) search.set("filter[level]", params.level)
   if (params.language) search.set("filter[language]", params.language)
   if (params.maxFee) search.set("filter[max_fee]", params.maxFee)
+  if (params.openIntake) search.set("filter[open_intake]", "1")
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 

@@ -398,20 +398,20 @@
     "ctaButton": "找到适合你的专业",
     "stats": {
       "students": {
-        "value": "50 万+",
-        "label": "国际学生"
+        "value": "304",
+        "label": "目录中的大学"
       },
       "english": {
-        "value": "英语",
-        "label": "授课专业"
+        "value": "13,000+",
+        "label": "英文授课项目"
       },
       "scholarships": {
-        "value": "奖学金",
-        "label": "广泛提供"
+        "value": "50,000+",
+        "label": "列入 CSC 奖学金的项目"
       },
       "recognition": {
-        "value": "全球",
-        "label": "学位认可"
+        "value": "43",
+        "label": "教育部批准的 MBBS 院校（2026–27）"
       }
     },
     "reasons": {
@@ -654,7 +654,9 @@
       "autumn2026": "2026 年秋季",
       "spring2027": "2027 年春季",
       "autumn2027": "2027 年秋季",
-      "flexible": "时间灵活"
+      "flexible": "时间灵活",
+      "spring2028": "2028 年春季",
+      "autumn2028": "2028 年秋季"
     },
     "funding": {
       "selfFunded": "自费",
