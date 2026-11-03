@@ -11,7 +11,6 @@ import {
   MessageCircle,
   Search,
   Wallet,
-  Zap,
   type LucideIcon,
 } from "lucide-react"
 import type { TFunction } from "i18next"
@@ -45,7 +44,6 @@ const HIGHLIGHTS: { titleKey: string; bodyKey: string; to: string; tagKey: strin
   { titleKey: "home.highlights.medicalTitle", bodyKey: "home.highlights.medicalBody", to: "/site/universities?moe=1", tagKey: "home.highlights.medicalTag", icon: BadgeCheck },
   { titleKey: "home.highlights.deadlinesTitle", bodyKey: "home.highlights.deadlinesBody", to: "/site/universities?topic=deadlines", tagKey: "home.highlights.deadlinesTag", icon: CalendarClock },
   { titleKey: "home.highlights.languageTitle", bodyKey: "home.highlights.languageBody", to: "/site/programs?language=Chinese", tagKey: "home.highlights.languageTag", icon: BookOpen },
-  { titleKey: "home.highlights.fastTrackTitle", bodyKey: "home.highlights.fastTrackBody", to: "/site/services#fast-track", tagKey: "home.highlights.fastTrackTag", icon: Zap },
   { titleKey: "home.highlights.valueTitle", bodyKey: "home.highlights.valueBody", to: "/site/programs?maxFee=20000", tagKey: "home.highlights.valueTag", icon: Wallet },
   { titleKey: "home.highlights.fullScholarshipTitle", bodyKey: "home.highlights.fullScholarshipBody", to: "/site/scholarships?type=full", tagKey: "home.highlights.fullScholarshipTag", icon: Award },
   { titleKey: "home.highlights.partialScholarshipTitle", bodyKey: "home.highlights.partialScholarshipBody", to: "/site/scholarships?type=partial", tagKey: "home.highlights.partialScholarshipTag", icon: Globe2 },
