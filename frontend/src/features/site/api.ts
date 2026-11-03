@@ -105,6 +105,14 @@ export interface SiteRepProfessor {
   photo_url: string | null
 }
 
+export interface SiteCityStat {
+  city: string
+  count: number
+  photo_url: string | null
+  photo_credit: string | null
+  photo_is_city: boolean
+}
+
 export interface SiteGuideBlock {
   h: string
   t: string[]
@@ -167,7 +175,7 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
-  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
+  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[]; city_stats?: SiteCityStat[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
 }
 
 export const getSiteUniversity = (slug: string) =>

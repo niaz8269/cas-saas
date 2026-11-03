@@ -9,6 +9,7 @@ use App\Http\Resources\Public\PublicUniversityResource;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
+use App\Services\Media\ImageService;
 use App\Services\Public\AudienceResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -70,7 +71,41 @@ class PublicCatalogController extends Controller
             ->pluck('city');
 
         return PublicUniversityResource::collection($universities)
-            ->additional(['cities' => $cities, 'audience' => $audience]);
+            ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience]);
+    }
+
+    /**
+     * Per-city university counts with a photo for the destinations page: the
+     * city photo when there is one, otherwise a campus photo of a university
+     * in that city.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function cityStats(): array
+    {
+        $images = app(ImageService::class);
+
+        return University::query()
+            ->where('status', 'active')
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->orderBy('name')
+            ->get(['city', 'cover_path', 'cover_credit', 'cover_is_city'])
+            ->groupBy('city')
+            ->map(function ($rows, $city) use ($images) {
+                $photo = $rows->firstWhere('cover_is_city', true) ?? $rows->first(fn ($u) => filled($u->cover_path));
+
+                return [
+                    'city' => $city,
+                    'count' => $rows->count(),
+                    'photo_url' => $photo ? $images->url($photo->cover_path) : null,
+                    'photo_credit' => $photo?->cover_credit,
+                    'photo_is_city' => (bool) $photo?->cover_is_city,
+                ];
+            })
+            ->sortBy([['count', 'desc'], ['city', 'asc']])
+            ->values()
+            ->all();
     }
 
     public function university(Request $request, string $slug): PublicUniversityResource

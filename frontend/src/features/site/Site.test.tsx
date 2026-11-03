@@ -220,12 +220,14 @@ it("renders the destinations page from the API city list", async () => {
     data: [{ id: 1, name: "BIT", slug: "bit", city: "Beijing" }],
     meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
     cities: ["Beijing", "Shanghai"],
+    city_stats: [{ city: "Beijing", count: 27, photo_url: "/photos/x.webp", photo_credit: "A, CC BY 4.0, via Wikimedia Commons", photo_is_city: true }, { city: "Shanghai", count: 1, photo_url: null, photo_credit: null, photo_is_city: false }],
   })))
 
   renderWithProviders(<SiteCities />)
 
   expect(await screen.findByRole("heading", { name: "Study in China by city", level: 1 })).toBeInTheDocument()
   expect(await screen.findByRole("link", { name: /Beijing/ })).toHaveAttribute("href", "/site/universities?city=Beijing")
+  expect(screen.getByText("27 universities")).toBeInTheDocument()
   expect(screen.getByText("1 university")).toBeInTheDocument()
 })
 
