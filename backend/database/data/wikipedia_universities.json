@@ -3154,6 +3154,20 @@
    "est": "1948",
    "type": "Public university",
    "stu": null
+  },
+  "jiangxi-university-of-chinese-medicine": {
+   "wp": "https://en.wikipedia.org/wiki/Jiangxi_University_of_Traditional_Chinese_Medicine",
+   "x": "Jiangxi University of Traditional Chinese Medicine (Chinese: 江西中医药大学; pinyin: Jiāngxī Zhōngyīyào Dàxué), designated as a medical university in Nanchang, Jiangxi, is an institution of higher learning under the leadership of Jiangxi provincial government.",
+   "est": "1959",
+   "type": "Public",
+   "stu": null
+  },
+  "qinghai-minzu-university": {
+   "wp": "https://en.wikipedia.org/wiki/Qinghai_University_for_Nationalities",
+   "x": "Qinghai University for Nationalities (simplified Chinese: 青海民族大学; traditional Chinese: 青海民族大學; pinyin: Qīnghǎi Mínzú Dàxúe) is a university in Xining, Qinghai, China. It was established in December 1949 and was Qinghai's earliest university of higher education.",
+   "est": "1949",
+   "type": null,
+   "stu": null
   }
  }
 }
