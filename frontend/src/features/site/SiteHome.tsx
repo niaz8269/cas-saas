@@ -73,6 +73,17 @@ const FEATURED: { id: string; labelKey: string; items: { titleKey: string; to: s
   },
 ]
 
+/** Round seal for a hero card: the university's square emblem crop, or its initials when it has none. */
+function HeroLogo({ emblem, name }: { emblem?: string | null; name: string }) {
+  const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")
+
+  return emblem ? (
+    <img src={emblem} alt="" className="size-10 shrink-0 rounded-full object-cover" />
+  ) : (
+    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-xs font-bold text-white">{initials}</span>
+  )
+}
+
 const money = (t: TFunction, v: string | number | null | undefined, c?: string | null) =>
   v == null ? t("home.money.onRequest") : t("home.money.perYear", { amount: Number(v).toLocaleString(), currency: c ?? "CNY" })
 
@@ -152,11 +163,9 @@ export default function SiteHome() {
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
+                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                     >
-                      {u.logo_url
-                        ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
-                        : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
+                      <HeroLogo emblem={u.emblem_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
                     </Link>
                   ))}

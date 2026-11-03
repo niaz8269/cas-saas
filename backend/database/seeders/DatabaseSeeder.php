@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             DocumentTypeSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,
+            UniversityEmblemSeeder::class,
             MirrorPhotosSeeder::class,
         ]);
     }

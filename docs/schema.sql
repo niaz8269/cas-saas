@@ -951,4 +951,8 @@ ALTER TABLE universities
   ADD COLUMN wikipedia_url    VARCHAR(500) NULL AFTER student_count,
   ADD COLUMN cover_is_city    TINYINT(1)   NOT NULL DEFAULT 0 AFTER cover_source_url;
 
+-- ADDENDUM: square seal crop of the logo for round avatars.
+ALTER TABLE universities
+  ADD COLUMN emblem_path VARCHAR(255) NULL AFTER logo_path;
+
 -- =========================== END OF SCHEMA ===========================

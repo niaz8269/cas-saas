@@ -37,6 +37,7 @@ class PublicUniversityResource extends JsonResource
             'address' => $this->address,
             'country' => $this->whenLoaded('country', fn () => $this->country?->name),
             'logo_url' => $images->url($this->logo_path),
+            'emblem_url' => $images->url($this->emblem_path),
             'cover_url' => $images->url($this->cover_path),
             'cover_credit' => $this->cover_credit,
             'cover_is_city' => (bool) $this->cover_is_city,
