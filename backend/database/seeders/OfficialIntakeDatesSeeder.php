@@ -72,6 +72,17 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Xuzhou Medical University', 'Autumn 2026 English-taught Clinical Medicine (closed)', '2026-01-26', '2026-06-30', 'closed', 'https://gjjy.xzhmu.edu.cn/info/1010/2412.htm'],
             ['Harbin Medical University', 'Autumn 2026 MBBS intake (closed)', '2026-03-01', '2026-08-31', 'closed', 'https://cie.hrbmu.edu.cn/info/1081/1901.htm'],
             ['Hebei Medical University', 'Autumn intake (annual schedule: apply 1 Jan – 31 Aug)', '2027-01-01', '2027-08-31', 'open', 'https://iec.hebmu.edu.cn/a/2026/01/14/66E80232D10748D29C0A0CE8B12D021B.html'],
+            // Month-level or annual schedules stated on the university's own pages
+            ['Wenzhou Medical University', 'Autumn intake (annual schedule: apply January – July)', '2027-01-01', '2027-07-31', 'open', 'https://sis.wmu.edu.cn/zw24/lxwy/bksxm/bkszsjz.htm'],
+            ['Zhengzhou University', 'Autumn intake (annual: January – June, per 2025 brochure)', '2027-01-01', '2027-06-30', 'open', 'https://www5.zzu.edu.cn/sie/info/1145/1210.htm'],
+            ['Southwest Medical University', 'Autumn 2026 MBBS intake: July – August 2026 (closed)', '2026-07-01', '2026-08-31', 'closed', 'https://gjjl.swmu.edu.cn/info/1020/2633.htm'],
+            // Dates seen only in a search listing or on a third-party page: shown as unconfirmed
+            ['Capital Medical University', 'Autumn 2026 English-taught Clinical Medicine (closed; listing, unconfirmed)', null, '2026-08-15', 'closed', 'https://admissions.ccmu.edu.cn/uploads/attached/file/20260703/E703561977069793.pdf'],
+            ['China Medical University', 'Autumn 2026 MBBS, Feb – Aug (closed; listing, unconfirmed)', '2026-02-01', '2026-08-31', 'closed', 'https://www.cmu.edu.cn/gjjyxy/zsxx/bks.htm'],
+            ['Shandong University', 'Autumn 2026 MBBS (closed; listing, unconfirmed)', null, '2026-07-31', 'closed', 'http://www.mbbs.sdu.edu.cn/Admission.htm'],
+            ['Soochow University', 'Autumn 2026 undergraduate, last batch (closed; listing, unconfirmed)', null, '2026-06-15', 'closed', 'http://apply.international.suda.edu.cn/apply_en/28005/list.htm'],
+            ['Shantou University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-05-31', 'closed', 'https://www.china-admissions.com/blog/sumc-deadline-may-31-2026/'],
+            ['Ningxia Medical University', 'Autumn intake: apply before 30 July each year (third-party, unconfirmed)', null, '2027-07-30', 'open', 'https://wentchina.com/ningxia-medical-university-prospectus-for/'],
         ];
     }
 }
