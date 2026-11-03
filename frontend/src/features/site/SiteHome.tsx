@@ -73,6 +73,19 @@ const FEATURED: { id: string; labelKey: string; items: { titleKey: string; to: s
   },
 ]
 
+/** Round emblem for a hero card: the logo cropped to a circle from its left edge, where the emblem sits in wide logos; initials until it loads. */
+function HeroLogo({ url, name }: { url: string | null; name: string }) {
+  const [loaded, setLoaded] = useState(false)
+  const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")
+
+  return (
+    <span className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/15 text-xs font-bold text-white">
+      {!loaded && initials}
+      {url && <img src={url} alt="" onLoad={() => setLoaded(true)} className={loaded ? "absolute inset-0 size-full bg-white object-cover object-left" : "hidden"} />}
+    </span>
+  )
+}
+
 const money = (t: TFunction, v: string | number | null | undefined, c?: string | null) =>
   v == null ? t("home.money.onRequest") : t("home.money.perYear", { amount: Number(v).toLocaleString(), currency: c ?? "CNY" })
 
@@ -152,11 +165,9 @@ export default function SiteHome() {
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm border border-cas-red/70 bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
+                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                     >
-                      {u.logo_url
-                        ? <img src={u.logo_url} alt="" className="size-9 shrink-0 rounded-sm bg-white object-contain p-0.5" />
-                        : <span className="flex size-9 shrink-0 items-center justify-center rounded-sm bg-white/15 text-xs font-bold text-white">{u.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")}</span>}
+                      <HeroLogo url={u.logo_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
                     </Link>
                   ))}
