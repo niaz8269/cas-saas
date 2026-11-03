@@ -86,11 +86,15 @@ it('seeds only verified catalog data, each record carrying its official source',
     expect(Intake::whereColumn('application_open_date', '>', 'application_deadline')->count())->toBe(0)
         ->and(Scholarship::whereColumn('application_open_date', '>', 'deadline')->count())->toBe(0);
 
+    // The MoE-approved MBBS universities carry published application windows where an official page states them.
+    expect(Intake::whereHas('university', fn ($q) => $q->where('moe_listed', true))->whereNotNull('application_deadline')->count())->toBeGreaterThanOrEqual(15);
+
     // Idempotency: reseeding replaces rather than duplicates.
     $programs = Program::count();
     $universities = University::count();
     $this->seed(VerifiedCatalogSeeder::class);
     $this->seed(SasCatalogSeeder::class);
+    $this->seed(\Database\Seeders\OfficialIntakeDatesSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });

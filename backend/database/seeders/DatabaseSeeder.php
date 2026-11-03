@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SasCatalogSeeder::class,
             MoeMbbsSeeder::class,
             GovernmentScholarshipSeeder::class,
+            OfficialIntakeDatesSeeder::class,
             NewsSeeder::class,
             DocumentTypeSeeder::class,
             MajorSeeder::class,
