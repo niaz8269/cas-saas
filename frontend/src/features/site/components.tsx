@@ -175,7 +175,7 @@ export function AdmissionWindow({ opens, closes, sourceUrl, verifiedOn, classNam
       </p>
       {sourceUrl && (
         <p className="pl-5 text-[11px] text-muted-foreground">
-          {t(/cucas\./.test(sourceUrl) ? "admissionWindow.sourceCucas" : "admissionWindow.source")}
+          {t(/cucas\./.test(sourceUrl) ? "admissionWindow.sourceCucas" : /sas\.cas\.moe/.test(sourceUrl) ? "admissionWindow.sourceSas" : "admissionWindow.source")}
           {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
         </p>
       )}

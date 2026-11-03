@@ -167,3 +167,18 @@ it('filters universities to those with an admission window that is still open', 
     // Without the filter every active university is listed.
     $this->getJson('/api/v1/public/universities')->assertOk()->assertJsonCount(3, 'data');
 });
+
+it('filters programs to universities with an admission window that is still open', function () {
+    $open = University::factory()->create(['status' => 'active']);
+    $closed = University::factory()->create(['status' => 'active']);
+
+    Program::factory()->for($open)->create(['name' => 'Open Program', 'status' => 'active']);
+    Program::factory()->for($closed)->create(['name' => 'Closed Program', 'status' => 'active']);
+    Intake::factory()->for($open)->create(['status' => 'open', 'application_deadline' => now()->addMonth()->toDateString()]);
+    Intake::factory()->for($closed)->create(['status' => 'closed', 'application_deadline' => now()->subMonth()->toDateString()]);
+
+    $this->getJson('/api/v1/public/programs?filter[open_intake]=1')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'Open Program');
+});

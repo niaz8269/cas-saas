@@ -211,7 +211,7 @@ export default function SiteHome() {
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-3 text-sm">
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.language")}</p><p className="font-semibold">{weekly.teaching_language ?? t("home.weekly.englishDefault")}</p></div>
-                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level}</p></div>
+                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level.replace("_", "-")}</p></div>
                   <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, weekly.tuition_fee, weekly.currency)}</p></div>
                 </div>
                 {weeklyWindow && (
@@ -264,7 +264,7 @@ export default function SiteHome() {
             {outstanding.map((p, i) => (
               <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?ref=outstanding"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
                 <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
-                  <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level}</span>
+                  <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level.replace("_", "-")}</span>
                 </PhotoBanner>
                 <div className="p-5">
                   <h3 className="line-clamp-1 font-semibold text-cas-navy group-hover:text-cas-red-600">{p.name}</h3>

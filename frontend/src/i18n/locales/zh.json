@@ -1462,6 +1462,7 @@
     "source": "大学通知",
     "checked": "{{date}} 核查",
     "nextTbd": "该大学尚未公布下一批招生日期——请向 CAS 咨询确认。",
-    "sourceCucas": "CUCAS 列表——请向大学确认"
+    "sourceCucas": "CUCAS 列表——请向大学确认",
+    "sourceSas": "SAS 收录"
   }
 }

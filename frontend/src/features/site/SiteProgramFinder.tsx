@@ -148,7 +148,7 @@ export default function SiteProgramFinder() {
           <div key={p.id} className="flex flex-col gap-3 rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cas-red/40 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level}</span>
+                <span className="inline-flex items-center rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-semibold text-cas-navy capitalize">{p.level.replace("_", "-")}</span>
                 <h2 className="font-semibold text-cas-navy">{p.name}</h2>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">

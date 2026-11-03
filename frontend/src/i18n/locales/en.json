@@ -1464,6 +1464,7 @@
     "source": "University notice",
     "checked": "checked {{date}}",
     "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them.",
-    "sourceCucas": "CUCAS listing — confirm with the university"
+    "sourceCucas": "CUCAS listing — confirm with the university",
+    "sourceSas": "SAS listing"
   }
 }

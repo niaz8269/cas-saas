@@ -101,7 +101,7 @@ class PublicCatalogController extends Controller
 
         $programs = Program::query()
             ->where('status', 'active')
-            ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
+            ->whereHas('university', fn ($q) => $q->where('status', 'active'))
             ->with('university:id,name,slug')
             ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))

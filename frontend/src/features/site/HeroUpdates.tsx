@@ -118,7 +118,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                 <Row
                   key={p.id}
                   to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
-                  left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level}</span></span></>}
+                  left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level.replace("_", "-")}</span></span></>}
                   right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))
