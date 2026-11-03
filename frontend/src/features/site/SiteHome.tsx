@@ -128,9 +128,9 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-20 text-center">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-28 pb-6 text-center">
           <div className="w-full max-w-5xl">
-            <h1 className="text-4xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-6xl md:text-[5.5rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
+            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-[4rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
             {featuredUnis[0] ? (
               <Link
                 to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs?ref=featured"}
@@ -146,7 +146,7 @@ export default function SiteHome() {
 
             {/* Ranked featured universities + expander (reference's numbered cards) */}
             {featuredUnis.length > 0 && (
-              <div className="mt-9">
+              <div className="mt-7">
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   {featuredUnis.slice(0, 3).map((u) => (
                     <Link
