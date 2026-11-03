@@ -112,6 +112,8 @@ class UniversityLocationSeeder extends Seeder
             University::where('slug', $slug)->update(['city' => $city, 'province' => $province]);
         }
 
+        University::where('slug', 'jilin-medical-university')->whereNull('name_zh')->update(['name_zh' => '吉林医药学院']);
+
         // Tidy photo credits that carry Commons' placeholder text instead of an author name.
         foreach (University::where('cover_credit', 'like', 'No machine-readable author provided.%')->get(['id', 'cover_credit']) as $uni) {
             $credit = preg_replace('/^No machine-readable author provided\. (\S+) assu[^,]*, (.+)$/u', '$1 (assumed author), $2', $uni->cover_credit);
