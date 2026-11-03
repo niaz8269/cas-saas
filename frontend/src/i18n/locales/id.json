@@ -851,7 +851,10 @@
     "search": {
       "placeholder": "MASUKKAN NAMA UNIVERSITAS ATAU PROGRAM",
       "ariaSearchField": "Cari universitas atau program",
-      "ariaSearchButton": "Cari"
+      "ariaSearchButton": "Cari",
+      "label": "Temukan universitas atau program Anda",
+      "button": "Cari",
+      "popular": "Populer:"
     },
     "popularSearches": {
       "chineseLanguage": "Program Bahasa Mandarin",

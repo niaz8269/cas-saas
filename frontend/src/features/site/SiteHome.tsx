@@ -179,22 +179,28 @@ export default function SiteHome() {
 
         {/* Search bar — sits over the bottom of the full-screen image, fully visible */}
         <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-8">
-          <div className="rounded-sm bg-white p-5 shadow-xl ring-1 ring-black/5 sm:p-6">
-            <form onSubmit={runSearch} className="flex">
-              <input
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-                placeholder={t("home.search.placeholder")}
-                aria-label={t("home.search.ariaSearchField")}
-                className="flex-1 rounded-l-sm border-2 border-r-0 border-cas-red bg-white px-4 py-3 text-sm text-ink placeholder:text-gray-400 outline-none focus:border-cas-red-600"
-              />
-              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex items-center rounded-r-sm bg-cas-red px-6 text-white transition-colors hover:bg-cas-red-600">
-                <Search className="size-5" />
+          <div className="rounded-lg bg-white p-5 shadow-2xl ring-1 ring-black/5 sm:p-7">
+            <p className="text-center text-sm font-semibold tracking-wide text-cas-navy">{t("home.search.label")}</p>
+            <form onSubmit={runSearch} className="mt-3 flex items-stretch gap-2">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  placeholder={t("home.search.placeholder")}
+                  aria-label={t("home.search.ariaSearchField")}
+                  className="h-12 w-full rounded-md border border-slate-300 bg-white pr-4 pl-12 text-base text-slate-900 caret-cas-red shadow-inner placeholder:text-slate-400 outline-none transition-colors focus:border-cas-red focus:ring-2 focus:ring-cas-red/20"
+                />
+              </div>
+              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-12 items-center gap-2 rounded-md bg-cas-red px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
+                <span className="hidden sm:inline">{t("home.search.button")}</span>
+                <Search className="size-5 sm:hidden" />
               </button>
             </form>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-slate-500">{t("home.search.popular")}</span>
               {POPULAR_SEARCHES.map(([labelKey, to]) => (
-                <Link key={labelKey} to={to} className="rounded-sm bg-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:bg-cas-red-50 hover:text-cas-red-600">
+                <Link key={labelKey} to={to} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-cas-red/40 hover:bg-cas-red-50 hover:text-cas-red-600">
                   {t(labelKey)}
                 </Link>
               ))}

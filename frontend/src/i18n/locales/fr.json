@@ -851,7 +851,10 @@
     "search": {
       "placeholder": "SAISISSEZ LE NOM D'UNE UNIVERSITÉ OU D'UN PROGRAMME",
       "ariaSearchField": "Rechercher des universités ou des programmes",
-      "ariaSearchButton": "Rechercher"
+      "ariaSearchButton": "Rechercher",
+      "label": "Trouvez votre université ou programme",
+      "button": "Rechercher",
+      "popular": "Populaires :"
     },
     "popularSearches": {
       "chineseLanguage": "Programme de langue chinoise",

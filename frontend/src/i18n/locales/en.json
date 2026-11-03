@@ -859,7 +859,10 @@
     "search": {
       "placeholder": "ENTER THE NAME OF A UNIVERSITY OR A PROGRAM",
       "ariaSearchField": "Search universities or programs",
-      "ariaSearchButton": "Search"
+      "ariaSearchButton": "Search",
+      "label": "Find your university or program",
+      "button": "Search",
+      "popular": "Popular:"
     },
     "popularSearches": {
       "chineseLanguage": "Chinese Language Program",

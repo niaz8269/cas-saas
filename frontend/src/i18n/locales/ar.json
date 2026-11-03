@@ -863,7 +863,10 @@
     "search": {
       "placeholder": "أدخل اسم جامعة أو برنامج",
       "ariaSearchField": "ابحث عن الجامعات أو البرامج",
-      "ariaSearchButton": "بحث"
+      "ariaSearchButton": "بحث",
+      "label": "ابحث عن جامعتك أو برنامجك",
+      "button": "بحث",
+      "popular": "الأكثر بحثًا:"
     },
     "popularSearches": {
       "chineseLanguage": "برنامج اللغة الصينية",
