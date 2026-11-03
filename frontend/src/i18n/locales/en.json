@@ -159,7 +159,16 @@
     "factFounded": "Founded",
     "factType": "Type",
     "factStudents": "Students",
-    "wikipediaCredit": "Facts and introduction from"
+    "wikipediaCredit": "Facts and introduction from",
+    "generalRequirementsTitle": "General requirements for international students (each university and program sets its own exact checklist)",
+    "generalRequirements": [
+      "Non-Chinese citizen with a valid passport, in good physical and mental health.",
+      "Bachelor's: high-school graduate. Master's: bachelor's degree. Doctorate: master's degree.",
+      "Bachelor's applicants take the CSCA (China Scholastic Competency Assessment).",
+      "Chinese-taught programs: an HSK certificate (the level depends on the program). English-taught programs: proof of English proficiency unless you studied in English.",
+      "Certified academic transcripts, a physical examination form and a police clearance certificate.",
+      "CAS confirms the exact requirements, deadlines and fees for your course before you apply."
+    ]
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",

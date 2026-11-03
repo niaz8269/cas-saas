@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils"
 const money = (v: string | number | null | undefined, currency?: string | null) =>
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()
 
-const levelLabel = (l: string) => l.replace(/\b\w/g, (c) => c.toUpperCase())
+const levelLabel = (l: string) => l.replace(/_/g, "-").replace(/^\w/, (c) => c.toUpperCase())
 
 export default function SiteUniversity() {
   const { t } = useTranslation()
@@ -422,7 +422,14 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">{t("university.requirementsFallback")}</p>
+          <div className="mt-2">
+            <p className="text-sm text-muted-foreground">{t("university.generalRequirementsTitle")}</p>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {(t("university.generalRequirements", { returnObjects: true }) as string[]).map((r, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-cas-navy" />{r}</li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
       <div className="flex flex-col items-start justify-between gap-3 rounded-sm bg-cas-navy p-6 text-white sm:flex-row sm:items-center">

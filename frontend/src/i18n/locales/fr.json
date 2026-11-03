@@ -157,7 +157,16 @@
     "factFounded": "Fondée en",
     "factType": "Type",
     "factStudents": "Étudiants",
-    "wikipediaCredit": "Faits et introduction issus de"
+    "wikipediaCredit": "Faits et introduction issus de",
+    "generalRequirementsTitle": "Conditions générales pour les étudiants internationaux (chaque université et programme fixe sa propre liste)",
+    "generalRequirements": [
+      "Être de nationalité non chinoise, avec un passeport valide, en bonne santé physique et mentale.",
+      "Licence : baccalauréat. Master : licence. Doctorat : master.",
+      "Les candidats en licence passent le CSCA (China Scholastic Competency Assessment).",
+      "Programmes en chinois : certificat HSK (niveau selon le programme). Programmes en anglais : preuve de niveau d'anglais, sauf études en anglais.",
+      "Relevés de notes certifiés, formulaire d'examen médical et casier judiciaire vierge.",
+      "CAS confirme les conditions, dates limites et frais exacts de votre cursus avant la candidature."
+    ]
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",

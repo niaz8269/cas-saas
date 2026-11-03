@@ -157,7 +157,16 @@
     "factFounded": "Didirikan",
     "factType": "Jenis",
     "factStudents": "Mahasiswa",
-    "wikipediaCredit": "Fakta dan pengantar dari"
+    "wikipediaCredit": "Fakta dan pengantar dari",
+    "generalRequirementsTitle": "Persyaratan umum mahasiswa internasional (setiap universitas dan program menetapkan daftar persyaratannya sendiri)",
+    "generalRequirements": [
+      "Warga negara non-Tiongkok dengan paspor yang berlaku, sehat jasmani dan rohani.",
+      "Sarjana: lulusan SMA. Magister: gelar sarjana. Doktor: gelar magister.",
+      "Pelamar program sarjana mengikuti CSCA (China Scholastic Competency Assessment).",
+      "Program berbahasa Mandarin: sertifikat HSK (tingkat sesuai program). Program berbahasa Inggris: bukti kemampuan bahasa Inggris kecuali pernah belajar dalam bahasa Inggris.",
+      "Transkrip akademik tersertifikasi, formulir pemeriksaan kesehatan, dan surat keterangan catatan kepolisian.",
+      "CAS memastikan persyaratan, batas waktu, dan biaya yang tepat untuk program Anda sebelum Anda mendaftar."
+    ]
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",

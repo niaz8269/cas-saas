@@ -128,7 +128,7 @@ class PublicCatalogController extends Controller
 
     /**
      * Program finder across all active universities. Filterable by level,
-     * teaching language, budget and university; sorted cheapest-first.
+     * teaching language, budget and university; degrees first, cheapest first within a level.
      */
     public function programs(Request $request): AnonymousResourceCollection
     {
@@ -146,6 +146,8 @@ class PublicCatalogController extends Controller
             ->when($request->filled('filter.language'), fn ($q) => $q->where('teaching_language', 'like', '%'.$request->input('filter.language').'%'))
             ->when($request->filled('filter.max_fee'), fn ($q) => $q->where('tuition_fee', '<=', (float) $request->input('filter.max_fee')))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
+            // Degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
+            ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
             ->orderByRaw('tuition_fee is null, tuition_fee')
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
