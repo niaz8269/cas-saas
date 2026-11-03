@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Http;
  */
 class FetchUniversityLogos extends Command
 {
-    protected $signature = 'catalog:fetch-logos {--only=* : slugs to limit the run}';
+    protected $signature = 'catalog:fetch-logos {--only=* : slugs to limit the run} {--https : force https for every website}';
 
     protected $description = 'Download logo candidates from university websites';
 
@@ -88,7 +88,9 @@ class FetchUniversityLogos extends Command
 
     private function url(string $website): string
     {
-        return preg_match('#^https?://#i', $website) ? $website : 'http://'.$website;
+        $website = preg_replace('#^https?://#i', '', $website);
+
+        return ($this->option('https') ? 'https://' : 'http://').$website;
     }
 
     /**

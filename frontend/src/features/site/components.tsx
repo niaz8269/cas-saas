@@ -79,9 +79,11 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
-          {u.logo_url && (
+          {u.emblem_url ? (
+            <img src={u.emblem_url} alt="" loading="lazy" decoding="async" className="size-12 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5" />
+          ) : u.logo_url ? (
             <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
-          )}
+          ) : null}
           <div className="min-w-0">
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</h3>
             {u.name_zh && <p className="text-xs text-muted-foreground">{u.name_zh}</p>}

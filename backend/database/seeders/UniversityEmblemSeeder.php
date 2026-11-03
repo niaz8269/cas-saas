@@ -36,5 +36,19 @@ class UniversityEmblemSeeder extends Seeder
                 'logo_path' => $uni->logo_path ?: "/logos/{$name}.png",
             ])->save();
         }
+
+        // Logos and seals found on each university's own website (see catalog:fetch-logos).
+        $path = database_path('data/university_logos_auto.json');
+        $auto = is_file($path) ? (json_decode(file_get_contents($path), true) ?: []) : [];
+        foreach ($auto as $slug => $files) {
+            $uni = University::where('slug', $slug)->first();
+            if (! $uni) {
+                continue;
+            }
+            $uni->forceFill([
+                'logo_path' => $uni->logo_path ?: ($files['logo'] ?? null),
+                'emblem_path' => $uni->emblem_path ?: ($files['emblem'] ?? null),
+            ])->save();
+        }
     }
 }

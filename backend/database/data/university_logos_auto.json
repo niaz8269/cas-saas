@@ -1,0 +1,688 @@
+{
+ "anhui-agricultural-university": {
+  "logo": "/logos/anhui-agricultural-university.png",
+  "emblem": "/logos/emblems/anhui-agricultural-university.png"
+ },
+ "anhui-normal-university": {
+  "logo": "/logos/anhui-normal-university.png",
+  "emblem": "/logos/emblems/anhui-normal-university.png"
+ },
+ "anhui-university": {
+  "logo": "/logos/anhui-university.png",
+  "emblem": "/logos/emblems/anhui-university.png"
+ },
+ "anshan-normal-university": {
+  "logo": "/logos/anshan-normal-university.png",
+  "emblem": "/logos/emblems/anshan-normal-university.png"
+ },
+ "beihang-university": {
+  "logo": "/logos/beihang-university.png",
+  "emblem": "/logos/emblems/beihang-university.png"
+ },
+ "beijing-international-studies-university": {
+  "emblem": "/logos/emblems/beijing-international-studies-university.png"
+ },
+ "beijing-jiaotong-university": {
+  "logo": "/logos/beijing-jiaotong-university.png",
+  "emblem": "/logos/emblems/beijing-jiaotong-university.png"
+ },
+ "beijing-language-and-culture-university": {
+  "logo": "/logos/beijing-language-and-culture-university.png",
+  "emblem": "/logos/emblems/beijing-language-and-culture-university.png"
+ },
+ "beijing-normal-university": {
+  "logo": "/logos/beijing-normal-university.png"
+ },
+ "beijing-technology-and-business-university": {
+  "logo": "/logos/beijing-technology-and-business-university.png",
+  "emblem": "/logos/emblems/beijing-technology-and-business-university.png"
+ },
+ "beijing-university-of-chemical-technology": {
+  "logo": "/logos/beijing-university-of-chemical-technology.png",
+  "emblem": "/logos/emblems/beijing-university-of-chemical-technology.png"
+ },
+ "beijing-university-of-chinese-medicine": {
+  "logo": "/logos/beijing-university-of-chinese-medicine.png",
+  "emblem": "/logos/emblems/beijing-university-of-chinese-medicine.png"
+ },
+ "beijing-university-of-technology": {
+  "logo": "/logos/beijing-university-of-technology.png",
+  "emblem": "/logos/emblems/beijing-university-of-technology.png"
+ },
+ "capital-medical-university": {
+  "logo": "/logos/capital-medical-university.png",
+  "emblem": "/logos/emblems/capital-medical-university.png"
+ },
+ "capital-university-of-physical-education-and-sports": {
+  "logo": "/logos/capital-university-of-physical-education-and-sports.png"
+ },
+ "central-china-normal-university": {
+  "logo": "/logos/central-china-normal-university.png",
+  "emblem": "/logos/emblems/central-china-normal-university.png"
+ },
+ "central-conservatory-of-music": {
+  "logo": "/logos/central-conservatory-of-music.png",
+  "emblem": "/logos/emblems/central-conservatory-of-music.png"
+ },
+ "central-south-university": {
+  "logo": "/logos/central-south-university.png"
+ },
+ "central-university-of-finance-and-economics": {
+  "logo": "/logos/central-university-of-finance-and-economics.png"
+ },
+ "changan-university": {
+  "logo": "/logos/changan-university.png",
+  "emblem": "/logos/emblems/changan-university.png"
+ },
+ "changsha-university-of-science-and-technology": {
+  "logo": "/logos/changsha-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/changsha-university-of-science-and-technology.png"
+ },
+ "china-foreign-affairs-university": {
+  "logo": "/logos/china-foreign-affairs-university.png",
+  "emblem": "/logos/emblems/china-foreign-affairs-university.png"
+ },
+ "china-pharmaceutical-university": {
+  "logo": "/logos/china-pharmaceutical-university.png",
+  "emblem": "/logos/emblems/china-pharmaceutical-university.png"
+ },
+ "china-three-gorges-university": {
+  "logo": "/logos/china-three-gorges-university.png",
+  "emblem": "/logos/emblems/china-three-gorges-university.png"
+ },
+ "china-university-of-geosciences-beijing": {
+  "logo": "/logos/china-university-of-geosciences-beijing.png",
+  "emblem": "/logos/emblems/china-university-of-geosciences-beijing.png"
+ },
+ "china-university-of-geosciences-wuhan": {
+  "logo": "/logos/china-university-of-geosciences-wuhan.png",
+  "emblem": "/logos/emblems/china-university-of-geosciences-wuhan.png"
+ },
+ "china-university-of-mining-and-technology": {
+  "logo": "/logos/china-university-of-mining-and-technology.png",
+  "emblem": "/logos/emblems/china-university-of-mining-and-technology.png"
+ },
+ "china-university-of-mining-and-technology-beijing": {
+  "logo": "/logos/china-university-of-mining-and-technology-beijing.png",
+  "emblem": "/logos/emblems/china-university-of-mining-and-technology-beijing.png"
+ },
+ "china-university-of-petroleum-beijing": {
+  "logo": "/logos/china-university-of-petroleum-beijing.png",
+  "emblem": "/logos/emblems/china-university-of-petroleum-beijing.png"
+ },
+ "china-university-of-petroleum-east-china": {
+  "logo": "/logos/china-university-of-petroleum-east-china.png",
+  "emblem": "/logos/emblems/china-university-of-petroleum-east-china.png"
+ },
+ "china-youth-university-of-political-studies": {
+  "logo": "/logos/china-youth-university-of-political-studies.png",
+  "emblem": "/logos/emblems/china-youth-university-of-political-studies.png"
+ },
+ "chongqing-jiaotong-university": {
+  "logo": "/logos/chongqing-jiaotong-university.png",
+  "emblem": "/logos/emblems/chongqing-jiaotong-university.png"
+ },
+ "chongqing-medical-university": {
+  "logo": "/logos/chongqing-medical-university.png",
+  "emblem": "/logos/emblems/chongqing-medical-university.png"
+ },
+ "chongqing-university": {
+  "logo": "/logos/chongqing-university.png",
+  "emblem": "/logos/emblems/chongqing-university.png"
+ },
+ "chongqing-university-of-posts-and-telecommunications": {
+  "logo": "/logos/chongqing-university-of-posts-and-telecommunications.png",
+  "emblem": "/logos/emblems/chongqing-university-of-posts-and-telecommunications.png"
+ },
+ "dalian-maritime-university": {
+  "logo": "/logos/dalian-maritime-university.png",
+  "emblem": "/logos/emblems/dalian-maritime-university.png"
+ },
+ "dalian-university-of-foreign-languages": {
+  "logo": "/logos/dalian-university-of-foreign-languages.png"
+ },
+ "dongbei-university-of-finance-and-economics": {
+  "logo": "/logos/dongbei-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/dongbei-university-of-finance-and-economics.png"
+ },
+ "donghua-university": {
+  "logo": "/logos/donghua-university.png"
+ },
+ "east-china-university-of-political-science-and-law": {
+  "logo": "/logos/east-china-university-of-political-science-and-law.png",
+  "emblem": "/logos/emblems/east-china-university-of-political-science-and-law.png"
+ },
+ "east-china-university-of-science-and-technology": {
+  "logo": "/logos/east-china-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/east-china-university-of-science-and-technology.png"
+ },
+ "fudan-university": {
+  "logo": "/logos/fudan-university.png"
+ },
+ "fujian-agriculture-and-forestry-university": {
+  "logo": "/logos/fujian-agriculture-and-forestry-university.png",
+  "emblem": "/logos/emblems/fujian-agriculture-and-forestry-university.png"
+ },
+ "fujian-medical-university": {
+  "logo": "/logos/fujian-medical-university.png",
+  "emblem": "/logos/emblems/fujian-medical-university.png"
+ },
+ "fujian-normal-university": {
+  "logo": "/logos/fujian-normal-university.png",
+  "emblem": "/logos/emblems/fujian-normal-university.png"
+ },
+ "fujian-university-of-technology": {
+  "logo": "/logos/fujian-university-of-technology.png",
+  "emblem": "/logos/emblems/fujian-university-of-technology.png"
+ },
+ "fuzhou-university": {
+  "logo": "/logos/fuzhou-university.png"
+ },
+ "guangdong-university-of-foreign-studies": {
+  "logo": "/logos/guangdong-university-of-foreign-studies.png",
+  "emblem": "/logos/emblems/guangdong-university-of-foreign-studies.png"
+ },
+ "guangxi-medical-university": {
+  "logo": "/logos/guangxi-medical-university.png",
+  "emblem": "/logos/emblems/guangxi-medical-university.png"
+ },
+ "guangxi-minzu-university": {
+  "logo": "/logos/guangxi-minzu-university.png"
+ },
+ "guangxi-normal-university": {
+  "logo": "/logos/guangxi-normal-university.png",
+  "emblem": "/logos/emblems/guangxi-normal-university.png"
+ },
+ "guangzhou-medical-university": {
+  "logo": "/logos/guangzhou-medical-university.png",
+  "emblem": "/logos/emblems/guangzhou-medical-university.png"
+ },
+ "guangzhou-university-of-chinese-medicine": {
+  "logo": "/logos/guangzhou-university-of-chinese-medicine.png",
+  "emblem": "/logos/emblems/guangzhou-university-of-chinese-medicine.png"
+ },
+ "guizhou-medical-university": {
+  "logo": "/logos/guizhou-medical-university.png",
+  "emblem": "/logos/emblems/guizhou-medical-university.png"
+ },
+ "guizhou-minzu-university": {
+  "logo": "/logos/guizhou-minzu-university.png",
+  "emblem": "/logos/emblems/guizhou-minzu-university.png"
+ },
+ "guizhou-normal-university": {
+  "logo": "/logos/guizhou-normal-university.png",
+  "emblem": "/logos/emblems/guizhou-normal-university.png"
+ },
+ "guizhou-university": {
+  "logo": "/logos/guizhou-university.png"
+ },
+ "guizhou-university-of-finance-and-economics": {
+  "emblem": "/logos/emblems/guizhou-university-of-finance-and-economics.png"
+ },
+ "harbin-engineering-university": {
+  "logo": "/logos/harbin-engineering-university.png",
+  "emblem": "/logos/emblems/harbin-engineering-university.png"
+ },
+ "harbin-institute-of-technology": {
+  "logo": "/logos/harbin-institute-of-technology.png",
+  "emblem": "/logos/emblems/harbin-institute-of-technology.png"
+ },
+ "harbin-medical-university": {
+  "logo": "/logos/harbin-medical-university.png",
+  "emblem": "/logos/emblems/harbin-medical-university.png"
+ },
+ "harbin-university-of-science-and-technology": {
+  "logo": "/logos/harbin-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/harbin-university-of-science-and-technology.png"
+ },
+ "hebei-medical-university": {
+  "logo": "/logos/hebei-medical-university.png",
+  "emblem": "/logos/emblems/hebei-medical-university.png"
+ },
+ "hebei-normal-university": {
+  "logo": "/logos/hebei-normal-university.png"
+ },
+ "hebei-university-of-technology": {
+  "logo": "/logos/hebei-university-of-technology.png",
+  "emblem": "/logos/emblems/hebei-university-of-technology.png"
+ },
+ "hefei-university-of-technology": {
+  "logo": "/logos/hefei-university-of-technology.png",
+  "emblem": "/logos/emblems/hefei-university-of-technology.png"
+ },
+ "heilongjiang-university": {
+  "logo": "/logos/heilongjiang-university.png",
+  "emblem": "/logos/emblems/heilongjiang-university.png"
+ },
+ "heilongjiang-university-of-chinese-medicine": {
+  "logo": "/logos/heilongjiang-university-of-chinese-medicine.png",
+  "emblem": "/logos/emblems/heilongjiang-university-of-chinese-medicine.png"
+ },
+ "henan-university": {
+  "logo": "/logos/henan-university.png",
+  "emblem": "/logos/emblems/henan-university.png"
+ },
+ "henan-university-of-chinese-medicine": {
+  "logo": "/logos/henan-university-of-chinese-medicine.png",
+  "emblem": "/logos/emblems/henan-university-of-chinese-medicine.png"
+ },
+ "henan-university-of-technology": {
+  "logo": "/logos/henan-university-of-technology.png",
+  "emblem": "/logos/emblems/henan-university-of-technology.png"
+ },
+ "huangshan-university": {
+  "emblem": "/logos/emblems/huangshan-university.png"
+ },
+ "huaqiao-university": {
+  "logo": "/logos/huaqiao-university.png",
+  "emblem": "/logos/emblems/huaqiao-university.png"
+ },
+ "huazhong-agricultural-university": {
+  "logo": "/logos/huazhong-agricultural-university.png",
+  "emblem": "/logos/emblems/huazhong-agricultural-university.png"
+ },
+ "huazhong-university-of-science-and-technology": {
+  "logo": "/logos/huazhong-university-of-science-and-technology.png"
+ },
+ "hunan-normal-university": {},
+ "hunan-university": {
+  "logo": "/logos/hunan-university.png",
+  "emblem": "/logos/emblems/hunan-university.png"
+ },
+ "inner-mongolia-normal-university": {
+  "logo": "/logos/inner-mongolia-normal-university.png",
+  "emblem": "/logos/emblems/inner-mongolia-normal-university.png"
+ },
+ "inner-mongolia-university-of-technology": {
+  "logo": "/logos/inner-mongolia-university-of-technology.png"
+ },
+ "jiangnan-university": {
+  "logo": "/logos/jiangnan-university.png"
+ },
+ "jiangsu-normal-university": {
+  "logo": "/logos/jiangsu-normal-university.png",
+  "emblem": "/logos/emblems/jiangsu-normal-university.png"
+ },
+ "jiangxi-agricultural-university": {
+  "logo": "/logos/jiangxi-agricultural-university.png",
+  "emblem": "/logos/emblems/jiangxi-agricultural-university.png"
+ },
+ "jiangxi-university-of-finance-and-economics": {
+  "logo": "/logos/jiangxi-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/jiangxi-university-of-finance-and-economics.png"
+ },
+ "jilin-university": {
+  "logo": "/logos/jilin-university.png",
+  "emblem": "/logos/emblems/jilin-university.png"
+ },
+ "jinan-university": {
+  "logo": "/logos/jinan-university.png",
+  "emblem": "/logos/emblems/jinan-university.png"
+ },
+ "jinzhou-medical-university": {
+  "logo": "/logos/jinzhou-medical-university.png",
+  "emblem": "/logos/emblems/jinzhou-medical-university.png"
+ },
+ "kunming-university-of-science-and-technology": {
+  "logo": "/logos/kunming-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/kunming-university-of-science-and-technology.png"
+ },
+ "lanzhou-jiaotong-university": {
+  "logo": "/logos/lanzhou-jiaotong-university.png",
+  "emblem": "/logos/emblems/lanzhou-jiaotong-university.png"
+ },
+ "liaoning-normal-university": {
+  "logo": "/logos/liaoning-normal-university.png"
+ },
+ "liaoning-university": {
+  "logo": "/logos/liaoning-university.png",
+  "emblem": "/logos/emblems/liaoning-university.png"
+ },
+ "liaoning-university-of-technology": {
+  "logo": "/logos/liaoning-university-of-technology.png",
+  "emblem": "/logos/emblems/liaoning-university-of-technology.png"
+ },
+ "minzu-university-of-china": {
+  "logo": "/logos/minzu-university-of-china.png"
+ },
+ "nanchang-hangkong-university": {
+  "logo": "/logos/nanchang-hangkong-university.png",
+  "emblem": "/logos/emblems/nanchang-hangkong-university.png"
+ },
+ "nanchang-university": {
+  "logo": "/logos/nanchang-university.png",
+  "emblem": "/logos/emblems/nanchang-university.png"
+ },
+ "nanjing-forestry-university": {
+  "logo": "/logos/nanjing-forestry-university.png",
+  "emblem": "/logos/emblems/nanjing-forestry-university.png"
+ },
+ "nanjing-medical-university": {
+  "logo": "/logos/nanjing-medical-university.png",
+  "emblem": "/logos/emblems/nanjing-medical-university.png"
+ },
+ "nanjing-university": {
+  "logo": "/logos/nanjing-university.png",
+  "emblem": "/logos/emblems/nanjing-university.png"
+ },
+ "nanjing-university-of-aeronautics-and-astronautics": {
+  "logo": "/logos/nanjing-university-of-aeronautics-and-astronautics.png",
+  "emblem": "/logos/emblems/nanjing-university-of-aeronautics-and-astronautics.png"
+ },
+ "nanjing-university-of-posts-and-telecommunications": {
+  "logo": "/logos/nanjing-university-of-posts-and-telecommunications.png"
+ },
+ "nanjing-university-of-the-arts": {
+  "logo": "/logos/nanjing-university-of-the-arts.png",
+  "emblem": "/logos/emblems/nanjing-university-of-the-arts.png"
+ },
+ "nankai-university": {
+  "logo": "/logos/nankai-university.png",
+  "emblem": "/logos/emblems/nankai-university.png"
+ },
+ "ningbo-university": {
+  "logo": "/logos/ningbo-university.png",
+  "emblem": "/logos/emblems/ningbo-university.png"
+ },
+ "ningxia-university": {
+  "logo": "/logos/ningxia-university.png",
+  "emblem": "/logos/emblems/ningxia-university.png"
+ },
+ "north-china-electric-power-university": {
+  "logo": "/logos/north-china-electric-power-university.png"
+ },
+ "north-china-university-of-technology": {
+  "logo": "/logos/north-china-university-of-technology.png",
+  "emblem": "/logos/emblems/north-china-university-of-technology.png"
+ },
+ "northeast-agricultural-university": {
+  "logo": "/logos/northeast-agricultural-university.png",
+  "emblem": "/logos/emblems/northeast-agricultural-university.png"
+ },
+ "northeast-forestry-university": {
+  "logo": "/logos/northeast-forestry-university.png",
+  "emblem": "/logos/emblems/northeast-forestry-university.png"
+ },
+ "northeast-normal-university": {
+  "logo": "/logos/northeast-normal-university.png"
+ },
+ "northeastern-university": {
+  "logo": "/logos/northeastern-university.png",
+  "emblem": "/logos/emblems/northeastern-university.png"
+ },
+ "northwest-af-university": {
+  "logo": "/logos/northwest-af-university.png",
+  "emblem": "/logos/emblems/northwest-af-university.png"
+ },
+ "northwest-university": {
+  "logo": "/logos/northwest-university.png",
+  "emblem": "/logos/emblems/northwest-university.png"
+ },
+ "northwestern-polytechnical-university": {
+  "logo": "/logos/northwestern-polytechnical-university.png",
+  "emblem": "/logos/emblems/northwestern-polytechnical-university.png"
+ },
+ "qingdao-university": {
+  "logo": "/logos/qingdao-university.png",
+  "emblem": "/logos/emblems/qingdao-university.png"
+ },
+ "qingdao-university-of-science-and-technology": {
+  "logo": "/logos/qingdao-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/qingdao-university-of-science-and-technology.png"
+ },
+ "qinghai-university": {
+  "logo": "/logos/qinghai-university.png",
+  "emblem": "/logos/emblems/qinghai-university.png"
+ },
+ "qiqihar-university": {
+  "logo": "/logos/qiqihar-university.png",
+  "emblem": "/logos/emblems/qiqihar-university.png"
+ },
+ "renmin-university-of-china": {
+  "logo": "/logos/renmin-university-of-china.png"
+ },
+ "shaanxi-normal-university": {
+  "logo": "/logos/shaanxi-normal-university.png",
+  "emblem": "/logos/emblems/shaanxi-normal-university.png"
+ },
+ "shaanxi-university-of-chinese-medicine": {
+  "logo": "/logos/shaanxi-university-of-chinese-medicine.png",
+  "emblem": "/logos/emblems/shaanxi-university-of-chinese-medicine.png"
+ },
+ "shandong-normal-university": {
+  "emblem": "/logos/emblems/shandong-normal-university.png"
+ },
+ "shandong-university-of-science-and-technology": {},
+ "shandong-university-of-technology": {
+  "logo": "/logos/shandong-university-of-technology.png",
+  "emblem": "/logos/emblems/shandong-university-of-technology.png"
+ },
+ "shanghai-international-studies-university": {
+  "logo": "/logos/shanghai-international-studies-university.png",
+  "emblem": "/logos/emblems/shanghai-international-studies-university.png"
+ },
+ "shanghai-jiao-tong-university": {
+  "logo": "/logos/shanghai-jiao-tong-university.png",
+  "emblem": "/logos/emblems/shanghai-jiao-tong-university.png"
+ },
+ "shanghai-university": {
+  "logo": "/logos/shanghai-university.png"
+ },
+ "shanghai-university-of-finance-and-economics": {
+  "logo": "/logos/shanghai-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/shanghai-university-of-finance-and-economics.png"
+ },
+ "shanghai-university-of-international-business-and-economics": {
+  "logo": "/logos/shanghai-university-of-international-business-and-economics.png",
+  "emblem": "/logos/emblems/shanghai-university-of-international-business-and-economics.png"
+ },
+ "shanghai-university-of-traditional-chinese-medicine": {
+  "logo": "/logos/shanghai-university-of-traditional-chinese-medicine.png",
+  "emblem": "/logos/emblems/shanghai-university-of-traditional-chinese-medicine.png"
+ },
+ "shantou-university": {
+  "logo": "/logos/shantou-university.png",
+  "emblem": "/logos/emblems/shantou-university.png"
+ },
+ "shanxi-university": {
+  "logo": "/logos/shanxi-university.png"
+ },
+ "shenyang-aerospace-university": {
+  "logo": "/logos/shenyang-aerospace-university.png",
+  "emblem": "/logos/emblems/shenyang-aerospace-university.png"
+ },
+ "shenyang-jianzhu-university": {
+  "logo": "/logos/shenyang-jianzhu-university.png",
+  "emblem": "/logos/emblems/shenyang-jianzhu-university.png"
+ },
+ "shenyang-normal-university": {
+  "logo": "/logos/shenyang-normal-university.png",
+  "emblem": "/logos/emblems/shenyang-normal-university.png"
+ },
+ "shihezi-university": {
+  "logo": "/logos/shihezi-university.png",
+  "emblem": "/logos/emblems/shihezi-university.png"
+ },
+ "sichuan-agricultural-university": {
+  "logo": "/logos/sichuan-agricultural-university.png",
+  "emblem": "/logos/emblems/sichuan-agricultural-university.png"
+ },
+ "south-china-agricultural-university": {
+  "logo": "/logos/south-china-agricultural-university.png",
+  "emblem": "/logos/emblems/south-china-agricultural-university.png"
+ },
+ "south-china-normal-university": {
+  "logo": "/logos/south-china-normal-university.png",
+  "emblem": "/logos/emblems/south-china-normal-university.png"
+ },
+ "southeast-university": {
+  "logo": "/logos/southeast-university.png",
+  "emblem": "/logos/emblems/southeast-university.png"
+ },
+ "southern-university-of-science-and-technology": {
+  "logo": "/logos/southern-university-of-science-and-technology.png"
+ },
+ "southwest-jiaotong-university": {
+  "logo": "/logos/southwest-jiaotong-university.png",
+  "emblem": "/logos/emblems/southwest-jiaotong-university.png"
+ },
+ "southwest-medical-university": {
+  "logo": "/logos/southwest-medical-university.png",
+  "emblem": "/logos/emblems/southwest-medical-university.png"
+ },
+ "southwest-petroleum-university": {
+  "logo": "/logos/southwest-petroleum-university.png",
+  "emblem": "/logos/emblems/southwest-petroleum-university.png"
+ },
+ "southwest-university": {
+  "logo": "/logos/southwest-university.png",
+  "emblem": "/logos/emblems/southwest-university.png"
+ },
+ "southwestern-university-of-finance-and-economics": {
+  "logo": "/logos/southwestern-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/southwestern-university-of-finance-and-economics.png"
+ },
+ "sun-yat-sen-university": {
+  "logo": "/logos/sun-yat-sen-university.png",
+  "emblem": "/logos/emblems/sun-yat-sen-university.png"
+ },
+ "tianjin-normal-university": {
+  "logo": "/logos/tianjin-normal-university.png",
+  "emblem": "/logos/emblems/tianjin-normal-university.png"
+ },
+ "tianjin-university": {
+  "logo": "/logos/tianjin-university.png",
+  "emblem": "/logos/emblems/tianjin-university.png"
+ },
+ "tianjin-university-of-finance-and-economics": {
+  "logo": "/logos/tianjin-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/tianjin-university-of-finance-and-economics.png"
+ },
+ "tianjin-university-of-science-and-technology": {
+  "logo": "/logos/tianjin-university-of-science-and-technology.png",
+  "emblem": "/logos/emblems/tianjin-university-of-science-and-technology.png"
+ },
+ "tianjin-university-of-technology": {
+  "logo": "/logos/tianjin-university-of-technology.png",
+  "emblem": "/logos/emblems/tianjin-university-of-technology.png"
+ },
+ "tianjin-university-of-technology-and-education": {
+  "logo": "/logos/tianjin-university-of-technology-and-education.png",
+  "emblem": "/logos/emblems/tianjin-university-of-technology-and-education.png"
+ },
+ "tianjin-university-of-traditional-chinese-medicine": {
+  "logo": "/logos/tianjin-university-of-traditional-chinese-medicine.png"
+ },
+ "tongji-university": {
+  "logo": "/logos/tongji-university.png",
+  "emblem": "/logos/emblems/tongji-university.png"
+ },
+ "tsinghua-university": {
+  "logo": "/logos/tsinghua-university.png",
+  "emblem": "/logos/emblems/tsinghua-university.png"
+ },
+ "university-of-chinese-academy-of-sciences": {
+  "logo": "/logos/university-of-chinese-academy-of-sciences.png"
+ },
+ "university-of-international-business-and-economics": {
+  "logo": "/logos/university-of-international-business-and-economics.png",
+  "emblem": "/logos/emblems/university-of-international-business-and-economics.png"
+ },
+ "university-of-jinan": {
+  "logo": "/logos/university-of-jinan.png",
+  "emblem": "/logos/emblems/university-of-jinan.png"
+ },
+ "university-of-nottingham-ningbo-china": {
+  "logo": "/logos/university-of-nottingham-ningbo-china.png"
+ },
+ "university-of-science-and-technology-beijing": {
+  "logo": "/logos/university-of-science-and-technology-beijing.png",
+  "emblem": "/logos/emblems/university-of-science-and-technology-beijing.png"
+ },
+ "university-of-science-and-technology-liaoning": {
+  "logo": "/logos/university-of-science-and-technology-liaoning.png",
+  "emblem": "/logos/emblems/university-of-science-and-technology-liaoning.png"
+ },
+ "wenzhou-medical-university": {
+  "logo": "/logos/wenzhou-medical-university.png",
+  "emblem": "/logos/emblems/wenzhou-medical-university.png"
+ },
+ "wenzhou-university": {
+  "logo": "/logos/wenzhou-university.png",
+  "emblem": "/logos/emblems/wenzhou-university.png"
+ },
+ "wuhan-textile-university": {
+  "logo": "/logos/wuhan-textile-university.png",
+  "emblem": "/logos/emblems/wuhan-textile-university.png"
+ },
+ "wuhan-university": {
+  "logo": "/logos/wuhan-university.png",
+  "emblem": "/logos/emblems/wuhan-university.png"
+ },
+ "wuhan-university-of-technology": {
+  "logo": "/logos/wuhan-university-of-technology.png",
+  "emblem": "/logos/emblems/wuhan-university-of-technology.png"
+ },
+ "wuyi-university": {
+  "logo": "/logos/wuyi-university.png",
+  "emblem": "/logos/emblems/wuyi-university.png"
+ },
+ "xiamen-university": {
+  "logo": "/logos/xiamen-university.png",
+  "emblem": "/logos/emblems/xiamen-university.png"
+ },
+ "xian-jiaotong-university": {
+  "logo": "/logos/xian-jiaotong-university.png",
+  "emblem": "/logos/emblems/xian-jiaotong-university.png"
+ },
+ "xian-shiyou-university": {
+  "logo": "/logos/xian-shiyou-university.png",
+  "emblem": "/logos/emblems/xian-shiyou-university.png"
+ },
+ "xiangtan-university": {
+  "logo": "/logos/xiangtan-university.png",
+  "emblem": "/logos/emblems/xiangtan-university.png"
+ },
+ "xinjiang-normal-university": {
+  "logo": "/logos/xinjiang-normal-university.png",
+  "emblem": "/logos/emblems/xinjiang-normal-university.png"
+ },
+ "xinjiang-university": {
+  "logo": "/logos/xinjiang-university.png",
+  "emblem": "/logos/emblems/xinjiang-university.png"
+ },
+ "yangtze-university": {
+  "logo": "/logos/yangtze-university.png",
+  "emblem": "/logos/emblems/yangtze-university.png"
+ },
+ "yanshan-university": {
+  "logo": "/logos/yanshan-university.png",
+  "emblem": "/logos/emblems/yanshan-university.png"
+ },
+ "yantai-university": {
+  "logo": "/logos/yantai-university.png"
+ },
+ "yunnan-university": {
+  "logo": "/logos/yunnan-university.png",
+  "emblem": "/logos/emblems/yunnan-university.png"
+ },
+ "yunnan-university-of-finance-and-economics": {
+  "logo": "/logos/yunnan-university-of-finance-and-economics.png",
+  "emblem": "/logos/emblems/yunnan-university-of-finance-and-economics.png"
+ },
+ "zhejiang-ocean-university": {
+  "logo": "/logos/zhejiang-ocean-university.png",
+  "emblem": "/logos/emblems/zhejiang-ocean-university.png"
+ },
+ "zhejiang-sci-tech-university": {
+  "logo": "/logos/zhejiang-sci-tech-university.png",
+  "emblem": "/logos/emblems/zhejiang-sci-tech-university.png"
+ },
+ "zhejiang-university-of-technology": {
+  "logo": "/logos/zhejiang-university-of-technology.png",
+  "emblem": "/logos/emblems/zhejiang-university-of-technology.png"
+ },
+ "zhengzhou-university": {
+  "logo": "/logos/zhengzhou-university.png"
+ }
+}
