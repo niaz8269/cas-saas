@@ -21,6 +21,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 import heroBg from "@/assets/b1.webp"
+import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
@@ -208,7 +209,7 @@ export default function SiteHome() {
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> {t("home.weekly.title")}
         </h2>
         <div className="mt-10 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <PhotoBanner src="/images/art-3.svg" className="min-h-48" />
+          <PhotoBanner src="/images/art-3.svg" image={weeklyUniversity.data?.data.cover_url ? { src: weeklyUniversity.data.data.cover_url, credit: weeklyUniversity.data.data.cover_credit ?? undefined } : null} className="min-h-48" />
           <div className="p-6">
             {weekly ? (
               <>
@@ -248,7 +249,7 @@ export default function SiteHome() {
         <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
           {HIGHLIGHTS.map(({ titleKey, bodyKey, to, tagKey }, i) => (
             <Link key={titleKey} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="h-44">
+              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} image={HIGHLIGHT_PHOTOS[i % HIGHLIGHT_PHOTOS.length]} className="h-44">
                 <span className="absolute top-3 left-3 rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white">{t(tagKey)}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-6">

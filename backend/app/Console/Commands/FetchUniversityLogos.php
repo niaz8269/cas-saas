@@ -35,7 +35,7 @@ class FetchUniversityLogos extends Command
 
         foreach ($universities->chunk(12) as $chunk) {
             $pages = Http::pool(fn (Pool $pool) => $chunk->map(
-                fn ($u) => $pool->as($u->slug)->withUserAgent(self::UA)->timeout(25)->get($this->url($u->website))
+                fn ($u) => $pool->as($u->slug)->withUserAgent(self::UA)->timeout(20)->get($this->url($u->website))
             )->all());
 
             foreach ($chunk as $u) {
@@ -51,8 +51,12 @@ class FetchUniversityLogos extends Command
                 File::ensureDirectoryExists($dir);
                 $saved = 0;
 
-                foreach (array_slice($candidates, 0, 6) as $i => [$kind, $src]) {
-                    $img = Http::withUserAgent(self::UA)->timeout(25)->get($src);
+                foreach (array_slice($candidates, 0, 4) as $i => [$kind, $src]) {
+                    try {
+                        $img = Http::withUserAgent(self::UA)->timeout(15)->get($src);
+                    } catch (\Throwable) {
+                        continue;
+                    }
                     if (! $img->successful() || strlen($img->body()) < 1500) {
                         continue;
                     }

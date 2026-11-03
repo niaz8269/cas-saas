@@ -27,9 +27,16 @@ function toneFor(seed: number | string): string {
  * A tinted banner area. Only real, supplied images are ever shown on the public
  * site; where there is none, this renders a plain brand tint — never stock art.
  */
-export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
+export function PhotoBanner({ src, image, className, children }: { src: string; image?: HeaderImage | null; className?: string; children?: ReactNode }) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
+      {image && (
+        <>
+          <img src={image.src} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/45 to-transparent" />
+          {image.credit && <span className="pointer-events-none absolute inset-x-3 bottom-1.5 line-clamp-1 text-[10px] text-white/85">{image.credit}</span>}
+        </>
+      )}
       {children}
     </div>
   )
