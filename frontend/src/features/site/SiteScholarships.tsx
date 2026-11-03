@@ -1,3 +1,4 @@
+import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Award, Lock, School, Search } from "lucide-react"
 import { AdmissionWindow } from "@/features/site/components"
@@ -52,7 +53,7 @@ export default function SiteScholarships() {
 
   return (
     <div className="space-y-6">
-      <SitePageHeader
+      <SitePageHeader image={HEADER_IMAGES.scholarships}
         eyebrow={t("scholarships.eyebrow")}
         title={t("scholarships.title")}
         subtitle={t("scholarships.subtitle")}

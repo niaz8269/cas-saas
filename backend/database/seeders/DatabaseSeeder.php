@@ -20,16 +20,17 @@ class DatabaseSeeder extends Seeder
             StaffUserSeeder::class,
             VerifiedCatalogSeeder::class,
             SasCatalogSeeder::class,
+            UniversityLocationSeeder::class,
             WikipediaProfileSeeder::class,
             MoeMbbsSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
-            NewsSeeder::class,
             DocumentTypeSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,
             UniversityEmblemSeeder::class,
             MirrorPhotosSeeder::class,
+            NewsSeeder::class,
         ]);
     }
 }

@@ -1,3 +1,4 @@
+import { HEADER_IMAGES, type HeaderImage } from "@/features/site/headerImages"
 import { ArrowUpRight, CalendarClock, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
@@ -103,15 +104,19 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
  * content) — a prominent navy banner with a red eyebrow pill, so the whole
  * site shares a single header pattern.
  */
-export function SitePageHeader({ eyebrow, title, subtitle, action }: {
+export function SitePageHeader({ eyebrow, title, subtitle, action, image = HEADER_IMAGES.default }: {
   eyebrow?: ReactNode
   title: string
   subtitle?: string
   action?: ReactNode
+  image?: HeaderImage
 }) {
   return (
     <section className="relative overflow-hidden rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
+      <img src={image.src} alt="" decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/90 via-cas-navy/75 to-cas-navy/45" />
       <div className="pointer-events-none absolute -top-16 -right-12 size-56 rounded-full bg-cas-red/20 blur-3xl" />
+      {image.credit && <span className="pointer-events-none absolute right-3 bottom-1.5 max-w-[80%] truncate text-[10px] text-white/70">{image.credit}</span>}
       <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
           {eyebrow && <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">{eyebrow}</span>}

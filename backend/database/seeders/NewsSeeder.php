@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Post;
+use App\Models\University;
 use Illuminate\Database\Seeder;
 
 /**
@@ -17,6 +18,12 @@ class NewsSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->posts() as $post) {
+            // Cover: the campus (or city) photo of the university the news is about,
+            // or the site's hero photo for news that concerns all universities.
+            $cover = isset($post['university'])
+                ? University::where('slug', $post['university'])->value('cover_path')
+                : '/images/hero-great-wall.webp';
+
             Post::updateOrCreate(
                 ['slug' => $post['slug']],
                 [
@@ -25,6 +32,7 @@ class NewsSeeder extends Seeder
                     'excerpt' => $post['excerpt'],
                     'body' => $post['body'],
                     'category' => $post['category'],
+                    'cover_image_path' => $cover,
                     'status' => 'published',
                     'published_at' => $post['date'],
                 ],
@@ -50,6 +58,7 @@ class NewsSeeder extends Seeder
             ],
             [
                 'slug' => 'dalian-medical-university-spring-2027-applications-open',
+                'university' => 'dalian-medical-university',
                 'title' => 'Dalian Medical University: spring 2027 applications opened on 20 October 2026',
                 'excerpt' => 'The international college opened online applications for its spring 2027 (March start) programs, including the pre-medical program and MBBS.',
                 'category' => 'Admissions',
@@ -60,6 +69,7 @@ class NewsSeeder extends Seeder
             ],
             [
                 'slug' => 'liaoning-petrochemical-university-spring-2027-applications',
+                'university' => 'liaoning-petrochemical-university',
                 'title' => 'Liaoning Petrochemical University: spring 2027 applications run from 1 November to 20 April',
                 'excerpt' => 'The university publishes a yearly admission schedule: spring intake applications open on 1 November, autumn intake applications on 1 May.',
                 'category' => 'Admissions',
@@ -70,6 +80,7 @@ class NewsSeeder extends Seeder
             ],
             [
                 'slug' => 'nuist-september-2027-applications-close-30-april',
+                'university' => 'nanjing-university-of-information-science-and-technology',
                 'title' => 'NUIST: applications for September 2027 close on 30 April 2027',
                 'excerpt' => 'Nanjing University of Information Science and Technology lists 30 April 2027 as the deadline for university scholarships and self-sponsored study.',
                 'category' => 'Admissions',
@@ -80,6 +91,7 @@ class NewsSeeder extends Seeder
             ],
             [
                 'slug' => 'zust-march-2027-chinese-language-intake-closes-10-january',
+                'university' => 'zhejiang-university-of-science-and-technology',
                 'title' => 'ZUST: apply by 10 January 2027 for the March 2027 Chinese-language intake',
                 'excerpt' => 'Zhejiang University of Science and Technology is taking applications for a one-semester Chinese-language program starting 8 March 2027.',
                 'category' => 'Admissions',
