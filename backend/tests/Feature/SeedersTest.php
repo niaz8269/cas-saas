@@ -10,8 +10,11 @@ use App\Models\Scholarship;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use App\Models\User;
+use Database\Seeders\MirrorPhotosSeeder;
+use Database\Seeders\OfficialIntakeDatesSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
+use Database\Seeders\WikipediaProfileSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
@@ -103,9 +106,9 @@ it('seeds only verified catalog data, each record carrying its official source',
     $universities = University::count();
     $this->seed(VerifiedCatalogSeeder::class);
     $this->seed(SasCatalogSeeder::class);
-    $this->seed(\Database\Seeders\OfficialIntakeDatesSeeder::class);
-    $this->seed(\Database\Seeders\WikipediaProfileSeeder::class);
-    $this->seed(\Database\Seeders\MirrorPhotosSeeder::class);
+    $this->seed(OfficialIntakeDatesSeeder::class);
+    $this->seed(WikipediaProfileSeeder::class);
+    $this->seed(MirrorPhotosSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });
