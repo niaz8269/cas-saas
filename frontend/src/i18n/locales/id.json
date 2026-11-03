@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp kami",
     "freeConsultation": "Konsultasi gratis",
     "rights": "© {{year}} CAS Education. Seluruh hak cipta dilindungi.",
-    "authorized": "Agen resmi berwenang sejak 2012."
+    "authorized": "Agen resmi berwenang sejak 2012.",
+    "photoCredits": "Kredit foto"
   },
   "components": {
     "moeListed": "Terdaftar di Kemendikbud",
@@ -1478,5 +1479,17 @@
     "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
     "sourceSas": "Daftar SAS",
     "sourceListing": "Daftar pihak ketiga, belum dikonfirmasi"
+  },
+  "photoCredits": {
+    "seoTitle": "Kredit foto",
+    "seoDescription": "Pembuat dan lisensi foto di situs CAS.",
+    "title": "Kredit foto",
+    "subtitle": "Foto kampus dan kota di situs ini berlisensi bebas. Setiap foto membawa tanda CAS; pembuat dan lisensinya tercantum di sini.",
+    "siteTitle": "Foto yang digunakan di seluruh situs",
+    "universityTitle": "Foto universitas dan kota",
+    "loadError": "Kredit tidak dapat dimuat saat ini.",
+    "city": "foto kota",
+    "campus": "foto kampus",
+    "source": "sumber"
   }
 }

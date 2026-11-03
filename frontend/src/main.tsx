@@ -53,6 +53,7 @@ import SiteProgramFinder from "@/features/site/SiteProgramFinder"
 import SiteScholarships from "@/features/site/SiteScholarships"
 import SiteAbout from "@/features/site/SiteAbout"
 import SiteCities from "@/features/site/SiteCities"
+import SitePhotoCredits from "@/features/site/SitePhotoCredits"
 import SiteContact from "@/features/site/SiteContact"
 import SiteFAQ from "@/features/site/SiteFAQ"
 import SitePartner from "@/features/site/SitePartner"
@@ -112,6 +113,7 @@ const router = createBrowserRouter([
       { path: "/site/partner", element: <SitePartner /> },
       { path: "/site/faq", element: <SiteFAQ /> },
       { path: "/site/cities", element: <SiteCities /> },
+      { path: "/site/photo-credits", element: <SitePhotoCredits /> },
     ],
   },
 

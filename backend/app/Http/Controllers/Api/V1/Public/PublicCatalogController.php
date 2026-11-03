@@ -11,6 +11,7 @@ use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
 use App\Services\Public\AudienceResolver;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -106,6 +107,29 @@ class PublicCatalogController extends Controller
             ->sortBy([['count', 'desc'], ['city', 'asc']])
             ->values()
             ->all();
+    }
+
+    /**
+     * Attribution for the freely licensed photos used on the site. The photos
+     * carry the CAS mark; their authors and licences are listed on one page.
+     */
+    public function photoCredits(): JsonResponse
+    {
+        $rows = University::query()
+            ->where('status', 'active')
+            ->whereNotNull('cover_credit')
+            ->orderBy('name')
+            ->get(['name', 'slug', 'cover_credit', 'cover_source_url', 'cover_is_city'])
+            ->map(fn ($u) => [
+                'university' => $u->name,
+                'slug' => $u->slug,
+                'credit' => $u->cover_credit,
+                'source_url' => $u->cover_source_url,
+                'kind' => $u->cover_is_city ? 'city' : 'campus',
+            ])
+            ->values();
+
+        return response()->json(['data' => $rows]);
     }
 
     public function university(Request $request, string $slug): PublicUniversityResource

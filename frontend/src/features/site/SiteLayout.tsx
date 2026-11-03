@@ -295,6 +295,7 @@ export default function SiteLayout() {
               <li><Link to="/site/scholarships?type=government" className="hover:text-white">{t("footer.exploreScholarships")}</Link></li>
               <li><Link to="/site/why-china?read=intro" className="hover:text-white">{t("footer.exploreWhyChina")}</Link></li>
               <li><Link to="/site/news?view=all" className="hover:text-white">{t("footer.exploreNews")}</Link></li>
+              <li><Link to="/site/photo-credits" className="hover:text-white">{t("footer.photoCredits")}</Link></li>
             </ul>
           </div>
 

@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp us",
     "freeConsultation": "Free consultation",
     "rights": "© {{year}} CAS Education. All rights reserved.",
-    "authorized": "Official authorized agent since 2012."
+    "authorized": "Official authorized agent since 2012.",
+    "photoCredits": "Photo credits"
   },
   "components": {
     "moeListed": "MoE-approved MBBS",
@@ -1480,5 +1481,17 @@
     "sourceCucas": "CUCAS listing — confirm with the university",
     "sourceSas": "SAS listing",
     "sourceListing": "Third-party listing, unconfirmed"
+  },
+  "photoCredits": {
+    "seoTitle": "Photo credits",
+    "seoDescription": "Authors and licences of the photos used on the CAS website.",
+    "title": "Photo credits",
+    "subtitle": "Campus and city photos on this site are freely licensed. Each photo carries the CAS mark; the authors and licences are listed here.",
+    "siteTitle": "Photos used across the site",
+    "universityTitle": "University and city photos",
+    "loadError": "Couldn't load the credits right now.",
+    "city": "city photo",
+    "campus": "campus photo",
+    "source": "source"
   }
 }

@@ -109,6 +109,18 @@ export interface SiteRepProfessor {
   photo_url: string | null
 }
 
+export interface SitePhotoCredit {
+  university: string
+  slug: string
+  credit: string
+  source_url: string | null
+  kind: "campus" | "city"
+}
+
+export function getSitePhotoCredits() {
+  return siteApi<{ data: SitePhotoCredit[] }>("/public/photo-credits")
+}
+
 export interface SiteCityStat {
   city: string
   count: number

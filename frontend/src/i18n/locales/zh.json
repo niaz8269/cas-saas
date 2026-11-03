@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp 联系",
     "freeConsultation": "免费咨询",
     "rights": "© {{year}} CAS Education。保留所有权利。",
-    "authorized": "自 2012 年起的官方授权代理。"
+    "authorized": "自 2012 年起的官方授权代理。",
+    "photoCredits": "图片来源"
   },
   "components": {
     "moeListed": "教育部认可",
@@ -1478,5 +1479,17 @@
     "sourceCucas": "CUCAS 列表——请向大学确认",
     "sourceSas": "SAS 收录",
     "sourceListing": "第三方信息，未经确认"
+  },
+  "photoCredits": {
+    "seoTitle": "图片来源",
+    "seoDescription": "CAS 网站所用照片的作者与许可信息。",
+    "title": "图片来源",
+    "subtitle": "本站的校园和城市照片均为自由许可。每张照片带有 CAS 标识；作者与许可信息列于此处。",
+    "siteTitle": "全站使用的照片",
+    "universityTitle": "大学与城市照片",
+    "loadError": "暂时无法加载图片来源。",
+    "city": "城市照片",
+    "campus": "校园照片",
+    "source": "来源"
   }
 }

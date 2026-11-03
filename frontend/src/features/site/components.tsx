@@ -4,6 +4,7 @@ import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import logoWhite from "@/assets/cas-logo-white.png"
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
 
@@ -24,6 +25,26 @@ function toneFor(seed: number | string): string {
 }
 
 /**
+ * The CAS mark on every photo: logo and website. Photo authors and licences are
+ * listed once on the Photo credits page rather than on each picture.
+ */
+export function PhotoMark({ className, link = false }: { className?: string; link?: boolean }) {
+  const inner = (
+    <>
+      <img src={logoWhite} alt="CAS" className="h-4 w-auto" />
+      <span className="text-[10px] font-medium tracking-wide text-white">www.cas.moe</span>
+    </>
+  )
+  const base = "absolute right-2.5 bottom-2 z-10 inline-flex items-center gap-1.5 rounded-sm bg-black/40 px-2 py-1 backdrop-blur-sm"
+
+  return link ? (
+    <a href="https://www.cas.moe" target="_blank" rel="noreferrer" className={cn(base, "hover:bg-black/55", className)}>{inner}</a>
+  ) : (
+    <span className={cn(base, "pointer-events-none", className)}>{inner}</span>
+  )
+}
+
+/**
  * A tinted banner area. Only real, supplied images are ever shown on the public
  * site; where there is none, this renders a plain brand tint — never stock art.
  */
@@ -34,7 +55,7 @@ export function PhotoBanner({ src, image, className, children }: { src: string; 
         <>
           <img src={image.src} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/45 to-transparent" />
-          {image.credit && <span className="pointer-events-none absolute inset-x-3 bottom-1.5 line-clamp-1 text-[10px] text-white/85">{image.credit}</span>}
+          <PhotoMark />
         </>
       )}
       {children}
@@ -65,9 +86,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-            {cover.credit && (
-              <p className="pointer-events-none absolute inset-x-3 bottom-1.5 line-clamp-1 text-[10px] text-white/85">{cover.credit}</p>
-            )}
+            <PhotoMark />
           </>
         )}
         {u.moe_listed && (
@@ -125,7 +144,7 @@ export function SitePageHeader({ eyebrow, title, subtitle, action, image = HEADE
       <img src={image.src} alt="" decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/90 via-cas-navy/75 to-cas-navy/45" />
       <div className="pointer-events-none absolute -top-16 -right-12 size-56 rounded-full bg-cas-red/20 blur-3xl" />
-      {image.credit && <span className="pointer-events-none absolute right-3 bottom-1.5 max-w-[80%] truncate text-[10px] text-white/70">{image.credit}</span>}
+      <PhotoMark link />
       <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
           {eyebrow && <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">{eyebrow}</span>}

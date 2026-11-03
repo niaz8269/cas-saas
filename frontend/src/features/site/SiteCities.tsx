@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
-import { SitePageHeader } from "@/features/site/components"
+import { PhotoMark, SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
 export default function SiteCities() {
@@ -48,7 +48,7 @@ export default function SiteCities() {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cities.map(({ city, count, photo_url, photo_credit }) => (
+          {cities.map(({ city, count, photo_url }) => (
             <Link
               key={city}
               to={`/site/universities?city=${encodeURIComponent(city)}`}
@@ -58,7 +58,7 @@ export default function SiteCities() {
                 {photo_url && <img src={photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 <span className="relative px-5 pb-3 font-sans text-2xl font-bold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">{city}</span>
-                {photo_credit && <span className="pointer-events-none absolute right-2 bottom-1 max-w-[70%] truncate text-[9px] text-white/75">{photo_credit}</span>}
+                {photo_url && <PhotoMark />}
               </div>
               <div className="flex flex-1 items-center justify-between gap-3 p-5">
                 <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">

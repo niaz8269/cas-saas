@@ -23,7 +23,7 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AdmissionWindow } from "@/features/site/components"
+import { AdmissionWindow, PhotoMark } from "@/features/site/components"
 import { getSiteUniversity, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
@@ -104,11 +104,7 @@ export default function SiteUniversity() {
             </div>
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-          {cover?.credit && (
-            <p className="absolute right-3 bottom-2 left-3 text-right text-[11px] text-white/90">
-              {"own" in cover ? t("university.photoCredit") : t("university.locationPhoto")}: {cover.credit}
-            </p>
-          )}
+          {cover && <PhotoMark link />}
         </div>
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">

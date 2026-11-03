@@ -53,7 +53,8 @@
     "whatsappUs": "Écrivez-nous sur WhatsApp",
     "freeConsultation": "Consultation gratuite",
     "rights": "© {{year}} CAS Education. Tous droits réservés.",
-    "authorized": "Agent officiel agréé depuis 2012."
+    "authorized": "Agent officiel agréé depuis 2012.",
+    "photoCredits": "Crédits photo"
   },
   "components": {
     "moeListed": "Listée par le MoE",
@@ -1478,5 +1479,17 @@
     "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université",
     "sourceSas": "Fiche SAS",
     "sourceListing": "Annonce tierce, non confirmée"
+  },
+  "photoCredits": {
+    "seoTitle": "Crédits photo",
+    "seoDescription": "Auteurs et licences des photos du site CAS.",
+    "title": "Crédits photo",
+    "subtitle": "Les photos de campus et de villes de ce site sont sous licence libre. Chaque photo porte la marque CAS ; les auteurs et licences sont listés ici.",
+    "siteTitle": "Photos utilisées sur le site",
+    "universityTitle": "Photos d'universités et de villes",
+    "loadError": "Impossible de charger les crédits pour le moment.",
+    "city": "photo de la ville",
+    "campus": "photo du campus",
+    "source": "source"
   }
 }
