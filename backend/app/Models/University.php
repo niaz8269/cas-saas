@@ -35,6 +35,8 @@ class University extends Model
         'cover_source_url',
         'status',
         'moe_listed',
+        'moe_mbbs_year',
+        'moe_mbbs_source_url',
         'nearest_airport',
         'about',
         'guide',

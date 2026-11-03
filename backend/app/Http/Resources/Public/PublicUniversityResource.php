@@ -43,6 +43,8 @@ class PublicUniversityResource extends JsonResource
             'cover_credit' => $this->cover_credit,
             'cover_source_url' => $this->cover_source_url,
             'moe_listed' => $this->moe_listed,
+            'moe_mbbs_year' => $this->moe_mbbs_year,
+            'moe_mbbs_source_url' => $this->moe_mbbs_source_url,
             'nearest_airport' => $this->nearest_airport,
             'about' => $this->about,
             'guide' => $this->guide,

@@ -30,6 +30,7 @@ const COLUMNS: Col[] = [
     title: "megaMenu.colUniversities",
     checkAll: { label: "megaMenu.allUniversities", to: "/site/universities" },
     links: [
+      ["megaMenu.moeListed", "/site/universities?moe=1"],
       ["megaMenu.medical", "/site/universities?q=Medical"],
       ["megaMenu.engineering", "/site/universities?q=Engineering"],
       ["megaMenu.technology", "/site/universities?q=Technology"],

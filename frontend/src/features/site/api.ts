@@ -133,6 +133,8 @@ export interface SiteUniversityCard {
   cover_credit?: string | null
   cover_source_url?: string | null
   moe_listed: boolean
+  moe_mbbs_year?: string | null
+  moe_mbbs_source_url?: string | null
   nearest_airport: string | null
   about: string | null
   requirements: string[]

@@ -54,8 +54,8 @@ it("renders the public universities grid", async () => {
   expect(await screen.findByText("Jilin Medical University")).toBeInTheDocument()
   expect(screen.getByText("Beta Tech")).toBeInTheDocument()
   expect(screen.getByText("2 programs")).toBeInTheDocument()
-  // The unverifiable "MoE-listed only" toggle is gone.
-  expect(screen.queryByRole("button", { name: /MoE-listed only/ })).not.toBeInTheDocument()
+  // The MoE toggle filters by the Ministry of Education's approved-MBBS list.
+  expect(screen.getByRole("button", { name: /MoE-approved MBBS only/ })).toBeInTheDocument()
 })
 
 it("gates program fees for guests and shows the CAS service fee for members", async () => {
@@ -159,7 +159,7 @@ it("opens the hamburger mega-menu on hover with deep-linked 5 columns", async ()
     expect(screen.getByText(col)).toBeInTheDocument()
   }
   expect(screen.getByRole("link", { name: "Study MBBS in China" })).toHaveAttribute("href", "/site/programs?q=MBBS&src=menu")
-  expect(screen.queryByRole("link", { name: "MoE-listed universities" })).not.toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "MoE-approved MBBS universities" })).toHaveAttribute("href", "/site/universities?moe=1&src=menu")
 })
 
 it("opens the counsellor widget with CAS's own contact channels", async () => {
@@ -285,7 +285,7 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
 
   // Fact header + Overview tab (default).
   expect(await screen.findByRole("heading", { name: "Jilin Medical University" })).toBeInTheDocument()
-  expect(screen.getByText("China MoE-listed")).toBeInTheDocument()
+  expect(screen.getByText("MoE-approved for English-taught MBBS")).toBeInTheDocument()
   expect(screen.getByText("Prof. Li Wei")).toBeInTheDocument()
   // Future-dated intake shows its opening and closing dates with the source
   // link; header "Apply now" is a login-gated button into CAS's own form.

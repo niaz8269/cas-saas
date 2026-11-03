@@ -938,4 +938,9 @@ ALTER TABLE universities
   ADD COLUMN cover_credit     VARCHAR(255) NULL AFTER cover_path,
   ADD COLUMN cover_source_url VARCHAR(500) NULL AFTER cover_credit;
 
+-- ADDENDUM: MoE approval for English-taught MBBS (the meaning of "MoE-listed").
+ALTER TABLE universities
+  ADD COLUMN moe_mbbs_year       VARCHAR(9)   NULL AFTER moe_listed,
+  ADD COLUMN moe_mbbs_source_url VARCHAR(500) NULL AFTER moe_mbbs_year;
+
 -- =========================== END OF SCHEMA ===========================

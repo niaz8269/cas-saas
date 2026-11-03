@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { School, Search } from "lucide-react"
+import { School, Search, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, UniCard } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
+import { cn } from "@/lib/utils"
 
 // Contextual "topic" views so distinct index links land on distinct,
 // framed university lists (backend has no topic flags yet, so these set the
@@ -43,7 +44,7 @@ export default function SiteUniversities() {
 
   const [searchInput, setSearchInput] = useState(params.get("q") ?? topic?.q ?? "")
   const [q, setQ] = useState(params.get("q") ?? topic?.q ?? "")
-  const [moe] = useState(params.get("moe") === "1")
+  const [moe, setMoe] = useState(params.get("moe") === "1")
   const openIntake = !!topic?.openIntake
   const [city, setCity] = useState(params.get("city") ?? "")
   const [page, setPage] = useState(1)
@@ -92,6 +93,17 @@ export default function SiteUniversities() {
           <option value="">{t("universities.allCities")}</option>
           {cities.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
+        <button
+          type="button"
+          onClick={() => { setMoe((v) => !v); setPage(1) }}
+          aria-pressed={moe}
+          className={cn(
+            "inline-flex h-11 items-center gap-2 rounded-sm border px-4 text-sm font-medium transition-colors",
+            moe ? "border-cas-red bg-cas-red-50 text-cas-red-600" : "bg-background text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <ShieldCheck className="size-4" /> {t("universities.moeListedOnly")}
+        </button>
       </div>
 
       {isError && (

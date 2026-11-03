@@ -42,7 +42,7 @@ const POPULAR_SEARCHES: [string, string][] = [
 ]
 
 const HIGHLIGHTS: { titleKey: string; bodyKey: string; to: string; tagKey: string; icon: LucideIcon }[] = [
-  { titleKey: "home.highlights.medicalTitle", bodyKey: "home.highlights.medicalBody", to: "/site/universities?topic=medical", tagKey: "home.highlights.medicalTag", icon: BadgeCheck },
+  { titleKey: "home.highlights.medicalTitle", bodyKey: "home.highlights.medicalBody", to: "/site/universities?moe=1", tagKey: "home.highlights.medicalTag", icon: BadgeCheck },
   { titleKey: "home.highlights.deadlinesTitle", bodyKey: "home.highlights.deadlinesBody", to: "/site/universities?topic=deadlines", tagKey: "home.highlights.deadlinesTag", icon: CalendarClock },
   { titleKey: "home.highlights.languageTitle", bodyKey: "home.highlights.languageBody", to: "/site/programs?language=Chinese", tagKey: "home.highlights.languageTag", icon: BookOpen },
   { titleKey: "home.highlights.fastTrackTitle", bodyKey: "home.highlights.fastTrackBody", to: "/site/services#fast-track", tagKey: "home.highlights.fastTrackTag", icon: Zap },

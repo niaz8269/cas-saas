@@ -132,7 +132,7 @@ export default function SiteUniversity() {
                 </div>
                 {u.moe_listed && (
                   <Badge variant="outline" className="mt-3 border-transparent bg-cas-red-50 text-cas-red-600">
-                    <ShieldCheck className="size-3.5" /> {t("university.moeListedBadge")}
+                    <ShieldCheck className="size-3.5" /> {t("university.moeListedBadge")}{u.moe_mbbs_year ? ` ${u.moe_mbbs_year}` : ""}
                   </Badge>
                 )}
               </div>
@@ -231,7 +231,7 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
   const { t } = useTranslation()
   const facts: [string, string][] = [
     [t("university.factLocation"), [u.city, u.country].filter(Boolean).join(", ") || "—"],
-    [t("university.factMoeListed"), u.moe_listed ? t("university.yes") : "—"],
+    [t("university.factMoeListed"), u.moe_listed ? t("university.moeApprovedYear", { year: u.moe_mbbs_year ?? "" }) : "—"],
     [t("university.factNearestAirport"), u.nearest_airport || "—"],
     [t("university.factPrograms"), String(u.programs.length)],
   ]
@@ -300,6 +300,9 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
+            {!u.moe_listed && p.level === "bachelor" && p.teaching_language === "English" && /MBBS|Clinical Medicine/i.test(p.name) && (
+              <span className="basis-full text-cas-red-600">{t("university.mbbsNotApproved")}</span>
+            )}
             {p.csc_listed && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{t("university.cscListed")}</Badge>}
             <ApplyButton universitySlug={u.slug} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
           </div>
