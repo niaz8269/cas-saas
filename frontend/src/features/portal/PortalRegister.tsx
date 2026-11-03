@@ -4,7 +4,7 @@ import { CheckCircle2 } from "lucide-react"
 import { useEffect, useMemo, useState, type ComponentProps } from "react"
 import { useForm, type FieldValues, type Path, type UseFormSetError } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 
 import casLogo from "@/assets/cas-logo.png"
@@ -42,7 +42,8 @@ export default function PortalRegister() {
   const navigate = useNavigate()
   const token = usePortalAuthStore((s) => s.token)
   const kindInStore = usePortalAuthStore((s) => s.kind)
-  const [kind, setKind] = useState<Kind>("student")
+  const [params] = useSearchParams()
+  const [kind, setKind] = useState<Kind>(params.get("as") === "agent" ? "agent" : "student")
 
   useEffect(() => {
     if (token && kindInStore) navigate(`/portal/${kindInStore}`, { replace: true })

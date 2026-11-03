@@ -274,65 +274,243 @@
     "ctaButton": "Contact us"
   },
   "pricing": {
-    "seoTitle": "Pricing — Transparent Fees for Studying in China",
-    "seoDescription": "How CAS pricing works: a free consultation and study plan, with any paid services quoted clearly and up front. No hidden fees.",
-    "headerEyebrow": "Clear & student-first",
-    "headerTitle": "Simple, transparent pricing",
-    "headerSubtitle": "Every student's plan is different, so we start free and quote clearly for anything beyond that — you'll always know the cost before you commit.",
-    "howTitle": "How our pricing works",
-    "principleFreeTitle": "Free to get started",
-    "principleFreeBody": "Your first consultation and a personalised study plan — including a university and scholarship shortlist — cost nothing.",
-    "principleTransparentTitle": "Priced transparently",
-    "principleTransparentBody": "Where a service has a fee, you see a clear, itemised quote before you commit. No hidden charges, ever.",
-    "principleOnlyPayTitle": "Only pay for what you need",
-    "principleOnlyPayBody": "Take the full package or just the parts you want. Your advisor tailors the support — and the cost — to your plan.",
+    "seoTitle": "Cost of Studying in China & CAS Fees",
+    "seoDescription": "What studying in China costs, from real university tuition by level, and how CAS charges: a free study plan, with any paid services quoted itemised before you commit.",
+    "headerEyebrow": "Costs & fees",
+    "headerTitle": "What it costs to study in China",
+    "headerSubtitle": "Real yearly tuition from the universities we list, what to budget beyond tuition, and exactly how CAS charges for its services.",
+    "costTitle": "Yearly tuition, English-taught programs",
+    "costSubtitle": "Typical fees across the programs in our catalog, by level.",
+    "costNote": "Taken from the tuition universities list for English-taught programs; the range covers the middle 80% of listed fees and the figure shown is the median. Accommodation, insurance and living costs are not included. Your university page shows the exact fee for each program.",
+    "level": {
+      "bachelor": "Bachelor's",
+      "master": "Master's",
+      "phd": "Doctorate (PhD)",
+      "mbbs": "MBBS (medicine)"
+    },
+    "perYear": "/ year",
+    "typical": "Median yearly tuition",
+    "range": "Most programs: {{low}} to {{high}}",
+    "programsCount": "Based on {{count}} programs",
+    "noData": "Not enough listed fees yet.",
+    "budgetTitle": "Beyond tuition, budget for",
+    "budgetSubtitle": "These costs are set by the university or by China, not by CAS. Each university page lists the figures it has published.",
+    "budget": [
+      "Accommodation: a university dormitory or private housing.",
+      "Medical insurance, required for international students.",
+      "Application fee, charged by some universities.",
+      "Visa and residence permit, plus the physical examination.",
+      "Flights, and day-to-day living costs in your city."
+    ],
+    "scholarshipTitle": "Scholarships can cover tuition",
+    "scholarshipBody": "Government and university scholarships can pay tuition, accommodation or a living stipend. The scholarships currently active in our catalog:",
+    "scholarshipKind": {
+      "government": "Government",
+      "full": "Full",
+      "partial": "Partial"
+    },
+    "scholarshipLink": "Browse scholarships",
+    "casTitle": "What CAS charges",
+    "casSubtitle": "Starting is free. Anything paid is quoted as an itemised list before you agree to it.",
     "freeBadge": "Free",
     "freeCardTitle": "Getting started",
     "free1": "Initial consultation with an advisor",
     "free2": "Personalised study plan",
-    "free3": "University & program shortlisting",
+    "free3": "University and program shortlist",
     "free4": "Scholarship matching guidance",
     "quotedBadge": "Quoted up front",
     "quotedCardTitle": "Optional services",
-    "quoted1": "Application handling & document review",
-    "quoted2": "Visa (JW202 / admission letter) assistance",
-    "quoted3": "Accommodation booking",
-    "quoted4": "Airport pickup & pre-departure support",
-    "quoted5": "Certified document translation",
+    "service": {
+      "application": {
+        "title": "Application handling",
+        "body": "Document review and submission to your chosen universities."
+      },
+      "visa": {
+        "title": "Visa support",
+        "body": "Help with the admission letter, JW202 form and visa application."
+      },
+      "accommodation": {
+        "title": "Accommodation booking",
+        "body": "A place arranged before you arrive."
+      },
+      "arrival": {
+        "title": "Airport pickup and arrival support",
+        "body": "Someone to meet you and help you settle in."
+      },
+      "documents": {
+        "title": "Certified translation",
+        "body": "Translation of transcripts, diplomas and certificates."
+      }
+    },
+    "quoteNote": "Prices depend on the services you choose and the universities you apply to, so your advisor sends a written quote first. You only pay for the services you accept.",
+    "stepsTitle": "How paying works",
+    "steps": [
+      {
+        "title": "Get your free plan",
+        "body": "Tell us your grades, budget and goals. We send a shortlist and a scholarship check at no charge."
+      },
+      {
+        "title": "Receive an itemised quote",
+        "body": "If you want help beyond the plan, we list each service and its price in writing."
+      },
+      {
+        "title": "Pick what you need",
+        "body": "Accept the whole package or only some services. Nothing is added without your agreement."
+      }
+    ],
+    "faqTitle": "Pricing questions",
+    "faq": [
+      {
+        "q": "Is the first consultation really free?",
+        "a": "Yes. The consultation, the study plan, the university and program shortlist and scholarship guidance have no charge."
+      },
+      {
+        "q": "Who sets the tuition fees?",
+        "a": "The universities do. CAS does not mark tuition up on this site; the fees shown come from the universities' own listings."
+      },
+      {
+        "q": "Are there hidden charges?",
+        "a": "No. Paid services are quoted in writing and itemised before you agree to anything."
+      },
+      {
+        "q": "Can I use only some of your services?",
+        "a": "Yes. You can take the full application support or only the parts you need, such as the visa or the accommodation."
+      },
+      {
+        "q": "Does a scholarship change what I pay?",
+        "a": "It can. A full scholarship may cover tuition and accommodation and add a stipend, while a partial one covers part. Each scholarship page states what it covers."
+      }
+    ],
     "ctaTitle": "Want a personalised quote?",
-    "ctaSubtitle": "Start with a free study plan — we'll follow up with clear next steps and costs.",
+    "ctaSubtitle": "Start with a free study plan. We follow up with clear next steps and costs.",
     "ctaButton": "Get a free study plan"
   },
   "partner": {
-    "seoTitle": "Partner with CAS — Agency & Recruitment Cooperation",
-    "seoDescription": "Partner with CAS to place students in Chinese universities: 200+ MoE-listed universities, competitive commissions, a real-time partner portal and dedicated support.",
-    "headerEyebrow": "For agencies & recruiters",
+    "seoTitle": "Become a Study-in-China Partner Agent",
+    "seoDescription": "Partner with CAS as an agent or recruiter: apply to Chinese universities through one portal, track every application live and see your commission at each stage.",
+    "headerEyebrow": "For agencies and recruiters",
     "headerTitle": "Partner with CAS",
-    "headerSubtitle": "Give your students access to China's top universities through an authorized agent — with a live partner portal, competitive commissions and a team that supports you at every step.",
-    "becomePartner": "Become a partner",
-    "whyTitle": "Why partner with us",
-    "whySubtitle": "One trusted channel into studying in China.",
-    "benefitUniversitiesTitle": "200+ universities",
-    "benefitUniversitiesBody": "Refer students to Ministry of Education–listed universities across China through one trusted channel.",
-    "benefitCommissionsTitle": "Competitive commissions",
-    "benefitCommissionsBody": "Earn on every successful placement, tracked transparently and paid on a clear schedule.",
-    "benefitPortalTitle": "A real-time partner portal",
-    "benefitPortalBody": "Submit and track every application, see status changes live, and manage your students in one place.",
-    "benefitMarketingTitle": "Marketing support",
-    "benefitMarketingBody": "Access up-to-date program lists, intake deadlines and co-branded materials to help you recruit.",
-    "benefitAuthorizedTitle": "Authorized since 2012",
-    "benefitAuthorizedBody": "Work with an established, university-authorized agent with a strong visa and admission track record.",
-    "benefitTeamTitle": "Dedicated partner team",
-    "benefitTeamBody": "A named CAS contact supports you and your students from first enquiry to arrival.",
-    "howTitle": "How it works",
-    "step1Title": "Apply to partner",
-    "step1Body": "Tell us about your agency and the students you work with.",
-    "step2Title": "Get onboarded",
-    "step2Body": "We set up your partner portal access and walk your team through the process.",
-    "step3Title": "Refer & earn",
-    "step3Body": "Submit applications, track them live, and earn on every successful placement.",
+    "headerSubtitle": "Place your students in Chinese universities through an authorized agent. Submit and track applications in one portal and see where each commission stands.",
+    "becomePartner": "Apply as a partner",
+    "signIn": "Partner sign in",
+    "talkToUs": "Talk to us first",
+    "statUniversities": "Universities listed",
+    "statPrograms": "Programs listed",
+    "statMbbs": "Approved for English-taught MBBS",
+    "statSince": "Working with universities since",
+    "whyTitle": "What you get",
+    "whySubtitle": "The tools and support a recruiting agency needs, in one place.",
+    "benefit": {
+      "universities": {
+        "title": "One channel to many universities",
+        "body": "Apply to Ministry of Education-listed universities across China without managing each university separately."
+      },
+      "portal": {
+        "title": "A live partner portal",
+        "body": "Add students, submit applications and watch each status change as it happens."
+      },
+      "commissions": {
+        "title": "Commission you can follow",
+        "body": "Every placement shows its commission stage in your portal, from expected to paid."
+      },
+      "materials": {
+        "title": "Up-to-date information",
+        "body": "Program lists, fees and application windows you can use when you counsel students."
+      }
+    },
+    "portalTitle": "Inside the partner portal",
+    "portalSubtitle": "Everything you do with CAS happens in one account.",
+    "portal": {
+      "students": {
+        "title": "Manage students",
+        "body": "Add each student once and keep their details and documents together."
+      },
+      "apply": {
+        "title": "Apply to universities",
+        "body": "Choose programs and submit applications, or apply for scholarships, from one wizard."
+      },
+      "track": {
+        "title": "Track every application",
+        "body": "See each application's current status and what is needed next."
+      },
+      "earnings": {
+        "title": "See your commissions",
+        "body": "Check which commissions are expected, eligible, invoiced and paid."
+      }
+    },
+    "stagesTitle": "How a commission progresses",
+    "stagesSubtitle": "Each placement moves through the same stages, and you can see the current one.",
+    "stage": "Stage {{n}}",
+    "stages": [
+      {
+        "title": "Expected",
+        "body": "The student has applied and a commission is recorded."
+      },
+      {
+        "title": "Pending arrival",
+        "body": "The student is admitted and we wait for them to arrive."
+      },
+      {
+        "title": "Eligible",
+        "body": "The student has arrived, registered and paid the first-year fee."
+      },
+      {
+        "title": "Invoiced",
+        "body": "CAS invoices the university for the commission."
+      },
+      {
+        "title": "Paid to you",
+        "body": "Once received, your share is payable and then paid."
+      }
+    ],
+    "stagesNote": "Commission becomes eligible only after the student's arrival, registration and first-year fee payment. Rates depend on the university and are confirmed to you when you join.",
+    "howTitle": "How to start",
+    "steps": [
+      {
+        "title": "Apply to partner",
+        "body": "Create a partner account with your agency details."
+      },
+      {
+        "title": "Get approved",
+        "body": "Our team reviews your application and activates your portal access."
+      },
+      {
+        "title": "Refer and track",
+        "body": "Add students, submit applications and follow them to arrival."
+      }
+    ],
+    "fitTitle": "Who this is for",
+    "fit": [
+      "Study-abroad agencies and education consultants.",
+      "Schools and colleges that place graduates abroad.",
+      "Individual recruiters who counsel students regularly.",
+      "Teams who want one place to run applications to China."
+    ],
+    "faqTitle": "Partner questions",
+    "faq": [
+      {
+        "q": "Is there a fee to become a partner?",
+        "a": "No. Registering a partner account is free. You are approved by our team before you can submit applications."
+      },
+      {
+        "q": "How do commissions work?",
+        "a": "A commission is recorded for each placement and moves through stages in your portal. It becomes eligible after the student has arrived, registered and paid the first-year fee."
+      },
+      {
+        "q": "How much commission will I earn?",
+        "a": "Rates depend on the university and the agreement in place. We confirm the rate with you when you are approved."
+      },
+      {
+        "q": "Can I apply for scholarships for my students?",
+        "a": "Yes. The portal has a scholarship application flow next to the standard university application."
+      },
+      {
+        "q": "Which universities can my students apply to?",
+        "a": "Any university in our catalog, including the universities approved for English-taught MBBS."
+      }
+    ],
     "ctaTitle": "Ready to work together?",
-    "ctaSubtitle": "Tell us about your agency and we'll set up your partnership."
+    "ctaSubtitle": "Apply for a partner account, or talk to our team first."
   },
   "services": {
     "seoTitle": "Our Services",
