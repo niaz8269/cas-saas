@@ -90,6 +90,8 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Tianjin Medical University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://applyforchina.com/2025/01/24/china-medical-university/'],
             ['Shihezi University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://mdmsenquiry.com/shihezi-university/'],
             ['Yangzhou University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/yangzhou-university/'],
+            ['Jinzhou Medical University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-08-30', 'closed', 'https://eaziline.com/jinzhou-medical-university/'],
+            ['Beihua University', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-07-04', 'closed', 'https://www.sicas.com.cn/School/278/Beihua-University'],
         ];
     }
 }
