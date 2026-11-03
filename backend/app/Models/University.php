@@ -30,6 +30,7 @@ class University extends Model
         'address',
         'website',
         'logo_path',
+        'emblem_path',
         'cover_path',
         'cover_credit',
         'cover_source_url',

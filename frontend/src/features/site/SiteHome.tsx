@@ -73,16 +73,14 @@ const FEATURED: { id: string; labelKey: string; items: { titleKey: string; to: s
   },
 ]
 
-/** Round emblem for a hero card: the logo cropped to a circle from its left edge, where the emblem sits in wide logos; initials until it loads. */
-function HeroLogo({ url, name }: { url: string | null; name: string }) {
-  const [loaded, setLoaded] = useState(false)
+/** Round seal for a hero card: the university's square emblem crop, or its initials when it has none. */
+function HeroLogo({ emblem, name }: { emblem?: string | null; name: string }) {
   const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")
 
-  return (
-    <span className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/15 text-xs font-bold text-white">
-      {!loaded && initials}
-      {url && <img src={url} alt="" onLoad={() => setLoaded(true)} className={loaded ? "absolute inset-0 size-full bg-white object-cover object-left" : "hidden"} />}
-    </span>
+  return emblem ? (
+    <img src={emblem} alt="" className="size-10 shrink-0 rounded-full object-cover" />
+  ) : (
+    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-xs font-bold text-white">{initials}</span>
   )
 }
 
@@ -167,7 +165,7 @@ export default function SiteHome() {
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
                       className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
                     >
-                      <HeroLogo url={u.logo_url} name={u.name} />
+                      <HeroLogo emblem={u.emblem_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
                     </Link>
                   ))}

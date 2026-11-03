@@ -125,6 +125,7 @@ export interface SiteUniversityCard {
   address: string | null
   country: string | null
   logo_url: string | null
+  emblem_url?: string | null
   cover_url: string | null
   cover_credit?: string | null
   /** True when the cover is a photo of the city because no campus photo was available. */
