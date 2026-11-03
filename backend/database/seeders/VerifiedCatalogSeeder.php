@@ -401,6 +401,7 @@ class VerifiedCatalogSeeder extends Seeder
                     'High-school diploma (undergraduate), bachelor\'s (master\'s) or master\'s (doctoral)',
                     'Valid HSK for Chinese-taught programs; IELTS or TOEFL for English-taught programs',
                     'Passport copy, notarized diploma and transcripts, study plan, non-criminal record (within 6 months), foreigner physical examination form, photo; two recommendation letters for postgraduates',
+                    'Accommodation: four-bed international-student room CNY 2,500 per year (college fee notice of 13 Nov 2025); double and single rooms are priced higher',
                 ],
                 'contacts' => [['International Education College', 'iec@xjmu.edu.cn', 'Admissions']],
                 'programs' => [
@@ -449,14 +450,36 @@ class VerifiedCatalogSeeder extends Seeder
             [
                 'code' => 'LPU', 'name' => 'Liaoning Petrochemical University', 'city' => 'Fushun',
                 'address' => 'No. 1 West Section of Dandong Road, Wanghua District, Fushun, Liaoning 113001',
-                'website' => 'www.lnpu.edu.cn', 'apply_link' => null, 'logo' => '/logos/lnpu.png',
-                'about' => 'Liaoning Petrochemical University (辽宁石油化工大学) is located in Fushun, Liaoning; its official site still uses the former English name Liaoning Shihua University. Admission dates are being confirmed with the university — please contact CAS for current information.',
+                'website' => 'www.lnpu.edu.cn', 'apply_link' => 'http://admission.lnpu.edu.cn/', 'logo' => '/logos/lnpu.png',
+                'about' => 'Liaoning Petrochemical University (辽宁石油化工大学) is located in Fushun, Liaoning; its official site still uses the former English name Liaoning Shihua University. International students apply through its International Education College, which publishes an annual admission schedule, fees and scholarships.',
                 'requirements' => [
-                    'Tuition (CUCAS listing, checked 30 Oct 2026): Chinese language training RMB 12,000; bachelor RMB 16,000 per year; master RMB 22,000 per year',
-                    'International student apartment (CUCAS listing): double room RMB 4,200–5,500 per year, single room RMB 6,000–10,000 per year',
-                    'Confirm exact program fees and deadlines with CAS before applying',
+                    'Degree programs: aged 18–35 and in good health; Chinese-language study: aged 18–65. Bachelor needs a high-school certificate; master\'s needs a bachelor\'s degree',
+                    'Meet the Chinese Ministry of Education health standard for international students; good conduct',
+                    'Tuition per year (university fee page): English-taught bachelor CNY 16,000; Chinese-taught bachelor 14,500; master\'s 19,000 (English or Chinese); Chinese language 12,000; foundation year 15,000',
+                    'Accommodation per year: double room CNY 4,500–5,500; single room 6,000–7,000',
+                    'First-year costs: application fee CNY 800; bedding 260 (optional); medical exam 310.5. Each year: insurance CNY 385; residence permit 800; living costs about CNY 800 a month',
                 ],
-                'programs' => [], 'intakes' => [], 'scholarships' => [],
+                'contacts' => [['International Education College — Admissions Office', 'shihuadaxue2008@163.com', 'Admissions (tel. +86-24-56863926)']],
+                'programs' => [],
+                'intakes' => [
+                    // The university publishes a recurring yearly schedule; dates below are the next occurrence of it.
+                    ['name' => 'Spring 2027 intake (annual schedule: apply 1 Nov – 20 Apr)', 'opens' => '2026-11-01', 'closes' => '2027-04-20', 'status' => 'open', 'source' => 'https://gjjyxy.lnpu.edu.cn/index/lxszs/zsrc.htm'],
+                    ['name' => 'Autumn 2027 intake (annual schedule: apply 1 May – 20 Oct)', 'opens' => '2027-05-01', 'closes' => '2027-10-20', 'status' => 'open', 'source' => 'https://gjjyxy.lnpu.edu.cn/index/lxszs/zsrc.htm'],
+                ],
+                'scholarships' => [
+                    [
+                        'name' => 'Chinese Government Scholarship (CSC) — master\'s', 'type' => 'full',
+                        'description' => 'For master\'s applicants, applied for through the CSC online system (studyinchina.csc.edu.cn) plus notarized documents mailed to the International Education College. The university states the deadline as before 30 March each year; it does not list the award amounts on this page.',
+                        'how' => 'Register and apply on the CSC system, then mail the notarized application form, highest degree, transcripts, a study plan of at least 800 words, two recommendation letters and the physical examination form.',
+                        'apply' => 'http://studyinchina.csc.edu.cn', 'closes' => '2027-03-30', 'source' => 'https://gjjyxy.lnpu.edu.cn/index/lhlx/zgzfjxj.htm',
+                    ],
+                    [
+                        'name' => 'LNPU Scholarship for international students', 'type' => 'partial',
+                        'description' => 'Awarded once a school year to self-funded international students who are already enrolled: first, second and third-class scholarships plus awards for outstanding student leaders and activity participants. Amounts are not published.',
+                        'eligibility' => 'Undergraduates in years 2–4 and master\'s students in years 2–3, self-funded, with no disciplinary record. Apply when the college issues its notice.',
+                        'source' => 'https://gjjyxy.lnpu.edu.cn/index/lhlx/lshjxj.htm',
+                    ],
+                ],
             ],
         ];
     }
