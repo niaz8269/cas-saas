@@ -64,6 +64,9 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Fujian Medical University', 'Autumn 2026 English-taught intake (closed)', '2025-12-20', '2026-07-01', 'closed', 'https://oec.fjmu.edu.cn/en/2025/1229/c4070a212648/page.htm'],
             ['Guangzhou Medical University', 'Autumn 2026 MBBS intake (closed)', '2026-03-01', '2026-08-30', 'closed', 'https://en.gzhmu.edu.cn/info/1661/3891.htm'],
             ['Chongqing Medical University', 'Autumn 2026 bachelor\'s intake (closed)', null, '2026-08-31', 'closed', 'https://english.cqmu.edu.cn/info/1148/3038.htm'],
+            ['Shanghai Jiao Tong University', 'Autumn 2026 School of Medicine intake (closed)', '2025-12-08', '2026-04-30', 'closed', 'https://www.shsmu.edu.cn/iso/info/1034/1348.htm'],
+            ['Sichuan University', 'Autumn 2026 undergraduate intake (closed)', '2026-01-01', '2026-05-30', 'closed', 'https://global.scu.edu.cn/oso/article/details/3445f292-d2e3-494a-9a8d-d49f8e829e88?lang=zh'],
+            ['Kunming Medical University', '2026 self-funded degree intake incl. English-taught undergraduate (closed)', '2026-01-01', '2026-07-31', 'closed', 'https://www.kmmu.edu.cn/upload/20251111/2025111111371682.pdf'],
         ];
     }
 }
