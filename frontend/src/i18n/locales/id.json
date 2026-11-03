@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp kami",
     "freeConsultation": "Konsultasi gratis",
     "rights": "© {{year}} CAS Education. Seluruh hak cipta dilindungi.",
-    "authorized": "Agen resmi berwenang sejak 2012."
+    "authorized": "Agen resmi berwenang sejak 2012.",
+    "photoCredits": "Kredit foto"
   },
   "components": {
     "moeListed": "Terdaftar di Kemendikbud",
@@ -157,7 +158,17 @@
     "factFounded": "Didirikan",
     "factType": "Jenis",
     "factStudents": "Mahasiswa",
-    "wikipediaCredit": "Fakta dan pengantar dari"
+    "wikipediaCredit": "Fakta dan pengantar dari",
+    "generalRequirementsTitle": "Persyaratan umum mahasiswa internasional (setiap universitas dan program menetapkan daftar persyaratannya sendiri)",
+    "generalRequirements": [
+      "Warga negara non-Tiongkok dengan paspor yang berlaku, sehat jasmani dan rohani.",
+      "Sarjana: lulusan SMA. Magister: gelar sarjana. Doktor: gelar magister.",
+      "Pelamar program sarjana mengikuti CSCA (China Scholastic Competency Assessment).",
+      "Program berbahasa Mandarin: sertifikat HSK (tingkat sesuai program). Program berbahasa Inggris: bukti kemampuan bahasa Inggris kecuali pernah belajar dalam bahasa Inggris.",
+      "Transkrip akademik tersertifikasi, formulir pemeriksaan kesehatan, dan surat keterangan catatan kepolisian.",
+      "CAS memastikan persyaratan, batas waktu, dan biaya yang tepat untuk program Anda sebelum Anda mendaftar."
+    ],
+    "overviewContents": "Daftar isi"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
@@ -840,7 +851,10 @@
     "search": {
       "placeholder": "MASUKKAN NAMA UNIVERSITAS ATAU PROGRAM",
       "ariaSearchField": "Cari universitas atau program",
-      "ariaSearchButton": "Cari"
+      "ariaSearchButton": "Cari",
+      "label": "Temukan universitas atau program Anda",
+      "button": "Cari",
+      "popular": "Populer:"
     },
     "popularSearches": {
       "chineseLanguage": "Program Bahasa Mandarin",
@@ -1469,5 +1483,20 @@
     "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
     "sourceSas": "Daftar SAS",
     "sourceListing": "Daftar pihak ketiga, belum dikonfirmasi"
+  },
+  "photoCredits": {
+    "seoTitle": "Kredit foto",
+    "seoDescription": "Pembuat dan lisensi foto di situs CAS.",
+    "title": "Kredit foto",
+    "subtitle": "Foto kampus dan kota di situs ini berlisensi bebas. Setiap foto membawa tanda CAS; pembuat dan lisensinya tercantum di sini.",
+    "siteTitle": "Foto yang digunakan di seluruh situs",
+    "universityTitle": "Foto universitas dan kota",
+    "loadError": "Kredit tidak dapat dimuat saat ini.",
+    "city": "foto kota",
+    "campus": "foto kampus",
+    "source": "sumber",
+    "textTitle": "Teks pada halaman universitas",
+    "textBody": "Pengantar, fakta, dan bagian ikhtisar pada halaman universitas diadaptasi dari Wikipedia bahasa Inggris (artikel universitas, kota, dan provinsinya) dengan lisensi CC BY-SA 4.0; artikel setiap universitas ditautkan di bawah.",
+    "textFrom": "teks dari Wikipedia"
   }
 }

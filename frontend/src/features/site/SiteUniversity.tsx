@@ -23,8 +23,8 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AdmissionWindow } from "@/features/site/components"
-import { getSiteUniversity, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
+import { AdmissionWindow, PhotoMark } from "@/features/site/components"
+import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { useSeo } from "@/lib/seo"
@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils"
 const money = (v: string | number | null | undefined, currency?: string | null) =>
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()
 
-const levelLabel = (l: string) => l.replace(/\b\w/g, (c) => c.toUpperCase())
+const levelLabel = (l: string) => l.replace(/_/g, "-").replace(/^\w/, (c) => c.toUpperCase())
 
 export default function SiteUniversity() {
   const { t } = useTranslation()
@@ -104,16 +104,12 @@ export default function SiteUniversity() {
             </div>
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-          {cover?.credit && (
-            <p className="absolute right-3 bottom-2 left-3 text-right text-[11px] text-white/90">
-              {"own" in cover ? t("university.photoCredit") : t("university.locationPhoto")}: {cover.credit}
-            </p>
-          )}
+          {cover && <PhotoMark link />}
         </div>
         <div className="p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="-mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
+              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="relative z-10 -mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 {u.name_zh && <p className="mt-0.5 text-lg text-muted-foreground">{u.name_zh}</p>}
@@ -218,6 +214,53 @@ function SignInGate({ label, className }: { label: string; className?: string })
   )
 }
 
+/** The long Overview: a contents row and the sections (history, campus, city, programs, admission). */
+function OverviewArticle({ sections }: { sections: SiteOverviewSection[] }) {
+  const { t } = useTranslation()
+  const slug = (i: number) => `overview-${i}`
+  const toc = sections.map((s, i) => ({ s, i })).filter(({ s }) => s.level === 2)
+
+  return (
+    <article className="rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+      {toc.length > 3 && (
+        <nav aria-label={t("university.overviewContents")} className="mb-6 flex flex-wrap gap-x-4 gap-y-1.5 border-b pb-4 text-sm">
+          {toc.map(({ s, i }) => (
+            <a key={i} href={`#${slug(i)}`} className="text-cas-navy hover:underline">{s.h}</a>
+          ))}
+        </nav>
+      )}
+      <div className="max-w-3xl space-y-8">
+        {sections.map((s, i) => {
+          const Heading = s.level === 2 ? "h2" : "h3"
+          const groups: ({ t: "p"; x: string } | { t: "ul"; items: string[] })[] = []
+          for (const b of s.blocks) {
+            const last = groups[groups.length - 1]
+            if (b.t === "li") {
+              if (last && last.t === "ul") last.items.push(b.x)
+              else groups.push({ t: "ul", items: [b.x] })
+            } else groups.push({ t: "p", x: b.x })
+          }
+
+          return (
+            <section key={i} id={slug(i)} className={s.level === 2 ? "scroll-mt-24" : "-mt-4 scroll-mt-24"}>
+              <Heading className={s.level === 2 ? "text-lg font-semibold text-cas-navy" : "text-base font-semibold text-foreground"}>{s.h}</Heading>
+              <div className="mt-2 space-y-3 text-sm leading-relaxed text-foreground/90">
+                {groups.map((g, j) => g.t === "p" ? (
+                  <p key={j}>{g.x}</p>
+                ) : (
+                  <ul key={j} className="grid list-disc gap-x-8 gap-y-1 pl-5 sm:grid-cols-2">
+                    {g.items.map((x, k) => <li key={k}>{x}</li>)}
+                  </ul>
+                ))}
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    </article>
+  )
+}
+
 function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfessor | null }) {
   const { t } = useTranslation()
   const facts: [string, string][] = [
@@ -240,17 +283,13 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
           </div>
         ))}
       </div>
-      {u.about && (
+      {u.overview?.length ? (
+        <OverviewArticle sections={u.overview} />
+      ) : u.about ? (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
-          {u.wikipedia_url && (
-            <p className="mt-3 text-[11px] text-muted-foreground">
-              {t("university.wikipediaCredit")}{" "}
-              <a href={u.wikipedia_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">Wikipedia</a> (CC BY-SA 4.0)
-            </p>
-          )}
         </div>
-      )}
+      ) : null}
       {rep?.name && (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
           <h3 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">{t("university.repHeading")}</h3>
@@ -422,7 +461,14 @@ function AdmissionPanel({ u }: { u: SiteUniversityDetail }) {
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">{t("university.requirementsFallback")}</p>
+          <div className="mt-2">
+            <p className="text-sm text-muted-foreground">{t("university.generalRequirementsTitle")}</p>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {(t("university.generalRequirements", { returnObjects: true }) as string[]).map((r, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm"><span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-cas-navy" />{r}</li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
       <div className="flex flex-col items-start justify-between gap-3 rounded-sm bg-cas-navy p-6 text-white sm:flex-row sm:items-center">

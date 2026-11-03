@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp us",
     "freeConsultation": "Free consultation",
     "rights": "© {{year}} CAS Education. All rights reserved.",
-    "authorized": "Official authorized agent since 2012."
+    "authorized": "Official authorized agent since 2012.",
+    "photoCredits": "Photo credits"
   },
   "components": {
     "moeListed": "MoE-approved MBBS",
@@ -159,7 +160,17 @@
     "factFounded": "Founded",
     "factType": "Type",
     "factStudents": "Students",
-    "wikipediaCredit": "Facts and introduction from"
+    "wikipediaCredit": "Facts and introduction from",
+    "generalRequirementsTitle": "General requirements for international students (each university and program sets its own exact checklist)",
+    "generalRequirements": [
+      "Non-Chinese citizen with a valid passport, in good physical and mental health.",
+      "Bachelor's: high-school graduate. Master's: bachelor's degree. Doctorate: master's degree.",
+      "Bachelor's applicants take the CSCA (China Scholastic Competency Assessment).",
+      "Chinese-taught programs: an HSK certificate (the level depends on the program). English-taught programs: proof of English proficiency unless you studied in English.",
+      "Certified academic transcripts, a physical examination form and a police clearance certificate.",
+      "CAS confirms the exact requirements, deadlines and fees for your course before you apply."
+    ],
+    "overviewContents": "Contents"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
@@ -848,7 +859,10 @@
     "search": {
       "placeholder": "ENTER THE NAME OF A UNIVERSITY OR A PROGRAM",
       "ariaSearchField": "Search universities or programs",
-      "ariaSearchButton": "Search"
+      "ariaSearchButton": "Search",
+      "label": "Find your university or program",
+      "button": "Search",
+      "popular": "Popular:"
     },
     "popularSearches": {
       "chineseLanguage": "Chinese Language Program",
@@ -1471,5 +1485,20 @@
     "sourceCucas": "CUCAS listing — confirm with the university",
     "sourceSas": "SAS listing",
     "sourceListing": "Third-party listing, unconfirmed"
+  },
+  "photoCredits": {
+    "seoTitle": "Photo credits",
+    "seoDescription": "Authors and licences of the photos used on the CAS website.",
+    "title": "Photo credits",
+    "subtitle": "Campus and city photos on this site are freely licensed. Each photo carries the CAS mark; the authors and licences are listed here.",
+    "siteTitle": "Photos used across the site",
+    "universityTitle": "University and city photos",
+    "loadError": "Couldn't load the credits right now.",
+    "city": "city photo",
+    "campus": "campus photo",
+    "source": "source",
+    "textTitle": "Text on university pages",
+    "textBody": "Introductions, facts and the overview sections on university pages are adapted from English Wikipedia (the articles of the university, its city and its province) and licensed CC BY-SA 4.0; each university's article is linked below.",
+    "textFrom": "text from Wikipedia"
   }
 }

@@ -955,4 +955,8 @@ ALTER TABLE universities
 ALTER TABLE universities
   ADD COLUMN emblem_path VARCHAR(255) NULL AFTER logo_path;
 
+-- ADDENDUM: sectioned overview text shown on the university Overview tab.
+ALTER TABLE universities
+  ADD COLUMN overview JSON NULL AFTER about;
+
 -- =========================== END OF SCHEMA ===========================

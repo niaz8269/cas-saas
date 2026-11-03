@@ -21,6 +21,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 import heroBg from "@/assets/b1.webp"
+import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
 import { organizationJsonLd, useSeo } from "@/lib/seo"
@@ -178,22 +179,28 @@ export default function SiteHome() {
 
         {/* Search bar — sits over the bottom of the full-screen image, fully visible */}
         <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-8">
-          <div className="rounded-sm bg-white p-5 shadow-xl ring-1 ring-black/5 sm:p-6">
-            <form onSubmit={runSearch} className="flex">
-              <input
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-                placeholder={t("home.search.placeholder")}
-                aria-label={t("home.search.ariaSearchField")}
-                className="flex-1 rounded-l-sm border-2 border-r-0 border-cas-red bg-white px-4 py-3 text-sm text-ink placeholder:text-gray-400 outline-none focus:border-cas-red-600"
-              />
-              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex items-center rounded-r-sm bg-cas-red px-6 text-white transition-colors hover:bg-cas-red-600">
-                <Search className="size-5" />
+          <div className="rounded-lg bg-white p-5 shadow-2xl ring-1 ring-black/5 sm:p-7">
+            <p className="text-center text-sm font-semibold tracking-wide text-cas-navy">{t("home.search.label")}</p>
+            <form onSubmit={runSearch} className="mt-3 flex items-stretch gap-2">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  placeholder={t("home.search.placeholder")}
+                  aria-label={t("home.search.ariaSearchField")}
+                  className="h-12 w-full rounded-md border border-slate-300 bg-white pr-4 pl-12 text-base text-slate-900 caret-cas-red shadow-inner placeholder:text-slate-400 outline-none transition-colors focus:border-cas-red focus:ring-2 focus:ring-cas-red/20"
+                />
+              </div>
+              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-12 items-center gap-2 rounded-md bg-cas-red px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
+                <span className="hidden sm:inline">{t("home.search.button")}</span>
+                <Search className="size-5 sm:hidden" />
               </button>
             </form>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-slate-500">{t("home.search.popular")}</span>
               {POPULAR_SEARCHES.map(([labelKey, to]) => (
-                <Link key={labelKey} to={to} className="rounded-sm bg-gray-100 px-3 py-1 text-xs text-gray-500 transition-colors hover:bg-cas-red-50 hover:text-cas-red-600">
+                <Link key={labelKey} to={to} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-cas-red/40 hover:bg-cas-red-50 hover:text-cas-red-600">
                   {t(labelKey)}
                 </Link>
               ))}
@@ -208,7 +215,7 @@ export default function SiteHome() {
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> {t("home.weekly.title")}
         </h2>
         <div className="mt-10 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <PhotoBanner src="/images/art-3.svg" className="min-h-48" />
+          <PhotoBanner src="/images/art-3.svg" image={weeklyUniversity.data?.data.cover_url ? { src: weeklyUniversity.data.data.cover_url, credit: weeklyUniversity.data.data.cover_credit ?? undefined } : null} className="min-h-48" />
           <div className="p-6">
             {weekly ? (
               <>
@@ -248,7 +255,7 @@ export default function SiteHome() {
         <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
           {HIGHLIGHTS.map(({ titleKey, bodyKey, to, tagKey }, i) => (
             <Link key={titleKey} to={to} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} className="h-44">
+              <PhotoBanner src={`/images/art-${(i % 6) + 1}.svg`} image={HIGHLIGHT_PHOTOS[i % HIGHLIGHT_PHOTOS.length]} className="h-44">
                 <span className="absolute top-3 left-3 rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white">{t(tagKey)}</span>
               </PhotoBanner>
               <div className="flex flex-1 flex-col p-6">
@@ -272,7 +279,7 @@ export default function SiteHome() {
             {programs.isPending && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-sm bg-white/10" />)}
             {outstanding.map((p, i) => (
               <Link key={p.id} to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?ref=outstanding"} className="group overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} className="flex h-32 items-center justify-center">
+                <PhotoBanner src={`/images/art-${((i + 3) % 6) + 1}.svg`} image={p.university?.cover_url ? { src: p.university.cover_url, credit: p.university.cover_credit ?? undefined } : null} className="flex h-32 items-center justify-center">
                   <span className="rounded-full bg-cas-red px-2.5 py-0.5 text-[11px] font-semibold text-white capitalize">{p.level.replace("_", "-")}</span>
                 </PhotoBanner>
                 <div className="p-5">

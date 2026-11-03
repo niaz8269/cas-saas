@@ -5,13 +5,8 @@ import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
-import { SitePageHeader } from "@/features/site/components"
+import { PhotoMark, SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
-
-const DOT_GRID = {
-  backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
-  backgroundSize: "20px 20px",
-}
 
 export default function SiteCities() {
   const { t } = useTranslation()
@@ -26,9 +21,7 @@ export default function SiteCities() {
     queryFn: () => getSiteUniversities({ perPage: 50 }),
   })
 
-  const cities = data?.cities ?? []
-  const unis = data?.data ?? []
-  const countFor = (city: string) => unis.filter((u) => u.city === city).length
+  const cities = data?.city_stats ?? []
 
   return (
     <div className="space-y-6">
@@ -55,31 +48,29 @@ export default function SiteCities() {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cities.map((city) => {
-            const count = countFor(city)
-
-            return (
-              <Link
-                key={city}
-                to={`/site/universities?city=${encodeURIComponent(city)}`}
-                className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
-              >
-                <div className="relative flex h-28 items-center justify-center overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
-                  <div className="pointer-events-none absolute inset-0 opacity-[0.14]" style={DOT_GRID} />
-                  <span className="relative font-sans text-2xl font-bold text-white/95">{city}</span>
-                </div>
-                <div className="flex flex-1 items-center justify-between gap-3 p-5">
-                  <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Building2 className="size-4 text-cas-navy" />
-                    {count > 0 ? t("cities.universityCount", { count }) : t("cities.exploreUniversities")}
-                  </span>
-                  <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600">
-                    {t("cities.view")} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </div>
-              </Link>
-            )
-          })}
+          {cities.map(({ city, count, photo_url }) => (
+            <Link
+              key={city}
+              to={`/site/universities?city=${encodeURIComponent(city)}`}
+              className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
+            >
+              <div className="relative flex h-36 items-end overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
+                {photo_url && <img src={photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <span className="relative px-5 pb-3 font-sans text-2xl font-bold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">{city}</span>
+                {photo_url && <PhotoMark />}
+              </div>
+              <div className="flex flex-1 items-center justify-between gap-3 p-5">
+                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <Building2 className="size-4 text-cas-navy" />
+                  {t("cities.universityCount", { count })}
+                </span>
+                <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600">
+                  {t("cities.view")} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>

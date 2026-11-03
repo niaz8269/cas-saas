@@ -53,7 +53,8 @@
     "whatsappUs": "Écrivez-nous sur WhatsApp",
     "freeConsultation": "Consultation gratuite",
     "rights": "© {{year}} CAS Education. Tous droits réservés.",
-    "authorized": "Agent officiel agréé depuis 2012."
+    "authorized": "Agent officiel agréé depuis 2012.",
+    "photoCredits": "Crédits photo"
   },
   "components": {
     "moeListed": "Listée par le MoE",
@@ -157,7 +158,17 @@
     "factFounded": "Fondée en",
     "factType": "Type",
     "factStudents": "Étudiants",
-    "wikipediaCredit": "Faits et introduction issus de"
+    "wikipediaCredit": "Faits et introduction issus de",
+    "generalRequirementsTitle": "Conditions générales pour les étudiants internationaux (chaque université et programme fixe sa propre liste)",
+    "generalRequirements": [
+      "Être de nationalité non chinoise, avec un passeport valide, en bonne santé physique et mentale.",
+      "Licence : baccalauréat. Master : licence. Doctorat : master.",
+      "Les candidats en licence passent le CSCA (China Scholastic Competency Assessment).",
+      "Programmes en chinois : certificat HSK (niveau selon le programme). Programmes en anglais : preuve de niveau d'anglais, sauf études en anglais.",
+      "Relevés de notes certifiés, formulaire d'examen médical et casier judiciaire vierge.",
+      "CAS confirme les conditions, dates limites et frais exacts de votre cursus avant la candidature."
+    ],
+    "overviewContents": "Sommaire"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -840,7 +851,10 @@
     "search": {
       "placeholder": "SAISISSEZ LE NOM D'UNE UNIVERSITÉ OU D'UN PROGRAMME",
       "ariaSearchField": "Rechercher des universités ou des programmes",
-      "ariaSearchButton": "Rechercher"
+      "ariaSearchButton": "Rechercher",
+      "label": "Trouvez votre université ou programme",
+      "button": "Rechercher",
+      "popular": "Populaires :"
     },
     "popularSearches": {
       "chineseLanguage": "Programme de langue chinoise",
@@ -1469,5 +1483,20 @@
     "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université",
     "sourceSas": "Fiche SAS",
     "sourceListing": "Annonce tierce, non confirmée"
+  },
+  "photoCredits": {
+    "seoTitle": "Crédits photo",
+    "seoDescription": "Auteurs et licences des photos du site CAS.",
+    "title": "Crédits photo",
+    "subtitle": "Les photos de campus et de villes de ce site sont sous licence libre. Chaque photo porte la marque CAS ; les auteurs et licences sont listés ici.",
+    "siteTitle": "Photos utilisées sur le site",
+    "universityTitle": "Photos d'universités et de villes",
+    "loadError": "Impossible de charger les crédits pour le moment.",
+    "city": "photo de la ville",
+    "campus": "photo du campus",
+    "source": "source",
+    "textTitle": "Textes des pages d'universités",
+    "textBody": "Les introductions, faits et sections de présentation des pages d'universités sont adaptés de Wikipédia en anglais (articles de l'université, de sa ville et de sa province), sous licence CC BY-SA 4.0 ; l'article de chaque université est lié ci-dessous.",
+    "textFrom": "texte de Wikipédia"
   }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Resources\Public;
 
 use App\Models\Scholarship;
+use App\Models\University;
+use App\Services\Media\ImageService;
 use App\Support\SourceKind;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -42,10 +44,42 @@ class PublicScholarshipResource extends JsonResource
             'source_kind' => SourceKind::of($this->source_url),
             'verified_on' => $this->verified_on?->toDateString(),
             'how_to_apply' => $howVisible ? $this->how_to_apply : null,
+            'photo_url' => $this->photo()['url'],
+            'photo_credit' => $this->photo()['credit'],
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,
             ]),
         ];
+    }
+
+    /** China-wide scholarships are shown with the campus of the university that runs or hosts them. */
+    private const HOSTS = [
+        'yenching-fellowship-2027' => 'peking-university',
+        'zhejiang-university-doctoral-scholarship-routes' => 'zhejiang-university',
+        'tsinghua-graduate-scholarships-2027' => 'tsinghua-university',
+        'schwarzman-scholars-class-2028' => 'tsinghua-university',
+        'beijing-government-scholarship' => 'beijing-normal-university',
+    ];
+
+    /** @var array<string, University> */
+    private static array $hosts = [];
+
+    /** @return array{url: string|null, credit: string|null} */
+    private function photo(): array
+    {
+        $images = app(ImageService::class);
+        $university = $this->resource->university;
+        if (! $university && isset(self::HOSTS[$this->slug])) {
+            $slug = self::HOSTS[$this->slug];
+            $university = self::$hosts[$slug] ??= University::where('slug', $slug)->first(['id', 'slug', 'cover_path', 'cover_credit']);
+        }
+
+        if ($university?->cover_path) {
+            return ['url' => $images->url($university->cover_path), 'credit' => $university->cover_credit];
+        }
+
+        // National programs without a host campus (CSC): the site's China photo.
+        return ['url' => '/images/hero-great-wall.webp', 'credit' => null];
     }
 }

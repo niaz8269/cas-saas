@@ -53,7 +53,8 @@
     "whatsappUs": "WhatsApp 联系",
     "freeConsultation": "免费咨询",
     "rights": "© {{year}} CAS Education。保留所有权利。",
-    "authorized": "自 2012 年起的官方授权代理。"
+    "authorized": "自 2012 年起的官方授权代理。",
+    "photoCredits": "图片来源"
   },
   "components": {
     "moeListed": "教育部认可",
@@ -157,7 +158,17 @@
     "factFounded": "创办年份",
     "factType": "类型",
     "factStudents": "学生人数",
-    "wikipediaCredit": "事实与简介来源："
+    "wikipediaCredit": "事实与简介来源：",
+    "generalRequirementsTitle": "国际学生一般要求（各高校和专业有各自的具体清单）",
+    "generalRequirements": [
+      "非中国籍公民，持有效护照，身心健康。",
+      "本科：高中毕业；硕士：本科学位；博士：硕士学位。",
+      "本科申请者须参加 CSCA（来华留学本科入学学业水平测试）。",
+      "中文授课项目：需 HSK 证书（等级视项目而定）；英文授课项目：需英语水平证明，英语授课毕业者除外。",
+      "经认证的成绩单、体格检查表和无犯罪记录证明。",
+      "申请前，CAS 会为您确认所选专业的具体要求、截止日期和费用。"
+    ],
+    "overviewContents": "目录"
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",
@@ -840,7 +851,10 @@
     "search": {
       "placeholder": "输入院校或专业名称",
       "ariaSearchField": "搜索院校或专业",
-      "ariaSearchButton": "搜索"
+      "ariaSearchButton": "搜索",
+      "label": "查找大学或项目",
+      "button": "搜索",
+      "popular": "热门搜索："
     },
     "popularSearches": {
       "chineseLanguage": "中文语言课程",
@@ -1469,5 +1483,20 @@
     "sourceCucas": "CUCAS 列表——请向大学确认",
     "sourceSas": "SAS 收录",
     "sourceListing": "第三方信息，未经确认"
+  },
+  "photoCredits": {
+    "seoTitle": "图片来源",
+    "seoDescription": "CAS 网站所用照片的作者与许可信息。",
+    "title": "图片来源",
+    "subtitle": "本站的校园和城市照片均为自由许可。每张照片带有 CAS 标识；作者与许可信息列于此处。",
+    "siteTitle": "全站使用的照片",
+    "universityTitle": "大学与城市照片",
+    "loadError": "暂时无法加载图片来源。",
+    "city": "城市照片",
+    "campus": "校园照片",
+    "source": "来源",
+    "textTitle": "大学页面文字",
+    "textBody": "大学页面的简介、事实和概览章节改编自英文维基百科（大学、所在城市和省份的条目），采用 CC BY-SA 4.0 许可；各大学对应的条目链接见下方。",
+    "textFrom": "文字来自维基百科"
   }
 }

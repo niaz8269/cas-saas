@@ -1,8 +1,10 @@
+import { HEADER_IMAGES, type HeaderImage } from "@/features/site/headerImages"
 import { ArrowUpRight, CalendarClock, GraduationCap, MapPin, ShieldCheck } from "lucide-react"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import logoWhite from "@/assets/cas-logo-white.png"
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
 
@@ -23,12 +25,39 @@ function toneFor(seed: number | string): string {
 }
 
 /**
+ * The CAS mark on every photo: logo and website. Photo authors and licences are
+ * listed once on the Photo credits page rather than on each picture.
+ */
+export function PhotoMark({ className, link = false }: { className?: string; link?: boolean }) {
+  const inner = (
+    <>
+      <img src={logoWhite} alt="CAS" className="h-4 w-auto" />
+      <span className="text-[10px] font-medium tracking-wide text-white">www.cas.moe</span>
+    </>
+  )
+  const base = "absolute right-2.5 bottom-2 z-10 inline-flex items-center gap-1.5 rounded-sm bg-black/40 px-2 py-1 backdrop-blur-sm"
+
+  return link ? (
+    <a href="https://www.cas.moe" target="_blank" rel="noreferrer" className={cn(base, "hover:bg-black/55", className)}>{inner}</a>
+  ) : (
+    <span className={cn(base, "pointer-events-none", className)}>{inner}</span>
+  )
+}
+
+/**
  * A tinted banner area. Only real, supplied images are ever shown on the public
  * site; where there is none, this renders a plain brand tint — never stock art.
  */
-export function PhotoBanner({ src, className, children }: { src: string; className?: string; children?: ReactNode }) {
+export function PhotoBanner({ src, image, className, children }: { src: string; image?: HeaderImage | null; className?: string; children?: ReactNode }) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
+      {image && (
+        <>
+          <img src={image.src} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/45 to-transparent" />
+          <PhotoMark />
+        </>
+      )}
       {children}
     </div>
   )
@@ -57,9 +86,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-            {cover.credit && (
-              <p className="pointer-events-none absolute inset-x-3 bottom-1.5 line-clamp-1 text-[10px] text-white/85">{cover.credit}</p>
-            )}
+            <PhotoMark />
           </>
         )}
         {u.moe_listed && (
@@ -71,9 +98,11 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
-          {u.logo_url && (
+          {u.emblem_url ? (
+            <img src={u.emblem_url} alt="" loading="lazy" decoding="async" className="size-12 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5" />
+          ) : u.logo_url ? (
             <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
-          )}
+          ) : null}
           <div className="min-w-0">
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</h3>
             {u.name_zh && <p className="text-xs text-muted-foreground">{u.name_zh}</p>}
@@ -103,15 +132,19 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
  * content) — a prominent navy banner with a red eyebrow pill, so the whole
  * site shares a single header pattern.
  */
-export function SitePageHeader({ eyebrow, title, subtitle, action }: {
+export function SitePageHeader({ eyebrow, title, subtitle, action, image = HEADER_IMAGES.default }: {
   eyebrow?: ReactNode
   title: string
   subtitle?: string
   action?: ReactNode
+  image?: HeaderImage
 }) {
   return (
     <section className="relative overflow-hidden rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
+      <img src={image.src} alt="" decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/90 via-cas-navy/75 to-cas-navy/45" />
       <div className="pointer-events-none absolute -top-16 -right-12 size-56 rounded-full bg-cas-red/20 blur-3xl" />
+      <PhotoMark link />
       <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
           {eyebrow && <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">{eyebrow}</span>}

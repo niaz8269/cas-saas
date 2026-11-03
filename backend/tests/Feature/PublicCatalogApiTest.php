@@ -208,3 +208,14 @@ it('never exposes official links on the public catalog (admin-only)', function (
 
     $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertJsonPath('data.intakes.0.source_kind', 'official');
 });
+
+it('lists photo authors and licences on one public credits endpoint', function () {
+    University::factory()->create(['name' => 'Credit Uni', 'status' => 'active', 'cover_credit' => 'A. Author, CC BY 4.0, via Wikimedia Commons', 'cover_source_url' => 'https://commons.wikimedia.org/wiki/File:X.jpg']);
+    University::factory()->create(['name' => 'No Photo Uni', 'status' => 'active', 'cover_credit' => null]);
+
+    $this->getJson('/api/v1/public/photo-credits')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.university', 'Credit Uni')
+        ->assertJsonPath('data.0.credit', 'A. Author, CC BY 4.0, via Wikimedia Commons');
+});

@@ -9,7 +9,9 @@ use App\Http\Resources\Public\PublicUniversityResource;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
+use App\Services\Media\ImageService;
 use App\Services\Public\AudienceResolver;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -70,7 +72,65 @@ class PublicCatalogController extends Controller
             ->pluck('city');
 
         return PublicUniversityResource::collection($universities)
-            ->additional(['cities' => $cities, 'audience' => $audience]);
+            ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience]);
+    }
+
+    /**
+     * Per-city university counts with a photo for the destinations page: the
+     * city photo when there is one, otherwise a campus photo of a university
+     * in that city.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function cityStats(): array
+    {
+        $images = app(ImageService::class);
+
+        return University::query()
+            ->where('status', 'active')
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->orderBy('name')
+            ->get(['city', 'cover_path', 'cover_credit', 'cover_is_city'])
+            ->groupBy('city')
+            ->map(function ($rows, $city) use ($images) {
+                $photo = $rows->firstWhere('cover_is_city', true) ?? $rows->first(fn ($u) => filled($u->cover_path));
+
+                return [
+                    'city' => $city,
+                    'count' => $rows->count(),
+                    'photo_url' => $photo ? $images->url($photo->cover_path) : null,
+                    'photo_credit' => $photo?->cover_credit,
+                    'photo_is_city' => (bool) $photo?->cover_is_city,
+                ];
+            })
+            ->sortBy([['count', 'desc'], ['city', 'asc']])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Attribution for the freely licensed photos used on the site. The photos
+     * carry the CAS mark; their authors and licences are listed on one page.
+     */
+    public function photoCredits(): JsonResponse
+    {
+        $rows = University::query()
+            ->where('status', 'active')
+            ->where(fn ($q) => $q->whereNotNull('cover_credit')->orWhereNotNull('wikipedia_url'))
+            ->orderBy('name')
+            ->get(['name', 'slug', 'cover_credit', 'cover_source_url', 'cover_is_city', 'wikipedia_url'])
+            ->map(fn ($u) => [
+                'university' => $u->name,
+                'slug' => $u->slug,
+                'credit' => $u->cover_credit,
+                'source_url' => $u->cover_source_url,
+                'kind' => $u->cover_is_city ? 'city' : 'campus',
+                'text_source_url' => $u->wikipedia_url,
+            ])
+            ->values();
+
+        return response()->json(['data' => $rows]);
     }
 
     public function university(Request $request, string $slug): PublicUniversityResource
@@ -93,7 +153,7 @@ class PublicCatalogController extends Controller
 
     /**
      * Program finder across all active universities. Filterable by level,
-     * teaching language, budget and university; sorted cheapest-first.
+     * teaching language, budget and university; degrees first, cheapest first within a level.
      */
     public function programs(Request $request): AnonymousResourceCollection
     {
@@ -102,7 +162,7 @@ class PublicCatalogController extends Controller
         $programs = Program::query()
             ->where('status', 'active')
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
-            ->with('university:id,name,slug')
+            ->with('university:id,name,slug,cover_path,cover_credit')
             ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('university.intakes', fn ($i) => $i
@@ -111,6 +171,8 @@ class PublicCatalogController extends Controller
             ->when($request->filled('filter.language'), fn ($q) => $q->where('teaching_language', 'like', '%'.$request->input('filter.language').'%'))
             ->when($request->filled('filter.max_fee'), fn ($q) => $q->where('tuition_fee', '<=', (float) $request->input('filter.max_fee')))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
+            // Degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
+            ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
             ->orderByRaw('tuition_fee is null, tuition_fee')
             ->orderBy('name')
             ->paginate(min($request->integer('per_page', 24), 50));
@@ -126,7 +188,7 @@ class PublicCatalogController extends Controller
         $scholarships = Scholarship::query()
             ->where('status', 'active')
             ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
-            ->with('university:id,name,slug')
+            ->with('university:id,name,slug,cover_path,cover_credit')
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('type', 'like', $term));

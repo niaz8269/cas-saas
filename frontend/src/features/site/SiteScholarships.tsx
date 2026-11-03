@@ -1,6 +1,7 @@
+import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Award, Lock, School, Search } from "lucide-react"
-import { AdmissionWindow } from "@/features/site/components"
+import { AdmissionWindow, PhotoMark } from "@/features/site/components"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
@@ -52,7 +53,7 @@ export default function SiteScholarships() {
 
   return (
     <div className="space-y-6">
-      <SitePageHeader
+      <SitePageHeader image={HEADER_IMAGES.scholarships}
         eyebrow={t("scholarships.eyebrow")}
         title={t("scholarships.title")}
         subtitle={t("scholarships.subtitle")}
@@ -98,11 +99,15 @@ export default function SiteScholarships() {
         )}
 
         {scholarships.map((s) => (
-          <div key={s.id} className="flex flex-col rounded-sm border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-cas-red/40 hover:shadow">
-            <div className="flex items-start justify-between gap-2">
-              <span className="inline-flex size-10 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Award className="size-5" /></span>
-              {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}
+          <div key={s.id} className="flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-cas-red/40 hover:shadow">
+            <div className="relative h-36 bg-cas-navy">
+              {s.photo_url && <img src={s.photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+              <span className="absolute top-3 left-3 inline-flex size-9 items-center justify-center rounded-sm bg-white/90 text-cas-navy shadow-sm"><Award className="size-5" /></span>
+              {s.type && <Badge variant="outline" className="absolute top-3 right-3 border-transparent bg-white/90 text-cas-navy capitalize shadow-sm">{s.type}</Badge>}
+              {s.photo_url && <PhotoMark />}
             </div>
+            <div className="flex flex-1 flex-col p-5">
             <h2 className="mt-3 font-semibold text-cas-navy">{s.name}</h2>
             {amountLabel(s) && <p className="mt-1 text-sm font-medium">{amountLabel(s)}</p>}
             {s.description && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{s.description}</p>}
@@ -119,6 +124,7 @@ export default function SiteScholarships() {
                   <Lock className="size-3.5" /> {t("scholarships.signInForDetails")}
                 </Link>
               )}
+            </div>
             </div>
           </div>
         ))}

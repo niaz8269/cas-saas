@@ -1,3 +1,4 @@
+import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import type { TFunction } from "i18next"
 import { Clock, GraduationCap, Languages, School, Search } from "lucide-react"
@@ -90,7 +91,7 @@ export default function SiteProgramFinder() {
 
   return (
     <div className="space-y-6">
-      <SitePageHeader
+      <SitePageHeader image={HEADER_IMAGES.programs}
         eyebrow={t("programs.eyebrow")}
         title={t("programs.title")}
         subtitle={t("programs.subtitle")}

@@ -101,6 +101,15 @@ it('seeds only verified catalog data, each record carrying its official source',
     // Photos are served by the site itself, not hotlinked from Wikimedia.
     expect(University::where('cover_path', 'like', 'http%')->orWhere('logo_path', 'like', 'http%')->count())->toBe(0);
 
+    // Public-page gaps: every university has a nearest airport and an introduction; most have a seal.
+    expect(University::whereNull('nearest_airport')->count())->toBe(0)
+        ->and(University::where(fn ($q) => $q->whereNull('about')->orWhere('about', ''))->count())->toBe(0)
+        ->and(University::whereNotNull('emblem_path')->count())->toBeGreaterThan(140);
+
+    // Long overview text for every university, and (almost) no cover photo shared by several universities.
+    expect(University::whereNull('overview')->count())->toBe(0)
+        ->and(University::where('cover_is_city', false)->distinct()->count('cover_path'))->toBeGreaterThan(215);
+
     // Idempotency: reseeding replaces rather than duplicates.
     $programs = Program::count();
     $universities = University::count();

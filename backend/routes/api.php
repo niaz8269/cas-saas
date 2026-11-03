@@ -73,6 +73,7 @@ Route::prefix('v1')->group(function () {
         Route::get('programs', [PublicCatalogController::class, 'programs']);
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
+        Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
         // Reference data for the public sign-up forms (student/agent registration)
         Route::get('countries', [CountryController::class, 'index']);
         // Content: blogs / news / events (published only)

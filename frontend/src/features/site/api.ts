@@ -47,6 +47,8 @@ export class SiteApiError extends Error {
 export interface SiteUniversityRef {
   name: string
   slug: string | null
+  cover_url?: string | null
+  cover_credit?: string | null
 }
 
 export interface SiteProgram {
@@ -94,6 +96,8 @@ export interface SiteScholarship {
   application_open_date: string | null
   source_kind: string | null
   verified_on: string | null
+  photo_url?: string | null
+  photo_credit?: string | null
   university?: SiteUniversityRef
   /** Audience gating (Phase 1): amount/deadline/how-to-apply are registered-only. */
   details_locked?: boolean
@@ -103,6 +107,33 @@ export interface SiteRepProfessor {
   name: string | null
   title: string | null
   photo_url: string | null
+}
+
+export interface SitePhotoCredit {
+  university: string
+  slug: string
+  credit: string | null
+  source_url: string | null
+  kind: "campus" | "city"
+  text_source_url: string | null
+}
+
+export function getSitePhotoCredits() {
+  return siteApi<{ data: SitePhotoCredit[] }>("/public/photo-credits")
+}
+
+export interface SiteCityStat {
+  city: string
+  count: number
+  photo_url: string | null
+  photo_credit: string | null
+  photo_is_city: boolean
+}
+
+export interface SiteOverviewSection {
+  h: string
+  level: number
+  blocks: { t: "p" | "li"; x: string }[]
 }
 
 export interface SiteGuideBlock {
@@ -138,6 +169,7 @@ export interface SiteUniversityCard {
   moe_mbbs_year?: string | null
   nearest_airport: string | null
   about: string | null
+  overview?: SiteOverviewSection[] | null
   requirements: string[]
   representative_professor: SiteRepProfessor | null
   programs_count?: number
@@ -167,7 +199,7 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
-  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
+  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[]; city_stats?: SiteCityStat[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
 }
 
 export const getSiteUniversity = (slug: string) =>

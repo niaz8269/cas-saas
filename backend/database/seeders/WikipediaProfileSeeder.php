@@ -44,6 +44,21 @@ class WikipediaProfileSeeder extends Seeder
         }
 
         $this->cityPhotos();
+        $this->factualIntroductions();
+    }
+
+    /** A short factual line for universities that still have no introduction, built only from catalog data. */
+    private function factualIntroductions(): void
+    {
+        foreach (University::where(fn ($q) => $q->whereNull('about')->orWhere('about', ''))->withCount('programs')->get() as $uni) {
+            $place = collect([$uni->city, $uni->province, 'China'])->filter()->unique()->implode(', ');
+            $languages = $uni->programs()->whereNotNull('teaching_language')->distinct()->orderBy('teaching_language')->pluck('teaching_language')->implode(' and ');
+            $text = $uni->name.($uni->name_zh ? ' ('.$uni->name_zh.')' : '').' is a university in '.$place.'.';
+            if ($uni->programs_count > 0) {
+                $text .= ' This page lists '.$uni->programs_count.' program'.($uni->programs_count === 1 ? '' : 's').' for international students'.($languages ? ', taught in '.$languages : '').'.';
+            }
+            $uni->forceFill(['about' => $text])->save();
+        }
     }
 
     /** A photo of the city for universities that still have no campus photo. */

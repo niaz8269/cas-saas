@@ -1,3 +1,4 @@
+import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { School, Search, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -67,7 +68,7 @@ export default function SiteUniversities() {
 
   return (
     <div className="space-y-6">
-      <SitePageHeader
+      <SitePageHeader image={HEADER_IMAGES.universities}
         eyebrow={topic ? t(topic.eyebrow) : (sort ? t("universities.sortedBy", { label: t(sort.labelKey) }) : t("universities.eyebrowPartnerNetwork"))}
         title={topic ? t(topic.title) : t("universities.pageTitle")}
         subtitle={topic ? t(topic.subtitle) : t("universities.pageSubtitle")}
