@@ -92,6 +92,19 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Yangzhou University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/yangzhou-university/'],
             ['Jinzhou Medical University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-08-30', 'closed', 'https://eaziline.com/jinzhou-medical-university/'],
             ['Beihua University', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-07-04', 'closed', 'https://www.sicas.com.cn/School/278/Beihua-University'],
+            // Well-known universities outside the MBBS list
+            ['Northwestern Polytechnical University', 'Autumn 2027 undergraduate, rolling batches (apply from 1 Nov 2026)', '2026-11-01', '2027-05-20', 'open', 'https://studyat.nwpu.edu.cn/info/1089/10401.htm'],
+            ['East China Normal University', 'Autumn 2027 undergraduate (self-funded)', null, '2027-06-01', 'open', 'https://lxs.ecnu.edu.cn/en_admission_degree_programs_undergraduate_program/'],
+            ['Dalian University of Technology', 'Autumn 2027 Chinese-taught undergraduate (until June 2027)', '2026-11-01', '2027-06-30', 'open', 'https://sie.dlut.edu.cn/info/1179/2479.htm'],
+            ['Nanjing University', 'Autumn intake (annual schedule: apply 1 Mar – 15 May)', '2027-03-01', '2027-05-15', 'open', 'https://hwxy.nju.edu.cn/lxnd/zsxx/bkxm/sbzn/index.html'],
+            ['South China University of Technology', 'Autumn intake (annual: apply by 30 June each year)', null, '2027-06-30', 'open', 'https://www2.scut.edu.cn/gzic_en/44830/list.htm'],
+            ['Peking University', 'Autumn 2026 undergraduate (closed)', '2026-01-01', '2026-02-28', 'closed', 'https://www.isd.pku.edu.cn/en/detail.php?id=818'],
+            ['Central South University', 'Autumn 2026 Chinese-taught undergraduate (closed)', null, '2026-05-31', 'closed', 'https://intl.csu.edu.cn/English/Admission/Undergraduate_Programs/Chinese_taught_Programs.htm'],
+            ['Sun Yat-sen University', 'Autumn 2026 undergraduate, two rounds (closed)', '2026-01-01', '2026-04-30', 'closed', 'https://iso.sysu.edu.cn/en/application/guide/1420575.htm'],
+            ['Harbin Institute of Technology', 'Autumn 2026 self-financed undergraduate (closed)', null, '2026-07-15', 'closed', 'https://studyathit.hit.edu.cn/18358/list.htm'],
+            ['Beijing Normal University', 'Autumn 2026 undergraduate (closed)', '2025-11-15', '2026-03-15', 'closed', 'https://admission-is.bnu.edu.cn/zsxm/bkxm/jz2/index.html'],
+            ['Renmin University of China', 'Autumn 2026 Chinese-taught undergraduate (closed; listing, unconfirmed)', '2026-01-01', '2026-03-31', 'closed', 'http://iso.ruc.edu.cn/docs/2025-11/f79cdb88f9d74a9d9905712db70b3a3f.pdf'],
+            ['Nankai University', 'Autumn 2026 undergraduate (closed; third-party copy, unconfirmed)', '2025-10-20', '2026-06-30', 'closed', 'https://study.dongzong.my/wp-content/uploads/2026/01/Undergraduate-Programs-of-Nankai-University-for-International-Students-2026.pdf'],
         ];
     }
 }
