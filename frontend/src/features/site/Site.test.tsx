@@ -39,7 +39,7 @@ const DETAIL = {
     moe_listed: true, nearest_airport: "Changchun (CGQ)", about: "A leading medical university.",
     requirements: ["IELTS 6.0"], representative_professor: { name: "Prof. Li Wei", title: "Dean", photo_url: null }, programs_count: 1,
     programs: [{ id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: "32000.00", currency: "CNY", apply_link: null, requirements: null }],
-    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_open_date: "2029-10-01", application_deadline: "2030-07-15", source_url: "https://example.edu/notice", verified_on: "2026-10-30", seats: 100, program: "MBBS" }],
+    intakes: [{ id: 5, name: "Sept 2026", start_date: "2026-09-01", application_open_date: "2029-10-01", application_deadline: "2030-07-15", source_kind: "official", verified_on: "2026-10-30", seats: 100, program: "MBBS" }],
     scholarships: [{ id: 7, name: "Belt & Road Scholarship", slug: "belt-road", type: "full", coverage: "Full tuition", amount: "30000.00", currency: "CNY", description: "Flagship award.", eligibility: null, how_to_apply: null, apply_link: null, deadline: "2026-06-30" }],
   },
 }

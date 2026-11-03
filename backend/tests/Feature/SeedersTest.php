@@ -95,6 +95,9 @@ it('seeds only verified catalog data, each record carrying its official source',
         ->and(University::where(fn ($q) => $q->whereNull('cover_path')->orWhere('cover_path', ''))->count())->toBeLessThan(10)
         ->and(University::where('cover_is_city', true)->whereNull('cover_credit')->count())->toBe(0);
 
+    // Photos are served by the site itself, not hotlinked from Wikimedia.
+    expect(University::where('cover_path', 'like', 'http%')->orWhere('logo_path', 'like', 'http%')->count())->toBe(0);
+
     // Idempotency: reseeding replaces rather than duplicates.
     $programs = Program::count();
     $universities = University::count();
@@ -102,6 +105,7 @@ it('seeds only verified catalog data, each record carrying its official source',
     $this->seed(SasCatalogSeeder::class);
     $this->seed(\Database\Seeders\OfficialIntakeDatesSeeder::class);
     $this->seed(\Database\Seeders\WikipediaProfileSeeder::class);
+    $this->seed(\Database\Seeders\MirrorPhotosSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });

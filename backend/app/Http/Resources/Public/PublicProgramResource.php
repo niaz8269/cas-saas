@@ -27,7 +27,6 @@ class PublicProgramResource extends JsonResource
         // field gated independently, with the registered-only default when unconfigured.
         $tuitionVisible = $this->resource->audienceCanSee('tuition_fee', $audience);
         $chargeVisible = $this->resource->audienceCanSee('service_charge', $audience);
-        $applyVisible = $this->resource->audienceCanSee('apply_link', $audience);
 
         return [
             'id' => $this->id,
@@ -46,7 +45,6 @@ class PublicProgramResource extends JsonResource
             'service_charge' => $chargeVisible
                 ? app(ApplicationCatalog::class)->serviceChargeFor($this->resource, $applicant)
                 : null,
-            'apply_link' => $applyVisible ? $this->apply_link : null,
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,

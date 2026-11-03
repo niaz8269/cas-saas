@@ -217,7 +217,7 @@ export default function SiteHome() {
                 {weeklyWindow && (
                   <div className="mt-4 rounded-sm bg-subtle px-3 py-2">
                     <p className="mb-1 text-sm font-medium">{weeklyWindow.name}</p>
-                    <AdmissionWindow opens={weeklyWindow.application_open_date} closes={weeklyWindow.application_deadline} sourceUrl={weeklyWindow.source_url} verifiedOn={weeklyWindow.verified_on} />
+                    <AdmissionWindow opens={weeklyWindow.application_open_date} closes={weeklyWindow.application_deadline} sourceKind={weeklyWindow.source_kind} verifiedOn={weeklyWindow.verified_on} />
                   </div>
                 )}
                 <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">

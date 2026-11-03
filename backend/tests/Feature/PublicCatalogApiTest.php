@@ -182,3 +182,29 @@ it('filters programs to universities with an admission window that is still open
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.name', 'Open Program');
 });
+
+it('never exposes official links on the public catalog (admin-only)', function () {
+    $uni = University::factory()->create([
+        'status' => 'active',
+        'website' => 'https://www.example.edu.cn',
+        'apply_link' => 'https://apply.example.edu.cn',
+        'moe_mbbs_source_url' => 'https://example.gov/list.pdf',
+        'cover_source_url' => 'https://commons.wikimedia.org/wiki/File:X.jpg',
+        'guide' => ['blocks' => [], 'links' => [['Notice', 'https://example.edu.cn/n']]],
+        'visibility' => ['deadlines' => ['public']],
+    ]);
+    Intake::factory()->for($uni)->create(['status' => 'open', 'source_url' => 'https://example.edu.cn/intake']);
+    Scholarship::factory()->for($uni)->create(['status' => 'active', 'source_url' => 'https://sas.cas.moe/scholarships/x', 'apply_link' => 'https://example.edu.cn/apply']);
+
+    $bodies = [
+        $this->getJson('/api/v1/public/universities')->assertOk()->getContent(),
+        $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertOk()->getContent(),
+        $this->getJson('/api/v1/public/scholarships')->assertOk()->getContent(),
+    ];
+
+    foreach ($bodies as $body) {
+        expect($body)->not->toContain('example.edu.cn')->not->toContain('example.gov')->not->toContain('sas.cas.moe');
+    }
+
+    $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertJsonPath('data.intakes.0.source_kind', 'official');
+});

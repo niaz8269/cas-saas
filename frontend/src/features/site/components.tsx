@@ -150,10 +150,10 @@ const fmtDay = (d: string) => new Date(d).toLocaleDateString(undefined, { day: "
  * university's own published page (named, never linked, on public pages). Never invents a date;
  * shows "to be announced" when the university has not published one.
  */
-export function AdmissionWindow({ opens, closes, sourceUrl, verifiedOn, className }: {
+export function AdmissionWindow({ opens, closes, sourceKind, verifiedOn, className }: {
   opens?: string | null
   closes?: string | null
-  sourceUrl?: string | null
+  sourceKind?: string | null
   verifiedOn?: string | null
   className?: string
 }) {
@@ -172,9 +172,9 @@ export function AdmissionWindow({ opens, closes, sourceUrl, verifiedOn, classNam
           {closes ? t(closed ? "admissionWindow.closedOn" : "admissionWindow.closes", { date: fmtDay(closes) }) : t("admissionWindow.closeTbd")}
         </span>
       </p>
-      {sourceUrl && (
+      {sourceKind && (
         <p className="pl-5 text-[11px] text-muted-foreground">
-          {t(/cucas\./.test(sourceUrl) ? "admissionWindow.sourceCucas" : /sas\.cas\.moe/.test(sourceUrl) ? "admissionWindow.sourceSas" : "admissionWindow.source")}
+          {t(sourceKind === "cucas" ? "admissionWindow.sourceCucas" : sourceKind === "sas" ? "admissionWindow.sourceSas" : "admissionWindow.source")}
           {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
         </p>
       )}

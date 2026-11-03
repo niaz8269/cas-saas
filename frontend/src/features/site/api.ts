@@ -59,7 +59,6 @@ export interface SiteProgram {
   duration_months: number | null
   tuition_fee: string | number | null
   currency: string | null
-  apply_link: string | null
   requirements: string[] | null
   university?: SiteUniversityRef
   // Audience gating (Phase 1): fees are registered-only; rate follows role.
@@ -73,7 +72,7 @@ export interface SiteIntake {
   start_date: string | null
   application_open_date: string | null
   application_deadline: string | null
-  source_url: string | null
+  source_kind: string | null
   verified_on: string | null
   status?: string
   seats: number | null
@@ -91,10 +90,9 @@ export interface SiteScholarship {
   description: string | null
   eligibility: string | null
   how_to_apply: string | null
-  apply_link: string | null
   deadline: string | null
   application_open_date: string | null
-  source_url: string | null
+  source_kind: string | null
   verified_on: string | null
   university?: SiteUniversityRef
   /** Audience gating (Phase 1): amount/deadline/how-to-apply are registered-only. */
@@ -126,12 +124,9 @@ export interface SiteUniversityCard {
   province?: string | null
   address: string | null
   country: string | null
-  website: string | null
-  apply_link: string | null
   logo_url: string | null
   cover_url: string | null
   cover_credit?: string | null
-  cover_source_url?: string | null
   /** True when the cover is a photo of the city because no campus photo was available. */
   cover_is_city?: boolean
   founded_year?: number | null
@@ -140,7 +135,6 @@ export interface SiteUniversityCard {
   wikipedia_url?: string | null
   moe_listed: boolean
   moe_mbbs_year?: string | null
-  moe_mbbs_source_url?: string | null
   nearest_airport: string | null
   about: string | null
   requirements: string[]

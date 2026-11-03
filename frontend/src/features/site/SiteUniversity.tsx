@@ -61,7 +61,6 @@ export default function SiteUniversity() {
           "@context": "https://schema.org",
           "@type": "CollegeOrUniversity",
           name: uni.name,
-          ...(uni.website ? { url: uni.website } : {}),
           ...(uni.city ? { address: { "@type": "PostalAddress", addressLocality: uni.city, addressCountry: "CN" } } : {}),
         }
       : undefined,
@@ -141,7 +140,7 @@ export default function SiteUniversity() {
             {upcoming ? (
               <>
                 <p className="mb-1 font-medium">{upcoming.name}</p>
-                <AdmissionWindow opens={upcoming.application_open_date} closes={upcoming.application_deadline} sourceUrl={upcoming.source_url} verifiedOn={upcoming.verified_on} />
+                <AdmissionWindow opens={upcoming.application_open_date} closes={upcoming.application_deadline} sourceKind={upcoming.source_kind} verifiedOn={upcoming.verified_on} />
               </>
             ) : u.deadlines_locked ? (
               <p className="flex items-center gap-2"><CalendarClock className="size-4 text-cas-navy" /><SignInGate label={t("university.signInForDeadlines")} /></p>
@@ -342,7 +341,7 @@ function IntakesPanel({ u }: { u: SiteUniversityDetail }) {
               <p className="text-xs text-muted-foreground">{i.program ?? t("university.allPrograms")}{i.seats ? t("university.seatsCount", { count: i.seats }) : ""}</p>
             </div>
             <div className="text-right text-muted-foreground">
-              <AdmissionWindow opens={i.application_open_date} closes={i.application_deadline} sourceUrl={i.source_url} verifiedOn={i.verified_on} />
+              <AdmissionWindow opens={i.application_open_date} closes={i.application_deadline} sourceKind={i.source_kind} verifiedOn={i.verified_on} />
             </div>
           </li>
         ))}
@@ -364,7 +363,7 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
             {s.type && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy capitalize">{s.type}</Badge>}
           </div>
           {s.description && <p className="mt-1.5 text-sm text-muted-foreground">{s.description}</p>}
-          <AdmissionWindow className="mt-2" opens={s.application_open_date} closes={s.deadline} sourceUrl={s.source_url} verifiedOn={s.verified_on} />
+          <AdmissionWindow className="mt-2" opens={s.application_open_date} closes={s.deadline} sourceKind={s.source_kind} verifiedOn={s.verified_on} />
           <p className="mt-2 text-sm text-muted-foreground">
             {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? t("university.deadlineLabel", { date: new Date(s.deadline).toLocaleDateString() }) : null].filter(Boolean).join(" · ")}
           </p>
