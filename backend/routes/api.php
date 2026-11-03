@@ -72,6 +72,7 @@ Route::prefix('v1')->group(function () {
         Route::get('universities', [PublicCatalogController::class, 'universities']);
         Route::get('programs', [PublicCatalogController::class, 'programs']);
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
+        Route::get('cost-guide', [PublicCatalogController::class, 'costGuide']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
         Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
         Route::get('cities/{slug}', [PublicCatalogController::class, 'city']);

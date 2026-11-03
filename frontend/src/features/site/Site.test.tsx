@@ -243,14 +243,14 @@ it("renders the FAQ with categories and expands an answer", async () => {
   expect(screen.getByText(/globally recognised qualifications/)).toBeInTheDocument()
 })
 
-it("renders the pricing and partner pages", () => {
+it("renders the pricing and partner pages", async () => {
   renderWithProviders(<SitePricing />)
-  expect(screen.getByRole("heading", { name: "Simple, transparent pricing", level: 1 })).toBeInTheDocument()
+  expect(screen.getByRole("heading", { name: "What it costs to study in China", level: 1 })).toBeInTheDocument()
   expect(screen.getByText("Getting started")).toBeInTheDocument()
 
   renderWithProviders(<SitePartner />)
   expect(screen.getByRole("heading", { name: "Partner with CAS", level: 1 })).toBeInTheDocument()
-  expect(screen.getAllByRole("link", { name: /Become a partner/ }).length).toBeGreaterThan(0)
+  expect(screen.getAllByRole("link", { name: /Apply as a partner/ }).length).toBeGreaterThan(0)
 })
 
 it("renders the services, why-china and news pages", () => {

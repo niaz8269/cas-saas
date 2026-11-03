@@ -219,3 +219,22 @@ it('lists photo authors and licences on one public credits endpoint', function (
         ->assertJsonPath('data.0.university', 'Credit Uni')
         ->assertJsonPath('data.0.credit', 'A. Author, CC BY 4.0, via Wikimedia Commons');
 });
+
+it('summarises yearly English-taught tuition per level without exposing fees the public cannot see', function () {
+    cache()->forget('public.cost-guide');
+    $uni = University::factory()->create(['status' => 'active']);
+
+    foreach ([20000, 30000, 40000] as $fee) {
+        Program::factory()->create(['university_id' => $uni->id, 'level' => 'master', 'status' => 'active', 'teaching_language' => 'English', 'currency' => 'CNY', 'tuition_fee' => $fee, 'visibility' => ['tuition_fee' => ['public']]]);
+    }
+    Program::factory()->create(['university_id' => $uni->id, 'level' => 'master', 'status' => 'active', 'teaching_language' => 'English', 'currency' => 'CNY', 'tuition_fee' => 999999, 'visibility' => ['tuition_fee' => ['student']]]);
+    Program::factory()->create(['university_id' => $uni->id, 'level' => 'master', 'status' => 'active', 'teaching_language' => 'Chinese', 'currency' => 'CNY', 'tuition_fee' => 1]);
+
+    $this->getJson('/api/v1/public/cost-guide')
+        ->assertOk()
+        ->assertJsonPath('levels.master.programs', 3)
+        ->assertJsonPath('levels.master.median', 30000)
+        ->assertJsonPath('levels.bachelor', null);
+
+    cache()->forget('public.cost-guide');
+});

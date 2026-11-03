@@ -283,5 +283,16 @@ export interface EnquiryPayload {
   details?: Record<string, string>
 }
 
+export interface SiteCostBand { programs: number; low: number; median: number; high: number }
+export interface SiteCostGuide {
+  currency: string
+  levels: { bachelor: SiteCostBand | null; master: SiteCostBand | null; phd: SiteCostBand | null; mbbs: SiteCostBand | null }
+  scholarships: { government: number; full: number; partial: number }
+}
+
+export function getSiteCostGuide() {
+  return siteApi<SiteCostGuide>("/public/cost-guide")
+}
+
 export const postEnquiry = (payload: EnquiryPayload) =>
   siteApi<{ message: string }>("/public/enquiries", { method: "POST", body: JSON.stringify(payload) })

@@ -207,6 +207,57 @@ class PublicCatalogController extends Controller
         return PublicProgramResource::collection($programs)->additional(['audience' => $audience]);
     }
 
+    /**
+     * Yearly tuition for English-taught programs, summarised per level from the
+     * catalog (only fees the public may see). Nothing here is a CAS price.
+     */
+    public function costGuide(): JsonResponse
+    {
+        $data = cache()->remember('public.cost-guide', now()->addHour(), function () {
+            $rows = Program::query()
+                ->where('status', 'active')
+                ->whereHas('university', fn ($q) => $q->where('status', 'active'))
+                ->where('teaching_language', 'like', '%English%')
+                ->where('currency', 'CNY')
+                ->where('tuition_fee', '>', 0)
+                ->get(['id', 'name', 'level', 'tuition_fee', 'visibility'])
+                ->filter(fn (Program $p) => $p->audienceCanSee('tuition_fee', 'public'));
+
+            $summarise = function ($group) {
+                $fees = $group->pluck('tuition_fee')->map(fn ($f) => (float) $f)->sort()->values();
+                $n = $fees->count();
+
+                if ($n === 0) {
+                    return null;
+                }
+
+                $at = fn (float $q) => (int) round($fees[(int) floor(($n - 1) * $q)]);
+
+                return ['programs' => $n, 'low' => $at(0.1), 'median' => $at(0.5), 'high' => $at(0.9)];
+            };
+
+            $mbbs = $rows->filter(fn (Program $p) => $p->level === 'bachelor' && preg_match('/MBBS|Clinical Medicine/i', $p->name));
+
+            return [
+                'currency' => 'CNY',
+                'basis' => 'English-taught programs, yearly tuition, middle 80% of listed fees',
+                'levels' => [
+                    'bachelor' => $summarise($rows->where('level', 'bachelor')),
+                    'master' => $summarise($rows->where('level', 'master')),
+                    'phd' => $summarise($rows->where('level', 'phd')),
+                    'mbbs' => $summarise($mbbs),
+                ],
+                'scholarships' => [
+                    'government' => Scholarship::where('status', 'active')->where('scope', 'government')->count(),
+                    'full' => Scholarship::where('status', 'active')->where('type', 'full')->count(),
+                    'partial' => Scholarship::where('status', 'active')->where('type', 'partial')->count(),
+                ],
+            ];
+        });
+
+        return response()->json($data);
+    }
+
     /** Active scholarships across all active universities. */
     public function scholarships(Request $request): AnonymousResourceCollection
     {
