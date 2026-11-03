@@ -1467,6 +1467,7 @@
     "checked": "diperiksa {{date}}",
     "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya.",
     "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
-    "sourceSas": "Daftar SAS"
+    "sourceSas": "Daftar SAS",
+    "sourceListing": "Daftar pihak ketiga, belum dikonfirmasi"
   }
 }

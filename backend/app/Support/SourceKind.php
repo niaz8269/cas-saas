@@ -15,7 +15,8 @@ class SourceKind
             blank($url) => null,
             (bool) preg_match('#//([^/]*\.)?cucas\.#i', $url) => 'cucas',
             (bool) preg_match('#//([^/]*\.)?sas\.cas\.moe#i', $url) => 'sas',
-            default => 'official',
+            (bool) preg_match('#//[^/]*\.(edu|gov)\.cn(/|$)#i', $url) => 'official',
+            default => 'listing',
         };
     }
 }
