@@ -177,6 +177,11 @@ export default function UniversityDetailPage() {
       </Button>
     ) : undefined
 
+  const officialLinks = [
+    uni.moe_mbbs_source_url ? ["MoE English-taught MBBS list" + (uni.moe_mbbs_year ? ` ${uni.moe_mbbs_year}` : ""), uni.moe_mbbs_source_url] : null,
+    uni.cover_source_url ? ["Cover photo source", uni.cover_source_url] : null,
+    ...(uni.guide_links ?? []).map(([label, href]) => [label || href, href]),
+  ].filter((l): l is string[] => !!l)
   const deadline = nextDeadline(intakes.data?.data ?? [])
   const rep = uni.representative_professor
   const requirements = uni.requirements ?? []
@@ -387,6 +392,11 @@ export default function UniversityDetailPage() {
                   >
                     {intake.status}
                   </Badge>
+                  {intake.source_url && (
+                    <a href={intake.source_url} target="_blank" rel="noreferrer" className="ml-3 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">
+                      Official source <ExternalLink className="size-3" />
+                    </a>
+                  )}
                 </div>
               </li>
             ))}
@@ -395,6 +405,17 @@ export default function UniversityDetailPage() {
           <p className="text-sm text-muted-foreground">No intakes yet.</p>
         )}
       </Section>
+
+      {/* Official links: shown only here in the admin portal, never on the public site */}
+      {officialLinks.length > 0 && (
+        <Section title="Official links">
+          <ul className="space-y-1 text-sm">
+            {officialLinks.map(([label, href], i) => (
+              <li key={i}><a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cas-navy hover:underline">{label} <ExternalLink className="size-3.5" /></a></li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       {/* Scholarships */}
       <Section title="Scholarships" action={addButton("Add scholarship", "scholarship")}>
@@ -414,6 +435,11 @@ export default function UniversityDetailPage() {
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
+                  {scholarship.source_url && (
+                    <a href={scholarship.source_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">
+                      Official source <ExternalLink className="size-3.5" />
+                    </a>
+                  )}
                   {scholarship.apply_link && (
                     <a href={scholarship.apply_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">
                       Apply <ExternalLink className="size-3.5" />

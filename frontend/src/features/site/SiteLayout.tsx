@@ -35,7 +35,6 @@ const NAV_PRIMARY: NavItemT[] = [
       ["whyCasMenu.learningCenter", "/site/news?view=guides"],
     ],
   },
-  { to: "/site/why-china", labelKey: "nav.studyInChina" },
   { to: "/site/universities", labelKey: "nav.universities" },
   { to: "/site/programs", labelKey: "nav.programs" },
   { to: "/site/pricing", labelKey: "nav.pricing" },

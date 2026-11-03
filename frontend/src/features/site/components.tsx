@@ -148,7 +148,7 @@ const fmtDay = (d: string) => new Date(d).toLocaleDateString(undefined, { day: "
 
 /**
  * An admission window: when applications open and close, taken from the
- * university's own published page (linked as the source). Never invents a date;
+ * university's own published page (named, never linked, on public pages). Never invents a date;
  * shows "to be announced" when the university has not published one.
  */
 export function AdmissionWindow({ opens, closes, sourceUrl, verifiedOn, className }: {
@@ -175,7 +175,7 @@ export function AdmissionWindow({ opens, closes, sourceUrl, verifiedOn, classNam
       </p>
       {sourceUrl && (
         <p className="pl-5 text-[11px] text-muted-foreground">
-          <a href={sourceUrl} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">{t(/cucas\./.test(sourceUrl) ? "admissionWindow.sourceCucas" : "admissionWindow.source")}</a>
+          {t(/cucas\./.test(sourceUrl) ? "admissionWindow.sourceCucas" : "admissionWindow.source")}
           {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
         </p>
       )}

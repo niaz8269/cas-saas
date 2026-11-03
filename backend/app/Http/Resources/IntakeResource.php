@@ -30,6 +30,8 @@ class IntakeResource extends JsonResource
             'application_deadline' => $this->application_deadline?->toDateString(),
             'seats' => $this->seats,
             'status' => $this->status,
+            'source_url' => $this->source_url,
+            'verified_on' => $this->verified_on?->toDateString(),
         ];
     }
 }

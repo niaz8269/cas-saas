@@ -9,7 +9,7 @@ import LanguageSwitcher from "./LanguageSwitcher"
 
 afterEach(async () => { await i18n.changeLanguage("en") })
 
-it("opens the flag menu, lists the other languages, and switches to RTL Arabic", async () => {
+it("opens the language menu, lists the other languages, and switches to RTL Arabic", async () => {
   const user = userEvent.setup()
   renderWithProviders(<LanguageSwitcher />)
 

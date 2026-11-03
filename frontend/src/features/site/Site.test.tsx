@@ -291,7 +291,9 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   // link; header "Apply now" is a login-gated button into CAS's own form.
   expect(screen.getByText(/Opens .*2029/)).toBeInTheDocument()
   expect(screen.getByText(/Closes .*2030/)).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: "University notice" })).toHaveAttribute("href", "https://example.edu/notice")
+  // Official sources are named but never linked on public pages (admin portal only).
+  expect(screen.queryByRole("link", { name: "University notice" })).not.toBeInTheDocument()
+  expect(document.querySelector('a[href="https://example.edu/notice"]')).toBeNull()
   expect(screen.getByRole("button", { name: /Apply now/ })).toBeInTheDocument()
 
   // Programs tab.

@@ -7,7 +7,6 @@ import {
   CalendarDays,
   ClipboardCheck,
   BookOpen,
-  ExternalLink,
   GraduationCap,
   Info,
   Languages,
@@ -110,12 +109,6 @@ export default function SiteUniversity() {
           {cover?.credit && (
             <p className="absolute right-3 bottom-2 left-3 text-right text-[11px] text-white/90">
               {"own" in cover ? t("university.photoCredit") : t("university.locationPhoto")}: {cover.credit}
-              {"own" in cover && u.cover_source_url && (
-                <>
-                  {" · "}
-                  <a href={u.cover_source_url} target="_blank" rel="noreferrer" className="underline">{t("university.photoSource")}</a>
-                </>
-              )}
             </p>
           )}
         </div>
@@ -367,11 +360,7 @@ function ScholarshipsPanel({ u }: { u: SiteUniversityDetail }) {
           <p className="mt-2 text-sm text-muted-foreground">
             {[s.coverage, s.amount != null ? money(s.amount, s.currency) : null, s.deadline ? t("university.deadlineLabel", { date: new Date(s.deadline).toLocaleDateString() }) : null].filter(Boolean).join(" · ")}
           </p>
-          {s.details_locked ? (
-            <div className="mt-2"><SignInGate label={t("university.signInForAward")} className="text-xs" /></div>
-          ) : (
-            s.apply_link && <a href={s.apply_link} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-cas-navy hover:underline">{t("university.howToApply")} <ExternalLink className="size-3" /></a>
-          )}
+          {s.details_locked && <div className="mt-2"><SignInGate label={t("university.signInForAward")} className="text-xs" /></div>}
         </div>
       ))}
     </div>
@@ -409,16 +398,6 @@ function GuidePanel({ u }: { u: SiteUniversityDetail }) {
           {b.t.map((line, j) => (line.startsWith("TABLE:") ? <GuideTable key={j} raw={line} /> : <p key={j} className="text-sm text-muted-foreground">{line}</p>))}
         </section>
       ))}
-      {guide.links.length > 0 && (
-        <div className="border-t pt-4">
-          <h3 className="mb-2 font-semibold text-cas-navy">{t("university.guideSources")}</h3>
-          <ul className="space-y-1 text-sm">
-            {guide.links.map(([label, href], i) => (
-              <li key={i}><a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cas-navy underline hover:text-cas-red">{label || href} <ExternalLink className="size-3" /></a></li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   )
 }
