@@ -51,6 +51,9 @@ class SasCatalogSeeder extends Seeder
         $sitesPath = database_path('data/university_websites.json');
         $sites = is_file($sitesPath) ? (json_decode(file_get_contents($sitesPath), true)['websites'] ?? []) : [];
 
+        $logosPath = database_path('data/university_logos.json');
+        $logos = is_file($logosPath) ? (json_decode(file_get_contents($logosPath), true)['logos'] ?? []) : [];
+
         $coversPath = database_path('data/university_covers.json');
         $covers = is_file($coversPath) ? (json_decode(file_get_contents($coversPath), true)['covers'] ?? []) : [];
 
@@ -101,6 +104,11 @@ class SasCatalogSeeder extends Seeder
             // Official website (Wikidata P856) where the university has none yet.
             if (! $uni->website && isset($sites[$uni->slug])) {
                 $uni->forceFill(['website' => $sites[$uni->slug]])->save();
+            }
+
+            // Logo from Wikimedia Commons where the university has none yet.
+            if (! $uni->logo_path && isset($logos[$uni->slug])) {
+                $uni->forceFill(['logo_path' => $logos[$uni->slug]])->save();
             }
 
             // Campus photo from Wikimedia Commons with its credit, unless a cover was set by hand.
