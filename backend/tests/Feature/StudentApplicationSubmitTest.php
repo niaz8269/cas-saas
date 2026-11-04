@@ -104,20 +104,30 @@ it('blocks submission until every required document is attached', function () {
     expect(Application::find($id)->status)->toBe('draft');
 });
 
-it('accepts only JPG documents on the draft', function () {
+it('accepts only JPG and PDF documents on the draft', function () {
     [$program, $passport] = programRequiringPassport();
     $student = actingAsStudentPortal();
     $id = $this->postJson('/api/v1/student/applications', draftPayload($program))->json('data.id');
     $key = "students/{$student->id}/applications/{$id}/scan.jpg";
 
-    // A PDF is rejected.
+    // Other formats are rejected.
     $this->postJson("/api/v1/student/applications/{$id}/documents", [
         'document_type_id' => $passport->id,
         'key' => $key,
+        'file_name' => 'passport.png',
+        'mime' => 'image/png',
+        'size' => 1000,
+    ])->assertStatus(422)->assertJsonValidationErrors('mime');
+
+    // A PDF scan is accepted, and so is a JPG.
+    $pdfKey = "students/{$student->id}/applications/{$id}/scan.pdf";
+    $this->postJson("/api/v1/student/applications/{$id}/documents", [
+        'document_type_id' => $passport->id,
+        'key' => $pdfKey,
         'file_name' => 'passport.pdf',
         'mime' => 'application/pdf',
         'size' => 1000,
-    ])->assertStatus(422)->assertJsonValidationErrors('mime');
+    ])->assertCreated();
 
     // A JPG is accepted and attaches to the application.
     $this->postJson("/api/v1/student/applications/{$id}/documents", [
@@ -129,7 +139,7 @@ it('accepts only JPG documents on the draft', function () {
     ])->assertCreated();
 
     $application = Application::find($id);
-    expect($application->documents()->count())->toBe(1);
+    expect($application->documents()->count())->toBe(2);
 });
 
 it('submits the draft to CAS once documents are complete', function () {

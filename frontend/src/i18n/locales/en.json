@@ -1597,9 +1597,9 @@
     },
     "documents": {
       "uploadClear": "Upload a clear",
-      "uploadEachDoc": "photo/scan of each document. Application",
+      "uploadEachDoc": "photo or scan of each document. Application",
       "noDocsRequired": "No documents are required.",
-      "onlyJpg": "Only JPG images are accepted.",
+      "onlyJpg": "Only JPG images and PDF files are accepted.",
       "uploadFailed": "Upload failed. Please try again.",
       "replace": "Replace",
       "upload": "Upload"

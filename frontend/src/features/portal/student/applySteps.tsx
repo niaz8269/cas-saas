@@ -279,7 +279,7 @@ export function DocumentsStep(props: {
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        {t("wizard.documents.uploadClear")} <strong>JPG</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.
+        {t("wizard.documents.uploadClear")} <strong>JPG / PDF</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.
       </p>
       {draft.required_documents.length === 0 && (
         <PortalCard><p className="text-sm text-muted-foreground">{t("wizard.documents.noDocsRequired")}</p></PortalCard>
@@ -306,7 +306,7 @@ function DocumentRow(props: {
 
   const onFile = async (file: File | undefined) => {
     if (!file) return
-    if (file.type !== "image/jpeg") {
+    if (file.type !== "image/jpeg" && file.type !== "application/pdf") {
       props.onError(t("wizard.documents.onlyJpg"))
 
       return
@@ -315,7 +315,7 @@ function DocumentRow(props: {
     try {
       await uploadApplicationDocument(props.kind, props.applicationId, props.docTypeId, file)
       // A local object URL lets the applicant preview it on the review step.
-      props.onUploaded(props.docTypeId, file.name, URL.createObjectURL(file))
+      props.onUploaded(props.docTypeId, file.name, file.type === "application/pdf" ? undefined : URL.createObjectURL(file))
     } catch (err) {
       props.onError(err instanceof ApiError ? err.message : t("wizard.documents.uploadFailed"))
     } finally {
@@ -340,7 +340,7 @@ function DocumentRow(props: {
       )}>
         {pending ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
         {props.uploadedName ? t("wizard.documents.replace") : t("wizard.documents.upload")}
-        <input type="file" accept=".jpg,.jpeg,image/jpeg" className="hidden" disabled={pending}
+        <input type="file" accept=".jpg,.jpeg,.pdf,image/jpeg,application/pdf" className="hidden" disabled={pending}
           onChange={(e) => onFile(e.target.files?.[0])} />
       </label>
     </PortalCard>
