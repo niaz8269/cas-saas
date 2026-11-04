@@ -208,7 +208,7 @@ export default function SiteLayout() {
       <ScrollToTop />
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
-      <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/15 backdrop-blur-md")}>
+      <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/70 backdrop-blur-md")}>
         {/* Top promo bar — visible at the top, hidden once scrolled */}
         {!scrolled && (
           <div className={cn("border-b", solid ? "border-black/5 bg-subtle" : "border-white/25")}>
