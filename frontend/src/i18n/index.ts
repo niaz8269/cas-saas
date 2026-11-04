@@ -56,7 +56,7 @@ i18n.changeLanguage = async (lng, callback) => {
 }
 
 // A language remembered from an earlier visit (or the browser's) loads in the background.
-const detected = i18n.resolvedLanguage ?? i18n.language
+const detected = i18n.language
 if (detected && detected.slice(0, 2) !== "en") void i18n.changeLanguage(detected)
 
 export default i18n
