@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             WikidataFactsSeeder::class,
             OfficialAddressSeeder::class,
             UniversityScholarshipSeeder::class,
+            UniversityContactFixSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
             DocumentTypeSeeder::class,
