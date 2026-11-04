@@ -1,0 +1,200 @@
+{
+ "source": "Wikidata (CC0): street address P6375 and student count P2196, fetched 2026-11-04",
+ "universities": {
+  "anhui-university": {
+   "students": 26690,
+   "qid": "Q545540"
+  },
+  "china-academy-of-art": {
+   "address": "浙江省杭州市上城区南山路218号",
+   "qid": "Q985670"
+  },
+  "beijing-normal-university": {
+   "address": "北京市海淀区新街口外大街19号",
+   "qid": "Q1604022"
+  },
+  "beijing-university-of-chemical-technology": {
+   "students": 12000,
+   "qid": "Q2496210"
+  },
+  "beijing-foreign-studies-university": {
+   "students": 8600,
+   "qid": "Q1144682"
+  },
+  "beijing-language-and-culture-university": {
+   "students": 13000,
+   "qid": "Q549697"
+  },
+  "central-conservatory-of-music": {
+   "address": "中华人民共和国北京市西城区鲍家街43号",
+   "students": 1897,
+   "qid": "Q2994505"
+  },
+  "beijing-film-academy": {
+   "students": 1531,
+   "qid": "Q138182"
+  },
+  "capital-normal-university": {
+   "address": "北京市西三环北路105号",
+   "qid": "Q3551814"
+  },
+  "fudan-university": {
+   "students": 44300,
+   "qid": "Q495015"
+  },
+  "east-china-normal-university": {
+   "students": 36026,
+   "students_year": "2019",
+   "qid": "Q2034790"
+  },
+  "communication-university-of-china": {
+   "address": "北京市朝阳区定福庄东街一号",
+   "qid": "Q1765168"
+  },
+  "fuzhou-university": {
+   "students": 50000,
+   "students_year": "2023",
+   "qid": "Q470963"
+  },
+  "china-university-of-political-science-and-law": {
+   "students": 21325,
+   "qid": "Q833961"
+  },
+  "east-china-university-of-political-science-and-law": {
+   "students": 15420,
+   "qid": "Q5328082"
+  },
+  "hunan-university": {
+   "students": 46000,
+   "qid": "Q649868"
+  },
+  "guilin-university-of-electronic-technology": {
+   "address": "1 Jinji Road, Guilin, Guangxi",
+   "qid": "Q461322"
+  },
+  "guizhou-university": {
+   "students": 45000,
+   "qid": "Q461033"
+  },
+  "hohai-university": {
+   "students": 33000,
+   "qid": "Q662131"
+  },
+  "hefei-university": {
+   "students": 14000,
+   "qid": "Q5698189"
+  },
+  "hainan-normal-university": {
+   "address": "龙昆南路99号",
+   "qid": "Q5639373"
+  },
+  "minzu-university-of-china": {
+   "students": 15800,
+   "qid": "Q190336"
+  },
+  "nanjing-normal-university": {
+   "students": 21885,
+   "qid": "Q1477812"
+  },
+  "peking-university": {
+   "students": 50481,
+   "students_year": "2025",
+   "qid": "Q16952"
+  },
+  "northeastern-university": {
+   "address": "360 Huntington Ave, Boston, MA, 02115-5005",
+   "students": 33197,
+   "students_year": "2021",
+   "qid": "Q37548"
+  },
+  "shanghai-conservatory-of-music": {
+   "students": 1200,
+   "qid": "Q2994526"
+  },
+  "shanghai-university": {
+   "students": 56753,
+   "qid": "Q1343386"
+  },
+  "shanghai-ocean-university": {
+   "address": "999 Hucheng Ring Road, Pudong, Shanghai, 201306",
+   "students": 15800,
+   "students_year": "2020",
+   "qid": "Q7488485"
+  },
+  "northwest-normal-university": {
+   "students": 35900,
+   "qid": "Q2120270"
+  },
+  "ningbo-university-of-technology": {
+   "address": "No. 201, Fenghua Road, Jiangbei District,Ningbo, Zhejiang, 315211",
+   "qid": "Q7038668"
+  },
+  "shanghai-jiao-tong-university": {
+   "students": 46443,
+   "qid": "Q525169"
+  },
+  "south-china-university-of-technology": {
+   "students": 42720,
+   "students_year": "2019",
+   "qid": "Q835366"
+  },
+  "sun-yat-sen-university": {
+   "students": 65638,
+   "students_year": "2018",
+   "qid": "Q178972"
+  },
+  "sichuan-university": {
+   "students": 70000,
+   "qid": "Q2281517"
+  },
+  "sichuan-international-studies-university": {
+   "students": 14921,
+   "qid": "Q3551746"
+  },
+  "shanghai-university-of-finance-and-economics": {
+   "address": "上海市国定路777号",
+   "qid": "Q6129947"
+  },
+  "tianjin-normal-university": {
+   "students": 21876,
+   "qid": "Q10940196"
+  },
+  "southwestern-university-of-finance-and-economics": {
+   "students": 24126,
+   "qid": "Q1107944"
+  },
+  "south-china-agricultural-university": {
+   "students": 60588,
+   "students_year": "2020",
+   "qid": "Q7566809"
+  },
+  "southern-university-of-science-and-technology": {
+   "address": "1088 Xueyuan Avenue, Shenzhen 518055,P.R. China",
+   "qid": "Q7568723"
+  },
+  "xiamen-university": {
+   "students": 28133,
+   "qid": "Q1153539"
+  },
+  "wuhan-university": {
+   "students": 53000,
+   "qid": "Q1108197"
+  },
+  "university-of-chinese-academy-of-sciences": {
+   "address": "No.19(A) Yuquan Road, Shijingshan District, Beijing, P.R.China 100049",
+   "qid": "Q6544465"
+  },
+  "zhejiang-university": {
+   "students": 39000,
+   "qid": "Q197543"
+  },
+  "yunnan-university": {
+   "students": 19872,
+   "qid": "Q649882"
+  },
+  "yunnan-normal-university": {
+   "students": 33000,
+   "qid": "Q2120272"
+  }
+ }
+}
