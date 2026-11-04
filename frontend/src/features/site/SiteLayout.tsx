@@ -132,7 +132,7 @@ function NotificationBell() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={t("header.notifications")}
+        aria-label={`${t("header.notifications")} ${n}`}
         className="relative inline-flex text-cas-navy transition-colors hover:text-cas-red"
       >
         <Bell className="size-5" />
@@ -215,14 +215,14 @@ export default function SiteLayout() {
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
                 <span className="hidden text-cas-navy/75 sm:inline">{t("header.promoFreeApplyText")}</span>
-                <Link to="/site/universities?topic=deadlines" className="hidden rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700 sm:inline-block">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" aria-label={`${t("header.learnMore")}: ${t("header.promoFreeApplyText")}`} className="hidden rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700 sm:inline-block">{t("header.learnMore")}</Link>
                 <Link to="/site/universities?topic=deadlines" className="inline-flex items-center gap-1 font-medium text-cas-navy sm:hidden">
                   {t("header.promoMobile")} <ArrowRight className="size-3.5" />
                 </Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
                 <span className="text-cas-navy/75">{t("header.promoScholarshipsText")}</span>
-                <Link to="/site/scholarships?q=funded-2026" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
+                <Link to="/site/scholarships?q=funded-2026" aria-label={`${t("header.learnMore")}: ${t("header.promoScholarshipsText")}`} className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
               </div>
             </div>
           </div>
@@ -243,11 +243,11 @@ export default function SiteLayout() {
             <div className="flex shrink-0 items-center gap-3">
               <LanguageSwitcher className="hidden sm:block" />
               {loggedIn ? (
-                <Link to={`/portal/${portalKind}/apply`} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                <Link to={`/portal/${portalKind}/apply`} aria-label={t("header.applyNow")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
                   <ArrowRight className="size-4" /> <span className="hidden sm:inline">{t("header.applyNow")}</span>
                 </Link>
               ) : (
-                <Link to="/portal/login" className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                <Link to="/portal/login" aria-label={t("header.signIn")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
                   <LogIn className="size-4" /> <span className="hidden sm:inline">{t("header.signIn")}</span>
                 </Link>
               )}

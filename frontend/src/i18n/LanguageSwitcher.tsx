@@ -39,7 +39,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={t("language.select")}
+        aria-label={`${current.code.toUpperCase()} ${t("language.select")}`}
         title={current.label}
         className="flex h-7 min-w-9 items-center justify-center rounded-sm px-2 text-xs font-semibold tracking-wide text-cas-navy ring-1 ring-black/10 transition hover:ring-cas-red"
       >
