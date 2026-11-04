@@ -215,7 +215,10 @@ export default function SiteLayout() {
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
                 <span className="hidden text-cas-navy/75 sm:inline">{t("header.promoFreeApplyText")}</span>
-                <Link to="/site/universities?topic=deadlines" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" className="hidden rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700 sm:inline-block">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" className="inline-flex items-center gap-1 font-medium text-cas-navy sm:hidden">
+                  {t("header.promoMobile")} <ArrowRight className="size-3.5" />
+                </Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
                 <span className="text-cas-navy/75">{t("header.promoScholarshipsText")}</span>
