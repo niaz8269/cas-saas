@@ -74,7 +74,7 @@ export function ActionCard({ to, icon: Icon, title, hint, primary, className }: 
     <Link
       to={to}
       className={cn(
-        "group flex items-center gap-3 rounded-xl border p-4 shadow-sm transition-colors",
+        "group flex min-w-0 items-center gap-3 rounded-xl border p-4 shadow-sm transition-colors",
         primary
           ? "border-cas-navy bg-cas-navy text-white hover:bg-cas-navy-700"
           : "bg-card hover:border-cas-navy/40",

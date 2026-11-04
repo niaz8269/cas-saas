@@ -65,12 +65,12 @@ export default function PortalShell() {
     <div dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col bg-subtle">
       {/* Header — full width above both the desktop rail and the content */}
       <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-card px-4">
-        <img src={casLogo} alt="CAS" className="h-8 w-auto" />
-        <div className="flex items-center gap-2">
+        <img src={casLogo} alt="CAS" className="h-8 w-auto shrink-0" />
+        <div className="flex min-w-0 items-center gap-2">
           <PortalNotificationBell kind={kind ?? "student"} />
-          <div className="text-right leading-tight">
-            <p className="max-w-40 truncate text-sm font-medium">{profile?.name}</p>
-            <p className="font-mono text-[11px] text-muted-foreground">{profile?.code}</p>
+          <div className="min-w-0 text-right leading-tight">
+            <p className="max-w-[28vw] truncate text-sm font-medium sm:max-w-40">{profile?.name}</p>
+            <p className="truncate font-mono text-[11px] text-muted-foreground">{profile?.code}</p>
           </div>
           <button
             type="button"
