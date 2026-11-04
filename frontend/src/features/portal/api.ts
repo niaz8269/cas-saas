@@ -490,7 +490,7 @@ export const createApplication = (
 export const createStudentApplication = (payload: CreateApplicationPayload) =>
   createApplication("student", payload)
 
-/** Presign → direct PUT → register, scoped to a draft application (JPG). */
+/** Presign → direct PUT → register, scoped to a draft application (JPG or PDF). */
 export async function uploadApplicationDocument(
   kind: PortalKind,
   applicationId: number,

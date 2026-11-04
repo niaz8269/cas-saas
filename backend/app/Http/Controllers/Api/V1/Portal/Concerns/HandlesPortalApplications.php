@@ -183,7 +183,7 @@ trait HandlesPortalApplications
     }
 
     /**
-     * Shared upload validation — JPG only for the wizard (report step 4).
+     * Shared upload validation: JPG images and PDF scans for the wizard.
      *
      * @return array<string, mixed>
      */
@@ -191,13 +191,13 @@ trait HandlesPortalApplications
     {
         return $request->validate([
             'document_type_id' => ['required', 'integer', Rule::exists('document_types', 'id')],
-            'file_name' => ['required', 'string', 'max:255', 'ends_with:.jpg,.jpeg,.JPG,.JPEG'],
-            'mime' => ['required', Rule::in(['image/jpeg'])],
+            'file_name' => ['required', 'string', 'max:255', 'ends_with:.jpg,.jpeg,.pdf,.JPG,.JPEG,.PDF'],
+            'mime' => ['required', Rule::in(['image/jpeg', 'application/pdf'])],
             'size' => ['required', 'integer', 'min:1', 'max:'.DocumentService::MAX_BYTES],
             'key' => [Rule::requiredIf($withKey), 'string', 'max:500'],
         ], [
-            'mime.in' => 'Only JPG images are accepted.',
-            'file_name.ends_with' => 'Only JPG images are accepted.',
+            'mime.in' => 'Only JPG images and PDF files are accepted.',
+            'file_name.ends_with' => 'Only JPG images and PDF files are accepted.',
         ]);
     }
 
