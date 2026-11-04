@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             MoeMbbsSeeder::class,
             MbbsProgramGapSeeder::class,
             OfficialProgramGapSeeder::class,
+            WikidataFactsSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
             DocumentTypeSeeder::class,
