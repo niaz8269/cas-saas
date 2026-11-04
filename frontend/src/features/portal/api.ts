@@ -226,6 +226,10 @@ export const getStudentApplications = () =>
 export const getStudentVisaCase = () =>
   portalApi<{ data: StudentVisaCase }>("/student/visa-case")
 
+/** A message to the CAS team; staff see it on the student's timeline. */
+export const sendStudentMessage = (body: string) =>
+  portalApi<{ data: { id: number } }>("/student/messages", { method: "POST", body: JSON.stringify({ body }) })
+
 export const getStudentInvoices = () =>
   portalApi<{ data: StudentInvoiceRow[] }>("/student/invoices")
 
