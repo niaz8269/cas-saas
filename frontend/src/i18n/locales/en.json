@@ -276,7 +276,7 @@
   },
   "pricing": {
     "seoTitle": "Cost of Studying in China & CAS Fees",
-    "seoDescription": "What studying in China costs, from real university tuition by level, and how CAS charges: a free study plan, with any paid services quoted itemised before you commit.",
+    "seoDescription": "What studying in China costs, from real university tuition, and what CAS charges: a free study plan, a ¥1,000 application fee, and document and service charges that vary by university, program and degree.",
     "headerEyebrow": "Costs & fees",
     "headerTitle": "What it costs to study in China",
     "headerSubtitle": "Real yearly tuition from the universities we list, what to budget beyond tuition, and exactly how CAS charges for its services.",
@@ -299,7 +299,7 @@
     "budget": [
       "Accommodation: a university dormitory or private housing.",
       "Medical insurance, required for international students.",
-      "Application fee, charged by some universities.",
+      "University application fee, charged by some universities.",
       "Visa and residence permit, plus the physical examination.",
       "Flights, and day-to-day living costs in your city."
     ],
@@ -312,15 +312,15 @@
     },
     "scholarshipLink": "Browse scholarships",
     "casTitle": "What CAS charges",
-    "casSubtitle": "Starting is free. Anything paid is quoted as an itemised list before you agree to it.",
+    "casSubtitle": "A study plan costs nothing. After that, a ¥1,000 application fee, plus document and service charges that depend on the university, program and degree.",
     "freeBadge": "Free",
     "freeCardTitle": "Getting started",
     "free1": "Initial consultation with an advisor",
     "free2": "Personalised study plan",
     "free3": "University and program shortlist",
     "free4": "Scholarship matching guidance",
-    "quotedBadge": "Quoted up front",
-    "quotedCardTitle": "Optional services",
+    "quotedBadge": "Fees",
+    "quotedCardTitle": "What you pay CAS",
     "service": {
       "application": {
         "title": "Application handling",
@@ -343,7 +343,7 @@
         "body": "Translation of transcripts, diplomas and certificates."
       }
     },
-    "quoteNote": "Prices depend on the services you choose and the universities you apply to, so your advisor sends a written quote first. You only pay for the services you accept.",
+    "quoteNote": "Your advisor sends the exact document and service charges in writing before you commit. You only pay for the services you accept.",
     "stepsTitle": "How paying works",
     "steps": [
       {
@@ -362,16 +362,20 @@
     "faqTitle": "Pricing questions",
     "faq": [
       {
+        "q": "What does CAS charge?",
+        "a": "A ¥1,000 application fee, plus document and service charges that vary by university, program and degree. You get the itemised amounts in writing before you pay."
+      },
+      {
         "q": "Is the first consultation really free?",
         "a": "Yes. The consultation, the study plan, the university and program shortlist and scholarship guidance have no charge."
       },
       {
         "q": "Who sets the tuition fees?",
-        "a": "The universities do. CAS does not mark tuition up on this site; the fees shown come from the universities' own listings."
+        "a": "The universities do. CAS does not mark tuition up on this site; the fees shown come from the universities’ own listings."
       },
       {
         "q": "Are there hidden charges?",
-        "a": "No. Paid services are quoted in writing and itemised before you agree to anything."
+        "a": "No. The application fee is ¥1,000, and every other charge is itemised in writing before you agree to anything."
       },
       {
         "q": "Can I use only some of your services?",
@@ -384,7 +388,12 @@
     ],
     "ctaTitle": "Want a personalised quote?",
     "ctaSubtitle": "Start with a free study plan. We follow up with clear next steps and costs.",
-    "ctaButton": "Get a free study plan"
+    "ctaButton": "Get a free study plan",
+    "feeLabel": "Application fee",
+    "feeAmount": "¥1,000",
+    "variesLabel": "Document and service charges",
+    "variesValue": "Vary by university, program and degree",
+    "servicesIntro": "Services we can handle"
   },
   "partner": {
     "seoTitle": "Become a Study-in-China Partner Agent",

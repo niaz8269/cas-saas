@@ -274,7 +274,7 @@
   },
   "pricing": {
     "seoTitle": "Coût des études en Chine et frais CAS",
-    "seoDescription": "Ce que coûtent les études en Chine, d’après les frais réels des universités, et comment CAS facture : un plan d’études gratuit, et les services payants chiffrés en détail avant tout engagement.",
+    "seoDescription": "Ce que coûtent les études en Chine, d’après les frais réels des universités, et ce que facture CAS : un plan d’études gratuit, des frais de dossier de 1 000 ¥, et des frais de documents et de service qui varient selon l’université, le programme et le diplôme.",
     "headerEyebrow": "Coûts et frais",
     "headerTitle": "Ce que coûtent les études en Chine",
     "headerSubtitle": "Les frais de scolarité réels des universités que nous présentons, ce qu’il faut prévoir en plus, et la façon exacte dont CAS facture ses services.",
@@ -297,7 +297,7 @@
     "budget": [
       "Logement : résidence universitaire ou logement privé.",
       "Assurance maladie, obligatoire pour les étudiants internationaux.",
-      "Frais de dossier, demandés par certaines universités.",
+      "Frais de dossier de l’université, demandés par certaines universités.",
       "Visa et permis de séjour, ainsi que la visite médicale.",
       "Billets d’avion et frais de vie quotidienne dans votre ville."
     ],
@@ -310,15 +310,15 @@
     },
     "scholarshipLink": "Voir les bourses",
     "casTitle": "Ce que CAS facture",
-    "casSubtitle": "Commencer est gratuit. Tout service payant est chiffré en détail avant que vous l’acceptiez.",
+    "casSubtitle": "Un plan d’études ne coûte rien. Ensuite, 1 000 ¥ de frais de dossier, plus des frais de documents et de service qui dépendent de l’université, du programme et du diplôme.",
     "freeBadge": "Gratuit",
     "freeCardTitle": "Pour commencer",
     "free1": "Premier entretien avec un conseiller",
     "free2": "Plan d’études personnalisé",
     "free3": "Sélection d’universités et de programmes",
     "free4": "Conseils sur les bourses adaptées",
-    "quotedBadge": "Chiffré à l’avance",
-    "quotedCardTitle": "Services optionnels",
+    "quotedBadge": "Frais",
+    "quotedCardTitle": "Ce que vous payez à CAS",
     "service": {
       "application": {
         "title": "Gestion des candidatures",
@@ -341,7 +341,7 @@
         "body": "Traduction de relevés de notes, diplômes et certificats."
       }
     },
-    "quoteNote": "Les prix dépendent des services choisis et des universités visées ; votre conseiller vous envoie donc d’abord un devis écrit. Vous ne payez que les services que vous acceptez.",
+    "quoteNote": "Votre conseiller vous envoie par écrit les frais exacts de documents et de service avant que vous vous engagiez. Vous ne payez que les services que vous acceptez.",
     "stepsTitle": "Comment se passe le paiement",
     "steps": [
       {
@@ -360,6 +360,10 @@
     "faqTitle": "Questions sur les tarifs",
     "faq": [
       {
+        "q": "Que facture CAS ?",
+        "a": "Des frais de dossier de 1 000 ¥, plus des frais de documents et de service qui varient selon l’université, le programme et le diplôme. Vous recevez les montants détaillés par écrit avant de payer."
+      },
+      {
         "q": "Le premier entretien est-il vraiment gratuit ?",
         "a": "Oui. L’entretien, le plan d’études, la sélection d’universités et de programmes et les conseils sur les bourses sont sans frais."
       },
@@ -369,7 +373,7 @@
       },
       {
         "q": "Y a-t-il des frais cachés ?",
-        "a": "Non. Les services payants sont chiffrés par écrit et détaillés avant que vous acceptiez quoi que ce soit."
+        "a": "Non. Les frais de dossier sont de 1 000 ¥, et tout autre frais est détaillé par écrit avant que vous acceptiez quoi que ce soit."
       },
       {
         "q": "Puis-je n’utiliser qu’une partie de vos services ?",
@@ -382,7 +386,12 @@
     ],
     "ctaTitle": "Vous voulez un devis personnalisé ?",
     "ctaSubtitle": "Commencez par un plan d’études gratuit. Nous vous indiquons ensuite les prochaines étapes et les coûts.",
-    "ctaButton": "Obtenir un plan d’études gratuit"
+    "ctaButton": "Obtenir un plan d’études gratuit",
+    "feeLabel": "Frais de dossier",
+    "feeAmount": "1 000 ¥",
+    "variesLabel": "Frais de documents et de service",
+    "variesValue": "Varient selon l’université, le programme et le diplôme",
+    "servicesIntro": "Services que nous pouvons prendre en charge"
   },
   "partner": {
     "seoTitle": "Devenir agent partenaire pour les études en Chine",

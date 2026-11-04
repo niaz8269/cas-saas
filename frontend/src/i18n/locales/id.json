@@ -274,7 +274,7 @@
   },
   "pricing": {
     "seoTitle": "Biaya kuliah di Tiongkok dan biaya CAS",
-    "seoDescription": "Berapa biaya kuliah di Tiongkok, berdasarkan biaya nyata universitas, dan cara CAS menagih: rencana studi gratis, dengan layanan berbayar yang dirinci sebelum Anda memutuskan.",
+    "seoDescription": "Berapa biaya kuliah di Tiongkok, berdasarkan biaya nyata universitas, dan apa yang dikenakan CAS: rencana studi gratis, biaya pendaftaran ¥1.000, serta biaya dokumen dan layanan yang bervariasi menurut universitas, program, dan jenjang.",
     "headerEyebrow": "Biaya",
     "headerTitle": "Berapa biaya kuliah di Tiongkok",
     "headerSubtitle": "Biaya kuliah nyata dari universitas yang kami tampilkan, apa yang perlu dianggarkan di luar biaya kuliah, dan cara tepatnya CAS menagih layanannya.",
@@ -297,7 +297,7 @@
     "budget": [
       "Akomodasi: asrama universitas atau hunian swasta.",
       "Asuransi kesehatan, wajib bagi mahasiswa internasional.",
-      "Biaya pendaftaran, yang dikenakan oleh sebagian universitas.",
+      "Biaya pendaftaran universitas, yang dikenakan oleh sebagian universitas.",
       "Visa dan izin tinggal, serta pemeriksaan kesehatan.",
       "Tiket pesawat dan biaya hidup sehari-hari di kota Anda."
     ],
@@ -310,15 +310,15 @@
     },
     "scholarshipLink": "Lihat beasiswa",
     "casTitle": "Biaya dari CAS",
-    "casSubtitle": "Memulai itu gratis. Layanan berbayar dirinci dalam penawaran sebelum Anda menyetujuinya.",
+    "casSubtitle": "Rencana studi tidak dipungut biaya. Setelah itu, biaya pendaftaran ¥1.000, ditambah biaya dokumen dan layanan yang bergantung pada universitas, program, dan jenjang.",
     "freeBadge": "Gratis",
     "freeCardTitle": "Untuk memulai",
     "free1": "Konsultasi awal dengan penasihat",
     "free2": "Rencana studi yang dipersonalisasi",
     "free3": "Daftar pilihan universitas dan program",
     "free4": "Panduan pencocokan beasiswa",
-    "quotedBadge": "Dirinci di muka",
-    "quotedCardTitle": "Layanan opsional",
+    "quotedBadge": "Biaya",
+    "quotedCardTitle": "Yang Anda bayar kepada CAS",
     "service": {
       "application": {
         "title": "Pengurusan pendaftaran",
@@ -341,7 +341,7 @@
         "body": "Terjemahan transkrip, ijazah, dan sertifikat."
       }
     },
-    "quoteNote": "Harga bergantung pada layanan yang Anda pilih dan universitas yang Anda tuju, sehingga penasihat Anda mengirim penawaran tertulis terlebih dahulu. Anda hanya membayar layanan yang Anda setujui.",
+    "quoteNote": "Penasihat Anda mengirim rincian biaya dokumen dan layanan yang pasti secara tertulis sebelum Anda berkomitmen. Anda hanya membayar layanan yang Anda setujui.",
     "stepsTitle": "Cara pembayaran berjalan",
     "steps": [
       {
@@ -360,6 +360,10 @@
     "faqTitle": "Pertanyaan tentang biaya",
     "faq": [
       {
+        "q": "Berapa yang dikenakan CAS?",
+        "a": "Biaya pendaftaran ¥1.000, ditambah biaya dokumen dan layanan yang bervariasi menurut universitas, program, dan jenjang. Anda menerima rincian jumlahnya secara tertulis sebelum membayar."
+      },
+      {
         "q": "Apakah konsultasi pertama benar-benar gratis?",
         "a": "Ya. Konsultasi, rencana studi, daftar pilihan universitas dan program, serta panduan beasiswa tidak dipungut biaya."
       },
@@ -369,7 +373,7 @@
       },
       {
         "q": "Apakah ada biaya tersembunyi?",
-        "a": "Tidak. Layanan berbayar ditawarkan secara tertulis dan dirinci sebelum Anda menyetujui apa pun."
+        "a": "Tidak. Biaya pendaftaran adalah ¥1.000, dan setiap biaya lain dirinci secara tertulis sebelum Anda menyetujui apa pun."
       },
       {
         "q": "Bolehkah saya memakai sebagian layanan saja?",
@@ -382,7 +386,12 @@
     ],
     "ctaTitle": "Ingin penawaran yang dipersonalisasi?",
     "ctaSubtitle": "Mulailah dengan rencana studi gratis. Kami lanjutkan dengan langkah berikutnya dan biayanya.",
-    "ctaButton": "Dapatkan rencana studi gratis"
+    "ctaButton": "Dapatkan rencana studi gratis",
+    "feeLabel": "Biaya pendaftaran",
+    "feeAmount": "¥1.000",
+    "variesLabel": "Biaya dokumen dan layanan",
+    "variesValue": "Bervariasi menurut universitas, program, dan jenjang",
+    "servicesIntro": "Layanan yang dapat kami tangani"
   },
   "partner": {
     "seoTitle": "Jadi agen mitra untuk studi di Tiongkok",
