@@ -20,7 +20,9 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
-import heroBg from "@/assets/hero-graduate.webp"
+import heroLg from "@/assets/hero-graduate.webp"
+import heroMd from "@/assets/hero-graduate-1400.webp"
+import heroSm from "@/assets/hero-graduate-800.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
@@ -131,7 +133,15 @@ export default function SiteHome() {
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
       <section className="relative flex min-h-[calc(100svh/var(--site-zoom,1.1))] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-[position:center_55%]" style={{ backgroundImage: `url(${heroBg})` }} />
+          <img
+            src={heroLg}
+            srcSet={`${heroSm} 800w, ${heroMd} 1400w, ${heroLg} 2000w`}
+            sizes="(max-width: 640px) 150vw, 100vw"
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 size-full object-cover object-[center_55%]"
+          />
           {/* Light at the very top (so the navy header/logo read on the misty
               sky), darkening downward so the heading and search stay legible. */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/35 to-black/65" />

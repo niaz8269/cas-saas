@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import i18n from "@/i18n"
+import i18n, { loadLanguage } from "@/i18n"
 import { langDef } from "@/i18n/languages"
 import { renderWithProviders } from "@/test/utils"
 
@@ -25,7 +25,8 @@ it("opens the language menu, lists the other languages, and switches to RTL Arab
   expect(langDef(i18n.language).dir).toBe("rtl")
 })
 
-it("uses English as the fallback for keys missing in a locale", () => {
+it("uses English as the fallback for keys missing in a locale", async () => {
+  await loadLanguage("id") // locales other than English load on demand
   // A key present only in English must resolve to English in any locale
   // (so a not-yet-translated key never renders as a raw key or a blank).
   i18n.addResource("en", "translation", "test.fallbackOnly", "Fallback text")
