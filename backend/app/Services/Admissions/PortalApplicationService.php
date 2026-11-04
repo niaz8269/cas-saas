@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
  * no staff actor, and hands a completed draft to CAS by transitioning
  * draft → under_review once the per-program document checklist is satisfied.
  *
- * Funded student applications additionally wait on the one-time processing fee
+ * Student-filed applications additionally wait on the one-time application fee
  * ({@see ProcessingFee}); Finance confirming the payment releases them.
  */
 class PortalApplicationService
@@ -116,7 +116,7 @@ class PortalApplicationService
         // The invoice is raised here (not earlier) so nobody is billed for an
         // application they abandoned half-way.
         if ($this->processingFee->appliesTo($application)
-            && ! $this->processingFee->isSettled($application->student)) {
+            && ! $this->processingFee->isSettledFor($application)) {
             $invoice = $this->processingFee->ensureInvoice($application);
 
             throw new HttpResponseException(response()->json([
@@ -157,7 +157,7 @@ class PortalApplicationService
             ->where('status', 'draft')
             ->with('program', 'scholarship')
             ->get()
-            ->filter(fn (Application $a) => $this->processingFee->appliesTo($a));
+            ->filter(fn (Application $a) => $this->processingFee->appliesTo($a) && $this->processingFee->isSettledFor($a));
 
         foreach ($drafts as $application) {
             // A draft whose documents are still short simply stays a draft —

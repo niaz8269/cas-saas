@@ -6,13 +6,14 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 import { ProcessingFeeNotice, ProcessingFeeStep } from "./ProcessingFee"
 
 const INVOICE = {
-  id: 7, invoice_no: "INV-2026-00007", total: 100, amount_paid: 0,
-  currency: "USD", status: "issued", receipts: [],
+  id: 7, invoice_no: "INV-2026-00007", total: 500, amount_paid: 0,
+  currency: "CNY", status: "issued", receipts: [],
 }
 
 const feeState = (over: Record<string, unknown> = {}) => ({
   data: {
-    fee: { amount: 100, currency: "USD" },
+    fee: { amount: 500, currency: "CNY" },
+    fees: { scholarship: { amount: 500, currency: "CNY" }, self: { amount: 1000, currency: "CNY" } },
     instructions: "Bank of China · A/C 1234567890 · SWIFT BKCHCNBJ",
     settled: false,
     invoice: INVOICE,
@@ -27,7 +28,7 @@ it("states the amount, that it is one-time, and that the university fee is separ
 
   renderWithProviders(<ProcessingFeeNotice open onAcknowledge={vi.fn()} onCancel={vi.fn()} />)
 
-  expect(await screen.findByText(/One-time processing fee of 100 USD/)).toBeInTheDocument()
+  expect(await screen.findByText(/One-time application fee of 500 CNY/)).toBeInTheDocument()
   expect(screen.getByText(/non-refundable/)).toBeInTheDocument()
   expect(screen.getByText(/separate from any application fee charged by the university/)).toBeInTheDocument()
 })
@@ -51,7 +52,7 @@ it("tells a student who already paid that they are covered", async () => {
 
   renderWithProviders(<ProcessingFeeNotice open onAcknowledge={vi.fn()} onCancel={vi.fn()} />)
 
-  expect(await screen.findByText("Your processing fee is already paid")).toBeInTheDocument()
+  expect(await screen.findByText("Your application fee is already paid")).toBeInTheDocument()
   expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
 })
 
@@ -60,7 +61,7 @@ it("shows what is owed, how to pay it, and the reference to quote", async () => 
 
   renderWithProviders(<ProcessingFeeStep invoice={INVOICE} />)
 
-  expect(screen.getByText("100 USD")).toBeInTheDocument() // straight from the submit response
+  expect(screen.getByText("500 CNY")).toBeInTheDocument() // straight from the submit response
   expect(await screen.findByText(/Bank of China/)).toBeInTheDocument() // arrives with the fee query
   expect(screen.getByText(/quote INV-2026-00007/)).toBeInTheDocument()
 })

@@ -18,9 +18,12 @@ class SettingSeeder extends Seeder
             ['key' => 'finance.processing_fee'],
             [
                 'group' => 'finance',
-                // One-time, non-refundable, charged once per student on their
-                // first funded (scholarship/partial) application.
-                'value' => ['amount' => 100, 'currency' => 'USD'],
+                // One-time, non-refundable, charged once per student: 500 CNY for
+                // scholarship applications, 1,000 CNY for self-funded programs.
+                'value' => [
+                    'scholarship' => ['amount' => 500, 'currency' => 'CNY'],
+                    'self' => ['amount' => 1000, 'currency' => 'CNY'],
+                ],
             ],
         );
     }

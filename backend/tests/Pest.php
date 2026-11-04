@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Agent;
+use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
@@ -74,4 +75,20 @@ function actingAsStudentPortal(array $attributes = []): Student
     Sanctum::actingAs($student, guard: 'student');
 
     return $student;
+}
+
+/**
+ * A student who has already paid the one-time CAS application fee (self-funded
+ * tier), so their applications submit straight to Admissions.
+ */
+function settleApplicationFee(Student $student): void
+{
+    $invoice = Invoice::factory()->create([
+        'party_type' => 'student', 'party_id' => $student->id,
+        'status' => 'paid', 'total' => 1000, 'amount_paid' => 1000, 'currency' => 'CNY',
+    ]);
+    $invoice->items()->create([
+        'fee_type' => 'processing_fee', 'description' => 'CAS application fee',
+        'qty' => 1, 'unit_price' => 1000, 'amount' => 1000,
+    ]);
 }

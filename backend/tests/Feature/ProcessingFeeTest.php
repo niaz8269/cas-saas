@@ -48,8 +48,8 @@ it('raises the fee invoice on the first submit and never bills twice', function 
     $invoices = Invoice::where('party_type', 'student')->where('party_id', $student->id)->get();
 
     expect($invoices)->toHaveCount(1)
-        ->and((float) $invoices->first()->total)->toBe(100.0)
-        ->and($invoices->first()->currency)->toBe('USD')
+        ->and((float) $invoices->first()->total)->toBe(500.0)
+        ->and($invoices->first()->currency)->toBe('CNY')
         ->and($invoices->first()->status)->toBe('issued')
         ->and($invoices->first()->items->first()->fee_type)->toBe(ProcessingFee::FEE_TYPE);
 });
@@ -66,13 +66,41 @@ it('reads the amount from settings so Finance can change it', function () {
         ->assertJsonPath('invoice.currency', 'EUR');
 });
 
-it('never charges a self-funded application', function () {
+it('charges a self-funded application the higher fee', function () {
     actingAsStudentPortal();
 
-    // No scholarship attached — the ordinary self-funded path.
+    // No scholarship attached: the ordinary self-funded path.
     $application = Application::factory()->create(['scholarship_id' => null, 'agent_id' => null, 'kind' => 'course']);
+    $fee = app(ProcessingFee::class);
 
-    expect(app(ProcessingFee::class)->appliesTo($application))->toBeFalse();
+    expect($fee->appliesTo($application))->toBeTrue()
+        ->and($fee->tierFor($application))->toBe('self')
+        ->and($fee->amount('self'))->toBe(['amount' => 1000.0, 'currency' => 'CNY'])
+        ->and($fee->amount('scholarship'))->toBe(['amount' => 500.0, 'currency' => 'CNY']);
+});
+
+it('bills only the difference when a scholarship student later applies self-funded', function () {
+    $student = actingAsStudentPortal();
+    $fee = app(ProcessingFee::class);
+
+    $scholarship = Application::factory()->create(['student_id' => $student->id, 'agent_id' => null, 'kind' => 'scholarship']);
+    $paid = $fee->ensureInvoice($scholarship);
+    $paid->update(['status' => 'paid', 'amount_paid' => $paid->total]);
+
+    $selfFunded = Application::factory()->create(['student_id' => $student->id, 'agent_id' => null, 'kind' => 'course', 'scholarship_id' => null]);
+
+    expect($fee->isSettledFor($scholarship->refresh()))->toBeTrue()
+        ->and($fee->isSettledFor($selfFunded))->toBeFalse();
+
+    $topUp = $fee->ensureInvoice($selfFunded);
+
+    expect((float) $topUp->total)->toBe(500.0)
+        ->and($topUp->id)->not->toBe($paid->id)
+        ->and($fee->ensureInvoice($selfFunded)->id)->toBe($topUp->id); // idempotent
+
+    $topUp->update(['status' => 'paid', 'amount_paid' => $topUp->total]);
+
+    expect($fee->isSettledFor($selfFunded))->toBeTrue();
 });
 
 it('never charges a partner-filed application', function () {
@@ -90,7 +118,7 @@ it('lets the student see what is owed and file a receipt against it', function (
     $this->getJson('/api/v1/student/processing-fee')
         ->assertOk()
         ->assertJsonPath('data.settled', false)
-        ->assertJsonPath('data.fee.amount', 100)
+        ->assertJsonPath('data.fee.amount', 500)
         ->assertJsonPath('data.invoice.status', 'issued');
 
     $invoiceId = Invoice::where('party_id', $student->id)->value('id');
@@ -142,7 +170,7 @@ it('submits the held application when Finance confirms the payment', function ()
     actingAsStaffWith(['finance.manage.global']);
 
     $this->postJson("/api/v1/invoices/{$invoice->id}/payments", [
-        'amount' => 100, 'method' => 'bank_transfer', 'reference' => 'TT-9931',
+        'amount' => 500, 'method' => 'bank_transfer', 'reference' => 'TT-9931',
     ])->assertOk();
 
     expect($invoice->refresh()->status)->toBe('paid')
@@ -156,7 +184,7 @@ it('waves a later application straight through once the fee is settled', functio
 
     $invoice = Invoice::where('party_id', $student->id)->sole();
     actingAsStaffWith(['finance.manage.global']);
-    $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 100])->assertOk();
+    $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 500])->assertOk();
 
     // Back as the student: a brand-new funded application submits immediately.
     Sanctum::actingAs($student, guard: 'student');
@@ -182,7 +210,7 @@ it('leaves a documents-short draft alone when the fee is confirmed', function ()
 
     $invoice = Invoice::where('party_id', $student->id)->sole();
     actingAsStaffWith(['finance.manage.global']);
-    $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 100])->assertOk();
+    $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 500])->assertOk();
 
     expect(Application::find($ready)->status)->toBe('under_review')
         ->and(Application::find($short)->status)->toBe('draft');

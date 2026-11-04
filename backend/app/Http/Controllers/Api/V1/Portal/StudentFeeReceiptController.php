@@ -43,8 +43,9 @@ class StudentFeeReceiptController extends Controller
         return response()->json([
             'data' => [
                 'fee' => $amount,
+                'fees' => ['scholarship' => $amount, 'self' => $this->fee->amount('self')],
                 'instructions' => $this->fee->instructions(),
-                'settled' => $invoice?->status === 'paid',
+                'settled' => $this->fee->isSettled($student),
                 'invoice' => $invoice === null ? null : [
                     'id' => $invoice->id,
                     'invoice_no' => $invoice->invoice_no,
