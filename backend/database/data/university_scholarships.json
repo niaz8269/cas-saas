@@ -719,6 +719,748 @@
     "deadline": null,
     "source_url": "https://web.archive.org/web/20260520235624/https://gjjl.swmu.edu.cn/info/1020/1562.htm"
    }
+  ],
+  "university-of-electronic-science-and-technology-of-china": [
+   {
+    "slug": "university-of-electronic-science-and-technology-of-china-uestc-university-scholarship-belt-and-road-initiative",
+    "name": "UESTC University Scholarship (Belt and Road Initiative Scholarship)",
+    "type": "University",
+    "coverage": "Class 1: tuition, housing, insurance and 1,500 RMB a month; lower classes cover less",
+    "description": "UESTC's own scholarship for graduate degree students in three classes. Winners are picked during new-student recruitment and cannot be applied for after enrolment. It runs two years for master's and three for doctoral students. Taken from an older archived copy of the page, so terms may have changed.",
+    "eligibility": "Non-Chinese applicants who qualify for admission, are healthy and law-abiding, and hold no other scholarship. Master's and doctoral only.",
+    "how_to_apply": "Apply to a graduate program through the online international application system; selection happens during admission.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20200531144437id_/http://en.uestc.edu.cn/admission/Scholarships_Cost/University_Scholarship.htm"
+   },
+   {
+    "slug": "university-of-electronic-science-and-technology-of-china-chengdu-sister-cities-scholarship-via-uestc",
+    "name": "Chengdu Sister Cities Scholarship (via UESTC)",
+    "type": "Municipal",
+    "coverage": "Tuition, on-campus housing and insurance; undergraduate up to 4 years, doctoral up to 3",
+    "description": "A Chengdu government scholarship for students from the city's sister cities. The university does the first review and the city gives final approval. From an older archived page.",
+    "eligibility": "Foreign nationals born in, studying in, working in or living in a Chengdu sister city, with a confirmation letter from that city; meet the admission requirements; no other scholarship.",
+    "how_to_apply": "Submit documents through the online application system before arrival, or to the School of International Education after arrival; they then go to the Chengdu government.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20200409074228id_/http://en.uestc.edu.cn/info/1103/2576.htm"
+   }
+  ],
+  "peking-university": [
+   {
+    "slug": "peking-university-peking-university-scholarship-for-international-students",
+    "name": "Peking University Scholarship for International Students",
+    "type": "University",
+    "coverage": "Tuition, living stipend and medical insurance; renewable yearly after review",
+    "description": "The university's own merit scholarship for undergraduate, master's and doctoral students, set up in 2012. It lasts 4 years (undergraduate), 2 to 3 (master's) or 4 (doctoral) and is renewed each year if the annual review is passed.",
+    "eligibility": "Meets the admission requirements and applies to a full-time self-funded program; no other scholarship funding.",
+    "how_to_apply": "Apply through the university's international student portal; undergraduates need no separate form. Results are sent by email.",
+    "deadline": null,
+    "source_url": "https://isd.pku.edu.cn/en/detail.php?id=525"
+   },
+   {
+    "slug": "peking-university-beijing-government-scholarship-for-current-students-peking-university",
+    "name": "Beijing Government Scholarship for current students (Peking University)",
+    "type": "Municipal",
+    "coverage": "Type A: tuition, housing, stipend, insurance; Type B: no stipend; Type C: tuition and insurance",
+    "description": "A Beijing municipal scholarship for continuing international students, with Types A, B and C. Type C holders in year two or above can apply to upgrade.",
+    "eligibility": "Full-time foreign students in year two or above on programs with regular tuition; no other Chinese government, social organisation or university scholarship. Age limits 25 (undergraduate), 35 (master's), 40 (doctoral).",
+    "how_to_apply": "Log in to the student portal, open Scholarship Application, then Application for Current Students, and upload the official transcript and documents. The yearly window closes in September.",
+    "deadline": null,
+    "source_url": "https://isd.pku.edu.cn/en/detail.php?id=835"
+   }
+  ],
+  "tsinghua-university": [
+   {
+    "slug": "tsinghua-university-tsinghua-university-tuition-scholarship-graduate",
+    "name": "Tsinghua University Tuition Scholarship (graduate)",
+    "type": "University",
+    "coverage": "Full or partial tuition for one academic year; reapply yearly",
+    "description": "The graduate admissions site lists tuition scholarships for international graduate students, including the Beijing Government Scholarship and the university's own tuition scholarship. They cover full or partial tuition for one year and are competitive.",
+    "eligibility": "Outstanding full-time international graduate students; no further criteria are listed.",
+    "how_to_apply": "Students may apply every year; see the scholarship application page on the graduate admissions site.",
+    "deadline": null,
+    "source_url": "https://yz.tsinghua.edu.cn/en/Financial_Aid/Financial_Aid_System.htm"
+   },
+   {
+    "slug": "tsinghua-university-asian-future-leaders-scholarship-program-2026-cohort",
+    "name": "Asian Future Leaders Scholarship Program (2026 cohort)",
+    "type": "Corporate",
+    "coverage": "One to two years of tuition plus a living allowance for Asian master's applicants",
+    "description": "Offered by the Bai Xian Asia Institute to Asian applicants to Tsinghua master's programs. Recipients attend the institute's summer program in August 2027.",
+    "eligibility": "Non-Chinese Asian citizens meeting the master's admission requirements, with academic excellence, leadership and good English; no other scholarship. Not open to Shenzhen International Graduate School applicants.",
+    "how_to_apply": "Apply online for a 2026 full-time international master's program, then email the scholarship form with a three-minute video, English certificate, transcripts and a recommendation to the target department.",
+    "deadline": null,
+    "source_url": "https://yz.tsinghua.edu.cn/en/info/1027/1477.htm"
+   }
+  ],
+  "changan-university": [
+   {
+    "slug": "changan-university-san-qin-international-student-scholarship-of-shaanxi-province",
+    "name": "San Qin International Student Scholarship of Shaanxi Province",
+    "type": "Provincial",
+    "coverage": "Yearly cash award: doctoral 25,000, master's 20,000, undergraduate 13,000 RMB",
+    "description": "A Shaanxi provincial scholarship for enrolled self-funded international students, administered by the university's international education school.",
+    "eligibility": "Registered self-funded full-time undergraduate, master's or doctoral students in year two or above with a clean conduct record and a B or above in current-year exams. Holders of other scholarships should not apply.",
+    "how_to_apply": "Submit the form, passport and visa copies and the current transcript; the deadline is announced on the school's website.",
+    "deadline": null,
+    "source_url": "https://ies.chd.edu.cn/en/zxsjxj/list.htm"
+   },
+   {
+    "slug": "changan-university-chang-an-university-outstanding-international-students-scholarship",
+    "name": "Chang'an University Outstanding International Students Scholarship",
+    "type": "University",
+    "coverage": "Tiered cash awards; amounts are shown only in an image on the page",
+    "description": "A university award for current international students with strong academic results and campus involvement.",
+    "eligibility": "Full-time self-funded undergraduate, master's or doctoral students in year two or above who passed all current-year exams, took part in cultural, sports or social activities and have no disciplinary violations.",
+    "how_to_apply": "Submit the form, an official transcript and copies of award certificates; the deadline is in a separate notice.",
+    "deadline": null,
+    "source_url": "https://ies.chd.edu.cn/en/2025/0922/c8919a255775/page.htm"
+   },
+   {
+    "slug": "changan-university-chang-an-university-presidential-scholarship",
+    "name": "Chang'an University Presidential Scholarship",
+    "type": "University",
+    "coverage": "Monthly stipend of 1,500, 2,000 or 2,500 RMB for ten months; undergraduate hostel waiver",
+    "description": "For new degree students. The stipend is paid in the first year only; undergraduates also get a hostel-fee waiver on the Weishui campus. Tuition is self-funded.",
+    "eligibility": "Non-Chinese; bachelor's under 25, master's under 35, doctoral under 40; no other scholarship; HSK or English proficiency, with exemptions for prior study in Chinese or English.",
+    "how_to_apply": "Apply on the university's online system and select the Presidential Scholarship; pay the 400 RMB fee after preliminary review and submit the passport, diplomas, transcripts, medical form, police certificate, study plan and two recommendations.",
+    "deadline": null,
+    "source_url": "http://webplus.chd.edu.cn/en/8923/list.psp"
+   },
+   {
+    "slug": "changan-university-chang-an-university-innovation-scholarship",
+    "name": "Chang'an University Innovation Scholarship",
+    "type": "University",
+    "coverage": "Full tuition waiver plus a one-off 15,000 RMB living allowance",
+    "description": "For two four-year English-taught bachelor's programs (Applied Geology; Materials Science and Technology), 20 seats each. Selection is by documents and interview; recipients must pass an annual review. Housing is not covered.",
+    "eligibility": "Age 18 to 25, healthy, with a high-school diploma, a valid passport and IELTS 5.5 or TOEFL 68.",
+    "how_to_apply": "Apply on the university's admission system and pay the 400 RMB fee after preliminary approval; the window is 15 May to 30 June.",
+    "deadline": null,
+    "source_url": "https://ies.chd.edu.cn/en/ChangwanUniversityInnovationScholarship/list.htm"
+   }
+  ],
+  "university-of-science-and-technology-of-china": [
+   {
+    "slug": "university-of-science-and-technology-of-china-ustc-fellowship-for-undergraduate-programs-2027-intake",
+    "name": "USTC Fellowship for Undergraduate Programs (2027 intake)",
+    "type": "University",
+    "coverage": "Full: tuition, insurance, monthly stipend and housing; partial: tuition only",
+    "description": "The university's own scholarship for international bachelor's applicants, with a full level and a tuition-only level. Applicants with other Chinese funding for 2027-28 cannot apply.",
+    "eligibility": "Under 25 on 1 September 2027 and meeting the 2027 undergraduate admission requirements.",
+    "how_to_apply": "Create an account in the online application system, choose a bachelor's program, complete the form and upload documents; check the email for supplement requests and interview invitations.",
+    "deadline": "2027-03-31",
+    "source_url": "http://ic.ustc.edu.cn/?abroad=339"
+   },
+   {
+    "slug": "university-of-science-and-technology-of-china-ustc-fellowship-for-master-s-programs-type-c-and-cas-anso-type-a",
+    "name": "USTC Fellowship for Master's Programs (Type C and CAS-ANSO Type A)",
+    "type": "University",
+    "coverage": "Level A: tuition, insurance, stipend and housing; level B: tuition only",
+    "description": "The university's own master's scholarship (Type C) in two levels. Type A (CAS-ANSO) has the same coverage as level A but different eligibility. Applicants may apply for several types but receive only one; no host supervisor is needed.",
+    "eligibility": "Type C: under 35 on 1 September 2027 and meeting the 2027 master's requirements. Type A: under 30 and not already in a master's program in China.",
+    "how_to_apply": "Create an account in the online application system, select the program and scholarship type, complete the form and upload documents.",
+    "deadline": null,
+    "source_url": "http://ic.ustc.edu.cn/?abroad=ustc-fellowship-for-masters-programs"
+   },
+   {
+    "slug": "university-of-science-and-technology-of-china-ustc-fellowship-for-doctoral-programs-type-c-and-cas-anso-type-a",
+    "name": "USTC Fellowship for Doctoral Programs (Type C and CAS-ANSO Type A)",
+    "type": "University",
+    "coverage": "Level A: tuition, insurance, stipend and housing; level B: tuition only",
+    "description": "The university's own doctoral scholarship (Type C) in two levels. Type A is the CAS-ANSO scholarship covering tuition, insurance and a stipend. Each applicant receives only one type; no host supervisor is needed.",
+    "eligibility": "Type C: under 40 on 1 September 2027. Type A: under 35, not enrolled in a doctoral program in China, and not also applying for CAS-ANSO at UCAS.",
+    "how_to_apply": "Create an account in the online application system, select the program and scholarship type, complete the form and upload documents.",
+    "deadline": null,
+    "source_url": "http://ic.ustc.edu.cn/?abroad=351"
+   }
+  ],
+  "beihang-university": [
+   {
+    "slug": "beihang-university-outstanding-talents-scholarship-of-beihang-university-freshman",
+    "name": "Outstanding Talents Scholarship of Beihang University (freshman)",
+    "type": "University",
+    "coverage": "100% tuition waiver, living allowance and on-campus housing",
+    "description": "A freshman undergraduate scholarship for the 2027 intake; evaluation runs May to June 2027.",
+    "eligibility": "Current-year high-school graduates with an excellent record and conduct, a strong admission assessment and a school recommendation; honours, patents or provincial culture or sports prizes may earn priority.",
+    "how_to_apply": "Submit scholarship materials through the online application system together with the admission application; without them you are treated as not applying.",
+    "deadline": "2027-04-30",
+    "source_url": "https://is.buaa.edu.cn/en/lxsq/Undergraduate.htm"
+   },
+   {
+    "slug": "beihang-university-program-and-cooperation-foreign-students-scholarship-undergraduate",
+    "name": "Program and Cooperation Foreign Students Scholarship (undergraduate)",
+    "type": "University",
+    "coverage": "Tuition waiver of 100%, 80%, 50% or 20%",
+    "description": "For undergraduates recommended by institutions with a cooperation agreement with the university; evaluated May to June 2027.",
+    "eligibility": "Current-year high-school graduates with an excellent record and conduct and a recommendation from a domestic or overseas partner institution.",
+    "how_to_apply": "Submit scholarship materials through the online application system together with the admission application.",
+    "deadline": "2027-04-30",
+    "source_url": "https://is.buaa.edu.cn/en/lxsq/Undergraduate.htm"
+   },
+   {
+    "slug": "beihang-university-beihang-university-scholarship-for-international-students-freshmen",
+    "name": "Beihang University Scholarship for International Students (freshmen)",
+    "type": "University",
+    "coverage": "Tuition waiver of 100%, 80%, 50% or 20%",
+    "description": "A merit scholarship for new undergraduates, decided at admission; evaluated May to June 2027.",
+    "eligibility": "Applicants with an excellent high-school record and conduct and a strong admission assessment.",
+    "how_to_apply": "Submit scholarship materials through the online application system together with the admission application.",
+    "deadline": "2027-04-30",
+    "source_url": "https://is.buaa.edu.cn/en/lxsq/Undergraduate.htm"
+   },
+   {
+    "slug": "beihang-university-beijing-government-scholarship-beihang-undergraduate-beijing-campus-majors",
+    "name": "Beijing Government Scholarship (Beihang undergraduate, Beijing campus majors)",
+    "type": "Municipal",
+    "coverage": "Full tuition waiver plus insurance fee",
+    "description": "A Beijing municipal full scholarship for freshmen on Beijing-campus majors, administered by the university; evaluated May to June 2027.",
+    "eligibility": "Current-year high-school graduates with an excellent record and conduct and a strong admission assessment.",
+    "how_to_apply": "Submit scholarship materials through the online application system together with the admission application.",
+    "deadline": "2027-04-30",
+    "source_url": "https://is.buaa.edu.cn/en/lxsq/Undergraduate.htm"
+   },
+   {
+    "slug": "beihang-university-program-and-cooperation-foreign-students-scholarship-self-supported-general-rules",
+    "name": "Program and Cooperation Foreign Students Scholarship (self-supported, general rules)",
+    "type": "University",
+    "coverage": "Tuition cut by 20, 50, 80 or 100%, plus housing and living costs for some",
+    "description": "The university's general scheme for new self-supported students recommended by partner institutions. Exchange students usually get tuition support only. Holders pass an annual review each May.",
+    "eligibility": "New applicants must meet the recruitment rules and be recommended by a university, organisation, government department, embassy or consulate.",
+    "how_to_apply": "Fill in the recommendation form, have the recommending institution approve it and submit it with the application form to the foreign student affairs office. Usual deadlines are 20 December (spring) and 25 May (fall).",
+    "deadline": null,
+    "source_url": "https://is.buaa.edu.cn/en/info/1042/1940.htm"
+   }
+  ],
+  "hunan-normal-university": [
+   {
+    "slug": "hunan-normal-university-hunan-province-scholarship-for-foreign-students",
+    "name": "Hunan Province Scholarship for Foreign Students",
+    "type": "Provincial",
+    "coverage": "Yearly award: language 6,000, bachelor's 15,000, master's 20,000, doctoral 25,000 RMB",
+    "description": "A Hunan provincial scholarship for excellent foreign students; the amounts come from an older English page, as the 2022-23 brochure gives none.",
+    "eligibility": "Outstanding foreign undergraduate, master's and doctoral students studying in Hunan.",
+    "how_to_apply": "Apply directly to the university, usually in June and July.",
+    "deadline": null,
+    "source_url": "https://oiec.hunnu.edu.cn/info/1028/3215.htm"
+   },
+   {
+    "slug": "hunan-normal-university-hunan-province-belt-and-road-scholarship",
+    "name": "Hunan Province Belt and Road Scholarship",
+    "type": "Provincial",
+    "coverage": "Registration fee, tuition, housing and insurance for one year of Chinese study",
+    "description": "A Hunan provincial scholarship for one-year non-degree Chinese-language study; the quota is announced in June.",
+    "eligibility": "Applicants from Belt and Road countries.",
+    "how_to_apply": "Apply directly to the university, usually April to June.",
+    "deadline": null,
+    "source_url": "https://oiec.hunnu.edu.cn/info/1028/3215.htm"
+   },
+   {
+    "slug": "hunan-normal-university-hunan-normal-university-scholarship-for-international-students",
+    "name": "Hunan Normal University Scholarship for International Students",
+    "type": "University",
+    "coverage": "Awards of 1,000 to 16,000 RMB depending on the program",
+    "description": "A university award for excellent international students; winners and quotas are announced in June or July.",
+    "eligibility": "Excellent current or prospective non-degree, undergraduate, master's and doctoral students.",
+    "how_to_apply": "Apply directly to the university, usually May to June.",
+    "deadline": null,
+    "source_url": "https://oiec.hunnu.edu.cn/info/1028/3215.htm"
+   },
+   {
+    "slug": "hunan-normal-university-hunan-normal-university-first-class-discipline-scholarship",
+    "name": "Hunan Normal University First-Class Discipline Scholarship",
+    "type": "University",
+    "coverage": "30,000 to 50,000 RMB per year",
+    "description": "For graduate students in designated first-class discipline majors, reviewed on a rolling basis.",
+    "eligibility": "Excellent international master's and doctoral applicants to first-class discipline majors.",
+    "how_to_apply": "Details are in a separate scholarship brochure; applications are accepted on a rolling basis.",
+    "deadline": null,
+    "source_url": "https://oiec.hunnu.edu.cn/info/1028/3215.htm"
+   }
+  ],
+  "east-china-normal-university": [
+   {
+    "slug": "east-china-normal-university-shanghai-government-scholarship-ecnu-graduate",
+    "name": "Shanghai Government Scholarship (ECNU, graduate)",
+    "type": "Municipal",
+    "coverage": "Type A: tuition, housing, stipend of 3,000 or 3,500 RMB, insurance; Type B: tuition and insurance",
+    "description": "A Shanghai municipal scholarship for master's and doctoral students, awarded after pre-admission in a separate evaluation. A few master's programs in economics, management and teacher education are excluded.",
+    "eligibility": "Non-Chinese in good health; master's under 35, doctoral under 40; HSK or English scores required.",
+    "how_to_apply": "Apply on the university's application site, pay the 800 RMB fee and upload the scholarship form; the school reviews and may interview.",
+    "deadline": null,
+    "source_url": "https://lxs.ecnu.edu.cn/en_scholarship_graduate_shanghai_government_scholarship/list.htm"
+   },
+   {
+    "slug": "east-china-normal-university-shanghai-government-scholarship-ecnu-undergraduate",
+    "name": "Shanghai Government Scholarship (ECNU, undergraduate)",
+    "type": "Municipal",
+    "coverage": "Type A: tuition, housing, 2,500 RMB a month, insurance; Type B: tuition and insurance",
+    "description": "A Shanghai municipal scholarship for Chinese-taught undergraduates; the university nominates recipients. Joint, English-taught and international Chinese studies programs are excluded.",
+    "eligibility": "Non-Chinese in good health with a high-school diploma, under 25, meeting the major's Chinese requirement.",
+    "how_to_apply": "Submit the online application and pay the 800 RMB fee; no separate scholarship application is needed.",
+    "deadline": null,
+    "source_url": "https://lxs.ecnu.edu.cn/en_scholarship_undergraduate_shanghai_government_scholarship/list.htm"
+   }
+  ],
+  "central-south-university": [
+   {
+    "slug": "central-south-university-central-south-university-scholarship-for-international-students",
+    "name": "Central South University Scholarship for International Students",
+    "type": "University",
+    "coverage": "Full: tuition, housing and monthly stipend; partial: tuition only",
+    "description": "The university's own scholarship for new master's (three years) and doctoral (four years) students, with an annual review. The 2026 round closed on 31 May 2026; no 2027 notice has been published yet.",
+    "eligibility": "Non-Chinese in good health with no criminal record. Master's: bachelor's degree, age 18 to 35. Doctoral: master's degree, age 18 to 40. HSK 4 (260+) or HSK 5 (200+) depending on field, or IELTS 6.0 / TOEFL 85. No other funding.",
+    "how_to_apply": "Apply online, pay the 500 RMB fee after initial review, then the school reviews; documents include a one-minute video, two recommendations and a study plan of at least 1,000 words.",
+    "deadline": null,
+    "source_url": "https://intl.csu.edu.cn/info/1144/3831.htm"
+   }
+  ],
+  "shaanxi-normal-university": [
+   {
+    "slug": "shaanxi-normal-university-xi-an-municipal-belt-and-road-scholarship-shaanxi-normal-university",
+    "name": "Xi'an Municipal Belt and Road Scholarship (Shaanxi Normal University)",
+    "type": "Municipal",
+    "coverage": "Per person: doctoral 25,000, master's 20,000, bachelor's 15,000 RMB; language 1,000 a month",
+    "description": "A Xi'an city award for Belt and Road students run through the university. Awardees pay tuition, housing and insurance at registration and the grant is paid afterwards. The university interviews and recommends candidates; the city makes the final decision.",
+    "eligibility": "Ordinary passport from a Belt and Road country; no other scholarship. Age: doctoral under 40, master's under 35, bachelor's under 30, language under 45. Undergraduates need a CSCA transcript; HSK 4 or 5 for Chinese-taught programs.",
+    "how_to_apply": "Register on the university's online international-student system and upload the passport, notarised diplomas and transcripts, a study plan, two referee letters for graduate applicants, language certificate, police clearance, medical form and proof of funds.",
+    "deadline": null,
+    "source_url": "https://study.snnu.edu.cn/en/info/1066/1836.htm"
+   },
+   {
+    "slug": "shaanxi-normal-university-five-central-asian-countries-scholarship-shaanxi-normal-university",
+    "name": "Five Central Asian Countries Scholarship (Shaanxi Normal University)",
+    "type": "Municipal",
+    "coverage": "Tuition, housing, insurance, books, living allowance and a flight home",
+    "description": "A Xi'an government scholarship for students from five Central Asian countries on bachelor's (1+4 years), master's (3) and doctoral (3) programs starting September 2026. The university assesses applicants and recommends them to the city's education bureau.",
+    "eligibility": "Ordinary passport from Kazakhstan, Kyrgyzstan, Tajikistan, Turkmenistan or Uzbekistan; no other scholarship. Age: doctoral under 45, master's under 35, bachelor's under 25; undergraduates take the CSCA; HSK 4 or 5 for Chinese-taught programs.",
+    "how_to_apply": "Apply on the university's online system and choose the Five Central Asian Countries scholarship; upload the form, study plan, passport, diplomas and transcripts, police clearance, recommendation, language certificate and medical form.",
+    "deadline": null,
+    "source_url": "https://study.snnu.edu.cn/en/info/1066/2036.htm"
+   }
+  ],
+  "nanjing-agricultural-university": [
+   {
+    "slug": "nanjing-agricultural-university-jiangsu-provincial-government-distinguished-scholarship-nau",
+    "name": "Jiangsu Provincial Government Distinguished Scholarship (NAU)",
+    "type": "Provincial",
+    "coverage": "One-time award: 18,000 RMB for undergraduates, 30,000 RMB for postgraduates",
+    "description": "For outstanding international students already studying at the university. For 2026 it could nominate 2 undergraduates, 4 master's and 1 doctoral student, through self-application, college approval, university review and a public posting.",
+    "eligibility": "Degree students in year two or above who have paid fees and have no discipline record. Undergraduates need a GPA of at least 2.5; postgraduates 70 or more in every course. Not on suspension or extension and not a previous winner.",
+    "how_to_apply": "Log in to the international student service system and upload the transcript, the signed recommendation form, an HSK certificate if any, a story of at least 800 words about study in China and supporting awards.",
+    "deadline": "2026-11-06",
+    "source_url": "https://coieen.njau.edu.cn/info/1125/5423.htm"
+   }
+  ],
+  "east-china-university-of-science-and-technology": [
+   {
+    "slug": "east-china-university-of-science-and-technology-shanghai-government-scholarship-ecust",
+    "name": "Shanghai Government Scholarship (ECUST)",
+    "type": "Municipal",
+    "coverage": "Class A: tuition, housing, insurance and 3,000 or 3,500 RMB a month; class B: tuition and insurance",
+    "description": "A Shanghai city scholarship handled by the university. Class A (master's and doctoral) is a full award; class B (all levels) covers tuition and insurance. A 1+4 undergraduate track gives a pre-university year, then four years of tuition and insurance.",
+    "eligibility": "Applicants to the university's degree programs; the 1+4 track is Chinese-taught only and needs HSK 3 or above.",
+    "how_to_apply": "Register on the application site, answer Yes for scholarship and pick the Shanghai Government Scholarship class, and pay the application fee.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260517152824/https://cie.ecust.edu.cn/shanghai_government_scholarship/"
+   },
+   {
+    "slug": "east-china-university-of-science-and-technology-ecust-scholarship-for-international-students-comprehensive-and",
+    "name": "ECUST Scholarship for International Students (comprehensive and outstanding performance)",
+    "type": "University",
+    "coverage": "Comprehensive: 1,500 to 5,000 RMB; outstanding performance: 500 to 1,000 RMB",
+    "description": "A yearly merit award for enrolled degree students, with each type capped at 5% of degree students; self-funded students get higher amounts than scholarship holders. Taken from an archived 2025 copy.",
+    "eligibility": "Degree students who studied at least a year, did not suspend or extend, have no discipline record and failed no more than two exams; GPA of 60 or above, rising to 75 to 80 for the comprehensive award.",
+    "how_to_apply": "Applications open each November; submit the form, last year's transcript and supporting materials.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/2026/https://ies.ecust.edu.cn/en/msg.php?id=382"
+   },
+   {
+    "slug": "east-china-university-of-science-and-technology-ecust-scholarship-for-international-chinese-language-students",
+    "name": "ECUST Scholarship for International Chinese Language Students",
+    "type": "University",
+    "coverage": "1,000 RMB each semester (academic excellence or degree-study award)",
+    "description": "A semester award for non-degree Chinese-language students. The academic excellence award needs 90 or above in every course; the degree-study award is for those admitted to a degree program. Winners cannot receive both.",
+    "eligibility": "Chinese-language students with at least 90% attendance; degree students, holders of other scholarships and tuition-exempt exchange students are excluded.",
+    "how_to_apply": "Assessed by a college panel after end-of-semester exams; no separate application is stated.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260517143406/https://cie.ecust.edu.cn/ecust_scholarship_for_international_chinese_language_students/"
+   }
+  ],
+  "university-of-chinese-academy-of-sciences": [
+   {
+    "slug": "university-of-chinese-academy-of-sciences-ucas-scholarship-for-international-students",
+    "name": "UCAS Scholarship for International Students",
+    "type": "University",
+    "coverage": "Full: tuition, 3,000 to 3,500 RMB stipend, housing, insurance; partial: tuition and insurance",
+    "description": "For master's, doctoral, visiting and joint-program students. Full awards cover tuition (doctoral 40,000, master's 30,000 RMB a year), a stipend of at least 3,500 RMB for doctoral and 3,000 for master's students, basic housing and insurance, with the 600 RMB application fee waived. Up to 36 months, no extension. The 2026 degree deadline was 31 January 2026.",
+    "eligibility": "Non-Chinese with a foreign passport and English or Chinese proficiency; born on or after 1 January 1991 (doctoral) or 1996 (master's); not already in a master's or doctoral program in China at the same level.",
+    "how_to_apply": "Apply in the online admission system and choose the UCAS Scholarship option; email master@ucas.ac.cn with questions.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260616093049/https://english.ucas.ac.cn/index.php/admission/international-students/financial-aid/6658-ucas-scholarship-for-international-students-2026-call-for-applications"
+   }
+  ],
+  "tianjin-university": [
+   {
+    "slug": "tianjin-university-tianjin-university-international-student-scholarship-bachelor-s",
+    "name": "Tianjin University International Student Scholarship (bachelor's)",
+    "type": "University",
+    "coverage": "One year: type A 20,000 RMB tuition plus 1,400 a month; B 20,000; C 10,000; D 6,000",
+    "description": "The undergraduate scholarship in four tiers (A to D), each lasting one year; amounts follow the admission notice.",
+    "eligibility": "Non-Chinese, under 25, with a high-school diploma, good health and character. A CSCA transcript plus HSK 5 (180+) for Chinese-taught programs or IELTS 6.0 / TOEFL 80 for English-taught ones.",
+    "how_to_apply": "Apply through the international student service system with the diploma, transcripts, CSCA score, passport, language proof, resume, a study plan of at least 600 words and the medical form. The 2026 deadline was 1 April.",
+    "deadline": null,
+    "source_url": "https://sie.tju.edu.cn/en/jxj/tjdxjxj/202410/t20241015_323982.html"
+   },
+   {
+    "slug": "tianjin-university-tianjin-university-scholarship-in-chemical-engineering-english-taught-bachelor-s",
+    "name": "Tianjin University Scholarship in Chemical Engineering (English-taught bachelor's)",
+    "type": "University",
+    "coverage": "Full: 20,000 RMB tuition subsidy plus 1,400 a month; partial: 20,000 RMB a year",
+    "description": "From the School of Chemical Engineering and Technology for its bachelor's program, four years subject to an annual review, with limited quotas.",
+    "eligibility": "Non-Chinese, under 25, with a high-school diploma and good health; IELTS 6.0 or TOEFL 80 unless a native English speaker.",
+    "how_to_apply": "Apply through the international student service system with the standard undergraduate documents; the 2026 deadline was 1 April.",
+    "deadline": null,
+    "source_url": "https://sie.tju.edu.cn/en/jxj/tjdxjxj/202410/t20241015_323984.html"
+   },
+   {
+    "slug": "tianjin-university-peiyang-future-scholar-scholarship-doctoral",
+    "name": "Peiyang Future Scholar Scholarship (doctoral)",
+    "type": "University",
+    "coverage": "Full: 38,000 RMB tuition, 3,500 RMB a month and free housing for three to four years",
+    "description": "A scholarship for doctoral students in any program, lasting the full 3 to 4 years; students who fail the annual review lose funding the next year.",
+    "eligibility": "Non-Chinese, under 40, with a master's degree; HSK 5 (180+) for Chinese-taught programs or IELTS 6.0 / TOEFL 80 for English-taught ones.",
+    "how_to_apply": "Apply through the international student service system with diplomas, transcripts, passport, language proof, a supervisor's acceptance letter and a research proposal of at least 1,000 words; the 2026 deadline was 31 May.",
+    "deadline": null,
+    "source_url": "https://sie.tju.edu.cn/en/jxj/PeiyangFutureScholarScholarship/202603/t20260306_324563.html"
+   }
+  ],
+  "lanzhou-university": [
+   {
+    "slug": "lanzhou-university-lanzhou-university-president-scholarship",
+    "name": "Lanzhou University President Scholarship",
+    "type": "University",
+    "coverage": "Not stated on the pages read",
+    "description": "Set up in 2017 to recruit outstanding international students. The English page is an archived stub; the Chinese brochure gives eligibility and steps but no amount, coverage or deadline.",
+    "eligibility": "Non-Chinese in good health with no other scholarship. Bachelor's: high-school diploma, generally under 25; master's: bachelor's degree, under 35; doctoral: master's degree, under 40; plus a valid HSK certificate.",
+    "how_to_apply": "Register on the university's application site and upload the form, a personal statement of at least 1,500 words, medical form, degrees and transcripts, referee letters for graduate applicants and passport, then post one printed set to the School of International Cultural Exchange.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20240810213624/https://sice.lzu.edu.cn/col_xzjxj/index/"
+   }
+  ],
+  "heilongjiang-university": [
+   {
+    "slug": "heilongjiang-university-heilongjiang-university-international-college-scholarship-undergraduate",
+    "name": "Heilongjiang University International College Scholarship (undergraduate)",
+    "type": "University",
+    "coverage": "Four tiers: registration, tuition and housing; tuition; half tuition; 10% of tuition",
+    "description": "An entry scholarship for new undergraduates in two Chinese-taught majors, Chinese Language and Literature (4 years) and International Economics and Trade (5 years), renewed each year by review. Selection uses application materials plus an interview.",
+    "eligibility": "Non-Chinese, healthy, 25 or under, with a high-school diploma, a CSCA score, no criminal record and no other scholarship.",
+    "how_to_apply": "Email the form, notarised diploma, transcripts, study plan, medical form, passport and police certificate to the admissions office by 5 June; offers go out in early July.",
+    "deadline": null,
+    "source_url": "https://hi.hlju.edu.cn/admissions/jxj/xxjxj.htm"
+   },
+   {
+    "slug": "heilongjiang-university-heilongjiang-provincial-government-scholarship-via-heilongjiang-university",
+    "name": "Heilongjiang Provincial Government Scholarship (via Heilongjiang University)",
+    "type": "Provincial",
+    "coverage": "Tuition, shared dorm and comprehensive medical insurance",
+    "description": "A province-funded scholarship run by the international college; the provincial education department sets yearly quotas and approves recipients. The scheme page predates 2026.",
+    "eligibility": "Foreign nationality for at least four years. Bachelor's: high-school graduate, 25 or under; master's: bachelor's degree, 35 or under; doctoral: master's degree, 40 or under; HSK 5 (180+); no other scholarship.",
+    "how_to_apply": "Applications usually open March to May; submit the provincial form, notarised credentials, HSK report, a study plan of 800 to 1,000 words, referee letters for graduates and the medical form.",
+    "deadline": null,
+    "source_url": "https://hi.hlju.edu.cn/info/1080/1322.htm"
+   },
+   {
+    "slug": "heilongjiang-university-moe-heilongjiang-eurasian-countries-scholarship",
+    "name": "MOE-Heilongjiang Eurasian Countries Scholarship",
+    "type": "Provincial",
+    "coverage": "Tuition, housing, living allowance and insurance; master's and doctoral, 2027 to 2030",
+    "description": "A joint Ministry of Education and Heilongjiang program for master's and doctoral students from 13 Eurasian countries, applied for through the university. It is a named regional scheme, not the generic national scholarship.",
+    "eligibility": "Nationals of Russia, Belarus, Ukraine, Georgia, Armenia, Kyrgyzstan, Uzbekistan, Tajikistan, Kazakhstan, Turkmenistan, Moldova, Azerbaijan or Mongolia. Master's 35 or under, doctoral 40 or under; grades above 75/100; no other scholarship.",
+    "how_to_apply": "Register in the CSC online system under the university's agency number, print and sign the form, and submit notarised credentials, transcripts, a study plan of at least 1,000 words, two professor letters and a passport copy.",
+    "deadline": null,
+    "source_url": "https://hi.hlju.edu.cn/admissions/jxj/bsgj_oygjxm.htm"
+   },
+   {
+    "slug": "heilongjiang-university-heilongjiang-university-self-funded-student-scholarship",
+    "name": "Heilongjiang University self-funded student scholarship",
+    "type": "University",
+    "coverage": "Degree: 6,000, 4,000 or 2,000 RMB; non-degree: 1,000, 500 or 300 RMB",
+    "description": "Yearly merit awards for self-funded students already studying at the university, assessed each autumn; about 28% of assessed students receive one.",
+    "eligibility": "Self-funded foreign-passport holders with no other scholarship. Degree students: top 40% of class, lowest subject 80+, average 85+, over a year at the university. Non-degree: top 40%, each subject 85+, average 90+.",
+    "how_to_apply": "Assessed by the international college's scholarship committee each September and October (internal process).",
+    "deadline": null,
+    "source_url": "https://gjjl.hlju.edu.cn/info/1049/1265.htm"
+   }
+  ],
+  "nanjing-normal-university": [
+   {
+    "slug": "nanjing-normal-university-nanjing-normal-university-scholarship",
+    "name": "Nanjing Normal University Scholarship",
+    "type": "University",
+    "coverage": "Tuition, housing, monthly stipend of 1,000, 1,500 or 2,500 RMB, insurance 800 RMB a year",
+    "description": "A full scholarship for new international students on English-taught undergraduate programs and on master's and doctoral programs. A recipient cannot also hold a Chinese Government Scholarship.",
+    "eligibility": "English-taught: TOEFL 85 / IELTS 6.5 or an English-medium prior degree. Chinese-taught: HSK 5 (180+) for master's, HSK 6 (180+) for doctoral. Postgraduates need two recommendations and a supervisor's acceptance.",
+    "how_to_apply": "Apply online; the 2026 window was 1 March to 1 May and results were emailed in mid to late June.",
+    "deadline": null,
+    "source_url": "https://en.njnu.edu.cn/admissions/nanjing-normal-university-scholarship"
+   }
+  ],
+  "nanjing-university-of-the-arts": [
+   {
+    "slug": "nanjing-university-of-the-arts-jiangsu-government-scholarship-for-international-students-via-nua",
+    "name": "Jiangsu Government Scholarship for International Students (via NUA)",
+    "type": "Provincial",
+    "coverage": "18,000 RMB for undergraduates; 30,000 RMB for master's or doctoral students; one year",
+    "description": "Annual funding for degree students, with the university recommending applicants; it can be renewed by applying again each year.",
+    "eligibility": "Degree students in year two or above; applicants submit the previous year's grades, awards and activities.",
+    "how_to_apply": "Apply through the international education college with last year's academic record and activities; the university recommends the best candidates.",
+    "deadline": null,
+    "source_url": "https://gjy.nua.edu.cn/894/listm.htm"
+   },
+   {
+    "slug": "nanjing-university-of-the-arts-nanjing-municipal-government-scholarship-via-nua",
+    "name": "Nanjing Municipal Government Scholarship (via NUA)",
+    "type": "Municipal",
+    "coverage": "10,000 RMB bachelor's; 20,000 master's and doctoral; 5,000 non-degree trainee; one year",
+    "description": "One-year funding for self-funded international students, including new students; it can be applied for every year.",
+    "eligibility": "Self-funded international undergraduate, master's, doctoral or professional-training (a year or more) students.",
+    "how_to_apply": "Choose the self-funded category in the online application; the category is changed if you are awarded. Details from the international education college.",
+    "deadline": null,
+    "source_url": "https://gjy.nua.edu.cn/894/listm.htm"
+   }
+  ],
+  "shanxi-university": [
+   {
+    "slug": "shanxi-university-shanxi-university-undergraduate-scholarship-levels-a-and-b",
+    "name": "Shanxi University Undergraduate Scholarship (levels A and B)",
+    "type": "University",
+    "coverage": "A: tuition, housing and 7,500 RMB a year living; B: tuition and housing",
+    "description": "For new international undergraduates in the 2026 bachelor's program. Majors listed: International Economics and Trade, Business Administration, Tourism Management, Chinese Linguistics and Literature, International Politics, Computer Science and Technology.",
+    "eligibility": "Level A: passed the CSCA, interview score 85+, HSK 4 of 220+. Level B: passed the CSCA, interview 75+, HSK 4 of 200+. General: non-Chinese, 25 or under, high-school certificate, transcript average above 85, HSK 4 of 180+.",
+    "how_to_apply": "Register in the international student system, choose the preparatory program, upload documents and attend the interview; the 2026 window was 1 December 2025 to 30 June 2026.",
+    "deadline": null,
+    "source_url": "https://siee.sxu.edu.cn/ggtz/1e8561eeda91453d821f6aa246dbf1a4.htm"
+   },
+   {
+    "slug": "shanxi-university-shanxi-government-scholarship-program-for-international-students",
+    "name": "Shanxi Government Scholarship Program for International Students",
+    "type": "Provincial",
+    "coverage": "Tuition and application fee waived, free housing and a living allowance",
+    "description": "A provincial scholarship for degree students at the university; the 2025 notice lists bachelor's, master's and doctoral levels.",
+    "eligibility": "Non-Chinese with no other scholarship. Doctoral: 40 or under, master's degree, GPA over 3.3/4, HSK 6 or English proof. Master's: 35 or under, GPA over 3.0/4, HSK 5 (200) or English proof. Bachelor's: 25 or under, average above 75, HSK 4 (220).",
+    "how_to_apply": "Register and apply online, upload documents with proof of 20,000 RMB in funds, then interview; results come within 15 working days.",
+    "deadline": null,
+    "source_url": "https://siee.sxu.edu.cn/lxsxm/jxjjs/12ac47005d3f4791b45d7d59f8e8af0c.htm"
+   }
+  ],
+  "china-agricultural-university": [
+   {
+    "slug": "china-agricultural-university-beijing-government-scholarship-china-agricultural-university",
+    "name": "Beijing Government Scholarship (China Agricultural University)",
+    "type": "Municipal",
+    "coverage": "Level A: tuition, housing, living, insurance; B: no living allowance; C: tuition and insurance",
+    "description": "A Beijing municipal scholarship for new bachelor's, master's and doctoral students and outstanding self-funded students. Category 1 targets agricultural talent from Belt and Road and BRICS countries.",
+    "eligibility": "Non-Chinese; undergraduate under 25, master's under 35, doctoral under 40; HSK 4 for Chinese-taught or TOEFL 85 / IELTS 6.5 for English-taught programs; average 80/100 or GPA 3.0; undergraduates need a CSCA score of 80+.",
+    "how_to_apply": "Register on the application site, choose the Beijing Government Scholarship, upload documents and pay the 400 RMB fee; the college interviews or examines applicants. The 2026 window was 8 May to 30 June.",
+    "deadline": null,
+    "source_url": "https://admissions.cau.edu.cn/art/2026/5/12/art_48609_1112755.html"
+   }
+  ],
+  "nanchang-university": [
+   {
+    "slug": "nanchang-university-jiangxi-provincial-government-scholarship-nanchang-university",
+    "name": "Jiangxi Provincial Government Scholarship (Nanchang University)",
+    "type": "Provincial",
+    "coverage": "Master's and doctoral: a one-time yearly payment; amount not stated",
+    "description": "A provincial scholarship for international degree and language students at the university or new entrants; the page gives no amount or dates.",
+    "eligibility": "Foreign passport, no other scholarship. Undergraduate under 28, master's under 35, doctoral under 45, language under 50; HSK or equivalent for Chinese-language applicants.",
+    "how_to_apply": "Apply online with notarised credentials, transcript, passport copy, health and no-crime certificates, plus recommendations and a study plan for master's and doctoral applicants.",
+    "deadline": null,
+    "source_url": "https://iec.ncu.edu.cn/en/SCHOLARSHIPS/Jiangxi_Provincial_Government_Scholarships_for_I.htm"
+   },
+   {
+    "slug": "nanchang-university-nanchang-university-president-scholarship",
+    "name": "Nanchang University President Scholarship",
+    "type": "University",
+    "coverage": "Freshman, excellent undergraduate and graduate categories; amounts not stated",
+    "description": "A university scholarship for self-funded students in three categories: new undergraduates (class-based programs prioritised), undergraduates from year two, and master's and doctoral students.",
+    "eligibility": "Friendly to China, strong grades and good conduct.",
+    "how_to_apply": "Apply online and upload documents.",
+    "deadline": null,
+    "source_url": "http://iec.ncu.edu.cn/en/SCHOLARSHIPS/NCU_President_Scholarship_for_International_Stud.htm"
+   }
+  ],
+  "chongqing-normal-university": [
+   {
+    "slug": "chongqing-normal-university-chongqing-normal-university-president-scholarship-2026",
+    "name": "Chongqing Normal University President Scholarship (2026)",
+    "type": "University",
+    "coverage": "First class: tuition, shared dorm, fees and 400 RMB a month; second class: tuition and fees",
+    "description": "A university-funded scholarship for bachelor's, master's, doctoral and language students. First class for graduate students requires a completed year at the university; first-year graduates receive only second class.",
+    "eligibility": "Non-Chinese, healthy, friendly to China, no criminal record. Bachelor's: high school, 25 or under, CSCA required; master's 35 or under; doctoral 40 or under; language 18 to 50; HSK 4 or 5 by level; no other scholarship.",
+    "how_to_apply": "Register on the international student online service system and upload the form, credentials, transcripts, study plan, HSK, recommendations and medical form; the 2026 window was 1 March to 30 May.",
+    "deadline": null,
+    "source_url": "https://international.cqnu.edu.cn/ywb/info/1356/1313.htm"
+   },
+   {
+    "slug": "chongqing-normal-university-chongqing-municipal-government-mayor-scholarship-via-cqnu",
+    "name": "Chongqing Municipal Government Mayor Scholarship (via CQNU)",
+    "type": "Municipal",
+    "coverage": "35,000 RMB doctoral, 30,000 master's, 25,000 bachelor's per year",
+    "description": "A Chongqing municipal scholarship applied for through the university, payable for the normal length of each degree.",
+    "eligibility": "Non-Chinese, healthy, no other scholarship. Bachelor's 25 or under with the CSCA; master's 35 or under; doctoral 40 or under; language 18 to 50.",
+    "how_to_apply": "Use the same online system as the President Scholarship with the Mayor Scholarship form; the 2026 window was 1 March to 30 May.",
+    "deadline": null,
+    "source_url": "https://international.cqnu.edu.cn/ywb/info/1356/1312.htm"
+   }
+  ],
+  "shanghai-normal-university": [
+   {
+    "slug": "shanghai-normal-university-shanghai-government-scholarship-shanghai-normal-university",
+    "name": "Shanghai Government Scholarship (Shanghai Normal University)",
+    "type": "Municipal",
+    "coverage": "Class A: tuition, housing, insurance, 3,000 or 3,500 RMB a month; class B: tuition and insurance",
+    "description": "A Shanghai municipal scholarship run by the university. Class A is full funding for master's and doctoral students; class B is partial and open to bachelor's, master's and doctoral students.",
+    "eligibility": "Non-Chinese, healthy, strong grades, no CSC award. Age under 25 / 35 / 40; Chinese-taught programs need HSK, English-taught IELTS 6.5 or TOEFL 90 for postgraduates; the CSCA is required; art applicants submit four or five works.",
+    "how_to_apply": "Apply on the application site, upload the scholarship form and documents and pay 520 RMB; the 2026 window was 1 January to 31 May, with results by end of August.",
+    "deadline": null,
+    "source_url": "https://iao.shnu.edu.cn/e1/0a/c20436a844042/page.htm"
+   },
+   {
+    "slug": "shanghai-normal-university-sisp-scholarship-shanghai-international-student-pre-college",
+    "name": "SISP Scholarship (Shanghai International Student Pre-college)",
+    "type": "Municipal",
+    "coverage": "Tier A: tuition, housing, 2,500 RMB a month, insurance; tier B: tuition and insurance",
+    "description": "For a one-year pre-college program (Chinese, maths and CSCA preparation) run by the university for the Shanghai Education Commission, preparing students for undergraduate study at Shanghai universities.",
+    "eligibility": "Non-Chinese, 17 or over, scholarship applicants under 23 on 1 September 2026, healthy, with a strong high-school record and HSK 3 or above; no other Chinese government scholarship.",
+    "how_to_apply": "Apply on the application site with the 520 RMB fee, medical form, certificates, transcripts, statement, CV and recommendations.",
+    "deadline": null,
+    "source_url": "https://iao.shnu.edu.cn/f1/9f/c20437a848287/page.htm"
+   }
+  ],
+  "guangxi-university": [
+   {
+    "slug": "guangxi-university-china-southern-power-grid-company-scholarship-guangxi-university-2026",
+    "name": "China Southern Power Grid Company Scholarship (Guangxi University, 2026)",
+    "type": "Corporate",
+    "coverage": "Full: tuition, housing, living costs and insurance, including a Chinese prep year for bachelor's",
+    "description": "Co-funded by China Southern Power Grid and the university to train bachelor's students in Electrical Engineering and Automation; master's students study Electrical Engineering, Law or Economics. Teaching is in Chinese, and bachelor's students first take a one-year Chinese course and must pass HSK 4 and the CSCA.",
+    "eligibility": "Passport holders from ASEAN countries or students sponsored by the company's overseas projects, healthy with no criminal record. Bachelor's: born after 1 September 1996; master's: bachelor's degree, born after 1 September 1991, HSK 4 (180+).",
+    "how_to_apply": "Apply on the online system and choose the scholarship; upload the standard documents plus two recommendations and a study plan for master's applicants; the university and company review and interview. The 2026 deadline was 21 June.",
+    "deadline": null,
+    "source_url": "https://dqgc-en.gxu.edu.cn/nfdwzsjz2026.pdf"
+   }
+  ],
+  "hunan-university": [
+   {
+    "slug": "hunan-university-partial-scholarship-of-hunan-university",
+    "name": "Partial Scholarship of Hunan University",
+    "type": "University",
+    "coverage": "Waives application fee, insurance, tuition and on-campus housing fees",
+    "description": "A university partial scholarship for degree students (bachelor's 4 years, master's 2.5 years). English-taught majors are Business Administration, Electrical Engineering, Mechanical Engineering and Computer Science; Chinese-taught programs cover all 23 colleges. From an archived 2023 page, so terms may have changed.",
+    "eligibility": "Non-Chinese in good health; bachelor's aged 18 to 30, master's 18 to 35. HSK 4 for Chinese-taught majors; an English certificate or the university's English test for English-taught ones.",
+    "how_to_apply": "Register on the online system and upload the diploma, transcripts, passport copy, medical form and police certificate; master's applicants add a study plan and two professor recommendations.",
+    "deadline": null,
+    "source_url": "http://web.archive.org/web/20230127154201/http://www-en.hnu.edu.cn/info/1040/2963.htm"
+   }
+  ],
+  "sun-yat-sen-university": [
+   {
+    "slug": "sun-yat-sen-university-sysu-scholarship-for-international-students-2026",
+    "name": "SYSU Scholarship for International Students (2026)",
+    "type": "University",
+    "coverage": "Tier 1: full tuition plus 30,000 to 42,000 RMB a year stipend; tier 2: tuition; tier 3: half tuition",
+    "description": "A merit award for new students in all 2026 catalogue programs except MPA and MBA. Stipends are 30,000 RMB a year for bachelor's, 36,000 for master's and 42,000 for doctoral students, for the standard program length with an annual review. Recipients pay for housing, utilities, insurance, visa, flights and medical checks. The 2026 window has closed and the 2027 cycle is not yet posted.",
+    "eligibility": "Meet the 2026 enrolment rules with outstanding grades; bachelor's under 25, master's under 35, doctoral under 40; a recommendation from a recognised agency or ambassador in the home country. Holders of CSC, CLEC or MPA scholarships are excluded.",
+    "how_to_apply": "Apply on the international student application system and fill in the scholarship section; qualification review and interview follow, with results about 15 days after the interview.",
+    "deadline": null,
+    "source_url": "https://iso.sysu.edu.cn/en/application/scholarship/1420586.htm"
+   }
+  ],
+  "yunnan-university": [
+   {
+    "slug": "yunnan-university-yunnan-university-international-student-scholarship-2026",
+    "name": "Yunnan University International Student Scholarship (2026)",
+    "type": "University",
+    "coverage": "Full: tuition and on-campus housing; partial: housing plus most of the tuition (5,000 RMB payable)",
+    "description": "A scholarship for full-time bachelor's, master's and doctoral students.",
+    "eligibility": "Non-Chinese passport holders of good conduct and health; age 18 to 30 (bachelor's), 20 to 40 (master's), 22 to 45 (doctoral); HSK 4 (180+) or IELTS 6.5 / TOEFL 90.",
+    "how_to_apply": "Apply on the international student service system with the standard documents, a study plan and recommendations; experts review and may test or interview. The 2026 deadline was 30 June.",
+    "deadline": null,
+    "source_url": "https://regional.chinadaily.com.cn/specials/ynu/YunnanUniversityAdmissionsforInternationalStudentsYunnanUniversityScholarshipProgram2026.pdf"
+   },
+   {
+    "slug": "yunnan-university-yunnan-university-south-and-southeast-asian-university-alliance-ambassador-scholarship-2026",
+    "name": "Yunnan University South and Southeast Asian University Alliance Ambassador Scholarship (2026)",
+    "type": "University",
+    "coverage": "Full: tuition and housing; partial: housing plus most of the tuition (5,000 RMB payable)",
+    "description": "For students recommended by ambassadors at member universities of the alliance, covering non-degree Chinese language, master's and doctoral study, with the same tiers as the university scholarship.",
+    "eligibility": "Non-Chinese passport holders recommended by an alliance-member ambassador; master's 20 to 40, doctoral 22 to 45.",
+    "how_to_apply": "Apply on the international student service system with the same documents as the university scholarship.",
+    "deadline": null,
+    "source_url": "https://regional.chinadaily.com.cn/specials/ynu/YunnanUniversityAdmissionsforS&SE%20ASIANUNAmbassadorScholarshipProgram2026.pdf"
+   },
+   {
+    "slug": "yunnan-university-yunnan-provincial-government-scholarship-via-yunnan-university",
+    "name": "Yunnan Provincial Government Scholarship (via Yunnan University)",
+    "type": "Provincial",
+    "coverage": "Coverage not stated in the brochure; aimed mainly at South and Southeast Asian applicants",
+    "description": "A provincial scholarship administered by the university for degree students and Chinese-language non-degree students, mainly for South and Southeast Asian countries though others are welcome.",
+    "eligibility": "Non-Chinese, healthy, of good conduct; bachelor's normally under 25, master's under 35, doctoral under 40, non-degree under 55; a CSCA report for bachelor's; HSK 4 (180+) or IELTS 6.5 / TOEFL 90.",
+    "how_to_apply": "Apply on the international student service system with the provincial scholarship form and standard documents; the university reviews and may interview.",
+    "deadline": null,
+    "source_url": "https://www.chinadaily.com.cn/specials/ynu/YunnanUniversityAdmissionsforInternationalStudentsYunnanProvincialGovernmentScholarshipProgram2026.pdf"
+   }
+  ],
+  "liaoning-normal-university": [
+   {
+    "slug": "liaoning-normal-university-liaoning-provincial-government-scholarship-liaoning-normal-university",
+    "name": "Liaoning Provincial Government Scholarship (Liaoning Normal University)",
+    "type": "Provincial",
+    "coverage": "Doctoral only: tuition and housing waived, 3,500 RMB a month, insurance",
+    "description": "A provincial scholarship for new doctoral students; students pay their own international travel.",
+    "eligibility": "Non-Chinese in good health, studying abroad, with a master's degree and under 40.",
+    "how_to_apply": "Submit the forms and notarised diploma, transcripts, study plan and recommendations to the international college between December and the end of February each year.",
+    "deadline": null,
+    "source_url": "https://en.lnnu.edu.cn/SCHOLARSHIP/Liaoning_Provincial_Government_Scholarship.htm"
+   }
+  ],
+  "dalian-university-of-technology": [
+   {
+    "slug": "dalian-university-of-technology-dut-international-students-presidential-scholarship-2026-27-intake",
+    "name": "DUT International Students Presidential Scholarship (2026-27 intake)",
+    "type": "University",
+    "coverage": "Full (graduate): tuition, housing and 1,500 or 1,800 RMB a month; partial: tuition, with or without housing",
+    "description": "A university-funded scholarship for new bachelor's, master's and doctoral students. Full awards (graduate only) cover tuition, on-campus housing and a monthly allowance; partial awards waive tuition, or tuition and housing. Travel and settlement costs are not covered; annual review applies; holders of CSC, Liaoning Government or ICLTS scholarships are excluded.",
+    "eligibility": "Bachelor's: finished high school with excellent results, under 25. Master's: bachelor's degree, under 35. Doctoral: master's degree, under 40. Applicants outside China submit two recommendation letters from professors.",
+    "how_to_apply": "Complete the online application and the Presidential Scholarship form, and upload the notarised diploma, transcripts, language proof and study plan. The window for master's and doctoral applicants is 1 November 2026 to 15 February 2027; bachelor's applicants have until 30 May 2027.",
+    "deadline": "2027-02-15",
+    "source_url": "https://sie.dlut.edu.cn/English/Scholarship1/DUT_Scholarship/DUT_Scholarship.htm"
+   },
+   {
+    "slug": "dalian-university-of-technology-liaoning-provincial-government-scholarship-dalian-university-of-technology",
+    "name": "Liaoning Provincial Government Scholarship (Dalian University of Technology)",
+    "type": "Provincial",
+    "coverage": "Doctoral only: tuition and housing waived, 3,500 RMB a month, insurance; three years",
+    "description": "A provincial scholarship for new doctoral students, funded for three years; afterwards it may convert to the Presidential Scholarship, subject to review.",
+    "eligibility": "Non-Chinese in good health with a recognised master's degree, 40 or under, an excellent record, two professor recommendations and no other Chinese government scholarship.",
+    "how_to_apply": "Apply on the online application system with the provincial form, notarised diploma, transcripts, a study plan of at least 1,000 words signed by a supervisor, two recommendations and the medical form; window 1 November 2026 to 15 February 2027.",
+    "deadline": "2027-02-15",
+    "source_url": "https://sie.dlut.edu.cn/English/Scholarship1/LSC_Scholarship/LSC_Scholarship.htm"
+   }
+  ],
+  "tiangong-university": [
+   {
+    "slug": "tiangong-university-tianjin-municipal-government-scholarship-tiangong-university",
+    "name": "Tianjin Municipal Government Scholarship (Tiangong University)",
+    "type": "Municipal",
+    "coverage": "Partial: tuition for the first year of bachelor's or three years of master's",
+    "description": "A municipal scholarship supporting new international degree students on Chinese-taught or English-taught programs. The university screens documents and holds a video interview; each recipient gets no more than one Chinese government or university scholarship. From an older page, so terms may have changed.",
+    "eligibility": "Non-Chinese in good health who choose the university first, or current students; age 18 to 30 (bachelor's), up to 35 (master's), 40 (doctoral).",
+    "how_to_apply": "Fill in and sign the form and apply on the online system with the passport, notarised diploma, transcripts, two professor recommendations for postgraduates, medical form and language proof; admitted students pay a 500 RMB registration fee.",
+    "deadline": null,
+    "source_url": "http://en.tiangong.edu.cn/2019/1224/c5823a50259/page.htm"
+   }
   ]
  }
 }
