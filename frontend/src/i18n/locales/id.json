@@ -20,7 +20,9 @@
     "cities": "50+ Kota",
     "localServices": "Layanan Lokal",
     "howItWorks": "Cara Kerjanya",
-    "learningCenter": "Pusat Pembelajaran"
+    "learningCenter": "Pusat Pembelajaran",
+    "mbbs": "MBBS di Tiongkok",
+    "csc": "Beasiswa CSC"
   },
   "header": {
     "promoFreeApplyText": "Jelajahi universitas dan tanggal penerimaan di CAS",
@@ -33,7 +35,8 @@
     "previousNotification": "Notifikasi sebelumnya",
     "nextNotification": "Notifikasi berikutnya",
     "close": "Tutup",
-    "learnMoreArrow": "Selengkapnya »"
+    "learnMoreArrow": "Selengkapnya »",
+    "promoMobile": "Jelajahi universitas dan tanggal penerimaan"
   },
   "footer": {
     "blurb": "CAS — Consultancy for Abroad Study — telah membimbing para pelajar menuju universitas kelas dunia di Tiongkok sejak 2012, sebagai agen resmi berwenang untuk institusi yang terdaftar di Kementerian Pendidikan.",
@@ -54,7 +57,9 @@
     "freeConsultation": "Konsultasi gratis",
     "rights": "© {{year}} CAS Education. Seluruh hak cipta dilindungi.",
     "authorized": "Agen resmi berwenang sejak 2012.",
-    "photoCredits": "Kredit foto"
+    "photoCredits": "Kredit foto",
+    "exploreMbbs": "MBBS di Tiongkok",
+    "exploreCsc": "Beasiswa CSC"
   },
   "components": {
     "moeListed": "Terdaftar di Kemendikbud",
@@ -268,65 +273,243 @@
     "ctaButton": "Hubungi kami"
   },
   "pricing": {
-    "seoTitle": "Harga — Biaya Transparan untuk Kuliah di Tiongkok",
-    "seoDescription": "Cara kerja harga CAS: konsultasi dan rencana studi gratis, dengan setiap layanan berbayar yang ditawarkan dengan jelas dan di muka. Tanpa biaya tersembunyi.",
-    "headerEyebrow": "Jelas & mengutamakan pelajar",
-    "headerTitle": "Harga yang sederhana dan transparan",
-    "headerSubtitle": "Rencana setiap pelajar berbeda, jadi kami memulai secara gratis dan memberikan penawaran yang jelas untuk apa pun di luar itu — Anda akan selalu tahu biayanya sebelum memutuskan.",
-    "howTitle": "Cara kerja harga kami",
-    "principleFreeTitle": "Gratis untuk memulai",
-    "principleFreeBody": "Konsultasi pertama dan rencana studi yang dipersonalisasi Anda — termasuk daftar singkat universitas dan beasiswa — tidak dikenakan biaya.",
-    "principleTransparentTitle": "Harga yang transparan",
-    "principleTransparentBody": "Bila suatu layanan dikenakan biaya, Anda akan melihat penawaran yang jelas dan terperinci sebelum memutuskan. Tanpa biaya tersembunyi, selamanya.",
-    "principleOnlyPayTitle": "Bayar hanya untuk yang Anda butuhkan",
-    "principleOnlyPayBody": "Ambil paket lengkap atau hanya bagian yang Anda inginkan. Penasihat Anda menyesuaikan dukungan — dan biayanya — dengan rencana Anda.",
+    "seoTitle": "Biaya kuliah di Tiongkok dan biaya CAS",
+    "seoDescription": "Berapa biaya kuliah di Tiongkok, berdasarkan biaya nyata universitas, dan cara CAS menagih: rencana studi gratis, dengan layanan berbayar yang dirinci sebelum Anda memutuskan.",
+    "headerEyebrow": "Biaya",
+    "headerTitle": "Berapa biaya kuliah di Tiongkok",
+    "headerSubtitle": "Biaya kuliah nyata dari universitas yang kami tampilkan, apa yang perlu dianggarkan di luar biaya kuliah, dan cara tepatnya CAS menagih layanannya.",
+    "costTitle": "Biaya kuliah per tahun, program berbahasa Inggris",
+    "costSubtitle": "Biaya umum program di katalog kami, menurut jenjang.",
+    "costNote": "Diambil dari biaya kuliah yang dicantumkan universitas untuk program berbahasa Inggris; rentangnya mencakup 80% biaya tengah yang tercantum dan angka yang ditampilkan adalah median. Akomodasi, asuransi, dan biaya hidup tidak termasuk. Halaman universitas menampilkan biaya pasti untuk tiap program.",
+    "level": {
+      "bachelor": "Sarjana",
+      "master": "Magister",
+      "phd": "Doktoral (PhD)",
+      "mbbs": "MBBS (kedokteran)"
+    },
+    "perYear": "/ tahun",
+    "typical": "Median biaya kuliah per tahun",
+    "range": "Sebagian besar program: {{low}} sampai {{high}}",
+    "programsCount": "Berdasarkan {{count}} program",
+    "noData": "Belum cukup data biaya yang tercantum.",
+    "budgetTitle": "Selain biaya kuliah, siapkan anggaran untuk",
+    "budgetSubtitle": "Biaya ini ditentukan oleh universitas atau Tiongkok, bukan CAS. Halaman tiap universitas menampilkan angka yang telah dipublikasikannya.",
+    "budget": [
+      "Akomodasi: asrama universitas atau hunian swasta.",
+      "Asuransi kesehatan, wajib bagi mahasiswa internasional.",
+      "Biaya pendaftaran, yang dikenakan oleh sebagian universitas.",
+      "Visa dan izin tinggal, serta pemeriksaan kesehatan.",
+      "Tiket pesawat dan biaya hidup sehari-hari di kota Anda."
+    ],
+    "scholarshipTitle": "Beasiswa dapat menanggung biaya kuliah",
+    "scholarshipBody": "Beasiswa pemerintah dan universitas dapat membayar biaya kuliah, akomodasi, atau tunjangan hidup. Beasiswa yang saat ini aktif di katalog kami:",
+    "scholarshipKind": {
+      "government": "Pemerintah",
+      "full": "Penuh",
+      "partial": "Parsial"
+    },
+    "scholarshipLink": "Lihat beasiswa",
+    "casTitle": "Biaya dari CAS",
+    "casSubtitle": "Memulai itu gratis. Layanan berbayar dirinci dalam penawaran sebelum Anda menyetujuinya.",
     "freeBadge": "Gratis",
-    "freeCardTitle": "Memulai",
+    "freeCardTitle": "Untuk memulai",
     "free1": "Konsultasi awal dengan penasihat",
     "free2": "Rencana studi yang dipersonalisasi",
-    "free3": "Penyusunan daftar singkat universitas & program",
+    "free3": "Daftar pilihan universitas dan program",
     "free4": "Panduan pencocokan beasiswa",
-    "quotedBadge": "Ditawarkan di muka",
+    "quotedBadge": "Dirinci di muka",
     "quotedCardTitle": "Layanan opsional",
-    "quoted1": "Penanganan lamaran & tinjauan dokumen",
-    "quoted2": "Bantuan visa (JW202 / surat penerimaan)",
-    "quoted3": "Pemesanan akomodasi",
-    "quoted4": "Penjemputan bandara & dukungan sebelum keberangkatan",
-    "quoted5": "Terjemahan dokumen bersertifikat",
+    "service": {
+      "application": {
+        "title": "Pengurusan pendaftaran",
+        "body": "Pemeriksaan dokumen dan pengiriman ke universitas pilihan Anda."
+      },
+      "visa": {
+        "title": "Bantuan visa",
+        "body": "Bantuan untuk surat penerimaan, formulir JW202, dan pengajuan visa."
+      },
+      "accommodation": {
+        "title": "Pemesanan akomodasi",
+        "body": "Tempat tinggal yang diatur sebelum Anda tiba."
+      },
+      "arrival": {
+        "title": "Penjemputan bandara dan bantuan kedatangan",
+        "body": "Seseorang yang menjemput dan membantu Anda menetap."
+      },
+      "documents": {
+        "title": "Terjemahan tersertifikasi",
+        "body": "Terjemahan transkrip, ijazah, dan sertifikat."
+      }
+    },
+    "quoteNote": "Harga bergantung pada layanan yang Anda pilih dan universitas yang Anda tuju, sehingga penasihat Anda mengirim penawaran tertulis terlebih dahulu. Anda hanya membayar layanan yang Anda setujui.",
+    "stepsTitle": "Cara pembayaran berjalan",
+    "steps": [
+      {
+        "title": "Dapatkan rencana gratis",
+        "body": "Ceritakan nilai, anggaran, dan tujuan Anda. Kami mengirim daftar pilihan dan pengecekan beasiswa tanpa biaya."
+      },
+      {
+        "title": "Terima penawaran terperinci",
+        "body": "Jika Anda ingin bantuan di luar rencana, kami mencantumkan tiap layanan beserta harganya secara tertulis."
+      },
+      {
+        "title": "Pilih yang Anda butuhkan",
+        "body": "Setujui seluruh paket atau hanya sebagian layanan. Tidak ada yang ditambahkan tanpa persetujuan Anda."
+      }
+    ],
+    "faqTitle": "Pertanyaan tentang biaya",
+    "faq": [
+      {
+        "q": "Apakah konsultasi pertama benar-benar gratis?",
+        "a": "Ya. Konsultasi, rencana studi, daftar pilihan universitas dan program, serta panduan beasiswa tidak dipungut biaya."
+      },
+      {
+        "q": "Siapa yang menetapkan biaya kuliah?",
+        "a": "Universitas. CAS tidak menambah biaya kuliah di situs ini; biaya yang ditampilkan berasal dari daftar universitas itu sendiri."
+      },
+      {
+        "q": "Apakah ada biaya tersembunyi?",
+        "a": "Tidak. Layanan berbayar ditawarkan secara tertulis dan dirinci sebelum Anda menyetujui apa pun."
+      },
+      {
+        "q": "Bolehkah saya memakai sebagian layanan saja?",
+        "a": "Boleh. Anda dapat mengambil pendampingan pendaftaran lengkap atau hanya bagian yang Anda perlukan, seperti visa atau akomodasi."
+      },
+      {
+        "q": "Apakah beasiswa mengubah yang harus saya bayar?",
+        "a": "Bisa. Beasiswa penuh dapat menanggung biaya kuliah dan akomodasi serta menambah tunjangan, sedangkan beasiswa parsial menanggung sebagian. Halaman tiap beasiswa menyatakan apa yang ditanggungnya."
+      }
+    ],
     "ctaTitle": "Ingin penawaran yang dipersonalisasi?",
-    "ctaSubtitle": "Mulailah dengan rencana studi gratis — kami akan menindaklanjuti dengan langkah dan biaya yang jelas.",
+    "ctaSubtitle": "Mulailah dengan rencana studi gratis. Kami lanjutkan dengan langkah berikutnya dan biayanya.",
     "ctaButton": "Dapatkan rencana studi gratis"
   },
   "partner": {
-    "seoTitle": "Bermitra dengan CAS — Kerja Sama Agensi & Rekrutmen",
-    "seoDescription": "Bermitra dengan CAS untuk menempatkan pelajar ke universitas di Tiongkok: 200+ universitas terdaftar di Kemendikbud, komisi kompetitif, portal mitra waktu nyata, dan dukungan khusus.",
-    "headerEyebrow": "Untuk agensi & perekrut",
+    "seoTitle": "Jadi agen mitra untuk studi di Tiongkok",
+    "seoDescription": "Jadilah agen atau perekrut mitra CAS: daftarkan ke universitas Tiongkok dari satu portal, pantau tiap pendaftaran secara langsung, dan lihat komisi Anda di setiap tahap.",
+    "headerEyebrow": "Untuk agensi dan perekrut",
     "headerTitle": "Bermitra dengan CAS",
-    "headerSubtitle": "Berikan akses kepada pelajar Anda ke universitas terbaik Tiongkok melalui agen resmi berwenang — dengan portal mitra langsung, komisi kompetitif, dan tim yang mendukung Anda di setiap langkah.",
-    "becomePartner": "Jadi mitra",
-    "whyTitle": "Mengapa bermitra dengan kami",
-    "whySubtitle": "Satu saluran tepercaya menuju kuliah di Tiongkok.",
-    "benefitUniversitiesTitle": "200+ universitas",
-    "benefitUniversitiesBody": "Rujuk pelajar ke universitas di seluruh Tiongkok yang terdaftar di Kementerian Pendidikan melalui satu saluran tepercaya.",
-    "benefitCommissionsTitle": "Komisi kompetitif",
-    "benefitCommissionsBody": "Dapatkan penghasilan dari setiap penempatan yang berhasil, dilacak secara transparan dan dibayarkan sesuai jadwal yang jelas.",
-    "benefitPortalTitle": "Portal mitra waktu nyata",
-    "benefitPortalBody": "Kirim dan lacak setiap lamaran, lihat perubahan status secara langsung, dan kelola pelajar Anda di satu tempat.",
-    "benefitMarketingTitle": "Dukungan pemasaran",
-    "benefitMarketingBody": "Akses daftar program terkini, batas waktu periode masuk, dan materi berlabel bersama untuk membantu Anda merekrut.",
-    "benefitAuthorizedTitle": "Berwenang sejak 2012",
-    "benefitAuthorizedBody": "Bekerja dengan agen mapan yang berwenang dari universitas dengan rekam jejak visa dan penerimaan yang kuat.",
-    "benefitTeamTitle": "Tim mitra khusus",
-    "benefitTeamBody": "Kontak CAS yang ditunjuk mendukung Anda dan pelajar Anda dari pertanyaan pertama hingga kedatangan.",
-    "howTitle": "Cara kerjanya",
-    "step1Title": "Ajukan kemitraan",
-    "step1Body": "Ceritakan kepada kami tentang agensi Anda dan para pelajar yang Anda dampingi.",
-    "step2Title": "Ikuti onboarding",
-    "step2Body": "Kami menyiapkan akses portal mitra Anda dan memandu tim Anda melalui prosesnya.",
-    "step3Title": "Rujuk & dapatkan penghasilan",
-    "step3Body": "Kirim lamaran, lacak secara langsung, dan dapatkan penghasilan dari setiap penempatan yang berhasil.",
+    "headerSubtitle": "Tempatkan mahasiswa Anda di universitas Tiongkok melalui agen resmi. Ajukan dan pantau pendaftaran di satu portal, dan lihat posisi tiap komisi.",
+    "becomePartner": "Daftar sebagai mitra",
+    "signIn": "Masuk mitra",
+    "talkToUs": "Bicara dengan kami dulu",
+    "statUniversities": "Universitas ditampilkan",
+    "statPrograms": "Program ditampilkan",
+    "statMbbs": "Disetujui untuk MBBS berbahasa Inggris",
+    "statSince": "Bekerja dengan universitas sejak",
+    "whyTitle": "Yang Anda dapatkan",
+    "whySubtitle": "Alat dan dukungan yang dibutuhkan agensi perekrutan, dalam satu tempat.",
+    "benefit": {
+      "universities": {
+        "title": "Satu saluran ke banyak universitas",
+        "body": "Daftarkan ke universitas Tiongkok yang disetujui Kementerian Pendidikan tanpa mengurus tiap universitas secara terpisah."
+      },
+      "portal": {
+        "title": "Portal mitra langsung",
+        "body": "Tambahkan mahasiswa, ajukan pendaftaran, dan lihat setiap perubahan status saat terjadi."
+      },
+      "commissions": {
+        "title": "Komisi yang bisa Anda pantau",
+        "body": "Setiap penempatan menampilkan tahap komisinya di portal Anda, dari diharapkan sampai dibayar."
+      },
+      "materials": {
+        "title": "Informasi terbaru",
+        "body": "Daftar program, biaya, dan periode pendaftaran yang bisa Anda pakai saat mendampingi mahasiswa."
+      }
+    },
+    "portalTitle": "Di dalam portal mitra",
+    "portalSubtitle": "Semua yang Anda lakukan bersama CAS ada dalam satu akun.",
+    "portal": {
+      "students": {
+        "title": "Kelola mahasiswa",
+        "body": "Tambahkan tiap mahasiswa sekali dan simpan data serta dokumennya bersama."
+      },
+      "apply": {
+        "title": "Daftar ke universitas",
+        "body": "Pilih program dan ajukan pendaftaran, atau daftar beasiswa, dari satu wizard."
+      },
+      "track": {
+        "title": "Pantau tiap pendaftaran",
+        "body": "Lihat status terkini tiap pendaftaran dan apa yang dibutuhkan berikutnya."
+      },
+      "earnings": {
+        "title": "Lihat komisi Anda",
+        "body": "Periksa komisi mana yang diharapkan, memenuhi syarat, ditagihkan, dan dibayar."
+      }
+    },
+    "stagesTitle": "Bagaimana komisi berjalan",
+    "stagesSubtitle": "Setiap penempatan melalui tahap yang sama, dan Anda bisa melihat tahap saat ini.",
+    "stage": "Tahap {{n}}",
+    "stages": [
+      {
+        "title": "Diharapkan",
+        "body": "Mahasiswa sudah mendaftar dan komisi dicatat."
+      },
+      {
+        "title": "Menunggu kedatangan",
+        "body": "Mahasiswa diterima dan kami menunggu kedatangannya."
+      },
+      {
+        "title": "Memenuhi syarat",
+        "body": "Mahasiswa sudah tiba, mendaftar ulang, dan membayar biaya tahun pertama."
+      },
+      {
+        "title": "Ditagihkan",
+        "body": "CAS menagihkan komisi kepada universitas."
+      },
+      {
+        "title": "Dibayar kepada Anda",
+        "body": "Setelah diterima, bagian Anda jatuh tempo lalu dibayarkan."
+      }
+    ],
+    "stagesNote": "Komisi baru memenuhi syarat setelah mahasiswa tiba, mendaftar ulang, dan membayar biaya tahun pertama. Tarif bergantung pada universitas dan dikonfirmasi kepada Anda saat bergabung.",
+    "howTitle": "Cara memulai",
+    "steps": [
+      {
+        "title": "Daftar sebagai mitra",
+        "body": "Buat akun mitra dengan data agensi Anda."
+      },
+      {
+        "title": "Disetujui",
+        "body": "Tim kami meninjau pengajuan Anda dan mengaktifkan akses portal."
+      },
+      {
+        "title": "Rujuk dan pantau",
+        "body": "Tambahkan mahasiswa, ajukan pendaftaran, dan ikuti sampai mereka tiba."
+      }
+    ],
+    "fitTitle": "Untuk siapa ini",
+    "fit": [
+      "Agensi studi luar negeri dan konsultan pendidikan.",
+      "Sekolah dan perguruan tinggi yang menyalurkan lulusan ke luar negeri.",
+      "Perekrut perorangan yang rutin mendampingi mahasiswa.",
+      "Tim yang ingin satu tempat untuk mengurus pendaftaran ke Tiongkok."
+    ],
+    "faqTitle": "Pertanyaan mitra",
+    "faq": [
+      {
+        "q": "Apakah ada biaya untuk menjadi mitra?",
+        "a": "Tidak. Mendaftarkan akun mitra gratis. Tim kami menyetujui Anda sebelum Anda dapat mengajukan pendaftaran."
+      },
+      {
+        "q": "Bagaimana komisi bekerja?",
+        "a": "Komisi dicatat untuk tiap penempatan dan bergerak melalui tahap-tahap di portal Anda. Komisi memenuhi syarat setelah mahasiswa tiba, mendaftar ulang, dan membayar biaya tahun pertama."
+      },
+      {
+        "q": "Berapa komisi yang akan saya dapat?",
+        "a": "Tarif bergantung pada universitas dan perjanjian yang berlaku. Kami mengonfirmasi tarifnya kepada Anda saat Anda disetujui."
+      },
+      {
+        "q": "Bisakah saya mengajukan beasiswa untuk mahasiswa saya?",
+        "a": "Bisa. Portal memiliki alur pendaftaran beasiswa di samping pendaftaran universitas biasa."
+      },
+      {
+        "q": "Universitas mana yang bisa dituju mahasiswa saya?",
+        "a": "Universitas mana pun di katalog kami, termasuk yang disetujui untuk MBBS berbahasa Inggris."
+      }
+    ],
     "ctaTitle": "Siap bekerja sama?",
-    "ctaSubtitle": "Ceritakan kepada kami tentang agensi Anda dan kami akan menyiapkan kemitraan Anda."
+    "ctaSubtitle": "Ajukan akun mitra, atau bicara dengan tim kami terlebih dahulu."
   },
   "services": {
     "seoTitle": "Layanan Kami",
@@ -763,7 +946,8 @@
     "email": "Email",
     "freeStudyPlan": "Dapatkan rencana studi gratis →",
     "leaveAMessage": "Tinggalkan pesan",
-    "message": "Pesan"
+    "message": "Pesan",
+    "scanToChat": "Pindai untuk chat"
   },
   "megaMenu": {
     "browseEverything": "Jelajahi semuanya",
@@ -846,10 +1030,11 @@
     "hero": {
       "title": "Kuliah di Tiongkok",
       "featuredUniPrograms": "{{name}} : Program Berbahasa Inggris",
-      "moePrograms": "Universitas yang terdaftar di Kementerian Pendidikan : Program Berbahasa Inggris"
+      "moePrograms": "Universitas yang terdaftar di Kementerian Pendidikan : Program Berbahasa Inggris",
+      "motto": "Jalur tepercaya Anda ke universitas-universitas Tiongkok, sejak 2012"
     },
     "search": {
-      "placeholder": "MASUKKAN NAMA UNIVERSITAS ATAU PROGRAM",
+      "placeholder": "Cari universitas, kota, atau program",
       "ariaSearchField": "Cari universitas atau program",
       "ariaSearchButton": "Cari",
       "label": "Temukan universitas atau program Anda",
@@ -1498,5 +1683,99 @@
     "textTitle": "Teks pada halaman universitas",
     "textBody": "Pengantar, fakta, dan bagian ikhtisar pada halaman universitas diadaptasi dari Wikipedia bahasa Inggris (artikel universitas, kota, dan provinsinya) dengan lisensi CC BY-SA 4.0; artikel setiap universitas ditautkan di bawah.",
     "textFrom": "teks dari Wikipedia"
+  },
+  "notFound": {
+    "title": "Halaman tidak ditemukan",
+    "body": "Kami tidak menemukan halaman itu. Mungkin sudah dipindahkan, atau alamatnya salah.",
+    "home": "Ke beranda",
+    "universities": "Jelajahi universitas",
+    "programs": "Cari program"
+  },
+  "city": {
+    "seoTitle": "Kuliah di {{city}}: universitas dan program",
+    "seoTitleFallback": "Kuliah di Tiongkok menurut kota",
+    "seoDescription": "Kuliah di {{city}}: {{count}} universitas untuk mahasiswa internasional, lengkap dengan program, biaya, dan periode pendaftaran.",
+    "title": "Kuliah di {{city}}",
+    "subtitle": "Seperti apa kuliah di {{city}}, dan {{count}} universitas di sana yang menerima mahasiswa internasional.",
+    "universities": "Universitas di {{city}}",
+    "allCities": "Semua kota"
+  },
+  "mbbs": {
+    "seoTitle": "MBBS di Tiongkok: universitas resmi dan biaya",
+    "seoDescription": "43 universitas yang disetujui Kementerian Pendidikan Tiongkok untuk menerima mahasiswa MBBS berbahasa Inggris pada 2026-27, lengkap dengan biaya, periode pendaftaran, dan cara mendaftar.",
+    "eyebrow": "Kedokteran berbahasa Inggris",
+    "title": "MBBS di Tiongkok",
+    "subtitle": "Universitas yang disetujui Kementerian Pendidikan untuk MBBS berbahasa Inggris, persyaratan pendaftaran, dan tanggal yang dipublikasikan universitas.",
+    "howTitle": "Cara kerja daftar persetujuan",
+    "how1": "Kementerian Pendidikan Tiongkok setiap tahun menerbitkan daftar universitas yang diizinkan menerima mahasiswa internasional program sarjana Kedokteran Klinis (MBBS) berbahasa Inggris. Untuk 2026-27 daftarnya berisi 43 universitas. Universitas yang tidak ada dalam daftar tidak boleh merekrut mahasiswa MBBS berbahasa Inggris.",
+    "how2": "Periksa daftar sebelum mendaftar, dan pastikan kepada dewan perizinan di negara tempat Anda berencana berpraktik bahwa gelar dari universitas tersebut diakui. Program di katalog kami berlangsung enam tahun (72 bulan), diajarkan dalam bahasa Inggris, dan biaya kuliah yang tercantum antara 26.000 dan 50.000 CNY per tahun.",
+    "listTitle": "{{count}} universitas resmi",
+    "listSubtitle": "Setiap halaman menampilkan program, biaya, periode pendaftaran, dan beasiswa.",
+    "reqTitle": "Persyaratan pendaftaran yang umum",
+    "requirements": [
+      "Paspor asing yang berlaku; pelamar umumnya berusia 18 sampai 25 tahun (batas pastinya ditentukan tiap universitas).",
+      "Ijazah SMA dengan nilai baik di biologi, kimia, serta fisika atau matematika.",
+      "Hasil CSCA (China Scholastic Competency Assessment), yang diikuti pelamar program sarjana sebelum mendaftar.",
+      "Bukti kemampuan bahasa Inggris: IELTS atau TOEFL, kecuali pendidikan sebelumnya berbahasa Inggris.",
+      "Formulir pemeriksaan kesehatan dan surat keterangan catatan kepolisian, keduanya diterbitkan dalam enam bulan terakhir.",
+      "Surat motivasi dan, bila diminta, wawancara daring dengan universitas."
+    ],
+    "faqTitle": "Pertanyaan yang sering diajukan",
+    "faq": [
+      {
+        "q": "Berapa lama MBBS di Tiongkok?",
+        "a": "Program MBBS berbahasa Inggris di katalog kami berlangsung enam tahun (72 bulan), dan tahun terakhir biasanya berupa praktik klinis."
+      },
+      {
+        "q": "Universitas mana yang boleh menerima mahasiswa internasional MBBS?",
+        "a": "Hanya universitas dalam daftar tahunan Kementerian Pendidikan. Untuk 2026-27 ada 43, semuanya tercantum di halaman ini."
+      },
+      {
+        "q": "Apakah saya harus bisa bahasa Mandarin?",
+        "a": "Tidak perlu bahasa Mandarin untuk memulai, karena pengajarannya dalam bahasa Inggris. Universitas menambahkan kursus bahasa Mandarin karena pelatihan di rumah sakit melibatkan percakapan dengan pasien."
+      },
+      {
+        "q": "Berapa biayanya?",
+        "a": "Biaya kuliah program MBBS di katalog kami antara 26.000 dan 50.000 CNY per tahun, di luar akomodasi dan biaya hidup. Halaman tiap universitas menampilkan biayanya sendiri."
+      },
+      {
+        "q": "Kapan pendaftaran dibuka?",
+        "a": "Berbeda-beda di tiap universitas. Banyak yang dibuka beberapa bulan sebelum penerimaan September dan ditutup antara Mei dan Agustus. Halaman tiap universitas mencantumkan periode yang kami temukan dan tingkat keandalan sumbernya."
+      }
+    ],
+    "cta": "Bingung memilih universitas? Konselor CAS akan menyusun daftar pilihan sesuai nilai dan anggaran Anda.",
+    "ctaButton": "Dapatkan rencana studi gratis"
+  },
+  "csc": {
+    "seoTitle": "Beasiswa CSC: panduan Beasiswa Pemerintah Tiongkok",
+    "seoDescription": "Cara kerja Beasiswa Pemerintah Tiongkok (CSC): apa yang ditanggung, siapa yang bisa mendaftar, bagaimana dan kapan mendaftar, serta beasiswa tingkat nasional yang kami tampilkan.",
+    "eyebrow": "Beasiswa Pemerintah Tiongkok",
+    "title": "Beasiswa CSC",
+    "subtitle": "Apa yang ditanggung Beasiswa Pemerintah Tiongkok, siapa yang bisa mendaftar, serta bagaimana dan kapan mendaftar.",
+    "whatTitle": "Apa itu beasiswa CSC",
+    "what1": "Beasiswa Pemerintah Tiongkok, yang dikelola China Scholarship Council (CSC), mendanai mahasiswa internasional untuk kuliah di universitas Tiongkok. Pendaftaran dilakukan daring melalui sistem CSC Study in China, biasanya lewat kedutaan atau konsulat Tiongkok di negara Anda (dengan nomor agensi) atau melalui universitas tujuan; kategori dan nomor agensi bergantung pada jalur yang Anda pilih.",
+    "coversTitle": "Yang dapat ditanggung",
+    "covers": [
+      "Biaya kuliah.",
+      "Akomodasi, atau tunjangan akomodasi.",
+      "Tunjangan hidup bulanan.",
+      "Asuransi kesehatan menyeluruh."
+    ],
+    "whoTitle": "Siapa yang bisa mendaftar",
+    "who1": "Pelamar harus warga negara non-Tiongkok yang sehat dan memenuhi syarat penerimaan universitas tujuan. Dalam pengumuman 2026-27 untuk Kanada, batas usia adalah di bawah 25 tahun untuk sarjana, di bawah 35 tahun untuk magister, dan di bawah 40 tahun untuk doktoral. Program berbahasa Mandarin memerlukan HSK 3 (sarjana) atau HSK 4 (magister dan doktoral), dan pelamar sarjana harus mengikuti CSCA. Pengumuman di negara lain bisa berbeda.",
+    "howTitle": "Cara mendaftar",
+    "steps": [
+      "Pilih universitas dan program yang terbuka bagi pelamar CSC.",
+      "Periksa pengumuman kedutaan Anda: tanggal buka, tenggat, dan tahap wawancara berbeda di tiap negara.",
+      "Siapkan dokumen: paspor, transkrip dan ijazah tersertifikasi, rencana studi, surat rekomendasi, dan sertifikat bahasa.",
+      "Daftar daring di sistem CSC Study in China dan ajukan pendaftaran ke universitas, biasanya dengan surat pra-penerimaan atau surat undangan dari universitas.",
+      "Ikuti petunjuk kedutaan atau universitas untuk wawancara dan hasil."
+    ],
+    "timeTitle": "Kapan mendaftar",
+    "time1": "Tanggal bergantung pada negara atau jalur Anda. Untuk putaran 2026-27, pengumuman kedutaan Tiongkok mulai terbit sejak akhir Oktober 2025; satu kedutaan membuka pendaftaran pada 16 Februari 2026, dan pengumuman 2026-27 untuk Kanada ditutup pada 22 Februari 2026. Periksa pengumuman kedutaan Anda untuk putaran terkini.",
+    "listTitle": "Beasiswa tingkat nasional yang kami tampilkan",
+    "cta": "Kami dapat mencocokkan Anda dengan program yang terbuka bagi CSC dan membantu mendaftar tepat waktu.",
+    "allScholarships": "Semua beasiswa",
+    "ctaButton": "Dapatkan rencana studi gratis"
   }
 }
