@@ -174,15 +174,15 @@ export default function SiteHome() {
             <form
               onSubmit={runSearch}
               role="search"
-              className="mt-2.5 flex items-center gap-1 rounded-full bg-white p-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-white/60 transition-shadow focus-within:ring-2 focus-within:ring-cas-red/70"
+              className="mt-2.5 flex items-center gap-1 rounded-full bg-black/35 p-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-white/25 backdrop-blur-sm transition-shadow focus-within:bg-black/50 focus-within:ring-2 focus-within:ring-white/60"
             >
-              <Search className="pointer-events-none ml-4 size-5 shrink-0 text-cas-navy/60" />
+              <Search className="pointer-events-none ml-4 size-5 shrink-0 text-white/70" />
               <input
                 value={term}
                 onChange={(e) => setTerm(e.target.value)}
                 placeholder={t("home.search.placeholder")}
                 aria-label={t("home.search.ariaSearchField")}
-                className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-ellipsis text-slate-900 caret-cas-red outline-none placeholder:text-slate-400 sm:text-base"
+                className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-ellipsis text-white caret-white outline-none placeholder:text-white/60 sm:text-base"
               />
               <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-cas-red px-6 text-sm font-semibold text-white transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
                 <span className="hidden sm:inline">{t("home.search.button")}</span>
