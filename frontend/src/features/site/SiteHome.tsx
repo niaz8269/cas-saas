@@ -20,7 +20,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
-import heroBg from "@/assets/b1.webp"
+import heroBg from "@/assets/hero-graduate.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
@@ -131,10 +131,10 @@ export default function SiteHome() {
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
       <section className="relative flex min-h-[calc(100svh/var(--site-zoom,1.1))] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
+          <div className="absolute inset-0 bg-cover bg-[position:52%_40%] sm:bg-[length:132%_auto] sm:bg-[position:0%_34%] sm:bg-no-repeat" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
               sky), darkening downward so the heading and search stay legible. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/25 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/50" />
           <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={DOT_GRID} />
         </div>
 
