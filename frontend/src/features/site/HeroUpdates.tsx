@@ -69,14 +69,14 @@ export default function HeroUpdates({ universities, programs }: { universities: 
   const lastApp = fmtDate(Date.now() + 60 * 86_400_000)
 
   return (
-    <div className="relative mt-4">
+    <div className="relative mt-3">
       <div className="flex justify-center">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? t("heroUpdates.hideUpdates") : t("heroUpdates.showUpdates")}
-          className="flex size-9 items-center justify-center rounded-full border border-white/40 bg-black/20 text-white/80 backdrop-blur transition-colors hover:border-cas-red hover:text-cas-red"
+          className="flex size-8 items-center justify-center rounded-full border border-white/40 bg-black/20 text-white/80 backdrop-blur transition-colors hover:border-cas-red hover:text-cas-red"
         >
           {open ? <X className="size-5" /> : <Plus className="size-5" />}
         </button>

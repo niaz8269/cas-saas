@@ -129,7 +129,7 @@ export default function SiteHome() {
   return (
     <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
-      <section className="relative flex min-h-svh flex-col text-white">
+      <section className="relative flex min-h-[calc(100svh/1.1)] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
@@ -139,31 +139,31 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-24 pb-6 text-center [@media(max-height:700px)]:pt-20">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-32 pb-2 text-center sm:pt-[8.5rem] [@media(max-height:680px)]:sm:pt-[7.5rem]">
           <div className="w-full max-w-5xl">
-            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-[4rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
+            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:leading-[1.05] [@media(min-height:700px)]:md:text-[3.5rem]">{t("home.hero.title")}</h1>
             {featuredUnis[0] ? (
               <Link
                 to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs?ref=featured"}
-                className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
+                className="mx-auto mt-3 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
               >
                 {t("home.hero.featuredUniPrograms", { name: featuredUnis[0].name })}
               </Link>
             ) : (
-              <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
+              <p className="mx-auto mt-3 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
                 {t("home.hero.moePrograms")}
               </p>
             )}
 
             {/* Ranked featured universities + expander (reference's numbered cards) */}
             {featuredUnis.length > 0 && (
-              <div className="mt-7">
+              <div className="mt-4">
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   {featuredUnis.slice(0, 3).map((u) => (
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-md bg-black/30 px-3 pl-4 text-left ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-black/45 sm:w-52"
+                      className="group relative flex h-12 w-full items-center gap-2.5 sm:h-14 overflow-hidden rounded-md bg-black/30 px-3 pl-4 text-left ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-black/45 sm:w-52"
                     >
                       <HeroLogo emblem={u.emblem_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
@@ -177,10 +177,10 @@ export default function SiteHome() {
         </div>
 
         {/* Search bar — sits over the bottom of the full-screen image, fully visible */}
-        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-8">
-          <div className="rounded-lg bg-white p-5 shadow-2xl ring-1 ring-black/5 sm:p-7">
-            <p className="text-center text-sm font-semibold tracking-wide text-cas-navy">{t("home.search.label")}</p>
-            <form onSubmit={runSearch} className="mt-3 flex items-stretch gap-2">
+        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-4">
+          <div>
+            <p className="text-center text-sm font-semibold tracking-wide text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">{t("home.search.label")}</p>
+            <form onSubmit={runSearch} className="mt-2 flex items-stretch gap-2">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-400" />
                 <input
@@ -188,7 +188,7 @@ export default function SiteHome() {
                   onChange={(e) => setTerm(e.target.value)}
                   placeholder={t("home.search.placeholder")}
                   aria-label={t("home.search.ariaSearchField")}
-                  className="h-12 w-full rounded-md border border-slate-300 bg-white pr-4 pl-12 text-sm text-ellipsis text-slate-900 sm:text-base caret-cas-red shadow-inner placeholder:text-slate-400 outline-none transition-colors focus:border-cas-red focus:ring-2 focus:ring-cas-red/20"
+                  className="h-12 w-full rounded-md border-0 bg-white pr-4 pl-12 text-sm text-ellipsis text-slate-900 sm:text-base caret-cas-red shadow-lg placeholder:text-slate-400 outline-none transition-colors focus:border-cas-red focus:ring-2 focus:ring-cas-red/20"
                 />
               </div>
               <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-12 items-center gap-2 rounded-md bg-cas-red px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
@@ -196,10 +196,10 @@ export default function SiteHome() {
                 <Search className="size-5 sm:hidden" />
               </button>
             </form>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-              <span className="text-xs text-slate-500">{t("home.search.popular")}</span>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-white/80 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">{t("home.search.popular")}</span>
               {POPULAR_SEARCHES.map(([labelKey, to]) => (
-                <Link key={labelKey} to={to} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-cas-red/40 hover:bg-cas-red-50 hover:text-cas-red-600">
+                <Link key={labelKey} to={to} className="rounded-full border border-white/30 bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20">
                   {t(labelKey)}
                 </Link>
               ))}
