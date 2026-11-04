@@ -9,25 +9,42 @@ import { cn } from "@/lib/utils"
 // CAS's own channels (mirrors the footer) — never the reference's.
 const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnquiry: EMAIL, wechat: WECHAT_ID } = CONTACT
 
-// Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
-const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
+const GREEN = "25D366"
+const WECHAT_GREEN = "07C160"
+
+// Brand-coloured QR with a logo badge in the middle (error correction H keeps it scannable).
+const brandQr = (data: string, color: string) =>
+  `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&ecc=H&color=${color}&data=${encodeURIComponent(data)}`
 
 /**
- * CAS's WeChat QR code. Put the account's own QR image at public/images/wechat-qr.png;
- * until it exists, a code that carries the WeChat ID is shown instead.
+ * A scannable contact tile: QR code, logo badge and a caption. CAS's own WeChat
+ * QR image can be dropped at public/images/wechat-qr.png; until it exists a code
+ * carrying the WeChat ID is shown.
  */
-function WeChatQr({ alt }: { alt: string }) {
+function QrTile({ kind, alt, caption }: { kind: "wechat" | "whatsapp"; alt: string; caption: string }) {
   const [missing, setMissing] = useState(false)
+  const own = kind === "wechat" && !missing
+  const color = kind === "wechat" ? WECHAT_GREEN : GREEN
 
   return (
-    <img
-      src={missing ? qrUrl(WECHAT_ID) : "/images/wechat-qr.png"}
-      onError={() => setMissing(true)}
-      alt={alt}
-      width={92}
-      height={92}
-      className="rounded object-contain"
-    />
+    <figure className="flex w-[9.5rem] flex-col items-center gap-2">
+      <div className="relative size-[7.5rem]">
+        <img
+          src={own ? "/images/wechat-qr.png" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
+          onError={() => kind === "wechat" && setMissing(true)}
+          alt={alt}
+          className="size-full rounded object-contain"
+        />
+        {!own && (
+          <span aria-hidden className="absolute top-1/2 left-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow">
+            <span className="flex size-6 items-center justify-center rounded-full text-white" style={{ backgroundColor: `#${color}` }}>
+              {kind === "wechat" ? <MessageCircle className="size-3.5" /> : <Phone className="size-3.5" />}
+            </span>
+          </span>
+        )}
+      </div>
+      <figcaption className="text-center text-xs leading-snug text-muted-foreground">{caption}</figcaption>
+    </figure>
   )
 }
 
@@ -89,27 +106,13 @@ export default function SiteHelpDock() {
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
-                <div className="absolute bottom-full left-0 z-50 hidden w-[26rem] pb-3 group-hover:block">
+                <div className="absolute bottom-full left-0 z-50 hidden w-[24rem] pb-3 group-hover:block">
                   <div className="relative rounded-sm bg-white p-4 text-left text-cas-navy shadow-2xl">
                     <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-white" />
-                    <div className="flex items-center gap-5">
-                      <div className="space-y-3 text-sm leading-tight">
-                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{WECHAT_ID}</p></div>
-                        <div>
-                          <p className="font-semibold">{t("helpDock.whatsappTelLabel")}</p>
-                          <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
-                        </div>
-                      </div>
-                      <div className="ml-auto flex shrink-0 items-start gap-3">
-                        <figure className="flex flex-col items-center gap-1">
-                          <WeChatQr alt={t("helpDock.wechatQrAlt")} />
-                          <figcaption className="text-xs text-muted-foreground">{t("helpDock.wechat")}</figcaption>
-                        </figure>
-                        <figure className="flex flex-col items-center gap-1">
-                          <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
-                          <figcaption className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</figcaption>
-                        </figure>
-                      </div>
+                    <p className="text-sm font-bold text-cas-navy">{t("helpDock.scanToChat")}</p>
+                    <div className="mt-3 flex items-start justify-between gap-4">
+                      <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} caption={`${t("helpDock.wechat")}: ${WECHAT_ID}`} />
+                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} caption={`${t("helpDock.whatsapp")}: ${PHONE_DISPLAY}`} />
                     </div>
                   </div>
                 </div>
