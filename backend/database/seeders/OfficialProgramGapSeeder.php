@@ -19,6 +19,8 @@ class OfficialProgramGapSeeder extends Seeder
 
     private const YANTAI_SOURCE = 'https://engsie.ytu.edu.cn/eng2027.pdf';
 
+    private const YANBIAN_SOURCE = 'https://liuxue.ybu.edu.cn/zsxx/xls/bks.htm';
+
     private const ZJGSU_SOURCE = 'https://sie.zjgsu.edu.cn/gjen/_t75/2128/listm.htm';
 
     /** @return list<array<string, mixed>> */
@@ -42,6 +44,23 @@ class OfficialProgramGapSeeder extends Seeder
         }
         foreach ([['Business Administration', 21000], ['Computer Science and Technology', 25000]] as [$major, $fee]) {
             $rows[] = ['university' => 'Yantai University', 'name' => $major, 'level' => 'master', 'teaching_language' => 'Chinese', 'duration_months' => null, 'tuition_fee' => $fee, 'source_url' => self::YANTAI_SOURCE];
+        }
+
+        // Yanbian's undergraduate catalogue (an image on its international-admissions site): Chinese-taught,
+        // four years (five for medicine and veterinary). Fees by field: medicine 26,000, sports and arts 27,000,
+        // agriculture 22,000, everything else 18,000. Nursing and pharmacy are not assigned a field there, so no fee.
+        $yanbian = [
+            18000 => ['English', 'Japanese', 'Russian', 'Korean', 'Law', 'International Politics', 'Sociology', 'History', 'Educational Technology', 'Preschool Education', 'Primary Education', 'Psychology', 'Chinese Language and Literature', 'Chinese Language', 'International Chinese Language Education', 'Journalism', 'Mathematics and Applied Mathematics', 'Physics', 'Statistics', 'Chemistry', 'Applied Chemistry', 'Electronic Information Engineering', 'Communication Engineering', 'Artificial Intelligence', 'Civil Engineering', 'Computer Science and Technology', 'Biotechnology', 'Food Science and Engineering', 'Economics', 'International Economics and Trade', 'Business Administration', 'Accounting', 'Tourism Management', 'Geographical Science', 'Environmental Science'],
+            26000 => ['Clinical Medicine', 'Anesthesiology', 'Stomatology', 'Preventive Medicine', 'Traditional Chinese Medicine'],
+            27000 => ['Physical Education', 'Sports Training', 'Music Performance', 'Musicology', 'Dance Performance', 'Fine Arts', 'Environmental Design', 'Visual Communication Design'],
+            22000 => ['Agronomy', 'Horticulture', 'Animal Science'],
+            0 => ['Nursing', 'Pharmacy'],
+        ];
+        $fiveYear = ['Clinical Medicine', 'Anesthesiology', 'Stomatology', 'Preventive Medicine', 'Traditional Chinese Medicine'];
+        foreach ($yanbian as $fee => $majors) {
+            foreach ($majors as $major) {
+                $rows[] = ['university' => 'Yanbian University', 'name' => $major, 'level' => 'bachelor', 'teaching_language' => 'Chinese', 'duration_months' => in_array($major, $fiveYear, true) ? 60 : 48, 'tuition_fee' => $fee ?: null, 'source_url' => self::YANBIAN_SOURCE];
+            }
         }
 
         // Zhejiang Gongshang's 2026 English-taught undergraduate catalogue: four years, 18,000 CNY a year.
