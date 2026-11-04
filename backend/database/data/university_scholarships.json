@@ -647,6 +647,78 @@
     "deadline": null,
     "source_url": "https://iczu.zju.edu.cn/iczuen/2026/0611/c63325a3177469/page.htm"
    }
+  ],
+  "zhengzhou-university": [
+   {
+    "slug": "zhengzhou-university-zhengzhou-university-president-scholarship",
+    "name": "Zhengzhou University President Scholarship",
+    "type": "University",
+    "coverage": "Doctoral: full tuition, 1,000 RMB housing and 3,500 RMB stipend a month for four years",
+    "description": "Funds outstanding international postgraduates, especially doctoral students, for four academic years. Selection weighs the prior degree and institution, research output and proposal, language and test results, awards, and completeness of documents.",
+    "eligibility": "Non-Chinese citizen in good health under 40 with a master's degree or higher and an excellent record, not already a registered doctoral student at a Chinese university. HSK 5 for Chinese-taught programs; IELTS 6.5 or higher for English-taught ones.",
+    "how_to_apply": "Submit the form, CV, passport, degrees and transcripts, a research proposal of at least 2,000 words, two recommendations, language scores, medical record and police clearance through the university's online application system. Intakes: applications 15 October to 15 December (March entry) and 1 March to 15 June (September entry); results follow 4 to 6 weeks later.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260801080538/http://international.zzu.edu.cn/en/scholarship/detail?cid=49&pid=5&detail=13"
+   },
+   {
+    "slug": "zhengzhou-university-zhengzhou-university-scholarships-for-excellent-international-students",
+    "name": "Zhengzhou University Scholarships for Excellent International Students",
+    "type": "University",
+    "coverage": "One-year cash awards of 12,000, 8,000 or 5,000 RMB, or 3,000 RMB for special merit",
+    "description": "A yearly merit award for enrolled students: the top 2% receive 12,000 RMB, the next 3% receive 8,000 and the next 5% receive 5,000; none renews. Ranking is 85% academic results and 15% conduct and activities.",
+    "eligibility": "Undergraduate or postgraduate students with more than a year of study, in the top 30% of their course results with attendance above 90%. Chinese Government Scholarship holders and students on extended study are excluded. Postgraduates also need a competition prize or an indexed paper or book.",
+    "how_to_apply": "Fill in the scholarship form and hand it to the Students Management Office; advisors rank the top 30% and the evaluation committee approves the list.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20241115031322/http://international.zzu.edu.cn/en/scholarship/detail?cid=49&pid=5&detail=6"
+   },
+   {
+    "slug": "zhengzhou-university-henan-government-scholarship-via-zhengzhou-university",
+    "name": "Henan Government Scholarship (via Zhengzhou University)",
+    "type": "Provincial",
+    "coverage": "Partial: doctoral 40,000 RMB a year; master's tuition up to 30,000; bachelor's 15,000",
+    "description": "Henan funds international students at provincial universities, with no monthly allowance: doctoral 40,000 RMB a year for up to four years, master's tuition up to 30,000 a year for up to three, bachelor's 15,000 a year, language and scholar programs 5,000 a semester. It pays tuition only; any shortfall is the student's. The provincial education department makes the final decision.",
+    "eligibility": "Non-Chinese in good health with no criminal record, new students only, with the matching prior qualification and language level. Age caps run from 25 (bachelor's) to 45 (doctoral). Holders of other government or sponsor funding such as CSC are not eligible.",
+    "how_to_apply": "Apply through the university's online application system and choose the Henan Province Government Scholarship; up to three universities may be applied to. The page's deadline text is inconsistent, so confirm the dates with the university.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20250401023128/http://international.zzu.edu.cn/en/scholarship/detail?cid=49&pid=5&detail=10"
+   }
+  ],
+  "beihua-university": [
+   {
+    "slug": "beihua-university-jilin-provincial-government-scholarship-changbai-mountain-scholarship",
+    "name": "Jilin Provincial Government Scholarship (Changbai Mountain Scholarship)",
+    "type": "Provincial",
+    "coverage": "Master's: tuition, housing, insurance and living allowance for two years",
+    "description": "A full provincial scholarship for full-time master's students, running two academic years of a three-year program, with intake each September.",
+    "eligibility": "Non-Chinese in good health, 35 or under, with a bachelor's degree recognised by China's Ministry of Education, excellent grades, two professor recommendations and HSK 4 or equivalent. No other Chinese government scholarship.",
+    "how_to_apply": "Email the application form and supporting documents as PDF files to the admissions office; the page gives no deadline.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20250327041056/https://admissions.beihua.edu.cn/jxj/jlszfjxj.htm"
+   }
+  ],
+  "southwest-medical-university": [
+   {
+    "slug": "southwest-medical-university-swmu-university-scholarship-postgraduate",
+    "name": "SWMU University Scholarship (postgraduate)",
+    "type": "University",
+    "coverage": "25,000 RMB a year, paid back after the tuition is paid",
+    "description": "Students pay the 25,000 RMB annual tuition first and the university then pays 25,000 RMB a year to each recipient, so it works as a tuition refund. The 2024 guide gives no further details.",
+    "eligibility": "No separate criteria; the postgraduate admission rules apply: age 18 to 40, a medical bachelor's degree or above, HSK 4 or above and English ability.",
+    "how_to_apply": "Apply for the postgraduate program by emailing the signed forms and documents to the international office.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260520235624/https://gjjl.swmu.edu.cn/info/1020/1562.htm"
+   },
+   {
+    "slug": "southwest-medical-university-sichuan-government-scholarship-via-swmu-postgraduate",
+    "name": "Sichuan Government Scholarship (via SWMU, postgraduate)",
+    "type": "Provincial",
+    "coverage": "20,000 RMB per year",
+    "description": "The 2024 postgraduate admission guide lists a Sichuan Government Scholarship of 20,000 RMB a year and states nothing more about it.",
+    "eligibility": "Not stated separately; the general postgraduate admission requirements apply.",
+    "how_to_apply": "Not stated separately; use the postgraduate admission application.",
+    "deadline": null,
+    "source_url": "https://web.archive.org/web/20260520235624/https://gjjl.swmu.edu.cn/info/1020/1562.htm"
+   }
   ]
  }
 }
