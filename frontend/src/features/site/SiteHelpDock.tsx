@@ -47,7 +47,7 @@ export default function SiteHelpDock() {
 
   const barVisible = pastHero || manualOpen
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
-  const Divider = () => <span className="h-9 w-px border-l border-dashed border-white/25" />
+  const Divider = () => <span className="h-6 w-px border-l border-dashed border-white/25" />
 
   return (
     <>
@@ -58,14 +58,14 @@ export default function SiteHelpDock() {
           barVisible ? "translate-y-0" : "translate-y-full",
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-2">
-          <span className="text-sm leading-tight font-bold tracking-wide text-cas-red uppercase">{t("helpDock.hereToHelpLine1")}<br />{t("helpDock.hereToHelpLine2")}</span>
+        <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-1">
+          <span className="text-[11px] leading-tight font-bold tracking-wide text-cas-red uppercase">{t("helpDock.hereToHelpLine1")}<br />{t("helpDock.hereToHelpLine2")}</span>
           <Divider />
           <div className="flex items-center gap-5">
             {CONTACTS.map((c) => (
-              <div key={c.nameKey} className="group relative flex cursor-pointer flex-col items-center gap-1">
-                <span className="flex size-10 items-center justify-center rounded-full bg-white/10 ring-2 ring-cas-red/80"><MessageCircle className="size-5" /></span>
-                <span className="text-[11px] text-white/80">{t(c.nameKey)}</span>
+              <div key={c.nameKey} className="group relative flex cursor-pointer flex-col items-center">
+                <span className="flex size-7 items-center justify-center rounded-full bg-white/10 ring-2 ring-cas-red/80"><MessageCircle className="size-3.5" /></span>
+                <span className="text-[10px] leading-tight text-white/80">{t(c.nameKey)}</span>
 
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
                     bridges the gap to the avatar so moving the cursor into the
@@ -96,18 +96,18 @@ export default function SiteHelpDock() {
             ))}
           </div>
 
-          <div className="ml-auto flex items-center gap-5">
-            <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
-              <CalendarDays className="size-5" /> {t("helpDock.customPlan")}
+          <div className="ml-auto flex items-center gap-4">
+            <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-xs text-white/90 transition-colors hover:text-cas-red">
+              <CalendarDays className="size-4" /> {t("helpDock.customPlan")}
             </Link>
             <Divider />
-            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
-              <span className="flex size-6 items-center justify-center rounded-full border border-white/50"><MoreHorizontal className="size-3.5" /></span>
+            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-xs text-white/90 transition-colors hover:text-cas-red">
+              <span className="flex size-5 items-center justify-center rounded-full border border-white/50"><MoreHorizontal className="size-3" /></span>
               {t("helpDock.leaveMessage")}
             </button>
             <Divider />
-            <button type="button" aria-label={t("helpDock.backToTop")} onClick={toTop} className="flex size-9 items-center justify-center border border-white/40 transition-colors hover:bg-white/10">
-              <ArrowUp className="size-5" />
+            <button type="button" aria-label={t("helpDock.backToTop")} onClick={toTop} className="flex size-7 items-center justify-center border border-white/40 transition-colors hover:bg-white/10">
+              <ArrowUp className="size-4" />
             </button>
           </div>
         </div>

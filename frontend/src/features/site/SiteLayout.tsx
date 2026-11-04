@@ -204,7 +204,7 @@ export default function SiteLayout() {
   }, [])
 
   return (
-    <div dir={langDef(i18n.language).dir} className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-14">
+    <div dir={langDef(i18n.language).dir} className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-11">
       <ScrollToTop />
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
