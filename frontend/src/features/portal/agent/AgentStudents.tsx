@@ -37,9 +37,9 @@ export default function AgentStudents() {
 
   return (
     <div>
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <PageTitle title={t("agentPortal.students.title")} subtitle={t("agentPortal.students.subtitle")} />
-        <div className="flex shrink-0 flex-wrap justify-end gap-2">
+        <div className="flex flex-wrap gap-2 sm:shrink-0 sm:justify-end">
           <Button asChild variant="secondary" size="sm">
             <Link to="/portal/agent/apply"><FilePlus2 className="size-4" /> {t("agentPortal.students.newApplication")}</Link>
           </Button>
