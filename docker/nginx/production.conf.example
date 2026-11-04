@@ -1,0 +1,81 @@
+# Production nginx for the CAS public site and API (one host, e.g. www.cas.moe).
+#
+# The React app is a single-page app, but search engines must receive real HTML
+# for public pages. So nginx serves ONLY the built static files itself and sends
+# everything else — every page URL, /api, robots.txt, sitemaps — to Laravel:
+#
+#   * Laravel's SeoController reads frontend/dist/index.html (SEO_INDEX_PATH) and
+#     injects the title, canonical, structured data and crawlable content.
+#   * Do NOT use `try_files ... /index.html` for page routes: that bypasses the SEO
+#     shell and crawlers would see an empty page.
+#
+# Paths below assume the compose layout in docker/compose.yml with the built
+# frontend mounted at /var/www/frontend/dist in BOTH the web and app containers:
+#
+#   frontend/dist  ->  /var/www/frontend/dist   (npm run build)
+#   backend        ->  /var/www/html            (Laravel; public/ is the web root)
+#
+# Required backend/.env:
+#   APP_ENV=production  APP_DEBUG=false
+#   SITE_URL=https://www.cas.moe
+#   SEO_INDEX_PATH=/var/www/frontend/dist/index.html
+#   INDEXNOW_KEY=<16-64 letters/digits, optional>
+#
+# TLS: terminate HTTPS in front of this (load balancer, Caddy, or add certbot
+# listeners) and redirect cas.moe -> www.cas.moe so there is one canonical host.
+
+server {
+    listen 80;
+    server_name _;
+
+    root /var/www/html/public;
+    client_max_body_size 25m;
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/xml image/svg+xml;
+
+    # Hashed build output: cache for a year.
+    location ^~ /assets/ {
+        root /var/www/frontend/dist;
+        try_files $uri =404;
+        access_log off;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # Images and logos copied into the build from frontend/public.
+    location ~ ^/(images|logos|photos)/ {
+        root /var/www/frontend/dist;
+        try_files $uri =404;
+        access_log off;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+
+    location ~ ^/(favicon\.svg|og-image\.png|cas-logo-copy\.png)$ {
+        root /var/www/frontend/dist;
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+
+    # Everything else is Laravel: API, robots.txt, sitemaps, IndexNow key file and
+    # every public / portal / staff page (the SEO shell or a noindex shell).
+    location / {
+        include fastcgi_params;
+        fastcgi_pass app:9000;
+        fastcgi_param SCRIPT_FILENAME $realpath_root/index.php;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        fastcgi_hide_header X-Powered-By;
+        fastcgi_read_timeout 60s;
+    }
+
+    # Never serve dotfiles (except the ACME challenge path).
+    location ~ /\.(?!well-known) {
+        deny all;
+    }
+
+    # Only the front controller is executed; direct .php requests are not routed.
+    location ~ \.php$ {
+        return 404;
+    }
+}

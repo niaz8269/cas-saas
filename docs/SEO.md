@@ -17,10 +17,7 @@ Official university URLs and apply links are never rendered on public pages (adm
    - `SITE_URL=https://www.cas.moe`
    - `SEO_INDEX_PATH=/path/to/frontend/dist/index.html` (built with `npm run build`)
    - optional `INDEXNOW_KEY=<16-64 alphanumerics>` (served at `/<key>.txt`)
-2. nginx must send HTML requests to Laravel, and static assets (`/assets/*`, images) straight from `frontend/dist`:
-   - `/`, `/site/*`, `/robots.txt`, `/sitemap.xml`, `/sitemaps/*`, `/{key}.txt` and the fallback → `php-fpm` (`backend/public/index.php`)
-   - `/api/*` → Laravel
-   - Do **not** use `try_files ... /index.html` for HTML routes, or the shell is bypassed.
+2. Use `docker/nginx/production.conf.example` as the nginx config. It serves only the built static files (`/assets`, `/images`, `/logos`, `/photos`, favicon, OG image) itself and sends everything else (every page URL, `/api`, `robots.txt`, sitemaps, the IndexNow key file) to Laravel. Mount `frontend/dist` at `/var/www/frontend/dist` in both the web and app containers. Do **not** use `try_files ... /index.html` for page routes: it bypasses the SEO shell and crawlers would see an empty page.
 3. Serve everything over HTTPS on one canonical host (redirect `cas.moe` → `www.cas.moe`).
 4. After each frontend build, `SEO_INDEX_PATH` picks up the new asset hashes automatically.
 
