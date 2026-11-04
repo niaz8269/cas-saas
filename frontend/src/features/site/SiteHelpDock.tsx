@@ -33,7 +33,7 @@ function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: 
           src={own ? "/images/wechat-qr.png" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
           onError={() => kind === "wechat" && setMissing(true)}
           alt={alt}
-          className="size-full object-contain"
+          className={`size-full object-contain ${own ? "[image-rendering:pixelated]" : ""}`}
         />
         {!own && (
           <span aria-hidden className="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md">
