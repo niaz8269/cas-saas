@@ -3883,6 +3883,67 @@
     "deadline": null,
     "source_url": "https://admissions.swu.edu.cn/Scholarships/Chongqing_Mayor_Scholarship.htm"
    }
+  ],
+  "hangzhou-normal-university": [
+   {
+    "slug": "hangzhou-normal-university-hangzhou-normal-university-international-student-scholarship",
+    "name": "Hangzhou Normal University International Student Scholarship",
+    "type": "University",
+    "coverage": "Type A (graduate): tuition aid plus monthly stipend; Type B 20,000 and Type C 10,000 RMB/yr tuition aid (bachelor)",
+    "description": "University-funded award set up in 2020 to attract strong international students and reward diligent current ones. Graduate Type A scales tuition support to the programme fee and adds a monthly living allowance (1,500 RMB master, 2,000 RMB doctoral, 10 months a year); bachelor Types B and C give flat yearly tuition support.",
+    "eligibility": "Foreign passport holder; bachelor applicants aged 18-30, master/PhD under 40; good health; compliance with Chinese law and school rules; high school diploma (bachelor) or bachelor/master degree (graduate).",
+    "how_to_apply": "Not detailed on the page; contact the International Education College's international student office.",
+    "deadline": null,
+    "source_url": "https://gjjyxy.hznu.edu.cn/c/2026-03-04/2960599.shtml"
+   },
+   {
+    "slug": "hangzhou-normal-university-zhejiang-provincial-government-scholarship-for-international-students",
+    "name": "Zhejiang Provincial Government Scholarship for International Students",
+    "type": "Provincial",
+    "coverage": "30,000 RMB/yr (Type A master) or 20,000 RMB/yr (Type B bachelor)",
+    "description": "Provincial award, established 2009, for outstanding international students already studying at Zhejiang universities; assessed once a year via the university.",
+    "eligibility": "Foreign national in good health; master applicants hold a bachelor degree, are 35 or younger and have two professor/associate professor recommendations; bachelor applicants hold high-school graduation and are 30 or younger; HSK or other Chinese proof; top academic standing; good conduct; no other scholarship held.",
+    "how_to_apply": "Apply through the international students office following the provincial education department notice; applications are in October each year.",
+    "deadline": null,
+    "source_url": "https://gjjyxy.hznu.edu.cn/c/2026-03-04/2960590.shtml"
+   }
+  ],
+  "shanghai-university-of-political-science-and-law": [
+   {
+    "slug": "shanghai-university-of-political-science-and-law-shupl-belt-and-road-scholarship",
+    "name": "SHUPL Belt and Road Scholarship",
+    "type": "University",
+    "coverage": "Type A tuition+housing; Type B tuition; Type C 1,000 RMB/month for 10 months (non-degree)",
+    "description": "University-level award to attract international students; A and B for degree students, C for non-degree language students. Support lasts 2-3 years master, 4 years bachelor, 1 year language.",
+    "eligibility": "Foreign national in good health; bachelor: high school diploma, age 25 or under, HSK4 (180+); master: bachelor degree, age 35 or under, HSK5 (180+); must not hold other scholarship funding.",
+    "how_to_apply": "Apply on the university admission platform (admission.shupl.edu.cn); window runs November to 30 May of the following year.",
+    "deadline": null,
+    "source_url": "https://iso.shupl.edu.cn/english/2017/0420/c3363a145473/page.htm"
+   },
+   {
+    "slug": "shanghai-university-of-political-science-and-law-shanghai-government-scholarship-via-shupl",
+    "name": "Shanghai Government Scholarship (via SHUPL)",
+    "type": "Municipal",
+    "coverage": "Type A: tuition, housing, living stipend, insurance; Type B: tuition and insurance",
+    "description": "Shanghai municipal scholarship (since 2006) for outstanding international students in Shanghai, administered through SHUPL for its students; annual review decides continuation.",
+    "eligibility": "Foreign national in good health; bachelor: high school, age 25 or under, HSK4 (180+); master: bachelor degree, age 35 or under, HSK5 (180+); foundation applicants age 23 or under with pre-admission letter; no other Chinese government scholarship.",
+    "how_to_apply": "Apply on the Study in Shanghai site and the SHUPL admission platform; the 2025-26 window was 30 Nov 2025 to 30 May 2026.",
+    "deadline": null,
+    "source_url": "https://iso.shupl.edu.cn/english/2017/0420/c3363a145472/page.htm"
+   }
+  ],
+  "huangshan-university": [
+   {
+    "slug": "huangshan-university-anhui-government-scholarship-huangshan-university",
+    "name": "Anhui Government Scholarship (Huangshan University)",
+    "type": "Provincial",
+    "coverage": "20,000 RMB per year for undergraduates, up to 4 years",
+    "description": "Anhui provincial award for international undergraduates, nominated by the university within a yearly provincial quota; lost on exam failure or rule breaches.",
+    "eligibility": "Foreign passport and valid visa; high school equivalent; age 28 or under; HSK5 or 210+ on new HSK4 (otherwise a year of Chinese study first); good conduct and grades; not a Chinese Government Scholarship holder.",
+    "how_to_apply": "Email the application form, passport copy, highest diploma, and school transcript/conduct proof to iec@hsu.edu.cn; page gives 10 June as the annual deadline.",
+    "deadline": null,
+    "source_url": "https://www.hsu.edu.cn/f8/2c/c52a63532/page.htm"
+   }
   ]
  }
 }
