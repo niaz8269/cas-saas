@@ -1,0 +1,652 @@
+{
+ "source": "Each university's own international-admissions pages, read 2026-11-04 and rewritten in CAS's own words",
+ "universities": {
+  "anhui-medical-university": [
+   {
+    "slug": "anhui-medical-university-anhui-provincial-government-scholarship-study-in-anhui",
+    "name": "Anhui Provincial Government Scholarship (Study in Anhui)",
+    "type": "Provincial",
+    "coverage": "Yearly cash award: PhD 50,000, master's 30,000, bachelor's 20,000 RMB",
+    "description": "A provincial award administered by the university for full-time international students. It is a cash award only.",
+    "eligibility": "Full-time international students with a valid passport, proof of English and a current HSK certificate. Age limits: doctoral under 45, master's under 40, bachelor's under 28. Postgraduates need two professor recommendations.",
+    "how_to_apply": "Hold the university's pre-admission notice first; no separate scholarship form is described.",
+    "deadline": null,
+    "source_url": "https://lxszs.ahmu.edu.cn/2022/0329/c6094a117554/page.htm"
+   },
+   {
+    "slug": "anhui-medical-university-ahmu-china-asean-silk-road-scholarship",
+    "name": "AHMU China-ASEAN Silk Road Scholarship",
+    "type": "University",
+    "coverage": "Tuition, housing, insurance and books, plus a first-year allowance",
+    "description": "Full scholarship for students from ASEAN countries; the first-year living allowance is 10,000 RMB and students may reapply in later years.",
+    "eligibility": "Full-time students from the ten ASEAN countries other than Timor-Leste, with a valid passport and proof of English. Age limits: bachelor's under 28, master's under 35, doctoral under 40. Holders of a Chinese Government Scholarship are excluded.",
+    "how_to_apply": "Apply for admission and email the materials to the international education office.",
+    "deadline": null,
+    "source_url": "https://lxszs.ahmu.edu.cn/2022/0329/c6094a117554/page.htm"
+   }
+  ],
+  "capital-medical-university": [
+   {
+    "slug": "capital-medical-university-beijing-government-scholarship-capital-medical-university",
+    "name": "Beijing Government Scholarship (Capital Medical University)",
+    "type": "Municipal",
+    "coverage": "Partial award from the Beijing programme, subject to the yearly quota",
+    "description": "The university follows the Beijing Government Scholarship management measures for its English-taught undergraduate clinical medicine students. An earlier brochure described up to 20,000 RMB per year from the second year and 20,000 RMB for qualified new students; the 2026 brochure states no amount.",
+    "eligibility": "Criteria follow the Beijing measures; the 2026 brochure lists none.",
+    "how_to_apply": "No separate procedure is described; apply for the programme through the university's admissions system.",
+    "deadline": null,
+    "source_url": "https://gjxy.ccmu.edu.cn/docs/2026-01/378e3b986a874a54b3f7eca368a4bb22.rar"
+   }
+  ],
+  "chongqing-medical-university": [
+   {
+    "slug": "chongqing-medical-university-chongqing-municipal-government-mayor-scholarship",
+    "name": "Chongqing Municipal Government Mayor Scholarship",
+    "type": "Municipal",
+    "coverage": "Cash awards in two classes by level, 10,000 to 35,000 RMB a year",
+    "description": "First and second class awards per year: doctoral 35,000 / 20,000, master's 30,000 / 15,000, bachelor's 25,000 / 10,000, Chinese-language course 10,000 / 8,000. About 20 to 30 awards a year; results usually come late May to mid-June.",
+    "eligibility": "Non-Chinese citizens in good health. Age limits: bachelor's under 25 (high-school diploma), master's under 35, doctoral under 40, language training under 35. Open to new and current students.",
+    "how_to_apply": "Consult the university's scholarship pages or international office; the listing gives no procedure.",
+    "deadline": null,
+    "source_url": "https://english.cqmu.edu.cn/info/1150/1300.htm"
+   }
+  ],
+  "fudan-university": [
+   {
+    "slug": "fudan-university-fudan-university-international-students-scholarship",
+    "name": "Fudan University International Students' Scholarship",
+    "type": "University",
+    "coverage": "Awarded to excellent applicants by academic record and admission results",
+    "description": "A merit scholarship for applicants to the Chinese-taught postgraduate programs; the guide does not say whether it reduces tuition or pays cash.",
+    "eligibility": "Chosen from applicants on academic performance and the admission evaluation.",
+    "how_to_apply": "No separate form; applicants are considered automatically.",
+    "deadline": null,
+    "source_url": "https://iso.fudan.edu.cn/_upload/article/files/6b/87/c1cb39a549e58d87edd4614f856d/ea9d2f6a-44e8-47fe-acf8-3844b6f0cf33.pdf"
+   },
+   {
+    "slug": "fudan-university-shanghai-government-scholarship-through-fudan",
+    "name": "Shanghai Government Scholarship (through Fudan)",
+    "type": "Municipal",
+    "coverage": "Master's stipend 3,000 and doctoral 3,500 RMB a month, as listed for the scholarship group",
+    "description": "The guide groups it with the Chinese Government Scholarship benefits: tuition, housing or a housing subsidy, medical insurance and the monthly stipend. Shanghai's own amounts are not listed separately.",
+    "eligibility": "Non-Chinese citizens in good health; master's applicants under 35, doctoral under 40; no other Chinese government scholarship.",
+    "how_to_apply": "Complete and sign the Shanghai Government Scholarship form and upload it with the admission application in Fudan's online system.",
+    "deadline": null,
+    "source_url": "https://iso.fudan.edu.cn/_upload/article/files/6b/87/c1cb39a549e58d87edd4614f856d/ea9d2f6a-44e8-47fe-acf8-3844b6f0cf33.pdf"
+   }
+  ],
+  "fujian-medical-university": [
+   {
+    "slug": "fujian-medical-university-fujian-medical-university-scholarship-graduate",
+    "name": "Fujian Medical University Scholarship (graduate)",
+    "type": "University",
+    "coverage": "Tiered yearly cash awards, 10,000 to 45,000 RMB",
+    "description": "Master's first year: 40,000 / 20,000 / 10,000 RMB for the top 20% / next 20% / remaining 60%. Doctoral first year: 45,000 / 30,000 / 20,000 RMB on the same split. Later years use different shares. At least the third level is guaranteed in year one.",
+    "eligibility": "International master's and doctoral students enrolled at the university; the tier depends on a comprehensive assessment.",
+    "how_to_apply": "No application needed; students are considered automatically.",
+    "deadline": null,
+    "source_url": "https://oec.fjmu.edu.cn/_upload/article/files/9e/1c/84672d884f0694be1c23d42133c1/aac86c15-4bf3-4752-8b5a-4bdd8173c4c7.pdf"
+   },
+   {
+    "slug": "fujian-medical-university-fujian-medical-university-monthly-stipend-graduate",
+    "name": "Fujian Medical University monthly stipend (graduate)",
+    "type": "University",
+    "coverage": "Monthly stipend: master's 1,000, doctoral 1,500 RMB for three years",
+    "description": "A monthly living stipend paid to graduate students for three academic years.",
+    "eligibility": "International master's and doctoral students at the university.",
+    "how_to_apply": "No application required.",
+    "deadline": null,
+    "source_url": "https://oec.fjmu.edu.cn/_upload/article/files/9e/1c/84672d884f0694be1c23d42133c1/aac86c15-4bf3-4752-8b5a-4bdd8173c4c7.pdf"
+   },
+   {
+    "slug": "fujian-medical-university-fujian-provincial-government-scholarship-via-fjmu",
+    "name": "Fujian Provincial Government Scholarship (via FJMU)",
+    "type": "Provincial",
+    "coverage": "45,000 RMB per academic year",
+    "description": "A provincial award administered by the university. The fee sheet does not say which costs it offsets.",
+    "eligibility": "Open to international students who did not win a Chinese government scholarship.",
+    "how_to_apply": "Apply on the college's online platform with an 800 RMB application fee; follow the College of Overseas Education site for details.",
+    "deadline": null,
+    "source_url": "https://oec.fjmu.edu.cn/en/2025/1229/c4070a212651/page.htm"
+   }
+  ],
+  "guangxi-medical-university": [
+   {
+    "slug": "guangxi-medical-university-gxmu-president-scholarship-for-freshmen",
+    "name": "GXMU President Scholarship for Freshmen",
+    "type": "University",
+    "coverage": "Awarded to admitted self-funded undergraduates by admission score",
+    "description": "A freshman award for self-funded undergraduates who are admitted, register and pay all fees; the brochure states no amount.",
+    "eligibility": "Open to all nationalities, ranked by overall admission score.",
+    "how_to_apply": "No separate application; eligible students are included automatically.",
+    "deadline": null,
+    "source_url": "https://gjy.gxmu.edu.cn/en/NN/Notice/t224270.html"
+   },
+   {
+    "slug": "guangxi-medical-university-guangxi-government-full-scholarship-for-asean-students",
+    "name": "Guangxi Government Full Scholarship for ASEAN Students",
+    "type": "Provincial",
+    "coverage": "Tuition, housing, insurance and books plus a monthly allowance",
+    "description": "Covers tuition, on-campus housing, comprehensive medical insurance and textbooks, plus a monthly allowance (the 2024 notice gave 1,000 for bachelor's, 1,500 for master's and 2,000 RMB for doctoral students). Travel is the student's own cost.",
+    "eligibility": "Citizens of ASEAN countries in good health studying Chinese-taught programs. Age: bachelor's 18 to 25, master's up to 35, doctoral up to 40. HSK 4 for bachelor's, HSK 5 for postgraduates. No other Chinese government scholarship.",
+    "how_to_apply": "Apply online through the international student system; the university reviews and interviews, then nominates candidates to the Guangxi education department. Applications are accepted March to May each year.",
+    "deadline": null,
+    "source_url": "https://gjy.gxmu.edu.cn/en/Admission/Scholarship/t185424.html"
+   }
+  ],
+  "guangzhou-medical-university": [
+   {
+    "slug": "guangzhou-medical-university-guangdong-government-outstanding-international-students-scholarship-for-freshmen",
+    "name": "Guangdong Government Outstanding International Students Scholarship for Freshmen",
+    "type": "Provincial",
+    "coverage": "One-off cash award: doctoral 30,000, master's 20,000 RMB",
+    "description": "A one-off cash payment into the winner's bank account after registration. It is not a fee waiver; winners still pay fees at the self-funded rate.",
+    "eligibility": "Self-supporting international master's and doctoral freshmen.",
+    "how_to_apply": "No separate process is described; contact the international office. The admission window runs 1 March to 30 June.",
+    "deadline": null,
+    "source_url": "https://en.gzhmu.edu.cn/info/1671/3901.htm"
+   }
+  ],
+  "harbin-medical-university": [
+   {
+    "slug": "harbin-medical-university-moe-heilongjiang-joint-scholarship-for-eurasian-countries",
+    "name": "MOE-Heilongjiang Joint Scholarship for Eurasian Countries",
+    "type": "Provincial",
+    "coverage": "Tuition, housing, insurance and a stipend of 3,000 (master's) or 3,500 (doctoral) RMB a month",
+    "description": "A joint national and provincial postgraduate scholarship; about 20 places in 2026 across all postgraduate programs. The university recommends candidates and the China Scholarship Council decides.",
+    "eligibility": "Citizens of Russia, Belarus, Ukraine, Georgia, Armenia, Kyrgyzstan, Uzbekistan, Tajikistan, Kazakhstan, Turkmenistan, Moldova, Azerbaijan or Mongolia. Master's applicants under 35, doctoral under 40.",
+    "how_to_apply": "Apply on the CSC online system as Type B using the university's code, with a study plan, two recommendations, language proof, a medical report, a police certificate and a supervisor's acceptance letter.",
+    "deadline": null,
+    "source_url": "https://cie.hrbmu.edu.cn/english/info/1082/1542.htm"
+   }
+  ],
+  "hebei-medical-university": [
+   {
+    "slug": "hebei-medical-university-hmu-international-student-scholarship-for-freshmen",
+    "name": "HMU International Student Scholarship for Freshmen",
+    "type": "University",
+    "coverage": "Cash award by class: bachelor's 8,000 to 36,000, master's 10,000 to 40,000, doctoral 30,000 to 50,000 RMB",
+    "description": "A new-student merit award in three classes (two for doctoral students). The page does not say which costs it offsets and gives its amounts only in a table from February 2025.",
+    "eligibility": "Not stated on the page.",
+    "how_to_apply": "Not stated on the page.",
+    "deadline": null,
+    "source_url": "https://iec.hebmu.edu.cn/a/2025/07/04/16E306CC8FED4D61BD65A311BC217D9A.html"
+   }
+  ],
+  "huazhong-university-of-science-and-technology": [
+   {
+    "slug": "huazhong-university-of-science-and-technology-hust-president-scholarship-undergraduate",
+    "name": "HUST President Scholarship (undergraduate)",
+    "type": "University",
+    "coverage": "One-time payment of 2,000 to 5,000 RMB in the first semester",
+    "description": "A one-off award for new self-funded international undergraduates.",
+    "eligibility": "Self-funded international undergraduates with strong high-school results and good overall qualities.",
+    "how_to_apply": "No separate application; recipients are chosen from the admission materials.",
+    "deadline": null,
+    "source_url": "http://iso.hust.edu.cn/info/1194/4206.htm"
+   }
+  ],
+  "jiangsu-university": [
+   {
+    "slug": "jiangsu-university-jsu-presidential-scholarship",
+    "name": "JSU Presidential Scholarship",
+    "type": "University",
+    "coverage": "Tuition and housing (doctoral) or yearly cash award (master's and bachelor's)",
+    "description": "For English-taught programs. Doctoral Type A covers tuition and housing plus a 5,000 RMB stipend; Type B covers tuition and housing. Master's awards are 25,000 (A) or 20,000 RMB (B); bachelor's 10,000 RMB (A: first year only; B: every year). Chinese-taught bachelor's applicants get a 40% tuition discount instead.",
+    "eligibility": "English-taught programs only. Age: bachelor's under 25, master's under 30, doctoral under 40. Type A suits graduates of top-ranked universities, continuing students and listed new programs; Type B bachelor's is for listed countries. Graduate awards are reviewed yearly and cannot be combined with others.",
+    "how_to_apply": "Fill in the Presidential Scholarship form and upload it with the online application.",
+    "deadline": null,
+    "source_url": "https://oec.ujs.edu.cn/en/SCHOLARSHIPS/JSU_Presidential_Scholarship.htm"
+   },
+   {
+    "slug": "jiangsu-university-study-in-jiangsu-government-scholarship-via-jsu",
+    "name": "Study in Jiangsu Government Scholarship (via JSU)",
+    "type": "Provincial",
+    "coverage": "One-time award: undergraduates 18,000, postgraduates 30,000 RMB",
+    "description": "A one-time provincial cash award for continuing students.",
+    "eligibility": "Full-time degree students in year two or above. Anyone who has held a Chinese Government or Jiangsu provincial scholarship cannot apply.",
+    "how_to_apply": "Timing follows the Jiangsu Department of Education notice.",
+    "deadline": null,
+    "source_url": "https://oec.ujs.edu.cn/doc/prospectus2023.pdf"
+   }
+  ],
+  "jilin-university": [
+   {
+    "slug": "jilin-university-jlu-golden-bean-international-students-scholarship",
+    "name": "JLU Golden Bean International Students Scholarship",
+    "type": "University",
+    "coverage": "Cash award of 2,000 RMB per person",
+    "description": "A donor-funded award; the 2024 round had 40 scholarships and 25 sponsorships, and nobody could receive both in a year.",
+    "eligibility": "Scholarship: self-funded degree students in the top 10% of their major with at least 90% attendance and no failed exams. Sponsorship: students with financial difficulty and at least 85% attendance.",
+    "how_to_apply": "Fill in the application form, get the college to sign it and submit it with supporting documents to the College of International Education; there is an interview. The usual window is November.",
+    "deadline": null,
+    "source_url": "https://cie.jlu.edu.cn/info/1079/3359.htm"
+   }
+  ],
+  "jinan-university": [
+   {
+    "slug": "jinan-university-guangdong-provincial-government-scholarship-via-jinan-university",
+    "name": "Guangdong Provincial Government Scholarship (via Jinan University)",
+    "type": "Provincial",
+    "coverage": "Cash award of 10,000 RMB per year",
+    "description": "A yearly cash award for continuing undergraduates.",
+    "eligibility": "Full-time undergraduates under 40 in year two or above, with grades above 70, no failed courses, no other Chinese government scholarship, and proof of Chinese proficiency (may be relaxed for English-taught majors).",
+    "how_to_apply": "Hand in the form, transcript, passport copy, language proof and a personal essay to your college, which nominates students; the province approves.",
+    "deadline": null,
+    "source_url": "https://xsc.jnu.edu.cn/2025/0717/c5511a840760/page.htm"
+   }
+  ],
+  "kunming-medical-university": [
+   {
+    "slug": "kunming-medical-university-yunnan-provincial-government-scholarship-via-kmu",
+    "name": "Yunnan Provincial Government Scholarship (via KMU)",
+    "type": "Provincial",
+    "coverage": "Tuition, housing, insurance and a monthly stipend of 1,400 to 2,000 RMB",
+    "description": "Covers tuition, housing and medical insurance for the standard length of the program, with a monthly stipend of 1,400 (bachelor's), 1,700 (master's) or 2,000 RMB (doctoral).",
+    "eligibility": "Foreign citizens in medicine-related majors with good conduct and grades. Age: bachelor's 18 to 25, master's 18 to 35, doctoral 20 to 45. Bachelor's applicants take the CSCA; Chinese-taught programs need HSK 4, English-taught IELTS 6.0 or TOEFL 70. No other government or university scholarship.",
+    "how_to_apply": "Apply on the university's international admission platform; there is a document check, a video interview and committee review, and the Yunnan education department approves.",
+    "deadline": null,
+    "source_url": "https://www.kmmu.edu.cn/upload/20251111/2025111111413498.pdf"
+   },
+   {
+    "slug": "kunming-medical-university-kmu-freshmen-financial-aid",
+    "name": "KMU Freshmen Financial Aid",
+    "type": "University",
+    "coverage": "Monthly stipend over ten months: bachelor's 1,000, master's 1,700, doctoral 2,000 RMB",
+    "description": "A monthly stipend subject to monthly assessment and fees being paid; Chinese-language study 600 and medical advanced study 1,000 RMB a month.",
+    "eligibility": "First-year self-funded students paying full tuition.",
+    "how_to_apply": "Students apply and the university reviews; no window is stated.",
+    "deadline": null,
+    "source_url": "https://www.kmmu.edu.cn/upload/20251209/2025120909062641.pdf"
+   },
+   {
+    "slug": "kunming-medical-university-kmu-academic-scholarships",
+    "name": "KMU Academic Scholarships",
+    "type": "University",
+    "coverage": "Yearly cash awards for 70% of eligible students",
+    "description": "First class (10% of students), second (20%) and third (40%). English-medium bachelor's: 15,000 / 10,000 / 5,000 RMB. Master's and doctoral: 20,000 / 15,000 / 10,000 RMB.",
+    "eligibility": "Self-funded undergraduate and graduate students from year two. Awards weigh exams or research (70%) and conduct (30%), with all fees paid and the annual assessment passed.",
+    "how_to_apply": "Not stated.",
+    "deadline": null,
+    "source_url": "https://www.kmmu.edu.cn/upload/20251209/2025120909062641.pdf"
+   }
+  ],
+  "nanjing-medical-university": [
+   {
+    "slug": "nanjing-medical-university-nmu-scholarship-for-excellent-international-students-graduate",
+    "name": "NMU Scholarship for Excellent International Students (graduate)",
+    "type": "University",
+    "coverage": "Quota and amount set each year by the university",
+    "description": "A merit scholarship for graduate students who have studied at least a year at the university, scored on a social part and an academic part.",
+    "eligibility": "Full-time international graduate students after at least one year of study; students on extended study, with discipline warnings or failed exams are excluded.",
+    "how_to_apply": "Submit the form and materials to the School of International Education; a committee ranks applicants and the list is announced with an appeal route.",
+    "deadline": null,
+    "source_url": "https://intladmission.njmu.edu.cn/2022/0411/c17836a214184/page.htm"
+   },
+   {
+    "slug": "nanjing-medical-university-nmu-tuition-scholarship-for-undergraduates-in-chinese-taught-courses",
+    "name": "NMU Tuition Scholarship for undergraduates in Chinese-taught courses",
+    "type": "University",
+    "coverage": "Full, half or quarter tuition by yearly grade average of 90, 80 or 70",
+    "description": "A tuition award for undergraduates after their first year; the page gives no money amounts.",
+    "eligibility": "Full-time undergraduates with at least a year in Chinese-taught courses; holders of a Chinese government scholarship are excluded; year-three completers need HSK 4 at 180 or above.",
+    "how_to_apply": "No form; the school compiles a list from grade statistics each September and a committee reviews it.",
+    "deadline": null,
+    "source_url": "https://intladmission.njmu.edu.cn/_t1560/2022/0410/c17836a214123/page.htm"
+   }
+  ],
+  "nantong-university": [
+   {
+    "slug": "nantong-university-nantong-university-international-students-scholarship",
+    "name": "Nantong University International Students Scholarship",
+    "type": "University",
+    "coverage": "Five types, from free housing and part-tuition waivers to tuition, housing and allowance",
+    "description": "Types: free on-campus housing; 30 to 50% tuition waiver; full tuition waiver; tuition plus housing waiver; tuition, housing and a monthly allowance. Applies from bridging to doctoral level.",
+    "eligibility": "Good conduct and health, no other scholarship for the same period. Age: bachelor's under 30, master's under 35, doctoral under 45. HSK 4 for Chinese-taught programs, English proof for English-taught ones.",
+    "how_to_apply": "Submit the admission application by 30 June each year; winners get their admission notice by the end of July.",
+    "deadline": null,
+    "source_url": "https://sie.ntu.edu.cn/uploads/20240418/4eb2172533072542811155a6f77996ca.pdf"
+   }
+  ],
+  "ningbo-university": [
+   {
+    "slug": "ningbo-university-ningbo-university-scholarship",
+    "name": "Ningbo University Scholarship",
+    "type": "University",
+    "coverage": "Master's and doctoral about 30,000 RMB, bachelor's 10,000 RMB",
+    "description": "A university award; the page does not say what costs it covers.",
+    "eligibility": "Non-Chinese citizens in good health. Age: bachelor's under 25, master's under 35, doctoral under 40. HSK or equivalent for Chinese-taught programs.",
+    "how_to_apply": "Hand in or mail the form, passport copy, notarized diploma and transcripts and health certificate to the International College admissions office.",
+    "deadline": null,
+    "source_url": "https://is.nbu.edu.cn/site/scholarships/ningbo-univeristy-scholarship.html"
+   },
+   {
+    "slug": "ningbo-university-ningbo-government-scholarship-via-nbu",
+    "name": "Ningbo Government Scholarship (via NBU)",
+    "type": "Municipal",
+    "coverage": "Master's and doctoral 30,000, bachelor's 20,000, Chinese-language students 6,000 RMB",
+    "description": "A city award; the page does not say whether the amounts are yearly.",
+    "eligibility": "Same basic conditions as the university scholarship, plus two recommendation letters for degree applicants.",
+    "how_to_apply": "Same paper-based process as the Ningbo University Scholarship.",
+    "deadline": null,
+    "source_url": "https://is.nbu.edu.cn/site/scholarships/ningbo-government-scholarship.html"
+   }
+  ],
+  "qingdao-university": [
+   {
+    "slug": "qingdao-university-qingdao-university-presidential-scholarship",
+    "name": "Qingdao University Presidential Scholarship",
+    "type": "University",
+    "coverage": "Tuition, housing, insurance and a monthly allowance of 3,000 to 3,500 RMB",
+    "description": "Covers tuition, on-campus housing, living allowance and medical insurance for the period in the admission notice. In 2026 there were 5 places, all doctoral (3,500 RMB a month); in 2025 there were 20 doctoral and 10 master's places. Recipients pass an annual review and do 120 hours of volunteer work.",
+    "eligibility": "Non-Chinese in good health; master's under 35, doctoral under 40; one scholarship only.",
+    "how_to_apply": "Apply online, upload proof of the registration fee, then email the receipt and signed form to the admissions office.",
+    "deadline": null,
+    "source_url": "https://istudy.qdu.edu.cn/en/article?cid=26&detail=422"
+   },
+   {
+    "slug": "qingdao-university-qingdao-municipal-government-scholarship-chinese-language-bachelor-s",
+    "name": "Qingdao Municipal Government Scholarship (Chinese Language bachelor's)",
+    "type": "Municipal",
+    "coverage": "First-semester tuition for new students; partial tuition waivers for continuing students",
+    "description": "New students receive full first-semester tuition. Continuing students ranked in the top 20% with at least 90% attendance get next year's first-semester tuition; those ranked 20 to 50% get a 5,000 RMB waiver.",
+    "eligibility": "Students in the Chinese Language bachelor's program.",
+    "how_to_apply": "New students add the Qingdao Municipal Government Scholarship form to their program application (April to June each year).",
+    "deadline": null,
+    "source_url": "https://istudy.qdu.edu.cn/en/article?cid=25&pid=21&detail=21"
+   }
+  ],
+  "shandong-university": [
+   {
+    "slug": "shandong-university-shandong-university-scholarship-for-outstanding-international-students",
+    "name": "Shandong University Scholarship for Outstanding International Students",
+    "type": "University",
+    "coverage": "Full (tuition, allowance, housing, insurance) or partial (tuition and insurance)",
+    "description": "Runs for the length of study stated in the admission letter. Results are announced by 1 August.",
+    "eligibility": "Non-Chinese in good health; bachelor's under 25, master's under 35, doctoral under 40; strong academic record; no other Chinese government-funded scholarship. Chinese-taught programs need HSK 4 / 5 / 6; English-taught programs need IELTS 6.0 or TOEFL 80.",
+    "how_to_apply": "Apply through the university's online system, filling in, signing and uploading the scholarship form.",
+    "deadline": null,
+    "source_url": "https://www.istudy.sdu.edu.cn/info/1367/3754.htm"
+   }
+  ],
+  "shanghai-jiao-tong-university": [
+   {
+    "slug": "shanghai-jiao-tong-university-sjtu-scholarship-undergraduate",
+    "name": "SJTU Scholarship (undergraduate)",
+    "type": "University",
+    "coverage": "First class: full tuition and 2,500 RMB a month; second: half tuition; third: quarter tuition",
+    "description": "Three tiers over four years; first class also includes a housing subsidy and insurance. The Shanghai Government Scholarship is merged into it. The figures are labelled estimates for 2027.",
+    "eligibility": "Admitted applicants judged excellent; no other scholarship at the same time.",
+    "how_to_apply": "Tick 'Apply for scholarship' in the online application; results come with the admission result.",
+    "deadline": null,
+    "source_url": "https://gc.sjtu.edu.cn/admission/international-undergraduate-admission/fees-and-scholarships/"
+   },
+   {
+    "slug": "shanghai-jiao-tong-university-sjtu-scholarship-and-fellowship-graduate",
+    "name": "SJTU Scholarship and Fellowship (graduate)",
+    "type": "University",
+    "coverage": "Full or partial tuition, with a housing subsidy tied to the level",
+    "description": "Master's: SJTU Scholarship, tuition scholarships and school or college awards. Doctoral: SJTU Fellowship and Scholarship. No free dormitory is provided, only a subsidy.",
+    "eligibility": "Graduate applicants; recipients pass an annual review; only one channel (the university or an embassy) may be used.",
+    "how_to_apply": "Choose 'Apply for scholarships through SJTU' in the online application.",
+    "deadline": null,
+    "source_url": "https://gc.sjtu.edu.cn/admission/graduate-admission/tuition-fees-and-scholarships/"
+   }
+  ],
+  "shantou-university": [
+   {
+    "slug": "shantou-university-new-international-student-scholarship-of-shantou-university",
+    "name": "New International Student Scholarship of Shantou University",
+    "type": "University",
+    "coverage": "First prize: first-year tuition and housing; second: first-year tuition; third: half",
+    "description": "For prospective undergraduates, not the Medical College programs. Winners pay the tuition in advance each September and the award is credited in the first year; only the highest award applies.",
+    "eligibility": "Prospective undergraduate applicants; two recommendation letters.",
+    "how_to_apply": "Apply to an undergraduate program through the online system or by email to the admissions office; the program deadline is 15 June.",
+    "deadline": null,
+    "source_url": "https://sie.stu.edu.cn/upload/file/20260413/6391167738893235215371326.pdf"
+   },
+   {
+    "slug": "shantou-university-guangdong-government-scholarship-via-shantou-university",
+    "name": "Guangdong Government Scholarship (via Shantou University)",
+    "type": "Provincial",
+    "coverage": "One-time award of 10,000 RMB for an undergraduate",
+    "description": "A one-time cash award for self-funded international undergraduates in any program.",
+    "eligibility": "Self-funded international undergraduates.",
+    "how_to_apply": "The School of International Education announces the process, usually February to June.",
+    "deadline": null,
+    "source_url": "https://sie.stu.edu.cn/upload/file/20260413/6391167738893235215371326.pdf"
+   }
+  ],
+  "sichuan-university": [
+   {
+    "slug": "sichuan-university-study-at-scu-outstanding-student-scholarship",
+    "name": "Study at SCU Outstanding Student Scholarship",
+    "type": "University",
+    "coverage": "Undergraduate partial award; master's and doctoral full award with allowance",
+    "description": "Undergraduate up to 20,000 RMB a year. Master's and doctoral awards cover tuition, a housing subsidy, medical insurance and living expenses (up to 2,000 and 3,000 RMB a month). Clinical Medicine and Stomatology are excluded.",
+    "eligibility": "Non-Chinese with a valid passport and good health; undergraduates about 18 to 22, master's under 30, doctoral under 35. Cannot be combined with Chinese government or other domestic funding; annual review applies.",
+    "how_to_apply": "Apply through the SCU International Student Application System; the Scholarship Review Committee selects within limited places.",
+    "deadline": null,
+    "source_url": "https://global.scu.edu.cn/oso/article/details/9dfcd5bf-f620-402f-97a1-54caa31312e5"
+   }
+  ],
+  "soochow-university": [
+   {
+    "slug": "soochow-university-soochow-university-scholarship",
+    "name": "Soochow University Scholarship",
+    "type": "University",
+    "coverage": "Full (with 3,000 or 3,500 RMB stipend) or partial (without stipend)",
+    "description": "Full award: registration fee, tuition, housing, medical insurance and a monthly stipend (3,000 RMB for master's, 3,500 for doctoral). Partial award: the same without the stipend. Runs for the admitted study period.",
+    "eligibility": "Master's and doctoral applicants under 35 and 40; HSK 5 for Chinese-taught programs or the English requirement for English-taught ones; annual review applies.",
+    "how_to_apply": "Choose 'Soochow University Scholarship' in the International Student Service System and complete the online application.",
+    "deadline": null,
+    "source_url": "http://apply.international.suda.edu.cn/apply_en/28038/list.htm"
+   }
+  ],
+  "southeast-university": [
+   {
+    "slug": "southeast-university-southeast-university-scholarship-new-students",
+    "name": "Southeast University Scholarship (new students)",
+    "type": "University",
+    "coverage": "From part-tuition waivers up to full tuition plus 3,500 RMB a month",
+    "description": "The scholarships page says awards range from full tuition plus a monthly allowance down to partial tuition waivers, without saying which tier applies.",
+    "eligibility": "HSK 4 (200+) for Chinese-taught programs (HSK 5 for medical, humanities and economics/management); TOEFL 80 / IELTS 6.0 for English-taught programs; two recommendation letters and an 800-word research proposal.",
+    "how_to_apply": "Apply on the university's application site and select the Southeast University Scholarship program.",
+    "deadline": null,
+    "source_url": "https://cis.seu.edu.cn/hwenglish/14010/list.htm"
+   }
+  ],
+  "tongji-university": [
+   {
+    "slug": "tongji-university-tongji-university-international-student-excellence-scholarship",
+    "name": "Tongji University International Student Excellence Scholarship",
+    "type": "University",
+    "coverage": "Full tuition waiver and insurance; doctoral allowance 5,000 RMB a month",
+    "description": "For high-level doctoral students, partner-university exchange students and English-taught undergraduates. Doctoral awards add housing or a 3,000 RMB off-campus subsidy, a 5,000 RMB monthly allowance and a 12,000 RMB graduation travel grant. Undergraduates receive 2,500 RMB a month.",
+    "eligibility": "Non-Chinese in good health. Undergraduates 18 to 25, doctoral and exchange students up to 40. Doctoral applicants need a master's degree, a strong research record and a supervisor's acceptance. HSK 5 for Chinese-taught, TOEFL 85 or IELTS 6.5 for English-taught programs. No other Chinese government scholarship.",
+    "how_to_apply": "Apply online through the university's international admission system and upload the documents; selection is mainly by documents, with possible interviews.",
+    "deadline": null,
+    "source_url": "https://study.tongji.edu.cn/__local/2/05/BF/E756DD2A359377BC9B5CE3375F0_9965AAB7_239CA.pdf"
+   },
+   {
+    "slug": "tongji-university-shanghai-municipal-government-scholarship-via-tongji",
+    "name": "Shanghai Municipal Government Scholarship (via Tongji)",
+    "type": "Municipal",
+    "coverage": "Category A: tuition, insurance, housing subsidy and a monthly allowance; Category B: tuition and insurance",
+    "description": "Category A allowance is 2,500 RMB a month for bachelor's, 3,000 for master's and 3,500 for doctoral students. Joint degree promotion programs and English-taught undergraduate programs are excluded.",
+    "eligibility": "Non-Chinese in good health; age limits 25 (bachelor's), 35 (master's), 40 (doctoral); no other scholarship.",
+    "how_to_apply": "Apply online and choose the Shanghai Government Scholarship program; a non-refundable 600 RMB fee applies. The fall 2027 window is December 2026 to March 2027.",
+    "deadline": null,
+    "source_url": "https://study.tongji.edu.cn/en/info/1049/1002.htm"
+   }
+  ],
+  "wenzhou-medical-university": [
+   {
+    "slug": "wenzhou-medical-university-wenzhou-medical-university-scholarship-postgraduate",
+    "name": "Wenzhou Medical University Scholarship (postgraduate)",
+    "type": "University",
+    "coverage": "Tuition waiver for three years; allowance of 2,500 to 3,000 RMB a month for doctoral",
+    "description": "Master's: tuition waived for three years. Doctoral: tuition waived plus 3,000 RMB a month. Combined master-doctoral: tuition waived for 2+3 years with 2,500 then 3,000 RMB a month. Housing and other costs are self-paid.",
+    "eligibility": "The page lists no criteria and points to the postgraduate admissions brochure.",
+    "how_to_apply": "Register and upload materials on the university's International Student Service Platform.",
+    "deadline": null,
+    "source_url": "https://sis.wmu.edu.cn/info/4729/25203.htm"
+   },
+   {
+    "slug": "wenzhou-medical-university-wenzhou-medical-university-mbbs-scholarships",
+    "name": "Wenzhou Medical University MBBS scholarships",
+    "type": "University",
+    "coverage": "Freshman awards of 5,000 to 20,000 RMB; yearly academic awards of 1,000 to 5,000 RMB",
+    "description": "A freshman entrance award in three tiers (20,000 / 10,000 / 5,000 RMB) by entrance-exam ranking, and yearly academic awards for MBBS years two to six (5,000 / 2,000 / 1,000 RMB), with a 20,000 RMB Zhejiang Government award on the same evaluation basis.",
+    "eligibility": "Freshmen are ranked by entrance results and must first pay full tuition; years two to six are assessed by yearly comprehensive evaluation.",
+    "how_to_apply": "No separate process is described; payment follows an official notice.",
+    "deadline": null,
+    "source_url": "https://sis.wmu.edu.cn/info/3739/35654.htm"
+   }
+  ],
+  "wuhan-university": [
+   {
+    "slug": "wuhan-university-wuhan-university-academic-freshman-scholarship",
+    "name": "Wuhan University Academic Freshman Scholarship",
+    "type": "University",
+    "coverage": "One-time award: bachelor's 4,000, master's 6,000, doctoral 8,000 RMB",
+    "description": "Paid after first-semester registration; up to 100 awards a year, about 80 bachelor's and 20 master's or doctoral. The list is published by 30 June.",
+    "eligibility": "Self-funded new degree students meeting admission and language requirements (HSK 4 or 5, or TOEFL 85 / IELTS 6.5). Excludes students funded by the Chinese or a foreign government, a Confucius Institute or a company.",
+    "how_to_apply": "Apply online and select a major, uploading passport, degrees, transcripts, language certificate, statement, recommendations, medical form, proof of funds and a police certificate. The window is 5 March to 20 May each year.",
+    "deadline": null,
+    "source_url": "https://admission.whu.edu.cn/info/1271/1671.htm"
+   },
+   {
+    "slug": "wuhan-university-wuhan-university-advanced-student-freshman-scholarship",
+    "name": "Wuhan University Advanced Student Freshman Scholarship",
+    "type": "University",
+    "coverage": "One-time award: 2,000 (one semester) or 4,000 RMB (one year)",
+    "description": "For self-funded first-year non-degree advanced students; up to 100 a year.",
+    "eligibility": "Meet admission and language requirements (HSK 4 for Chinese-taught, TOEFL 85 / IELTS 6.5 for English-taught). Excludes students funded by the Chinese government or another organisation.",
+    "how_to_apply": "Apply online with passport, language results, study plan, proof of funds, police certificate and medical form; the window runs 5 March to 30 May each year.",
+    "deadline": null,
+    "source_url": "https://admission.whu.edu.cn/info/1271/1661.htm"
+   }
+  ],
+  "xian-jiaotong-university": [
+   {
+    "slug": "xian-jiaotong-university-xjtu-siyuan-international-student-scholarship-postgraduate",
+    "name": "XJTU Siyuan International Student Scholarship (postgraduate)",
+    "type": "University",
+    "coverage": "Tuition waiver plus a monthly living allowance",
+    "description": "Housing and medical insurance are not included. Subject to annual review.",
+    "eligibility": "Non-Chinese with an ordinary passport and good health; master's applicants under 35, doctoral under 40; no other scholarship.",
+    "how_to_apply": "Apply online through the international student system, then pay the non-refundable 800 RMB fee after initial review.",
+    "deadline": null,
+    "source_url": "https://sie.xjtu.edu.cn/en/info/1224/2537.htm"
+   },
+   {
+    "slug": "xian-jiaotong-university-xjtu-international-undergraduate-freshman-scholarship",
+    "name": "XJTU International Undergraduate Freshman Scholarship",
+    "type": "University",
+    "coverage": "First-year tuition waiver from 100% down to 10% in five tiers",
+    "description": "Tiers are 100%, 75%, 50%, 25% and 10% of tuition. Later years are reviewed on academic performance.",
+    "eligibility": "Admitted to non-medical undergraduate programs.",
+    "how_to_apply": "Apply through the online system; an 800 RMB fee applies to scholarship applicants.",
+    "deadline": null,
+    "source_url": "https://sie.xjtu.edu.cn/en/info/1119/2943.htm"
+   },
+   {
+    "slug": "xian-jiaotong-university-xjtu-xi-an-city-government-belt-and-road-scholarship",
+    "name": "XJTU-Xi'an City Government Belt and Road Scholarship",
+    "type": "Municipal",
+    "coverage": "Bachelor's 15,000, master's 20,000, doctoral 25,000 RMB a year",
+    "description": "Master's and doctoral awards come with a full XJTU tuition waiver; non-degree stays of six months or more receive 1,000 RMB a month. Annual review applies.",
+    "eligibility": "Citizens of Belt and Road countries with HSK 4 or above. Age: bachelor's under 25, master's under 35, doctoral under 40, non-degree under 45. No other scholarship.",
+    "how_to_apply": "Apply online directly to the university.",
+    "deadline": null,
+    "source_url": "https://sie.xjtu.edu.cn/en/SCHOLARSHIPS1/XJTU_Xi_an_City_Government_Belt___Road_Scholarshi1.htm"
+   }
+  ],
+  "xiamen-university": [
+   {
+    "slug": "xiamen-university-xiamen-university-scholarship-for-new-international-students",
+    "name": "Xiamen University Scholarship for New International Students",
+    "type": "University",
+    "coverage": "First class: full tuition and allowance; second: full tuition; third: half tuition",
+    "description": "2027 intake. First-class allowance is 2,500 RMB a month for bachelor's, 3,000 for master's and 3,500 for doctoral students. Duration follows the program, with an annual review.",
+    "eligibility": "Already admitted to the university. Age on 1 September: bachelor's under 25, master's under 40, doctoral under 45. Selection weighs academic record, language, merit, research and supervisor comments.",
+    "how_to_apply": "Apply online and upload the signed scholarship form; no paper mailing. The window is 1 December 2026 to 30 April 2027.",
+    "deadline": "2027-04-30",
+    "source_url": "https://admissions.xmu.edu.cn/info/1061/3880.htm"
+   }
+  ],
+  "xuzhou-medical-university": [
+   {
+    "slug": "xuzhou-medical-university-xzmu-excellent-freshman-scholarship-undergraduate",
+    "name": "XZMU Excellent Freshman Scholarship (undergraduate)",
+    "type": "University",
+    "coverage": "All or part of first-year tuition",
+    "description": "MBBS awards of 33,000 / 16,500 / 8,250 RMB, nursing 30,000 / 25,000 / 20,000 and dental 18,000 / 13,000 / 8,000 RMB (from a 2023 notice, so amounts may have changed). Housing and registration fees are not covered.",
+    "eligibility": "Full-time undergraduate applicants with a high-school diploma, strong results and a valid foreign passport; competition winners preferred; no other scholarship at the same time.",
+    "how_to_apply": "Decided from the admission application; no separate application is needed.",
+    "deadline": null,
+    "source_url": "https://gjjyen.xzhmu.edu.cn/__local/D/35/E4/651AB329091BF9855E6059A11F1_F8A6A707_26780.pdf"
+   },
+   {
+    "slug": "xuzhou-medical-university-xzmu-principal-fund-scholarship-master-s-and-doctoral",
+    "name": "XZMU Principal Fund Scholarship (master's and doctoral)",
+    "type": "University",
+    "coverage": "100% tuition plus a monthly allowance of 1,000 to 2,500 RMB",
+    "description": "Covers the full tuition (36,000 RMB a year for master's, 40,000 for doctoral) plus an allowance of 1,000 or 1,500 RMB a month for master's and 2,500 for doctoral students. From the 2025 brochure; the university may change details.",
+    "eligibility": "All admitted master's and doctoral students are eligible.",
+    "how_to_apply": "No separate application is required.",
+    "deadline": null,
+    "source_url": "https://gjjyen.xzhmu.edu.cn/__local/2/11/E2/30A6D35FAD41F291453C71C23FB_747A4EB2_38453.pdf"
+   },
+   {
+    "slug": "xuzhou-medical-university-jiangsu-provincial-government-scholarship-via-xzmu",
+    "name": "Jiangsu Provincial Government Scholarship (via XZMU)",
+    "type": "Provincial",
+    "coverage": "Master's 70,000, doctoral 90,000 RMB a year; 30,000 for later-year students",
+    "description": "Awarded by the Jiangsu government; second-year and later awards of 30,000 RMB also depend on performance.",
+    "eligibility": "Decided by the Jiangsu government.",
+    "how_to_apply": "Apply twice: in the university's international student system and on the Jiangsu Government Scholarship website.",
+    "deadline": null,
+    "source_url": "https://gjjyen.xzhmu.edu.cn/__local/2/11/E2/30A6D35FAD41F291453C71C23FB_747A4EB2_38453.pdf"
+   }
+  ],
+  "yangzhou-university": [
+   {
+    "slug": "yangzhou-university-yangzhou-university-scholarship-master-s-and-doctoral",
+    "name": "Yangzhou University Scholarship (master's and doctoral)",
+    "type": "University",
+    "coverage": "Tuition and housing waiver plus a monthly living allowance",
+    "description": "Master's lasts the standard study period; doctoral the standard period plus one year. Annual review each May, with results in June.",
+    "eligibility": "Applicants to a master's degree aged 18 to under 35, or a doctoral degree aged 18 to under 40, with no similar scholarship in China.",
+    "how_to_apply": "Apply together with the admission application; results are posted in the international student service system.",
+    "deadline": null,
+    "source_url": "http://coe.yzu.edu.cn/en/info/1025/1008.htm"
+   }
+  ],
+  "zhejiang-university": [
+   {
+    "slug": "zhejiang-university-zhejiang-government-scholarship-new-international-postgraduates",
+    "name": "Zhejiang Government Scholarship (new international postgraduates)",
+    "type": "Provincial",
+    "coverage": "One-year award of 30,000 RMB",
+    "description": "Strong students may reapply; the award is lost on suspension or withdrawal.",
+    "eligibility": "Meet postgraduate admission requirements, show solid grades, and hold no other scholarship at the same time.",
+    "how_to_apply": "Apply in the online application system, uploading the scholarship form and a police certificate issued within six months; shortlisted candidates have a video interview.",
+    "deadline": null,
+    "source_url": "https://iczu.zju.edu.cn/admissionsen/2022/0530/c68995a2590722/page.htm"
+   },
+   {
+    "slug": "zhejiang-university-kuka-home-international-student-scholarship",
+    "name": "KUKA Home International Student Scholarship",
+    "type": "Corporate",
+    "coverage": "Awards of 15,000, 8,000 and 5,000 RMB for outstanding graduating students",
+    "description": "Six awards: one first prize, two second prizes and three third prizes.",
+    "eligibility": "Full-time international undergraduate and master's students about to graduate, with clean conduct and strong academics and activities.",
+    "how_to_apply": "Email the form, supporting documents and a personal statement of at least 300 words as one ZIP file to the university's student office.",
+    "deadline": null,
+    "source_url": "https://iczu.zju.edu.cn/iczuen/2026/0611/c63325a3177469/page.htm"
+   }
+  ]
+ }
+}
