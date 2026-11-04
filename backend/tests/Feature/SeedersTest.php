@@ -10,7 +10,9 @@ use App\Models\Scholarship;
 use App\Models\University;
 use App\Models\UniversityAgreement;
 use App\Models\User;
+use Database\Seeders\MbbsProgramGapSeeder;
 use Database\Seeders\MirrorPhotosSeeder;
+use Database\Seeders\MoeMbbsSeeder;
 use Database\Seeders\OfficialIntakeDatesSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
@@ -118,6 +120,8 @@ it('seeds only verified catalog data, each record carrying its official source',
     $this->seed(OfficialIntakeDatesSeeder::class);
     $this->seed(WikipediaProfileSeeder::class);
     $this->seed(MirrorPhotosSeeder::class);
+    $this->seed(MoeMbbsSeeder::class);
+    $this->seed(MbbsProgramGapSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });
