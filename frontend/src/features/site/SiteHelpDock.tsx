@@ -21,29 +21,32 @@ const brandQr = (data: string, color: string) =>
  * QR image can be dropped at public/images/wechat-qr.png; until it exists a code
  * carrying the WeChat ID is shown.
  */
-function QrTile({ kind, alt, caption }: { kind: "wechat" | "whatsapp"; alt: string; caption: string }) {
+function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: string; name: string; value: string }) {
   const [missing, setMissing] = useState(false)
   const own = kind === "wechat" && !missing
   const color = kind === "wechat" ? WECHAT_GREEN : GREEN
 
   return (
-    <figure className="flex w-[9.5rem] flex-col items-center gap-2">
-      <div className="relative size-[7.5rem]">
+    <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-slate-200 bg-slate-50 p-3">
+      <div className="relative size-28 rounded bg-white p-1.5 shadow-sm ring-1 ring-slate-200">
         <img
           src={own ? "/images/wechat-qr.png" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
           onError={() => kind === "wechat" && setMissing(true)}
           alt={alt}
-          className="size-full rounded object-contain"
+          className="size-full object-contain"
         />
         {!own && (
-          <span aria-hidden className="absolute top-1/2 left-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow">
-            <span className="flex size-6 items-center justify-center rounded-full text-white" style={{ backgroundColor: `#${color}` }}>
-              {kind === "wechat" ? <MessageCircle className="size-3.5" /> : <Phone className="size-3.5" />}
+          <span aria-hidden className="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md">
+            <span className="flex size-7 items-center justify-center rounded-full text-white" style={{ backgroundColor: `#${color}` }}>
+              {kind === "wechat" ? <MessageCircle className="size-4" /> : <Phone className="size-4" />}
             </span>
           </span>
         )}
       </div>
-      <figcaption className="text-center text-xs leading-snug text-muted-foreground">{caption}</figcaption>
+      <figcaption className="mt-2.5 text-center">
+        <span className="block text-xs font-semibold text-cas-navy">{name}</span>
+        <span className="mt-0.5 block text-[11px] whitespace-nowrap text-muted-foreground">{value}</span>
+      </figcaption>
     </figure>
   )
 }
@@ -106,13 +109,14 @@ export default function SiteHelpDock() {
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
-                <div className="absolute bottom-full left-0 z-50 hidden w-[24rem] pb-3 group-hover:block">
-                  <div className="relative rounded-sm bg-white p-4 text-left text-cas-navy shadow-2xl">
+                <div className="absolute bottom-full left-0 z-50 hidden w-[21.5rem] pb-3 group-hover:block">
+                  <div className="relative rounded-lg bg-white p-4 text-left text-cas-navy shadow-2xl ring-1 ring-black/5">
                     <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-white" />
-                    <p className="text-sm font-bold text-cas-navy">{t("helpDock.scanToChat")}</p>
-                    <div className="mt-3 flex items-start justify-between gap-4">
-                      <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} caption={`${t("helpDock.wechat")}: ${WECHAT_ID}`} />
-                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} caption={`${t("helpDock.whatsapp")}: ${PHONE_DISPLAY}`} />
+                    <p className="text-sm font-bold">{t("helpDock.scanToChat")}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{t("helpDock.freeGuidance")}</p>
+                    <div className="mt-3 flex items-stretch justify-between gap-3">
+                      <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} name={t("helpDock.wechat")} value={WECHAT_ID} />
+                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={PHONE_DISPLAY} />
                     </div>
                   </div>
                 </div>
