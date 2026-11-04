@@ -131,10 +131,10 @@ export default function SiteHome() {
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
       <section className="relative flex min-h-[calc(100svh/var(--site-zoom,1.1))] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-[position:52%_40%] sm:bg-[length:132%_auto] sm:bg-[position:0%_34%] sm:bg-no-repeat" style={{ backgroundImage: `url(${heroBg})` }} />
+          <div className="absolute inset-0 bg-cover bg-[position:center_24%]" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
               sky), darkening downward so the heading and search stay legible. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/60" />
           <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={DOT_GRID} />
         </div>
 
