@@ -79,7 +79,7 @@ function HeroLogo({ emblem, name }: { emblem?: string | null; name: string }) {
   const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")
 
   return emblem ? (
-    <img src={emblem} alt="" className="size-10 shrink-0 rounded-full object-cover" />
+    <img src={emblem} alt="" className="size-10 shrink-0 rounded-full bg-white object-cover ring-2 ring-white/80" />
   ) : (
     <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-xs font-bold text-white">{initials}</span>
   )
@@ -129,7 +129,7 @@ export default function SiteHome() {
   return (
     <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
-      <section className="site-bleed relative flex min-h-[92vh] flex-col text-white">
+      <section className="relative flex min-h-[calc(100svh/var(--site-zoom,1.1))] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
@@ -139,31 +139,22 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-28 pb-6 text-center">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-32 pb-2 text-center sm:pt-[8.5rem] [@media(max-height:680px)]:sm:pt-[7.5rem]">
           <div className="w-full max-w-5xl">
-            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-[4rem] md:leading-[1.05]">{t("home.hero.title")}</h1>
-            {featuredUnis[0] ? (
-              <Link
-                to={featuredUnis[0].slug ? `/site/universities/${featuredUnis[0].slug}` : "/site/programs?ref=featured"}
-                className="mx-auto mt-5 block max-w-full text-sm break-words text-white/90 underline-offset-4 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] hover:text-white hover:underline sm:max-w-2xl sm:text-base"
-              >
-                {t("home.hero.featuredUniPrograms", { name: featuredUnis[0].name })}
-              </Link>
-            ) : (
-              <p className="mx-auto mt-5 max-w-2xl text-sm text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-base">
-                {t("home.hero.moePrograms")}
-              </p>
-            )}
+            <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:leading-[1.05] [@media(min-height:700px)]:md:text-[3.5rem]">{t("home.hero.title")}</h1>
+            <p className="mx-auto mt-3 max-w-2xl text-sm font-medium tracking-wide text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-lg">
+              {t("home.hero.motto")}
+            </p>
 
             {/* Ranked featured universities + expander (reference's numbered cards) */}
             {featuredUnis.length > 0 && (
-              <div className="mt-7">
-                <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-4">
+                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                   {featuredUnis.slice(0, 3).map((u) => (
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                      className="group relative flex h-16 w-full items-center gap-2.5 overflow-hidden rounded-sm bg-white/5 px-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10 sm:w-52"
+                      className="group relative flex h-11 w-full items-center gap-2.5 sm:h-14 overflow-hidden rounded-md bg-black/30 px-3 pl-4 text-left ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-black/45 sm:w-52"
                     >
                       <HeroLogo emblem={u.emblem_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
@@ -177,29 +168,31 @@ export default function SiteHome() {
         </div>
 
         {/* Search bar — sits over the bottom of the full-screen image, fully visible */}
-        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-8">
-          <div className="rounded-lg bg-white p-5 shadow-2xl ring-1 ring-black/5 sm:p-7">
-            <p className="text-center text-sm font-semibold tracking-wide text-cas-navy">{t("home.search.label")}</p>
-            <form onSubmit={runSearch} className="mt-3 flex items-stretch gap-2">
-              <div className="relative flex-1">
-                <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-400" />
-                <input
-                  value={term}
-                  onChange={(e) => setTerm(e.target.value)}
-                  placeholder={t("home.search.placeholder")}
-                  aria-label={t("home.search.ariaSearchField")}
-                  className="h-12 w-full rounded-md border border-slate-300 bg-white pr-4 pl-12 text-base text-slate-900 caret-cas-red shadow-inner placeholder:text-slate-400 outline-none transition-colors focus:border-cas-red focus:ring-2 focus:ring-cas-red/20"
-                />
-              </div>
-              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-12 items-center gap-2 rounded-md bg-cas-red px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
+        <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-4">
+          <div>
+            <p className="text-center text-xs font-semibold tracking-[0.18em] text-white uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">{t("home.search.label")}</p>
+            <form
+              onSubmit={runSearch}
+              role="search"
+              className="mt-2.5 flex items-center gap-1 rounded-full bg-white p-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)] ring-1 ring-white/60 transition-shadow focus-within:ring-2 focus-within:ring-cas-red/70"
+            >
+              <Search className="pointer-events-none ml-4 size-5 shrink-0 text-cas-navy/60" />
+              <input
+                value={term}
+                onChange={(e) => setTerm(e.target.value)}
+                placeholder={t("home.search.placeholder")}
+                aria-label={t("home.search.ariaSearchField")}
+                className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-ellipsis text-slate-900 caret-cas-red outline-none placeholder:text-slate-400 sm:text-base"
+              />
+              <button type="submit" aria-label={t("home.search.ariaSearchButton")} className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-cas-red px-6 text-sm font-semibold text-white transition-colors hover:bg-cas-red-600 focus-visible:ring-2 focus-visible:ring-cas-red/40 focus-visible:outline-none">
                 <span className="hidden sm:inline">{t("home.search.button")}</span>
-                <Search className="size-5 sm:hidden" />
+                <ArrowRight className="size-4" />
               </button>
             </form>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-              <span className="text-xs text-slate-500">{t("home.search.popular")}</span>
-              {POPULAR_SEARCHES.map(([labelKey, to]) => (
-                <Link key={labelKey} to={to} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-cas-red/40 hover:bg-cas-red-50 hover:text-cas-red-600">
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-white/80 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">{t("home.search.popular")}</span>
+              {POPULAR_SEARCHES.map(([labelKey, to], i) => (
+                <Link key={labelKey} to={to} className={`rounded-full border border-white/30 bg-black/30 px-3 py-1 text-xs ${i > 2 ? "hidden sm:inline-block" : ""} font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20`}>
                   {t(labelKey)}
                 </Link>
               ))}
@@ -208,6 +201,7 @@ export default function SiteHome() {
         </div>
       </section>
 
+      <div className="mx-auto w-full max-w-7xl space-y-16 px-4 sm:space-y-24 sm:px-6">
       {/* ── Weekly Programs spotlight ────────────────────────── */}
       <section>
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
@@ -266,9 +260,10 @@ export default function SiteHome() {
           ))}
         </div>
       </SiteSection>
+      </div>
 
       {/* ── Outstanding Programs (dark band) ─────────────────── */}
-      <section className="site-bleed bg-cas-navy-900 px-4 py-16 text-white sm:py-24">
+      <section className="bg-cas-navy-900 px-4 py-16 text-white sm:py-24">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 text-center">
             <h2 className="text-2xl font-bold sm:text-[2rem]">{t("home.outstanding.title")}</h2>
@@ -296,6 +291,7 @@ export default function SiteHome() {
         </div>
       </section>
 
+      <div className="mx-auto w-full max-w-7xl space-y-16 px-4 sm:space-y-24 sm:px-6">
       {/* ── Featured Content (tabbed) ────────────────────────── */}
       <SiteSection title={t("home.featured.title")}>
         <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
@@ -360,6 +356,7 @@ export default function SiteHome() {
           <Link to="/site/contact?topic=consultation" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-bold text-white hover:bg-cas-red-600"><MessageCircle className="size-4" /> {t("home.cta.freeConsultation")}</Link>
         </div>
       </section>
+      </div>
     </div>
   )
 }

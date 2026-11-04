@@ -69,14 +69,14 @@ export default function HeroUpdates({ universities, programs }: { universities: 
   const lastApp = fmtDate(Date.now() + 60 * 86_400_000)
 
   return (
-    <div className="relative mt-4">
+    <div className="relative mt-3">
       <div className="flex justify-center">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? t("heroUpdates.hideUpdates") : t("heroUpdates.showUpdates")}
-          className="flex size-9 items-center justify-center rounded-full border border-white/40 bg-black/20 text-white/80 backdrop-blur transition-colors hover:border-cas-red hover:text-cas-red"
+          className="flex size-8 items-center justify-center rounded-full border border-white/40 bg-black/20 text-white/80 backdrop-blur transition-colors hover:border-cas-red hover:text-cas-red"
         >
           {open ? <X className="size-5" /> : <Plus className="size-5" />}
         </button>
@@ -84,7 +84,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
 
       {/* Floating popup — overlays the hero (does not push it down), like the reference. */}
       {open && (
-        <div className="absolute top-full left-1/2 z-30 mt-3 w-[calc(100vw-2rem)] max-w-4xl -translate-x-1/2 overflow-hidden rounded-sm border border-white/10 bg-[#1a1733]/95 text-left shadow-2xl backdrop-blur">
+        <div className="absolute top-full left-1/2 z-30 mt-3 w-[min(56rem,calc((100vw-2rem)/var(--site-zoom,1.1)))] -translate-x-1/2 overflow-hidden rounded-sm border border-white/10 bg-[#1a1733]/95 text-left shadow-2xl backdrop-blur">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-white/10 px-4 py-3">
             {TABS.map((item) => (
               <button

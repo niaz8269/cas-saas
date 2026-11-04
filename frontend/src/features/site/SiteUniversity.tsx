@@ -98,10 +98,10 @@ export default function SiteUniversity() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
           {cover && <PhotoMark link />}
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex items-start gap-4">
-              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="relative z-10 -mt-14 size-20 shrink-0 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
+            <div className="flex items-start gap-3 sm:gap-4">
+              {u.logo_url && <img src={u.logo_url} alt={t("university.logoAlt", { name: u.name })} className="relative z-10 -mt-10 size-16 shrink-0 sm:-mt-14 sm:size-20 rounded-sm border-2 border-card bg-white object-contain p-1 shadow-lg" />}
               <div>
                 <h1 className="text-2xl font-bold text-cas-navy sm:text-3xl">{u.name}</h1>
                 {u.name_zh && <p className="mt-0.5 text-lg text-muted-foreground">{u.name_zh}</p>}

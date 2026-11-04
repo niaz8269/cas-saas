@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
@@ -163,7 +163,7 @@ export default function SiteLayout() {
   const { t, i18n } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
-  const isHome = pathname === "/site"
+  const isHome = pathname === "/" || pathname === "/site"
 
   // Signed-in portal visitors get an "Apply now" CTA straight to their apply
   // flow instead of the sign-in button.
@@ -183,8 +183,28 @@ export default function SiteLayout() {
   }, [])
   const solid = !isHome || scrolled
 
+  // Scale the whole public site with the screen, so the design looks the same
+  // from a phone to a 32-inch monitor and wide screens have no empty margins:
+  // 1x on phones and tablets, 1.1x up to a 1440px laptop, then in proportion
+  // to the width (the layout stays ~1310 CSS px wide). Published as --site-zoom
+  // for CSS that needs it (viewport units are scaled by zoom as well).
+  useLayoutEffect(() => {
+    const apply = () => {
+      const w = document.documentElement.clientWidth
+      const zoom = w < 1024 ? 1 : Math.min(3, Math.max(1.1, w / 1310))
+      document.documentElement.style.setProperty("--site-zoom", zoom.toFixed(3))
+    }
+    apply()
+    window.addEventListener("resize", apply)
+
+    return () => {
+      window.removeEventListener("resize", apply)
+      document.documentElement.style.removeProperty("--site-zoom")
+    }
+  }, [])
+
   return (
-    <div dir={langDef(i18n.language).dir} className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-14">
+    <div dir={langDef(i18n.language).dir} className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-11">
       <ScrollToTop />
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
@@ -195,7 +215,10 @@ export default function SiteLayout() {
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
               <div className="flex items-center gap-3">
                 <span className="hidden text-cas-navy/75 sm:inline">{t("header.promoFreeApplyText")}</span>
-                <Link to="/site/universities?topic=deadlines" className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" className="hidden rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700 sm:inline-block">{t("header.learnMore")}</Link>
+                <Link to="/site/universities?topic=deadlines" className="inline-flex items-center gap-1 font-medium text-cas-navy sm:hidden">
+                  {t("header.promoMobile")} <ArrowRight className="size-3.5" />
+                </Link>
               </div>
               <div className="hidden items-center gap-3 md:flex">
                 <span className="text-cas-navy/75">{t("header.promoScholarshipsText")}</span>
@@ -262,7 +285,7 @@ export default function SiteLayout() {
         </div>
       </header>
 
-      <main className={cn("mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6", isHome ? "pb-8" : "pt-28 pb-8")}>
+      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-28 pb-8 sm:px-6")}>
         <Outlet />
       </main>
 

@@ -28,6 +28,7 @@
     "promoFreeApplyText": "Browse universities and admission dates on CAS",
     "promoScholarshipsText": "See scholarships and their application windows",
     "learnMore": "Learn More",
+    "promoMobile": "Browse universities and admission dates",
     "signIn": "SIGN IN",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
@@ -655,7 +656,7 @@
     "officeList": {
       "headOffice": {
         "city": "Head Office",
-        "detail": "Beijing, China"
+        "detail": "Dalian, China"
       },
       "islamabad": {
         "city": "Islamabad",
@@ -936,6 +937,7 @@
     "counsellorJayla": "Jayla",
     "counsellorJoe": "Joe",
     "wechatLabel": "WeChat:",
+    "scanToChat": "Scan to chat",
     "whatsappTelLabel": "WhatsApp/Tel:",
     "wechatQrAlt": "WeChat QR code",
     "wechat": "WeChat",
@@ -1035,11 +1037,12 @@
     },
     "hero": {
       "title": "Study in China",
+      "motto": "Your trusted path to China’s universities, since 2012",
       "featuredUniPrograms": "{{name}} : English-taught Programs",
       "moePrograms": "Ministry of Education–listed universities : English-taught Programs"
     },
     "search": {
-      "placeholder": "ENTER THE NAME OF A UNIVERSITY OR A PROGRAM",
+      "placeholder": "Search a university, city or program",
       "ariaSearchField": "Search universities or programs",
       "ariaSearchButton": "Search",
       "label": "Find your university or program",

@@ -9,8 +9,47 @@ import { cn } from "@/lib/utils"
 // CAS's own channels (mirrors the footer) — never the reference's.
 const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnquiry: EMAIL, wechat: WECHAT_ID } = CONTACT
 
-// Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
-const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
+const GREEN = "25D366"
+const WECHAT_GREEN = "07C160"
+
+// Brand-coloured QR with a logo badge in the middle (error correction H keeps it scannable).
+const brandQr = (data: string, color: string) =>
+  `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&ecc=H&color=${color}&data=${encodeURIComponent(data)}`
+
+/**
+ * A scannable contact tile: QR code, logo badge and a caption. CAS's own WeChat
+ * QR image can be dropped at public/images/wechat-qr.jpg; until it exists a code
+ * carrying the WeChat ID is shown.
+ */
+function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: string; name: string; value: string }) {
+  const [missing, setMissing] = useState(false)
+  const own = kind === "wechat" && !missing
+  const color = kind === "wechat" ? WECHAT_GREEN : GREEN
+
+  return (
+    <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-white/70 bg-white/50 p-3 shadow-sm">
+      <div className="relative size-28 rounded-md bg-white p-1.5 shadow-md ring-1 ring-cas-navy/10">
+        <img
+          src={own ? "/images/wechat-qr.jpg" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
+          onError={() => kind === "wechat" && setMissing(true)}
+          alt={alt}
+          className="size-full object-contain"
+        />
+        {!own && (
+          <span aria-hidden className="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md">
+            <span className="flex size-7 items-center justify-center rounded-full text-white" style={{ backgroundColor: `#${color}` }}>
+              {kind === "wechat" ? <MessageCircle className="size-4" /> : <Phone className="size-4" />}
+            </span>
+          </span>
+        )}
+      </div>
+      <figcaption className="mt-2.5 text-center">
+        <span className="block text-xs font-semibold text-cas-navy">{name}</span>
+        <span className="mt-0.5 block text-[11px] whitespace-nowrap text-cas-navy/65">{value}</span>
+      </figcaption>
+    </figure>
+  )
+}
 
 // The single contact entry in the help bar (CAS admissions — no staff photos).
 const CONTACTS = [{ nameKey: "helpDock.talkToCounsellor" }]
@@ -47,7 +86,7 @@ export default function SiteHelpDock() {
 
   const barVisible = pastHero || manualOpen
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
-  const Divider = () => <span className="h-9 w-px border-l border-dashed border-white/25" />
+  const Divider = () => <span className="h-6 w-px border-l border-dashed border-white/25" />
 
   return (
     <>
@@ -58,37 +97,26 @@ export default function SiteHelpDock() {
           barVisible ? "translate-y-0" : "translate-y-full",
         )}
       >
-        <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-2">
-          <span className="text-sm leading-tight font-bold tracking-wide text-cas-red uppercase">{t("helpDock.hereToHelpLine1")}<br />{t("helpDock.hereToHelpLine2")}</span>
+        <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-1">
+          <span className="text-[11px] leading-tight font-bold tracking-wide text-cas-red uppercase">{t("helpDock.hereToHelpLine1")}<br />{t("helpDock.hereToHelpLine2")}</span>
           <Divider />
           <div className="flex items-center gap-5">
             {CONTACTS.map((c) => (
-              <div key={c.nameKey} className="group relative flex cursor-pointer flex-col items-center gap-1">
-                <span className="flex size-10 items-center justify-center rounded-full bg-white/10 ring-2 ring-cas-red/80"><MessageCircle className="size-5" /></span>
-                <span className="text-[11px] text-white/80">{t(c.nameKey)}</span>
+              <div key={c.nameKey} className="group relative flex cursor-pointer flex-col items-center">
+                <span className="flex size-7 items-center justify-center rounded-full bg-white/10 ring-2 ring-cas-red/80"><MessageCircle className="size-3.5" /></span>
+                <span className="text-[10px] leading-tight text-white/80">{t(c.nameKey)}</span>
 
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
-                <div className="absolute bottom-full left-1/2 z-50 hidden w-[24rem] -translate-x-1/2 pb-3 group-hover:block">
-                  <div className="relative rounded-sm bg-white p-4 text-left text-cas-navy shadow-2xl">
-                    <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
-                    <div className="flex items-start gap-4">
-                      <div className="flex shrink-0 flex-col items-center gap-1.5">
-                        <span className="flex size-14 items-center justify-center rounded-full bg-cas-navy/10 ring-2 ring-cas-red/70"><MessageCircle className="size-6" /></span>
-                        <span className="text-sm font-semibold text-cas-red-600">{t(c.nameKey)}</span>
-                      </div>
-                      <div className="space-y-2.5 text-sm leading-tight">
-                        <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{WECHAT_ID}</p></div>
-                        <div>
-                          <p className="font-semibold">{t("helpDock.whatsappTelLabel")}</p>
-                          <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
-                        </div>
-                      </div>
-                      <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
-                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
-                        <span className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</span>
-                      </div>
+                <div className="absolute bottom-full left-0 z-50 hidden w-[21.5rem] pb-3 group-hover:block">
+                  <div className="relative rounded-lg bg-white/75 p-4 text-left text-cas-navy shadow-2xl ring-1 ring-white/70 backdrop-blur-xl backdrop-saturate-150">
+                    <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-white/75 backdrop-blur-xl" />
+                    <p className="text-sm font-bold">{t("helpDock.scanToChat")}</p>
+                    <p className="mt-0.5 text-xs text-cas-navy/70">{t("helpDock.freeGuidance")}</p>
+                    <div className="mt-3 flex items-stretch justify-between gap-3">
+                      <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} name={t("helpDock.wechat")} value={WECHAT_ID} />
+                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={PHONE_DISPLAY} />
                     </div>
                   </div>
                 </div>
@@ -96,18 +124,18 @@ export default function SiteHelpDock() {
             ))}
           </div>
 
-          <div className="ml-auto flex items-center gap-5">
-            <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
-              <CalendarDays className="size-5" /> {t("helpDock.customPlan")}
+          <div className="ml-auto flex items-center gap-4">
+            <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-xs text-white/90 transition-colors hover:text-cas-red">
+              <CalendarDays className="size-4" /> {t("helpDock.customPlan")}
             </Link>
             <Divider />
-            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-sm text-white/90 transition-colors hover:text-cas-red">
-              <span className="flex size-6 items-center justify-center rounded-full border border-white/50"><MoreHorizontal className="size-3.5" /></span>
+            <button type="button" onClick={() => setMsgOpen((v) => !v)} className="flex items-center gap-2 text-xs text-white/90 transition-colors hover:text-cas-red">
+              <span className="flex size-5 items-center justify-center rounded-full border border-white/50"><MoreHorizontal className="size-3" /></span>
               {t("helpDock.leaveMessage")}
             </button>
             <Divider />
-            <button type="button" aria-label={t("helpDock.backToTop")} onClick={toTop} className="flex size-9 items-center justify-center border border-white/40 transition-colors hover:bg-white/10">
-              <ArrowUp className="size-5" />
+            <button type="button" aria-label={t("helpDock.backToTop")} onClick={toTop} className="flex size-7 items-center justify-center border border-white/40 transition-colors hover:bg-white/10">
+              <ArrowUp className="size-4" />
             </button>
           </div>
         </div>
@@ -163,10 +191,10 @@ export default function SiteHelpDock() {
         type="button"
         aria-label={msgOpen ? t("helpDock.close") : t("helpDock.leaveAMessage")}
         onClick={() => setMsgOpen((v) => !v)}
-        className="fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-cas-navy py-3.5 pr-4 pl-3.5 text-white shadow-lg transition-transform hover:scale-[1.03] lg:hidden"
+        className="fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-cas-navy p-3.5 text-white shadow-lg transition-transform hover:scale-[1.03] sm:py-3.5 sm:pr-4 sm:pl-3.5 lg:hidden"
       >
         {msgOpen ? <X className="size-6" /> : <MessageCircle className="size-6" />}
-        <span className="text-sm font-semibold">{msgOpen ? t("helpDock.close") : t("helpDock.message")}</span>
+        <span className="hidden text-sm font-semibold sm:inline">{msgOpen ? t("helpDock.close") : t("helpDock.message")}</span>
       </button>
     </>
   )
