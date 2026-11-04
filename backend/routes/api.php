@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\StudentAuthController;
 use App\Http\Controllers\Api\V1\Portal\StudentDocumentController;
 use App\Http\Controllers\Api\V1\Portal\StudentFeeReceiptController;
+use App\Http\Controllers\Api\V1\Portal\StudentMessageController;
 use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -168,6 +169,8 @@ Route::prefix('v1')->group(function () {
             Route::post('applications/{application}/submit', [StudentApplicationController::class, 'submit']);
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
+            // A message to the CAS team (lands on the student's communications timeline).
+            Route::post('messages', [StudentMessageController::class, 'store'])->middleware('throttle:10,1');
             Route::get('invoices', [StudentPortalController::class, 'invoices']);
 
             // One-time scholarship processing fee: what is owed, and the

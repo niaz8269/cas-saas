@@ -43,6 +43,7 @@ const StudentApplyWizard = lazy(() => import("@/features/portal/student/StudentA
 const StudentScholarshipWizard = lazy(() => import("@/features/portal/student/StudentScholarshipWizard"))
 const StudentApplications = lazy(() => import("@/features/portal/student/StudentApplications"))
 const StudentVisa = lazy(() => import("@/features/portal/student/StudentVisa"))
+const StudentContact = lazy(() => import("@/features/portal/student/StudentContact"))
 const StudentInvoices = lazy(() => import("@/features/portal/student/StudentInvoices"))
 const StudentDocuments = lazy(() => import("@/features/portal/student/StudentDocuments"))
 import SiteLayout from "@/features/site/SiteLayout"
@@ -145,6 +146,7 @@ const router = createBrowserRouter([
           { path: "/portal/student/apply-scholarship", element: <StudentScholarshipWizard /> },
           { path: "/portal/student/applications", element: <StudentApplications /> },
           { path: "/portal/student/visa", element: <StudentVisa /> },
+          { path: "/portal/student/contact", element: <StudentContact /> },
           { path: "/portal/student/invoices", element: <StudentInvoices /> },
           { path: "/portal/student/documents", element: <StudentDocuments /> },
         ],

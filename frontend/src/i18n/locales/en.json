@@ -1298,7 +1298,9 @@
       "applications": "Applications",
       "outstandingFees": "Outstanding fees",
       "visaStatus": "Visa status",
-      "uploadDocs": "Upload docs"
+      "uploadDocs": "Upload docs",
+      "contactCas": "Contact CAS",
+      "contactHint": "WhatsApp, WeChat, email or a message"
     },
     "applications": {
       "title": "My applications",
@@ -1345,6 +1347,26 @@
       "milestoneTravelReady": "Travel ready",
       "documentChecklist": "Document checklist",
       "optionalSuffix": " (optional)"
+    },
+    "contact": {
+      "title": "Contact CAS",
+      "subtitle": "Reach your CAS team in the way that suits you",
+      "whatsapp": "WhatsApp",
+      "whatsappText": "Hello CAS, I need help with my application ({{code}}).",
+      "email": "Email",
+      "emailSubject": "Question about my application {{code}}",
+      "wechat": "WeChat",
+      "wechatQrAlt": "CAS WeChat QR code",
+      "copyId": "Copy ID",
+      "copied": "Copied",
+      "messageTitle": "Send us a message",
+      "messageHint": "Your counselor sees it in your file and replies here or by your preferred channel.",
+      "messageLabel": "Your message",
+      "messagePlaceholder": "Tell us how we can help",
+      "send": "Send message",
+      "sending": "Sending…",
+      "sent": "Message sent. The CAS team will get back to you soon.",
+      "sendFailed": "We could not send your message. Please try again or use WhatsApp."
     }
   },
   "agentPortal": {

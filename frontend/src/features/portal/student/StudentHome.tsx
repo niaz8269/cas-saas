@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Award, Plane, Plus, Upload } from "lucide-react"
+import { Award, LifeBuoy, Plane, Plus, Upload } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
@@ -43,6 +43,12 @@ export default function StudentHome() {
           icon={Award}
           title={t("studentPortal.home.applyScholarship")}
           hint={t("studentPortal.home.scholarshipHint")}
+        />
+        <ActionCard
+          to="/portal/student/contact"
+          icon={LifeBuoy}
+          title={t("studentPortal.home.contactCas")}
+          hint={t("studentPortal.home.contactHint")}
         />
         <ActionCard
           to="/portal/student/documents"
