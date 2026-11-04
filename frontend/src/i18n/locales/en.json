@@ -1325,13 +1325,14 @@
     },
     "invoices": {
       "title": "Fees & receipts",
-      "subtitle": "Your tuition invoices and payments",
+      "subtitle": "Your fee vouchers, invoices and payments",
       "emptyTitle": "No invoices yet",
       "paid": "Paid",
       "outstanding": "Outstanding",
       "receipts": "Receipts",
       "preparing": "Preparing…",
-      "downloadPdf": "Download PDF"
+      "downloadPdf": "Download invoice",
+      "feeVoucher": "Fee voucher"
     },
     "visa": {
       "title": "Visa",

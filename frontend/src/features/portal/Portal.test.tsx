@@ -294,7 +294,40 @@ it("downloads a student invoice as a brokered PDF", async () => {
 
   renderWithProviders(<StudentInvoices />)
 
-  await user.click(await screen.findByRole("button", { name: /Download PDF/ }))
+  await user.click(await screen.findByRole("button", { name: /Download invoice/ }))
 
   await waitFor(() => expect(openSpy).toHaveBeenCalledWith("blob:mock-invoice", "_blank", "noopener"))
+})
+
+it("offers the fee voucher for an invoice that still has a balance", async () => {
+  usePortalAuthStore.setState({
+    token: "t", kind: "student",
+    profile: { id: 5, name: "Ali Khan", email: null, status: "arrived", code: "STU-2026-00005" },
+  })
+  const user = userEvent.setup()
+  const openSpy = vi.fn()
+  vi.stubGlobal("open", openSpy)
+  URL.createObjectURL = vi.fn(() => "blob:mock-voucher")
+  URL.revokeObjectURL = vi.fn()
+
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    if (String(input).includes("/voucher")) {
+      return Promise.resolve(new Response(new Blob(["%PDF-1.4 test"], { type: "application/pdf" })))
+    }
+    return Promise.resolve(jsonResponse({
+      data: [{
+        id: 9, invoice_no: "INV-2026-09001", currency: "CNY",
+        subtotal: "8000", tax: "0", total: "8000", amount_paid: "0",
+        status: "issued", issued_at: null, due_at: null, items: [], receipts: [],
+      }],
+    }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<StudentInvoices />)
+
+  await user.click(await screen.findByRole("button", { name: /Fee voucher/ }))
+
+  await waitFor(() => expect(openSpy).toHaveBeenCalledWith("blob:mock-voucher", "_blank", "noopener"))
+  expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/student/invoices/9/voucher"))).toBe(true)
 })

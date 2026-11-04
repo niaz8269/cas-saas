@@ -140,7 +140,7 @@
                     </span>
                 </td>
                 <td class="doc">
-                    <div class="kind">INVOICE</div>
+                    <div class="kind">{{ ($voucher ?? false) ? 'FEE VOUCHER' : 'INVOICE' }}</div>
                     <div class="no">{{ $invoice->invoice_no }}</div>
                 </td>
             </tr>
@@ -208,6 +208,25 @@
                 </table>
             </td></tr>
         </table>
+
+        @if ($voucher ?? false)
+            <div class="payments">
+                <h4>Confirmed with the CAS team</h4>
+                <div class="prow">
+                    These are the fees and service charges the CAS team has confirmed with you.
+                    Please do not pay any other amount.
+                </div>
+                <h4 style="margin-top: 18px;">How to pay</h4>
+                <div class="prow">
+                    @if (! empty($paymentInstructions))
+                        {!! nl2br(e($paymentInstructions)) !!}
+                        <br>Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference, then upload your receipt in the student portal.
+                    @else
+                        Payment details are shared by your CAS counselor. Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference, then upload your receipt in the student portal.
+                    @endif
+                </div>
+            </div>
+        @endif
 
         @if ($invoice->payments->isNotEmpty())
             <div class="payments">

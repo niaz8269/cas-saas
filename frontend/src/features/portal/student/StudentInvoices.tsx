@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { Download, Receipt } from "lucide-react"
+import { Download, FileText, Receipt } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
-import { getStudentInvoicePdf, getStudentInvoices } from "@/features/portal/api"
+import { getStudentInvoicePdf, getStudentInvoiceVoucher, getStudentInvoices } from "@/features/portal/api"
 import {
   EmptyState,
   ListSkeleton,
@@ -21,14 +21,14 @@ export default function StudentInvoices() {
     queryFn: getStudentInvoices,
   })
 
-  const pdf = useMutation({
-    mutationFn: (id: number) => getStudentInvoicePdf(id),
-    onSuccess: (blob) => {
-      const url = URL.createObjectURL(blob)
-      window.open(url, "_blank", "noopener")
-      setTimeout(() => URL.revokeObjectURL(url), 60_000)
-    },
-  })
+  const open = (blob: Blob) => {
+    const url = URL.createObjectURL(blob)
+    window.open(url, "_blank", "noopener")
+    setTimeout(() => URL.revokeObjectURL(url), 60_000)
+  }
+
+  const pdf = useMutation({ mutationFn: (id: number) => getStudentInvoicePdf(id), onSuccess: open })
+  const voucher = useMutation({ mutationFn: (id: number) => getStudentInvoiceVoucher(id), onSuccess: open })
 
   return (
     <div>
@@ -78,6 +78,18 @@ export default function StudentInvoices() {
                     </div>
                   ))}
                 </div>
+              )}
+
+              {outstanding > 0 && (
+                <Button
+                  type="button"
+                  className="mt-3 h-10 w-full"
+                  disabled={voucher.isPending && voucher.variables === inv.id}
+                  onClick={() => voucher.mutate(inv.id)}
+                >
+                  <FileText className="size-4" />
+                  {voucher.isPending && voucher.variables === inv.id ? t("studentPortal.invoices.preparing") : t("studentPortal.invoices.feeVoucher")}
+                </Button>
               )}
 
               <Button
