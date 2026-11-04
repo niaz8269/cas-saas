@@ -84,7 +84,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
 
       {/* Floating popup — overlays the hero (does not push it down), like the reference. */}
       {open && (
-        <div className="absolute top-full left-1/2 z-30 mt-3 w-[calc(100vw-2rem)] max-w-4xl -translate-x-1/2 overflow-hidden rounded-sm border border-white/10 bg-[#1a1733]/95 text-left shadow-2xl backdrop-blur">
+        <div className="absolute top-full left-1/2 z-30 mt-3 w-[min(56rem,calc((100vw-2rem)/var(--site-zoom,1.1)))] -translate-x-1/2 overflow-hidden rounded-sm border border-white/10 bg-[#1a1733]/95 text-left shadow-2xl backdrop-blur">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-white/10 px-4 py-3">
             {TABS.map((item) => (
               <button

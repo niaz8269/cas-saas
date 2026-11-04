@@ -163,10 +163,10 @@ export default function SiteHelpDock() {
         type="button"
         aria-label={msgOpen ? t("helpDock.close") : t("helpDock.leaveAMessage")}
         onClick={() => setMsgOpen((v) => !v)}
-        className="fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-cas-navy py-3.5 pr-4 pl-3.5 text-white shadow-lg transition-transform hover:scale-[1.03] lg:hidden"
+        className="fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-cas-navy p-3.5 text-white shadow-lg transition-transform hover:scale-[1.03] sm:py-3.5 sm:pr-4 sm:pl-3.5 lg:hidden"
       >
         {msgOpen ? <X className="size-6" /> : <MessageCircle className="size-6" />}
-        <span className="text-sm font-semibold">{msgOpen ? t("helpDock.close") : t("helpDock.message")}</span>
+        <span className="hidden text-sm font-semibold sm:inline">{msgOpen ? t("helpDock.close") : t("helpDock.message")}</span>
       </button>
     </>
   )

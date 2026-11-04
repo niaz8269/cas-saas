@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
@@ -182,6 +182,26 @@ export default function SiteLayout() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
   const solid = !isHome || scrolled
+
+  // Scale the whole public site with the screen, so the design looks the same
+  // from a phone to a 32-inch monitor and wide screens have no empty margins:
+  // 1x on phones and tablets, 1.1x up to a 1440px laptop, then in proportion
+  // to the width (the layout stays ~1310 CSS px wide). Published as --site-zoom
+  // for CSS that needs it (viewport units are scaled by zoom as well).
+  useLayoutEffect(() => {
+    const apply = () => {
+      const w = document.documentElement.clientWidth
+      const zoom = w < 1024 ? 1 : Math.min(3, Math.max(1.1, w / 1310))
+      document.documentElement.style.setProperty("--site-zoom", zoom.toFixed(3))
+    }
+    apply()
+    window.addEventListener("resize", apply)
+
+    return () => {
+      window.removeEventListener("resize", apply)
+      document.documentElement.style.removeProperty("--site-zoom")
+    }
+  }, [])
 
   return (
     <div dir={langDef(i18n.language).dir} className="site-root flex min-h-dvh flex-col overflow-x-clip bg-subtle lg:pb-14">

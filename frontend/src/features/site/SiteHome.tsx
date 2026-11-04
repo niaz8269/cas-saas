@@ -129,7 +129,7 @@ export default function SiteHome() {
   return (
     <div className="space-y-16 sm:space-y-24">
       {/* ── Hero — full-screen photo, transparent header overlays it ──── */}
-      <section className="relative flex min-h-[calc(100svh/1.1)] flex-col text-white">
+      <section className="relative flex min-h-[calc(100svh/var(--site-zoom,1.1))] flex-col text-white">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
           {/* Light at the very top (so the navy header/logo read on the misty
@@ -158,12 +158,12 @@ export default function SiteHome() {
             {/* Ranked featured universities + expander (reference's numbered cards) */}
             {featuredUnis.length > 0 && (
               <div className="mt-4">
-                <div className="flex flex-wrap items-center justify-center gap-3">
+                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                   {featuredUnis.slice(0, 3).map((u) => (
                     <Link
                       key={u.id}
                       to={u.slug ? `/site/universities/${u.slug}` : "#"}
-                      className="group relative flex h-12 w-full items-center gap-2.5 sm:h-14 overflow-hidden rounded-md bg-black/30 px-3 pl-4 text-left ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-black/45 sm:w-52"
+                      className="group relative flex h-11 w-full items-center gap-2.5 sm:h-14 overflow-hidden rounded-md bg-black/30 px-3 pl-4 text-left ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-black/45 sm:w-52"
                     >
                       <HeroLogo emblem={u.emblem_url} name={u.name} />
                       <span className="line-clamp-2 text-xs font-medium text-white">{u.name}</span>
@@ -200,8 +200,8 @@ export default function SiteHome() {
             </form>
             <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
               <span className="text-xs text-white/80 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">{t("home.search.popular")}</span>
-              {POPULAR_SEARCHES.map(([labelKey, to]) => (
-                <Link key={labelKey} to={to} className="rounded-full border border-white/30 bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20">
+              {POPULAR_SEARCHES.map(([labelKey, to], i) => (
+                <Link key={labelKey} to={to} className={`rounded-full border border-white/30 bg-black/30 px-3 py-1 text-xs ${i > 2 ? "hidden sm:inline-block" : ""} font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20`}>
                   {t(labelKey)}
                 </Link>
               ))}
