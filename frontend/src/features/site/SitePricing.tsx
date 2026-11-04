@@ -108,6 +108,17 @@ export default function SitePricing() {
           <div className="rounded-sm border bg-card p-6 shadow-sm lg:col-span-2">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-navy-50 px-2.5 py-0.5 text-[11px] font-bold text-cas-navy uppercase"><ReceiptText className="size-3" />{t("pricing.quotedBadge")}</span>
             <h3 className="mt-3 font-semibold text-cas-navy">{t("pricing.quotedCardTitle")}</h3>
+            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-sm border border-cas-navy/15 bg-cas-navy-50 p-4">
+                <dt className="text-xs font-medium text-muted-foreground">{t("pricing.feeLabel")}</dt>
+                <dd className="mt-1 text-2xl font-bold text-cas-navy">{t("pricing.feeAmount")}</dd>
+              </div>
+              <div className="rounded-sm border bg-subtle p-4">
+                <dt className="text-xs font-medium text-muted-foreground">{t("pricing.variesLabel")}</dt>
+                <dd className="mt-1 text-sm font-semibold text-foreground">{t("pricing.variesValue")}</dd>
+              </div>
+            </dl>
+            <p className="mt-5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t("pricing.servicesIntro")}</p>
             <ul className="mt-4 divide-y">
               {SERVICES.map(({ icon: Icon, key }) => (
                 <li key={key} className="flex items-start gap-3 py-3">
