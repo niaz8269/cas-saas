@@ -20,7 +20,9 @@
     "cities": "50+ villes",
     "localServices": "Services locaux",
     "howItWorks": "Comment ça marche",
-    "learningCenter": "Centre d'apprentissage"
+    "learningCenter": "Centre d'apprentissage",
+    "mbbs": "MBBS en Chine",
+    "csc": "Bourse CSC"
   },
   "header": {
     "promoFreeApplyText": "Parcourez les universités et les dates d'admission sur CAS",
@@ -33,7 +35,8 @@
     "previousNotification": "Notification précédente",
     "nextNotification": "Notification suivante",
     "close": "Fermer",
-    "learnMoreArrow": "En savoir plus »"
+    "learnMoreArrow": "En savoir plus »",
+    "promoMobile": "Parcourir les universités et les dates d’admission"
   },
   "footer": {
     "blurb": "CAS — Consultancy for Abroad Study — accompagne les étudiants vers des universités chinoises de renommée mondiale depuis 2012, en tant qu'agent officiel agréé des établissements listés par le Ministère de l'Éducation.",
@@ -54,7 +57,9 @@
     "freeConsultation": "Consultation gratuite",
     "rights": "© {{year}} CAS Education. Tous droits réservés.",
     "authorized": "Agent officiel agréé depuis 2012.",
-    "photoCredits": "Crédits photo"
+    "photoCredits": "Crédits photo",
+    "exploreMbbs": "MBBS en Chine",
+    "exploreCsc": "Bourse CSC"
   },
   "components": {
     "moeListed": "Listée par le MoE",
@@ -268,65 +273,243 @@
     "ctaButton": "Nous contacter"
   },
   "pricing": {
-    "seoTitle": "Tarifs — Des frais transparents pour étudier en Chine",
-    "seoDescription": "Comment fonctionne la tarification de CAS : une consultation et un plan d'études gratuits, avec tout service payant clairement chiffré à l'avance. Aucun frais caché.",
-    "headerEyebrow": "Clair et centré sur l'étudiant",
-    "headerTitle": "Une tarification simple et transparente",
-    "headerSubtitle": "Le plan de chaque étudiant est différent, c'est pourquoi nous commençons gratuitement et chiffrons clairement tout ce qui va au-delà — vous connaîtrez toujours le coût avant de vous engager.",
-    "howTitle": "Comment fonctionne notre tarification",
-    "principleFreeTitle": "Gratuit pour commencer",
-    "principleFreeBody": "Votre première consultation et un plan d'études personnalisé — comprenant une présélection d'universités et de bourses — ne coûtent rien.",
-    "principleTransparentTitle": "Tarifé en toute transparence",
-    "principleTransparentBody": "Lorsqu'un service a un coût, vous recevez un devis clair et détaillé avant de vous engager. Aucun frais caché, jamais.",
-    "principleOnlyPayTitle": "Ne payez que ce dont vous avez besoin",
-    "principleOnlyPayBody": "Choisissez la formule complète ou seulement les parties que vous souhaitez. Votre conseiller adapte l'accompagnement — et le coût — à votre plan.",
+    "seoTitle": "Coût des études en Chine et frais CAS",
+    "seoDescription": "Ce que coûtent les études en Chine, d’après les frais réels des universités, et comment CAS facture : un plan d’études gratuit, et les services payants chiffrés en détail avant tout engagement.",
+    "headerEyebrow": "Coûts et frais",
+    "headerTitle": "Ce que coûtent les études en Chine",
+    "headerSubtitle": "Les frais de scolarité réels des universités que nous présentons, ce qu’il faut prévoir en plus, et la façon exacte dont CAS facture ses services.",
+    "costTitle": "Frais de scolarité annuels, programmes en anglais",
+    "costSubtitle": "Frais habituels des programmes de notre catalogue, par niveau.",
+    "costNote": "Chiffres tirés des frais de scolarité que les universités publient pour leurs programmes en anglais ; la fourchette couvre les 80 % centraux des frais publiés et le chiffre affiché est la médiane. Le logement, l’assurance et les frais de vie ne sont pas inclus. La page de l’université indique les frais exacts de chaque programme.",
+    "level": {
+      "bachelor": "Licence",
+      "master": "Master",
+      "phd": "Doctorat (PhD)",
+      "mbbs": "MBBS (médecine)"
+    },
+    "perYear": "/ an",
+    "typical": "Frais annuels médians",
+    "range": "Pour la plupart des programmes : {{low}} à {{high}}",
+    "programsCount": "D’après {{count}} programmes",
+    "noData": "Pas encore assez de frais publiés.",
+    "budgetTitle": "Au-delà des frais de scolarité, prévoyez",
+    "budgetSubtitle": "Ces coûts sont fixés par l’université ou par la Chine, pas par CAS. Chaque page d’université indique les montants qu’elle a publiés.",
+    "budget": [
+      "Logement : résidence universitaire ou logement privé.",
+      "Assurance maladie, obligatoire pour les étudiants internationaux.",
+      "Frais de dossier, demandés par certaines universités.",
+      "Visa et permis de séjour, ainsi que la visite médicale.",
+      "Billets d’avion et frais de vie quotidienne dans votre ville."
+    ],
+    "scholarshipTitle": "Les bourses peuvent couvrir les frais de scolarité",
+    "scholarshipBody": "Les bourses gouvernementales et universitaires peuvent financer les frais de scolarité, le logement ou une allocation de subsistance. Bourses actuellement actives dans notre catalogue :",
+    "scholarshipKind": {
+      "government": "Gouvernement",
+      "full": "Complètes",
+      "partial": "Partielles"
+    },
+    "scholarshipLink": "Voir les bourses",
+    "casTitle": "Ce que CAS facture",
+    "casSubtitle": "Commencer est gratuit. Tout service payant est chiffré en détail avant que vous l’acceptiez.",
     "freeBadge": "Gratuit",
     "freeCardTitle": "Pour commencer",
-    "free1": "Consultation initiale avec un conseiller",
-    "free2": "Plan d'études personnalisé",
-    "free3": "Présélection d'universités et de programmes",
-    "free4": "Accompagnement pour trouver des bourses adaptées",
-    "quotedBadge": "Chiffré à l'avance",
+    "free1": "Premier entretien avec un conseiller",
+    "free2": "Plan d’études personnalisé",
+    "free3": "Sélection d’universités et de programmes",
+    "free4": "Conseils sur les bourses adaptées",
+    "quotedBadge": "Chiffré à l’avance",
     "quotedCardTitle": "Services optionnels",
-    "quoted1": "Gestion de la candidature et vérification des documents",
-    "quoted2": "Assistance visa (JW202 / lettre d'admission)",
-    "quoted3": "Réservation d'hébergement",
-    "quoted4": "Accueil à l'aéroport et accompagnement avant le départ",
-    "quoted5": "Traduction certifiée de documents",
-    "ctaTitle": "Vous souhaitez un devis personnalisé ?",
-    "ctaSubtitle": "Commencez par un plan d'études gratuit — nous vous recontacterons avec des étapes et des coûts clairs.",
-    "ctaButton": "Obtenir un plan d'études gratuit"
+    "service": {
+      "application": {
+        "title": "Gestion des candidatures",
+        "body": "Vérification des documents et dépôt auprès des universités choisies."
+      },
+      "visa": {
+        "title": "Aide pour le visa",
+        "body": "Aide pour la lettre d’admission, le formulaire JW202 et la demande de visa."
+      },
+      "accommodation": {
+        "title": "Réservation de logement",
+        "body": "Un logement organisé avant votre arrivée."
+      },
+      "arrival": {
+        "title": "Accueil à l’aéroport et aide à l’arrivée",
+        "body": "Quelqu’un pour vous accueillir et vous aider à vous installer."
+      },
+      "documents": {
+        "title": "Traduction certifiée",
+        "body": "Traduction de relevés de notes, diplômes et certificats."
+      }
+    },
+    "quoteNote": "Les prix dépendent des services choisis et des universités visées ; votre conseiller vous envoie donc d’abord un devis écrit. Vous ne payez que les services que vous acceptez.",
+    "stepsTitle": "Comment se passe le paiement",
+    "steps": [
+      {
+        "title": "Recevez votre plan gratuit",
+        "body": "Indiquez vos notes, votre budget et vos objectifs. Nous vous envoyons une sélection et une vérification des bourses, sans frais."
+      },
+      {
+        "title": "Recevez un devis détaillé",
+        "body": "Si vous voulez de l’aide au-delà du plan, nous listons chaque service et son prix par écrit."
+      },
+      {
+        "title": "Choisissez ce dont vous avez besoin",
+        "body": "Acceptez l’ensemble ou seulement certains services. Rien n’est ajouté sans votre accord."
+      }
+    ],
+    "faqTitle": "Questions sur les tarifs",
+    "faq": [
+      {
+        "q": "Le premier entretien est-il vraiment gratuit ?",
+        "a": "Oui. L’entretien, le plan d’études, la sélection d’universités et de programmes et les conseils sur les bourses sont sans frais."
+      },
+      {
+        "q": "Qui fixe les frais de scolarité ?",
+        "a": "Les universités. CAS n’ajoute aucune marge aux frais de scolarité affichés sur ce site : ils proviennent des fiches des universités."
+      },
+      {
+        "q": "Y a-t-il des frais cachés ?",
+        "a": "Non. Les services payants sont chiffrés par écrit et détaillés avant que vous acceptiez quoi que ce soit."
+      },
+      {
+        "q": "Puis-je n’utiliser qu’une partie de vos services ?",
+        "a": "Oui. Vous pouvez prendre l’accompagnement complet ou seulement certains éléments, comme le visa ou le logement."
+      },
+      {
+        "q": "Une bourse change-t-elle ce que je paie ?",
+        "a": "Elle peut le faire. Une bourse complète peut couvrir frais de scolarité et logement et ajouter une allocation, une bourse partielle n’en couvre qu’une part. Chaque page de bourse indique ce qu’elle couvre."
+      }
+    ],
+    "ctaTitle": "Vous voulez un devis personnalisé ?",
+    "ctaSubtitle": "Commencez par un plan d’études gratuit. Nous vous indiquons ensuite les prochaines étapes et les coûts.",
+    "ctaButton": "Obtenir un plan d’études gratuit"
   },
   "partner": {
-    "seoTitle": "Devenez partenaire de CAS — Coopération d'agences et de recrutement",
-    "seoDescription": "Devenez partenaire de CAS pour placer des étudiants dans les universités chinoises : 200+ universités listées par le MoE, des commissions compétitives, un portail partenaire en temps réel et un accompagnement dédié.",
-    "headerEyebrow": "Pour les agences et les recruteurs",
-    "headerTitle": "Devenez partenaire de CAS",
-    "headerSubtitle": "Donnez à vos étudiants accès aux meilleures universités de Chine via un agent agréé — avec un portail partenaire en direct, des commissions compétitives et une équipe qui vous accompagne à chaque étape.",
+    "seoTitle": "Devenir agent partenaire pour les études en Chine",
+    "seoDescription": "Devenez agent ou recruteur partenaire de CAS : candidatez aux universités chinoises depuis un seul portail, suivez chaque dossier en direct et voyez votre commission à chaque étape.",
+    "headerEyebrow": "Pour agences et recruteurs",
+    "headerTitle": "Devenir partenaire de CAS",
+    "headerSubtitle": "Placez vos étudiants dans des universités chinoises par l’intermédiaire d’un agent autorisé. Déposez et suivez les candidatures dans un seul portail et voyez où en est chaque commission.",
     "becomePartner": "Devenir partenaire",
-    "whyTitle": "Pourquoi devenir partenaire",
-    "whySubtitle": "Un canal unique et fiable vers les études en Chine.",
-    "benefitUniversitiesTitle": "200+ universités",
-    "benefitUniversitiesBody": "Orientez vos étudiants vers des universités listées par le Ministère de l'Éducation à travers la Chine par un seul canal de confiance.",
-    "benefitCommissionsTitle": "Commissions compétitives",
-    "benefitCommissionsBody": "Gagnez sur chaque placement réussi, suivi en toute transparence et payé selon un calendrier clair.",
-    "benefitPortalTitle": "Un portail partenaire en temps réel",
-    "benefitPortalBody": "Soumettez et suivez chaque candidature, voyez les changements de statut en direct et gérez vos étudiants au même endroit.",
-    "benefitMarketingTitle": "Support marketing",
-    "benefitMarketingBody": "Accédez à des listes de programmes à jour, aux échéances de rentrée et à des supports co-brandés pour vous aider à recruter.",
-    "benefitAuthorizedTitle": "Agréé depuis 2012",
-    "benefitAuthorizedBody": "Travaillez avec un agent établi et agréé par les universités, doté d'un solide historique en matière de visas et d'admissions.",
-    "benefitTeamTitle": "Équipe partenaire dédiée",
-    "benefitTeamBody": "Un contact CAS attitré vous accompagne, vous et vos étudiants, de la première demande à l'arrivée.",
-    "howTitle": "Comment ça marche",
-    "step1Title": "Candidater comme partenaire",
-    "step1Body": "Parlez-nous de votre agence et des étudiants que vous accompagnez.",
-    "step2Title": "Être intégré",
-    "step2Body": "Nous configurons votre accès au portail partenaire et guidons votre équipe à travers le processus.",
-    "step3Title": "Orienter et gagner",
-    "step3Body": "Soumettez des candidatures, suivez-les en direct et gagnez sur chaque placement réussi.",
+    "signIn": "Connexion partenaire",
+    "talkToUs": "Nous parler d’abord",
+    "statUniversities": "Universités présentées",
+    "statPrograms": "Programmes présentés",
+    "statMbbs": "Agréées pour le MBBS en anglais",
+    "statSince": "En lien avec les universités depuis",
+    "whyTitle": "Ce que vous obtenez",
+    "whySubtitle": "Les outils et l’appui dont une agence de recrutement a besoin, au même endroit.",
+    "benefit": {
+      "universities": {
+        "title": "Un seul canal vers de nombreuses universités",
+        "body": "Candidatez aux universités chinoises agréées par le ministère de l’Éducation sans gérer chacune séparément."
+      },
+      "portal": {
+        "title": "Un portail partenaire en direct",
+        "body": "Ajoutez des étudiants, déposez des candidatures et voyez chaque changement de statut en temps réel."
+      },
+      "commissions": {
+        "title": "Une commission que vous pouvez suivre",
+        "body": "Chaque placement affiche l’étape de sa commission dans votre portail, de « attendue » à « payée »."
+      },
+      "materials": {
+        "title": "Des informations à jour",
+        "body": "Listes de programmes, frais et périodes de candidature à utiliser pour conseiller vos étudiants."
+      }
+    },
+    "portalTitle": "Dans le portail partenaire",
+    "portalSubtitle": "Tout ce que vous faites avec CAS se passe dans un seul compte.",
+    "portal": {
+      "students": {
+        "title": "Gérer les étudiants",
+        "body": "Ajoutez chaque étudiant une seule fois et gardez ses informations et ses documents ensemble."
+      },
+      "apply": {
+        "title": "Candidater aux universités",
+        "body": "Choisissez des programmes et déposez des candidatures, ou postulez à des bourses, depuis un seul assistant."
+      },
+      "track": {
+        "title": "Suivre chaque candidature",
+        "body": "Voyez l’état de chaque candidature et ce qui est nécessaire ensuite."
+      },
+      "earnings": {
+        "title": "Voir vos commissions",
+        "body": "Vérifiez quelles commissions sont attendues, éligibles, facturées et payées."
+      }
+    },
+    "stagesTitle": "Comment progresse une commission",
+    "stagesSubtitle": "Chaque placement suit les mêmes étapes, et vous voyez l’étape en cours.",
+    "stage": "Étape {{n}}",
+    "stages": [
+      {
+        "title": "Attendue",
+        "body": "L’étudiant a postulé et une commission est enregistrée."
+      },
+      {
+        "title": "En attente d’arrivée",
+        "body": "L’étudiant est admis et nous attendons son arrivée."
+      },
+      {
+        "title": "Éligible",
+        "body": "L’étudiant est arrivé, s’est inscrit et a payé les frais de la première année."
+      },
+      {
+        "title": "Facturée",
+        "body": "CAS facture la commission à l’université."
+      },
+      {
+        "title": "Versée",
+        "body": "Une fois reçue, votre part est due puis versée."
+      }
+    ],
+    "stagesNote": "La commission n’est éligible qu’après l’arrivée de l’étudiant, son inscription et le paiement des frais de première année. Les taux dépendent de l’université et vous sont confirmés lors de votre adhésion.",
+    "howTitle": "Pour commencer",
+    "steps": [
+      {
+        "title": "Candidatez comme partenaire",
+        "body": "Créez un compte partenaire avec les informations de votre agence."
+      },
+      {
+        "title": "Faites-vous approuver",
+        "body": "Notre équipe examine votre demande et active votre accès au portail."
+      },
+      {
+        "title": "Orientez et suivez",
+        "body": "Ajoutez des étudiants, déposez des candidatures et suivez-les jusqu’à l’arrivée."
+      }
+    ],
+    "fitTitle": "À qui s’adresse ce programme",
+    "fit": [
+      "Agences d’études à l’étranger et conseillers en éducation.",
+      "Écoles et établissements qui orientent leurs diplômés vers l’étranger.",
+      "Recruteurs indépendants qui conseillent régulièrement des étudiants.",
+      "Équipes qui veulent un seul endroit pour gérer les candidatures vers la Chine."
+    ],
+    "faqTitle": "Questions des partenaires",
+    "faq": [
+      {
+        "q": "Faut-il payer pour devenir partenaire ?",
+        "a": "Non. La création d’un compte partenaire est gratuite. Notre équipe vous approuve avant que vous puissiez déposer des candidatures."
+      },
+      {
+        "q": "Comment fonctionnent les commissions ?",
+        "a": "Une commission est enregistrée pour chaque placement et progresse par étapes dans votre portail. Elle devient éligible après l’arrivée de l’étudiant, son inscription et le paiement des frais de première année."
+      },
+      {
+        "q": "Combien de commission vais-je gagner ?",
+        "a": "Les taux dépendent de l’université et de l’accord en vigueur. Nous vous confirmons le taux lors de votre approbation."
+      },
+      {
+        "q": "Puis-je demander des bourses pour mes étudiants ?",
+        "a": "Oui. Le portail propose un parcours de demande de bourse à côté de la candidature universitaire standard."
+      },
+      {
+        "q": "À quelles universités mes étudiants peuvent-ils candidater ?",
+        "a": "À toute université de notre catalogue, y compris celles agréées pour le MBBS en anglais."
+      }
+    ],
     "ctaTitle": "Prêt à travailler ensemble ?",
-    "ctaSubtitle": "Parlez-nous de votre agence et nous mettrons en place votre partenariat."
+    "ctaSubtitle": "Demandez un compte partenaire, ou parlez d’abord à notre équipe."
   },
   "services": {
     "seoTitle": "Nos services",
@@ -763,7 +946,8 @@
     "email": "E-mail",
     "freeStudyPlan": "Obtenir un plan d'études gratuit →",
     "leaveAMessage": "Laisser un message",
-    "message": "Message"
+    "message": "Message",
+    "scanToChat": "Scannez pour discuter"
   },
   "megaMenu": {
     "browseEverything": "Tout parcourir",
@@ -846,10 +1030,11 @@
     "hero": {
       "title": "Étudier en Chine",
       "featuredUniPrograms": "{{name}} : programmes enseignés en anglais",
-      "moePrograms": "Universités listées par le Ministère de l'Éducation : programmes enseignés en anglais"
+      "moePrograms": "Universités listées par le Ministère de l'Éducation : programmes enseignés en anglais",
+      "motto": "Votre voie de confiance vers les universités chinoises, depuis 2012"
     },
     "search": {
-      "placeholder": "SAISISSEZ LE NOM D'UNE UNIVERSITÉ OU D'UN PROGRAMME",
+      "placeholder": "Rechercher une université, une ville ou un programme",
       "ariaSearchField": "Rechercher des universités ou des programmes",
       "ariaSearchButton": "Rechercher",
       "label": "Trouvez votre université ou programme",
@@ -1498,5 +1683,99 @@
     "textTitle": "Textes des pages d'universités",
     "textBody": "Les introductions, faits et sections de présentation des pages d'universités sont adaptés de Wikipédia en anglais (articles de l'université, de sa ville et de sa province), sous licence CC BY-SA 4.0 ; l'article de chaque université est lié ci-dessous.",
     "textFrom": "texte de Wikipédia"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Nous n’avons pas trouvé cette page. Elle a peut-être été déplacée, ou l’adresse est incorrecte.",
+    "home": "Aller à l’accueil",
+    "universities": "Parcourir les universités",
+    "programs": "Trouver un programme"
+  },
+  "city": {
+    "seoTitle": "Étudier à {{city}} : universités et programmes",
+    "seoTitleFallback": "Étudier en Chine, ville par ville",
+    "seoDescription": "Étudier à {{city}} : {{count}} universités pour étudiants internationaux, avec programmes, frais et périodes de candidature.",
+    "title": "Étudier à {{city}}",
+    "subtitle": "Ce que signifie étudier à {{city}}, et les {{count}} universités qui y accueillent des étudiants internationaux.",
+    "universities": "Universités à {{city}}",
+    "allCities": "Toutes les villes"
+  },
+  "mbbs": {
+    "seoTitle": "MBBS en Chine : universités agréées et frais",
+    "seoDescription": "Les 43 universités agréées par le ministère chinois de l’Éducation pour accueillir des étudiants en MBBS enseigné en anglais en 2026-27, avec frais, périodes de candidature et marche à suivre.",
+    "eyebrow": "Médecine en anglais",
+    "title": "MBBS en Chine",
+    "subtitle": "Les universités agréées par le ministère de l’Éducation pour le MBBS en anglais, les conditions d’admission et les dates publiées par les universités.",
+    "howTitle": "Comment fonctionne la liste d’agrément",
+    "how1": "Le ministère chinois de l’Éducation publie chaque année la liste des universités autorisées à accueillir des étudiants internationaux en médecine clinique (MBBS) enseignée en anglais. Pour 2026-27, elle compte 43 universités. Une université absente de la liste ne peut pas recruter d’étudiants en MBBS en anglais.",
+    "how2": "Consultez la liste avant de candidater et vérifiez auprès de l’ordre ou du conseil médical du pays où vous comptez exercer que le diplôme de l’université y est reconnu. Les programmes de notre catalogue durent six ans (72 mois), sont enseignés en anglais, et leurs frais annuels affichés se situent entre 26 000 et 50 000 CNY.",
+    "listTitle": "{{count}} universités agréées",
+    "listSubtitle": "Chaque page présente les programmes, les frais, les périodes de candidature et les bourses.",
+    "reqTitle": "Conditions d’admission habituelles",
+    "requirements": [
+      "Un passeport étranger valide ; les candidats ont généralement de 18 à 25 ans (la limite exacte dépend de l’université).",
+      "Un diplôme de fin d’études secondaires avec de bons résultats en biologie, chimie et physique ou mathématiques.",
+      "Le résultat du CSCA (China Scholastic Competency Assessment), que les candidats en licence passent avant de postuler.",
+      "Une preuve de niveau d’anglais : IELTS ou TOEFL, sauf si vos études précédentes étaient en anglais.",
+      "Un certificat médical et un casier judiciaire, tous deux datant de moins de six mois.",
+      "Une lettre de motivation et, si demandé, un entretien en ligne avec l’université."
+    ],
+    "faqTitle": "Questions fréquentes",
+    "faq": [
+      {
+        "q": "Combien de temps dure un MBBS en Chine ?",
+        "a": "Les programmes de MBBS en anglais de notre catalogue durent six ans (72 mois), et la dernière année est normalement consacrée à la pratique clinique."
+      },
+      {
+        "q": "Quelles universités peuvent accueillir des étudiants internationaux en MBBS ?",
+        "a": "Seulement celles de la liste annuelle du ministère de l’Éducation. Pour 2026-27, il y en a 43, toutes présentées sur cette page."
+      },
+      {
+        "q": "Faut-il parler chinois ?",
+        "a": "Aucun chinois n’est nécessaire pour commencer, car l’enseignement est en anglais. Les universités ajoutent des cours de chinois car la formation à l’hôpital implique de parler avec les patients."
+      },
+      {
+        "q": "Combien cela coûte-t-il ?",
+        "a": "Les frais de scolarité des programmes de MBBS de notre catalogue vont de 26 000 à 50 000 CNY par an, hors logement et frais de vie. Chaque page d’université indique ses propres frais."
+      },
+      {
+        "q": "Quand les candidatures ouvrent-elles ?",
+        "a": "Cela varie selon l’université. Beaucoup ouvrent dans les mois précédant la rentrée de septembre et ferment entre mai et août. Chaque page d’université indique la période trouvée et la fiabilité de la source."
+      }
+    ],
+    "cta": "Vous ne savez pas quelle université choisir ? Un conseiller CAS vous proposera une sélection selon vos notes et votre budget.",
+    "ctaButton": "Obtenir un plan d’études gratuit"
+  },
+  "csc": {
+    "seoTitle": "Bourse CSC : guide de la bourse du gouvernement chinois",
+    "seoDescription": "Comment fonctionne la bourse du gouvernement chinois (CSC) : ce qu’elle couvre, qui peut postuler, comment et quand, et les bourses nationales que nous présentons.",
+    "eyebrow": "Bourse du gouvernement chinois",
+    "title": "Bourse CSC",
+    "subtitle": "Ce que couvre la bourse du gouvernement chinois, qui peut postuler, et comment et quand le faire.",
+    "whatTitle": "Qu’est-ce que la bourse CSC",
+    "what1": "La bourse du gouvernement chinois, gérée par le China Scholarship Council (CSC), finance des étudiants internationaux dans des universités chinoises. On postule en ligne via le système CSC Study in China, normalement par l’ambassade ou le consulat de Chine de son pays (avec un numéro d’agence) ou par une université d’accueil ; la catégorie et le numéro d’agence dépendent de la voie choisie.",
+    "coversTitle": "Ce qu’elle peut couvrir",
+    "covers": [
+      "Les frais de scolarité.",
+      "Le logement, ou une allocation de logement.",
+      "Une allocation mensuelle de subsistance.",
+      "Une assurance maladie complète."
+    ],
+    "whoTitle": "Qui peut postuler",
+    "who1": "Les candidats doivent être de nationalité non chinoise, en bonne santé et remplir les conditions d’admission de l’université visée. Dans l’appel 2026-27 publié pour le Canada, les limites d’âge étaient de moins de 25 ans pour la licence, moins de 35 ans pour le master et moins de 40 ans pour le doctorat. Les programmes en chinois exigeaient le HSK 3 (licence) ou le HSK 4 (master et doctorat), et les candidats en licence devaient passer le CSCA. Les appels d’autres pays peuvent différer.",
+    "howTitle": "Comment postuler",
+    "steps": [
+      "Choisissez une université et un programme ouverts aux candidats CSC.",
+      "Consultez l’appel de votre ambassade : dates d’ouverture, échéances et étapes d’entretien varient selon le pays.",
+      "Préparez les documents : passeport, relevés de notes et diplômes certifiés, plan d’études, lettres de recommandation et certificats de langue.",
+      "Postulez en ligne dans le système CSC Study in China et déposez la candidature à l’université, généralement avec l’avis de pré-admission ou la lettre d’invitation de l’université.",
+      "Suivez les instructions de l’ambassade ou de l’université pour les entretiens et les résultats."
+    ],
+    "timeTitle": "Quand postuler",
+    "time1": "Les dates dépendent de votre pays ou de la voie choisie. Pour la campagne 2026-27, les avis des ambassades de Chine ont commencé à paraître fin octobre 2025 ; une ambassade a ouvert les candidatures le 16 février 2026, et l’appel 2026-27 pour le Canada s’est clos le 22 février 2026. Consultez l’avis de votre ambassade pour la campagne en cours.",
+    "listTitle": "Bourses nationales présentées",
+    "cta": "Nous pouvons vous orienter vers les programmes ouverts au CSC et vous aider à postuler à temps.",
+    "allScholarships": "Toutes les bourses",
+    "ctaButton": "Obtenir un plan d’études gratuit"
   }
 }
