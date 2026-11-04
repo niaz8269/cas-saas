@@ -62,6 +62,8 @@ it('notifies management when an application is submitted', function () {
         'file_name' => 'passport.jpg', 'mime' => 'image/jpeg', 'size' => 1000,
     ])->assertCreated();
 
+    settleApplicationFee($student);
+
     $this->postJson("/api/v1/student/applications/{$id}/submit")->assertOk();
 
     expect(Notification::where('user_id', $manager->id)

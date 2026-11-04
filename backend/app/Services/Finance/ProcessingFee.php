@@ -9,17 +9,20 @@ use App\Models\Student;
 use App\Services\Admissions\ApplicationCatalog;
 
 /**
- * The one-time, non-refundable CAS processing fee for FUNDED study — a
- * scholarship, partially funded, or government-scholarship application.
+ * The one-time, non-refundable CAS application fee a student pays on the
+ * student portal: 500 CNY when they apply for a scholarship (funded study) and
+ * 1,000 CNY when they apply to a self-funded program.
  *
  * Distinct from two things it is easily confused with: the university's own
  * application fee (CAS never collects it) and the per-course CAS service
- * charge ({@see ApplicationCatalog::serviceChargeFor}),
- * which Finance proposes on the tuition invoice much later.
+ * charge ({@see ApplicationCatalog::serviceChargeFor}), which stays hidden from
+ * the student until the CAS team confirms it.
  *
  * Business rules, as agreed:
  *  - charged ONCE PER STUDENT, not per application — a student exploring three
  *    scholarships pays once and their later applications sail past the gate;
+ *  - a student who paid the scholarship fee and later applies to a self-funded
+ *    program owes only the difference (a top-up invoice), never the full fee again;
  *  - the application is NOT submitted on receipt upload; it waits until Finance
  *    confirms the payment, then releases automatically;
  *  - partner-filed applications are exempt — this is a student-portal rule.
@@ -35,25 +38,42 @@ class ProcessingFee
 
     private const INSTRUCTIONS_KEY = 'finance.payment_instructions';
 
-    private const FALLBACK = ['amount' => 100.0, 'currency' => 'USD'];
+    /** Billed when Finance has not set amounts in `settings`. */
+    private const FALLBACK = [
+        'scholarship' => ['amount' => 500.0, 'currency' => 'CNY'],
+        'self' => ['amount' => 1000.0, 'currency' => 'CNY'],
+    ];
 
     public function __construct(private readonly InvoiceService $invoices) {}
 
     /**
+     * The fee for a kind of study: 'scholarship' (funded) or 'self'. Settings may
+     * hold either the tiered shape {scholarship: {...}, self: {...}} or the older
+     * single {amount, currency}, which then applies to every tier.
+     *
      * @return array{amount: float, currency: string}
      */
-    public function amount(): array
+    public function amount(string $tier = 'scholarship'): array
     {
         $value = Setting::query()->where('key', self::SETTING_KEY)->value('value');
+        $fallback = self::FALLBACK[$tier];
 
-        if (! is_array($value) || ! isset($value['amount'])) {
-            return self::FALLBACK;
+        if (is_array($value) && isset($value[$tier]['amount'])) {
+            $value = $value[$tier];
+        } elseif (! is_array($value) || ! isset($value['amount'])) {
+            return $fallback;
         }
 
         return [
             'amount' => (float) $value['amount'],
-            'currency' => strtoupper((string) ($value['currency'] ?? self::FALLBACK['currency'])),
+            'currency' => strtoupper((string) ($value['currency'] ?? $fallback['currency'])),
         ];
+    }
+
+    /** Which tier an application falls in: self-funded programs carry the higher fee. */
+    public function tierFor(Application $application): string
+    {
+        return $application->kind === 'scholarship' || $application->scholarship_id !== null ? 'scholarship' : 'self';
     }
 
     /**
@@ -71,17 +91,13 @@ class ProcessingFee
     }
 
     /**
-     * Does this application attract the fee? Funded study means a government
-     * scholarship application, or a course application with an award attached
-     * (self-funded applications never carry a scholarship_id).
+     * Does this application attract the fee? Every application a student files
+     * on their own does, scholarship or self-funded. Partner-filed ones are
+     * exempt by decision.
      */
     public function appliesTo(Application $application): bool
     {
-        if ($application->agent_id !== null) {
-            return false; // partner-filed — exempt by decision
-        }
-
-        return $application->kind === 'scholarship' || $application->scholarship_id !== null;
+        return $application->agent_id === null;
     }
 
     /**
@@ -99,26 +115,59 @@ class ProcessingFee
             ->first();
     }
 
-    /** Has this student already settled the fee? Once true, always true. */
+    /** Every fee invoice of the student, cancelled ones excluded. */
+    private function feeInvoices(Student $student)
+    {
+        return Invoice::query()
+            ->where('party_type', 'student')
+            ->where('party_id', $student->id)
+            ->where('status', '!=', 'cancelled')
+            ->whereHas('items', fn ($q) => $q->where('fee_type', self::FEE_TYPE))
+            ->orderBy('id')
+            ->get();
+    }
+
+    /** Has this student settled a fee, with nothing outstanding? */
     public function isSettled(Student $student): bool
     {
-        return $this->invoiceFor($student)?->status === 'paid';
+        $invoices = $this->feeInvoices($student);
+
+        return $invoices->isNotEmpty() && $invoices->every(fn (Invoice $i) => $i->status === 'paid');
+    }
+
+    /** Has the student paid enough, with nothing outstanding, for THIS application's tier? */
+    public function isSettledFor(Application $application): bool
+    {
+        $invoices = $this->feeInvoices($application->student);
+        $needed = $this->amount($this->tierFor($application))['amount'];
+
+        return $invoices->isNotEmpty()
+            && $invoices->every(fn (Invoice $i) => $i->status === 'paid')
+            && (float) $invoices->sum('total') >= $needed;
     }
 
     /**
-     * The student's processing-fee invoice, raising it if this is their first
-     * funded application. Idempotent: repeated submit attempts reuse the same
-     * invoice rather than billing the student again.
+     * The invoice the student must pay for this application, raising it if
+     * needed. Idempotent: repeated submit attempts reuse the same invoice. A
+     * student whose earlier, smaller fee was paid owes only the difference.
      */
     public function ensureInvoice(Application $application): Invoice
     {
         $student = $application->student;
+        $invoices = $this->feeInvoices($student);
 
-        if ($existing = $this->invoiceFor($student)) {
-            return $existing;
+        if ($open = $invoices->first(fn (Invoice $i) => $i->status !== 'paid')) {
+            return $open;
         }
 
-        $fee = $this->amount();
+        $fee = $this->amount($this->tierFor($application));
+        $already = (float) $invoices->sum('total');
+
+        if ($invoices->isNotEmpty() && $already >= $fee['amount']) {
+            return $invoices->last();
+        }
+
+        $topUp = $invoices->isNotEmpty();
 
         return $this->invoices->create(
             partyType: 'student',
@@ -127,9 +176,11 @@ class ProcessingFee
             currency: $fee['currency'],
             items: [[
                 'fee_type' => self::FEE_TYPE,
-                'description' => 'CAS processing fee — scholarship application (one-time, non-refundable)',
+                'description' => $topUp
+                    ? 'CAS application fee, top-up for a self-funded program (non-refundable)'
+                    : 'CAS application fee (one-time, non-refundable)',
                 'qty' => 1,
-                'unit_price' => $fee['amount'],
+                'unit_price' => $fee['amount'] - $already,
             ]],
             actor: null, // raised by the system on the student's own action
         );

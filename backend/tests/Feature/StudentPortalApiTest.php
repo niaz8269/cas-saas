@@ -71,6 +71,20 @@ it('shows only the students own invoices and receipts, never commission data', f
         ->assertJsonCount(1, 'data.0.receipts');
 });
 
+it('keeps draft invoices, such as unconfirmed service charges, hidden from the student', function () {
+    $student = actingAsStudentPortal();
+
+    $draft = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'status' => 'draft']);
+    $issued = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'status' => 'issued']);
+
+    $this->getJson('/api/v1/student/invoices')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.invoice_no', $issued->invoice_no);
+
+    $this->get("/api/v1/student/invoices/{$draft->id}/pdf")->assertNotFound();
+});
+
 it('streams the students own invoice as a branded pdf', function () {
     $student = actingAsStudentPortal();
     $invoice = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'invoice_no' => 'INV-2026-09001']);

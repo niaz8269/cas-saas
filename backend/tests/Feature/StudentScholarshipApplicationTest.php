@@ -87,7 +87,7 @@ it('holds a documents-complete scholarship application for the processing fee', 
     $this->postJson("/api/v1/student/applications/{$id}/submit")
         ->assertStatus(409)
         ->assertJsonPath('code', 'PROCESSING_FEE_DUE')
-        ->assertJsonPath('invoice.total', 100);
+        ->assertJsonPath('invoice.total', 500);
 
     expect(Application::find($id)->status)->toBe('draft');
 });

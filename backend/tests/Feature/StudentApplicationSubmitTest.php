@@ -145,6 +145,8 @@ it('submits the draft to CAS once documents are complete', function () {
         'size' => 1000,
     ])->assertCreated();
 
+    settleApplicationFee($student);
+
     $this->postJson("/api/v1/student/applications/{$id}/submit")
         ->assertOk()
         ->assertJsonPath('data.status', 'under_review');
@@ -194,6 +196,8 @@ it('routes a submitted application to an admissions officer and notifies them', 
         'mime' => 'image/jpeg',
         'size' => 1000,
     ])->assertCreated();
+
+    settleApplicationFee($student);
 
     $this->postJson("/api/v1/student/applications/{$id}/submit")->assertOk();
 

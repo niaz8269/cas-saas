@@ -191,6 +191,7 @@ export default function StudentApplyWizard() {
 
       <ProcessingFeeNotice
         open={pendingFunding !== null}
+        funding={pendingFunding ?? undefined}
         onCancel={() => setPendingFunding(null)}
         onAcknowledge={() => {
           setFeeAcknowledged(true)
@@ -227,9 +228,9 @@ export default function StudentApplyWizard() {
           customAnswers={customAnswers}
           onDegree={(d) => { setDegree(d); setFunding(""); setProgram(null); resetDraft() }}
           onFunding={(f) => {
-            // Scholarship and partial funding attract the processing fee —
-            // say so before they invest time in the rest of the wizard.
-            if (f !== "self" && !feeAcknowledged) {
+            // Every application attracts the one-time application fee (a higher
+            // one for self-funded programs): say so before they invest time.
+            if (!feeAcknowledged) {
               setPendingFunding(f)
 
               return

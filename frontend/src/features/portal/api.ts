@@ -299,6 +299,8 @@ export interface ProcessingFeeInvoice {
 
 export interface ProcessingFeeState {
   fee: { amount: number; currency: string }
+  /** The fee per kind of study: scholarship (funded) or self-funded. */
+  fees: { scholarship: { amount: number; currency: string }; self: { amount: number; currency: string } }
   /** Bank details / payment link, when Finance has configured them. */
   instructions: string | null
   settled: boolean

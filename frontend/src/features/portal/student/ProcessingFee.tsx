@@ -18,20 +18,24 @@ import { money } from "@/features/portal/status"
 import { ApiError } from "@/lib/api"
 
 /**
- * Told up front, before any work is done: funded study carries a one-time,
- * non-refundable CAS processing fee, and it is NOT the university's own
- * application fee. Acknowledgement is explicit — the student cannot drift past
- * it — and the notice is shown once per wizard run.
+ * Told up front, before any work is done: every application carries a one-time,
+ * non-refundable CAS application fee (500 RMB for a scholarship, 1,000 RMB for a
+ * self-funded program), and it is NOT the university's own application fee.
+ * Acknowledgement is explicit, so the student cannot drift past it, and the
+ * notice is shown once per wizard run. CAS service charges are deliberately not
+ * mentioned here: the team confirms them with the student first.
  */
-export function ProcessingFeeNotice({ open, onAcknowledge, onCancel }: {
+export function ProcessingFeeNotice({ open, funding = "scholarship", onAcknowledge, onCancel }: {
   open: boolean
+  /** "self" for a self-funded program; anything else is a scholarship application. */
+  funding?: string
   onAcknowledge: () => void
   onCancel: () => void
 }) {
   const { t } = useTranslation()
   const { data } = useQuery({ queryKey: ["student", "processing-fee"], queryFn: getProcessingFee })
 
-  const fee = data?.data.fee
+  const fee = data?.data.fees?.[funding === "self" ? "self" : "scholarship"] ?? data?.data.fee
   const settled = data?.data.settled ?? false
   const amount = fee ? money(fee.amount, fee.currency) : "—"
 

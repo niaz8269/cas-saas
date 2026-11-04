@@ -1417,17 +1417,17 @@
     }
   },
   "fee": {
-    "noticeTitle": "One-time processing fee of {{amount}}",
-    "noticeTitleSettled": "Your processing fee is already paid",
-    "noticeBody": "Applications for scholarship or partially funded study carry a one-time, non-refundable CAS processing fee of {{amount}}. You pay it once — any later funded application is covered.",
+    "noticeTitle": "One-time application fee of {{amount}}",
+    "noticeTitleSettled": "Your application fee is already paid",
+    "noticeBody": "Every application carries a one-time, non-refundable CAS application fee: 500 RMB for a scholarship and 1,000 RMB for a self-funded program. You pay it once. If you applied for a scholarship first and later choose a self-funded program, you only pay the difference.",
     "noticeSeparate": "This is separate from any application fee charged by the university itself.",
     "noticeWhen": "You will be asked for it at the end, once your application is complete.",
-    "noticeSettledBody": "You have already paid the one-time CAS processing fee, so this application will be submitted as soon as it is complete.",
+    "noticeSettledBody": "You have already paid the one-time CAS application fee, so this application will be submitted as soon as it is complete.",
     "noticeAcknowledge": "I understand, continue",
     "noticeContinue": "Continue",
     "noticeCancel": "Choose another option",
-    "invoiceLabel": "Processing fee invoice",
-    "stepBody": "Your application is complete. Pay the processing fee and upload your receipt — CAS will confirm it and submit your application.",
+    "invoiceLabel": "Application fee invoice",
+    "stepBody": "Your application is complete. Pay the application fee and upload your receipt. CAS will confirm it and submit your application.",
     "howToPay": "How to pay",
     "quoteReference": "Please quote {{reference}} as the payment reference.",
     "noInstructions": "Payment details have not been published yet. Please contact your CAS counselor for how to pay.",
@@ -1440,7 +1440,7 @@
     "uploadFailed": "That upload failed. Please try again.",
     "doneForNow": "Back to my applications",
     "settledTitle": "Payment confirmed",
-    "settledBody": "Your processing fee is settled. This application has been submitted to CAS."
+    "settledBody": "Your application fee is settled. This application has been submitted to CAS."
   },
   "wizard": {
     "brand": {

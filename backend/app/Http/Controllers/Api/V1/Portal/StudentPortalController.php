@@ -60,6 +60,9 @@ class StudentPortalController extends Controller
         $invoices = Invoice::query()
             ->where('party_type', 'student')
             ->where('party_id', $request->user()->id)
+            // Drafts are CAS's working proposals (service charges are negotiated
+            // with the student first): the student only sees what staff issued.
+            ->where('status', '!=', 'draft')
             ->with(['items', 'payments'])
             ->latest('id')
             ->get();
@@ -71,7 +74,9 @@ class StudentPortalController extends Controller
     public function invoicePdf(Request $request, Invoice $invoice, InvoicePdfRenderer $renderer): Response
     {
         abort_unless(
-            $invoice->party_type === 'student' && $invoice->party_id === $request->user()->id,
+            $invoice->party_type === 'student'
+                && $invoice->party_id === $request->user()->id
+                && $invoice->status !== 'draft',
             404,
         );
 
