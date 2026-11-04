@@ -12,6 +12,25 @@ const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnqu
 // Free QR service (hotlink-friendly) — encodes the WhatsApp contact for now.
 const qrUrl = (data: string) => `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(data)}`
 
+/**
+ * CAS's WeChat QR code. Put the account's own QR image at public/images/wechat-qr.png;
+ * until it exists, a code that carries the WeChat ID is shown instead.
+ */
+function WeChatQr({ alt }: { alt: string }) {
+  const [missing, setMissing] = useState(false)
+
+  return (
+    <img
+      src={missing ? qrUrl(WECHAT_ID) : "/images/wechat-qr.png"}
+      onError={() => setMissing(true)}
+      alt={alt}
+      width={92}
+      height={92}
+      className="rounded object-contain"
+    />
+  )
+}
+
 // The single contact entry in the help bar (CAS admissions — no staff photos).
 const CONTACTS = [{ nameKey: "helpDock.talkToCounsellor" }]
 
@@ -70,24 +89,26 @@ export default function SiteHelpDock() {
                 {/* Contact-details card revealed on hover. The wrapper's pb-3
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
-                <div className="absolute bottom-full left-1/2 z-50 hidden w-[24rem] -translate-x-1/2 pb-3 group-hover:block">
+                <div className="absolute bottom-full left-0 z-50 hidden w-[26rem] pb-3 group-hover:block">
                   <div className="relative rounded-sm bg-white p-4 text-left text-cas-navy shadow-2xl">
-                    <span className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
-                    <div className="flex items-start gap-4">
-                      <div className="flex shrink-0 flex-col items-center gap-1.5">
-                        <span className="flex size-14 items-center justify-center rounded-full bg-cas-navy/10 ring-2 ring-cas-red/70"><MessageCircle className="size-6" /></span>
-                        <span className="text-sm font-semibold text-cas-red-600">{t(c.nameKey)}</span>
-                      </div>
-                      <div className="space-y-2.5 text-sm leading-tight">
+                    <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-white" />
+                    <div className="flex items-center gap-5">
+                      <div className="space-y-3 text-sm leading-tight">
                         <div><p className="font-semibold">{t("helpDock.wechatLabel")}</p><p className="text-muted-foreground">{WECHAT_ID}</p></div>
                         <div>
                           <p className="font-semibold">{t("helpDock.whatsappTelLabel")}</p>
                           <a href={WHATSAPP} target="_blank" rel="noreferrer" className="font-medium text-cas-red-600 hover:underline">{PHONE_DISPLAY}</a>
                         </div>
                       </div>
-                      <div className="ml-auto flex shrink-0 flex-col items-center gap-1">
-                        <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
-                        <span className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</span>
+                      <div className="ml-auto flex shrink-0 items-start gap-3">
+                        <figure className="flex flex-col items-center gap-1">
+                          <WeChatQr alt={t("helpDock.wechatQrAlt")} />
+                          <figcaption className="text-xs text-muted-foreground">{t("helpDock.wechat")}</figcaption>
+                        </figure>
+                        <figure className="flex flex-col items-center gap-1">
+                          <img src={qrUrl(WHATSAPP)} alt={t("helpDock.whatsapp")} width={92} height={92} className="rounded" />
+                          <figcaption className="text-xs text-muted-foreground">{t("helpDock.whatsapp")}</figcaption>
+                        </figure>
                       </div>
                     </div>
                   </div>
