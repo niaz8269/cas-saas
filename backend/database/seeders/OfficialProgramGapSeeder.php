@@ -8,39 +8,55 @@ use Illuminate\Database\Seeder;
 
 /**
  * Programs for universities whose imported catalog had none, taken from each
- * university's own international-admissions page (source_url) and written in
- * CAS's own words. Only programs whose language, length and fee the official
- * page states are listed; the others stay out until a page confirms them.
+ * university's own admissions page or catalogue (source_url) and written in
+ * CAS's own words. A value the official page does not state is left empty
+ * (the fee then shows as on request) rather than guessed.
  * Idempotent: keyed on university + program name.
  */
 class OfficialProgramGapSeeder extends Seeder
 {
-    private const ROWS = [
-        [
-            'university' => 'Shanghai University of Traditional Chinese Medicine',
-            'name' => 'Traditional Chinese Medicine (Acupuncture)',
-            'level' => 'bachelor',
-            'teaching_language' => 'English',
-            'duration_months' => 60,
-            'tuition_fee' => 42000,
-            'source_url' => 'https://iec.shutcm.edu.cn/en/2024/1113/c610a163304/page.htm',
-        ],
-        [
-            'university' => 'Renmin University of China',
-            'name' => 'Chinese Philosophy, Religion and Culture',
-            'level' => 'master',
-            'teaching_language' => 'English',
-            'duration_months' => 24,
-            'tuition_fee' => 40000,
-            'source_url' => 'http://phi.ruc.edu.cn/Home/International/InternationalStudentsProgram/1a5ee737329546eabda1056df98ce88f.htm',
-        ],
-    ];
+    private const SHANTOU_MASTER_SOURCE = 'https://intlsumc.med.stu.edu.cn/53/list_53_1.html';
+
+    private const YANTAI_SOURCE = 'https://engsie.ytu.edu.cn/eng2027.pdf';
+
+    private const ZJGSU_SOURCE = 'https://sie.zjgsu.edu.cn/gjen/_t75/2128/listm.htm';
+
+    /** @return list<array<string, mixed>> */
+    private function rows(): array
+    {
+        $rows = [
+            ['university' => 'Shanghai University of Traditional Chinese Medicine', 'name' => 'Traditional Chinese Medicine (Acupuncture)', 'level' => 'bachelor', 'teaching_language' => 'English', 'duration_months' => 60, 'tuition_fee' => 42000, 'source_url' => 'https://iec.shutcm.edu.cn/en/2024/1113/c610a163304/page.htm'],
+            ['university' => 'Renmin University of China', 'name' => 'Chinese Philosophy, Religion and Culture', 'level' => 'master', 'teaching_language' => 'English', 'duration_months' => 24, 'tuition_fee' => 40000, 'source_url' => 'http://phi.ruc.edu.cn/Home/International/InternationalStudentsProgram/1a5ee737329546eabda1056df98ce88f.htm'],
+            ['university' => 'Shantou University Medical College', 'name' => 'Clinical Medicine', 'level' => 'bachelor', 'teaching_language' => null, 'duration_months' => null, 'tuition_fee' => null, 'source_url' => 'https://www.med.stu.edu.cn/63/list_63_1.html'],
+            ['university' => 'Shantou University Medical College', 'name' => 'Ophthalmic Optometry', 'level' => 'bachelor', 'teaching_language' => null, 'duration_months' => null, 'tuition_fee' => null, 'source_url' => 'https://www.med.stu.edu.cn/63/list_63_1.html'],
+        ];
+
+        // Shantou's 2027 international master's catalogue: 18 majors, three years, taught in Chinese or English.
+        foreach (['Neurobiology', 'Cell Biology', 'Biochemistry and Molecular Biology', 'Immunology', 'Pathology and Pathophysiology', 'Oncology', 'Clinical Laboratory Diagnostics', 'Medical Imaging and Nuclear Medicine', 'Internal Medicine', 'Surgery', 'Pediatrics', 'Ophthalmology', 'Psychiatry and Mental Health', 'Medicinal Chemistry', 'Pharmacology', 'Obstetrics and Gynecology', 'Basic Medicine', 'Public Health and Preventive Medicine'] as $major) {
+            $rows[] = ['university' => 'Shantou University Medical College', 'name' => $major, 'level' => 'master', 'teaching_language' => 'Chinese or English', 'duration_months' => 36, 'tuition_fee' => null, 'source_url' => self::SHANTOU_MASTER_SOURCE];
+        }
+
+        // Yantai's 2027 prospectus: Chinese-taught; fees are by liberal-arts / science field.
+        foreach ([['Chinese Language', 12400, 48], ['Business Administration', 12400, null], ['Law', 12400, null], ['Computer Science and Technology', 13400, null], ['Pharmacy', 13400, null], ['Civil Engineering', 13400, null]] as [$major, $fee, $months]) {
+            $rows[] = ['university' => 'Yantai University', 'name' => $major, 'level' => 'bachelor', 'teaching_language' => 'Chinese', 'duration_months' => $months, 'tuition_fee' => $fee, 'source_url' => self::YANTAI_SOURCE];
+        }
+        foreach ([['Business Administration', 21000], ['Computer Science and Technology', 25000]] as [$major, $fee]) {
+            $rows[] = ['university' => 'Yantai University', 'name' => $major, 'level' => 'master', 'teaching_language' => 'Chinese', 'duration_months' => null, 'tuition_fee' => $fee, 'source_url' => self::YANTAI_SOURCE];
+        }
+
+        // Zhejiang Gongshang's 2026 English-taught undergraduate catalogue: four years, 18,000 CNY a year.
+        foreach (['International Business Administration', 'International Law', 'Accounting', 'International Hospitality Management', 'E-commerce', 'International Finance'] as $major) {
+            $rows[] = ['university' => 'Zhejiang Gongshang University', 'name' => $major, 'level' => 'bachelor', 'teaching_language' => 'English', 'duration_months' => 48, 'tuition_fee' => 18000, 'source_url' => self::ZJGSU_SOURCE];
+        }
+
+        return $rows;
+    }
 
     public function run(): void
     {
         $added = 0;
 
-        foreach (self::ROWS as $row) {
+        foreach ($this->rows() as $row) {
             $university = University::query()->where('name', $row['university'])->first();
             if (! $university) {
                 continue;
