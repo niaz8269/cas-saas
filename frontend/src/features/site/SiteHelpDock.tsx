@@ -27,8 +27,8 @@ function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: 
   const color = kind === "wechat" ? WECHAT_GREEN : GREEN
 
   return (
-    <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-white/10 bg-white/5 p-3">
-      <div className="relative size-28 rounded-md bg-white p-1.5 shadow-md">
+    <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-white/70 bg-white/50 p-3 shadow-sm">
+      <div className="relative size-28 rounded-md bg-white p-1.5 shadow-md ring-1 ring-cas-navy/10">
         <img
           src={own ? "/images/wechat-qr.jpg" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
           onError={() => kind === "wechat" && setMissing(true)}
@@ -44,8 +44,8 @@ function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: 
         )}
       </div>
       <figcaption className="mt-2.5 text-center">
-        <span className="block text-xs font-semibold text-white">{name}</span>
-        <span className="mt-0.5 block text-[11px] whitespace-nowrap text-white/60">{value}</span>
+        <span className="block text-xs font-semibold text-cas-navy">{name}</span>
+        <span className="mt-0.5 block text-[11px] whitespace-nowrap text-cas-navy/65">{value}</span>
       </figcaption>
     </figure>
   )
@@ -110,10 +110,10 @@ export default function SiteHelpDock() {
                     bridges the gap to the avatar so moving the cursor into the
                     card keeps it open (and lets the WhatsApp link be clicked). */}
                 <div className="absolute bottom-full left-0 z-50 hidden w-[21.5rem] pb-3 group-hover:block">
-                  <div className="relative rounded-lg bg-cas-navy-900 p-4 text-left text-white shadow-2xl ring-1 ring-white/10">
-                    <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-cas-navy-900" />
+                  <div className="relative rounded-lg bg-white/75 p-4 text-left text-cas-navy shadow-2xl ring-1 ring-white/70 backdrop-blur-xl backdrop-saturate-150">
+                    <span className="absolute -bottom-1.5 left-10 size-3 -translate-x-1/2 rotate-45 bg-white/75 backdrop-blur-xl" />
                     <p className="text-sm font-bold">{t("helpDock.scanToChat")}</p>
-                    <p className="mt-0.5 text-xs text-white/60">{t("helpDock.freeGuidance")}</p>
+                    <p className="mt-0.5 text-xs text-cas-navy/70">{t("helpDock.freeGuidance")}</p>
                     <div className="mt-3 flex items-stretch justify-between gap-3">
                       <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} name={t("helpDock.wechat")} value={WECHAT_ID} />
                       <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={PHONE_DISPLAY} />
