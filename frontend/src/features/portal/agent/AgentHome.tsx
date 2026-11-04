@@ -34,7 +34,7 @@ export default function AgentHome() {
       />
 
       {/* What a partner comes here to do, in the order they do it. */}
-      <div className="grid gap-3 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         <ActionCard
           to="/portal/agent/apply"
           icon={FilePlus2}

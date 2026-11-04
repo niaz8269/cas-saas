@@ -29,7 +29,7 @@ export default function StudentHome() {
         subtitle={t("studentPortal.home.studentCode", { code: profile?.code ?? "" })}
       />
 
-      <div className="grid gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         <ActionCard
           to="/portal/student/apply"
           icon={Plus}
