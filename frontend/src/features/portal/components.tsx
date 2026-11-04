@@ -89,7 +89,7 @@ export function ActionCard({ to, icon: Icon, title, hint, primary, className }: 
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-semibold">{title}</span>
-        <span className={cn("block truncate text-xs", primary ? "text-white/75" : "text-muted-foreground")}>{hint}</span>
+        <span className={cn("block text-xs", primary ? "text-white/75" : "text-muted-foreground")}>{hint}</span>
       </span>
       <ChevronRight
         className={cn(
