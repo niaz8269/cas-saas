@@ -11,10 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
  * Renders the branded invoice PDF shared by staff and the student portal.
  * The caller supplies the already-resolved party label (staff resolves any
  * party type; the portal knows it is the authenticated student).
+ *
+ * The same sheet doubles as the student's FEE VOUCHER: what the CAS team has
+ * confirmed with them, with how to pay, before they are asked for payment.
  */
 class InvoicePdfRenderer
 {
-    public function stream(Invoice $invoice, string $partyName): Response
+    public function stream(Invoice $invoice, string $partyName, bool $voucher = false, ?string $paymentInstructions = null): Response
     {
         $invoice->loadMissing(['items', 'payments.recorder:id,name', 'application:id,application_code']);
 
@@ -23,6 +26,8 @@ class InvoicePdfRenderer
         $pdf = Pdf::loadView('pdf.invoice', [
             'invoice' => $invoice,
             'partyName' => $partyName,
+            'voucher' => $voucher,
+            'paymentInstructions' => $paymentInstructions,
             'logo' => BrandAssets::logoDataUri(),
             'money' => $money,
             'balanceDue' => (float) $invoice->total - (float) $invoice->amount_paid,
@@ -30,6 +35,6 @@ class InvoicePdfRenderer
             'dueOn' => $invoice->due_at?->format('d M Y') ?? '—',
         ]);
 
-        return $pdf->stream('invoice-'.$invoice->invoice_no.'.pdf');
+        return $pdf->stream(($voucher ? 'fee-voucher-' : 'invoice-').$invoice->invoice_no.'.pdf');
     }
 }

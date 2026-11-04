@@ -177,6 +177,7 @@ Route::prefix('v1')->group(function () {
             Route::post('invoices/{invoice}/receipt', [StudentFeeReceiptController::class, 'store'])
                 ->name('student.fee.receipt');
             Route::get('invoices/{invoice}/pdf', [StudentPortalController::class, 'invoicePdf']);
+            Route::get('invoices/{invoice}/voucher', [StudentPortalController::class, 'invoiceVoucher']);
             Route::get('documents', [StudentPortalController::class, 'documents']);
             Route::get('document-types', [StudentPortalController::class, 'documentTypes']);
             Route::post('documents/presign', [StudentDocumentController::class, 'presign']);

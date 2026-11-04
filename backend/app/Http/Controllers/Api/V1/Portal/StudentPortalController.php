@@ -11,6 +11,7 @@ use App\Models\DocumentType;
 use App\Models\Invoice;
 use App\Models\VisaCase;
 use App\Services\Finance\InvoicePdfRenderer;
+use App\Services\Finance\ProcessingFee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -81,6 +82,19 @@ class StudentPortalController extends Controller
         );
 
         return $renderer->stream($invoice, $request->user()->full_name);
+    }
+
+    /** The fee voucher: the same sheet, framed as what CAS confirmed and how to pay. */
+    public function invoiceVoucher(Request $request, Invoice $invoice, InvoicePdfRenderer $renderer, ProcessingFee $fee): Response
+    {
+        abort_unless(
+            $invoice->party_type === 'student'
+                && $invoice->party_id === $request->user()->id
+                && $invoice->status !== 'draft',
+            404,
+        );
+
+        return $renderer->stream($invoice, $request->user()->full_name, voucher: true, paymentInstructions: $fee->instructions());
     }
 
     public function documents(Request $request): AnonymousResourceCollection

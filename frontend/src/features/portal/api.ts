@@ -233,6 +233,10 @@ export const getStudentInvoices = () =>
 export const getStudentInvoicePdf = (id: number) =>
   portalApiBlob(`/student/invoices/${id}/pdf`)
 
+/** The printable fee voucher for one of the student's invoices, as a Blob. */
+export const getStudentInvoiceVoucher = (id: number) =>
+  portalApiBlob(`/student/invoices/${id}/voucher`)
+
 export const getStudentDocuments = () =>
   portalApi<{ data: StudentDocumentRow[] }>("/student/documents")
 

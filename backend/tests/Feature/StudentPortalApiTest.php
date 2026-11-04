@@ -182,3 +182,24 @@ it('downloads only the students own documents', function () {
     $this->getJson("/api/v1/student/documents/{$foreign->id}/download")
         ->assertNotFound();
 });
+
+it('streams a fee voucher for an issued invoice and hides drafts', function () {
+    $student = actingAsStudentPortal();
+    $issued = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'status' => 'issued', 'invoice_no' => 'INV-2026-09100']);
+    $issued->items()->create(['description' => 'CAS service charge', 'qty' => 1, 'unit_price' => 7000, 'amount' => 7000]);
+    $draft = Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'status' => 'draft']);
+
+    $response = $this->get("/api/v1/student/invoices/{$issued->id}/voucher");
+
+    $response->assertOk()->assertHeader('content-type', 'application/pdf');
+    expect(substr((string) $response->getContent(), 0, 4))->toBe('%PDF');
+
+    $this->get("/api/v1/student/invoices/{$draft->id}/voucher")->assertNotFound();
+});
+
+it('404s when downloading another students fee voucher', function () {
+    actingAsStudentPortal();
+    $foreign = Invoice::factory()->create(['party_type' => 'student', 'party_id' => 999, 'status' => 'issued']);
+
+    $this->get("/api/v1/student/invoices/{$foreign->id}/voucher")->assertNotFound();
+});
