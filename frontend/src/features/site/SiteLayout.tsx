@@ -163,7 +163,7 @@ export default function SiteLayout() {
   const { t, i18n } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
-  const isHome = pathname === "/site"
+  const isHome = pathname === "/" || pathname === "/site"
 
   // Signed-in portal visitors get an "Apply now" CTA straight to their apply
   // flow instead of the sign-in button.
@@ -262,7 +262,7 @@ export default function SiteLayout() {
         </div>
       </header>
 
-      <main className={cn("mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6", isHome ? "pb-8" : "pt-28 pb-8")}>
+      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-28 pb-8 sm:px-6")}>
         <Outlet />
       </main>
 
