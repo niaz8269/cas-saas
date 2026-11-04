@@ -1039,7 +1039,7 @@
       "moePrograms": "Ministry of Education–listed universities : English-taught Programs"
     },
     "search": {
-      "placeholder": "ENTER THE NAME OF A UNIVERSITY OR A PROGRAM",
+      "placeholder": "Search a university, city or program",
       "ariaSearchField": "Search universities or programs",
       "ariaSearchButton": "Search",
       "label": "Find your university or program",
