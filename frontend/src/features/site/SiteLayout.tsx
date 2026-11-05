@@ -213,25 +213,6 @@ export default function SiteLayout() {
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
       <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/70 backdrop-blur-md")}>
-        {/* Top promo bar — visible at the top, hidden once scrolled */}
-        {!scrolled && (
-          <div className={cn("border-b", solid ? "border-black/5 bg-subtle" : "border-white/25")}>
-            <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[13px] sm:px-6 lg:justify-between">
-              <div className="flex items-center gap-3">
-                <span className="hidden text-cas-navy/75 sm:inline">{t("header.promoFreeApplyText")}</span>
-                <Link to="/site/universities?topic=deadlines" aria-label={`${t("header.learnMore")}: ${t("header.promoFreeApplyText")}`} className="hidden rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700 sm:inline-block">{t("header.learnMore")}</Link>
-                <Link to="/site/universities?topic=deadlines" className="inline-flex items-center gap-1 font-medium text-cas-navy sm:hidden">
-                  {t("header.promoMobile")} <ArrowRight className="size-3.5" />
-                </Link>
-              </div>
-              <div className="hidden items-center gap-3 md:flex">
-                <span className="text-cas-navy/75">{t("header.promoScholarshipsText")}</span>
-                <Link to="/site/scholarships?q=funded-2026" aria-label={`${t("header.learnMore")}: ${t("header.promoScholarshipsText")}`} className="rounded-sm bg-cas-navy px-2.5 py-0.5 text-xs text-white transition-colors hover:bg-cas-navy-700">{t("header.learnMore")}</Link>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Main nav */}
         <div className="relative">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -289,7 +270,7 @@ export default function SiteLayout() {
         </div>
       </header>
 
-      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-28 pb-8 sm:px-6")}>
+      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6")}>
         <Outlet />
       </main>
 

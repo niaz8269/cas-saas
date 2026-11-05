@@ -149,7 +149,7 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-32 pb-2 text-center sm:pt-[8.5rem] [@media(max-height:680px)]:sm:pt-[7.5rem]">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-24 pb-2 text-center sm:pt-28 [@media(max-height:680px)]:sm:pt-24">
           <div className="w-full max-w-5xl">
             <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:leading-[1.05] [@media(min-height:700px)]:md:text-[3.5rem]">{t("home.hero.title")}</h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm font-medium tracking-wide text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-lg">
