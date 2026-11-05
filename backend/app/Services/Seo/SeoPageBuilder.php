@@ -91,7 +91,7 @@ class SeoPageBuilder
             'universities' => University::where('status', 'active')->count(),
             'programs' => Program::where('status', 'active')->where('registry_only', false)->count(),
         ]);
-        $round = fn (int $n) => number_format(intdiv($n, $n >= 1000 ? 1000 : 100) * ($n >= 1000 ? 1000 : 100)).'+';
+        $round = fn (int $n) => number_format(intdiv($n, $n >= 10000 ? 1000 : 100) * ($n >= 10000 ? 1000 : 100)).'+';
 
         return strtr($text, ['{universities}' => $round($counts['universities']), '{programs}' => $round($counts['programs'])]);
     }
