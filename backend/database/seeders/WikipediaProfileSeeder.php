@@ -56,6 +56,8 @@ class WikipediaProfileSeeder extends Seeder
             $text = $uni->name.($uni->name_zh ? ' ('.$uni->name_zh.')' : '').' is a university in '.$place.'.';
             if ($uni->programs_count > 0) {
                 $text .= ' This page lists '.$uni->programs_count.' program'.($uni->programs_count === 1 ? '' : 's').' for international students'.($languages ? ', taught in '.$languages : '').'.';
+            } else {
+                $text .= ' CAS can confirm the programs, fees and admission dates open to international applicants on request.';
             }
             $uni->forceFill(['about' => $text])->save();
         }
