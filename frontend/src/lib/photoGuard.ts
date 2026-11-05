@@ -42,6 +42,19 @@ function restore(img: HTMLImageElement) {
 
 const imageOf = (target: EventTarget | null) => (target instanceof Element ? target.closest("img") : null)
 
+// The emblem copy is fetched ahead of time (when the pointer rests on a photo), so the switch is
+// instant and the browser always has a loaded picture to save.
+const warmed = new Set<string>()
+function warm(img: HTMLImageElement) {
+  const path = ownPhotoPath(img)
+  const match = path && SAVEABLE.exec(path)
+  if (!match) return
+  const url = `/wm/${match[1]}/${match[2]}`
+  if (warmed.has(url)) return
+  warmed.add(url)
+  new Image().src = url
+}
+
 export function installPhotoGuard(): void {
   if (typeof document === "undefined") return
   const swapped = new Set<HTMLImageElement>()
@@ -58,6 +71,13 @@ export function installPhotoGuard(): void {
     swapped.forEach(restore)
     swapped.clear()
   }
+
+  let hoverTimer: number | undefined
+  document.addEventListener("pointerover", (e) => {
+    const img = imageOf(e.target)
+    window.clearTimeout(hoverTimer)
+    if (img) hoverTimer = window.setTimeout(() => warm(img), 350)
+  }, true)
 
   // Desktop right-click, and long-press on Android (which sends the same event).
   document.addEventListener("contextmenu", (e) => {
@@ -78,6 +98,7 @@ export function installPhotoGuard(): void {
     const img = imageOf(e.target)
     if (!img) return
     window.clearTimeout(timer)
+    warm(img)
     timer = window.setTimeout(() => swap(img), 350)
   }, { passive: true, capture: true })
   const endTouch = () => {
