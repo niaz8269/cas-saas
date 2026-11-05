@@ -26,6 +26,8 @@ import heroSm from "@/assets/hero-graduate-800.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
+import HomeCities from "@/features/site/HomeCities"
+import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
 
 
@@ -212,6 +214,8 @@ export default function SiteHome() {
       </section>
 
       <div className="mx-auto w-full max-w-7xl space-y-16 px-4 sm:space-y-24 sm:px-6">
+      <HomeCities cities={universities.data?.city_stats} isPending={universities.isPending} />
+
       {/* ── Weekly Programs spotlight ────────────────────────── */}
       <section>
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
@@ -366,6 +370,8 @@ export default function SiteHome() {
           <Link to="/site/contact?topic=consultation" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-bold text-white hover:bg-cas-red-600"><MessageCircle className="size-4" /> {t("home.cta.freeConsultation")}</Link>
         </div>
       </section>
+
+      <WhyApply />
       </div>
     </div>
   )

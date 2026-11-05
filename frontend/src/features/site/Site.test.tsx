@@ -76,7 +76,10 @@ it("gates program fees for guests and shows the CAS service fee for members", as
 })
 
 it("renders the CUCAS-style home with hero, search and sections", async () => {
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(LIST)))
+  // A fresh Response per call (a body can be read only once); programs and scholarships are empty.
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) => Promise.resolve(jsonResponse(
+    /public\/(programs|scholarships)/.test(url) ? { data: [], meta: { total: 0 } } : LIST,
+  ))))
 
   renderWithProviders(<SiteHome />)
 
@@ -364,4 +367,19 @@ it("gates scholarship award details on the listing when locked", async () => {
 
   expect(await screen.findByText("Belt & Road Scholarship")).toBeInTheDocument()
   expect(screen.getByRole("link", { name: /Sign in to see award details/i })).toBeInTheDocument()
+})
+
+it("shows city cards under the hero that open the city page", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) => Promise.resolve(jsonResponse(
+    /public\/(programs|scholarships)/.test(url)
+      ? { data: [], meta: { total: 0 } }
+      : { ...LIST, city_stats: [{ city: "Beijing", count: 42, photo_url: "/photos/a.webp", photo_credit: null, photo_is_city: true }] },
+  ))))
+
+  renderWithProviders(<SiteHome />)
+
+  const card = (await screen.findAllByRole("link", { name: /Beijing/ })).find((l) => l.getAttribute("href") === "/site/cities/beijing")
+  expect(card).toBeDefined()
+  expect(screen.getByRole("link", { name: /See more cities/ })).toHaveAttribute("href", "/site/cities")
+  expect(screen.getByText("Why apply with CAS?")).toBeInTheDocument()
 })

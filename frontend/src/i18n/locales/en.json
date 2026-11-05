@@ -1052,6 +1052,26 @@
     "freeNoObligation": "Free · no obligation"
   },
   "home": {
+    "cities": {
+      "title": "Study in China's best cities",
+      "subtitle": "Pick a city and see the universities there, with their programs and admission dates.",
+      "universityCount_one": "{{count}} university",
+      "universityCount_other": "{{count}} universities",
+      "seeMore": "See more cities"
+    },
+    "why": {
+      "title": "Why apply with CAS?",
+      "freeTitle": "Free study plan",
+      "freeBody": "Your first study plan and counselor advice cost nothing, and you pay one application fee per student. See",
+      "freeLink": "exactly what CAS charges.",
+      "easyTitle": "One simple application",
+      "easyBody": "Fill in one online application and choose from {{total}} universities across China.",
+      "supportTitle": "Real support in English",
+      "supportBody": "Reach a counselor on WhatsApp, WeChat, email or in your student portal.",
+      "supportLink": "Talk to us.",
+      "officialTitle": "Information you can rely on",
+      "officialBody": "{{programs}} programs and {{scholarships}} scholarships, checked against what the universities publish."
+    },
     "seo": {
       "title": "Study in China — Universities, Programs & Scholarships",
       "description": "Study in China with CAS, an official authorized agent since 2012. Find MBBS, engineering and business programs at Ministry of Education–listed universities, with scholarships and full application-to-arrival support."

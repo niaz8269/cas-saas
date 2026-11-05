@@ -1,10 +1,9 @@
-import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, LayoutDashboard, MessageCircle, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { getSitePrograms, getSiteScholarships, getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
+import { formatTotal, useCatalogTotals } from "@/features/site/useCatalogTotals"
 import { useSeo } from "@/lib/seo"
 
 // Display text carried as i18n KEY strings, resolved via t() at render.
@@ -30,19 +29,10 @@ const PROMISES = [
   { icon: MessageCircle, titleKey: "about.promiseReachTitle", bodyKey: "about.promiseReachBody" },
 ]
 
-// Live totals from the catalog, so the numbers never go stale.
-function useCatalogTotal(key: string, fn: () => Promise<{ meta?: { total?: number } }>) {
-  const { data } = useQuery({ queryKey: ["about-total", key], queryFn: fn, staleTime: 5 * 60_000 })
-
-  return data?.meta?.total
-}
-
 export default function SiteAbout() {
   const { t } = useTranslation()
-  const universities = useCatalogTotal("universities", () => getSiteUniversities({ perPage: 1 }))
-  const programs = useCatalogTotal("programs", () => getSitePrograms())
-  const scholarships = useCatalogTotal("scholarships", () => getSiteScholarships())
-  const fmt = (n?: number) => (n === undefined ? "—" : n.toLocaleString("en-US"))
+  const { universities, programs, scholarships } = useCatalogTotals()
+  const fmt = formatTotal
   const stats: [string, string][] = [
     ["2012", "about.statSince"],
     [fmt(universities), "about.statUniversities"],
