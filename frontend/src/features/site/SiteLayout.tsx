@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
@@ -271,7 +271,9 @@ export default function SiteLayout() {
       </header>
 
       <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6")}>
-        <Outlet />
+        <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       {/* Footer */}

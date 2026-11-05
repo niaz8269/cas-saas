@@ -38,8 +38,8 @@ use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
-use App\Http\Controllers\Api\V1\Public\PublicMediaController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
+use App\Http\Controllers\Api\V1\Public\PublicMediaController;
 use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
@@ -54,6 +54,7 @@ use App\Http\Controllers\Api\V1\UploadController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VisaCaseController;
 use App\Http\Controllers\Api\V1\WebsiteSourceController;
+use App\Http\Middleware\PublicCatalogCache;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -70,7 +71,7 @@ Route::prefix('v1')->group(function () {
         ->middleware('api-source');
 
     // Public website catalog (unauthenticated, active/published only, throttled)
-    Route::prefix('public')->middleware('throttle:public')->group(function () {
+    Route::prefix('public')->middleware(['throttle:public', PublicCatalogCache::class])->group(function () {
         Route::get('universities', [PublicCatalogController::class, 'universities']);
         Route::get('programs', [PublicCatalogController::class, 'programs']);
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);

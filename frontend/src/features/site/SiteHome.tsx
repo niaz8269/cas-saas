@@ -20,9 +20,10 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
-import heroLg from "@/assets/hero-beijing.webp"
-import heroMd from "@/assets/hero-beijing-1400.webp"
-import heroSm from "@/assets/hero-beijing-800.webp"
+// Hero files live in /public so the page can preload them (see SeoController).
+const heroLg = "/images/hero-beijing-v2.webp"
+const heroMd = "/images/hero-beijing-1400-v2.webp"
+const heroSm = "/images/hero-beijing-800-v2.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
@@ -105,8 +106,8 @@ export default function SiteHome() {
   const [contentTab, setContentTab] = useState("questions")
 
   // Real data only: featured universities and programs are the ones with a published admission window that is open.
-  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1 }) })
-  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, openIntake: true }) })
+  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12 }) })
+  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, perPage: 6, openIntake: true }) })
   const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
   const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []

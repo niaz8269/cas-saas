@@ -64,13 +64,13 @@ class PublicCatalogController extends Controller
             ->paginate(min($request->integer('per_page', 24), 50));
 
         // Distinct cities for the directory filter (active universities only).
-        $cities = University::query()
+        $cities = cache()->remember('public.cities.v1', now()->addMinutes(10), fn () => University::query()
             ->where('status', 'active')
             ->whereNotNull('city')
             ->where('city', '!=', '')
             ->distinct()
             ->orderBy('city')
-            ->pluck('city');
+            ->pluck('city'));
 
         return PublicUniversityResource::collection($universities)
             ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience]);
@@ -84,6 +84,11 @@ class PublicCatalogController extends Controller
      * @return list<array<string, mixed>>
      */
     private function cityStats(): array
+    {
+        return cache()->remember('public.city-stats.v1', now()->addMinutes(10), fn () => $this->buildCityStats());
+    }
+
+    private function buildCityStats(): array
     {
         $images = app(ImageService::class);
 

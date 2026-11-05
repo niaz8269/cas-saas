@@ -162,6 +162,12 @@ class SeoController extends Controller
             $head .= '<script type="application/ld+json">'.json_encode($ld, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG).'</script>'."\n";
         }
 
+        if (($p['canonical'] ?? '') === rtrim((string) config('seo.site_url'), '/').'/') {
+            // The home page's first screen is its hero photo: start fetching it before the script runs.
+            $head .= '<link rel="preload" as="image" fetchpriority="high" imagesrcset="/images/hero-beijing-800-v2.webp 800w, /images/hero-beijing-1400-v2.webp 1400w, /images/hero-beijing-v2.webp 2000w" imagesizes="100vw" />'.'
+';
+        }
+
         $html = preg_replace('#</head>#i', $head.'</head>', $html, 1);
         // Crawlable content for search engines and no-JS visitors, kept out of sight for people while the
         // app loads: they see a branded loading screen instead of bare text. The app replaces all of it on mount.
