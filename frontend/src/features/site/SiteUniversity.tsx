@@ -96,11 +96,6 @@ export default function SiteUniversity() {
             </div>
           )}
         </div>
-        {u.cover_downloadable && (
-          <div className="flex justify-end px-4 pt-2 text-xs sm:px-6">
-            <a href={`/api/v1/public/universities/${u.slug}/cover-download`} className="text-muted-foreground hover:text-cas-navy hover:underline">{t("university.downloadCover")}</a>
-          </div>
-        )}
         <div className="p-4 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-3 sm:gap-4">

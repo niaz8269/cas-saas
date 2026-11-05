@@ -42,6 +42,54 @@ class BrandedDownload
         return is_file($file) ? $file : null;
     }
 
+    /**
+     * A copy of a site photo with the CAS emblem on it, for anything a visitor saves or drags out of
+     * the page (the page itself shows the clean photo). Written once under public/wm and then served
+     * as a plain file. Returns null when the photo may not be altered (licence forbids it or is not
+     * recorded) or does not exist.
+     */
+    public function watermarkedCopy(string $folder, string $name): ?string
+    {
+        $public = rtrim(config('media.public_path'), '/');
+        $allowed = $folder === 'photos' || ($folder === 'images' && preg_match('/^(hero|header)-/', $name));
+        if (! $allowed || ! preg_match('/^[A-Za-z0-9._-]+\.webp$/', $name) || str_contains($name, '..')) {
+            return null;
+        }
+
+        $source = "{$public}/{$folder}/{$name}";
+        if (! is_file($source)) {
+            return null;
+        }
+
+        if ($folder === 'photos') {
+            $credit = University::where('cover_path', "/photos/{$name}")->value('cover_credit');
+            // A photo that belongs to a university must carry a licence that allows adapting it.
+            if ($credit !== null && $this->licence($credit) === null) {
+                return null;
+            }
+        }
+
+        $target = "{$public}/wm/{$folder}/".substr($name, 0, -5).'.jpg';
+        if (is_file($target)) {
+            return $target;
+        }
+
+        $image = ImageManager::gd()->read($source);
+        if ($image->width() > 1600) {
+            $image->scaleDown(width: 1600);
+        }
+        $emblem = ImageManager::gd()->read(resource_path('images/cas-emblem-white.png'));
+        $emblem->scaleDown(width: max(56, (int) round($image->width() * 0.08)));
+        $image->place($emblem, 'bottom-right', 18, 18, 78);
+
+        if (! is_dir(dirname($target))) {
+            mkdir(dirname($target), 0775, true);
+        }
+        file_put_contents($target, (string) $image->toJpeg(88));
+
+        return $target;
+    }
+
     /** Builds the zip (branded photo + attribution) and returns its temporary path. */
     public function zip(University $university): string
     {

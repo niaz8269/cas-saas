@@ -4,7 +4,7 @@
     <If "%{REQUEST_URI} =~ m#^/assets/#">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </If>
-    <If "%{REQUEST_URI} =~ m#^/(photos|images|logos)/#">
+    <If "%{REQUEST_URI} =~ m#^/(photos|images|logos|wm)/#">
         Header set Cache-Control "public, max-age=2592000"
     </If>
 </IfModule>

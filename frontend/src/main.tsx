@@ -77,8 +77,10 @@ const IntegrationsPage = lazy(() => import("@/features/admin/IntegrationsPage"))
 const ErrorLogPage = lazy(() => import("@/features/admin/ErrorLogPage"))
 const TasksPage = lazy(() => import("@/features/tasks/TasksPage"))
 import { initErrorReporting } from "@/lib/errorReporting"
+import { installPhotoGuard } from "@/lib/photoGuard"
 
 initErrorReporting()
+installPhotoGuard()
 
 const queryClient = new QueryClient({
   defaultOptions: {
