@@ -65,7 +65,7 @@ export default function StudentContact() {
 
       <PortalCard>
         <div className="flex items-center gap-4">
-          <img src="/images/wechat-qr.jpg" alt={t("studentPortal.contact.wechatQrAlt")} width={96} height={96} className="size-24 shrink-0 rounded-lg border bg-white object-contain" />
+          <img src="/images/wechat-qr-v2.jpg" alt={t("studentPortal.contact.wechatQrAlt")} width={128} height={128} className="size-32 shrink-0 rounded-lg border bg-white object-contain" />
           <div className="min-w-0">
             <p className="text-sm font-semibold">{t("studentPortal.contact.wechat")}</p>
             <p className="mt-0.5 font-mono text-sm break-all">{CONTACT.wechat}</p>
