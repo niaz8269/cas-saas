@@ -1,7 +1,9 @@
-import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, Plane, Sparkles, Users } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, LayoutDashboard, MessageCircle, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { getSitePrograms, getSiteScholarships, getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 
@@ -20,15 +22,33 @@ const WHY_CHINA = [
   "about.whyPoint4",
 ]
 
-const STATS: [string, string][] = [
-  ["13+", "about.statYears"],
-  ["13K+", "about.statStudents"],
-  ["200+", "about.statPartners"],
-  ["100%", "about.statSupport"],
+// What CAS promises, each one true of the platform as built.
+const PROMISES = [
+  { icon: ShieldCheck, titleKey: "about.promiseOfficialTitle", bodyKey: "about.promiseOfficialBody" },
+  { icon: Wallet, titleKey: "about.promiseFeesTitle", bodyKey: "about.promiseFeesBody" },
+  { icon: LayoutDashboard, titleKey: "about.promiseTrackTitle", bodyKey: "about.promiseTrackBody" },
+  { icon: MessageCircle, titleKey: "about.promiseReachTitle", bodyKey: "about.promiseReachBody" },
 ]
+
+// Live totals from the catalog, so the numbers never go stale.
+function useCatalogTotal(key: string, fn: () => Promise<{ meta?: { total?: number } }>) {
+  const { data } = useQuery({ queryKey: ["about-total", key], queryFn: fn, staleTime: 5 * 60_000 })
+
+  return data?.meta?.total
+}
 
 export default function SiteAbout() {
   const { t } = useTranslation()
+  const universities = useCatalogTotal("universities", () => getSiteUniversities({ perPage: 1 }))
+  const programs = useCatalogTotal("programs", () => getSitePrograms())
+  const scholarships = useCatalogTotal("scholarships", () => getSiteScholarships())
+  const fmt = (n?: number) => (n === undefined ? "—" : n.toLocaleString("en-US"))
+  const stats: [string, string][] = [
+    ["2012", "about.statSince"],
+    [fmt(universities), "about.statUniversities"],
+    [fmt(programs), "about.statPrograms"],
+    [fmt(scholarships), "about.statScholarships"],
+  ]
   useSeo({
     title: t("about.seoTitle"),
     description: t("about.seoDescription"),
@@ -45,7 +65,7 @@ export default function SiteAbout() {
 
       {/* Stats */}
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {STATS.map(([v, l]) => (
+        {stats.map(([v, l]) => (
           <div key={l} className="rounded-sm border bg-card p-5 text-center shadow-sm">
             <p className="text-3xl font-bold text-cas-navy tabular-nums">{v}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t(l)}</p>
@@ -79,6 +99,24 @@ export default function SiteAbout() {
             </div>
           ))}
         </div>
+      </SiteSection>
+
+      {/* What you can count on */}
+      <SiteSection title={t("about.promiseTitle")} subtitle={t("about.promiseSubtitle")}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {PROMISES.map(({ icon: Icon, titleKey, bodyKey }) => (
+            <div key={titleKey} className="flex gap-4 rounded-sm border bg-card p-5 shadow-sm">
+              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-sm bg-cas-navy-50 text-cas-navy"><Icon className="size-5" /></span>
+              <div>
+                <h3 className="font-semibold">{t(titleKey)}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t(bodyKey)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          <Link to="/site/pricing" className="font-medium text-cas-navy hover:underline">{t("about.seeFees")}</Link>
+        </p>
       </SiteSection>
 
       {/* Mission band */}
