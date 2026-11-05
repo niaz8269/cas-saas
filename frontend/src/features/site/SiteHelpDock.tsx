@@ -18,7 +18,7 @@ const brandQr = (data: string, color: string) =>
 
 /**
  * A scannable contact tile: QR code, logo badge and a caption. CAS's own WeChat
- * QR image can be dropped at public/images/wechat-qr.jpg; until it exists a code
+ * QR image can be dropped at public/images/wechat-qr-v2.jpg; until it exists a code
  * carrying the WeChat ID is shown.
  */
 function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: string; name: string; value: string }) {
@@ -30,7 +30,7 @@ function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: 
     <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-white/70 bg-white/50 p-3 shadow-sm">
       <div className="relative size-28 rounded-md bg-white p-1.5 shadow-md ring-1 ring-cas-navy/10">
         <img
-          src={own ? "/images/wechat-qr.jpg" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
+          src={own ? "/images/wechat-qr-v2.jpg" : brandQr(kind === "wechat" ? WECHAT_ID : WHATSAPP, kind === "wechat" ? color : "1F2933")}
           onError={() => kind === "wechat" && setMissing(true)}
           alt={alt}
           className="size-full object-contain"
