@@ -6,12 +6,12 @@ export interface HeaderImage {
 
 export const HEADER_IMAGES: Record<"default" | "universities" | "programs" | "scholarships" | "cities", HeaderImage> = {
   // Supplied by the site owner (photographer and licence to be confirmed; see docs/CONTENT_MEDIA_AUDIT.md).
-  default: { src: "/images/header-default.webp" },
-  universities: { src: "/images/header-universities.webp" },
-  scholarships: { src: "/images/header-scholarships.webp" },
-  cities: { src: "/images/header-cities.webp" },
+  default: { src: "/images/header-default-v2.webp" },
+  universities: { src: "/images/header-universities-v2.webp" },
+  scholarships: { src: "/images/header-scholarships-v2.webp" },
+  cities: { src: "/images/header-cities-v2.webp" },
   // The same Tianjin photo the city pages use, with its Wikimedia Commons credit.
-  programs: { src: "/images/header-programs.webp", credit: "KangTyngrwey, CC BY-SA 4.0, via Wikimedia Commons" },
+  programs: { src: "/images/header-programs-v2.webp", credit: "KangTyngrwey, CC BY-SA 4.0, via Wikimedia Commons" },
 }
 
 /** Campus photos for the home page highlight tiles, in tile order. */
