@@ -7,9 +7,9 @@ use App\Models\University;
 use Illuminate\Database\Seeder;
 
 /**
- * Every undergraduate-level university in each province, from the Ministry of
- * Education's national list of regular higher-education institutions
- * (as of 17 June 2026). The catalog built from the CSC study-in-China list only
+ * Every undergraduate university and every vocational (short-cycle diploma)
+ * college in each province, from the Ministry of Education's national list of
+ * regular higher-education institutions (as of 17 June 2026). The catalog built from the CSC study-in-China list only
  * holds universities that already publish programs for international students;
  * this adds the rest so each province is complete. They carry the official name,
  * Chinese name, city, province and MoE school code, and no programs: counselors
