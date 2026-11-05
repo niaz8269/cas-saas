@@ -118,6 +118,9 @@ class UniversityLocationSeeder extends Seeder
             University::where('slug', $slug)->update(['city' => $city, 'province' => $province]);
         }
 
+        // One spelling per province, so province pages and counts do not split.
+        University::where('province', 'Tibet (Xizang)')->update(['province' => 'Tibet']);
+
         University::where('slug', 'jilin-medical-university')->whereNull('name_zh')->update(['name_zh' => '吉林医药学院']);
 
         // Tidy photo credits that carry Commons' placeholder text instead of an author name.
