@@ -79,8 +79,8 @@ class BrandedDownload
             $image->scaleDown(width: 1600);
         }
         $emblem = ImageManager::gd()->read(resource_path('images/cas-emblem-white.png'));
-        $emblem->scaleDown(width: max(56, (int) round($image->width() * 0.08)));
-        $image->place($emblem, 'bottom-right', 18, 18, 78);
+        $emblem->scaleDown(width: max(64, (int) round($image->width() * 0.11)));
+        $image->place($emblem, 'bottom-right', 20, 20, 88);
 
         if (! is_dir(dirname($target))) {
             mkdir(dirname($target), 0775, true);
