@@ -1673,10 +1673,7 @@
     "closeTbd": "Date de clôture à annoncer",
     "source": "Avis de l'université",
     "checked": "vérifié le {{date}}",
-    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer.",
-    "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université",
-    "sourceSas": "Fiche SAS",
-    "sourceListing": "Avis de l'université"
+    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer."
   },
   "photoCredits": {
     "seoTitle": "Crédits photo",

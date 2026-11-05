@@ -1673,10 +1673,7 @@
     "closeTbd": "Tanggal penutupan akan diumumkan",
     "source": "Pengumuman universitas",
     "checked": "diperiksa {{date}}",
-    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya.",
-    "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
-    "sourceSas": "Daftar SAS",
-    "sourceListing": "Pengumuman universitas"
+    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya."
   },
   "photoCredits": {
     "seoTitle": "Kredit foto",

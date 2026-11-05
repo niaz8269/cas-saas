@@ -207,7 +207,7 @@ export function AdmissionWindow({ opens, closes, sourceKind, verifiedOn, classNa
       </p>
       {sourceKind && (
         <p className="pl-5 text-[11px] text-muted-foreground">
-          {t(sourceKind === "cucas" ? "admissionWindow.sourceCucas" : sourceKind === "sas" ? "admissionWindow.sourceSas" : sourceKind === "listing" ? "admissionWindow.sourceListing" : "admissionWindow.source")}
+          {t("admissionWindow.source")}
           {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
         </p>
       )}
