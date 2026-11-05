@@ -1,0 +1,9 @@
+content,count,origin,category,action
+"University overviews (history, city, culture)",304,"English Wikipedia article text of the university and its city (CC BY-SA 4.0), joined with CAS catalog data","third-party text: rewrite","Rewrite in CAS voice from the facts; keep attribution until the rewrite replaces it"
+"University introductions (about)",2955,"Wikipedia lead where one existed, else a CAS-written factual line from catalog data",mixed,"Rewrite the Wikipedia-derived ones; the CAS lines are original"
+"University profile facts (founded, type, students)",294,"Wikipedia and Wikidata facts (facts are not copyrightable)","official third-party factual information",Keep
+"University names, cities, MoE codes",2955,"Ministry of Education national list (public information)","official third-party factual information","Keep; cite the source in the admin"
+"Registered majors",67045,"Ministry of Education filing results (public information)","official third-party factual information","Keep; names translated by CAS"
+"Programs, fees, dates, scholarships",55526,"Each university's own admissions pages, restated by CAS","rewritten CAS editorial content",Keep
+"News and blog posts",5,"Written by CAS","original CAS-created",Keep
+"Site pages (about, pricing, guides, FAQ)",0,"Written by CAS","original CAS-created",Keep

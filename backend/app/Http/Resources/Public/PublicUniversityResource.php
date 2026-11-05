@@ -40,6 +40,7 @@ class PublicUniversityResource extends JsonResource
             'emblem_url' => $images->url($this->emblem_path),
             'cover_url' => $images->url($this->cover_path),
             'cover_credit' => $this->cover_credit,
+            'cover_downloadable' => app(\App\Services\Media\BrandedDownload::class)->isAvailable($this->resource),
             'cover_is_city' => (bool) $this->cover_is_city,
             'moe_listed' => $this->moe_listed,
             'moe_mbbs_year' => $this->moe_mbbs_year,

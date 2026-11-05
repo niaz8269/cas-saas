@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Portal\StudentPortalController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
+use App\Http\Controllers\Api\V1\Public\PublicMediaController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -75,6 +76,8 @@ Route::prefix('v1')->group(function () {
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
         Route::get('cost-guide', [PublicCatalogController::class, 'costGuide']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
+        // CAS-branded copy of a licensed cover photo, with its attribution (previews stay clean)
+        Route::get('universities/{slug}/cover-download', [PublicMediaController::class, 'coverDownload']);
         Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
         Route::get('cities/{slug}', [PublicCatalogController::class, 'city']);
         // Reference data for the public sign-up forms (student/agent registration)

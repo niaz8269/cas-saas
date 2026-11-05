@@ -1,7 +1,7 @@
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Award, Lock, School, Search } from "lucide-react"
-import { AdmissionWindow, PhotoMark } from "@/features/site/components"
+import { AdmissionWindow } from "@/features/site/components"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
@@ -105,7 +105,6 @@ export default function SiteScholarships() {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
               <span className="absolute top-3 left-3 inline-flex size-9 items-center justify-center rounded-sm bg-white/90 text-cas-navy shadow-sm"><Award className="size-5" /></span>
               {s.type && <Badge variant="outline" className="absolute top-3 right-3 border-transparent bg-white/90 text-cas-navy capitalize shadow-sm">{s.type}</Badge>}
-              {s.photo_url && <PhotoMark />}
             </div>
             <div className="flex flex-1 flex-col p-5">
             <h2 className="mt-3 font-semibold text-cas-navy">{s.name}</h2>

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import type { SiteCityStat } from "@/features/site/api"
-import { PhotoMark } from "@/features/site/components"
 
 const citySlug = (c: string) => c.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
 
@@ -22,7 +21,6 @@ function CityCard({ city, tall }: { city: SiteCityStat; tall?: boolean }) {
         <span className={`font-bold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] ${tall ? "text-xl sm:text-2xl" : "text-lg"}`}>{city.city}</span>
         <span className="rounded-full bg-black/40 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">{t("home.cities.universityCount", { count: city.count })}</span>
       </div>
-      {city.photo_url && <PhotoMark />}
     </Link>
   )
 }

@@ -23,7 +23,7 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AdmissionWindow, PhotoMark } from "@/features/site/components"
+import { AdmissionWindow } from "@/features/site/components"
 import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
@@ -95,9 +95,12 @@ export default function SiteUniversity() {
               <span className="relative px-6 text-center font-sans text-2xl font-bold text-white/90 sm:text-3xl">{u.name}</span>
             </div>
           )}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-          {cover && <PhotoMark link />}
         </div>
+        {u.cover_downloadable && (
+          <div className="flex justify-end px-4 pt-2 text-xs sm:px-6">
+            <a href={`/api/v1/public/universities/${u.slug}/cover-download`} className="text-muted-foreground hover:text-cas-navy hover:underline">{t("university.downloadCover")}</a>
+          </div>
+        )}
         <div className="p-4 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-3 sm:gap-4">

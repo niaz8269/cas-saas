@@ -49,6 +49,7 @@ export interface SiteUniversityRef {
   slug: string | null
   cover_url?: string | null
   cover_credit?: string | null
+  cover_downloadable?: boolean
 }
 
 export interface SiteProgram {
@@ -172,6 +173,7 @@ export interface SiteUniversityCard {
   emblem_url?: string | null
   cover_url: string | null
   cover_credit?: string | null
+  cover_downloadable?: boolean
   /** True when the cover is a photo of the city because no campus photo was available. */
   cover_is_city?: boolean
   founded_year?: number | null
