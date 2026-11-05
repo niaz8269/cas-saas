@@ -11,7 +11,7 @@ export const HEADER_IMAGES: Record<"default" | "universities" | "programs" | "sc
   scholarships: { src: "/images/header-scholarships.webp" },
   cities: { src: "/images/header-cities.webp" },
   // The same Tianjin photo the city pages use, with its Wikimedia Commons credit.
-  programs: { src: "/photos/62178813c2fd09.webp", credit: "KangTyngrwey, CC BY-SA 4.0, via Wikimedia Commons" },
+  programs: { src: "/images/header-programs.webp", credit: "KangTyngrwey, CC BY-SA 4.0, via Wikimedia Commons" },
 }
 
 /** Campus photos for the home page highlight tiles, in tile order. */

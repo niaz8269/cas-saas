@@ -119,8 +119,7 @@ export function SitePageHeader({ eyebrow, title, subtitle, action, image = HEADE
   return (
     <section className="relative overflow-hidden rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
       <img src={image.src} alt="" decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/90 via-cas-navy/75 to-cas-navy/45" />
-      <div className="pointer-events-none absolute -top-16 -right-12 size-56 rounded-full bg-cas-red/20 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/85 via-cas-navy/45 to-transparent" />
       <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
           {eyebrow && <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-red/20 px-3 py-1 text-xs font-medium text-cas-red-50">{eyebrow}</span>}
