@@ -10,6 +10,10 @@ use Illuminate\Database\Seeder;
 /**
  * One demo account per staff role so every screen can be demoed.
  * Password comes from DEMO_PASSWORD (never hard-code real credentials).
+ *
+ * Never runs in production: the demo emails and the fallback password are
+ * public, so a production deploy creates its first admin with
+ * `php artisan cas:create-admin` instead.
  */
 class StaffUserSeeder extends Seeder
 {
@@ -31,6 +35,12 @@ class StaffUserSeeder extends Seeder
 
     public function run(): void
     {
+        if (app()->isProduction()) {
+            $this->command?->warn('Production: demo staff accounts skipped. Create the first admin with `php artisan cas:create-admin`.');
+
+            return;
+        }
+
         $password = env('DEMO_PASSWORD', 'CasDemo#2026');
         $hq = Branch::where('code', 'HQ')->first();
         $departments = Department::pluck('id', 'code');
