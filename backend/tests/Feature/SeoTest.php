@@ -73,3 +73,11 @@ it('does not expose official links in the server-rendered HTML', function () {
 
     expect(get('/site/universities/seo-uni')->getContent())->not->toContain('official-site.example');
 });
+
+it('hides the crawlable text behind a loading screen but keeps it in the page', function () {
+    $html = $this->get('/')->assertOk()->getContent();
+
+    expect($html)->toContain('id="cas-splash"')
+        ->and($html)->toContain('id="cas-seo"')
+        ->and($html)->toContain('clip:rect(0 0 0 0)');
+});

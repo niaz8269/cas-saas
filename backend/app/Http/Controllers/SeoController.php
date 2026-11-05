@@ -163,8 +163,15 @@ class SeoController extends Controller
         }
 
         $html = preg_replace('#</head>#i', $head.'</head>', $html, 1);
-        // Crawlable content; the app replaces it as soon as it loads.
-        $html = str_replace('<div id="root"></div>', '<div id="root"><main style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
+        // Crawlable content for search engines and no-JS visitors, kept out of sight for people while the
+        // app loads: they see a branded loading screen instead of bare text. The app replaces all of it on mount.
+        $splash = '<style>#cas-splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f6f8fc}'
+            .'#cas-splash img{width:88px;height:auto;animation:casPulse 1.4s ease-in-out infinite}'
+            .'@keyframes casPulse{0%,100%{opacity:.45}50%{opacity:1}}'
+            .'#cas-seo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>'
+            .'<noscript><style>#cas-splash{display:none}#cas-seo{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}</style></noscript>'
+            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="" /></div>';
+        $html = str_replace('<div id="root"></div>', '<div id="root">'.$splash.'<main id="cas-seo" style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
 
         return $html;
     }
