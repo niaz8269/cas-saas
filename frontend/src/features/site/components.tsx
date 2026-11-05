@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import logoWhite from "@/assets/cas-logo-white.png"
+import emblemWhite from "@/assets/cas-emblem-white.png"
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
 
@@ -25,17 +25,16 @@ function toneFor(seed: number | string): string {
 }
 
 /**
- * The CAS mark on every photo: logo and website. Photo authors and licences are
+ * The round CAS emblem on every photo. Photo authors and licences are
  * listed once on the Photo credits page rather than on each picture.
  */
 export function PhotoMark({ className, link = false }: { className?: string; link?: boolean }) {
   const inner = (
     <>
-      <img src={logoWhite} alt="CAS" className="h-4 w-auto" />
-      <span className="text-[10px] font-medium tracking-wide text-white">www.cas.moe</span>
+      <img src={emblemWhite} alt="CAS" className="size-6" />
     </>
   )
-  const base = "absolute right-2.5 bottom-2 z-10 inline-flex items-center gap-1.5 rounded-sm bg-black/40 px-2 py-1 backdrop-blur-sm"
+  const base = "absolute right-2.5 bottom-2 z-10 inline-flex items-center justify-center rounded-full bg-black/40 p-1 backdrop-blur-sm"
 
   return link ? (
     <a href="https://www.cas.moe" target="_blank" rel="noreferrer" className={cn(base, "hover:bg-black/55", className)}>{inner}</a>
