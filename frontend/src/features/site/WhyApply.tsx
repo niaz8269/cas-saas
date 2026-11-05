@@ -11,7 +11,7 @@ export default function WhyApply() {
 
   const points = [
     { title: t("home.why.freeTitle"), body: t("home.why.freeBody"), link: { to: "/site/pricing", label: t("home.why.freeLink") } },
-    { title: t("home.why.easyTitle"), body: t("home.why.easyBody", { total: formatTotal(totals.universities) }) },
+    { title: t("home.why.easyTitle"), body: t("home.why.easyBody") },
     { title: t("home.why.supportTitle"), body: t("home.why.supportBody"), link: { to: "/site/contact", label: t("home.why.supportLink") } },
     { title: t("home.why.officialTitle"), body: t("home.why.officialBody", { programs: formatTotal(totals.programs), scholarships: formatTotal(totals.scholarships) }) },
   ]
