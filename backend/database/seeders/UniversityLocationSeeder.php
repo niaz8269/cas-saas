@@ -103,6 +103,12 @@ class UniversityLocationSeeder extends Seeder
         'Zhengzhou' => 'Zhengzhou Xinzheng (CGO)',
         'Zhenjiang' => 'Nanjing Lukou (NKG)',
         'Zhoushan' => 'Zhoushan Putuoshan (HSN)',
+        "Yan'an" => "Yan'an Nanniwan (ENY)",
+        "Ma'anshan" => 'Nanjing Lukou (NKG)',
+        'Changzhou' => 'Changzhou Benniu (CZX)',
+        'Xinxiang' => 'Zhengzhou Xinzheng (CGO)',
+        'Luoyang' => 'Luoyang Beijiao (LYA)',
+        'Linyi' => 'Linyi Qiyang (LYI)',
         'Zibo' => 'Jinan Yaoqiang (TNA)',
     ];
 
