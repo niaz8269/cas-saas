@@ -10,8 +10,9 @@ use Illuminate\Support\Str;
 /**
  * Majors each institution has registered with the Ministry of Education, taken
  * from the Ministry's published results of its yearly undergraduate major
- * filings (2018, 2020 to 2024) and its approvals of new vocational majors
- * (2022 to 2026). They are what the Ministry lists for the school, not an
+ * filings (2018, 2020 to 2024), its approvals of new vocational majors
+ * (2022 to 2026), and the 2026 higher-vocational enrolment filings on its public
+ * major platform (zyyxzy.moe.edu.cn). They are what the Ministry lists for the school, not an
  * international-admissions offer, so they are flagged `registry_only`: the public
  * site shows them on the university's page with a note, and counselors confirm
  * language, fees and dates for international applicants.
