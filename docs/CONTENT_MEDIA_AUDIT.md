@@ -19,7 +19,7 @@ Regenerate the two CSVs any time with `php artisan cas:audit-content` (they are 
 | Campus photos | permission | 2 | Licence could not be confirmed (`/photos/a0adae278cb187.webp`, `/photos/2a4fe872e9c90a.webp`). Kept, flagged: confirm the licence or replace. |
 | University logos | permission | all | Each university's own mark, shown only to identify it. Request permission per university; no watermark, no download route. |
 | University emblems | permission | all | Cropped from the logos; same handling. |
-| Home hero and default header photos | verify | 2 | Source not recorded in the project. Owner to confirm the source or licence; otherwise replace with an original CAS-designed hero. |
+| Home hero (Beijing skyline with fireworks, supplied by the owner 2026-11-06) and default header photo | verify | 2 | Photographer and licence not recorded. Owner to confirm. The previous hero is kept in `frontend/src/assets/archive/`. |
 | CAS artwork, brand files, WeChat QR | own | - | Created by CAS. |
 
 How images are shown now:

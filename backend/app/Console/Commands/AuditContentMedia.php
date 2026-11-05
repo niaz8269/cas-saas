@@ -68,7 +68,7 @@ class AuditContentMedia extends Command
 
         // Static site assets.
         foreach ([
-            ['hero image', '/src/assets/hero-graduate*.webp', 'Home hero', 'source not recorded', 'unknown', 'unknown', 'verify', 'no', 'Owner to confirm the source or licence; otherwise commission or create an original CAS-designed hero'],
+            ['hero image', '/src/assets/hero-beijing*.webp', 'Home hero', 'supplied by the owner on 2026-11-06 (Beijing skyline with fireworks); photographer and licence not recorded', 'unknown', 'unknown', 'verify', 'no', 'Owner to confirm the photographer and licence; the previous hero is archived in src/assets/archive'],
             ['header image', '/images/hero-great-wall.webp', 'Default page header', 'source not recorded', 'unknown', 'unknown', 'verify', 'no', 'Same as the home hero'],
             ['artwork', '/images/art-1..6.svg', 'Cards', 'CAS original geometric artwork', 'CAS-owned', 'no', 'own', 'yes', 'None'],
             ['brand', '/cas-logo, /cas-emblem, favicon, og-image', 'Site chrome', 'CAS', 'CAS-owned', 'no', 'own', 'yes', 'None'],
