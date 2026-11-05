@@ -4,8 +4,7 @@ import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import type { SiteCityStat } from "@/features/site/api"
-
-const citySlug = (c: string) => c.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+import { citySlug } from "@/lib/slug"
 
 function CityCard({ city, tall }: { city: SiteCityStat; tall?: boolean }) {
   const { t } = useTranslation()
@@ -15,7 +14,7 @@ function CityCard({ city, tall }: { city: SiteCityStat; tall?: boolean }) {
       to={`/site/cities/${citySlug(city.city)}`}
       className={`group relative flex items-start overflow-hidden rounded-sm bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${tall ? "h-44 sm:h-52" : "h-32 sm:h-36"}`}
     >
-      {city.photo_url && <img src={city.photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
+      {city.photo_url && <img src={city.photo_url} alt={`${city.city}, China`} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/30" />
       <div className="relative flex w-full items-start justify-between gap-2 p-4 sm:p-5">
         <span className={`font-bold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] ${tall ? "text-xl sm:text-2xl" : "text-lg"}`}>{city.city}</span>

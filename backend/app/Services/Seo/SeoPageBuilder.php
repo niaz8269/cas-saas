@@ -60,6 +60,7 @@ class SeoPageBuilder
     private function staticPage(string $path, array $meta): array
     {
         [$title, $description] = $meta;
+        $description = $this->withCounts($description);
         $canonical = $path === '' ? '/' : '/'.$path;
         $crumbs = $path === '' ? [] : [['Home', '/'], [$this->crumbLabel($path, $title), $canonical]];
 
@@ -77,6 +78,22 @@ class SeoPageBuilder
         $ld = $path === '' ? [$this->organization(), $this->website()] : [];
 
         return $this->page($title, $description, $canonical, jsonLd: $ld, crumbs: $crumbs, body: $body);
+    }
+
+    /** Fills {universities} and {programs} with today's counts, rounded down so the text stays true as data grows. */
+    private function withCounts(string $text): string
+    {
+        if (! str_contains($text, '{')) {
+            return $text;
+        }
+
+        $counts = cache()->remember('seo.counts.v1', now()->addMinutes(30), fn () => [
+            'universities' => University::where('status', 'active')->count(),
+            'programs' => Program::where('status', 'active')->where('registry_only', false)->count(),
+        ]);
+        $round = fn (int $n) => number_format(intdiv($n, $n >= 1000 ? 1000 : 100) * ($n >= 1000 ? 1000 : 100)).'+';
+
+        return strtr($text, ['{universities}' => $round($counts['universities']), '{programs}' => $round($counts['programs'])]);
     }
 
     private function university(string $slug): ?array

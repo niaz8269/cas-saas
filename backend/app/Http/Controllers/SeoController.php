@@ -46,6 +46,7 @@ class SeoController extends Controller
             'Disallow: /dashboard',
             'Disallow: /portal',
             'Disallow: /login',
+            'Disallow: /wm/',
             '',
             "Sitemap: {$site}/sitemap.xml",
         ];
@@ -56,9 +57,17 @@ class SeoController extends Controller
     public function sitemapIndex(): Response
     {
         $site = config('seo.site_url');
+        $stamp = fn (?string $d) => $d ?: now()->toDateString();
+        $lastmod = [
+            'pages' => $stamp(date('Y-m-d', (int) filemtime(config_path('seo.php')))),
+            'universities' => $stamp(University::where('status', 'active')->max('updated_at') ? substr((string) University::where('status', 'active')->max('updated_at'), 0, 10) : null),
+            'cities' => $stamp(University::where('status', 'active')->max('updated_at') ? substr((string) University::where('status', 'active')->max('updated_at'), 0, 10) : null),
+            'news' => $stamp(Post::where('status', 'published')->max('updated_at') ? substr((string) Post::where('status', 'published')->max('updated_at'), 0, 10) : null),
+        ];
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        foreach (['pages', 'universities', 'cities', 'news'] as $name) {
-            $xml .= "<sitemap><loc>{$site}/sitemaps/{$name}.xml</loc><lastmod>".now()->toDateString().'</lastmod></sitemap>';
+        foreach ($lastmod as $name => $date) {
+            $xml .= "<sitemap><loc>{$site}/sitemaps/{$name}.xml</loc><lastmod>{$date}</lastmod></sitemap>";
         }
 
         return $this->xml($xml.'</sitemapindex>');
@@ -76,14 +85,22 @@ class SeoController extends Controller
                 }
                 break;
             case 'universities':
-                foreach (University::where('status', 'active')->orderBy('name')->get(['slug', 'name', 'cover_path', 'updated_at']) as $u) {
+                // Every active institution. Those with confirmed programs or a full profile rank higher
+                // than the ones that so far only list the Ministry's registered majors.
+                $rows = University::where('status', 'active')
+                    ->withCount(['programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+                    ->orderBy('name')
+                    ->get(['id', 'slug', 'name', 'cover_path', 'overview', 'updated_at']);
+                foreach ($rows as $u) {
                     $img = $this->images->url($u->cover_path);
-                    $urls[] = ['loc' => $site.'/site/universities/'.$u->slug, 'lastmod' => $u->updated_at?->toDateString(), 'changefreq' => 'weekly', 'priority' => 0.8, 'image' => $img ? (preg_match('#^https?://#', $img) ? $img : $site.$img) : null, 'title' => $u->name];
+                    $rich = $u->confirmed_programs_count > 0 || $u->overview !== null;
+                    $urls[] = ['loc' => $site.'/site/universities/'.$u->slug, 'lastmod' => $u->updated_at?->toDateString(), 'changefreq' => $rich ? 'weekly' : 'monthly', 'priority' => $rich ? 0.8 : 0.5, 'image' => $img ? (preg_match('#^https?://#', $img) ? $img : $site.$img) : null, 'title' => $u->name];
                 }
                 break;
             case 'cities':
-                foreach (University::where('status', 'active')->whereNotNull('city')->pluck('city')->unique()->sort() as $city) {
-                    $urls[] = ['loc' => $site.'/site/cities/'.Str::slug($city), 'changefreq' => 'monthly', 'priority' => 0.6];
+                $latest = University::where('status', 'active')->whereNotNull('city')->selectRaw('city, max(updated_at) as updated')->groupBy('city')->orderBy('city')->get();
+                foreach ($latest as $row) {
+                    $urls[] = ['loc' => $site.'/site/cities/'.Str::slug($row->city), 'lastmod' => $row->updated ? substr((string) $row->updated, 0, 10) : null, 'changefreq' => 'monthly', 'priority' => 0.6];
                 }
                 break;
             case 'news':

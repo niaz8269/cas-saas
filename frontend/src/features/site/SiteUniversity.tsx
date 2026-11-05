@@ -88,7 +88,7 @@ export default function SiteUniversity() {
         {/* Cover — image, or a designed gradient banner when none is available */}
         <div className="relative h-48 overflow-hidden sm:h-60">
           {cover ? (
-            <img src={cover.src} alt="" className="h-full w-full object-cover" />
+            <img src={cover.src} alt={cover.own ? `${u.name} campus` : `${u.city ?? "China"} city view near ${u.name}`} className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />

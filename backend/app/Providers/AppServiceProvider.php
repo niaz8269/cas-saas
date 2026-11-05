@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
 use App\Models\Task;
+use App\Models\University;
 use App\Models\User;
+use App\Observers\SeoPingObserver;
 use App\Observers\TaskObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -53,5 +56,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Assigned tasks raise the owner's in-app notification (§5.9).
         Task::observe(TaskObserver::class);
+        University::observe(SeoPingObserver::class);
+        Post::observe(SeoPingObserver::class);
     }
 }

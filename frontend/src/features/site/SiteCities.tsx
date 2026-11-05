@@ -8,8 +8,7 @@ import { getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { useSeo } from "@/lib/seo"
-
-const citySlug = (c: string) => c.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+import { citySlug } from "@/lib/slug"
 
 export default function SiteCities() {
   const { t } = useTranslation()
@@ -59,7 +58,7 @@ export default function SiteCities() {
               className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-sm"
             >
               <div className="relative flex h-36 items-end overflow-hidden bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
-                {photo_url && <img src={photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
+                {photo_url && <img src={photo_url} alt={`${city}, China`} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" />}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 <span className="relative px-5 pb-3 font-sans text-2xl font-bold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">{city}</span>
               </div>
