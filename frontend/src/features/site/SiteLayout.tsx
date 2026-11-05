@@ -9,6 +9,7 @@ import casLogoWhite from "@/assets/cas-logo-white.png"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
+import { loadTawk } from "@/lib/tawk"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
 import LanguageSwitcher from "@/i18n/LanguageSwitcher"
@@ -170,6 +171,9 @@ export default function SiteLayout() {
   const portalKind = usePortalAuthStore((s) => s.kind)
   const portalToken = usePortalAuthStore((s) => s.token)
   const loggedIn = Boolean(portalToken && portalKind)
+
+  // Live chat (Tawk.to) on the public website only, loaded once after first paint.
+  useEffect(() => { loadTawk() }, [])
 
   // Header is transparent over the home hero and turns solid once scrolled
   // (or on any non-home page). The logo stays the real colour mark throughout.
