@@ -83,6 +83,39 @@ class WikipediaProfileSeeder extends Seeder
                 'cover_is_city' => true,
             ])->save();
         }
+
+        $this->provinceFallback();
+    }
+
+    /**
+     * Where a city has no licensed photo of its own, show a photo of another city in the same
+     * province (the provincial capital when it has one). The credit names the city shown.
+     */
+    private function provinceFallback(): void
+    {
+        $capitals = ['Hebei' => 'Shijiazhuang', 'Shanxi' => 'Taiyuan', 'Inner Mongolia' => 'Hohhot', 'Liaoning' => 'Shenyang', 'Jilin' => 'Changchun', 'Heilongjiang' => 'Harbin', 'Jiangsu' => 'Nanjing', 'Zhejiang' => 'Hangzhou', 'Anhui' => 'Hefei', 'Fujian' => 'Fuzhou', 'Jiangxi' => 'Nanchang', 'Shandong' => 'Jinan', 'Henan' => 'Zhengzhou', 'Hubei' => 'Wuhan', 'Hunan' => 'Changsha', 'Guangdong' => 'Guangzhou', 'Guangxi' => 'Nanning', 'Hainan' => 'Haikou', 'Sichuan' => 'Chengdu', 'Guizhou' => 'Guiyang', 'Yunnan' => 'Kunming', 'Tibet' => 'Lhasa', 'Shaanxi' => "Xi'an", 'Gansu' => 'Lanzhou', 'Qinghai' => 'Xining', 'Ningxia' => 'Yinchuan', 'Xinjiang' => 'Urumqi'];
+
+        $donors = University::where('cover_is_city', true)->whereNotNull('cover_path')->get(['province', 'city', 'cover_path', 'cover_credit', 'cover_source_url'])
+            ->groupBy('province')
+            ->map(function ($group, $province) use ($capitals) {
+                $capital = $capitals[$province] ?? null;
+
+                return $group->firstWhere('city', $capital) ?? $group->sortBy('city')->first();
+            });
+
+        foreach (University::where(fn ($q) => $q->whereNull('cover_path')->orWhere('cover_path', ''))->whereNotNull('province')->get() as $uni) {
+            $donor = $donors->get($uni->province);
+            if (! $donor) {
+                continue;
+            }
+
+            $uni->forceFill([
+                'cover_path' => $donor->cover_path,
+                'cover_credit' => 'Photo of '.$donor->city.': '.$donor->cover_credit,
+                'cover_source_url' => $donor->cover_source_url,
+                'cover_is_city' => true,
+            ])->save();
+        }
     }
 
     private function type(?string $type): ?string
