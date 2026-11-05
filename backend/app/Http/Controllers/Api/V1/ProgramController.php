@@ -53,7 +53,8 @@ class ProgramController extends Controller
         $this->authorize('update', $program);
 
         $data = $request->validated();
-        $program->update($data);
+        // Saving a program in the admin means staff have confirmed its details for international applicants.
+        $program->update($data + ['registry_only' => false]);
 
         if (array_key_exists('scholarship_ids', $data)) {
             $program->scholarships()->sync($data['scholarship_ids'] ?? []);

@@ -31,3 +31,16 @@ it('keeps majors registered with the Ministry out of the program finder', functi
         ->and(collect($page)->pluck('name')->sort()->values()->all())->toBe(['Data Science', 'MBBS'])
         ->and(collect($page)->firstWhere('name', 'Data Science')['registry_only'])->toBeTrue();
 });
+
+it('turns a registered major into a confirmed program once staff save it', function () {
+    $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
+    $admin = \App\Models\User::factory()->create(['status' => 'active']);
+    $admin->assignRole('Super Admin');
+    $uni = University::create(['name' => 'Test University', 'code' => 'TU2', 'status' => 'active']);
+    $program = $uni->programs()->create(['name' => 'Data Science', 'level' => 'bachelor', 'registry_only' => true, 'status' => 'active']);
+
+    \Laravel\Sanctum\Sanctum::actingAs($admin, ['*'], 'staff');
+    $this->putJson("/api/v1/programs/{$program->id}", ['teaching_language' => 'English', 'tuition_fee' => 20000])->assertOk();
+
+    expect($program->fresh()->registry_only)->toBeFalse();
+});
