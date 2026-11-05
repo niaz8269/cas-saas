@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
+import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { useSeo } from "@/lib/seo"
 
 const citySlug = (c: string) => c.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
@@ -31,6 +32,7 @@ export default function SiteCities() {
         eyebrow={t("cities.eyebrow")}
         title={t("cities.title")}
         subtitle={t("cities.subtitle")}
+        image={HEADER_IMAGES.cities}
       />
 
       {isError && (

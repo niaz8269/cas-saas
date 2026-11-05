@@ -69,7 +69,8 @@ class AuditContentMedia extends Command
         // Static site assets.
         foreach ([
             ['hero image', '/src/assets/hero-beijing*.webp', 'Home hero', 'supplied by the owner on 2026-11-06 (Beijing skyline with fireworks); photographer and licence not recorded', 'unknown', 'unknown', 'verify', 'no', 'Owner to confirm the photographer and licence; the previous hero is archived in src/assets/archive'],
-            ['header image', '/images/hero-great-wall.webp', 'Default page header', 'source not recorded', 'unknown', 'unknown', 'verify', 'no', 'Same as the home hero'],
+            ['header image', '/images/header-{default,universities,scholarships,cities}.webp', 'Page headers', 'supplied by the owner on 2026-11-06; photographer and licence not recorded', 'unknown', 'unknown', 'verify', 'no', 'Owner to confirm photographer and licence'],
+            ['header image', '/images/hero-great-wall.webp', 'No longer used', 'source not recorded', 'unknown', 'unknown', 'verify', 'no', 'Kept in the repository; remove or confirm the source'],
             ['artwork', '/images/art-1..6.svg', 'Cards', 'CAS original geometric artwork', 'CAS-owned', 'no', 'own', 'yes', 'None'],
             ['brand', '/cas-logo, /cas-emblem, favicon, og-image', 'Site chrome', 'CAS', 'CAS-owned', 'no', 'own', 'yes', 'None'],
             ['QR code', '/images/wechat-qr-v2.jpg', 'Contact', 'CAS WeChat account', 'CAS-owned', 'no', 'own', 'no', 'None'],
