@@ -131,6 +131,9 @@ class SasCatalogSeeder extends Seeder
      */
     private function importPrograms(University $uni, array $rows, string $url, string $fetched): void
     {
+        // Majors only registered with the Ministry come back from RegisteredMajorsSeeder; they must not displace real programs.
+        DB::table('programs')->where('university_id', $uni->id)->where('registry_only', true)->delete();
+
         // Drop earlier CSC/SAS-sourced rows; keep hand-verified official-page rows.
         DB::table('programs')
             ->where('university_id', $uni->id)

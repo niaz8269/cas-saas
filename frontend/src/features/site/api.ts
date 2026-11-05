@@ -56,6 +56,8 @@ export interface SiteProgram {
   name: string
   name_zh?: string | null
   csc_listed?: boolean
+  // Registered with the Ministry of Education; international-student details not confirmed yet.
+  registry_only?: boolean
   level: string
   teaching_language: string | null
   duration_months: number | null

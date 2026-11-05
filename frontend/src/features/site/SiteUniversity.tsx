@@ -305,8 +305,13 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   const [shown, setShown] = useState(PROGRAMS_PAGE)
   if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
+  const hasRegistered = u.programs.some((p) => p.registry_only)
+
   return (
     <div className="space-y-4">
+    {hasRegistered && (
+      <p className="rounded-sm border border-cas-navy/15 bg-cas-navy-50 px-4 py-3 text-sm text-cas-navy">{t("university.registryNote")}</p>
+    )}
     <div className="grid gap-3 sm:grid-cols-2">
       {u.programs.slice(0, shown).map((p) => (
         <div key={p.id} className="rounded-sm border bg-card p-4 shadow-sm">
@@ -316,7 +321,9 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
               {p.name_zh && <p className="text-xs text-muted-foreground">{p.name_zh}</p>}
               <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
             </div>
-            {p.fee_locked ? (
+            {p.registry_only ? (
+              <Badge variant="outline" className="border-transparent bg-subtle text-muted-foreground">{t("university.registeredMajor")}</Badge>
+            ) : p.fee_locked ? (
               <SignInGate label={t("university.signInForFees")} className="text-sm" />
             ) : p.tuition_fee != null ? (
               <span className="text-right text-sm font-semibold tabular-nums text-cas-navy">

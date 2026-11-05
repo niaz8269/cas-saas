@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             UniversityContactFixSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
+            RegisteredMajorsSeeder::class,
             DocumentTypeSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,

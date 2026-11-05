@@ -18,3 +18,16 @@ it('adds universities that publish international admissions but are not on the C
         ->and(University::where('name', 'Shenyang Medical College')->count())->toBe(1)
         ->and($yanan->programs()->count())->toBe(1);
 });
+
+it('keeps majors registered with the Ministry out of the program finder', function () {
+    $uni = University::create(['name' => 'Test University', 'name_zh' => '测试大学', 'code' => 'TU1', 'slug' => 'test-university', 'status' => 'active']);
+    $uni->programs()->create(['name' => 'Data Science', 'level' => 'bachelor', 'registry_only' => true, 'status' => 'active']);
+    $uni->programs()->create(['name' => 'MBBS', 'level' => 'bachelor', 'status' => 'active']);
+
+    $finder = $this->getJson('/api/v1/public/programs')->assertOk()->json('data');
+    $page = $this->getJson('/api/v1/public/programs?filter[university_slug]=test-university')->assertOk()->json('data');
+
+    expect(collect($finder)->pluck('name')->all())->toBe(['MBBS'])
+        ->and(collect($page)->pluck('name')->sort()->values()->all())->toBe(['Data Science', 'MBBS'])
+        ->and(collect($page)->firstWhere('name', 'Data Science')['registry_only'])->toBeTrue();
+});

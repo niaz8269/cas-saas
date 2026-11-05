@@ -14,6 +14,7 @@ use Database\Seeders\MbbsProgramGapSeeder;
 use Database\Seeders\MirrorPhotosSeeder;
 use Database\Seeders\MoeMbbsSeeder;
 use Database\Seeders\OfficialIntakeDatesSeeder;
+use Database\Seeders\RegisteredMajorsSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
 use Database\Seeders\WikipediaProfileSeeder;
@@ -128,6 +129,7 @@ it('seeds only verified catalog data, each record carrying its official source',
     $this->seed(MirrorPhotosSeeder::class);
     $this->seed(MoeMbbsSeeder::class);
     $this->seed(MbbsProgramGapSeeder::class);
+    $this->seed(RegisteredMajorsSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });
