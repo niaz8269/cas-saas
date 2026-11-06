@@ -7,9 +7,8 @@ use App\Models\University;
 use Illuminate\Database\Seeder;
 
 /**
- * Public news items. Every post restates a fact taken from an official page;
- * nothing here is promotional filler. Add a post only when an official source
- * states the fact. The body carries no "Source:" line (the owner's decision).
+ * Public news items: factual, never promotional filler. The body carries no
+ * "Source:" line (the owner's decision).
  *
  * Idempotent: keyed on slug.
  */
