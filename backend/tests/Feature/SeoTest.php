@@ -29,7 +29,7 @@ it('redirects /site to the homepage permanently', function () {
 });
 
 it('gives each university its own title, canonical, image and breadcrumb data', function () {
-    University::factory()->create(['name' => 'Seo Uni', 'slug' => 'seo-uni', 'status' => 'active', 'city' => 'Dalian', 'about' => 'A university used in a test.', 'cover_path' => '/photos/x.webp']);
+    University::factory()->create(['name' => 'Seo Uni', 'slug' => 'seo-uni', 'status' => 'active', 'moe_listed' => true, 'city' => 'Dalian', 'about' => 'A university used in a test.', 'cover_path' => '/photos/x.webp']);
 
     $html = get('/site/universities/seo-uni')->assertOk()->getContent();
 
@@ -56,7 +56,7 @@ it('serves robots.txt that allows the public site and points to the sitemap', fu
 });
 
 it('lists every university, city and news post in the sitemaps', function () {
-    University::factory()->create(['slug' => 'seo-uni', 'status' => 'active', 'city' => 'Dalian']);
+    University::factory()->create(['slug' => 'seo-uni', 'status' => 'active', 'moe_listed' => true, 'city' => 'Dalian']);
     University::factory()->create(['slug' => 'hidden-uni', 'status' => 'inactive']);
     Post::factory()->create(['slug' => 'seo-news', 'status' => 'published', 'published_at' => now()]);
 

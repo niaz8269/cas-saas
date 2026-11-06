@@ -1,9 +1,12 @@
 <?php
 
 use App\Models\University;
+use App\Models\User;
 use Database\Seeders\AdditionalUniversitiesSeeder;
 use Database\Seeders\CountrySeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
@@ -33,13 +36,13 @@ it('keeps majors registered with the Ministry out of the program finder', functi
 });
 
 it('turns a registered major into a confirmed program once staff save it', function () {
-    $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-    $admin = \App\Models\User::factory()->create(['status' => 'active']);
+    $this->seed(RolesAndPermissionsSeeder::class);
+    $admin = User::factory()->create(['status' => 'active']);
     $admin->assignRole('Super Admin');
     $uni = University::create(['name' => 'Test University', 'code' => 'TU2', 'status' => 'active']);
     $program = $uni->programs()->create(['name' => 'Data Science', 'level' => 'bachelor', 'registry_only' => true, 'status' => 'active']);
 
-    \Laravel\Sanctum\Sanctum::actingAs($admin, ['*'], 'staff');
+    Sanctum::actingAs($admin, ['*'], 'staff');
     $this->putJson("/api/v1/programs/{$program->id}", ['teaching_language' => 'English', 'tuition_fee' => 20000])->assertOk();
 
     expect($program->fresh()->registry_only)->toBeFalse();

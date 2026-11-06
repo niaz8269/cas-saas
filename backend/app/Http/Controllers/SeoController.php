@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\University;
 use App\Services\Media\ImageService;
+use App\Services\Seo\SeoIndexability;
 use App\Services\Seo\SeoPageBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class SeoController extends Controller
         return response($this->render($page), $page['status'])
             ->header('Content-Type', 'text/html; charset=UTF-8')
             ->header('Cache-Control', $page['noindex'] ? 'no-cache' : 'public, max-age=300')
-            ->header('X-Robots-Tag', $page['noindex'] ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
+            ->header('X-Robots-Tag', $page['noindex'] ? (($page['follow'] ?? false) ? 'noindex, follow' : 'noindex, nofollow') : 'index, follow, max-image-preview:large');
     }
 
     public function robots(): Response
@@ -89,11 +90,13 @@ class SeoController extends Controller
                 // than the ones that so far only list the Ministry's registered majors.
                 $rows = University::where('status', 'active')
                     ->withCount(['programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+                    ->withExists('intakes as has_intakes')
                     ->orderBy('name')
-                    ->get(['id', 'slug', 'name', 'cover_path', 'overview', 'updated_at']);
+                    ->get(['id', 'slug', 'name', 'cover_path', 'overview', 'moe_listed', 'updated_at'])
+                    ->filter(fn ($u) => SeoIndexability::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes));
                 foreach ($rows as $u) {
                     $img = $this->images->url($u->cover_path);
-                    $rich = $u->confirmed_programs_count > 0 || $u->overview !== null;
+                    $rich = true;
                     $urls[] = ['loc' => $site.'/site/universities/'.$u->slug, 'lastmod' => $u->updated_at?->toDateString(), 'changefreq' => $rich ? 'weekly' : 'monthly', 'priority' => $rich ? 0.8 : 0.5, 'image' => $img ? (preg_match('#^https?://#', $img) ? $img : $site.$img) : null, 'title' => $u->name];
                 }
                 break;
@@ -159,7 +162,7 @@ class SeoController extends Controller
         if ($d) {
             $head .= "<meta name=\"description\" content=\"{$d}\" />\n";
         }
-        $head .= '<meta name="robots" content="'.($p['noindex'] ? 'noindex, nofollow' : 'index, follow, max-image-preview:large').'" />'."\n";
+        $head .= '<meta name="robots" content="'.($p['noindex'] ? (($p['follow'] ?? false) ? 'noindex, follow' : 'noindex, nofollow') : 'index, follow, max-image-preview:large').'" />'."\n";
         $head .= '<link rel="canonical" href="'.e($p['canonical']).'" />'."\n";
         $head .= '<meta property="og:site_name" content="'.e(config('seo.site_name')).'" />'."\n";
         $head .= '<meta property="og:type" content="'.e($p['type']).'" />'."\n";

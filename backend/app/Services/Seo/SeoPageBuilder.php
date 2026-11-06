@@ -109,7 +109,7 @@ class SeoPageBuilder
         $title = $this->fit([$u->name.': Programs, Fees & Application Dates', $u->name.': Programs & Dates', $u->name]);
         $image = $this->absolute($this->images->url($u->cover_path));
 
-        $programs = Program::where('university_id', $u->id)->where('status', 'active')->get(['name', 'level', 'teaching_language', 'tuition_fee']);
+        $programs = Program::where('university_id', $u->id)->where('status', 'active')->get(['name', 'level', 'teaching_language', 'tuition_fee', 'registry_only']);
         $english = $programs->where('teaching_language', 'English')->whereIn('level', ['bachelor', 'master', 'phd'])->pluck('name')->unique()->sort()->values();
         $intakes = Intake::where('university_id', $u->id)->where(fn ($q) => $q->whereNotNull('application_deadline')->orWhereNotNull('application_open_date'))->orderBy('application_deadline')->get();
         $neighbours = University::where('status', 'active')->where('city', $u->city)->where('id', '!=', $u->id)->orderBy('name')->limit(8)->get(['name', 'slug']);
@@ -154,7 +154,11 @@ class SeoPageBuilder
             'sameAs' => $u->wikipedia_url ? [$u->wikipedia_url] : null,
         ]];
 
-        return $this->page($title, $description, $canonical, image: $image, jsonLd: array_map(fn ($d) => array_filter($d, fn ($v) => $v !== null && $v !== ''), $ld), crumbs: [['Home', '/'], ['Universities', '/site/universities'], [$u->name, $canonical]], body: $body);
+        // Pages that so far hold only a name, a place and the Ministry's registered majors stay out of search
+        // results until they have confirmed programs, application windows or a full profile (then they switch on by themselves).
+        $indexable = SeoIndexability::universityHasSubstance($u, $programs->where('registry_only', false)->count(), $intakes->isNotEmpty());
+
+        return $this->page($title, $description, $canonical, image: $image, jsonLd: array_map(fn ($d) => array_filter($d, fn ($v) => $v !== null && $v !== ''), $ld), crumbs: [['Home', '/'], ['Universities', '/site/universities'], [$u->name, $canonical]], body: $body, noindex: ! $indexable, follow: true);
     }
 
     private function city(string $slug): ?array
@@ -326,7 +330,7 @@ class SeoPageBuilder
      * @param  list<array{0:string,1:string}>  $crumbs
      * @return array<string, mixed>
      */
-    private function page(string $title, ?string $description, string $canonical, ?string $image = null, array $jsonLd = [], array $crumbs = [], string $body = '', bool $noindex = false, int $status = 200, string $type = 'website'): array
+    private function page(string $title, ?string $description, string $canonical, ?string $image = null, array $jsonLd = [], array $crumbs = [], string $body = '', bool $noindex = false, int $status = 200, string $type = 'website', bool $follow = false): array
     {
         if ($crumbs) {
             $jsonLd[] = [
@@ -343,6 +347,7 @@ class SeoPageBuilder
             'canonical' => $this->abs($canonical),
             'image' => $image ?: $this->abs(config('seo.default_image')),
             'noindex' => $noindex,
+            'follow' => $follow,
             'type' => $type,
             'jsonLd' => $jsonLd,
             'body' => $body,
