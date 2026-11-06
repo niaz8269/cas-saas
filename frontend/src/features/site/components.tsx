@@ -154,15 +154,12 @@ export function SiteSection({ title, subtitle, action, children }: {
 const fmtDay = (d: string) => new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })
 
 /**
- * An admission window: when applications open and close, taken from the
- * university's own published page (named, never linked, on public pages). Never invents a date;
- * shows "to be announced" when the university has not published one.
+ * An admission window: when applications open and close. Never invents a date;
+ * shows "to be announced" when none is known.
  */
-export function AdmissionWindow({ opens, closes, sourceKind, verifiedOn, className }: {
+export function AdmissionWindow({ opens, closes, className }: {
   opens?: string | null
   closes?: string | null
-  sourceKind?: string | null
-  verifiedOn?: string | null
   className?: string
 }) {
   const { t } = useTranslation()
@@ -180,12 +177,6 @@ export function AdmissionWindow({ opens, closes, sourceKind, verifiedOn, classNa
           {closes ? t(closed ? "admissionWindow.closedOn" : "admissionWindow.closes", { date: fmtDay(closes) }) : t("admissionWindow.closeTbd")}
         </span>
       </p>
-      {sourceKind && (
-        <p className="pl-5 text-[11px] text-muted-foreground">
-          {t("admissionWindow.source")}
-          {verifiedOn ? ` · ${t("admissionWindow.checked", { date: fmtDay(verifiedOn) })}` : ""}
-        </p>
-      )}
     </div>
   )
 }

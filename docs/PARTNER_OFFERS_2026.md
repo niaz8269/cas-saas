@@ -9,8 +9,7 @@ Data file: `backend/database/data/partner_offers_2026.json`. Importer: `PartnerO
 46 universities, 92 programs (medical programs, degrees, diplomas, preparatory and Chinese-language courses).
 For each: name, level, duration, the university's own tuition and hostel fees where they are separable, age
 limits (in the program's `requirements`), and intake rows (one per university and month; a month that has
-already begun is recorded as closed). The teaching medium is not recorded, by decision. `verified_on` stays
-empty because none of this comes from a university page.
+already begun is recorded as closed). The teaching medium is not recorded, by decision.
 
 Never overwritten: a program the catalog already had (same university, level and name) is left as it was;
 a Ministry "registry only" placeholder with the same name is upgraded rather than duplicated.

@@ -2,18 +2,14 @@ import { CheckCircle2, GraduationCap, Handshake } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { formatTotal, useCatalogTotals } from "@/features/site/useCatalogTotals"
-
 /** "Why apply with CAS" block before the footer. Every claim is backed by the platform. */
 export default function WhyApply() {
   const { t } = useTranslation()
-  const totals = useCatalogTotals()
 
   const points = [
     { title: t("home.why.freeTitle"), body: t("home.why.freeBody"), link: { to: "/site/pricing", label: t("home.why.freeLink") } },
     { title: t("home.why.easyTitle"), body: t("home.why.easyBody") },
     { title: t("home.why.supportTitle"), body: t("home.why.supportBody"), link: { to: "/site/contact", label: t("home.why.supportLink") } },
-    { title: t("home.why.officialTitle"), body: t("home.why.officialBody", { programs: formatTotal(totals.programs), scholarships: formatTotal(totals.scholarships) }) },
   ]
 
   return (

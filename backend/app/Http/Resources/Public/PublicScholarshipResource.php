@@ -5,7 +5,6 @@ namespace App\Http\Resources\Public;
 use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
-use App\Support\SourceKind;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -41,8 +40,6 @@ class PublicScholarshipResource extends JsonResource
             'amount' => $amountVisible ? $this->amount : null,
             'deadline' => $deadlineVisible ? $this->deadline?->toDateString() : null,
             'application_open_date' => $deadlineVisible ? $this->application_open_date?->toDateString() : null,
-            'source_kind' => SourceKind::of($this->source_url),
-            'verified_on' => $this->verified_on?->toDateString(),
             'how_to_apply' => $howVisible ? $this->how_to_apply : null,
             'photo_url' => $this->photo()['url'],
             'photo_credit' => $this->photo()['credit'],

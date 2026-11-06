@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, LayoutDashboard, MessageCircle, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
+import { ArrowRight, BadgeCheck, Compass, FileCheck2, GraduationCap, LayoutDashboard, MessageCircle, Plane, Sparkles, Users, Wallet } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
@@ -23,7 +23,6 @@ const WHY_CHINA = [
 
 // What CAS promises, each one true of the platform as built.
 const PROMISES = [
-  { icon: ShieldCheck, titleKey: "about.promiseOfficialTitle", bodyKey: "about.promiseOfficialBody" },
   { icon: Wallet, titleKey: "about.promiseFeesTitle", bodyKey: "about.promiseFeesBody" },
   { icon: LayoutDashboard, titleKey: "about.promiseTrackTitle", bodyKey: "about.promiseTrackBody" },
   { icon: MessageCircle, titleKey: "about.promiseReachTitle", bodyKey: "about.promiseReachBody" },

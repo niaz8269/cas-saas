@@ -206,7 +206,13 @@ it('never exposes official links on the public catalog (admin-only)', function (
         expect($body)->not->toContain('example.edu.cn')->not->toContain('example.gov')->not->toContain('sas.cas.moe');
     }
 
-    $this->getJson('/api/v1/public/universities/'.$uni->slug)->assertJsonPath('data.intakes.0.source_kind', 'official');
+    // No source or "checked on" information is part of the public catalog.
+    $this->getJson('/api/v1/public/universities/'.$uni->slug)
+        ->assertJsonMissingPath('data.intakes.0.source_kind')
+        ->assertJsonMissingPath('data.intakes.0.verified_on');
+    $this->getJson('/api/v1/public/scholarships')
+        ->assertJsonMissingPath('data.0.source_kind')
+        ->assertJsonMissingPath('data.0.verified_on');
 });
 
 it('lists photo authors and licences on one public credits endpoint', function () {

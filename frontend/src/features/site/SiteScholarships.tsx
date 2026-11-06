@@ -117,7 +117,7 @@ export default function SiteScholarships() {
                   <School className="size-3.5" /> {s.university.name}
                 </Link>
               )}
-              <AdmissionWindow opens={s.application_open_date} closes={s.deadline} sourceKind={s.source_kind} verifiedOn={s.verified_on} />
+              <AdmissionWindow opens={s.application_open_date} closes={s.deadline} />
               {s.details_locked && (
                 <Link to="/portal/login" className="inline-flex items-center gap-1 font-semibold text-cas-red hover:underline">
                   <Lock className="size-3.5" /> {t("scholarships.signInForDetails")}

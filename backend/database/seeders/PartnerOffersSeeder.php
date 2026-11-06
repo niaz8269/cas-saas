@@ -17,7 +17,7 @@ use Illuminate\Database\Seeder;
  * `requirements` object) and intake rows. Agency package prices and charges,
  * deposits, scholarships and country restrictions are not imported, and the
  * teaching medium is intentionally not recorded. Fees are for reference and
- * subject to each university's confirmation: `source_url` carries the partner-sheet marker and `verified_on` stays empty.
+ * subject to each university's confirmation.
  *
  * Never overwrites: a program the catalog already has (same university, level
  * and name) is left exactly as it is. A Ministry "registry only" placeholder
@@ -26,12 +26,6 @@ use Illuminate\Database\Seeder;
  */
 class PartnerOffersSeeder extends Seeder
 {
-    /**
-     * Marks every record this seeder writes as coming from a CAS partner offer sheet, not from
-     * a university page. Such records are deliberately left without a verification date.
-     */
-    public const SOURCE = 'cas-partner-sheet:2026-27';
-
     public function __construct(private readonly ?string $path = null) {}
 
     public function run(): void
@@ -63,9 +57,6 @@ class PartnerOffersSeeder extends Seeder
                 }
 
                 $attributes = [
-                    'source_url' => self::SOURCE,
-                    // Unverified: an upgraded placeholder must not keep the date it had as a Ministry registry row.
-                    'verified_on' => null,
                     'duration_months' => $row['duration_months'] ?? null,
                     'tuition_fee' => $row['tuition_fee'] ?? null,
                     'hostel_fee' => $row['hostel_fee'] ?? null,
@@ -129,7 +120,7 @@ class PartnerOffersSeeder extends Seeder
 
         Intake::query()->firstOrCreate(
             ['university_id' => $university->id, 'program_id' => null, 'name' => $name.' intake'],
-            ['application_deadline' => $deadline, 'status' => $closed ? 'closed' : 'open', 'source_url' => self::SOURCE],
+            ['application_deadline' => $deadline, 'status' => $closed ? 'closed' : 'open'],
         );
     }
 }

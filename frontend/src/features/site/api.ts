@@ -77,8 +77,6 @@ export interface SiteIntake {
   start_date: string | null
   application_open_date: string | null
   application_deadline: string | null
-  source_kind: string | null
-  verified_on: string | null
   status?: string
   seats: number | null
   program: string | null
@@ -97,8 +95,6 @@ export interface SiteScholarship {
   how_to_apply: string | null
   deadline: string | null
   application_open_date: string | null
-  source_kind: string | null
-  verified_on: string | null
   photo_url?: string | null
   photo_credit?: string | null
   university?: SiteUniversityRef

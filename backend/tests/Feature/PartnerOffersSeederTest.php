@@ -44,10 +44,7 @@ it('adds programs with their fees and duration, and never records a teaching med
         ->and($p->teaching_language)->toBeNull()
         ->and($p->registry_only)->toBeFalse()
         ->and($p->status)->toBe('active')
-        ->and($p->requirements)->toBe(['min_age' => 18, 'max_age' => 25])
-        // Labelled as a partner sheet, never passed off as a university page, and never marked verified.
-        ->and($p->source_url)->toBe(PartnerOffersSeeder::SOURCE)
-        ->and($p->verified_on)->toBeNull();
+        ->and($p->requirements)->toBe(['min_age' => 18, 'max_age' => 25]);
 });
 
 it('leaves a program the catalog already has exactly as it is', function () {
@@ -71,16 +68,12 @@ it('upgrades a Ministry registry-only placeholder instead of duplicating it', fu
         'university_id' => $uni->id, 'name' => 'Stomatology', 'level' => 'bachelor',
         'registry_only' => true, 'tuition_fee' => null, 'teaching_language' => null,
     ]);
-    $placeholder->forceFill(['verified_on' => '2026-06-01'])->save();
 
     runOffers([['university' => 'Test University', 'programs' => [offer('Stomatology (BDS)', ['tuition_fee' => 22000])]]]);
 
     expect(Program::where('university_id', $uni->id)->count())->toBe(1)
         ->and($placeholder->refresh()->registry_only)->toBeFalse()
-        ->and((float) $placeholder->tuition_fee)->toBe(22000.0)
-        // The registry row's old verification date does not carry over to partner-sheet numbers.
-        ->and($placeholder->verified_on)->toBeNull()
-        ->and($placeholder->source_url)->toBe(PartnerOffersSeeder::SOURCE);
+        ->and((float) $placeholder->tuition_fee)->toBe(22000.0);
 });
 
 it('skips a university that is not in the catalog without failing', function () {

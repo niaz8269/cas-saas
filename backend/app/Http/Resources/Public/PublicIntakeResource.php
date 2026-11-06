@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Public;
 
 use App\Models\Intake;
-use App\Support\SourceKind;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,8 +22,6 @@ class PublicIntakeResource extends JsonResource
             'status' => $this->status,
             'start_date' => $this->start_date?->toDateString() ?? $this->start_date,
             'application_open_date' => $this->application_open_date?->toDateString(),
-            'source_kind' => SourceKind::of($this->source_url),
-            'verified_on' => $this->verified_on?->toDateString(),
             'application_deadline' => $this->application_deadline?->toDateString() ?? $this->application_deadline,
             'seats' => $this->seats,
             'program' => $this->whenLoaded('program', fn () => $this->program?->name),
