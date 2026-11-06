@@ -6,7 +6,7 @@
    "university": "Yan'an University",
    "programs": [
     {
-     "name": "Clinical Medicine",
+     "name": "Clinical Medicine (MBBS)",
      "level": "bachelor",
      "duration_months": 72,
      "tuition_fee": 16000,
@@ -154,7 +154,7 @@
    "university": "Jinggangshan University",
    "programs": [
     {
-     "name": "Clinical Medicine",
+     "name": "Clinical Medicine (MBBS)",
      "level": "bachelor",
      "duration_months": 72,
      "tuition_fee": 19000,
