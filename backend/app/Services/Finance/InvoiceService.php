@@ -88,6 +88,21 @@ class InvoiceService
                 'status' => $paid >= (float) $invoice->total ? 'paid' : 'partially_paid',
             ]);
 
+            // Settling the invoice confirms the receipts the payer filed against it:
+            // they stop reading "pending", and the payment points at the proof.
+            if ($invoice->status === 'paid') {
+                $pending = $invoice->documents()->where('status', 'pending')->orderByDesc('id')->get();
+
+                if ($pending->isNotEmpty()) {
+                    $invoice->documents()->where('status', 'pending')
+                        ->update(['status' => 'verified', 'verified_by' => $actor->id]);
+
+                    if ($payment->document_id === null) {
+                        $payment->update(['document_id' => $pending->first()->id]);
+                    }
+                }
+            }
+
             return $payment;
         });
     }

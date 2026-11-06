@@ -154,7 +154,7 @@ export default function BankAccountsPage() {
                 <p className="text-sm text-muted-foreground">{a.bank_name}</p>
               </div>
               <div className="flex shrink-0 items-center gap-1.5">
-                {a.is_default && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">Default</Badge>}
+                {a.is_default && a.is_active && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">Default</Badge>}
                 {a.currency && <Badge variant="outline">{a.currency}</Badge>}
                 <Badge variant="outline" className={a.is_active ? "border-transparent bg-green-100 text-green-800" : "border-transparent bg-muted text-muted-foreground"}>
                   {a.is_active ? "Active" : "Inactive"}

@@ -22,6 +22,9 @@
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>
+        <!-- Storage backends are chosen per test, never by a developer's .env. -->
+        <env name="DOCUMENTS_DISK" value="" force="true"/>
+        <env name="IMAGES_STORE" value="" force="true"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="MAIL_MAILER" value="array"/>
