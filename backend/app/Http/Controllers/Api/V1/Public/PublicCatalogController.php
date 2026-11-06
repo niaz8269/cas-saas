@@ -51,7 +51,12 @@ class PublicCatalogController extends Controller
                     ->where('name', 'like', $term)
                     ->orWhere('name_zh', 'like', $term)
                     ->orWhere('city', 'like', $term)
-                    ->orWhere('province', 'like', $term));
+                    ->orWhere('province', 'like', $term)
+                    // A university also matches when it offers a program with that name (e.g. "MBBS").
+                    ->orWhereHas('programs', fn ($p) => $p
+                        ->where('status', 'active')
+                        ->where('registry_only', false)
+                        ->where(fn ($n) => $n->where('name', 'like', $term)->orWhere('name_zh', 'like', $term))));
             })
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
