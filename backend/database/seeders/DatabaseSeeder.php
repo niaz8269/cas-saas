@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             MirrorPhotosSeeder::class,
             CampusPhotoSeeder::class,
             NewsSeeder::class,
+            GuidesSeeder::class,
         ]);
     }
 }
