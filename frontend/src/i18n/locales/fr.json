@@ -173,7 +173,8 @@
       "Relevés de notes certifiés, formulaire d'examen médical et casier judiciaire vierge.",
       "CAS confirme les conditions, dates limites et frais exacts de votre cursus avant la candidature."
     ],
-    "overviewContents": "Sommaire"
+    "overviewContents": "Sommaire",
+    "profileLabel": "Profil universitaire CAS"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -1407,6 +1408,15 @@
       "prev": "Préc.",
       "next": "Suiv."
     }
+  },
+  "payTo": {
+    "title": "Payer sur ce compte",
+    "bank": "Banque",
+    "accountName": "Titulaire du compte",
+    "accountNumber": "Numéro de compte",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "Adresse de la banque"
   },
   "fee": {
     "noticeTitle": "Frais de dossier uniques de {{amount}}",
