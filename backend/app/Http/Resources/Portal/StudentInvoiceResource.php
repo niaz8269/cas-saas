@@ -31,6 +31,16 @@ class StudentInvoiceResource extends JsonResource
             'status' => $this->status,
             'issued_at' => $this->issued_at?->toIso8601String(),
             'due_at' => $this->due_at?->toIso8601String(),
+            // Where to pay: the account staff chose for THIS invoice. Null until chosen.
+            'bank_account' => $this->whenLoaded('bankAccount', fn () => $this->bankAccount === null ? null : [
+                'bank_name' => $this->bankAccount->bank_name,
+                'account_name' => $this->bankAccount->account_name,
+                'account_number' => $this->bankAccount->account_number,
+                'iban' => $this->bankAccount->iban,
+                'swift' => $this->bankAccount->swift,
+                'bank_address' => $this->bankAccount->bank_address,
+                'instructions' => $this->bankAccount->instructions,
+            ]),
             'items' => $this->whenLoaded('items', fn () => $this->items->map(fn ($item) => [
                 'description' => $item->description,
                 'qty' => $item->qty,

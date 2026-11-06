@@ -121,9 +121,10 @@ class InvoiceController extends Controller
             actor: $request->user(),
             status: $data['status'] ?? 'issued',
             dueDays: $data['due_days'] ?? 30,
+            bankAccountId: $data['bank_account_id'] ?? null,
         );
 
-        $invoice->load(['items', 'application:id,application_code,student_id', 'application.student:id,first_name,last_name']);
+        $invoice->load(['items', 'bankAccount', 'application:id,application_code,student_id', 'application.student:id,first_name,last_name']);
         $this->attachPartyNames(collect([$invoice]));
 
         return new InvoiceResource($invoice);
@@ -135,6 +136,7 @@ class InvoiceController extends Controller
 
         $invoice->load([
             'items',
+            'bankAccount',
             'payments.recorder:id,name',
             'documents',
             'application:id,application_code,student_id',
@@ -144,6 +146,28 @@ class InvoiceController extends Controller
         $this->attachPartyNames(collect([$invoice]));
 
         return new InvoiceResource($invoice);
+    }
+
+    /**
+     * Point an existing invoice at a (different) CAS bank account. This is how
+     * system-raised fee invoices get their account, and how a wrong pick is fixed.
+     * Settled or cancelled invoices are left as they were.
+     */
+    public function setBankAccount(Request $request, Invoice $invoice): InvoiceResource
+    {
+        $this->authorize('manage', $invoice);
+
+        if (in_array($invoice->status, ['paid', 'cancelled'], true)) {
+            throw ValidationException::withMessages(['bank_account_id' => 'This invoice is already '.$invoice->status.'.']);
+        }
+
+        $data = $request->validate([
+            'bank_account_id' => ['required', 'integer', Rule::exists('bank_accounts', 'id')->where('is_active', true)->whereNull('deleted_at')],
+        ]);
+
+        $invoice->update(['bank_account_id' => $data['bank_account_id']]);
+
+        return new InvoiceResource($invoice->refresh()->load(['items', 'bankAccount', 'payments.recorder:id,name']));
     }
 
     public function storePayment(

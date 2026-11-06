@@ -218,12 +218,26 @@
                 </div>
                 <h4 style="margin-top: 18px;">How to pay</h4>
                 <div class="prow">
-                    @if (! empty($paymentInstructions))
+                    @if ($invoice->bankAccount)
+                        @include('pdf._bank_account', ['bank' => $invoice->bankAccount])
+                        Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference, then upload your receipt in the student portal.
+                    @elseif (! empty($paymentInstructions))
                         {!! nl2br(e($paymentInstructions)) !!}
                         <br>Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference, then upload your receipt in the student portal.
                     @else
                         Payment details are shared by your CAS counselor. Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference, then upload your receipt in the student portal.
                     @endif
+                </div>
+            </div>
+        @endif
+
+        {{-- Plain invoices carry the chosen account too, whenever money is still owed. --}}
+        @if (! ($voucher ?? false) && $invoice->bankAccount && $balanceDue > 0)
+            <div class="payments">
+                <h4>Pay to</h4>
+                <div class="prow">
+                    @include('pdf._bank_account', ['bank' => $invoice->bankAccount])
+                    Quote <strong>{{ $invoice->invoice_no }}</strong> as the payment reference.
                 </div>
             </div>
         @endif

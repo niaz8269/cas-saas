@@ -1474,6 +1474,15 @@
       "next": "Next"
     }
   },
+  "payTo": {
+    "title": "Pay to this account",
+    "bank": "Bank",
+    "accountName": "Account name",
+    "accountNumber": "Account number",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "Bank address"
+  },
   "fee": {
     "noticeTitle": "One-time application fee of {{amount}}",
     "noticeTitleSettled": "Your application fee is already paid",

@@ -30,6 +30,8 @@ class InvoiceResource extends JsonResource
                     'full_name' => $this->application->student->full_name,
                 ] : null,
             ] : null),
+            'bank_account_id' => $this->bank_account_id,
+            'bank_account' => $this->whenLoaded('bankAccount', fn () => $this->bankAccount ? new BankAccountResource($this->bankAccount) : null),
             'currency' => $this->currency,
             'subtotal' => $this->subtotal,
             'tax' => $this->tax,

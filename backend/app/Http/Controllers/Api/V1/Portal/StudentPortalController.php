@@ -64,7 +64,7 @@ class StudentPortalController extends Controller
             // Drafts are CAS's working proposals (service charges are negotiated
             // with the student first): the student only sees what staff issued.
             ->where('status', '!=', 'draft')
-            ->with(['items', 'payments'])
+            ->with(['items', 'payments', 'bankAccount'])
             ->latest('id')
             ->get();
 

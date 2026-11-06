@@ -26,6 +26,7 @@ class Invoice extends Model
         'party_type',
         'party_id',
         'application_id',
+        'bank_account_id',
         'currency',
         'subtotal',
         'tax',
@@ -68,6 +69,12 @@ class Invoice extends Model
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);
+    }
+
+    /** Where this invoice is paid. Trashed accounts still resolve, so old invoices keep their details. */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(BankAccount::class)->withTrashed();
     }
 
     /** Resolve the invoiced party (student/agent/university). */

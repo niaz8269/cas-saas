@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeft, Ban, Download, FileText, Plus, Undo2 } from "lucide-react"
+import { ArrowLeft, Ban, Download, FileText, Landmark, Plus, Undo2 } from "lucide-react"
 import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
@@ -17,7 +17,15 @@ import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCan } from "@/features/auth/useCan"
 import { downloadDocument } from "@/features/admissions/api"
-import { getInvoice, getInvoicePdf, recordInvoicePayment, recordInvoiceRefund, voidInvoice } from "@/features/finance/api"
+import {
+  getInvoice,
+  getInvoicePdf,
+  listBankAccounts,
+  recordInvoicePayment,
+  recordInvoiceRefund,
+  setInvoiceBankAccount,
+  voidInvoice,
+} from "@/features/finance/api"
 import { INVOICE_STATUS_BADGE, label, money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -86,6 +94,24 @@ export default function InvoiceDetailPage() {
       setVoidOpen(false)
       setError(err instanceof ApiError ? err.message : "Could not void the invoice.")
     },
+  })
+
+  // Active accounts, for re-pointing an open invoice (system-raised fee
+  // invoices start with none, and a wrong pick can be corrected here).
+  const accounts = useQuery({
+    queryKey: ["bank-accounts"],
+    queryFn: () => listBankAccounts(),
+    enabled: canManage,
+  })
+
+  const accountMutation = useMutation({
+    mutationFn: (bankAccountId: number) => setInvoiceBankAccount(id, bankAccountId),
+    onSuccess: () => {
+      setError(null)
+      queryClient.invalidateQueries({ queryKey: ["invoice", id] })
+      queryClient.invalidateQueries({ queryKey: ["student", "processing-fee"] })
+    },
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Could not change the bank account."),
   })
 
   const pdfMutation = useMutation({
@@ -177,6 +203,48 @@ export default function InvoiceDetailPage() {
           <p role="alert" className="mt-4 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
         )}
       </div>
+
+      <section className="rounded-xl border bg-card shadow-sm">
+        <header className="flex items-center gap-2 border-b px-5 py-3">
+          <Landmark className="size-4 text-muted-foreground" aria-hidden="true" />
+          <h3 className="text-[15px] font-semibold">Pay to</h3>
+        </header>
+        <div className="space-y-3 px-5 py-4 text-sm">
+          {invoice.bank_account ? (
+            <dl className="grid grid-cols-[8rem_1fr] gap-y-1">
+              <dt className="text-muted-foreground">Bank</dt><dd className="font-medium">{invoice.bank_account.bank_name}</dd>
+              <dt className="text-muted-foreground">Account name</dt><dd>{invoice.bank_account.account_name}</dd>
+              <dt className="text-muted-foreground">Account number</dt><dd className="font-mono">{invoice.bank_account.account_number}</dd>
+              {invoice.bank_account.iban && (<><dt className="text-muted-foreground">IBAN</dt><dd className="font-mono">{invoice.bank_account.iban}</dd></>)}
+              {invoice.bank_account.swift && (<><dt className="text-muted-foreground">SWIFT / BIC</dt><dd className="font-mono">{invoice.bank_account.swift}</dd></>)}
+            </dl>
+          ) : (
+            <p className="rounded-md bg-amber-50 px-3 py-2 text-warning">
+              No bank account chosen yet — the student is told to contact their counselor for payment details.
+            </p>
+          )}
+
+          {canManage && !["paid", "cancelled"].includes(invoice.status) && (
+            <label className="block">
+              <span className="mb-1.5 block text-muted-foreground">{invoice.bank_account ? "Change account" : "Choose account"}</span>
+              <select
+                className="w-full max-w-md rounded-md border bg-background px-3 py-2 text-sm"
+                value=""
+                disabled={accountMutation.isPending}
+                onChange={(e) => e.target.value && accountMutation.mutate(Number(e.target.value))}
+                aria-label="Choose the bank account for this invoice"
+              >
+                <option value="">Select an account…</option>
+                {(accounts.data?.data ?? [])
+                  .filter((a) => a.id !== invoice.bank_account_id && (!a.currency || a.currency === invoice.currency))
+                  .map((a) => (
+                    <option key={a.id} value={a.id}>{a.label} · {a.bank_name}{a.currency ? ` (${a.currency})` : ""}</option>
+                  ))}
+              </select>
+            </label>
+          )}
+        </div>
+      </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-xl border bg-card shadow-sm">

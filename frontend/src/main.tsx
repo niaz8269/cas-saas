@@ -16,6 +16,7 @@ const UniversityDetailPage = lazy(() => import("@/features/catalog/UniversityDet
 const ApplicationDetailPage = lazy(() => import("@/features/admissions/ApplicationDetailPage"))
 const ApplicationsPage = lazy(() => import("@/features/admissions/ApplicationsPage"))
 const AgentPayablesPage = lazy(() => import("@/features/finance/AgentPayablesPage"))
+const BankAccountsPage = lazy(() => import("@/features/finance/BankAccountsPage"))
 const CommissionDetailPage = lazy(() => import("@/features/finance/CommissionDetailPage"))
 const CommissionsPage = lazy(() => import("@/features/finance/CommissionsPage"))
 const FinancePage = lazy(() => import("@/features/finance/FinancePage"))
@@ -174,6 +175,7 @@ const router = createBrowserRouter([
           { path: "/universities/:id", element: <UniversityDetailPage /> },
           { path: "/scholarships", element: <ScholarshipsPage /> },
           { path: "/finance", element: <FinancePage /> },
+          { path: "/finance/bank-accounts", element: <BankAccountsPage /> },
           { path: "/finance/:id", element: <InvoiceDetailPage /> },
           { path: "/commissions", element: <CommissionsPage /> },
           { path: "/commissions/:id", element: <CommissionDetailPage /> },

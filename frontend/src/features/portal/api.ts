@@ -194,7 +194,19 @@ export interface StudentVisaCase {
   checklist?: { name: string; is_required: boolean; status: string }[]
 }
 
+/** The CAS account staff chose for one invoice; shown to the student so they know where to pay. */
+export interface PayToAccount {
+  bank_name: string
+  account_name: string
+  account_number: string
+  iban: string | null
+  swift: string | null
+  bank_address: string | null
+  instructions: string | null
+}
+
 export interface StudentInvoiceRow {
+  bank_account?: PayToAccount | null
   id: number
   invoice_no: string
   currency: string
@@ -296,6 +308,7 @@ export interface FeeReceipt {
 }
 
 export interface ProcessingFeeInvoice {
+  bank_account?: PayToAccount | null
   id: number
   invoice_no: string
   total: number

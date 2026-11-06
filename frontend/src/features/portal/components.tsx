@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
+import type { PayToAccount } from "@/features/portal/api"
 import { label, STATUS_LABEL_KEY } from "@/features/portal/status"
 import { cn } from "@/lib/utils"
 
@@ -29,6 +30,35 @@ export function StatusBadge({ status, map }: { status: string; map: Record<strin
 
 export function PortalCard({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={cn("rounded-xl border bg-card p-4 shadow-sm", className)}>{children}</div>
+}
+
+/** The bank account staff chose for an invoice, with the reference to quote. */
+export function PayToDetails({ account, reference }: { account: PayToAccount; reference: string }) {
+  const { t } = useTranslation()
+  const rows: [string, string | null][] = [
+    [t("payTo.bank"), account.bank_name],
+    [t("payTo.accountName"), account.account_name],
+    [t("payTo.accountNumber"), account.account_number],
+    [t("payTo.iban"), account.iban],
+    [t("payTo.swift"), account.swift],
+    [t("payTo.bankAddress"), account.bank_address],
+  ]
+
+  return (
+    <div className="rounded-lg bg-subtle p-3">
+      <p className="mb-2 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">{t("payTo.title")}</p>
+      <dl className="grid grid-cols-[6.5rem_1fr] gap-y-1 text-sm">
+        {rows.filter(([, v]) => v).map(([k, v]) => (
+          <div key={k} className="contents">
+            <dt className="text-muted-foreground">{k}</dt>
+            <dd className="font-medium break-all">{v}</dd>
+          </div>
+        ))}
+      </dl>
+      {account.instructions && <p className="mt-2 text-sm whitespace-pre-line">{account.instructions}</p>}
+      <p className="mt-2 text-xs text-muted-foreground">{t("fee.quoteReference", { reference })}</p>
+    </div>
+  )
 }
 
 /**

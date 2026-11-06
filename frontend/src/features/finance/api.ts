@@ -20,8 +20,28 @@ export interface PaymentRow {
   recorded_by?: string | null
 }
 
+/** A CAS receipt account an invoice can be paid into. */
+export interface BankAccount {
+  id: number
+  label: string
+  bank_name: string
+  account_name: string
+  account_number: string
+  iban: string | null
+  swift: string | null
+  bank_address: string | null
+  currency: string | null
+  instructions: string | null
+  is_active: boolean
+  sort_order: number
+}
+
+export type BankAccountInput = Partial<Omit<BankAccount, "id">>
+
 export interface InvoiceItemData {
   id: number
+  bank_account_id?: number | null
+  bank_account?: BankAccount | null
   invoice_no: string
   party_type: "student" | "agent" | "university"
   party_id: number
@@ -174,8 +194,31 @@ export interface CreateInvoicePayload {
   currency: string
   status?: string
   due_days?: number
+  bank_account_id?: number | null
   items: NewInvoiceItem[]
 }
+
+// ---- CAS bank accounts ----
+
+/** Active accounts for pickers; `all` also returns inactive ones (managers only). */
+export const listBankAccounts = (all = false) =>
+  api<{ data: BankAccount[] }>(`/bank-accounts${all ? "?all=1" : ""}`)
+
+export const createBankAccount = (payload: BankAccountInput) =>
+  api<{ data: BankAccount }>("/bank-accounts", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateBankAccount = (id: number, payload: BankAccountInput) =>
+  api<{ data: BankAccount }>(`/bank-accounts/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deleteBankAccount = (id: number) =>
+  api<{ message: string }>(`/bank-accounts/${id}`, { method: "DELETE" })
+
+/** Point an open invoice at a different CAS account. */
+export const setInvoiceBankAccount = (invoiceId: number | string, bankAccountId: number) =>
+  api<{ data: InvoiceItemData }>(`/invoices/${invoiceId}/bank-account`, {
+    method: "POST",
+    body: JSON.stringify({ bank_account_id: bankAccountId }),
+  })
 
 export const createInvoice = (payload: CreateInvoicePayload) =>
   api<{ data: InvoiceItemData }>("/invoices", { method: "POST", body: JSON.stringify(payload) })

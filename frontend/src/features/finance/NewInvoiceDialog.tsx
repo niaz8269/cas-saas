@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { listApplications, type ApplicationListItem } from "@/features/admissions/api"
-import { createInvoice, getFeeSchedule, type NewInvoiceItem } from "@/features/finance/api"
+import { createInvoice, getFeeSchedule, listBankAccounts, type NewInvoiceItem } from "@/features/finance/api"
 import { money } from "@/features/finance/status"
 import { ApiError } from "@/lib/api"
 
@@ -51,14 +51,29 @@ export default function NewInvoiceDialog({
   const [dueDays, setDueDays] = useState("30")
   const [status, setStatus] = useState<"issued" | "draft">("issued")
   const [error, setError] = useState<string | null>(null)
+  const [bankAccountId, setBankAccountId] = useState("")
 
   // Reset everything when the dialog opens.
   useEffect(() => {
     if (open) {
       setSearchInput(""); setQ(""); setApp(null); setRows([]); setCurrency("CNY")
-      setDueDays("30"); setStatus("issued"); setError(null)
+      setDueDays("30"); setStatus("issued"); setError(null); setBankAccountId("")
     }
   }, [open])
+
+  // Active CAS accounts this invoice can be paid into. An account tied to a
+  // currency is only offered for invoices in that currency.
+  const bankAccounts = useQuery({
+    queryKey: ["bank-accounts"],
+    queryFn: () => listBankAccounts(),
+    enabled: open,
+  })
+  const accountOptions = (bankAccounts.data?.data ?? []).filter((a) => !a.currency || a.currency === currency)
+
+  // Drop a choice the currency no longer allows.
+  useEffect(() => {
+    if (bankAccountId && !accountOptions.some((a) => String(a.id) === bankAccountId)) setBankAccountId("")
+  }, [currency, bankAccountId, accountOptions])
 
   useEffect(() => {
     const t = setTimeout(() => setQ(searchInput), 300)
@@ -111,6 +126,7 @@ export default function NewInvoiceDialog({
         currency,
         status,
         due_days: Number(dueDays) || 0,
+        bank_account_id: bankAccountId ? Number(bankAccountId) : null,
         items: rows
           .filter((r) => r.description.trim() && Number(r.unit_price) >= 0)
           .map((r) => ({
@@ -129,8 +145,10 @@ export default function NewInvoiceDialog({
   })
 
   const student = schedule.data?.data.context.student
+  // An issued invoice must say where to pay; a draft can wait.
+  const needsAccount = status === "issued" && !bankAccountId
   const canSubmit =
-    Boolean(app) && rows.some((r) => r.description.trim()) && !mutation.isPending && !schedule.isFetching
+    Boolean(app) && rows.some((r) => r.description.trim()) && !needsAccount && !mutation.isPending && !schedule.isFetching
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -270,6 +288,29 @@ export default function NewInvoiceDialog({
                 </select>
               </label>
             </div>
+
+            <label className="block text-sm">
+              <span className="mb-1.5 block text-muted-foreground">Pay into bank account</span>
+              <select
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                value={bankAccountId}
+                onChange={(e) => setBankAccountId(e.target.value)}
+                aria-label="Bank account for this invoice"
+              >
+                <option value="">Select an account…</option>
+                {accountOptions.map((a) => (
+                  <option key={a.id} value={a.id}>{a.label} · {a.bank_name}{a.currency ? ` (${a.currency})` : ""}</option>
+                ))}
+              </select>
+              {bankAccounts.isSuccess && accountOptions.length === 0 && (
+                <span className="mt-1 block text-xs text-amber-700">
+                  No active bank account for {currency}. Add one under Finance → Bank accounts.
+                </span>
+              )}
+              {needsAccount && accountOptions.length > 0 && (
+                <span className="mt-1 block text-xs text-muted-foreground">Choose the account the student should pay into, or save as a draft.</span>
+              )}
+            </label>
 
             <div className="flex items-center justify-between border-t pt-3 text-sm">
               <span className="text-muted-foreground">Total</span>

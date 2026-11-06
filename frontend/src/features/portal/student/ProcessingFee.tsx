@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { getProcessingFee, uploadFeeReceipt, type ProcessingFeeInvoice } from "@/features/portal/api"
-import { PortalCard } from "@/features/portal/components"
+import { PayToDetails, PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
 import { ApiError } from "@/lib/api"
 
@@ -127,7 +127,9 @@ export function ProcessingFeeStep({ invoice }: { invoice: ProcessingFeeInvoice }
         </p>
         <p className="text-sm text-muted-foreground">{t("fee.stepBody")}</p>
 
-        {instructions ? (
+        {live.bank_account ? (
+          <PayToDetails account={live.bank_account} reference={live.invoice_no} />
+        ) : instructions ? (
           <div className="rounded-lg bg-subtle p-3">
             <p className="mb-1 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
               {t("fee.howToPay")}
