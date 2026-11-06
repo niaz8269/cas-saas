@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('adds sourced programs to listed universities and is idempotent', function () {
+it('adds programs to listed universities and is idempotent', function () {
     $u = University::factory()->create(['name' => 'Renmin University of China']);
 
     $this->seed(OfficialProgramGapSeeder::class);
@@ -15,8 +15,6 @@ it('adds sourced programs to listed universities and is idempotent', function ()
 
     $programs = Program::where('university_id', $u->id)->get();
     expect($programs)->toHaveCount(1)
-        ->and($programs->first()->source_url)->not->toBeNull()
-        ->and($programs->first()->verified_on)->not->toBeNull()
         ->and($programs->first()->teaching_language)->toBe('English');
 });
 

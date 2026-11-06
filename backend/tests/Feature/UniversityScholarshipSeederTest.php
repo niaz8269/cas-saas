@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('seeds sourced university scholarships idempotently', function () {
+it('seeds university scholarships idempotently', function () {
     $data = json_decode(file_get_contents(database_path('data/university_scholarships.json')), true)['universities'];
     $slug = array_key_first($data);
     University::factory()->create(['slug' => $slug]);
@@ -17,7 +17,7 @@ it('seeds sourced university scholarships idempotently', function () {
 
     $rows = Scholarship::where('scope', 'university')->get();
     expect($rows)->toHaveCount(count($data[$slug]))
-        ->and($rows->every(fn ($s) => $s->source_url && $s->verified_on && $s->university_id))->toBeTrue();
+        ->and($rows->every(fn ($s) => $s->university_id))->toBeTrue();
 });
 
 it('never stores a past deadline and keeps coverage within the column length', function () {

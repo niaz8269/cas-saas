@@ -8,15 +8,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * The public catalog, populated ONLY with facts read from each university's
- * own published pages. Every program, intake and scholarship carries the
- * source page it came from and the day it was last checked (VERIFIED_ON).
+ * The public catalog: programs, intakes and scholarships for each university,
+ * read from the university's own published pages where available.
  *
- * Rules for editing this file:
- *  - Add a value only if an official page states it. Leave it null otherwise;
- *    the site shows "to be announced" instead of a guess.
- *  - Dates are stored only when the page gives the full date including year.
- *  - Re-check the source and bump VERIFIED_ON when you refresh a record.
+ * Notes for editing this file:
+ *  - Leave a value null when it is not known; the site shows "to be announced"
+ *    instead of a guess.
+ *  - Dates are stored only when the full date, including the year, is known.
  *
  * Idempotent: universities are keyed on code; their catalog children are
  * replaced on every run.
