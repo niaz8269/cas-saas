@@ -10,7 +10,7 @@ use Illuminate\Database\Seeder;
  * institutions approved to enrol English-taught MBBS (clinical medicine)
  * students. That list is what the public site means by "MoE-listed".
  *
- * Source: database/data/moe_mbbs_2026_27.json (MoE letter 教外函〔2026〕65号).
+ * Source: database/data/moe_mbbs_2026_27.json (MoE letter 教外照〔2026〕65号).
  * Universities are matched by Chinese name. Idempotent; resets every other
  * university to not listed so the flag always mirrors the current list.
  */
