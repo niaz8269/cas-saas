@@ -63,7 +63,7 @@ class StudentPortalController extends Controller
             ->where('party_id', $request->user()->id)
             // Drafts are CAS's working proposals (service charges are negotiated
             // with the student first): the student only sees what staff issued.
-            ->where('status', '!=', 'draft')
+            ->whereNotIn('status', ['draft', 'cancelled'])
             ->with(['items', 'payments', 'bankAccount'])
             ->latest('id')
             ->get();
@@ -77,7 +77,7 @@ class StudentPortalController extends Controller
         abort_unless(
             $invoice->party_type === 'student'
                 && $invoice->party_id === $request->user()->id
-                && $invoice->status !== 'draft',
+                && ! in_array($invoice->status, ['draft', 'cancelled'], true),
             404,
         );
 
@@ -90,7 +90,7 @@ class StudentPortalController extends Controller
         abort_unless(
             $invoice->party_type === 'student'
                 && $invoice->party_id === $request->user()->id
-                && $invoice->status !== 'draft',
+                && ! in_array($invoice->status, ['draft', 'cancelled'], true),
             404,
         );
 

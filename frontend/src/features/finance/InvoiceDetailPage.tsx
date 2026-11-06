@@ -146,6 +146,10 @@ export default function InvoiceDetailPage() {
 
   const invoice = data.data
   const remaining = Number(invoice.total) - Number(invoice.amount_paid)
+  // Other active accounts this invoice could be paid into (same currency, or any-currency).
+  const otherAccounts = (accounts.data?.data ?? []).filter(
+    (a) => a.id !== invoice.bank_account_id && (!a.currency || a.currency === invoice.currency),
+  )
 
   return (
     <div className="space-y-4">
@@ -235,12 +239,17 @@ export default function InvoiceDetailPage() {
                 aria-label="Choose the bank account for this invoice"
               >
                 <option value="">Select an account…</option>
-                {(accounts.data?.data ?? [])
-                  .filter((a) => a.id !== invoice.bank_account_id && (!a.currency || a.currency === invoice.currency))
-                  .map((a) => (
-                    <option key={a.id} value={a.id}>{a.label} · {a.bank_name}{a.currency ? ` (${a.currency})` : ""}</option>
-                  ))}
+                {otherAccounts.map((a) => (
+                  <option key={a.id} value={a.id}>{a.label} · {a.bank_name}{a.currency ? ` (${a.currency})` : ""}</option>
+                ))}
               </select>
+              {accounts.isSuccess && otherAccounts.length === 0 && (
+                <span className="mt-1 block text-xs text-muted-foreground">
+                  {invoice.bank_account
+                    ? `No other active account for ${invoice.currency}.`
+                    : `No active bank account for ${invoice.currency}. Add one under Finance → Bank accounts.`}
+                </span>
+              )}
             </label>
           )}
         </div>
