@@ -42,6 +42,19 @@ it('filters by search term and moe_listed', function () {
         ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Alpha Medical');
 });
 
+it('finds a university by the name of a program it offers, but not by a hidden or registry-only one', function () {
+    $offers = University::factory()->create(['name' => 'Alpha Medical', 'city' => 'Dalian', 'status' => 'active']);
+    $registry = University::factory()->create(['name' => 'Beta Tech', 'city' => 'Beijing', 'status' => 'active']);
+    University::factory()->create(['name' => 'Gamma College', 'status' => 'active']);
+    Program::factory()->create(['university_id' => $offers->id, 'name' => 'Clinical Medicine (MBBS)', 'status' => 'active', 'registry_only' => false]);
+    Program::factory()->create(['university_id' => $registry->id, 'name' => 'Clinical Medicine', 'status' => 'active', 'registry_only' => true]);
+
+    $this->getJson('/api/v1/public/universities?q=MBBS')
+        ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Alpha Medical');
+    $this->getJson('/api/v1/public/universities?q=Beijing')
+        ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Beta Tech');
+});
+
 it('filters by city and returns the distinct city list', function () {
     University::factory()->create(['name' => 'Alpha Medical', 'city' => 'Dalian', 'status' => 'active']);
     University::factory()->create(['name' => 'Beta Tech', 'city' => 'Beijing', 'status' => 'active']);
