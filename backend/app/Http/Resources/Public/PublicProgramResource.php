@@ -35,6 +35,7 @@ class PublicProgramResource extends JsonResource
             'name_zh' => $this->name_zh,
             'level' => $this->level,
             'csc_listed' => $this->csc_listed,
+            'registry_only' => (bool) $this->registry_only,
             'teaching_language' => $this->teaching_language,
             'duration_months' => $this->duration_months,
             'currency' => $this->currency,

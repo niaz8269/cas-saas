@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\University;
 use App\Services\Media\ImageService;
+use App\Services\Seo\SeoIndexability;
 use App\Services\Seo\SeoPageBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class SeoController extends Controller
         return response($this->render($page), $page['status'])
             ->header('Content-Type', 'text/html; charset=UTF-8')
             ->header('Cache-Control', $page['noindex'] ? 'no-cache' : 'public, max-age=300')
-            ->header('X-Robots-Tag', $page['noindex'] ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
+            ->header('X-Robots-Tag', $page['noindex'] ? (($page['follow'] ?? false) ? 'noindex, follow' : 'noindex, nofollow') : 'index, follow, max-image-preview:large');
     }
 
     public function robots(): Response
@@ -41,11 +42,14 @@ class SeoController extends Controller
         $lines = [
             'User-agent: *',
             'Allow: /',
+            // Public catalog data the pages load must stay crawlable so they render fully.
+            'Allow: /api/v1/public/',
             'Disallow: /api/',
             'Disallow: /admin',
             'Disallow: /dashboard',
             'Disallow: /portal',
             'Disallow: /login',
+            'Disallow: /wm/',
             '',
             "Sitemap: {$site}/sitemap.xml",
         ];
@@ -56,9 +60,17 @@ class SeoController extends Controller
     public function sitemapIndex(): Response
     {
         $site = config('seo.site_url');
+        $stamp = fn (?string $d) => $d ?: now()->toDateString();
+        $lastmod = [
+            'pages' => $stamp(date('Y-m-d', (int) filemtime(config_path('seo.php')))),
+            'universities' => $stamp(University::where('status', 'active')->max('updated_at') ? substr((string) University::where('status', 'active')->max('updated_at'), 0, 10) : null),
+            'cities' => $stamp(University::where('status', 'active')->max('updated_at') ? substr((string) University::where('status', 'active')->max('updated_at'), 0, 10) : null),
+            'news' => $stamp(Post::where('status', 'published')->max('updated_at') ? substr((string) Post::where('status', 'published')->max('updated_at'), 0, 10) : null),
+        ];
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        foreach (['pages', 'universities', 'cities', 'news'] as $name) {
-            $xml .= "<sitemap><loc>{$site}/sitemaps/{$name}.xml</loc><lastmod>".now()->toDateString().'</lastmod></sitemap>';
+        foreach ($lastmod as $name => $date) {
+            $xml .= "<sitemap><loc>{$site}/sitemaps/{$name}.xml</loc><lastmod>{$date}</lastmod></sitemap>";
         }
 
         return $this->xml($xml.'</sitemapindex>');
@@ -76,14 +88,24 @@ class SeoController extends Controller
                 }
                 break;
             case 'universities':
-                foreach (University::where('status', 'active')->orderBy('name')->get(['slug', 'name', 'cover_path', 'updated_at']) as $u) {
+                // Every active institution. Those with confirmed programs or a full profile rank higher
+                // than the ones that so far only list the Ministry's registered majors.
+                $rows = University::where('status', 'active')
+                    ->withCount(['programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+                    ->withExists('intakes as has_intakes')
+                    ->orderBy('name')
+                    ->get(['id', 'slug', 'name', 'cover_path', 'overview', 'moe_listed', 'updated_at'])
+                    ->filter(fn ($u) => SeoIndexability::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes));
+                foreach ($rows as $u) {
                     $img = $this->images->url($u->cover_path);
-                    $urls[] = ['loc' => $site.'/site/universities/'.$u->slug, 'lastmod' => $u->updated_at?->toDateString(), 'changefreq' => 'weekly', 'priority' => 0.8, 'image' => $img ? (preg_match('#^https?://#', $img) ? $img : $site.$img) : null, 'title' => $u->name];
+                    $rich = true;
+                    $urls[] = ['loc' => $site.'/site/universities/'.$u->slug, 'lastmod' => $u->updated_at?->toDateString(), 'changefreq' => $rich ? 'weekly' : 'monthly', 'priority' => $rich ? 0.8 : 0.5, 'image' => $img ? (preg_match('#^https?://#', $img) ? $img : $site.$img) : null, 'title' => $u->name];
                 }
                 break;
             case 'cities':
-                foreach (University::where('status', 'active')->whereNotNull('city')->pluck('city')->unique()->sort() as $city) {
-                    $urls[] = ['loc' => $site.'/site/cities/'.Str::slug($city), 'changefreq' => 'monthly', 'priority' => 0.6];
+                $latest = University::where('status', 'active')->whereNotNull('city')->selectRaw('city, max(updated_at) as updated')->groupBy('city')->orderBy('city')->get();
+                foreach ($latest as $row) {
+                    $urls[] = ['loc' => $site.'/site/cities/'.Str::slug($row->city), 'lastmod' => $row->updated ? substr((string) $row->updated, 0, 10) : null, 'changefreq' => 'monthly', 'priority' => 0.6];
                 }
                 break;
             case 'news':
@@ -142,7 +164,7 @@ class SeoController extends Controller
         if ($d) {
             $head .= "<meta name=\"description\" content=\"{$d}\" />\n";
         }
-        $head .= '<meta name="robots" content="'.($p['noindex'] ? 'noindex, nofollow' : 'index, follow, max-image-preview:large').'" />'."\n";
+        $head .= '<meta name="robots" content="'.($p['noindex'] ? (($p['follow'] ?? false) ? 'noindex, follow' : 'noindex, nofollow') : 'index, follow, max-image-preview:large').'" />'."\n";
         $head .= '<link rel="canonical" href="'.e($p['canonical']).'" />'."\n";
         $head .= '<meta property="og:site_name" content="'.e(config('seo.site_name')).'" />'."\n";
         $head .= '<meta property="og:type" content="'.e($p['type']).'" />'."\n";
@@ -162,9 +184,22 @@ class SeoController extends Controller
             $head .= '<script type="application/ld+json">'.json_encode($ld, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG).'</script>'."\n";
         }
 
+        if (($p['canonical'] ?? '') === rtrim((string) config('seo.site_url'), '/').'/') {
+            // The home page's first screen is its hero photo: start fetching it before the script runs.
+            $head .= '<link rel="preload" as="image" fetchpriority="high" imagesrcset="/images/hero-beijing-800-v2.webp 800w, /images/hero-beijing-1400-v2.webp 1400w, /images/hero-beijing-v2.webp 2000w" imagesizes="100vw" />'.'
+';
+        }
+
         $html = preg_replace('#</head>#i', $head.'</head>', $html, 1);
-        // Crawlable content; the app replaces it as soon as it loads.
-        $html = str_replace('<div id="root"></div>', '<div id="root"><main style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
+        // Crawlable content for search engines and no-JS visitors, kept out of sight for people while the
+        // app loads: they see a branded loading screen instead of bare text. The app replaces all of it on mount.
+        $splash = '<style>#cas-splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f6f8fc}'
+            .'#cas-splash img{width:88px;height:auto;animation:casPulse 1.4s ease-in-out infinite}'
+            .'@keyframes casPulse{0%,100%{opacity:.45}50%{opacity:1}}'
+            .'#cas-seo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>'
+            .'<noscript><style>#cas-splash{display:none}#cas-seo{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}</style></noscript>'
+            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="" /></div>';
+        $html = str_replace('<div id="root"></div>', '<div id="root">'.$splash.'<main id="cas-seo" style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
 
         return $html;
     }

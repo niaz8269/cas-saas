@@ -20,12 +20,15 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
-import heroLg from "@/assets/hero-graduate.webp"
-import heroMd from "@/assets/hero-graduate-1400.webp"
-import heroSm from "@/assets/hero-graduate-800.webp"
+// Hero files live in /public so the page can preload them (see SeoController).
+const heroLg = "/images/hero-beijing-v2.webp"
+const heroMd = "/images/hero-beijing-1400-v2.webp"
+const heroSm = "/images/hero-beijing-800-v2.webp"
 import { HIGHLIGHT_PHOTOS } from "@/features/site/headerImages"
 import { AdmissionWindow, PhotoBanner, SiteSection, UniCard } from "@/features/site/components"
 import HeroUpdates from "@/features/site/HeroUpdates"
+import HomeCities from "@/features/site/HomeCities"
+import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
 
 
@@ -103,8 +106,8 @@ export default function SiteHome() {
   const [contentTab, setContentTab] = useState("questions")
 
   // Real data only: featured universities and programs are the ones with a published admission window that is open.
-  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1 }) })
-  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, openIntake: true }) })
+  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12 }) })
+  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, perPage: 6, openIntake: true }) })
   const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
   const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
@@ -149,7 +152,7 @@ export default function SiteHome() {
         </div>
 
         {/* Content — centred in the space above the search */}
-        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-32 pb-2 text-center sm:pt-[8.5rem] [@media(max-height:680px)]:sm:pt-[7.5rem]">
+        <div className="relative flex flex-1 flex-col items-center justify-center px-4 pt-24 pb-2 text-center sm:pt-28 [@media(max-height:680px)]:sm:pt-24">
           <div className="w-full max-w-5xl">
             <h1 className="text-3xl font-normal tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:leading-[1.05] [@media(min-height:700px)]:md:text-[3.5rem]">{t("home.hero.title")}</h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm font-medium tracking-wide text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)] sm:text-lg">
@@ -212,6 +215,8 @@ export default function SiteHome() {
       </section>
 
       <div className="mx-auto w-full max-w-7xl space-y-16 px-4 sm:space-y-24 sm:px-6">
+      <HomeCities cities={universities.data?.city_stats} isPending={universities.isPending} />
+
       {/* ── Weekly Programs spotlight ────────────────────────── */}
       <section>
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
@@ -366,6 +371,8 @@ export default function SiteHome() {
           <Link to="/site/contact?topic=consultation" className="inline-flex h-12 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-bold text-white hover:bg-cas-red-600"><MessageCircle className="size-4" /> {t("home.cta.freeConsultation")}</Link>
         </div>
       </section>
+
+      <WhyApply />
       </div>
     </div>
   )

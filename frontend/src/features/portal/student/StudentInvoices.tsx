@@ -9,6 +9,7 @@ import {
   ListSkeleton,
   LoadError,
   PageTitle,
+  PayToDetails,
   PortalCard,
   StatusBadge,
 } from "@/features/portal/components"
@@ -77,6 +78,12 @@ export default function StudentInvoices() {
                       <span className="tabular-nums">{money(r.amount, inv.currency)}</span>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {outstanding > 0 && inv.bank_account && (
+                <div className="mt-3">
+                  <PayToDetails account={inv.bank_account} reference={inv.invoice_no} />
                 </div>
               )}
 

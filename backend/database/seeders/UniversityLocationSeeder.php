@@ -103,6 +103,12 @@ class UniversityLocationSeeder extends Seeder
         'Zhengzhou' => 'Zhengzhou Xinzheng (CGO)',
         'Zhenjiang' => 'Nanjing Lukou (NKG)',
         'Zhoushan' => 'Zhoushan Putuoshan (HSN)',
+        "Yan'an" => "Yan'an Nanniwan (ENY)",
+        "Ma'anshan" => 'Nanjing Lukou (NKG)',
+        'Changzhou' => 'Changzhou Benniu (CZX)',
+        'Xinxiang' => 'Zhengzhou Xinzheng (CGO)',
+        'Luoyang' => 'Luoyang Beijiao (LYA)',
+        'Linyi' => 'Linyi Qiyang (LYI)',
         'Zibo' => 'Jinan Yaoqiang (TNA)',
     ];
 
@@ -111,6 +117,9 @@ class UniversityLocationSeeder extends Seeder
         foreach (self::FIXES as $slug => [$city, $province]) {
             University::where('slug', $slug)->update(['city' => $city, 'province' => $province]);
         }
+
+        // One spelling per province, so province pages and counts do not split.
+        University::where('province', 'Tibet (Xizang)')->update(['province' => 'Tibet']);
 
         University::where('slug', 'jilin-medical-university')->whereNull('name_zh')->update(['name_zh' => '吉林医药学院']);
 

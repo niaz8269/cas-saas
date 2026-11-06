@@ -173,7 +173,8 @@
       "Relevés de notes certifiés, formulaire d'examen médical et casier judiciaire vierge.",
       "CAS confirme les conditions, dates limites et frais exacts de votre cursus avant la candidature."
     ],
-    "overviewContents": "Sommaire"
+    "overviewContents": "Sommaire",
+    "profileLabel": "Profil universitaire CAS"
   },
   "programs": {
     "seoTitle": "Trouvez des programmes pour étudier en Chine",
@@ -1408,6 +1409,15 @@
       "next": "Suiv."
     }
   },
+  "payTo": {
+    "title": "Payer sur ce compte",
+    "bank": "Banque",
+    "accountName": "Titulaire du compte",
+    "accountNumber": "Numéro de compte",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "Adresse de la banque"
+  },
   "fee": {
     "noticeTitle": "Frais de dossier uniques de {{amount}}",
     "noticeTitleSettled": "Vos frais de dossier sont déjà réglés",
@@ -1673,10 +1683,7 @@
     "closeTbd": "Date de clôture à annoncer",
     "source": "Avis de l'université",
     "checked": "vérifié le {{date}}",
-    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer.",
-    "sourceCucas": "Fiche CUCAS — à confirmer auprès de l'université",
-    "sourceSas": "Fiche SAS",
-    "sourceListing": "Annonce tierce, non confirmée"
+    "nextTbd": "L'université n'a pas encore publié les prochaines dates d'admission — demandez à CAS de les confirmer."
   },
   "photoCredits": {
     "seoTitle": "Crédits photo",

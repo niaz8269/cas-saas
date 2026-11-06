@@ -14,6 +14,7 @@ use Database\Seeders\MbbsProgramGapSeeder;
 use Database\Seeders\MirrorPhotosSeeder;
 use Database\Seeders\MoeMbbsSeeder;
 use Database\Seeders\OfficialIntakeDatesSeeder;
+use Database\Seeders\RegisteredMajorsSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
 use Database\Seeders\WikipediaProfileSeeder;
@@ -94,22 +95,28 @@ it('seeds only verified catalog data, each record carrying its official source',
     // The MoE-approved MBBS universities carry published application windows where an official page states them.
     expect(Intake::whereHas('university', fn ($q) => $q->where('moe_listed', true))->whereNotNull('application_deadline')->count())->toBeGreaterThanOrEqual(15);
 
-    // Wikipedia profile: facts and an introduction for nearly every university, a campus or city photo for almost all.
+    // Universities from the Ministry's national list (ten-digit school code) and the ones added from their own admissions
+    // pages have a name, place and basic profile but no photo or overview research yet; the completeness checks below
+    // cover the researched catalog only.
+    $added = collect(json_decode(file_get_contents(database_path('data/additional_universities.json')), true)['universities'])->pluck('name');
+    $researched = University::all()->reject(fn ($u) => ctype_digit((string) $u->code) || $added->contains($u->name))->pluck('id');
+
+    // Wikipedia profile: facts and an introduction for nearly every university, a campus or city photo for almost all
     expect(University::whereNotNull('founded_year')->count())->toBeGreaterThan(250)
         ->and(University::whereNotNull('wikipedia_url')->count())->toBeGreaterThan(280)
-        ->and(University::where(fn ($q) => $q->whereNull('cover_path')->orWhere('cover_path', ''))->count())->toBeLessThan(10)
+        ->and(University::whereIn('id', $researched)->where(fn ($q) => $q->whereNull('cover_path')->orWhere('cover_path', ''))->count())->toBeLessThan(10)
         ->and(University::where('cover_is_city', true)->whereNull('cover_credit')->count())->toBe(0);
 
     // Photos are served by the site itself, not hotlinked from Wikimedia.
     expect(University::where('cover_path', 'like', 'http%')->orWhere('logo_path', 'like', 'http%')->count())->toBe(0);
 
     // Public-page gaps: every university has a nearest airport and an introduction; most have a seal.
-    expect(University::whereNull('nearest_airport')->count())->toBe(0)
+    expect(University::whereIn('id', $researched)->whereNull('nearest_airport')->count())->toBe(0)
         ->and(University::where(fn ($q) => $q->whereNull('about')->orWhere('about', ''))->count())->toBe(0)
         ->and(University::whereNotNull('emblem_path')->count())->toBeGreaterThan(140);
 
     // Long overview text for every university, and (almost) no cover photo shared by several universities.
-    expect(University::whereNull('overview')->count())->toBe(0)
+    expect(University::whereIn('id', $researched)->whereNull('overview')->count())->toBe(0)
         ->and(University::where('cover_is_city', false)->distinct()->count('cover_path'))->toBeGreaterThan(215);
 
     // Idempotency: reseeding replaces rather than duplicates.
@@ -122,6 +129,7 @@ it('seeds only verified catalog data, each record carrying its official source',
     $this->seed(MirrorPhotosSeeder::class);
     $this->seed(MoeMbbsSeeder::class);
     $this->seed(MbbsProgramGapSeeder::class);
+    $this->seed(RegisteredMajorsSeeder::class);
     expect(Program::count())->toBe($programs)
         ->and(University::count())->toBe($universities);
 });

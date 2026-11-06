@@ -49,6 +49,7 @@ export interface SiteUniversityRef {
   slug: string | null
   cover_url?: string | null
   cover_credit?: string | null
+  cover_downloadable?: boolean
 }
 
 export interface SiteProgram {
@@ -56,6 +57,8 @@ export interface SiteProgram {
   name: string
   name_zh?: string | null
   csc_listed?: boolean
+  // Registered with the Ministry of Education; international-student details not confirmed yet.
+  registry_only?: boolean
   level: string
   teaching_language: string | null
   duration_months: number | null
@@ -170,6 +173,7 @@ export interface SiteUniversityCard {
   emblem_url?: string | null
   cover_url: string | null
   cover_credit?: string | null
+  cover_downloadable?: boolean
   /** True when the cover is a photo of the city because no campus photo was available. */
   cover_is_city?: boolean
   founded_year?: number | null

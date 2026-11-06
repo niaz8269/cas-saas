@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
+use App\Http\Controllers\Api\V1\BankAccountController;
 use App\Http\Controllers\Api\V1\BranchController;
 use App\Http\Controllers\Api\V1\CampaignController;
 use App\Http\Controllers\Api\V1\CommissionController;
@@ -39,6 +40,7 @@ use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
+use App\Http\Controllers\Api\V1\Public\PublicMediaController;
 use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
@@ -53,6 +55,7 @@ use App\Http\Controllers\Api\V1\UploadController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\VisaCaseController;
 use App\Http\Controllers\Api\V1\WebsiteSourceController;
+use App\Http\Middleware\PublicCatalogCache;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -69,12 +72,14 @@ Route::prefix('v1')->group(function () {
         ->middleware('api-source');
 
     // Public website catalog (unauthenticated, active/published only, throttled)
-    Route::prefix('public')->middleware('throttle:public')->group(function () {
+    Route::prefix('public')->middleware(['throttle:public', PublicCatalogCache::class])->group(function () {
         Route::get('universities', [PublicCatalogController::class, 'universities']);
         Route::get('programs', [PublicCatalogController::class, 'programs']);
         Route::get('scholarships', [PublicCatalogController::class, 'scholarships']);
         Route::get('cost-guide', [PublicCatalogController::class, 'costGuide']);
         Route::get('universities/{slug}', [PublicCatalogController::class, 'university']);
+        // CAS-branded copy of a licensed cover photo, with its attribution (previews stay clean)
+        Route::get('universities/{slug}/cover-download', [PublicMediaController::class, 'coverDownload']);
         Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
         Route::get('cities/{slug}', [PublicCatalogController::class, 'city']);
         // Reference data for the public sign-up forms (student/agent registration)
@@ -356,6 +361,16 @@ Route::prefix('v1')->group(function () {
         Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
         Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf']);
         Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'storePayment']);
+        Route::post('invoices/{invoice}/bank-account', [InvoiceController::class, 'setBankAccount']);
+        // CAS receipt accounts: pickers read (finance.view), changes need finance.manage.
+        Route::get('bank-accounts', [BankAccountController::class, 'index'])
+            ->middleware('permission:finance.view.global,staff');
+        Route::post('bank-accounts', [BankAccountController::class, 'store'])
+            ->middleware('permission:finance.manage.global,staff');
+        Route::patch('bank-accounts/{bankAccount}', [BankAccountController::class, 'update'])
+            ->middleware('permission:finance.manage.global,staff');
+        Route::delete('bank-accounts/{bankAccount}', [BankAccountController::class, 'destroy'])
+            ->middleware('permission:finance.manage.global,staff');
         Route::post('invoices/{invoice}/void', [InvoiceController::class, 'void']);
         Route::post('invoices/{invoice}/refunds', [InvoiceController::class, 'refund']);
         Route::get('commissions', [CommissionController::class, 'index']);

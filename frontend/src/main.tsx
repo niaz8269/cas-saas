@@ -16,6 +16,7 @@ const UniversityDetailPage = lazy(() => import("@/features/catalog/UniversityDet
 const ApplicationDetailPage = lazy(() => import("@/features/admissions/ApplicationDetailPage"))
 const ApplicationsPage = lazy(() => import("@/features/admissions/ApplicationsPage"))
 const AgentPayablesPage = lazy(() => import("@/features/finance/AgentPayablesPage"))
+const BankAccountsPage = lazy(() => import("@/features/finance/BankAccountsPage"))
 const CommissionDetailPage = lazy(() => import("@/features/finance/CommissionDetailPage"))
 const CommissionsPage = lazy(() => import("@/features/finance/CommissionsPage"))
 const FinancePage = lazy(() => import("@/features/finance/FinancePage"))
@@ -48,26 +49,26 @@ const StudentInvoices = lazy(() => import("@/features/portal/student/StudentInvo
 const StudentDocuments = lazy(() => import("@/features/portal/student/StudentDocuments"))
 import SiteLayout from "@/features/site/SiteLayout"
 import SiteHome from "@/features/site/SiteHome"
-import SiteUniversities from "@/features/site/SiteUniversities"
-import SiteUniversity from "@/features/site/SiteUniversity"
-import SiteProgramFinder from "@/features/site/SiteProgramFinder"
-import SiteScholarships from "@/features/site/SiteScholarships"
-import SiteAbout from "@/features/site/SiteAbout"
-import SiteCities from "@/features/site/SiteCities"
-import SiteCity from "@/features/site/SiteCity"
-import SiteMbbs from "@/features/site/SiteMbbs"
-import SiteCsc from "@/features/site/SiteCsc"
+const SiteUniversities = lazy(() => import("@/features/site/SiteUniversities"))
+const SiteUniversity = lazy(() => import("@/features/site/SiteUniversity"))
+const SiteProgramFinder = lazy(() => import("@/features/site/SiteProgramFinder"))
+const SiteScholarships = lazy(() => import("@/features/site/SiteScholarships"))
+const SiteAbout = lazy(() => import("@/features/site/SiteAbout"))
+const SiteCities = lazy(() => import("@/features/site/SiteCities"))
+const SiteCity = lazy(() => import("@/features/site/SiteCity"))
+const SiteMbbs = lazy(() => import("@/features/site/SiteMbbs"))
+const SiteCsc = lazy(() => import("@/features/site/SiteCsc"))
 import SiteNotFound from "@/features/site/SiteNotFound"
-import SitePhotoCredits from "@/features/site/SitePhotoCredits"
-import SiteContact from "@/features/site/SiteContact"
-import SiteFAQ from "@/features/site/SiteFAQ"
-import SitePartner from "@/features/site/SitePartner"
-import SitePricing from "@/features/site/SitePricing"
-import SiteStudyPlan from "@/features/site/SiteStudyPlan"
-import SiteServices from "@/features/site/SiteServices"
-import SiteWhyChina from "@/features/site/SiteWhyChina"
-import SiteNews from "@/features/site/SiteNews"
-import SitePostDetail from "@/features/site/SitePostDetail"
+const SitePhotoCredits = lazy(() => import("@/features/site/SitePhotoCredits"))
+const SiteContact = lazy(() => import("@/features/site/SiteContact"))
+const SiteFAQ = lazy(() => import("@/features/site/SiteFAQ"))
+const SitePartner = lazy(() => import("@/features/site/SitePartner"))
+const SitePricing = lazy(() => import("@/features/site/SitePricing"))
+const SiteStudyPlan = lazy(() => import("@/features/site/SiteStudyPlan"))
+const SiteServices = lazy(() => import("@/features/site/SiteServices"))
+const SiteWhyChina = lazy(() => import("@/features/site/SiteWhyChina"))
+const SiteNews = lazy(() => import("@/features/site/SiteNews"))
+const SitePostDetail = lazy(() => import("@/features/site/SitePostDetail"))
 const ContentPage = lazy(() => import("@/features/admin/ContentPage"))
 const MarketingPage = lazy(() => import("@/features/marketing/MarketingPage"))
 const PartnerRequestsPage = lazy(() => import("@/features/admin/PartnerRequestsPage"))
@@ -77,8 +78,10 @@ const IntegrationsPage = lazy(() => import("@/features/admin/IntegrationsPage"))
 const ErrorLogPage = lazy(() => import("@/features/admin/ErrorLogPage"))
 const TasksPage = lazy(() => import("@/features/tasks/TasksPage"))
 import { initErrorReporting } from "@/lib/errorReporting"
+import { installPhotoGuard } from "@/lib/photoGuard"
 
 initErrorReporting()
+installPhotoGuard()
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -172,6 +175,7 @@ const router = createBrowserRouter([
           { path: "/universities/:id", element: <UniversityDetailPage /> },
           { path: "/scholarships", element: <ScholarshipsPage /> },
           { path: "/finance", element: <FinancePage /> },
+          { path: "/finance/bank-accounts", element: <BankAccountsPage /> },
           { path: "/finance/:id", element: <InvoiceDetailPage /> },
           { path: "/commissions", element: <CommissionsPage /> },
           { path: "/commissions/:id", element: <CommissionDetailPage /> },

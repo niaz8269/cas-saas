@@ -64,13 +64,13 @@ class PublicCatalogController extends Controller
             ->paginate(min($request->integer('per_page', 24), 50));
 
         // Distinct cities for the directory filter (active universities only).
-        $cities = University::query()
+        $cities = cache()->remember('public.cities.v1', now()->addMinutes(10), fn () => University::query()
             ->where('status', 'active')
             ->whereNotNull('city')
             ->where('city', '!=', '')
             ->distinct()
             ->orderBy('city')
-            ->pluck('city');
+            ->pluck('city'));
 
         return PublicUniversityResource::collection($universities)
             ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience]);
@@ -84,6 +84,11 @@ class PublicCatalogController extends Controller
      * @return list<array<string, mixed>>
      */
     private function cityStats(): array
+    {
+        return cache()->remember('public.city-stats.v1', now()->addMinutes(10), fn () => $this->buildCityStats());
+    }
+
+    private function buildCityStats(): array
     {
         $images = app(ImageService::class);
 
@@ -169,7 +174,7 @@ class PublicCatalogController extends Controller
             ->where('slug', $slug)
             ->with([
                 'country:id,name,iso2',
-                'programs' => fn ($q) => $q->where('status', 'active')->orderBy('name'),
+                'programs' => fn ($q) => $q->where('status', 'active')->orderBy('registry_only')->orderBy('name'),
                 'intakes' => fn ($q) => $q->whereIn('status', ['open', 'closed'])->with('program:id,name')->orderBy('application_deadline'),
                 'scholarships' => fn ($q) => $q->where('status', 'active')->orderBy('name'),
             ])
@@ -188,6 +193,8 @@ class PublicCatalogController extends Controller
 
         $programs = Program::query()
             ->where('status', 'active')
+            // Majors only registered with the Ministry (no international details yet) show on their university's page, not in the program finder.
+            ->when(! $request->filled('filter.university_slug'), fn ($q) => $q->where('registry_only', false))
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
             ->with('university:id,name,slug,cover_path,cover_credit')
             ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))

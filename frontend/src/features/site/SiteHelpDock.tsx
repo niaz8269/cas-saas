@@ -124,7 +124,7 @@ export default function SiteHelpDock() {
             ))}
           </div>
 
-          <div className="ml-auto flex items-center gap-4">
+          <div className="ml-auto flex items-center gap-4 pr-20">
             <Link to="/site/study-plan?plan=custom" className="flex items-center gap-2 text-xs text-white/90 transition-colors hover:text-cas-red">
               <CalendarDays className="size-4" /> {t("helpDock.customPlan")}
             </Link>

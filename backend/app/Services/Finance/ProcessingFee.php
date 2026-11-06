@@ -3,6 +3,7 @@
 namespace App\Services\Finance;
 
 use App\Models\Application;
+use App\Models\BankAccount;
 use App\Models\Invoice;
 use App\Models\Setting;
 use App\Models\Student;
@@ -183,6 +184,8 @@ class ProcessingFee
                 'unit_price' => $fee['amount'] - $already,
             ]],
             actor: null, // raised by the system on the student's own action
+            // Nobody is choosing an account here, so use the default one (if set).
+            bankAccountId: BankAccount::defaultFor($fee['currency'])?->id,
         );
     }
 }

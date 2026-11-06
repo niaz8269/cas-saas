@@ -53,6 +53,15 @@ class StudentFeeReceiptController extends Controller
                     'amount_paid' => (float) $invoice->amount_paid,
                     'currency' => $invoice->currency,
                     'status' => $invoice->status,
+                    'bank_account' => $invoice->bankAccount === null ? null : [
+                        'bank_name' => $invoice->bankAccount->bank_name,
+                        'account_name' => $invoice->bankAccount->account_name,
+                        'account_number' => $invoice->bankAccount->account_number,
+                        'iban' => $invoice->bankAccount->iban,
+                        'swift' => $invoice->bankAccount->swift,
+                        'bank_address' => $invoice->bankAccount->bank_address,
+                        'instructions' => $invoice->bankAccount->instructions,
+                    ],
                     'receipts' => $invoice->documents()
                         ->orderByDesc('id')
                         ->get(['id', 'file_name', 'status', 'created_at'])

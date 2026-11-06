@@ -20,13 +20,16 @@ return [
     // IndexNow key (Bing, Yandex, Seznam, Naver): the key file is served at /{key}.txt.
     'indexnow_key' => env('INDEXNOW_KEY'),
 
+    // Seeders and other console runs never ping search engines; tests switch this on.
+    'ping_from_console' => false,
+
     'default_image' => '/og-image.png',
 
     // Static public pages: path => [title, description, priority, changefreq]
     'pages' => [
-        '' => ['Study in China: Universities, Programs & Scholarships', 'Find MBBS, engineering and business programs at 300+ Chinese universities. See application windows, tuition and scholarships, and apply with CAS.', 1.0, 'daily'],
-        'site/universities' => ['Universities in China for International Students', 'Browse 300+ Chinese universities with programs, tuition, application windows and scholarships for international students. Filter by city or MoE-approved MBBS.', 0.9, 'daily'],
-        'site/programs' => ['Find Programs to Study in China', 'Search 55,000+ programs in China by degree, language and budget: bachelor, master, PhD, English-taught MBBS, engineering and business.', 0.9, 'daily'],
+        '' => ['Study in China: Universities, Programs & Scholarships', 'Find MBBS, engineering and business programs at {universities} Chinese universities and colleges. See application windows, tuition and scholarships, and apply with CAS.', 1.0, 'daily'],
+        'site/universities' => ['Universities in China for International Students', 'Browse {universities} Chinese universities and colleges with programs, tuition, application windows and scholarships for international students. Filter by city or MoE-approved MBBS.', 0.9, 'daily'],
+        'site/programs' => ['Find Programs to Study in China', 'Search {programs} programs in China by degree, language and budget: bachelor, master, PhD, English-taught MBBS, engineering and business.', 0.9, 'daily'],
         'site/scholarships' => ['Scholarships to Study in China', 'Chinese Government (CSC), provincial and university scholarships for international students, with eligibility and application windows.', 0.9, 'weekly'],
         'site/mbbs-in-china' => ['MBBS in China: Approved Universities, Fees & Dates', 'The 43 universities approved by China\'s Ministry of Education to enrol English-taught MBBS students in 2026–27, with tuition, application windows and how to apply.', 0.95, 'weekly'],
         'site/csc-scholarship' => ['CSC Scholarship (Chinese Government Scholarship) Guide', 'How the Chinese Government Scholarship (CSC) works: who can apply, what it covers, deadlines by route, and which Chinese universities list CSC programs.', 0.9, 'weekly'],
@@ -37,7 +40,7 @@ return [
         'site/news' => ['News & Updates on Studying in China', 'Admission deadlines, scholarship openings and guides for international students applying to Chinese universities.', 0.7, 'daily'],
         'site/contact' => ['Contact CAS & Free Consultation', 'Request a free consultation with a CAS counselor about studying in China: universities, scholarships, visas and fees.', 0.6, 'monthly'],
         'site/pricing' => ['CAS Pricing: Free Plan & Clear Service Fees', 'Free consultation and study plan; paid services are quoted clearly and up front. No hidden fees.', 0.5, 'monthly'],
-        'site/partner' => ['Partner with CAS: Agency & Recruitment Cooperation', 'Refer students to 300+ Chinese universities through an authorized agent, with a partner portal and clear commissions.', 0.5, 'monthly'],
+        'site/partner' => ['Partner with CAS: Agency & Recruitment Cooperation', 'Refer students to {universities} Chinese universities and colleges through an authorized agent, with a partner portal and clear commissions.', 0.5, 'monthly'],
         'site/faq' => ['FAQ: Studying in China with CAS', 'Answers about choosing a university, scholarships, applying, student visas, arrival support and fees.', 0.6, 'monthly'],
         'site/study-plan' => ['Get a Free Study Plan for China', 'Tell us your goal and budget and a CAS advisor sends a personalised shortlist of universities, programs and scholarships.', 0.5, 'monthly'],
         'site/photo-credits' => ['Photo Credits', 'Authors and licences of the photos used on the CAS website.', 0.1, 'yearly'],

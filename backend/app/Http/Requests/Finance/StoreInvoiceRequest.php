@@ -34,6 +34,8 @@ class StoreInvoiceRequest extends FormRequest
             'party_id' => ['required', 'integer'],
             'application_id' => ['nullable', 'integer', Rule::exists('applications', 'id')],
             'currency' => ['required', 'string', 'size:3'],
+            // Which CAS account this invoice is paid into (active accounts only).
+            'bank_account_id' => ['nullable', 'integer', Rule::exists('bank_accounts', 'id')->where('is_active', true)->whereNull('deleted_at')],
             'status' => ['nullable', Rule::in(['draft', 'issued'])],
             'due_days' => ['nullable', 'integer', 'min:0', 'max:365'],
 

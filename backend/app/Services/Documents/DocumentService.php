@@ -19,13 +19,20 @@ use Illuminate\Support\Str;
  */
 class DocumentService
 {
-    public const DISK = 's3';
+    /** Disk handing signed URLs to browsers: S3 by default, or the app's own private disk. */
+    public static function disk(): string
+    {
+        return config('filesystems.documents_disk') ?: 's3';
+    }
 
     /**
-     * Same bucket as DISK, but over the server-to-server network path. Use for
-     * reading/writing bytes on the server; use DISK for browser presigned URLs.
+     * Same store as disk(), over the server-to-server path (differs from it only
+     * for S3/MinIO). Use for reading/writing bytes on the server.
      */
-    public const INTERNAL_DISK = 's3_internal';
+    public static function internalDisk(): string
+    {
+        return config('filesystems.documents_disk') ?: 's3_internal';
+    }
 
     public const MAX_BYTES = 25 * 1024 * 1024;
 
@@ -65,7 +72,7 @@ class DocumentService
         $key = $this->keyPrefix($documentable).Str::uuid().'_'.$safeName;
         $expiresAt = now()->addMinutes(15);
 
-        ['url' => $url, 'headers' => $headers] = Storage::disk(self::DISK)
+        ['url' => $url, 'headers' => $headers] = Storage::disk(self::disk())
             ->temporaryUploadUrl($key, $expiresAt, ['ContentType' => $mime]);
 
         return [
@@ -121,7 +128,7 @@ class DocumentService
     {
         $expiresAt = now()->addMinutes(10);
 
-        $url = Storage::disk(self::DISK)->temporaryUrl($document->file_path, $expiresAt);
+        $url = Storage::disk(self::disk())->temporaryUrl($document->file_path, $expiresAt);
 
         $this->log($document, $actorId, 'download', $ip);
 

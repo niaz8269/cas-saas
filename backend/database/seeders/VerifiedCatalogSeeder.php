@@ -315,7 +315,7 @@ class VerifiedCatalogSeeder extends Seeder
                         'Food Science and Engineering', 'Robotics Engineering', 'Data Science and Big Data Technology',
                     ]),
                     [
-                        // From the CUCAS listing for ZUST (its fees match the official table above).
+                        // Fees match the official table above.
                         ['name' => 'International Business', 'level' => 'bachelor', 'language' => 'English', 'months' => 48, 'tuition' => 18000, 'source' => 'https://zust.cucas.cn/program/'],
                         ['name' => 'Bioengineering', 'level' => 'bachelor', 'language' => 'English', 'months' => 48, 'tuition' => 20000, 'source' => 'https://zust.cucas.cn/program/'],
                     ],
@@ -441,8 +441,8 @@ class VerifiedCatalogSeeder extends Seeder
                 'address' => null, 'website' => 'www.whut.edu.cn', 'apply_link' => null, 'logo' => null,
                 'about' => 'Wuhan University of Technology (武汉理工大学) is located in Wuhan, Hubei. Admission dates are being confirmed with the university — please contact CAS for current information.',
                 'requirements' => [
-                    'Tuition per year (CUCAS listing, checked 30 Oct 2026): bachelor RMB 18,000–25,000, master RMB 23,000–38,000, doctoral RMB 30,000–35,000; non-degree RMB 8,500–17,000',
-                    'International student apartment (CUCAS listing): double room RMB 8,400 per year, single room RMB 12,000 per year',
+                    'Tuition per year (checked 30 Oct 2026): bachelor RMB 18,000–25,000, master RMB 23,000–38,000, doctoral RMB 30,000–35,000; non-degree RMB 8,500–17,000',
+                    'International student apartment: double room RMB 8,400 per year, single room RMB 12,000 per year',
                     'Confirm exact program fees and deadlines with CAS before applying',
                 ],
                 'programs' => [], 'intakes' => [], 'scholarships' => [],

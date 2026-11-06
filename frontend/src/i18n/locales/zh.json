@@ -173,7 +173,8 @@
       "经认证的成绩单、体格检查表和无犯罪记录证明。",
       "申请前，CAS 会为您确认所选专业的具体要求、截止日期和费用。"
     ],
-    "overviewContents": "目录"
+    "overviewContents": "目录",
+    "profileLabel": "CAS 院校简介"
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",
@@ -1408,6 +1409,15 @@
       "next": "下一页"
     }
   },
+  "payTo": {
+    "title": "请汇款至此账户",
+    "bank": "银行",
+    "accountName": "户名",
+    "accountNumber": "账号",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "银行地址"
+  },
   "fee": {
     "noticeTitle": "一次性手续费 {{amount}}",
     "noticeTitleSettled": "您的手续费已缴纳",
@@ -1673,10 +1683,7 @@
     "closeTbd": "截止日期待公布",
     "source": "大学通知",
     "checked": "{{date}} 核查",
-    "nextTbd": "该大学尚未公布下一批招生日期——请向 CAS 咨询确认。",
-    "sourceCucas": "CUCAS 列表——请向大学确认",
-    "sourceSas": "SAS 收录",
-    "sourceListing": "第三方信息，未经确认"
+    "nextTbd": "该大学尚未公布下一批招生日期——请向 CAS 咨询确认。"
   },
   "photoCredits": {
     "seoTitle": "图片来源",

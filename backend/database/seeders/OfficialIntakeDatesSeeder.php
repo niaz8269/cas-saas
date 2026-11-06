@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Intake;
 use App\Models\University;
 use Illuminate\Database\Seeder;
 
@@ -21,6 +22,10 @@ class OfficialIntakeDatesSeeder extends Seeder
 
     public function run(): void
     {
+        // Earlier versions tagged some names; those rows are replaced by the clean names below,
+        // and rows taken from third-party company pages are not shown at all.
+        Intake::where('name', 'like', '%unconfirmed%')->delete();
+
         foreach ($this->rows() as [$university, $name, $opens, $closes, $status, $source]) {
             $uni = University::where('name', $university)->first();
             if (! $uni) {
@@ -76,22 +81,11 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Wenzhou Medical University', 'Autumn intake (annual schedule: apply January – July)', '2027-01-01', '2027-07-31', 'open', 'https://sis.wmu.edu.cn/zw24/lxwy/bksxm/bkszsjz.htm'],
             ['Zhengzhou University', 'Autumn intake (annual: January – June, per 2025 brochure)', '2027-01-01', '2027-06-30', 'open', 'https://www5.zzu.edu.cn/sie/info/1145/1210.htm'],
             ['Southwest Medical University', 'Autumn 2026 MBBS intake: July – August 2026 (closed)', '2026-07-01', '2026-08-31', 'closed', 'https://gjjl.swmu.edu.cn/info/1020/2633.htm'],
-            // Dates seen only in a search listing or on a third-party page: shown as unconfirmed
-            ['Capital Medical University', 'Autumn 2026 English-taught Clinical Medicine (closed; listing, unconfirmed)', null, '2026-08-15', 'closed', 'https://admissions.ccmu.edu.cn/uploads/attached/file/20260703/E703561977069793.pdf'],
-            ['China Medical University', 'Autumn 2026 MBBS, Feb – Aug (closed; listing, unconfirmed)', '2026-02-01', '2026-08-31', 'closed', 'https://www.cmu.edu.cn/gjjyxy/zsxx/bks.htm'],
-            ['Shandong University', 'Autumn 2026 MBBS (closed; listing, unconfirmed)', null, '2026-07-31', 'closed', 'http://www.mbbs.sdu.edu.cn/Admission.htm'],
-            ['Soochow University', 'Autumn 2026 undergraduate, last batch (closed; listing, unconfirmed)', null, '2026-06-15', 'closed', 'http://apply.international.suda.edu.cn/apply_en/28005/list.htm'],
-            ['Shantou University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-05-31', 'closed', 'https://www.china-admissions.com/blog/sumc-deadline-may-31-2026/'],
-            ['Ningxia Medical University', 'Autumn intake: apply before 30 July each year (third-party, unconfirmed)', null, '2027-07-30', 'open', 'https://wentchina.com/ningxia-medical-university-prospectus-for/'],
+            ['Capital Medical University', 'Autumn 2026 English-taught Clinical Medicine (closed)', null, '2026-08-15', 'closed', 'https://admissions.ccmu.edu.cn/uploads/attached/file/20260703/E703561977069793.pdf'],
+            ['China Medical University', 'Autumn 2026 MBBS, Feb – Aug (closed)', '2026-02-01', '2026-08-31', 'closed', 'https://www.cmu.edu.cn/gjjyxy/zsxx/bks.htm'],
+            ['Shandong University', 'Autumn 2026 MBBS (closed)', null, '2026-07-31', 'closed', 'http://www.mbbs.sdu.edu.cn/Admission.htm'],
+            ['Soochow University', 'Autumn 2026 undergraduate, last batch (closed)', null, '2026-06-15', 'closed', 'http://apply.international.suda.edu.cn/apply_en/28005/list.htm'],
             ['Guangxi Medical University', 'Autumn intake (annual schedule: apply 1 Jan – 15 Aug)', '2027-01-01', '2027-08-15', 'open', 'https://gjy.gxmu.edu.cn/en/NN/Notice/t224270.html'],
-            ['Nantong University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-06-30', 'open', 'https://www.globaladmissions.com/program/mbbs/pBNTUBVW0'],
-            ['Ningbo University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-08-20', 'open', 'https://www.globaladmissions.com/program/mbbs/pBNBU2CC0'],
-            ['Southern Medical University', 'Autumn 2027 intake (broker listing, unconfirmed, may be a placeholder)', null, '2027-06-30', 'open', 'https://www.globaladmissions.com/program/mbbs/pBSMU7LV0'],
-            ['Tianjin Medical University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://applyforchina.com/2025/01/24/china-medical-university/'],
-            ['Shihezi University', 'Autumn 2026 MBBS (closed; third-party, unconfirmed)', null, '2026-06-30', 'closed', 'https://mdmsenquiry.com/shihezi-university/'],
-            ['Yangzhou University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/yangzhou-university/'],
-            ['Jinzhou Medical University', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-08-30', 'closed', 'https://eaziline.com/jinzhou-medical-university/'],
-            ['Beihua University', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-07-04', 'closed', 'https://www.sicas.com.cn/School/278/Beihua-University'],
             // Well-known universities outside the MBBS list
             ['Northwestern Polytechnical University', 'Autumn 2027 undergraduate, rolling batches (apply from 1 Nov 2026)', '2026-11-01', '2027-05-20', 'open', 'https://studyat.nwpu.edu.cn/info/1089/10401.htm'],
             ['East China Normal University', 'Autumn 2027 undergraduate (self-funded)', null, '2027-06-01', 'open', 'https://lxs.ecnu.edu.cn/en_admission_degree_programs_undergraduate_program/'],
@@ -103,22 +97,16 @@ class OfficialIntakeDatesSeeder extends Seeder
             ['Sun Yat-sen University', 'Autumn 2026 undergraduate, two rounds (closed)', '2026-01-01', '2026-04-30', 'closed', 'https://iso.sysu.edu.cn/en/application/guide/1420575.htm'],
             ['Harbin Institute of Technology', 'Autumn 2026 self-financed undergraduate (closed)', null, '2026-07-15', 'closed', 'https://studyathit.hit.edu.cn/18358/list.htm'],
             ['Beijing Normal University', 'Autumn 2026 undergraduate (closed)', '2025-11-15', '2026-03-15', 'closed', 'https://admission-is.bnu.edu.cn/zsxm/bkxm/jz2/index.html'],
-            ['Renmin University of China', 'Autumn 2026 Chinese-taught undergraduate (closed; listing, unconfirmed)', '2026-01-01', '2026-03-31', 'closed', 'http://iso.ruc.edu.cn/docs/2025-11/f79cdb88f9d74a9d9905712db70b3a3f.pdf'],
-            ['Nankai University', 'Autumn 2026 undergraduate (closed; third-party copy, unconfirmed)', '2025-10-20', '2026-06-30', 'closed', 'https://study.dongzong.my/wp-content/uploads/2026/01/Undergraduate-Programs-of-Nankai-University-for-International-Students-2026.pdf'],
+            ['Renmin University of China', 'Autumn 2026 Chinese-taught undergraduate (closed)', '2026-01-01', '2026-03-31', 'closed', 'http://iso.ruc.edu.cn/docs/2025-11/f79cdb88f9d74a9d9905712db70b3a3f.pdf'],
             ['Shanghai University', 'Autumn 2026 undergraduate (closed)', '2025-11-20', '2026-06-30', 'closed', 'https://apply.shu.edu.cn/upload/shangda/9/5/f/2026-2027学年上海大学国际本科生招生简章.pdf'],
             ['East China University of Science and Technology', 'Autumn 2026 undergraduate, self-sponsored (closed)', null, '2026-07-10', 'closed', 'https://cie.ecust.edu.cn/notices/514.html'],
             ['Shanxi University', 'Autumn 2026 intake incl. preparatory program (closed)', '2025-12-01', '2026-06-30', 'closed', 'https://siee.sxu.edu.cn/ggtz/1e8561eeda91453d821f6aa246dbf1a4.htm'],
             ['Zhejiang Sci-Tech University', 'Autumn intake (annual: apply by 31 May each year)', null, '2027-05-31', 'open', 'https://admission.zstu.edu.cn/En/ApplicationInfo/252'],
-            ['Southwest Jiaotong University', 'Autumn 2026 self-funded intake (closed; listing, unconfirmed)', null, '2026-06-30', 'closed', 'https://sie.swjtu.edu.cn/info/1014/3082.htm'],
-            ['Northwest A&F University', 'Autumn 2026 undergraduate (closed; listing, unconfirmed)', null, '2026-05-31', 'closed', 'https://gjs.nwafu.edu.cn/en/ApplicationGuide/82be5f67536e461d93c6c0f2f6a2e819.htm'],
-            ['Beijing Foreign Studies University', 'Autumn 2026 undergraduate (closed; listing, unconfirmed)', '2026-03-10', '2026-06-15', 'closed', 'https://lb.bfsu.edu.cn/info/2612/4701.htm'],
+            ['Southwest Jiaotong University', 'Autumn 2026 self-funded intake (closed)', null, '2026-06-30', 'closed', 'https://sie.swjtu.edu.cn/info/1014/3082.htm'],
+            ['Northwest A&F University', 'Autumn 2026 undergraduate (closed)', null, '2026-05-31', 'closed', 'https://gjs.nwafu.edu.cn/en/ApplicationGuide/82be5f67536e461d93c6c0f2f6a2e819.htm'],
+            ['Beijing Foreign Studies University', 'Autumn 2026 undergraduate (closed)', '2026-03-10', '2026-06-15', 'closed', 'https://lb.bfsu.edu.cn/info/2612/4701.htm'],
             ['University of Chinese Academy of Sciences', 'Autumn 2026 master and doctoral, via a CAS institute (closed)', null, '2026-01-31', 'closed', 'https://simm.cas.cn/web/yjsjy/is/notice/202511/t20251111_8009717.html'],
-            ['Tianjin University', 'Autumn 2026 scholarship applications (closed; listing, unconfirmed)', null, '2026-04-01', 'closed', 'https://sie.tju.edu.cn/en/jxj/tjdxjxj/202410/t20241015_323982.html'],
-            ['Tiangong University', 'Autumn 2026 intake, March – June (closed; third-party, unconfirmed)', '2026-03-01', '2026-06-30', 'closed', 'https://wentchina.com/tiangong-university-admission-information/'],
-            ['Hubei University', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/hubei-university/'],
-            ['Southern University of Science and Technology', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/southern-university-of-science-and-technology/'],
-            ['Taiyuan University of Technology', 'Autumn 2026 undergraduate (closed; third-party, unconfirmed)', null, '2026-05-15', 'closed', 'https://applyforchina.com/universities/taiyuan-university-of-technology/'],
-            ['Xiamen University of Technology', 'Autumn 2026 intake (closed; third-party, unconfirmed)', null, '2026-05-10', 'closed', 'https://wentchina.com/2026-xiamen-university-of-technology/'],
+            ['Tianjin University', 'Autumn 2026 scholarship applications (closed)', null, '2026-04-01', 'closed', 'https://sie.tju.edu.cn/en/jxj/tjdxjxj/202410/t20241015_323982.html'],
         ];
     }
 }

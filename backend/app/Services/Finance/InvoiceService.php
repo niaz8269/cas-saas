@@ -21,8 +21,9 @@ class InvoiceService
         ?User $actor,
         string $status = 'issued',
         int $dueDays = 30,
+        ?int $bankAccountId = null,
     ): Invoice {
-        return DB::transaction(function () use ($partyType, $partyId, $applicationId, $currency, $items, $actor, $status, $dueDays) {
+        return DB::transaction(function () use ($partyType, $partyId, $applicationId, $currency, $items, $actor, $status, $dueDays, $bankAccountId) {
             $subtotal = collect($items)->sum(fn ($item) => ($item['qty'] ?? 1) * $item['unit_price']);
 
             $invoice = Invoice::create([
@@ -30,6 +31,7 @@ class InvoiceService
                 'party_type' => $partyType,
                 'party_id' => $partyId,
                 'application_id' => $applicationId,
+                'bank_account_id' => $bankAccountId,
                 'currency' => $currency,
                 'subtotal' => $subtotal,
                 'tax' => 0,

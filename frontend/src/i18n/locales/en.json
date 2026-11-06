@@ -134,6 +134,8 @@
     "factPrograms": "Programs",
     "yes": "Yes",
     "repHeading": "Your CAS representative",
+    "registryNote": "These majors are registered by the university with the Ministry of Education. Whether each is open to international applicants, the teaching language, fees and dates are confirmed by CAS on request.",
+    "registeredMajor": "Registered major",
     "programsEmpty": "Programs will be listed soon — enquire and we'll share the current list.",
     "durationMonths": " · {{count}} months",
     "perYear": "/yr",
@@ -176,7 +178,8 @@
       "Certified academic transcripts, a physical examination form and a police clearance certificate.",
       "CAS confirms the exact requirements, deadlines and fees for your course before you apply."
     ],
-    "overviewContents": "Contents"
+    "overviewContents": "Contents",
+    "profileLabel": "CAS University Profile"
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
@@ -248,10 +251,21 @@
     "headerEyebrow": "Our story",
     "headerTitle": "About CAS",
     "headerSubtitle": "CAS — Consultancy for Abroad Study — helps students from around the world study at Ministry of Education–listed universities across China. We handle the whole journey: choosing the right program, applying, securing scholarships, and supporting you through visa and arrival.",
-    "statYears": "Years of experience",
-    "statStudents": "Students placed",
-    "statPartners": "University partners",
-    "statSupport": "Application support",
+    "statSince": "Helping students since",
+    "statUniversities": "Universities and colleges listed",
+    "statPrograms": "Programs to choose from",
+    "statScholarships": "Scholarships listed",
+    "promiseTitle": "What you can count on",
+    "promiseSubtitle": "Four things we hold ourselves to with every student.",
+    "promiseOfficialTitle": "Information from official sources",
+    "promiseOfficialBody": "University details, tuition, dates and scholarships are checked against what the universities themselves publish, not guessed.",
+    "promiseFeesTitle": "Fees you can see before you pay",
+    "promiseFeesBody": "A free study plan, one application fee per student, and service charges that appear in your portal before you are asked to pay.",
+    "promiseTrackTitle": "One place to follow your application",
+    "promiseTrackBody": "Your student portal shows every document, invoice and status update, so you always know the next step.",
+    "promiseReachTitle": "A real person, on your channel",
+    "promiseReachBody": "Reach a CAS counselor on WhatsApp, WeChat, email or in the portal, in English.",
+    "seeFees": "See exactly what CAS charges",
     "whyTitle": "Why study in China",
     "whySubtitle": "A world-class education with real opportunity — at a fraction of the cost.",
     "whyPoint1": "World-ranked, Ministry of Education–listed universities",
@@ -405,7 +419,7 @@
     "becomePartner": "Apply as a partner",
     "signIn": "Partner sign in",
     "talkToUs": "Talk to us first",
-    "statUniversities": "Universities listed",
+    "statUniversities": "Universities and colleges listed",
     "statPrograms": "Programs listed",
     "statMbbs": "Approved for English-taught MBBS",
     "statSince": "Working with universities since",
@@ -1041,6 +1055,26 @@
     "freeNoObligation": "Free · no obligation"
   },
   "home": {
+    "cities": {
+      "title": "Study in China's best cities",
+      "subtitle": "Pick a city and see the universities there, with their programs and admission dates.",
+      "universityCount_one": "{{count}} university",
+      "universityCount_other": "{{count}} universities",
+      "seeMore": "See more cities"
+    },
+    "why": {
+      "title": "Why apply with CAS?",
+      "freeTitle": "Free study plan",
+      "freeBody": "Your first study plan and counselor advice cost nothing, and you pay one application fee per student. See",
+      "freeLink": "exactly what CAS charges.",
+      "easyTitle": "One simple application",
+      "easyBody": "Fill in one online application and tell us the university you want; CAS prepares and submits it for you.",
+      "supportTitle": "Real support in English",
+      "supportBody": "Reach a counselor on WhatsApp, WeChat, email or in your student portal.",
+      "supportLink": "Talk to us.",
+      "officialTitle": "Information you can rely on",
+      "officialBody": "{{programs}} programs and {{scholarships}} scholarships, checked against what the universities publish."
+    },
     "seo": {
       "title": "Study in China — Universities, Programs & Scholarships",
       "description": "Study in China with CAS, an official authorized agent since 2012. Find MBBS, engineering and business programs at Ministry of Education–listed universities, with scholarships and full application-to-arrival support."
@@ -1440,6 +1474,15 @@
       "next": "Next"
     }
   },
+  "payTo": {
+    "title": "Pay to this account",
+    "bank": "Bank",
+    "accountName": "Account name",
+    "accountNumber": "Account number",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "Bank address"
+  },
   "fee": {
     "noticeTitle": "One-time application fee of {{amount}}",
     "noticeTitleSettled": "Your application fee is already paid",
@@ -1699,10 +1742,7 @@
     "closeTbd": "Closing date to be announced",
     "source": "University notice",
     "checked": "checked {{date}}",
-    "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them.",
-    "sourceCucas": "CUCAS listing — confirm with the university",
-    "sourceSas": "SAS listing",
-    "sourceListing": "Third-party listing, unconfirmed"
+    "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them."
   },
   "photoCredits": {
     "seoTitle": "Photo credits",

@@ -19,7 +19,7 @@ class InvoicePdfRenderer
 {
     public function stream(Invoice $invoice, string $partyName, bool $voucher = false, ?string $paymentInstructions = null): Response
     {
-        $invoice->loadMissing(['items', 'payments.recorder:id,name', 'application:id,application_code']);
+        $invoice->loadMissing(['items', 'bankAccount', 'payments.recorder:id,name', 'application:id,application_code']);
 
         $money = fn ($value) => $invoice->currency.' '.number_format((float) $value, 2);
 

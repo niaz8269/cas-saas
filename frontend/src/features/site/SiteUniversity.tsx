@@ -23,7 +23,7 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AdmissionWindow, PhotoMark } from "@/features/site/components"
+import { AdmissionWindow } from "@/features/site/components"
 import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
@@ -88,15 +88,13 @@ export default function SiteUniversity() {
         {/* Cover — image, or a designed gradient banner when none is available */}
         <div className="relative h-48 overflow-hidden sm:h-60">
           {cover ? (
-            <img src={cover.src} alt="" className="h-full w-full object-cover" />
+            <img src={cover.src} alt={cover.own ? `${u.name} campus` : `${u.city ?? "China"} city view near ${u.name}`} className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-cas-navy-900 via-cas-navy to-cas-navy-700">
               <div className="pointer-events-none absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
               <span className="relative px-6 text-center font-sans text-2xl font-bold text-white/90 sm:text-3xl">{u.name}</span>
             </div>
           )}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-          {cover && <PhotoMark link />}
         </div>
         <div className="p-4 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -214,6 +212,7 @@ export function OverviewArticle({ sections }: { sections: SiteOverviewSection[] 
 
   return (
     <article className="rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+      <p className="mb-4 text-xs font-semibold tracking-wider text-cas-red-600 uppercase">{t("university.profileLabel")}</p>
       {toc.length > 3 && (
         <nav aria-label={t("university.overviewContents")} className="mb-6 flex flex-wrap gap-x-4 gap-y-1.5 border-b pb-4 text-sm">
           {toc.map(({ s, i }) => (
@@ -279,6 +278,7 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
         <OverviewArticle sections={u.overview} />
       ) : u.about ? (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
+          <p className="mb-3 text-xs font-semibold tracking-wider text-cas-red-600 uppercase">{t("university.profileLabel")}</p>
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
         </div>
       ) : null}
@@ -305,8 +305,13 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   const [shown, setShown] = useState(PROGRAMS_PAGE)
   if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
+  const hasRegistered = u.programs.some((p) => p.registry_only)
+
   return (
     <div className="space-y-4">
+    {hasRegistered && (
+      <p className="rounded-sm border border-cas-navy/15 bg-cas-navy-50 px-4 py-3 text-sm text-cas-navy">{t("university.registryNote")}</p>
+    )}
     <div className="grid gap-3 sm:grid-cols-2">
       {u.programs.slice(0, shown).map((p) => (
         <div key={p.id} className="rounded-sm border bg-card p-4 shadow-sm">
@@ -316,7 +321,9 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
               {p.name_zh && <p className="text-xs text-muted-foreground">{p.name_zh}</p>}
               <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
             </div>
-            {p.fee_locked ? (
+            {p.registry_only ? (
+              <Badge variant="outline" className="border-transparent bg-subtle text-muted-foreground">{t("university.registeredMajor")}</Badge>
+            ) : p.fee_locked ? (
               <SignInGate label={t("university.signInForFees")} className="text-sm" />
             ) : p.tuition_fee != null ? (
               <span className="text-right text-sm font-semibold tabular-nums text-cas-navy">

@@ -20,8 +20,11 @@ class DatabaseSeeder extends Seeder
             StaffUserSeeder::class,
             VerifiedCatalogSeeder::class,
             SasCatalogSeeder::class,
+            AdditionalUniversitiesSeeder::class,
+            MoeInstitutionsSeeder::class,
             UniversityLocationSeeder::class,
             WikipediaProfileSeeder::class,
+            UniversityIntroSeeder::class,
             OverviewSeeder::class,
             MoeMbbsSeeder::class,
             MbbsProgramGapSeeder::class,
@@ -32,6 +35,7 @@ class DatabaseSeeder extends Seeder
             UniversityContactFixSeeder::class,
             GovernmentScholarshipSeeder::class,
             OfficialIntakeDatesSeeder::class,
+            RegisteredMajorsSeeder::class,
             DocumentTypeSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,
@@ -39,6 +43,7 @@ class DatabaseSeeder extends Seeder
             MirrorPhotosSeeder::class,
             CampusPhotoSeeder::class,
             NewsSeeder::class,
+            GuidesSeeder::class,
         ]);
     }
 }

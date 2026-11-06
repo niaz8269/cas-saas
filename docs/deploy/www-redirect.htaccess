@@ -1,0 +1,6 @@
+# Send www.cas.moe to cas.moe so search engines see one site (goes at the top of public_html/.htaccess).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^www\.cas\.moe$ [NC]
+    RewriteRule ^(.*)$ https://cas.moe/$1 [L,R=301]
+</IfModule>

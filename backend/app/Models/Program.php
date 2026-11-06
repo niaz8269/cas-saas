@@ -25,6 +25,7 @@ class Program extends Model
         'name_zh',
         'level',
         'csc_listed',
+        'registry_only',
         'teaching_language',
         'duration_months',
         'tuition_fee',
@@ -41,6 +42,7 @@ class Program extends Model
     {
         return [
             'csc_listed' => 'boolean',
+            'registry_only' => 'boolean',
             'duration_months' => 'integer',
             'tuition_fee' => 'decimal:2',
             'hostel_fee' => 'decimal:2',

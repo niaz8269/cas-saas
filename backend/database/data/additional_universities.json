@@ -1,0 +1,1478 @@
+{
+ "universities": [
+  {
+   "name": "Shenyang Medical College",
+   "name_zh": "沈阳医学院",
+   "city": "Shenyang",
+   "province": "Liaoning",
+   "website": "https://www.symc.edu.cn/",
+   "international_admissions_url": "https://gjjyxy.symc.edu.cn/zsxx/bks.htm",
+   "about": "A medical-focused provincial college in Shenyang, founded in 1949, with affiliated and teaching hospitals. It has admitted self-funded international students since 2004, and its international education college runs undergraduate admissions.",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Yan'an University",
+   "name_zh": "延安大学",
+   "city": "Yan'an",
+   "province": "Shaanxi",
+   "website": "https://www.yau.edu.cn/",
+   "international_admissions_url": "https://gjjlxy.yau.edu.cn/info/1045/1235.htm",
+   "about": "A public comprehensive university in Yan'an, Shaanxi, with roots in the university founded in Yan'an in the 1940s. Its international exchange and education college handles international students; a published brochure covers a four-year accounting bachelor's for students from Southeast Asia.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Accounting",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Beijing Information Science and Technology University",
+   "name_zh": "北京信息科技大学",
+   "city": "Beijing",
+   "province": "Beijing",
+   "website": "https://www.bistu.edu.cn/",
+   "international_admissions_url": "https://www.bistu.edu.cn/zsjy/gjxszs/index.html",
+   "about": "A Beijing municipal university with an information-technology and engineering emphasis. Its international admissions page describes bachelor's, master's and non-degree programs for international students, with online application.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate degree programs (Chinese- and English-taught options)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Master's degree programs",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Non-degree programs (exchange, Chinese language, summer school)",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Beijing Institute of Petrochemical Technology",
+   "name_zh": "北京石油化工学院",
+   "city": "Beijing",
+   "province": "Beijing",
+   "website": "https://www.bipt.edu.cn/",
+   "international_admissions_url": "https://www.bipt.edu.cn/zsjy/lxszs/index.htm",
+   "about": "A Beijing municipal university focused on petrochemical and related engineering fields. Its international admissions page says all undergraduate majors are open to international students and that it also recruits master's students and postdocs.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "All undergraduate majors open to international students",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Business Administration (master's)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Mechanical Engineering (master's)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Materials Science and Engineering (master's)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Hebei University of Science and Technology",
+   "name_zh": "河北科技大学",
+   "city": "Shijiazhuang",
+   "province": "Hebei",
+   "website": "https://www.hebust.edu.cn/",
+   "international_admissions_url": "https://sie.web.hebust.edu.cn/lxkd/zsjzz/index.htm",
+   "about": "A provincial multidisciplinary university in Shijiazhuang, Hebei. Its 2026 international student brochure lists bachelor's, master's, doctoral and Chinese-language programs with fees and an online application system.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "International Economics and Trade",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Civil Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Computer Science and Technology",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Artificial Intelligence",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Mechanical Design, Manufacturing and Automation",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Textile Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Environmental Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "MBA",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Civil Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Computer Science and Technology",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Control Science and Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Mechanical Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Textile Science and Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Environmental Science and Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 8000,
+     "duration_years": 3
+    },
+    {
+     "name": "Chemical Engineering and Technology",
+     "level": "phd",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Materials Science and Engineering",
+     "level": "phd",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Chinese culture / HSK language programme",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": 10000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": "2026-04-01",
+   "application_deadline": "2026-06-10",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Shanxi Normal University",
+   "name_zh": "山西师范大学",
+   "city": "Taiyuan",
+   "province": "Shanxi",
+   "website": "https://www.sxnu.edu.cn/",
+   "international_admissions_url": "https://gjjyxy.sxnu.edu.cn/lxsd/zsjz.htm",
+   "about": "A provincial normal university with its main campus in Taiyuan, Shanxi. Its School of International Education publishes admissions guides and program lists for language, bachelor's, master's and doctoral international students.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate programs (2026 list, PDF)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese language programs (2027 spring intake)",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "North University of China",
+   "name_zh": "中北大学",
+   "city": "Taiyuan",
+   "province": "Shanxi",
+   "website": "https://www.nuc.edu.cn/",
+   "international_admissions_url": "http://international.nuc.edu.cn/info/1413/28801.htm",
+   "about": "A university in Taiyuan, Shanxi, with an engineering and defense-technology background. Its School of International Education posts yearly admissions notices for international master's and doctoral students.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Master and doctoral programs (2026 catalogue, PDF)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xinjiang Agricultural University",
+   "name_zh": "新疆农业大学",
+   "city": "Urumqi",
+   "province": "Xinjiang",
+   "website": "https://www.xjau.edu.cn/",
+   "international_admissions_url": "https://cie.xjau.edu.cn/2026/0319/c1279a113910/page.htm",
+   "about": "A public university in Urumqi with a strength in agricultural sciences. Its 2026 brochure plans 285 places for international students across bachelor's, master's and doctoral levels, with a preparatory Chinese option.",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": null,
+   "application_deadline": "2026-07-15",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xi'an University of Science and Technology",
+   "name_zh": "西安科技大学",
+   "city": "Xi'an",
+   "province": "Shaanxi",
+   "website": "https://www.xust.edu.cn/",
+   "international_admissions_url": "https://gjjl.xust.edu.cn/info/1341/3334.htm",
+   "about": "A university in Xi'an, Shaanxi, with a mining and energy tradition. Its international office publishes a 2026 admissions brochure for international students and an online application system.",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xi'an Polytechnic University",
+   "name_zh": "西安工程大学",
+   "city": "Xi'an",
+   "province": "Shaanxi",
+   "website": "https://www.xpu.edu.cn/",
+   "international_admissions_url": "https://international.xpu.edu.cn/lhlx/zsjz.htm",
+   "about": "A university in Xi'an, Shaanxi, with textile and engineering roots. Its international office lists 2026 brochures for master's programs, Chinese language and culture, and short-term exchange, plus a 2025 bachelor's brochure.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Master's programs (2026 brochure)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Bachelor's programs (2025 brochure)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese language and culture education",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Short-term exchange",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xi'an International Studies University",
+   "name_zh": "西安外国语大学",
+   "city": "Xi'an",
+   "province": "Shaanxi",
+   "website": "https://www.xisu.edu.cn/",
+   "international_admissions_url": "http://six.xisu.edu.cn/zsxm1.htm",
+   "about": "A foreign-languages university in Xi'an, Shaanxi. Its international student site says it has enrolled international students since 1979 and offers degree programs from bachelor's to doctoral level plus Chinese-language and short-term programs.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Degree programs (bachelor's)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Degree programs (master's)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Degree programs (doctoral)",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese language and short-term programs",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Changchun University of Technology",
+   "name_zh": "长春工业大学",
+   "city": "Changchun",
+   "province": "Jilin",
+   "website": "https://www.ccut.edu.cn/",
+   "international_admissions_url": "http://ostu.ccut.edu.cn/",
+   "about": "A provincial engineering-oriented university in Changchun, Jilin. Its School of International Students site has sections for bachelor, master and PhD programs, scholarships, tuition and application deadlines.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "PhD programs",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Harbin University of Commerce",
+   "name_zh": "哈尔滨商业大学",
+   "city": "Harbin",
+   "province": "Heilongjiang",
+   "website": "https://www.hrbcu.edu.cn/",
+   "international_admissions_url": "https://gjjyxy.hrbcu.edu.cn/info/1208/3404.htm",
+   "about": "A provincial university in Harbin, Heilongjiang, with a focus on business and related fields. Its 2026 scholarship brochure for Eurasian countries lists Chinese-taught and English-taught programs from bachelor's to doctoral level.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Tourism Management",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Industrial Economics",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "International Trade",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Business Administration",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Traditional Chinese Medicine",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Food Science and Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese-taught bachelor programs",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Shenyang University",
+   "name_zh": "沈阳大学",
+   "city": "Shenyang",
+   "province": "Liaoning",
+   "website": "https://www.syu.edu.cn/",
+   "international_admissions_url": "https://wsc.syu.edu.cn/info/1058/1035.htm",
+   "about": "A municipal comprehensive university in Shenyang, Liaoning, with roots in schools founded in the early 1900s. Its 2025 brochure covers international master's programs in Chinese and English.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Master's programs (Chinese-taught)",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": null
+    },
+    {
+     "name": "Master's programs (English-taught)",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": 23000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xinjiang University of Finance and Economics",
+   "name_zh": "新疆财经大学",
+   "city": "Urumqi",
+   "province": "Xinjiang",
+   "website": "https://www.xjufe.edu.cn/",
+   "international_admissions_url": "https://www.xjufe.edu.cn/rcpy/lxsjy/index.htm",
+   "about": "A public university in Urumqi focused on finance, economics and management. Its international education page publishes a 2026 Chinese Government Scholarship brochure listing bachelor's and master's majors.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Finance",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Insurance",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Financial Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Financial Technology",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Economics",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Tourism Management",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "International Economics and Trade",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "International Business",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Law",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Network and New Media",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Chinese Language and International Education",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Logistics Management",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Tourism Management",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Journalism and Communication",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": "2026-04-07",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Dalian Minzu University",
+   "name_zh": "大连民族大学",
+   "city": "Dalian",
+   "province": "Liaoning",
+   "website": "https://www.dlnu.edu.cn/",
+   "international_admissions_url": "https://new.dlnu.edu.cn/culture/zsxx.htm",
+   "about": "A university in Dalian, Liaoning, originally focused on ethnic education. Its international cultural exchange college publishes Chinese and English admission brochures for international students.",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Beijing Institute of Graphic Communication",
+   "name_zh": "北京印刷学院",
+   "city": "Beijing",
+   "province": "Beijing",
+   "website": "https://www.bigc.edu.cn/",
+   "international_admissions_url": "http://sie.bigc.edu.cn/",
+   "about": "A Beijing municipal institute founded in 1958 and specialising in printing, publishing, media and design. Its English admissions site lists bachelor's, master's, diploma and Chinese-language programs for international students.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Printing Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Packaging Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Digital Publishing",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Communication (International Publishing and Communication)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Art and Design",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Master's programs (Chinese/English)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xi'an Technological University",
+   "name_zh": "西安工业大学",
+   "city": "Xi'an",
+   "province": "Shaanxi",
+   "website": "https://www.xatu.edu.cn/",
+   "international_admissions_url": "https://sie.xatu.edu.cn/",
+   "about": "A university in Xi'an, Shaanxi, with an engineering focus. Its School of International Education site lists bachelor's, master's, doctoral and Chinese-language programs, scholarships and an online application.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Bachelor's degree programs",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Master's degree programs",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Doctoral degree programs",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese language",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Jiangsu University of Science and Technology",
+   "name_zh": "江苏科技大学",
+   "city": "Zhenjiang",
+   "province": "Jiangsu",
+   "website": "https://www.just.edu.cn",
+   "international_admissions_url": "https://admission.just.edu.cn/2026/0409/c10116a372087/page.htm",
+   "about": "A public university in Zhenjiang with a strong focus on shipbuilding, ocean engineering and related engineering fields. Its 2026 guideline admits international students to bachelor, master and doctoral programs, with English-taught options at bachelor level.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Computer Science and Technology",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 11250,
+     "duration_years": 4
+    },
+    {
+     "name": "Bachelor of Business Administration (BBA)",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 11250,
+     "duration_years": 4
+    },
+    {
+     "name": "Computer Science and Technology",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 3
+    },
+    {
+     "name": "Mechanical Engineering",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 3
+    },
+    {
+     "name": "Naval Architecture and Ocean Engineering",
+     "level": "phd",
+     "language": "Chinese",
+     "tuition_cny_per_year": 25000,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": "2026-04-10",
+   "application_deadline": "2026-06-10",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Anhui University of Technology",
+   "name_zh": "安徽工业大学",
+   "city": "Ma'anshan",
+   "province": "Anhui",
+   "website": "https://en.ahut.edu.cn",
+   "international_admissions_url": "https://en.ahut.edu.cn/info/1050/1648.htm",
+   "about": "A public university in Ma'anshan, Anhui, known for metallurgy, materials and engineering disciplines. Its 2026 international admissions page lists English-taught degree programs from bachelor to doctoral level.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "International Economics and Trade",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "International Trade",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Metallurgical Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Materials Science and Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Chemistry",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Environmental Science and Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": "2026-06-15",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Changzhou University",
+   "name_zh": "常州大学",
+   "city": "Changzhou",
+   "province": "Jiangsu",
+   "website": "https://eng.cczu.edu.cn",
+   "international_admissions_url": "https://eng.cczu.edu.cn/11348/list.htm",
+   "about": "A public university in Changzhou, Jiangsu, with particular strength in petrochemical and materials-related engineering. Its English site lists degree programs for international students from bachelor to doctoral level, plus a Chinese-language training program.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Chemical Engineering and Technology",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Materials Science and Engineering",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 3
+    },
+    {
+     "name": "Materials Science and Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": 25000,
+     "duration_years": 4
+    },
+    {
+     "name": "Chinese language training program",
+     "level": "non_degree",
+     "language": "Chinese",
+     "tuition_cny_per_year": 12000,
+     "duration_years": 1
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Hangzhou Dianzi University",
+   "name_zh": "杭州电子科技大学",
+   "city": "Hangzhou",
+   "province": "Zhejiang",
+   "website": "https://www.hdu.edu.cn",
+   "international_admissions_url": "https://intedu.hdu.edu.cn/intedu_en/2025/0228/c13935a288752/page.htm",
+   "about": "A public university in Hangzhou specialising in electronics, information technology and related management fields. Its international education office publishes an application guideline with bachelor, master and doctoral options in Chinese-taught and English-taught tracks.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Bachelor: Management, Economics and Humanities",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 18000,
+     "duration_years": null
+    },
+    {
+     "name": "Bachelor: Science and Engineering",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 20000,
+     "duration_years": null
+    },
+    {
+     "name": "Master: Management, Economics and Humanities",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 25000,
+     "duration_years": null
+    },
+    {
+     "name": "Master: Science and Engineering",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 28000,
+     "duration_years": null
+    },
+    {
+     "name": "Doctoral: Engineering",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": 30000,
+     "duration_years": null
+    },
+    {
+     "name": "Chinese Language Study Program",
+     "level": "non_degree",
+     "language": "Chinese",
+     "tuition_cny_per_year": 8000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xi'an Jiaotong-Liverpool University",
+   "name_zh": "西交利物浦大学",
+   "city": "Suzhou",
+   "province": "Jiangsu",
+   "website": "https://www.xjtlu.edu.cn",
+   "international_admissions_url": "https://www.xjtlu.edu.cn/en/admissions/global/how-to-apply",
+   "about": "A Sino-British joint-venture university in Suzhou, founded by Xi'an Jiaotong University and the University of Liverpool. It runs a dedicated global admissions route for international undergraduate applicants.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "International undergraduate programmes (all majors)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": 99000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": "2027-05-31",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "East China Jiaotong University",
+   "name_zh": "华东交通大学",
+   "city": "Nanchang",
+   "province": "Jiangxi",
+   "website": "https://www.ecjtu.edu.cn",
+   "international_admissions_url": "https://gjc.ecjtu.edu.cn/lhlx/zszc.htm",
+   "about": "A public university in Nanchang, Jiangxi, historically centred on railway and transportation engineering. Its international office publishes an admissions page with English-taught degree programs at bachelor, master and doctoral level.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Civil Engineering",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Electrical Engineering and Automation",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "International Trade",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    },
+    {
+     "name": "Business Administration",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    },
+    {
+     "name": "Civil Engineering",
+     "level": "phd",
+     "language": "English",
+     "tuition_cny_per_year": null,
+     "duration_years": 5
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Jimei University",
+   "name_zh": "集美大学",
+   "city": "Xiamen",
+   "province": "Fujian",
+   "website": "https://www.jmu.edu.cn",
+   "international_admissions_url": "https://zsb.jmu.edu.cn/info/1042/8725.htm",
+   "about": "A public university in Xiamen with strengths in navigation, marine and engineering fields. Its 2026 prospectus for international students covers bachelor, master and doctoral degrees and Chinese-language programs.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Bachelor (liberal arts)",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 14000,
+     "duration_years": 4
+    },
+    {
+     "name": "Bachelor (natural science and engineering)",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 15400,
+     "duration_years": 4
+    },
+    {
+     "name": "Master (liberal arts)",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 3
+    },
+    {
+     "name": "Master (natural science and engineering)",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 22000,
+     "duration_years": 3
+    },
+    {
+     "name": "Doctoral (liberal arts)",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": 22000,
+     "duration_years": 4
+    },
+    {
+     "name": "Doctoral (natural science and engineering)",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": 25000,
+     "duration_years": 4
+    },
+    {
+     "name": "Long-term Chinese language program",
+     "level": "non_degree",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Henan Normal University",
+   "name_zh": "河南师范大学",
+   "city": "Xinxiang",
+   "province": "Henan",
+   "website": "https://www.htu.edu.cn",
+   "international_admissions_url": "https://www.htu.edu.cn/english/21736/list.htm",
+   "about": "A public university in Xinxiang, Henan, with a teacher-education tradition and a broad range of disciplines. Its English pages list undergraduate, master and doctoral admission for international students plus language study.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate programs",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Shanghai University of Engineering Science",
+   "name_zh": "上海工程技术大学",
+   "city": "Shanghai",
+   "province": "Shanghai",
+   "website": "https://www.sues.edu.cn",
+   "international_admissions_url": "https://infopub.sues.edu.cn/ca/27/c19a51751/page.htm",
+   "about": "A municipal applied-engineering university in Shanghai. Its admission guide for international students lists four English-taught bachelor programs.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "International Economics and Trade",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    },
+    {
+     "name": "Artificial Intelligence",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    },
+    {
+     "name": "Textile Engineering",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    },
+    {
+     "name": "Medicinal Chemistry",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Zhejiang A&F University",
+   "name_zh": "浙江农林大学",
+   "city": "Hangzhou",
+   "province": "Zhejiang",
+   "website": "https://www.zafu.edu.cn",
+   "international_admissions_url": "https://iec.zafu.edu.cn/info/1008/6736.htm",
+   "about": "A public university in Hangzhou (Lin'an) focused on agriculture, forestry and related sciences. Its 2026 autumn-intake bulletin lists English-delivered undergraduate majors, graduate programs and a one-year language program.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate programs (14 majors)",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 4
+    },
+    {
+     "name": "Graduate programs",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": 22000,
+     "duration_years": null
+    },
+    {
+     "name": "Language program",
+     "level": "non_degree",
+     "language": null,
+     "tuition_cny_per_year": 14000,
+     "duration_years": 1
+    }
+   ],
+   "application_open_date": "2026-04-15",
+   "application_deadline": "2026-06-30",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Nanjing University of Finance and Economics",
+   "name_zh": "南京财经大学",
+   "city": "Nanjing",
+   "province": "Jiangsu",
+   "website": "https://www.nufe.edu.cn",
+   "international_admissions_url": "https://english.nufe.edu.cn/info/1017/2195.htm",
+   "about": "A public university in Nanjing specialising in economics, finance, food and management. Its international college publishes yearly admission notices, including an English-taught BBA program.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Bachelor of Business Administration (BBA)",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 17000,
+     "duration_years": 4
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": "2026-06-15",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Xinxiang Medical University",
+   "name_zh": "新乡医学院",
+   "city": "Xinxiang",
+   "province": "Henan",
+   "website": "https://www.xxmu.edu.cn",
+   "international_admissions_url": "https://www.xxmu.edu.cn/gjjy/info/1007/3280.htm",
+   "about": "A medical university in Xinxiang, Henan, also presented as Henan Medical University. Its international education college publishes 2026 brochures for Chinese-taught clinical medicine at undergraduate and master's level.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Clinical Medicine",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": null,
+     "duration_years": 6
+    },
+    {
+     "name": "Clinical Medicine (master's)",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": 3
+    }
+   ],
+   "application_open_date": "2026-04-15",
+   "application_deadline": "2026-07-31",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Wannan Medical College",
+   "name_zh": "皖南医学院",
+   "city": "Wuhu",
+   "province": "Anhui",
+   "website": "https://www.wnmc.edu.cn",
+   "international_admissions_url": "https://wsc.wnmc.edu.cn/info/1019/1387.htm",
+   "about": "A medical college in Wuhu, Anhui. Its international office publishes an admission brochure for Chinese-taught medical and health programs at bachelor and master level (the brochure page dates from 2020).",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Henan University of Science and Technology",
+   "name_zh": "河南科技大学",
+   "city": "Luoyang",
+   "province": "Henan",
+   "website": "https://www.haust.edu.cn",
+   "international_admissions_url": "https://english.haust.edu.cn/Degree_Programs.htm",
+   "about": "A public university in Luoyang, Henan, with strengths in engineering, agriculture and medicine. Its English site lists bachelor, master and doctoral degree programs open to international students.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Bachelor's degree programs (98 listed)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Master's degree programs",
+     "level": "master",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    },
+    {
+     "name": "Doctoral degree programs",
+     "level": "phd",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Linyi University",
+   "name_zh": "临沂大学",
+   "city": "Linyi",
+   "province": "Shandong",
+   "website": "https://www.lyu.edu.cn",
+   "international_admissions_url": "https://studyinlyu-en.lyu.edu.cn/",
+   "about": "A public university in Linyi, Shandong. Its international student site publishes 2026 undergraduate and postgraduate brochures, an online application system and a fee schedule.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Chinese language program",
+     "level": "non_degree",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Shenzhen University",
+   "name_zh": "深圳大学",
+   "city": "Shenzhen",
+   "province": "Guangdong",
+   "website": "https://www.szu.edu.cn",
+   "international_admissions_url": "https://en.szu.edu.cn/info/1023/1903.htm",
+   "about": "Shenzhen University is a public comprehensive university in Shenzhen with campuses in Nanshan District. Its English site publishes yearly admission brochures for international bachelor, master and doctoral applicants.",
+   "moe_mbbs": false,
+   "programs": [],
+   "application_open_date": "2026-01-01",
+   "application_deadline": "2026-05-31",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Guangdong University of Technology",
+   "name_zh": "广东工业大学",
+   "city": "Guangzhou",
+   "province": "Guangdong",
+   "website": "https://www.gdut.edu.cn",
+   "international_admissions_url": "https://iec.gdut.edu.cn/EN/Home/Admission.htm",
+   "about": "Guangdong University of Technology is a public university in Guangzhou. Its International Exchange College lists degree programs, Chinese language training and short cultural programs for international applicants.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate (English-taught)",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 23000,
+     "duration_years": null
+    },
+    {
+     "name": "Undergraduate (science and engineering)",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 21000,
+     "duration_years": null
+    },
+    {
+     "name": "Master (science and engineering)",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 25000,
+     "duration_years": null
+    },
+    {
+     "name": "Doctoral (science and engineering)",
+     "level": "phd",
+     "language": "Chinese",
+     "tuition_cny_per_year": 32000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Guangdong Pharmaceutical University",
+   "name_zh": "广东药科大学",
+   "city": "Guangzhou",
+   "province": "Guangdong",
+   "website": "https://www.gdpu.edu.cn",
+   "international_admissions_url": "https://sie.gdpu.edu.cn/lxszs.htm",
+   "about": "Guangdong Pharmaceutical University is a public university in Guangdong focused on pharmacy and health sciences. Its School of International Education posts annual prospectuses for undergraduate, postgraduate and foundation programs for international students.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "International Economics and Trade",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 18000,
+     "duration_years": 4
+    },
+    {
+     "name": "Clinical Medicine",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 20000,
+     "duration_years": 5
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": "2026-06-30",
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Guilin University of Technology",
+   "name_zh": "桂林理工大学",
+   "city": "Guilin",
+   "province": "Guangxi",
+   "website": "https://www.glut.edu.cn",
+   "international_admissions_url": "https://gj.glut.edu.cn/info/1072/3787.htm",
+   "about": "Guilin University of Technology is a public university in Guilin, Guangxi. Its 2026 guide for international students covers bachelor, master and doctoral study, Chinese language courses and short programs.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate (Chinese-taught)",
+     "level": "bachelor",
+     "language": "Chinese",
+     "tuition_cny_per_year": 13800,
+     "duration_years": null
+    },
+    {
+     "name": "Undergraduate (English-taught)",
+     "level": "bachelor",
+     "language": "English",
+     "tuition_cny_per_year": 16800,
+     "duration_years": null
+    },
+    {
+     "name": "Postgraduate (Chinese-taught)",
+     "level": "master",
+     "language": "Chinese",
+     "tuition_cny_per_year": 16000,
+     "duration_years": null
+    },
+    {
+     "name": "Postgraduate (English-taught)",
+     "level": "master",
+     "language": "English",
+     "tuition_cny_per_year": 18000,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  },
+  {
+   "name": "Hunan University of Chinese Medicine",
+   "name_zh": "湖南中医药大学",
+   "city": "Changsha",
+   "province": "Hunan",
+   "website": "https://www.hnucm.edu.cn",
+   "international_admissions_url": "https://gjjy.hnucm.edu.cn/info/1080/1411.htm",
+   "about": "Hunan University of Chinese Medicine is a public university in Changsha specializing in traditional Chinese medicine and related health fields. Its international education college publishes a brochure covering bachelor, master, doctoral and non-degree study.",
+   "moe_mbbs": false,
+   "programs": [
+    {
+     "name": "Undergraduate programs (TCM, clinical medicine, nursing and others)",
+     "level": "bachelor",
+     "language": null,
+     "tuition_cny_per_year": null,
+     "duration_years": null
+    }
+   ],
+   "application_open_date": null,
+   "application_deadline": null,
+   "verified_on": "2026-11-05"
+  }
+ ]
+}

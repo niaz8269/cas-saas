@@ -173,7 +173,8 @@
       "Transkrip akademik tersertifikasi, formulir pemeriksaan kesehatan, dan surat keterangan catatan kepolisian.",
       "CAS memastikan persyaratan, batas waktu, dan biaya yang tepat untuk program Anda sebelum Anda mendaftar."
     ],
-    "overviewContents": "Daftar isi"
+    "overviewContents": "Daftar isi",
+    "profileLabel": "Profil Universitas CAS"
   },
   "programs": {
     "seoTitle": "Temukan Program untuk Kuliah di Tiongkok",
@@ -1408,6 +1409,15 @@
       "next": "Berikutnya"
     }
   },
+  "payTo": {
+    "title": "Bayar ke rekening ini",
+    "bank": "Bank",
+    "accountName": "Nama rekening",
+    "accountNumber": "Nomor rekening",
+    "iban": "IBAN",
+    "swift": "SWIFT / BIC",
+    "bankAddress": "Alamat bank"
+  },
   "fee": {
     "noticeTitle": "Biaya proses sekali bayar {{amount}}",
     "noticeTitleSettled": "Biaya proses Anda sudah lunas",
@@ -1673,10 +1683,7 @@
     "closeTbd": "Tanggal penutupan akan diumumkan",
     "source": "Pengumuman universitas",
     "checked": "diperiksa {{date}}",
-    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya.",
-    "sourceCucas": "Daftar CUCAS — konfirmasikan dengan universitas",
-    "sourceSas": "Daftar SAS",
-    "sourceListing": "Daftar pihak ketiga, belum dikonfirmasi"
+    "nextTbd": "Jadwal penerimaan berikutnya belum dipublikasikan universitas — minta CAS untuk memastikannya."
   },
   "photoCredits": {
     "seoTitle": "Kredit foto",

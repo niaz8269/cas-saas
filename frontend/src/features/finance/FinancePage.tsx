@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Clock, Plus, Receipt, Search } from "lucide-react"
+import { Clock, Landmark, Plus, Receipt, Search } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -145,6 +145,9 @@ export default function FinancePage() {
         </Button>
 
         <div className="ml-auto flex items-center gap-2">
+          <Button asChild variant="secondary">
+            <Link to="/finance/bank-accounts"><Landmark className="size-4" /> Bank accounts</Link>
+          </Button>
           <ExportButton path={`/invoices/export${invoiceExportQuery(q, status, partyType)}`} filename="invoices.csv" />
           {can("finance.manage.global") && (
             <Button onClick={() => setNewOpen(true)}>
