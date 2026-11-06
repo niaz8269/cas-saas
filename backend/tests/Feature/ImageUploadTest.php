@@ -4,6 +4,7 @@ use App\Models\University;
 use App\Services\Media\ImageService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -75,4 +76,21 @@ it('exposes logo_url / cover_url / professor photo_url on the resource', functio
         ->assertJsonPath('data.logo_url', 'https://cdn/logo.webp')
         ->assertJsonPath('data.cover_url', 'https://cdn/cover.webp')
         ->assertJsonPath('data.representative_professor.photo_url', 'https://cdn/li.webp');
+});
+
+it('stores uploads in the web root when there is no bucket', function () {
+    actingAsStaffWith(['content.manage.global']);
+    $root = sys_get_temp_dir().'/cas-web-'.uniqid();
+    config(['media.images_store' => 'public_path', 'media.public_path' => $root]);
+
+    $response = $this->postJson('/api/v1/uploads/images', [
+        'image' => UploadedFile::fake()->image('cover.png', 400, 300),
+    ])->assertOk()->json();
+
+    expect($response['path'])->toStartWith('/uploads/catalog/')->toEndWith('.webp')
+        ->and($response['url'])->toBe($response['path'])
+        ->and(substr((string) file_get_contents($root.$response['path']), 8, 4))->toBe('WEBP')
+        ->and(app(ImageService::class)->url($response['path']))->toBe($response['path']);
+
+    File::deleteDirectory($root);
 });

@@ -3,6 +3,7 @@
 namespace App\Services\Media;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -36,6 +37,18 @@ class ImageService
 
         $binary = (string) $image->toWebp(self::QUALITY);
         $key = trim($folder, '/').'/'.Str::uuid()->toString().'.webp';
+
+        // No bucket: write into the web root and store a site-relative path, which
+        // url() passes straight through like any other public asset.
+        if (config('media.images_store') === 'public_path') {
+            $relative = '/uploads/'.$key;
+            $target = rtrim((string) config('media.public_path'), '/').$relative;
+
+            File::ensureDirectoryExists(dirname($target));
+            File::put($target, $binary);
+
+            return ['path' => $relative, 'url' => $relative];
+        }
 
         Storage::disk(self::DISK)->put($key, $binary);
 
