@@ -48,7 +48,7 @@ class WikipediaProfileSeeder extends Seeder
     }
 
     /** A short factual line for universities that still have no introduction, built only from catalog data. */
-    private function factualIntroductions(): void
+    public function factualIntroductions(): void
     {
         foreach (University::where(fn ($q) => $q->whereNull('about')->orWhere('about', ''))->withCount('programs')->get() as $uni) {
             $place = collect([$uni->city, $uni->province, 'China'])->filter()->unique()->implode(', ');

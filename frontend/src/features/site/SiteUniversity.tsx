@@ -212,6 +212,7 @@ export function OverviewArticle({ sections }: { sections: SiteOverviewSection[] 
 
   return (
     <article className="rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+      <p className="mb-4 text-xs font-semibold tracking-wider text-cas-red-600 uppercase">{t("university.profileLabel")}</p>
       {toc.length > 3 && (
         <nav aria-label={t("university.overviewContents")} className="mb-6 flex flex-wrap gap-x-4 gap-y-1.5 border-b pb-4 text-sm">
           {toc.map(({ s, i }) => (
@@ -277,6 +278,7 @@ function OverviewPanel({ u, rep }: { u: SiteUniversityDetail; rep: SiteRepProfes
         <OverviewArticle sections={u.overview} />
       ) : u.about ? (
         <div className="rounded-sm border bg-card p-6 shadow-sm">
+          <p className="mb-3 text-xs font-semibold tracking-wider text-cas-red-600 uppercase">{t("university.profileLabel")}</p>
           <p className="text-sm whitespace-pre-line text-foreground/90">{u.about}</p>
         </div>
       ) : null}
