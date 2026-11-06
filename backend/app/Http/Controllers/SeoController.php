@@ -42,6 +42,8 @@ class SeoController extends Controller
         $lines = [
             'User-agent: *',
             'Allow: /',
+            // Public catalog data the pages load must stay crawlable so they render fully.
+            'Allow: /api/v1/public/',
             'Disallow: /api/',
             'Disallow: /admin',
             'Disallow: /dashboard',
