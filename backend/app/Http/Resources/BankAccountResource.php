@@ -28,6 +28,7 @@ class BankAccountResource extends JsonResource
             'currency' => $this->currency,
             'instructions' => $this->instructions,
             'is_active' => $this->is_active,
+            'is_default' => $this->is_default,
             'sort_order' => $this->sort_order,
         ];
     }

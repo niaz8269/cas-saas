@@ -15,6 +15,10 @@ return [
 
     'default' => env('FILESYSTEM_DISK', 'local'),
 
+    // Where student/application documents and payment receipts are stored:
+    // unset = S3-compatible storage; "documents" = the app's own private disk.
+    'documents_disk' => env('DOCUMENTS_DISK'),
+
     /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
@@ -43,6 +47,18 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        // Private document store on the application's own disk, outside the web
+        // root. Used when DOCUMENTS_DISK=documents (hosts with no S3 bucket): the
+        // same signed-URL flow as S3, served by the app itself and never public.
+        'documents' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/documents'),
+            'serve' => true,
+            'visibility' => 'private',
             'throw' => false,
             'report' => false,
         ],

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BankAccountResource;
 use App\Models\BankAccount;
+use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * CAS receipt accounts. Route middleware gates access: viewing needs
@@ -30,16 +32,52 @@ class BankAccountController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $account = BankAccount::create($this->validated($request));
+        // Refresh so column defaults (active, not default) are real attributes.
+        $account = BankAccount::create($this->validated($request))->refresh();
+        $assigned = $this->applyDefault($account);
 
-        return (new BankAccountResource($account))->response()->setStatusCode(201);
+        return (new BankAccountResource($account))
+            ->additional(['meta' => ['assigned_invoices' => $assigned]])
+            ->response()->setStatusCode(201);
     }
 
     public function update(Request $request, BankAccount $bankAccount): BankAccountResource
     {
         $bankAccount->update($this->validated($request, partial: true));
+        $assigned = $this->applyDefault($bankAccount);
 
-        return new BankAccountResource($bankAccount->refresh());
+        return (new BankAccountResource($bankAccount->refresh()))
+            ->additional(['meta' => ['assigned_invoices' => $assigned]]);
+    }
+
+    /**
+     * An active default account is the one the system uses for invoices it raises
+     * itself. Only one default per currency; and open invoices that still have no
+     * account (the students are being told to ask their counselor) get it now.
+     * Returns how many invoices were assigned.
+     */
+    private function applyDefault(BankAccount $account): int
+    {
+        if (! $account->is_default || ! $account->is_active) {
+            return 0;
+        }
+
+        return DB::transaction(function () use ($account) {
+            BankAccount::query()
+                ->where('id', '!=', $account->id)->where('is_default', true)
+                ->when(
+                    $account->currency === null,
+                    fn ($q) => $q->whereNull('currency'),
+                    fn ($q) => $q->where('currency', $account->currency),
+                )
+                ->update(['is_default' => false]);
+
+            return Invoice::query()
+                ->whereNull('bank_account_id')
+                ->whereNotIn('status', ['draft', 'paid', 'cancelled'])
+                ->when($account->currency !== null, fn ($q) => $q->where('currency', $account->currency))
+                ->update(['bank_account_id' => $account->id]);
+        });
     }
 
     /**
@@ -69,6 +107,7 @@ class BankAccountController extends Controller
             'currency' => ['nullable', 'string', 'size:3'],
             'instructions' => ['nullable', 'string', 'max:2000'],
             'is_active' => ['sometimes', 'boolean'],
+            'is_default' => ['sometimes', 'boolean'],
             'sort_order' => ['sometimes', 'integer', 'min:0', 'max:65535'],
         ]);
     }

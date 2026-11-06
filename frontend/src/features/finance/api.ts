@@ -33,6 +33,8 @@ export interface BankAccount {
   currency: string | null
   instructions: string | null
   is_active: boolean
+  /** Used for invoices the system raises itself (the application fee). */
+  is_default: boolean
   sort_order: number
 }
 

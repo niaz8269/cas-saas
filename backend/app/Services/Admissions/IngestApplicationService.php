@@ -212,7 +212,7 @@ class IngestApplicationService
 
         // The disk is configured with throw=false, so a failed upload returns false.
         // Don't register a document whose bytes never landed — fail the transaction.
-        if (Storage::disk(DocumentService::INTERNAL_DISK)->put($key, $content) === false) {
+        if (Storage::disk(DocumentService::internalDisk())->put($key, $content) === false) {
             throw new RuntimeException("Failed to store document '{$doc['file_name']}' for application {$application->id}.");
         }
 

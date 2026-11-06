@@ -29,7 +29,7 @@ import { ApiError } from "@/lib/api"
 
 const EMPTY = {
   label: "", bank_name: "", account_name: "", account_number: "",
-  iban: "", swift: "", bank_address: "", currency: "", instructions: "", is_active: true,
+  iban: "", swift: "", bank_address: "", currency: "", instructions: "", is_active: true, is_default: false,
 }
 
 type Form = typeof EMPTY
@@ -37,7 +37,7 @@ type Form = typeof EMPTY
 const toForm = (a: BankAccount): Form => ({
   label: a.label, bank_name: a.bank_name, account_name: a.account_name, account_number: a.account_number,
   iban: a.iban ?? "", swift: a.swift ?? "", bank_address: a.bank_address ?? "",
-  currency: a.currency ?? "", instructions: a.instructions ?? "", is_active: a.is_active,
+  currency: a.currency ?? "", instructions: a.instructions ?? "", is_active: a.is_active, is_default: a.is_default,
 })
 
 /** Empty optional fields go up as null so they clear cleanly. */
@@ -52,6 +52,7 @@ const toPayload = (f: Form): BankAccountInput => ({
   currency: f.currency.trim().toUpperCase() || null,
   instructions: f.instructions.trim() || null,
   is_active: f.is_active,
+  is_default: f.is_active && f.is_default,
 })
 
 /**
@@ -153,6 +154,7 @@ export default function BankAccountsPage() {
                 <p className="text-sm text-muted-foreground">{a.bank_name}</p>
               </div>
               <div className="flex shrink-0 items-center gap-1.5">
+                {a.is_default && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">Default</Badge>}
                 {a.currency && <Badge variant="outline">{a.currency}</Badge>}
                 <Badge variant="outline" className={a.is_active ? "border-transparent bg-green-100 text-green-800" : "border-transparent bg-muted text-muted-foreground"}>
                   {a.is_active ? "Active" : "Inactive"}
@@ -216,6 +218,15 @@ export default function BankAccountsPage() {
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={form.is_active} onChange={(e) => set({ is_active: e.target.checked })} />
               Active (can be chosen on new invoices)
+            </label>
+            <label className="flex items-start gap-2 text-sm">
+              <input type="checkbox" className="mt-1" checked={form.is_active && form.is_default} disabled={!form.is_active} onChange={(e) => set({ is_default: e.target.checked })} />
+              <span>
+                Default for application-fee invoices
+                <span className="block text-xs text-muted-foreground">
+                  Used automatically for invoices the system raises itself, and applied now to open invoices that have no account yet.
+                </span>
+              </span>
             </label>
           </div>
           <DialogFooter>

@@ -19,12 +19,22 @@ class BankAccount extends Model
 
     protected $fillable = [
         'label', 'bank_name', 'account_name', 'account_number', 'iban', 'swift',
-        'bank_address', 'currency', 'instructions', 'is_active', 'sort_order',
+        'bank_address', 'currency', 'instructions', 'is_active', 'is_default', 'sort_order',
     ];
 
     protected function casts(): array
     {
-        return ['is_active' => 'boolean', 'sort_order' => 'integer'];
+        return ['is_active' => 'boolean', 'is_default' => 'boolean', 'sort_order' => 'integer'];
+    }
+
+    /** The account the system uses for invoices it raises itself, if one is set for this currency. */
+    public static function defaultFor(string $currency): ?self
+    {
+        return static::query()
+            ->where('is_active', true)->where('is_default', true)
+            ->where(fn ($q) => $q->whereNull('currency')->orWhere('currency', strtoupper($currency)))
+            ->orderByRaw('currency is null') // an exact-currency account beats a catch-all
+            ->first();
     }
 
     public function invoices(): HasMany
