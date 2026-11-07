@@ -309,7 +309,6 @@ export default function SiteLayout() {
               <li><Link to="/site/csc-scholarship" className="hover:text-white">{t("footer.exploreCsc")}</Link></li>
               <li><Link to="/site/why-china?read=intro" className="hover:text-white">{t("footer.exploreWhyChina")}</Link></li>
               <li><Link to="/site/news?view=all" className="hover:text-white">{t("footer.exploreNews")}</Link></li>
-              <li><Link to="/site/photo-credits" className="hover:text-white">{t("footer.photoCredits")}</Link></li>
             </ul>
           </div>
 
@@ -320,7 +319,6 @@ export default function SiteLayout() {
               <li><Link to="/site/services#visa" className="hover:text-white">{t("footer.serviceVisa")}</Link></li>
               <li><Link to="/site/services#scholarships" className="hover:text-white">{t("footer.serviceScholarships")}</Link></li>
               <li><Link to="/site/about?section=story" className="hover:text-white">{t("footer.serviceAbout")}</Link></li>
-              <li><Link to="/admin" className="hover:text-white">{t("footer.serviceStaffLogin")}</Link></li>
             </ul>
           </div>
 
@@ -340,6 +338,7 @@ export default function SiteLayout() {
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/60 sm:flex-row sm:px-6">
             <p>{t("footer.rights", { year: new Date().getFullYear() })}</p>
+            <Link to="/site/terms" className="hover:text-white">{t("footer.terms", { defaultValue: "Terms & Conditions" })}</Link>
             <p>{t("footer.authorized")}</p>
           </div>
         </div>

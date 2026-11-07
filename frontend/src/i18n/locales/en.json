@@ -60,7 +60,8 @@
     "authorized": "Official authorized agent since 2012.",
     "photoCredits": "Photo credits",
     "exploreMbbs": "MBBS in China",
-    "exploreCsc": "CSC Scholarship"
+    "exploreCsc": "CSC Scholarship",
+    "terms": "Terms & Conditions"
   },
   "components": {
     "moeListed": "MoE-approved MBBS",
@@ -1854,5 +1855,11 @@
     "pointSecure": "Your documents stay private and secure",
     "showPassword": "Show password",
     "hidePassword": "Hide password"
+  },
+  "terms": {
+    "seoTitle": "Terms & Conditions",
+    "seoDescription": "The terms for using the CAS website and services.",
+    "title": "Terms & Conditions",
+    "subtitle": "Last updated {{date}}"
   }
 }
