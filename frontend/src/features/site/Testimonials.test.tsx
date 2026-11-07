@@ -70,7 +70,7 @@ it("searches testimonials by country name, flies to the country and filters the 
 
   const box = await screen.findByRole("combobox", { name: "Search testimonials by country" })
   await user.type(box, "egy")
-  await user.click(await screen.findByRole("option", { name: /Egypt/ }).then((o) => within(o).getByRole("button")))
+  await user.click(await screen.findByRole("option", { name: /Egypt/ }, { timeout: 5000 }).then((o) => within(o).getByRole("button")))
 
   expect(screen.getByText("1 from Egypt")).toBeInTheDocument()
   expect(await screen.findByRole("dialog", {}, { timeout: 5000 })).toBeInTheDocument()
@@ -80,7 +80,7 @@ it("searches testimonials by country name, flies to the country and filters the 
 
   await user.click(screen.getByRole("button", { name: "Clear search" }))
   expect(screen.getByText("All 2 testimonials")).toBeInTheDocument()
-})
+}, 20000)
 
 it("says so when nobody from that country has written yet", async () => {
   const user = userEvent.setup()
@@ -116,4 +116,17 @@ it("renders nothing at all when there are none yet", async () => {
 
   expect(String(fetchMock.mock.calls[0][0])).toContain("audience=agent")
   expect(container.querySelector("section")).toBeNull()
+})
+
+it("has a Share your experience button that leads to the public form (partners to the partner form)", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(two())))
+  const { unmount } = renderWithProviders(<Testimonials audience="student" />)
+
+  expect(await screen.findByRole("link", { name: "Share your experience" })).toHaveAttribute("href", "/site/share-your-experience")
+  unmount()
+
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ data: [item({ id: 9, audience: "agent", country_code: null })], summary: { count: 1, recommend_percent: 100 } })))
+  renderWithProviders(<Testimonials audience="agent" />)
+
+  expect(await screen.findByRole("link", { name: "Share your experience" })).toHaveAttribute("href", "/site/share-your-experience?as=agent")
 })

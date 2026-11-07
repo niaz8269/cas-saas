@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Search, X } from "lucide-react"
 import { lazy, Suspense, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 import { Skeleton } from "@/components/ui/skeleton"
@@ -73,6 +74,13 @@ export default function Testimonials({ audience }: { audience: "student" | "agen
         {audience === "student" && (
           <p className="mt-2 text-sm text-slate-600">{t("testimonials.globeHint", { defaultValue: "Students from around the world. Turn the globe, zoom, and open a photo to read their story." })}</p>
         )}
+
+        <Link
+          to={`/site/share-your-experience${audience === "agent" ? "?as=agent" : ""}`}
+          className="mt-5 inline-flex h-10 items-center rounded-full bg-cas-navy px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-navy-700 focus-visible:ring-2 focus-visible:ring-cas-navy/40 focus-visible:outline-none"
+        >
+          {t("testimonials.shareButton", { defaultValue: "Share your experience" })}
+        </Link>
 
         {summary && summary.recommend_percent !== null && (
           <p className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-1 rounded-full border bg-card px-5 py-2 text-sm shadow-sm">

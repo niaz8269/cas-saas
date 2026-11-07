@@ -340,6 +340,8 @@ export interface TestimonialRow {
   country: string | null
   quote: string
   consent_public: boolean
+  source: "public" | "portal" | "staff"
+  contact_email: string | null
   photo_path: string | null
   title: string | null
   university: string | null

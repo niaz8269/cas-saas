@@ -309,6 +309,7 @@ export default function SiteLayout() {
               <li><Link to="/site/csc-scholarship" className="hover:text-white">{t("footer.exploreCsc")}</Link></li>
               <li><Link to="/site/why-china?read=intro" className="hover:text-white">{t("footer.exploreWhyChina")}</Link></li>
               <li><Link to="/site/news?view=all" className="hover:text-white">{t("footer.exploreNews")}</Link></li>
+              <li><Link to="/site/share-your-experience" className="hover:text-white">{t("footer.shareExperience", { defaultValue: "Share your experience" })}</Link></li>
             </ul>
           </div>
 

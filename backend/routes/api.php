@@ -99,6 +99,10 @@ Route::prefix('v1')->group(function () {
         Route::get('testimonials', [TestimonialController::class, 'publicIndex']);
     });
 
+    // Public "share your experience" form (no account): tight per-IP throttle, held for review
+    Route::post('public/testimonials', [TestimonialController::class, 'publicSubmit'])->middleware('throttle:enquiry');
+    Route::post('public/testimonials/photo', [TestimonialController::class, 'uploadPhoto'])->middleware('throttle:enquiry');
+
     // Public website enquiry form → lead (tighter throttle)
     Route::post('public/enquiries', [PublicEnquiryController::class, 'store'])
         ->middleware('throttle:enquiry');
