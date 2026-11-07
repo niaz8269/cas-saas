@@ -246,11 +246,11 @@ class IngestApplicationService
         return Country::whereRaw('LOWER(name) = ?', [strtolower($nationality)])->value('id');
     }
 
-    /** Least-loaded Admissions officer (mirrors the portal submit routing). */
+    /** Least-loaded Admin (mirrors the portal submit routing). */
     private function pickAdmissionsOfficer(): ?User
     {
         $officerIds = User::query()
-            ->whereHas('roles', fn ($q) => $q->where('name', 'Admissions'))
+            ->whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
             ->orderBy('id')
             ->pluck('id');
 

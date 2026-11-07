@@ -58,8 +58,8 @@ it('stops a counselor from filing for a student outside their caseload', functio
     ])->assertStatus(422)->assertJsonValidationErrors(['student_id']);
 });
 
-it('lets Marketing work (not just create) a lead', function () {
-    actingAsRole('Marketing');
+it('lets Admin work (not just create) a lead', function () {
+    actingAsRole('Admin');
     $lead = Lead::factory()->create();
 
     $this->postJson("/api/v1/leads/{$lead->id}/notes", ['body' => 'Followed up by phone'])

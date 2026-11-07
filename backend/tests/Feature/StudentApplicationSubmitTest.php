@@ -191,9 +191,9 @@ it('persists the extended applicant profile fields', function () {
 });
 
 it('routes a submitted application to an admissions officer and notifies them', function () {
-    Role::findOrCreate('Admissions', 'staff');
+    Role::findOrCreate('Admin', 'staff');
     $officer = User::factory()->create();
-    $officer->assignRole('Admissions');
+    $officer->assignRole('Admin');
 
     [$program, $passport] = programRequiringPassport();
     $student = actingAsStudentPortal();

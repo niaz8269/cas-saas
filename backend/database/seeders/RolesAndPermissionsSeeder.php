@@ -20,28 +20,15 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     private const GUARD = 'staff';
 
+    /** Roles folded into Admin. */
+    private const RETIRED = ['Management', 'Admissions', 'Marketing'];
+
     /**
      * role => permissions (module.action.scope)
      *
      * @var array<string, list<string>>
      */
     private const MATRIX = [
-        'Management' => [
-            'dashboard.view.global',
-            'leads.view.global',
-            'students.view.global',
-            'applications.view.global',
-            'universities.view.global',
-            'scholarships.view.global',
-            'documents.view.global',
-            'finance.view.global',
-            'commission.view.global',
-            'visa.view.global',
-            'agents.view.global',
-            'content.view.global',
-            'marketing.view.global',
-            'reports.view.global',
-        ],
         'Admin' => [ // Admin / Operations — full on every module (§8.2)
             'dashboard.view.global',
             'leads.view.global', 'leads.create.global', 'leads.update.global',
@@ -75,19 +62,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'visa.view.global',
             'reports.view.own',
         ],
-        'Admissions' => [
-            'dashboard.view.global',
-            'leads.view.global',
-            'students.view.global', 'students.create.global', 'students.update.global',
-            'applications.view.global', 'applications.create.global', 'applications.update.global',
-            'universities.view.global', 'universities.manage.global',
-            'scholarships.view.global', 'scholarships.manage.global',
-            'documents.view.global', 'documents.upload.global', 'documents.verify.global',
-            'finance.view.global',
-            'commission.view.global',
-            'visa.view.global',
-            'reports.view.own',
-        ],
         'Finance' => [
             'dashboard.view.global',
             'students.view.global',
@@ -107,16 +81,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'documents.view.global', 'documents.upload.global', 'documents.verify.global',
             'universities.view.global', 'scholarships.view.global',
             'visa.view.global', 'visa.manage.global',
-            'reports.view.own',
-        ],
-        'Marketing' => [
-            'dashboard.view.department',
-            // Marketing owns lead intake end to end: create AND work them
-            // (notes, status) — not just pour them in.
-            'leads.view.global', 'leads.create.global', 'leads.update.global',
-            'content.view.global', 'content.manage.global',
-            // Campaigns + lead-source management (their own module).
-            'marketing.view.global', 'marketing.manage.global',
             'reports.view.own',
         ],
     ];
@@ -139,6 +103,31 @@ class RolesAndPermissionsSeeder extends Seeder
                 ->syncPermissions($rolePermissions);
         }
 
+        $this->retireOldRoles();
+
         app(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
+
+    /**
+     * The team runs on five roles. Management, Admissions and Marketing were
+     * folded into Admin (which already holds everything they could do): anyone
+     * who still has one of them becomes an Admin, then the role is removed.
+     * Idempotent: once they are gone this does nothing.
+     */
+    private function retireOldRoles(): void
+    {
+        foreach (self::RETIRED as $name) {
+            $old = Role::where('name', $name)->where('guard_name', self::GUARD)->first();
+
+            if (! $old) {
+                continue;
+            }
+
+            foreach ($old->users()->get() as $user) {
+                $user->assignRole('Admin');
+            }
+
+            $old->delete();
+        }
     }
 }

@@ -29,6 +29,10 @@ const DashboardPage = lazy(() => import("@/features/dashboard/DashboardPage"))
 const ReportsPage = lazy(() => import("@/features/dashboard/ReportsPage"))
 const VisaCaseDetailPage = lazy(() => import("@/features/visa/VisaCaseDetailPage"))
 const VisaCasesPage = lazy(() => import("@/features/visa/VisaCasesPage"))
+const ForgotPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ForgotPasswordPage mode="portal" /> })))
+const ResetPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ResetPasswordPage mode="portal" /> })))
+const StaffForgotPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ForgotPasswordPage mode="staff" /> })))
+const StaffResetPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ResetPasswordPage mode="staff" /> })))
 const PortalLogin = lazy(() => import("@/features/portal/PortalLogin"))
 const PortalRegister = lazy(() => import("@/features/portal/PortalRegister"))
 const PortalShell = lazy(() => import("@/features/portal/PortalShell"))
@@ -99,6 +103,8 @@ const router = createBrowserRouter([
   // student/agent portal. /login stays as a redirect for old links.
   { path: "/admin", element: <LoginPage /> },
   { path: "/login", element: <Navigate to="/admin" replace /> },
+  { path: "/admin/forgot-password", element: <StaffForgotPasswordPage /> },
+  { path: "/admin/reset-password", element: <StaffResetPasswordPage /> },
 
   // Public website preview (unauthenticated) — consumes the public API
   {
@@ -134,6 +140,8 @@ const router = createBrowserRouter([
   // Mobile-first portals (agent + student) — separate token + shell (M7)
   { path: "/portal/login", element: <PortalLogin /> },
   { path: "/portal/register", element: <PortalRegister /> },
+  { path: "/portal/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/portal/reset-password", element: <ResetPasswordPage /> },
   {
     element: <RequirePortalAuth />,
     children: [

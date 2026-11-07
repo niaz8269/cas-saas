@@ -37,7 +37,7 @@ class StudentMessageController extends Controller
         if ($student->assigned_counselor_id) {
             $notifications->push($student->assigned_counselor_id, 'student_message', $title, $excerpt, entityType: 'student', entityId: $student->id);
         } else {
-            $notifications->pushToRoles(['Counselor', 'Admissions'], 'student_message', $title, $excerpt, entityType: 'student', entityId: $student->id);
+            $notifications->pushToRoles(['Counselor', 'Admin'], 'student_message', $title, $excerpt, entityType: 'student', entityId: $student->id);
         }
 
         return response()->json(['data' => ['id' => $message->id]], 201);
