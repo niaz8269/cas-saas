@@ -304,8 +304,24 @@ export interface SiteTestimonial {
   headline: string | null
   country: string | null
   quote: string
+  photo_url: string | null
+  title: string | null
+  university: string | null
+  degree: string | null
+  program: string | null
+  intake_year: number | null
+  services: string[] | null
+  recommend: boolean | null
+  partner_since: string | null
+  students_referred: string | null
+  verified: boolean
+}
+
+export interface SiteTestimonialSummary {
+  count: number
+  recommend_percent: number | null
 }
 
 export function getSiteTestimonials(audience: "student" | "agent") {
-  return siteApi<{ data: SiteTestimonial[] }>(`/public/testimonials?audience=${audience}`)
+  return siteApi<{ data: SiteTestimonial[]; summary: SiteTestimonialSummary }>(`/public/testimonials?audience=${audience}`)
 }

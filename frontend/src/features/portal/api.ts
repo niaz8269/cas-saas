@@ -652,10 +652,29 @@ export interface MyTestimonial {
 
 export interface TestimonialPayload {
   quote: string
-  headline?: string
-  country?: string
+  title?: string
   display_name?: string
+  photo_path?: string
+  country?: string
+  headline?: string
+  university?: string
+  degree?: string
+  program?: string
+  intake_year?: number
+  services?: string[]
+  found_us?: string
+  recommend?: boolean
+  partner_since?: string
+  students_referred?: string
   consent_public: boolean
+}
+
+/** Upload a student's own picture (converted to WebP on the server); returns its stored path. */
+export const uploadTestimonialPhoto = (file: File) => {
+  const body = new FormData()
+  body.append("image", file)
+
+  return portalApi<{ path: string; url: string | null }>("/student/testimonial/photo", { method: "POST", body })
 }
 
 export const getMyTestimonial = (kind: PortalKind) =>

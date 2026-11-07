@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Testimonial;
 use App\Services\Comms\NotificationService;
+use App\Services\Media\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,24 +18,49 @@ use Illuminate\Validation\Rule;
  *  - portal: a student or partner writes their own (lands as "pending");
  *  - admin: staff review, edit, approve or reject, and may enter one that a
  *    person gave them in writing (consent must be confirmed).
+ *
+ * Private fields (how they found us, ids, status) never reach the public list.
  */
 class TestimonialController extends Controller
 {
-    private const PUBLIC_FIELDS = ['id', 'audience', 'name', 'headline', 'country', 'quote'];
+    private const PUBLIC_FIELDS = [
+        'id', 'audience', 'name', 'headline', 'country', 'quote', 'photo_path', 'title',
+        'university', 'degree', 'program', 'intake_year', 'services', 'recommend',
+        'partner_since', 'students_referred', 'student_id', 'agent_id',
+    ];
+
+    /** Only paths this app produced for a testimonial photo (never an arbitrary URL). */
+    private const PHOTO_PATTERN = '#^(/uploads/)?testimonials/[0-9a-f-]{36}\\.webp$#';
 
     // ── Public website ─────────────────────────────────────────────────────
 
-    public function publicIndex(Request $request): JsonResponse
+    public function publicIndex(Request $request, ImageService $images): JsonResponse
     {
         $audience = $request->string('audience')->value();
 
-        $rows = Testimonial::query()->public()
-            ->when(in_array($audience, Testimonial::AUDIENCES, true), fn ($q) => $q->where('audience', $audience))
-            ->orderBy('sort_order')->orderByDesc('approved_at')
-            ->limit(12)
-            ->get(self::PUBLIC_FIELDS);
+        $base = Testimonial::query()->public()
+            ->when(in_array($audience, Testimonial::AUDIENCES, true), fn ($q) => $q->where('audience', $audience));
 
-        return response()->json(['data' => $rows]);
+        $rows = (clone $base)->orderBy('sort_order')->orderByDesc('approved_at')->limit(12)->get(self::PUBLIC_FIELDS)
+            ->map(function (Testimonial $t) use ($images) {
+                // "Verified" = written from the person's own CAS account, not typed in by staff.
+                $row = $t->toArray();
+                $row['photo_url'] = $images->url($t->photo_path);
+                $row['verified'] = $t->student_id !== null || $t->agent_id !== null;
+                unset($row['student_id'], $row['agent_id'], $row['photo_path']);
+
+                return $row;
+            });
+
+        return response()->json([
+            'data' => $rows,
+            'summary' => [
+                'count' => (clone $base)->count(),
+                'recommend_percent' => ($rec = (clone $base)->whereNotNull('recommend'))->count()
+                    ? (int) round(100 * (clone $rec)->where('recommend', true)->count() / (clone $rec)->count())
+                    : null,
+            ],
+        ]);
     }
 
     // ── Student / agent portal ─────────────────────────────────────────────
@@ -45,16 +71,26 @@ class TestimonialController extends Controller
         return response()->json(['data' => $this->ownQuery($request)->latest()->first()]);
     }
 
+    /** A student's own picture: converted to WebP, kept until they submit their testimonial. */
+    public function uploadPhoto(Request $request, ImageService $images): JsonResponse
+    {
+        $request->validate([
+            'image' => ['required', 'file', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+        ], ['image.max' => 'Photos may not exceed 5 MB.', 'image.mimes' => 'Use a JPEG, PNG or WebP photo.']);
+
+        $stored = $images->storeWebp($request->file('image'), 'testimonials');
+
+        return response()->json(['path' => $stored['path'], 'url' => $stored['url']], 201);
+    }
+
     public function submit(Request $request, NotificationService $notifications): JsonResponse
     {
-        $data = $request->validate([
-            'quote' => ['required', 'string', 'min:30', 'max:1200'],
-            'headline' => ['nullable', 'string', 'max:160'],
-            'country' => ['nullable', 'string', 'max:80'],
-            'display_name' => ['nullable', 'string', 'max:120'],
-            'consent_public' => ['accepted'],
-        ], [
+        $audience = $this->audienceOf($request);
+
+        $data = $request->validate($this->portalRules($audience), [
             'consent_public.accepted' => 'Please confirm that we may show your words and name on the website.',
+            'photo_path.regex' => 'Please upload your photo again.',
+            'photo_path.required' => 'Please add your photo.',
         ]);
 
         // One live testimonial per person: edit by writing to us, or wait for the decision.
@@ -65,16 +101,26 @@ class TestimonialController extends Controller
         );
 
         $account = $request->user();
-        $audience = $this->audienceOf($request);
 
         $testimonial = Testimonial::create([
             'audience' => $audience,
             'student_id' => $audience === 'student' ? $account->id : null,
             'agent_id' => $audience === 'agent' ? $account->id : null,
-            'name' => $data['display_name'] ?? ($audience === 'student' ? $account->first_name : ($account->name ?? 'Partner')),
+            'name' => $audience === 'agent' ? (string) ($account->name ?? 'Partner') : trim($data['display_name']),
             'headline' => $data['headline'] ?? null,
             'country' => $data['country'] ?? null,
             'quote' => $data['quote'],
+            'photo_path' => $data['photo_path'] ?? null,
+            'title' => $data['title'] ?? null,
+            'university' => $data['university'] ?? null,
+            'degree' => $data['degree'] ?? null,
+            'program' => $data['program'] ?? null,
+            'intake_year' => $data['intake_year'] ?? null,
+            'services' => $data['services'] ?? null,
+            'found_us' => $data['found_us'] ?? null,
+            'recommend' => $data['recommend'] ?? null,
+            'partner_since' => $data['partner_since'] ?? null,
+            'students_referred' => $data['students_referred'] ?? null,
             'consent_public' => true,
             'consent_at' => now(),
             'status' => 'pending',
@@ -106,6 +152,12 @@ class TestimonialController extends Controller
             'headline' => ['nullable', 'string', 'max:160'],
             'country' => ['nullable', 'string', 'max:80'],
             'quote' => ['required', 'string', 'min:10', 'max:1200'],
+            'title' => ['nullable', 'string', 'max:120'],
+            'university' => ['nullable', 'string', 'max:160'],
+            'degree' => ['nullable', Rule::in(Testimonial::DEGREES)],
+            'program' => ['nullable', 'string', 'max:160'],
+            'intake_year' => ['nullable', 'integer', 'between:2000,2100'],
+            'recommend' => ['nullable', 'boolean'],
             'consent_public' => ['accepted'],
             'status' => ['sometimes', Rule::in(Testimonial::STATUSES)],
             'sort_order' => ['sometimes', 'integer', 'min:0', 'max:1000'],
@@ -126,6 +178,7 @@ class TestimonialController extends Controller
             'headline' => ['nullable', 'string', 'max:160'],
             'country' => ['nullable', 'string', 'max:80'],
             'quote' => ['sometimes', 'string', 'min:10', 'max:1200'],
+            'title' => ['nullable', 'string', 'max:120'],
             'status' => ['sometimes', Rule::in(Testimonial::STATUSES)],
             'sort_order' => ['sometimes', 'integer', 'min:0', 'max:1000'],
         ]);
@@ -149,6 +202,40 @@ class TestimonialController extends Controller
     }
 
     // ── helpers ────────────────────────────────────────────────────────────
+
+    /** @return array<string, array<int, mixed>> */
+    private function portalRules(string $audience): array
+    {
+        $common = [
+            'title' => ['nullable', 'string', 'max:120'],
+            'quote' => ['required', 'string', 'min:30', 'max:1200'],
+            'recommend' => ['nullable', 'boolean'],
+            'consent_public' => ['accepted'],
+        ];
+
+        return $audience === 'student'
+            ? $common + [
+                // A student is shown with a real face and what they studied, so these are all required.
+                'display_name' => ['required', 'string', 'min:2', 'max:120'],
+                'photo_path' => ['required', 'string', 'max:255', 'regex:'.self::PHOTO_PATTERN],
+                'country' => ['required', 'string', 'max:80'],
+                'university' => ['required', 'string', 'max:160'],
+                'degree' => ['required', Rule::in(Testimonial::DEGREES)],
+                'program' => ['required', 'string', 'max:160'],
+                'intake_year' => ['nullable', 'integer', 'between:2000,2100'],
+                'services' => ['nullable', 'array', 'max:6'],
+                'services.*' => ['string', Rule::in(Testimonial::STUDENT_SERVICES)],
+                'found_us' => ['nullable', Rule::in(Testimonial::FOUND_US)],
+            ]
+            : $common + [
+                'headline' => ['nullable', 'string', 'max:160'],
+                'country' => ['nullable', 'string', 'max:80'],
+                'partner_since' => ['nullable', 'digits:4'],
+                'students_referred' => ['nullable', Rule::in(Testimonial::REFERRED)],
+                'services' => ['nullable', 'array', 'max:6'],
+                'services.*' => ['string', Rule::in(Testimonial::PARTNER_STRENGTHS)],
+            ];
+    }
 
     private function audienceOf(Request $request): string
     {
