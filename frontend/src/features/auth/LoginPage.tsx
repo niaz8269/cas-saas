@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
 import { z } from "zod"
@@ -12,6 +12,7 @@ import { login } from "@/features/auth/api"
 import { AuthShell, PasswordInput } from "@/features/auth/AuthShell"
 import { ApiError } from "@/lib/api"
 import { useAuthStore } from "@/stores/auth"
+import { cn } from "@/lib/utils"
 
 const loginSchema = z.object({
   email: z
@@ -25,6 +26,7 @@ type LoginValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [audience, setAudience] = useState<"staff" | "admin">("staff")
   const location = useLocation()
   const token = useAuthStore((state) => state.token)
   const setAuth = useAuthStore((state) => state.setAuth)
@@ -75,8 +77,9 @@ export default function LoginPage() {
 
   return (
     <AuthShell
+      audience={audience}
       title="Sign in"
-      subtitle="Use your CAS staff account"
+      subtitle={audience === "admin" ? "Use your CAS administrator account" : "Use your CAS staff account"}
       footer={
         <>
           Student or agent?{" "}
@@ -86,6 +89,25 @@ export default function LoginPage() {
         </>
       }
     >
+      {/* Changes the side panel only; the same account sign-in serves both. */}
+      <div role="tablist" aria-label="Account type" className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
+        {(["staff", "admin"] as const).map((k) => (
+          <button
+            key={k}
+            role="tab"
+            type="button"
+            aria-selected={audience === k}
+            onClick={() => setAudience(k)}
+            className={cn(
+              "rounded-md py-2 text-sm font-medium capitalize transition-colors",
+              audience === k ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground",
+            )}
+          >
+            {k === "staff" ? "Staff" : "Admin"}
+          </button>
+        ))}
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         {errors.root && (
           <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">
