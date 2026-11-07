@@ -7,13 +7,12 @@ import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 
-import casLogo from "@/assets/cas-logo.png"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AuthShell, PasswordInput } from "@/features/auth/AuthShell"
 import { agentRegister, getPublicCountries, portalRegister } from "@/features/portal/api"
-import { langDef } from "@/i18n/languages"
 import { ApiError } from "@/lib/api"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
@@ -38,7 +37,7 @@ function applyServerErrors<T extends FieldValues>(
 }
 
 export default function PortalRegister() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const token = usePortalAuthStore((s) => s.token)
   const kindInStore = usePortalAuthStore((s) => s.kind)
@@ -50,19 +49,18 @@ export default function PortalRegister() {
   }, [token, kindInStore, navigate])
 
   return (
-    <main dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col items-center justify-center bg-subtle p-6">
-      <div className="w-full max-w-md">
-        <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto mb-8 h-14 w-auto" />
-
-        <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h1 className="text-lg font-semibold text-cas-navy">
-            {t(kind === "student" ? "portal.register.studentTitle" : "portal.register.agentTitle")}
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t(kind === "student" ? "portal.register.studentSubtitle" : "portal.register.agentSubtitle")}
-          </p>
-
-          <div role="tablist" aria-label={t("portal.register.asAria")} className="mt-4 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
+    <AuthShell
+      wide
+      title={t(kind === "student" ? "portal.register.studentTitle" : "portal.register.agentTitle")}
+      subtitle={t(kind === "student" ? "portal.register.studentSubtitle" : "portal.register.agentSubtitle")}
+      footer={
+        <>
+          {t("portal.register.haveAccount")}{" "}
+          <Link to="/portal/login" className="font-medium text-cas-navy hover:underline">{t("portal.register.signIn")}</Link>
+        </>
+      }
+    >
+      <div role="tablist" aria-label={t("portal.register.asAria")} className="grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
             {(["student", "agent"] as const).map((k) => (
               <button
                 key={k}
@@ -80,19 +78,9 @@ export default function PortalRegister() {
             ))}
           </div>
 
-          {kind === "student" ? <StudentForm /> : <AgentForm />}
 
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            {t("portal.register.haveAccount")}{" "}
-            <Link to="/portal/login" className="font-medium text-cas-navy hover:underline">{t("portal.register.signIn")}</Link>
-          </p>
-        </div>
-
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          {t("portal.copyright", { year: new Date().getFullYear() })}
-        </p>
-      </div>
-    </main>
+      {kind === "student" ? <StudentForm /> : <AgentForm />}
+    </AuthShell>
   )
 }
 
@@ -140,7 +128,7 @@ function StudentForm() {
   })
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 space-y-4">
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-5 space-y-4">
       {errors.root && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
       <div className="grid grid-cols-2 gap-3">
@@ -219,7 +207,7 @@ function AgentForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 space-y-4">
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-5 space-y-4">
       {errors.root && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
       <Field id="company_name" label={t("portal.register.companyName")} error={errors.company_name?.message} autoComplete="organization" {...register("company_name")} />
@@ -256,10 +244,12 @@ function AgentForm() {
 
 // ── Shared labelled input ─────────────────────────────────────────────────────
 
-const Field = ({ id, label, error, ...props }: { id: string; label: string; error?: string } & ComponentProps<typeof Input>) => (
+const Field = ({ id, label, error, type, ...props }: { id: string; label: string; error?: string } & ComponentProps<typeof Input>) => (
   <div className="space-y-2">
     <Label htmlFor={id}>{label}</Label>
-    <Input id={id} aria-invalid={error ? true : undefined} {...props} />
+    {type === "password"
+      ? <PasswordInput id={id} aria-invalid={error ? true : undefined} {...props} />
+      : <Input id={id} type={type} aria-invalid={error ? true : undefined} {...props} />}
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
   </div>
 )
