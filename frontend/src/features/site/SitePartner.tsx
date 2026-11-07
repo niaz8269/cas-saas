@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import Testimonials from "@/features/site/Testimonials"
 import { ArrowRight, BadgeCheck, Banknote, Building2, ChevronRight, ClipboardList, FileCheck2, LineChart, Megaphone, UserPlus, type LucideIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -138,6 +139,8 @@ export default function SitePartner() {
           </ul>
         </div>
       </section>
+
+      <Testimonials audience="agent" />
 
       <section className="mx-auto w-full max-w-3xl">
         <h2 className="text-center text-2xl font-bold text-cas-navy">{t("partner.faqTitle")}</h2>

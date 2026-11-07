@@ -49,6 +49,7 @@ use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\StaffController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TestimonialController;
 use App\Http\Controllers\Api\V1\UniversityAgreementController;
 use App\Http\Controllers\Api\V1\UniversityContactController;
 use App\Http\Controllers\Api\V1\UniversityController;
@@ -94,6 +95,8 @@ Route::prefix('v1')->group(function () {
         // Content: blogs / news / events (published only)
         Route::get('posts', [PublicPostController::class, 'index']);
         Route::get('posts/{slug}', [PublicPostController::class, 'show']);
+        // Testimonials the author agreed to and staff approved
+        Route::get('testimonials', [TestimonialController::class, 'publicIndex']);
     });
 
     // Public website enquiry form → lead (tighter throttle)
@@ -141,6 +144,8 @@ Route::prefix('v1')->group(function () {
             Route::get('applications', [AgentPortalController::class, 'applications']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
+            Route::get('testimonial', [TestimonialController::class, 'mine']);
+            Route::post('testimonial', [TestimonialController::class, 'submit'])->middleware('throttle:10,1');
             // In-app notification feed.
             Route::get('notifications', [PortalNotificationController::class, 'index']);
             Route::get('notifications/unread-count', [PortalNotificationController::class, 'unreadCount']);
@@ -164,6 +169,8 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:student')->group(function () {
             Route::post('auth/logout', [StudentAuthController::class, 'logout']);
             Route::get('auth/me', [StudentAuthController::class, 'me']);
+            Route::get('testimonial', [TestimonialController::class, 'mine']);
+            Route::post('testimonial', [TestimonialController::class, 'submit'])->middleware('throttle:10,1');
             Route::post('auth/verification/resend', [StudentAuthController::class, 'resendVerification'])
                 ->middleware('throttle:6,1');
             // Application wizard — browsing (static segments precede any
@@ -252,6 +259,16 @@ Route::prefix('v1')->group(function () {
         Route::match(['put', 'patch'], 'posts/{post}', [PostController::class, 'update'])
             ->middleware('permission:content.manage.global,staff');
         Route::delete('posts/{post}', [PostController::class, 'destroy'])
+            ->middleware('permission:content.manage.global,staff');
+
+        // Testimonials: review, edit, approve (content module)
+        Route::get('testimonials', [TestimonialController::class, 'index'])
+            ->middleware('permission:content.view.global,staff');
+        Route::post('testimonials', [TestimonialController::class, 'store'])
+            ->middleware('permission:content.manage.global,staff');
+        Route::match(['put', 'patch'], 'testimonials/{testimonial}', [TestimonialController::class, 'update'])
+            ->middleware('permission:content.manage.global,staff');
+        Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])
             ->middleware('permission:content.manage.global,staff');
 
         // Marketing: campaigns + lead-source management (policy-gated on

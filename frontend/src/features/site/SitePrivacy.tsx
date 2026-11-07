@@ -5,7 +5,7 @@ import { SitePageHeader } from "@/features/site/components"
 import { CONTACT } from "@/lib/contact"
 import { useSeo } from "@/lib/seo"
 
-const UPDATED = "9 November 2026"
+const UPDATED = "10 November 2026"
 
 /** How CAS collects, uses, shares and protects personal information. */
 const SECTIONS: { title: string; body: string[] }[] = [
@@ -20,6 +20,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
     body: [
       "Information you give us: your name, email, phone number, nationality, date of birth, address, education history, language results, the program you want, your passport details, and the documents you upload (such as passport, certificates, transcripts, photos, bank statements, medical forms and payment receipts). For partners: company name, contact person, website and address.",
       "Information we create while working on your case: application status, notes from our team, messages, invoices and payment records, offer letters and visa progress.",
+      "Words you choose to share: if you send a testimonial from your account, we keep it and, only after you agreed and our team approved it, show it on the website with your first name (or company name) and what you wrote about your study or business. You can ask us to remove it at any time.",
       "Technical information: when you use the site our servers record basic technical data such as IP address, browser type and the pages requested, which we use to keep the site secure and working. If you use the contact or enquiry forms we also keep what you write.",
     ],
   },

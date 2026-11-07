@@ -643,3 +643,23 @@ function query(params: Record<string, string | number | undefined>): string {
 
   return s ? `?${s}` : ""
 }
+
+export interface MyTestimonial {
+  id: number
+  status: "pending" | "approved" | "rejected"
+  quote: string
+}
+
+export interface TestimonialPayload {
+  quote: string
+  headline?: string
+  country?: string
+  display_name?: string
+  consent_public: boolean
+}
+
+export const getMyTestimonial = (kind: PortalKind) =>
+  portalApi<{ data: MyTestimonial | null }>(`/${kind}/testimonial`)
+
+export const submitTestimonial = (kind: PortalKind, payload: TestimonialPayload) =>
+  portalApi<{ data: { id: number; status: string } }>(`/${kind}/testimonial`, { method: "POST", body: JSON.stringify(payload) })

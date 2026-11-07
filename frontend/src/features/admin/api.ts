@@ -331,3 +331,33 @@ export const getErrorLog = (id: number) => api<{ data: ErrorLogItem }>(`/error-l
 
 export const resolveErrorLog = (id: number) =>
   api<{ data: ErrorLogItem }>(`/error-logs/${id}/resolve`, { method: "POST" })
+
+export interface TestimonialRow {
+  id: number
+  audience: "student" | "agent"
+  name: string
+  headline: string | null
+  country: string | null
+  quote: string
+  consent_public: boolean
+  status: "pending" | "approved" | "rejected"
+  sort_order: number
+  created_at: string | null
+}
+
+export const listTestimonials = (params: { status?: string; audience?: string; page?: number } = {}) => {
+  const qs = new URLSearchParams()
+  if (params.status) qs.set("filter[status]", params.status)
+  if (params.audience) qs.set("filter[audience]", params.audience)
+  if (params.page) qs.set("page", String(params.page))
+
+  return api<Paginated<TestimonialRow>>(`/testimonials?${qs.toString()}`)
+}
+
+export const createTestimonial = (payload: { audience: string; name: string; headline?: string; country?: string; quote: string; consent_public: boolean }) =>
+  api<{ data: TestimonialRow }>("/testimonials", { method: "POST", body: JSON.stringify(payload) })
+
+export const updateTestimonial = (id: number, payload: Partial<Pick<TestimonialRow, "status" | "quote" | "name" | "headline" | "country" | "sort_order">>) =>
+  api<{ data: TestimonialRow }>(`/testimonials/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const deleteTestimonial = (id: number) => api<void>(`/testimonials/${id}`, { method: "DELETE" })

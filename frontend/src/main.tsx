@@ -33,6 +33,9 @@ const ForgotPasswordPage = lazy(() => import("@/features/auth/PasswordPages").th
 const ResetPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ResetPasswordPage mode="portal" /> })))
 const StaffForgotPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ForgotPasswordPage mode="staff" /> })))
 const StaffResetPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ResetPasswordPage mode="staff" /> })))
+const StudentTestimonial = lazy(() => import("@/features/portal/TestimonialPage").then((m) => ({ default: () => <m.default kind="student" /> })))
+const AgentTestimonial = lazy(() => import("@/features/portal/TestimonialPage").then((m) => ({ default: () => <m.default kind="agent" /> })))
+const TestimonialsAdmin = lazy(() => import("@/features/admin/TestimonialsPage"))
 const PortalLogin = lazy(() => import("@/features/portal/PortalLogin"))
 const PortalRegister = lazy(() => import("@/features/portal/PortalRegister"))
 const PortalShell = lazy(() => import("@/features/portal/PortalShell"))
@@ -157,6 +160,8 @@ const router = createBrowserRouter([
           { path: "/portal/agent/apply-scholarship", element: <AgentScholarshipWizard /> },
           { path: "/portal/agent/commissions", element: <AgentCommissions /> },
           { path: "/portal/student", element: <StudentHome /> },
+          { path: "/portal/student/testimonial", element: <StudentTestimonial /> },
+          { path: "/portal/agent/testimonial", element: <AgentTestimonial /> },
           { path: "/portal/student/apply", element: <StudentApplyWizard /> },
           { path: "/portal/student/apply-scholarship", element: <StudentScholarshipWizard /> },
           { path: "/portal/student/applications", element: <StudentApplications /> },
@@ -198,6 +203,7 @@ const router = createBrowserRouter([
           { path: "/users", element: <UsersPage /> },
           { path: "/partner-requests", element: <PartnerRequestsPage /> },
           { path: "/content", element: <ContentPage /> },
+          { path: "/testimonials", element: <TestimonialsAdmin /> },
           { path: "/campaigns", element: <MarketingPage /> },
           { path: "/integrations", element: <IntegrationsPage /> },
           { path: "/error-log", element: <ErrorLogPage /> },
