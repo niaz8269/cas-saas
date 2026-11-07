@@ -1,6 +1,6 @@
 import { geoCentroid, geoDistance, geoOrthographic, geoPath, geoArea } from "d3-geo"
 import { Minus, Plus, RotateCcw, X } from "lucide-react"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { feature } from "topojson-client"
 import type { Feature, FeatureCollection, Geometry, MultiPolygon } from "geojson"
 import type { Topology } from "topojson-specification"
@@ -44,14 +44,13 @@ interface Pin { key: string; x: number; y: number; groups: Group[]; items: SiteT
  * photo on their country; zoomed out, nearby countries merge into one marker with a count.
  * Hover or click a marker to open the testimonial card(s).
  */
-export default function TestimonialGlobe({ items, focus }: { items: SiteTestimonial[]; focus: { code: string; nonce: number } | null }) {
+export default function TestimonialGlobe({ items }: { items: SiteTestimonial[] }) {
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState(480)
   const [world, setWorld] = useState<World | null>(null)
   const [rot, setRot] = useState<Lonlat>([-30, -15])
   const [zoom, setZoom] = useState(1)
   const [openKey, setOpenKey] = useState<string | null>(null)
-  const [selectedCode, setSelectedCode] = useState<string | null>(null)
   const interacting = useRef(false)
   const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null)
   const reduceMotion = useRef(typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
@@ -165,34 +164,6 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
     ctx.putImageData(frame.current.image, 0, 0)
   }, [tex, rot, radius, res, size])
 
-  const flyTo = useCallback((code: string) => {
-    const c = centres.current[code]
-    if (!c) return
-    interacting.current = true
-    const from = rot
-    const to: Lonlat = [-c[0], -Math.max(-55, Math.min(55, c[1]))]
-    const t0 = performance.now()
-    const step = (now: number) => {
-      const k = Math.min(1, (now - t0) / 750)
-      const e = 1 - Math.pow(1 - k, 3)
-      let dl = to[0] - from[0]
-      if (dl > 180) dl -= 360
-      if (dl < -180) dl += 360
-      setRot([from[0] + dl * e, from[1] + (to[1] - from[1]) * e])
-      if (k < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-    setZoom((z) => Math.max(z, 1.5))
-    setSelectedCode(code)
-    setOpenKey(`c:${code}`)
-  }, [rot])
-
-  // Search / list picks a country.
-  useEffect(() => {
-    if (focus && world) flyTo(focus.code)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus?.nonce, world])
-
   // Markers: one per country, merged by screen distance when close.
   const pins = useMemo<Pin[]>(() => {
     const center: Lonlat = [-rot[0], -rot[1]]
@@ -223,13 +194,9 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
     })
   }, [groups, projection, rot, size])
 
-  // A country picked from search keeps its card open even while the globe is still turning to it.
-  const searched = openKey?.startsWith("c:") ? groups.find((g) => `c:${g.code}` === openKey) : undefined
-  const open: Pin | null =
-    pins.find((p) => p.key === openKey) ??
-    (searched
-      ? { key: openKey as string, x: size / 2, y: size / 2, groups: [searched], items: searched.items, label: `${searched.items.length} ${searched.items.length === 1 ? "testimonial" : "testimonials"} from ${searched.country}` }
-      : null)
+  const open: Pin | null = pins.find((p) => p.key === openKey) ?? null
+  // The country (or countries) of the marker you are looking at light up, so the tie to the map is clear.
+  const activeCodes = useMemo(() => new Set(open?.groups.map((g) => g.code) ?? []), [open])
   const highlighted = useMemo(() => new Set(groups.map((g) => COUNTRY_BY_ISO2[g.code]?.num).filter(Boolean)), [groups])
 
   // Dragging
@@ -279,7 +246,7 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
   }, [])
 
   const zoomBy = (f: number) => { interacting.current = true; setZoom((z) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, z * f))) }
-  const reset = () => { setZoom(1); setOpenKey(null); setSelectedCode(null); interacting.current = false }
+  const reset = () => { setZoom(1); setOpenKey(null); interacting.current = false }
 
   // Popup placement: beside the marker, kept inside the box.
   const popupStyle = open
@@ -335,7 +302,7 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
           {!tex && world && <path d={path(world.land) ?? undefined} fill="#5E9A58" stroke="#3E7A3A" strokeWidth={0.4} />}
           {world && world.countries.filter((f) => highlighted.has(String(f.id).padStart(3, "0"))).map((f) => {
             const code = Object.values(COUNTRY_BY_ISO2).find((c) => c.num === String(f.id).padStart(3, "0"))?.iso2
-            const isSel = code === selectedCode
+            const isSel = !!code && activeCodes.has(code)
 
             return <path key={String(f.id)} d={path(f) ?? undefined} fill={isSel ? "#FBBF24" : "#FFFFFF"} fillOpacity={isSel ? 0.4 : 0.2} stroke={isSel ? "#FFFFFF" : "#FDE68A"} strokeOpacity={isSel ? 1 : 0.9} strokeWidth={isSel ? 1.8 : 1.1} />
           })}
@@ -377,8 +344,6 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
           </div>
         </div>
       )}
-
-      <p className="pointer-events-none absolute bottom-0 left-0 text-[10px] text-slate-400">Earth image: NASA Visible Earth</p>
 
       <div className="absolute right-0 bottom-0 flex flex-col overflow-hidden rounded-lg border bg-card shadow-sm" data-popup>
         <button type="button" aria-label="Zoom in" onClick={() => zoomBy(1.3)} className="p-2 hover:bg-muted"><Plus className="size-4" /></button>

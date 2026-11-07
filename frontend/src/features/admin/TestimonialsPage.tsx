@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { COUNTRIES } from "@/features/site/countryList"
 import { createTestimonial, deleteTestimonial, listTestimonials, updateTestimonial } from "@/features/admin/api"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -115,12 +116,13 @@ function AddForm({ onDone }: { onDone: () => void }) {
   const [name, setName] = useState("")
   const [headline, setHeadline] = useState("")
   const [country, setCountry] = useState("")
+  const [countryCode, setCountryCode] = useState("")
   const [quote, setQuote] = useState("")
   const [title, setTitle] = useState("")
   const [consent, setConsent] = useState(false)
 
   const save = useMutation({
-    mutationFn: () => createTestimonial({ audience, name: name.trim(), headline: headline.trim() || undefined, country: country.trim() || undefined, quote: quote.trim(), title: title.trim() || undefined, consent_public: consent }),
+    mutationFn: () => createTestimonial({ audience, name: name.trim(), headline: headline.trim() || undefined, country: country.trim() || undefined, country_code: audience === "student" ? countryCode || undefined : undefined, quote: quote.trim(), title: title.trim() || undefined, consent_public: consent }),
     onSuccess: onDone,
   })
   const err = save.error instanceof ApiError ? save.error : null
@@ -145,8 +147,15 @@ function AddForm({ onDone }: { onDone: () => void }) {
           <Input id="tm-headline" value={headline} onChange={(e) => setHeadline(e.target.value)} />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="tm-country">Country</Label>
-          <Input id="tm-country" value={country} onChange={(e) => setCountry(e.target.value)} />
+          <Label htmlFor="tm-country">{audience === "student" ? "Nationality (places them on the globe)" : "Country"}</Label>
+          {audience === "student" ? (
+            <select id="tm-country" value={countryCode} onChange={(e) => setCountryCode(e.target.value)} className="h-9 w-full rounded-md border bg-background px-3 text-sm">
+              <option value="">—</option>
+              {COUNTRIES.map((c) => <option key={c.iso2} value={c.iso2}>{c.name}</option>)}
+            </select>
+          ) : (
+            <Input id="tm-country" value={country} onChange={(e) => setCountry(e.target.value)} />
+          )}
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
