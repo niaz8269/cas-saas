@@ -338,7 +338,10 @@ export default function SiteLayout() {
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-white/60 sm:flex-row sm:px-6">
             <p>{t("footer.rights", { year: new Date().getFullYear() })}</p>
-            <Link to="/site/terms" className="hover:text-white">{t("footer.terms", { defaultValue: "Terms & Conditions" })}</Link>
+            <p className="flex items-center gap-4">
+              <Link to="/site/terms" className="hover:text-white">{t("footer.terms", { defaultValue: "Terms & Conditions" })}</Link>
+              <Link to="/site/privacy" className="hover:text-white">{t("footer.privacy", { defaultValue: "Privacy Policy" })}</Link>
+            </p>
             <p>{t("footer.authorized")}</p>
           </div>
         </div>

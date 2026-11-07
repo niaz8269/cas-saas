@@ -102,7 +102,7 @@ export function AuthShell({
       </aside>
 
       {/* Form side */}
-      <main className="flex flex-col items-center justify-center px-5 py-4 sm:px-8">
+      <main className="flex flex-col items-center justify-center px-5 py-3 sm:px-8">
         <div className={cn("w-full", wide ? "max-w-xl" : "max-w-sm")}>
           <a href="/" className="mb-4 block lg:hidden">
             <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto h-11 w-auto" />

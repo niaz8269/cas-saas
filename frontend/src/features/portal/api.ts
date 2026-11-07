@@ -49,6 +49,7 @@ export interface StudentRegisterPayload {
   phone: string
   password: string
   password_confirmation: string
+  accept_terms: boolean
 }
 
 /** Public student self-registration; on success the student is signed in. */
@@ -68,6 +69,7 @@ export interface AgentRegisterPayload {
   country_id: number
   password: string
   password_confirmation: string
+  accept_terms: boolean
 }
 
 /** Public agent/partner registration; creates a PENDING request (no token). */

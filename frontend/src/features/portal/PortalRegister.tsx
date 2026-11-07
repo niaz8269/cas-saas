@@ -87,8 +87,8 @@ export default function PortalRegister() {
 
 // ── Student ───────────────────────────────────────────────────────────────
 
-type StudentValues = { first_name: string; last_name: string; email: string; phone: string; password: string; password_confirmation: string }
-const STUDENT_FIELDS = ["first_name", "last_name", "email", "phone", "password", "password_confirmation"] as const
+type StudentValues = { first_name: string; last_name: string; email: string; phone: string; password: string; password_confirmation: string; accept_terms: boolean }
+const STUDENT_FIELDS = ["first_name", "last_name", "email", "phone", "password", "password_confirmation", "accept_terms"] as const
 
 function StudentForm() {
   const { t } = useTranslation()
@@ -105,6 +105,7 @@ function StudentForm() {
           phone: z.string().min(1, t("portal.register.errorPhone")),
           password: z.string().min(8, t("portal.register.errorPasswordMin")),
           password_confirmation: z.string(),
+          accept_terms: z.boolean().refine((v) => v, t("portal.register.errorTerms", { defaultValue: "Please accept the Terms & Conditions and Privacy Policy" })),
         })
         .refine((d) => d.password === d.password_confirmation, {
           message: t("portal.register.errorPasswordMatch"),
@@ -115,7 +116,7 @@ function StudentForm() {
 
   const { register, handleSubmit, setError, formState: { errors } } = useForm<StudentValues>({
     resolver: zodResolver(schema),
-    defaultValues: { first_name: "", last_name: "", email: "", phone: "", password: "", password_confirmation: "" },
+    defaultValues: { first_name: "", last_name: "", email: "", phone: "", password: "", password_confirmation: "", accept_terms: false },
   })
 
   const mutation = useMutation({
@@ -129,7 +130,7 @@ function StudentForm() {
   })
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2 sm:grid-cols-2">
       {errors.root && <p role="alert" className="sm:col-span-2 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
       <Field id="first_name" label={t("portal.register.firstName")} error={errors.first_name?.message} autoComplete="given-name" {...register("first_name")} />
@@ -138,6 +139,8 @@ function StudentForm() {
       <Field id="phone" type="tel" label={t("portal.register.phone")} error={errors.phone?.message} autoComplete="tel" {...register("phone")} />
       <Field id="password" type="password" label={t("portal.password")} error={errors.password?.message} autoComplete="new-password" {...register("password")} />
       <Field id="password_confirmation" type="password" label={t("portal.register.confirmPassword")} error={errors.password_confirmation?.message} autoComplete="new-password" {...register("password_confirmation")} />
+
+      <AcceptTerms error={errors.accept_terms?.message} {...register("accept_terms")} />
 
       <Button type="submit" className="mt-1 h-10 w-full sm:col-span-2" disabled={mutation.isPending}>
         {mutation.isPending ? t("portal.register.submitting") : t("portal.register.submit")}
@@ -150,9 +153,9 @@ function StudentForm() {
 
 type AgentValues = {
   company_name: string; contact_name: string; email: string; phone: string
-  website: string; country_id: string; address: string; password: string; password_confirmation: string
+  website: string; country_id: string; address: string; password: string; password_confirmation: string; accept_terms: boolean
 }
-const AGENT_FIELDS = ["company_name", "contact_name", "email", "phone", "website", "country_id", "address", "password", "password_confirmation"] as const
+const AGENT_FIELDS = ["company_name", "contact_name", "email", "phone", "website", "country_id", "address", "password", "password_confirmation", "accept_terms"] as const
 
 function AgentForm() {
   const { t } = useTranslation()
@@ -173,6 +176,7 @@ function AgentForm() {
           address: z.string().min(1, t("portal.register.errorAddress")),
           password: z.string().min(8, t("portal.register.errorPasswordMin")),
           password_confirmation: z.string(),
+          accept_terms: z.boolean().refine((v) => v, t("portal.register.errorTerms", { defaultValue: "Please accept the Terms & Conditions and Privacy Policy" })),
         })
         .refine((d) => d.password === d.password_confirmation, {
           message: t("portal.register.errorPasswordMatch"),
@@ -183,7 +187,7 @@ function AgentForm() {
 
   const { register, handleSubmit, setError, setValue, watch, formState: { errors } } = useForm<AgentValues>({
     resolver: zodResolver(schema),
-    defaultValues: { company_name: "", contact_name: "", email: "", phone: "", website: "", country_id: "", address: "", password: "", password_confirmation: "" },
+    defaultValues: { company_name: "", contact_name: "", email: "", phone: "", website: "", country_id: "", address: "", password: "", password_confirmation: "", accept_terms: false },
   })
 
   const mutation = useMutation({
@@ -206,7 +210,7 @@ function AgentForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2 sm:grid-cols-2">
       {errors.root && <p role="alert" className="sm:col-span-2 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
       <Field id="company_name" label={t("portal.register.companyName")} error={errors.company_name?.message} autoComplete="organization" {...register("company_name")} />
@@ -233,10 +237,34 @@ function AgentForm() {
 
       <Field id="address" wrapperClassName="sm:col-span-2" label={t("portal.register.address")} error={errors.address?.message} autoComplete="street-address" {...register("address")} />
 
+      <AcceptTerms error={errors.accept_terms?.message} {...register("accept_terms")} />
+
       <Button type="submit" className="mt-1 h-10 w-full sm:col-span-2" disabled={mutation.isPending}>
         {mutation.isPending ? t("portal.register.submitting") : t("portal.register.submitAgent")}
       </Button>
     </form>
+  )
+}
+
+// ── Terms acceptance ──────────────────────────────────────────────────────────
+
+const AcceptTerms = ({ error, ...props }: { error?: string } & ComponentProps<"input">) => {
+  const { t } = useTranslation()
+  const link = "font-medium text-cas-navy underline"
+
+  return (
+    <div className="sm:col-span-2">
+      <label className="flex items-start gap-2.5 text-sm text-muted-foreground">
+        <input type="checkbox" className="mt-0.5 size-4 shrink-0 rounded border-input accent-[#14357C]" aria-invalid={error ? true : undefined} {...props} />
+        <span>
+          {t("portal.register.agreePrefix", { defaultValue: "I agree to the" })}{" "}
+          <Link to="/site/terms" target="_blank" className={link}>{t("portal.register.terms", { defaultValue: "Terms & Conditions" })}</Link>{" "}
+          {t("portal.register.agreeAnd", { defaultValue: "and" })}{" "}
+          <Link to="/site/privacy" target="_blank" className={link}>{t("portal.register.privacy", { defaultValue: "Privacy Policy" })}</Link>
+        </span>
+      </label>
+      {error && <p role="alert" className="mt-1 text-xs text-destructive">{error}</p>}
+    </div>
   )
 }
 

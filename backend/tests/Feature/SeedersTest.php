@@ -15,6 +15,7 @@ use Database\Seeders\MirrorPhotosSeeder;
 use Database\Seeders\MoeMbbsSeeder;
 use Database\Seeders\OfficialIntakeDatesSeeder;
 use Database\Seeders\RegisteredMajorsSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
 use Database\Seeders\WikipediaProfileSeeder;
@@ -44,7 +45,7 @@ it('folds the retired roles into Admin and moves their users across', function (
         $user = User::factory()->create();
         $user->assignRole(Role::findOrCreate($name, 'staff'));
 
-        (new \Database\Seeders\RolesAndPermissionsSeeder)->run();
+        (new RolesAndPermissionsSeeder)->run();
 
         expect(Role::where('name', $name)->exists())->toBeFalse()
             ->and($user->fresh()->hasRole('Admin'))->toBeTrue();

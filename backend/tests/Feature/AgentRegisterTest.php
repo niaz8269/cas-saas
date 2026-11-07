@@ -20,8 +20,21 @@ function agentRegisterPayload(array $overrides = []): array
         'country_id' => Country::factory()->create()->id,
         'password' => 'secret1234',
         'password_confirmation' => 'secret1234',
+        'accept_terms' => true,
     ], $overrides);
 }
+
+it('will not create a partner request unless the terms are accepted, and records the acceptance when they are', function () {
+    $this->postJson('/api/v1/agent/auth/register', agentRegisterPayload(['accept_terms' => false]))
+        ->assertStatus(422)->assertJsonValidationErrors(['accept_terms']);
+    expect(Agent::count())->toBe(0);
+
+    $this->postJson('/api/v1/agent/auth/register', agentRegisterPayload())->assertCreated();
+
+    $agent = Agent::firstOrFail();
+    expect($agent->terms_accepted_at)->not->toBeNull()
+        ->and($agent->terms_version)->toBe(config('legal.terms_version'));
+});
 
 it('creates a PENDING agent request without issuing a token', function () {
     $this->postJson('/api/v1/agent/auth/register', agentRegisterPayload())
