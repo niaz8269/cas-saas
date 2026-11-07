@@ -209,3 +209,82 @@ it('rejects a nationality that is not a real country code and fills the country 
 
     expect(Testimonial::sole()->country)->toBe('Nigeria');
 });
+
+function publicPayload(array $over = []): array
+{
+    return array_merge(studentPayload(), ['audience' => 'student', 'contact_email' => 'sara@example.com'], $over);
+}
+
+it('lets anyone send a testimonial from the public page with no account, held for review', function () {
+    Role::findOrCreate('Admin', 'staff');
+    $admin = User::factory()->create();
+    $admin->assignRole('Admin');
+
+    $this->postJson('/api/v1/public/testimonials', publicPayload())->assertCreated()->assertJsonPath('data.status', 'pending');
+
+    $t = Testimonial::sole();
+    expect($t->source)->toBe('public')
+        ->and($t->student_id)->toBeNull()->and($t->agent_id)->toBeNull()
+        ->and($t->contact_email)->toBe('sara@example.com')
+        ->and($t->name)->toBe('Sara Khan')->and($t->country_code)->toBe('PK')
+        ->and($t->status)->toBe('pending')->and($t->consent_at)->not->toBeNull();
+    expect(Notification::where('user_id', $admin->id)->where('entity_type', 'testimonial')->exists())->toBeTrue();
+
+    // Hidden until approved; once approved it shows, marked unverified, and the email never leaks.
+    $this->getJson('/api/v1/public/testimonials')->assertJsonCount(0, 'data');
+    $t->update(['status' => 'approved', 'approved_at' => now()]);
+    $row = $this->getJson('/api/v1/public/testimonials')->json('data.0');
+    expect($row['verified'])->toBeFalse()->and($row)->not->toHaveKeys(['contact_email', 'source', 'found_us']);
+});
+
+it('requires the same student details on the public page, plus a real email', function () {
+    $this->postJson('/api/v1/public/testimonials', ['audience' => 'student', 'consent_public' => true])
+        ->assertStatus(422)->assertJsonValidationErrors(['contact_email', 'display_name', 'photo_path', 'country_code', 'university', 'degree', 'program', 'quote']);
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['contact_email' => 'not-an-email']))->assertStatus(422)->assertJsonValidationErrors(['contact_email']);
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['consent_public' => false]))->assertStatus(422)->assertJsonValidationErrors(['consent_public']);
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['audience' => 'robot']))->assertStatus(422);
+    expect(Testimonial::count())->toBe(0);
+});
+
+it('takes a partner agency testimonial from the public page, photo optional', function () {
+    $this->postJson('/api/v1/public/testimonials', [
+        'audience' => 'agent', 'contact_email' => 'info@agency.example', 'display_name' => 'Bright Path Consultancy',
+        'quote' => 'Clear commission statements and fast replies on every case we send.',
+        'headline' => 'Partner agency, Lahore', 'partner_since' => '2024', 'students_referred' => '11-50', 'consent_public' => true,
+    ])->assertCreated();
+
+    $t = Testimonial::sole();
+    expect($t->audience)->toBe('agent')->and($t->name)->toBe('Bright Path Consultancy')->and($t->photo_path)->toBeNull();
+
+    $this->postJson('/api/v1/public/testimonials', ['audience' => 'agent', 'contact_email' => 'x@y.example', 'consent_public' => true, 'quote' => str_repeat('x', 40)])
+        ->assertStatus(422)->assertJsonValidationErrors(['display_name']);
+});
+
+it('keeps bots out: a filled honeypot stores nothing, and one live testimonial per email', function () {
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['website' => 'http://spam.example']))->assertCreated();
+    expect(Testimonial::count())->toBe(0);
+
+    $this->postJson('/api/v1/public/testimonials', publicPayload())->assertCreated();
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['contact_email' => 'SARA@example.com']))->assertStatus(422);
+    expect(Testimonial::count())->toBe(1);
+
+    // A rejected one does not block a fresh try.
+    Testimonial::sole()->update(['status' => 'rejected']);
+    $this->postJson('/api/v1/public/testimonials', publicPayload())->assertCreated();
+});
+
+it('accepts a photo upload without an account and only the photo this app stored', function () {
+    $res = $this->postJson('/api/v1/public/testimonials/photo', ['image' => UploadedFile::fake()->image('me.jpg', 300, 300)])->assertCreated();
+
+    expect($res->json('path'))->toMatch('#testimonials/[0-9a-f-]{36}\.webp$#');
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['photo_path' => $res->json('path')]))->assertCreated();
+    $this->postJson('/api/v1/public/testimonials/photo', ['image' => UploadedFile::fake()->create('cv.pdf', 10, 'application/pdf')])->assertStatus(422);
+    $this->postJson('/api/v1/public/testimonials', publicPayload(['contact_email' => 'b@example.com', 'photo_path' => 'https://evil.example/x.png']))->assertStatus(422)->assertJsonValidationErrors(['photo_path']);
+});
+
+it('marks staff-entered testimonials with their source', function () {
+    actingAsStaffWith(['content.view.global', 'content.manage.global']);
+    $this->postJson('/api/v1/testimonials', ['audience' => 'student', 'name' => 'Omar', 'quote' => 'Written to us by email, shared with permission.', 'consent_public' => true])->assertCreated();
+
+    expect(Testimonial::sole()->source)->toBe('staff');
+});

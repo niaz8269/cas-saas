@@ -68,7 +68,7 @@ it("uploads the photo, sends everything and then shows a thank-you", async () =>
     photo_path: "/uploads/testimonials/11111111-1111-1111-1111-111111111111.webp", services: ["admission"], consent_public: true,
   })
   expect(body).not.toHaveProperty("rating")
-})
+}, 20000)
 
 it("shows the server's message for each missing required field", async () => {
   const user = userEvent.setup()

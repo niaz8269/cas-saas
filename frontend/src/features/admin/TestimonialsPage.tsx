@@ -77,6 +77,8 @@ export default function TestimonialsPage() {
                 <Badge className={cn("capitalize", BADGE[r.status])}>{r.status}</Badge>
                 {!r.consent_public && <Badge className="bg-cas-red-50 text-destructive">No consent</Badge>}
                 {(r.student_id || r.agent_id) && <span className="inline-flex items-center gap-0.5 text-xs text-success"><BadgeCheck className="size-3.5" aria-hidden="true" /> From their account</span>}
+                {r.source === "public" && <Badge variant="secondary">Public form</Badge>}
+                {r.contact_email && <a href={`mailto:${r.contact_email}`} className="text-xs text-muted-foreground underline">{r.contact_email}</a>}
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
                 {[r.headline, r.degree, r.program, r.university, r.intake_year ? `Intake ${r.intake_year}` : null, r.country, r.partner_since ? `Partner since ${r.partner_since}` : null, r.students_referred ? `${r.students_referred} students` : null].filter(Boolean).join(" · ")}

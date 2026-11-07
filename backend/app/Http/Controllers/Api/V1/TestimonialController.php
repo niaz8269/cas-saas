@@ -64,6 +64,76 @@ class TestimonialController extends Controller
         ]);
     }
 
+    // ── Public form (no account) ───────────────────────────────────────────
+
+    /**
+     * Anyone with the link can send a testimonial, no account needed. It lands as "pending" and
+     * nothing is shown until staff approve it. Guarded by a throttle, a hidden honeypot field, a
+     * required email, and one live testimonial per email address.
+     */
+    public function publicSubmit(Request $request, NotificationService $notifications): JsonResponse
+    {
+        // Bots fill every field, including the one people never see: pretend it worked, store nothing.
+        if (filled($request->input('website'))) {
+            return response()->json(['data' => ['id' => 0, 'status' => 'pending']], 201);
+        }
+
+        $audience = $request->input('audience');
+        abort_unless(in_array($audience, Testimonial::AUDIENCES, true), 422, 'Please choose whether you are a student or a partner.');
+
+        $rules = $this->portalRules($audience) + [
+            'audience' => ['required', Rule::in(Testimonial::AUDIENCES)],
+            'contact_email' => ['required', 'email', 'max:190'],
+        ];
+        if ($audience === 'agent') {
+            $rules['display_name'] = ['required', 'string', 'min:2', 'max:120'];
+            $rules['photo_path'] = ['nullable', 'string', 'max:255', 'regex:'.self::PHOTO_PATTERN];
+        }
+
+        $data = $request->validate($rules, [
+            'consent_public.accepted' => 'Please confirm that we may show your words and name on the website.',
+            'photo_path.regex' => 'Please upload your photo again.',
+            'photo_path.required' => 'Please add your photo.',
+            'contact_email.required' => 'Please give your email so we can reach you.',
+        ]);
+
+        $email = mb_strtolower(trim($data['contact_email']));
+        abort_if(
+            Testimonial::query()->where('contact_email', $email)->whereIn('status', ['pending', 'approved'])->exists(),
+            422,
+            'We already have a testimonial from this email address. Thank you!',
+        );
+
+        $testimonial = Testimonial::create([
+            'audience' => $audience,
+            'source' => 'public',
+            'contact_email' => $email,
+            'name' => trim($data['display_name']),
+            'headline' => $data['headline'] ?? null,
+            'country' => isset($data['country_code']) ? CountryList::name($data['country_code']) : ($data['country'] ?? null),
+            'country_code' => $data['country_code'] ?? null,
+            'quote' => $data['quote'],
+            'photo_path' => $data['photo_path'] ?? null,
+            'title' => $data['title'] ?? null,
+            'university' => $data['university'] ?? null,
+            'degree' => $data['degree'] ?? null,
+            'program' => $data['program'] ?? null,
+            'intake_year' => $data['intake_year'] ?? null,
+            'services' => $data['services'] ?? null,
+            'found_us' => $data['found_us'] ?? null,
+            'recommend' => $data['recommend'] ?? null,
+            'partner_since' => $data['partner_since'] ?? null,
+            'students_referred' => $data['students_referred'] ?? null,
+            'consent_public' => true,
+            'consent_at' => now(),
+            'status' => 'pending',
+        ]);
+
+        $notifications->pushToRoles(['Admin'], 'testimonial', 'New testimonial to review', mb_strimwidth($data['quote'], 0, 120, '...'), entityType: 'testimonial', entityId: $testimonial->id);
+
+        return response()->json(['data' => $testimonial->only(['id', 'status'])], 201);
+    }
+
     // ── Student / agent portal ─────────────────────────────────────────────
 
     /** The signed-in person's own testimonial (if any) and its status. */
@@ -167,6 +237,7 @@ class TestimonialController extends Controller
 
         $data['consent_public'] = true;
         $data['consent_at'] = now();
+        $data['source'] = 'staff';
         $data['status'] ??= 'approved';
         $data['approved_at'] = $data['status'] === 'approved' ? now() : null;
 

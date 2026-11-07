@@ -194,7 +194,13 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
     })
   }, [groups, projection, rot, size])
 
-  const open = pins.find((p) => p.key === openKey) ?? null
+  // A country picked from search keeps its card open even while the globe is still turning to it.
+  const searched = openKey?.startsWith("c:") ? groups.find((g) => `c:${g.code}` === openKey) : undefined
+  const open: Pin | null =
+    pins.find((p) => p.key === openKey) ??
+    (searched
+      ? { key: openKey as string, x: size / 2, y: size / 2, groups: [searched], items: searched.items, label: `${searched.items.length} ${searched.items.length === 1 ? "testimonial" : "testimonials"} from ${searched.country}` }
+      : null)
   const highlighted = useMemo(() => new Set(groups.map((g) => COUNTRY_BY_ISO2[g.code]?.num).filter(Boolean)), [groups])
 
   // Dragging
