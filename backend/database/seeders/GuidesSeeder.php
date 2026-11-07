@@ -24,7 +24,7 @@ class GuidesSeeder extends Seeder
                 'excerpt' => $g['excerpt'],
                 'body' => $g['body'],
                 'category' => 'CAS Admission Guide',
-                'cover_image_path' => '/images/header-default-v2.webp',
+                'cover_image_path' => '/images/header-default-v3.webp',
                 'status' => 'published',
                 'published_at' => $g['date'],
             ]);

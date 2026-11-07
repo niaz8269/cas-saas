@@ -6,7 +6,7 @@ export interface HeaderImage {
 
 export const HEADER_IMAGES: Record<"default" | "universities" | "programs" | "scholarships" | "cities", HeaderImage> = {
   // Supplied by the site owner (photographer and licence to be confirmed; see docs/CONTENT_MEDIA_AUDIT.md).
-  default: { src: "/images/header-default-v2.webp" },
+  default: { src: "/images/header-default-v3.webp" },
   universities: { src: "/images/header-universities-v2.webp" },
   scholarships: { src: "/images/header-scholarships-v2.webp" },
   cities: { src: "/images/header-cities-v2.webp" },
