@@ -24,13 +24,12 @@ class StaffUserSeeder extends Seeder
      */
     private const STAFF = [
         'admin@cas.moe' => ['CAS Super Admin', 'Super Admin', null],
-        'management@cas.moe' => ['CAS Management', 'Management', null],
         'operations@cas.moe' => ['CAS Operations', 'Admin', null],
         'counselor@cas.moe' => ['Demo Counselor', 'Counselor', 'CNS'],
-        'admissions@cas.moe' => ['Demo Admissions Officer', 'Admissions', 'ADM'],
+        'admissions@cas.moe' => ['Demo Admissions Officer', 'Admin', 'ADM'],
         'finance@cas.moe' => ['Demo Finance Officer', 'Finance', 'FIN'],
         'visa@cas.moe' => ['Demo Visa Officer', 'Visa', 'VIS'],
-        'marketing@cas.moe' => ['Demo Marketer', 'Marketing', 'MKT'],
+        'marketing@cas.moe' => ['Demo Marketer', 'Admin', 'MKT'],
     ];
 
     public function run(): void

@@ -24,9 +24,9 @@ it('files a student message on their timeline and notifies the assigned counselo
 });
 
 it('rings the Counselor and Admissions teams when no counselor is assigned', function () {
-    Role::findOrCreate('Admissions', 'staff');
+    Role::findOrCreate('Admin', 'staff');
     $officer = User::factory()->create();
-    $officer->assignRole('Admissions');
+    $officer->assignRole('Admin');
     actingAsStudentPortal(['assigned_counselor_id' => null]);
 
     $this->postJson('/api/v1/student/messages', ['body' => 'I need help with my documents.'])->assertCreated();

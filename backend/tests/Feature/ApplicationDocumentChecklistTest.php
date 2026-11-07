@@ -47,10 +47,10 @@ it('gives the admin checklist the same required set the applicant saw', function
         ->and($names)->toContain('Recommendation Letter');
 });
 
-it('notifies management when an application is submitted', function () {
-    Role::findOrCreate('Management', 'staff');
+it('notifies admins when an application is submitted', function () {
+    Role::findOrCreate('Admin', 'staff');
     $manager = User::factory()->create();
-    $manager->assignRole('Management');
+    $manager->assignRole('Admin');
 
     [$program, $passport] = programRequiringPassport();
     $student = actingAsStudentPortal();

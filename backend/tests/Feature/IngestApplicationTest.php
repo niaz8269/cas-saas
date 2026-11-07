@@ -98,9 +98,9 @@ function xjmuPayload(): array
 }
 
 it('ingests a full XJMU application straight into Applications for verification', function () {
-    Role::findOrCreate('Admissions', 'staff');
+    Role::findOrCreate('Admin', 'staff');
     $officer = User::factory()->create();
-    $officer->assignRole('Admissions');
+    $officer->assignRole('Admin');
     Country::factory()->create(['name' => 'Pakistan', 'iso2' => 'PK']);
 
     ['source' => $source, 'program' => $program, 'key' => $key] = mbbsSourceWithKey();
