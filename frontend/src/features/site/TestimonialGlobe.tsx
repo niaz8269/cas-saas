@@ -1,4 +1,4 @@
-import { geoCentroid, geoDistance, geoGraticule10, geoOrthographic, geoPath, geoArea } from "d3-geo"
+import { geoCentroid, geoDistance, geoOrthographic, geoPath, geoArea } from "d3-geo"
 import { Minus, Plus, RotateCcw, X } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { feature } from "topojson-client"
@@ -8,6 +8,7 @@ import type { Topology } from "topojson-specification"
 import type { SiteTestimonial } from "@/features/site/api"
 import { COUNTRY_BY_ISO2 } from "@/features/site/countryList"
 import TestimonialCard, { Avatar } from "@/features/site/TestimonialCard"
+import { buildEarthMap, drawEarth, loadEarthTexture, type EarthMap, type EarthTexture } from "@/features/site/earthRenderer"
 import { SMALL_COUNTRY_CENTRES } from "@/features/site/testimonialUtils"
 import { cn } from "@/lib/utils"
 
@@ -55,6 +56,10 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
   const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null)
   const reduceMotion = useRef(typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
   const centres = useRef<Record<string, Lonlat>>({})
+  const canvas = useRef<HTMLCanvasElement>(null)
+  const [tex, setTex] = useState<EarthTexture | null>(null)
+  const mapCache = useRef<{ key: string; map: EarthMap } | null>(null)
+  const frame = useRef<{ res: number; image: ImageData } | null>(null)
 
   // Load the map lazily, so the home page does not pay for it until this section is on screen.
   useEffect(() => {
@@ -75,6 +80,15 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
 
     return () => { alive = false }
   }, [])
+
+  // The photograph of the Earth: a lighter file on phones, a sharper one on larger screens.
+  const bigTexture = size >= 500
+  useEffect(() => {
+    let alive = true
+    loadEarthTexture(bigTexture ? "/images/earth-4k.webp" : "/images/earth-2k.webp").then((t) => { if (alive && t) setTex(t) })
+
+    return () => { alive = false }
+  }, [bigTexture])
 
   // Follow the container's width.
   useEffect(() => {
@@ -134,7 +148,22 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
     [radius, size, rot],
   )
   const path = useMemo(() => geoPath(projection), [projection])
-  const graticule = useMemo(() => geoGraticule10(), [])
+
+  // Paint the Earth. Internal resolution is capped so it stays smooth on phones.
+  const res = Math.round(Math.min(size * (typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1), 560))
+  useEffect(() => {
+    const el = canvas.current
+    if (!el || !tex) return
+    const ctx = el.getContext("2d")
+    if (!ctx) return
+    const radiusPx = radius * (res / size)
+    const lat0 = (-rot[1] * Math.PI) / 180
+    const key = `${res}|${radiusPx.toFixed(1)}|${lat0.toFixed(3)}|${tex.h}`
+    if (mapCache.current?.key !== key) mapCache.current = { key, map: buildEarthMap(res, radiusPx, lat0, tex.h) }
+    if (frame.current?.res !== res) frame.current = { res, image: ctx.createImageData(res, res) }
+    drawEarth(mapCache.current.map, tex, -rot[0], frame.current.image)
+    ctx.putImageData(frame.current.image, 0, 0)
+  }, [tex, rot, radius, res, size])
 
   const flyTo = useCallback((code: string) => {
     const c = centres.current[code]
@@ -219,7 +248,9 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
     d.x = e.clientX
     d.y = e.clientY
     const k = 0.35 / zoom
-    setRot((r) => [r[0] + dx * k, Math.max(-85, Math.min(85, r[1] - dy * k))])
+    // On touch screens a vertical swipe scrolls the page; only sideways swipes turn the globe.
+    const tilt = e.pointerType === "touch" ? 0 : dy * k
+    setRot((r) => [r[0] + dx * k, Math.max(-85, Math.min(85, r[1] - tilt))])
   }
   const onPointerUp = () => {
     if (drag.current && !drag.current.moved) setOpenKey(null)
@@ -268,35 +299,46 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
   return (
     <div
       ref={box}
-      className="relative mx-auto w-full max-w-[640px] touch-none select-none"
-      style={{ height: size }}
+      className="relative mx-auto w-full max-w-[640px] select-none"
+      style={{ height: size, touchAction: "pan-y" }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
+      {/* Soft blue glow around the planet */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute rounded-full"
+        style={{
+          left: size / 2 - radius * 1.04, top: size / 2 - radius * 1.04, width: radius * 2.08, height: radius * 2.08,
+          background: "radial-gradient(circle, rgba(0,0,0,0) 66%, rgba(96,165,250,0.22) 80%, rgba(96,165,250,0) 100%)",
+        }}
+      />
+
+      {/* The photograph of the Earth, lit from the upper left */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-full" aria-hidden="true">
+        <canvas ref={canvas} width={res} height={res} style={{ width: size, height: size }} />
+      </div>
+
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Globe showing where our students come from" className="absolute inset-0 cursor-grab active:cursor-grabbing">
         <defs>
           <clipPath id="globe-clip"><circle cx={size / 2} cy={size / 2} r={size / 2} /></clipPath>
           <radialGradient id="globe-ocean" cx="35%" cy="30%" r="80%">
-            <stop offset="0%" stopColor="#E8EFFB" />
-            <stop offset="100%" stopColor="#C4D5F0" />
+            <stop offset="0%" stopColor="#2F6BC2" />
+            <stop offset="100%" stopColor="#0B2A63" />
           </radialGradient>
         </defs>
         <g clipPath="url(#globe-clip)">
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="url(#globe-ocean)" stroke="#AFC3E8" strokeWidth={1} />
-        {world && (
-          <>
-            <path d={path(graticule) ?? undefined} fill="none" stroke="#B7C7E6" strokeOpacity={0.45} strokeWidth={0.5} />
-            <path d={path(world.land) ?? undefined} fill="#FFFFFF" stroke="#AFC3E8" strokeWidth={0.5} />
-            {world.countries.filter((f) => highlighted.has(String(f.id).padStart(3, "0"))).map((f) => {
-              const code = Object.values(COUNTRY_BY_ISO2).find((c) => c.num === String(f.id).padStart(3, "0"))?.iso2
-              const isSel = code === selectedCode
+          {/* Until the photograph has loaded: a simple blue ball with green land */}
+          {!tex && <circle cx={size / 2} cy={size / 2} r={radius} fill="url(#globe-ocean)" />}
+          {!tex && world && <path d={path(world.land) ?? undefined} fill="#5E9A58" stroke="#3E7A3A" strokeWidth={0.4} />}
+          {world && world.countries.filter((f) => highlighted.has(String(f.id).padStart(3, "0"))).map((f) => {
+            const code = Object.values(COUNTRY_BY_ISO2).find((c) => c.num === String(f.id).padStart(3, "0"))?.iso2
+            const isSel = code === selectedCode
 
-              return <path key={String(f.id)} d={path(f) ?? undefined} fill={isSel ? "#14357C" : "#7C9DDD"} fillOpacity={isSel ? 0.95 : 0.8} stroke="#FFFFFF" strokeWidth={0.6} />
-            })}
-          </>
-        )}
+            return <path key={String(f.id)} d={path(f) ?? undefined} fill={isSel ? "#FBBF24" : "#FFFFFF"} fillOpacity={isSel ? 0.4 : 0.2} stroke={isSel ? "#FFFFFF" : "#FDE68A"} strokeOpacity={isSel ? 1 : 0.9} strokeWidth={isSel ? 1.8 : 1.1} />
+          })}
         </g>
       </svg>
 
@@ -335,6 +377,8 @@ export default function TestimonialGlobe({ items, focus }: { items: SiteTestimon
           </div>
         </div>
       )}
+
+      <p className="pointer-events-none absolute bottom-0 left-0 text-[10px] text-slate-400">Earth image: NASA Visible Earth</p>
 
       <div className="absolute right-0 bottom-0 flex flex-col overflow-hidden rounded-lg border bg-card shadow-sm" data-popup>
         <button type="button" aria-label="Zoom in" onClick={() => zoomBy(1.3)} className="p-2 hover:bg-muted"><Plus className="size-4" /></button>
