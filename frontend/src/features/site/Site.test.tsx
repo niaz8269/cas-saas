@@ -383,3 +383,15 @@ it("shows city cards under the hero that open the city page", async () => {
   expect(screen.getByRole("link", { name: /See more cities/ })).toHaveAttribute("href", "/site/cities")
   expect(screen.getByText("Why apply with CAS?")).toBeInTheDocument()
 })
+
+it("lists what CAS offers on the Our Services page, with what each service includes and a clear way to start", async () => {
+  renderWithProviders(<SiteServices />)
+
+  for (const name of ["Admission service", "Scholarship assistance", "MBBS and medical programs", "Visa assistance", "Airport pickup", "On-campus support", "Chinese language foundation", "Partner program for agents"]) {
+    expect(await screen.findByRole("heading", { name })).toBeInTheDocument()
+  }
+  expect(screen.getByText("Admission letter and JW202 guidance")).toBeInTheDocument()
+  expect(screen.getByRole("heading", { name: "How it works" })).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /See how our fees work/ })).toHaveAttribute("href", "/site/pricing")
+  expect(screen.getByRole("link", { name: /MBBS in China/ })).toHaveAttribute("href", "/site/mbbs-in-china")
+})
