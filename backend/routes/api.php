@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ApiSourceController;
 use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\AutomationRuleController;
 use App\Http\Controllers\Api\V1\BankAccountController;
 use App\Http\Controllers\Api\V1\BranchController;
@@ -62,6 +63,12 @@ Route::prefix('v1')->group(function () {
     // Public
     Route::post('auth/login', [AuthController::class, 'login'])
         ->middleware('throttle:login');
+
+    // Forgot / reset password for staff, agent and student accounts.
+    Route::post('auth/{audience}/forgot-password', [PasswordResetController::class, 'forgot'])
+        ->whereIn('audience', ['staff', 'agent', 'student'])->middleware('throttle:login');
+    Route::post('auth/{audience}/reset-password', [PasswordResetController::class, 'reset'])
+        ->whereIn('audience', ['staff', 'agent', 'student'])->middleware('throttle:login');
 
     // Lead ingestion (per-source API keys; idempotent; rate-limited per key)
     Route::post('ingest/leads', LeadIngestController::class)
