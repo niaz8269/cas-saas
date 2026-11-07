@@ -71,13 +71,14 @@ it("registers a new student, stores the token, and sends the payload", async () 
   await user.type(screen.getByLabelText("Phone"), "+92 300 1234567")
   await user.type(screen.getByLabelText("Password"), "secret1234")
   await user.type(screen.getByLabelText("Confirm password"), "secret1234")
+  await user.click(screen.getByRole("checkbox"))
   await user.click(screen.getByRole("button", { name: "Create account" }))
 
   await waitFor(() => expect(usePortalAuthStore.getState().token).toBe("reg-token"))
   expect(usePortalAuthStore.getState().kind).toBe("student")
   const call = fetchMock.mock.calls.find(([u]) => u === "/api/v1/student/auth/register")!
   const body = JSON.parse((call[1] as RequestInit).body as string)
-  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", email: "ali@x.com", phone: "+92 300 1234567", password: "secret1234", password_confirmation: "secret1234" })
+  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", email: "ali@x.com", phone: "+92 300 1234567", password: "secret1234", password_confirmation: "secret1234", accept_terms: true })
 })
 
 it("submits an agent partner application and shows the pending screen", async () => {
@@ -106,6 +107,7 @@ it("submits an agent partner application and shows the pending screen", async ()
   await user.type(screen.getByLabelText("Business address"), "12 Mall Road")
   await user.type(screen.getByLabelText("Password"), "secret1234")
   await user.type(screen.getByLabelText("Confirm password"), "secret1234")
+  await user.click(screen.getByRole("checkbox"))
   await user.click(screen.getByRole("button", { name: "Submit application" }))
 
   expect(await screen.findByText("Application received")).toBeInTheDocument()
@@ -330,4 +332,25 @@ it("offers the fee voucher for an invoice that still has a balance", async () =>
 
   await waitFor(() => expect(openSpy).toHaveBeenCalledWith("blob:mock-voucher", "_blank", "noopener"))
   expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/student/invoices/9/voucher"))).toBe(true)
+})
+
+it("won't submit the sign-up form until the terms are accepted", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn()
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<PortalRegister />, { route: "/portal/register" })
+
+  await user.type(screen.getByLabelText("First name"), "Ali")
+  await user.type(screen.getByLabelText("Last name"), "Raza")
+  await user.type(screen.getByLabelText("Email"), "ali@x.com")
+  await user.type(screen.getByLabelText("Phone"), "+92 300 1234567")
+  await user.type(screen.getByLabelText("Password"), "secret1234")
+  await user.type(screen.getByLabelText("Confirm password"), "secret1234")
+  await user.click(screen.getByRole("button", { name: "Create account" }))
+
+  expect(await screen.findByText("Please accept the Terms & Conditions and Privacy Policy")).toBeInTheDocument()
+  expect(fetchMock).not.toHaveBeenCalled()
+  expect(screen.getByRole("link", { name: "Terms & Conditions" })).toHaveAttribute("href", "/site/terms")
+  expect(screen.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", "/site/privacy")
 })

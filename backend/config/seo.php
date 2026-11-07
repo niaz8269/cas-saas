@@ -43,6 +43,8 @@ return [
         'site/partner' => ['Partner with CAS: Agency & Recruitment Cooperation', 'Refer students to {universities} Chinese universities and colleges through an authorized agent, with a partner portal and clear commissions.', 0.5, 'monthly'],
         'site/faq' => ['FAQ: Studying in China with CAS', 'Answers about choosing a university, scholarships, applying, student visas, arrival support and fees.', 0.6, 'monthly'],
         'site/study-plan' => ['Get a Free Study Plan for China', 'Tell us your goal and budget and a CAS advisor sends a personalised shortlist of universities, programs and scholarships.', 0.5, 'monthly'],
+        'site/terms' => ['Terms & Conditions', 'The terms for using the CAS website and services.', 0.1, 'yearly'],
+        'site/privacy' => ['Privacy Policy', 'How CAS collects, uses, shares and protects personal information.', 0.1, 'yearly'],
         'site/photo-credits' => ['Photo Credits', 'Authors and licences of the photos used on the CAS website.', 0.1, 'yearly'],
     ],
 ];

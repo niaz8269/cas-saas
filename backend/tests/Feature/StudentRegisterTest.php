@@ -15,8 +15,23 @@ function registerPayload(array $overrides = []): array
         'phone' => '+92 300 1234567',
         'password' => 'secret1234',
         'password_confirmation' => 'secret1234',
+        'accept_terms' => true,
     ], $overrides);
 }
+
+it('will not create an account unless the terms are accepted, and records the acceptance when they are', function () {
+    $this->postJson('/api/v1/student/auth/register', registerPayload(['accept_terms' => false]))
+        ->assertStatus(422)->assertJsonValidationErrors(['accept_terms']);
+    $this->postJson('/api/v1/student/auth/register', array_diff_key(registerPayload(), ['accept_terms' => 1]))
+        ->assertStatus(422)->assertJsonValidationErrors(['accept_terms']);
+    expect(Student::count())->toBe(0);
+
+    $this->postJson('/api/v1/student/auth/register', registerPayload())->assertCreated();
+
+    $student = Student::firstOrFail();
+    expect($student->terms_accepted_at)->not->toBeNull()
+        ->and($student->terms_version)->toBe(config('legal.terms_version'));
+});
 
 it('registers a new student, activates the account and returns a token', function () {
     $this->postJson('/api/v1/student/auth/register', registerPayload())

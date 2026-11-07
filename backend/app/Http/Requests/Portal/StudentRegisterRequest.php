@@ -35,6 +35,7 @@ class StudentRegisterRequest extends FormRequest
             'password' => ['required', 'string', 'confirmed', Password::min(8)],
             'phone' => ['required', 'string', 'max:30'],
             'country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
+            'accept_terms' => ['accepted'],
             'device_name' => ['sometimes', 'string', 'max:100'],
         ];
     }
@@ -45,6 +46,7 @@ class StudentRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'accept_terms.accepted' => 'You must accept the Terms & Conditions and Privacy Policy to create an account.',
             'email.unique' => 'An account with this email already exists. Try signing in, or contact your counselor to activate your account.',
         ];
     }

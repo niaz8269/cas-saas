@@ -63,6 +63,8 @@ const SiteCity = lazy(() => import("@/features/site/SiteCity"))
 const SiteMbbs = lazy(() => import("@/features/site/SiteMbbs"))
 const SiteCsc = lazy(() => import("@/features/site/SiteCsc"))
 import SiteNotFound from "@/features/site/SiteNotFound"
+const SitePrivacy = lazy(() => import("@/features/site/SitePrivacy"))
+const SiteTerms = lazy(() => import("@/features/site/SiteTerms"))
 const SitePhotoCredits = lazy(() => import("@/features/site/SitePhotoCredits"))
 const SiteContact = lazy(() => import("@/features/site/SiteContact"))
 const SiteFAQ = lazy(() => import("@/features/site/SiteFAQ"))
@@ -131,6 +133,8 @@ const router = createBrowserRouter([
       { path: "/site/mbbs-in-china", element: <SiteMbbs /> },
       { path: "/site/csc-scholarship", element: <SiteCsc /> },
       { path: "/site/photo-credits", element: <SitePhotoCredits /> },
+      { path: "/site/terms", element: <SiteTerms /> },
+      { path: "/site/privacy", element: <SitePrivacy /> },
       { path: "/site/*", element: <SiteNotFound /> },
     ],
   },

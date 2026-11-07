@@ -36,7 +36,11 @@ class AgentAuthController extends Controller
             'status' => 'pending',
         ]);
         // password is guarded (not fillable); the cast hashes it on save.
-        $agent->forceFill(['password' => $data['password']])->save();
+        $agent->forceFill([
+            'password' => $data['password'],
+            'terms_accepted_at' => now(),
+            'terms_version' => config('legal.terms_version'),
+        ])->save();
 
         return response()->json([
             'message' => 'Your partner application has been received. Our team will review it and email you once it is approved.',

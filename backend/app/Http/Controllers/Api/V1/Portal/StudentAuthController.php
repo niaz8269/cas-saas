@@ -41,6 +41,8 @@ class StudentAuthController extends Controller
         $student->forceFill([
             'password' => $data['password'],
             'last_login_at' => now(),
+            'terms_accepted_at' => now(),
+            'terms_version' => config('legal.terms_version'),
         ])->save();
 
         $this->sendVerification($student);
