@@ -656,6 +656,7 @@ export interface TestimonialPayload {
   display_name?: string
   photo_path?: string
   country?: string
+  country_code?: string
   headline?: string
   university?: string
   degree?: string

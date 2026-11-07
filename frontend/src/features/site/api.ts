@@ -303,6 +303,7 @@ export interface SiteTestimonial {
   name: string
   headline: string | null
   country: string | null
+  country_code: string | null
   quote: string
   photo_url: string | null
   title: string | null

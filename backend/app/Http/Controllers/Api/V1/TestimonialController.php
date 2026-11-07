@@ -7,6 +7,7 @@ use App\Models\Agent;
 use App\Models\Testimonial;
 use App\Services\Comms\NotificationService;
 use App\Services\Media\ImageService;
+use App\Support\CountryList;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,7 +25,7 @@ use Illuminate\Validation\Rule;
 class TestimonialController extends Controller
 {
     private const PUBLIC_FIELDS = [
-        'id', 'audience', 'name', 'headline', 'country', 'quote', 'photo_path', 'title',
+        'id', 'audience', 'name', 'headline', 'country', 'country_code', 'quote', 'photo_path', 'title',
         'university', 'degree', 'program', 'intake_year', 'services', 'recommend',
         'partner_since', 'students_referred', 'student_id', 'agent_id',
     ];
@@ -41,7 +42,7 @@ class TestimonialController extends Controller
         $base = Testimonial::query()->public()
             ->when(in_array($audience, Testimonial::AUDIENCES, true), fn ($q) => $q->where('audience', $audience));
 
-        $rows = (clone $base)->orderBy('sort_order')->orderByDesc('approved_at')->limit(12)->get(self::PUBLIC_FIELDS)
+        $rows = (clone $base)->orderBy('sort_order')->orderByDesc('approved_at')->limit(150)->get(self::PUBLIC_FIELDS)
             ->map(function (Testimonial $t) use ($images) {
                 // "Verified" = written from the person's own CAS account, not typed in by staff.
                 $row = $t->toArray();
@@ -108,7 +109,8 @@ class TestimonialController extends Controller
             'agent_id' => $audience === 'agent' ? $account->id : null,
             'name' => $audience === 'agent' ? (string) ($account->name ?? 'Partner') : trim($data['display_name']),
             'headline' => $data['headline'] ?? null,
-            'country' => $data['country'] ?? null,
+            'country' => isset($data['country_code']) ? CountryList::name($data['country_code']) : ($data['country'] ?? null),
+            'country_code' => $data['country_code'] ?? null,
             'quote' => $data['quote'],
             'photo_path' => $data['photo_path'] ?? null,
             'title' => $data['title'] ?? null,
@@ -218,7 +220,7 @@ class TestimonialController extends Controller
                 // A student is shown with a real face and what they studied, so these are all required.
                 'display_name' => ['required', 'string', 'min:2', 'max:120'],
                 'photo_path' => ['required', 'string', 'max:255', 'regex:'.self::PHOTO_PATTERN],
-                'country' => ['required', 'string', 'max:80'],
+                'country_code' => ['required', Rule::in(array_keys(CountryList::NAMES))],
                 'university' => ['required', 'string', 'max:160'],
                 'degree' => ['required', Rule::in(Testimonial::DEGREES)],
                 'program' => ['required', 'string', 'max:160'],

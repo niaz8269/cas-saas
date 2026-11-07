@@ -38,7 +38,7 @@ function studentPayload(array $over = []): array
 {
     return array_merge([
         'display_name' => 'Sara Khan', 'photo_path' => '/uploads/testimonials/'.Str::uuid().'.webp',
-        'country' => 'Pakistan', 'university' => 'Jilin University', 'degree' => 'bachelor', 'program' => 'MBBS',
+        'country_code' => 'PK', 'university' => 'Jilin University', 'degree' => 'bachelor', 'program' => 'MBBS',
         'quote' => 'The team answered every question quickly and my visa came on time.',
         'consent_public' => true,
     ], $over);
@@ -57,6 +57,7 @@ it('lets a student submit one testimonial with the details we require, held for 
     expect($t->student_id)->toBe($student->id)
         ->and($t->name)->toBe('Sara Khan')
         ->and($t->country)->toBe('Pakistan')
+        ->and($t->country_code)->toBe('PK')
         ->and($t->university)->toBe('Jilin University')
         ->and($t->degree)->toBe('bachelor')
         ->and($t->program)->toBe('MBBS')
@@ -78,7 +79,7 @@ it('requires a student to give name, photo, nationality, university, degree, maj
 
     $this->postJson('/api/v1/student/testimonial', ['consent_public' => true])
         ->assertStatus(422)
-        ->assertJsonValidationErrors(['display_name', 'photo_path', 'country', 'university', 'degree', 'program', 'quote']);
+        ->assertJsonValidationErrors(['display_name', 'photo_path', 'country_code', 'university', 'degree', 'program', 'quote']);
 
     $this->postJson('/api/v1/student/testimonial', studentPayload(['consent_public' => false]))->assertStatus(422)->assertJsonValidationErrors(['consent_public']);
     $this->postJson('/api/v1/student/testimonial', studentPayload(['quote' => 'Good']))->assertStatus(422)->assertJsonValidationErrors(['quote']);
@@ -137,7 +138,7 @@ it('shows the public details and the photo, never the private fields', function 
     $row = $this->getJson('/api/v1/public/testimonials?audience=student')->assertOk()->json('data.0');
 
     expect($row)->toMatchArray([
-        'name' => 'Sara Khan', 'country' => 'Pakistan', 'university' => 'Jilin University', 'degree' => 'bachelor',
+        'name' => 'Sara Khan', 'country' => 'Pakistan', 'country_code' => 'PK', 'university' => 'Jilin University', 'degree' => 'bachelor',
         'program' => 'MBBS', 'verified' => true,
     ])->and($row['photo_url'])->toContain('testimonials/')
         ->and($row)->not->toHaveKeys(['found_us', 'student_id', 'agent_id', 'status', 'photo_path', 'rating']);
@@ -197,4 +198,14 @@ it('keeps testimonials management away from staff without the content permission
 
     $this->getJson('/api/v1/testimonials')->assertForbidden();
     $this->postJson('/api/v1/testimonials', [])->assertForbidden();
+});
+
+it('rejects a nationality that is not a real country code and fills the country name from the code', function () {
+    actingAsStudentPortal();
+
+    $this->postJson('/api/v1/student/testimonial', studentPayload(['country_code' => 'ZZ']))->assertStatus(422)->assertJsonValidationErrors(['country_code']);
+    $this->postJson('/api/v1/student/testimonial', studentPayload(['country_code' => 'Pakistan']))->assertStatus(422);
+    $this->postJson('/api/v1/student/testimonial', studentPayload(['country_code' => 'NG']))->assertCreated();
+
+    expect(Testimonial::sole()->country)->toBe('Nigeria');
 });

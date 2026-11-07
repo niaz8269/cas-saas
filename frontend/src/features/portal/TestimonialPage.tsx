@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { getMyTestimonial, submitTestimonial, uploadTestimonialPhoto, type TestimonialPayload } from "@/features/portal/api"
 import { PageTitle, PortalCard } from "@/features/portal/components"
+import { COUNTRIES } from "@/features/site/countryList"
 import { DEGREE_LABELS, SERVICE_LABELS } from "@/features/site/testimonialLabels"
 import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -19,6 +20,9 @@ const PARTNER_STRENGTHS = ["commission", "communication", "portal", "speed", "su
 const FOUND_US: [string, string][] = [["friend", "A friend or family"], ["agent", "An agent"], ["social", "Social media"], ["search", "Online search"], ["event", "An event"], ["other", "Other"]]
 const REFERRED = ["1-10", "11-50", "51-200", "200+"]
 const DEGREES = ["bachelor", "master", "phd", "diploma", "non_degree"]
+
+// Built once: 250 options should not be re-rendered on every keystroke.
+const COUNTRY_OPTIONS = COUNTRIES.map((c) => <option key={c.iso2} value={c.iso2}>{c.name}</option>)
 
 const field = "h-10 w-full rounded-md border bg-background px-3 text-sm"
 
@@ -119,6 +123,7 @@ export default function TestimonialPage({ kind }: { kind: PortalKind }) {
   const [program, setProgram] = useState("")
   const [intakeYear, setIntakeYear] = useState("")
   const [country, setCountry] = useState("")
+  const [countryCode, setCountryCode] = useState("")
   const [headline, setHeadline] = useState("")
   const [partnerSince, setPartnerSince] = useState("")
   const [referred, setReferred] = useState("")
@@ -135,7 +140,7 @@ export default function TestimonialPage({ kind }: { kind: PortalKind }) {
       }
       if (isStudent) {
         Object.assign(payload, {
-          display_name: displayName.trim(), photo_path: photoPath || undefined, university: university.trim() || undefined,
+          display_name: displayName.trim(), country_code: countryCode || undefined, photo_path: photoPath || undefined, university: university.trim() || undefined,
           degree: degree || undefined, program: program.trim() || undefined,
           intake_year: intakeYear ? Number(intakeYear) : undefined, found_us: foundUs || undefined,
         })
@@ -198,8 +203,12 @@ export default function TestimonialPage({ kind }: { kind: PortalKind }) {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="tm-country">{t("testimonialPage.nationality", { defaultValue: "Nationality" })}<Req /></Label>
-                      <Input id="tm-country" value={country} maxLength={80} onChange={(e) => setCountry(e.target.value)} placeholder="Pakistani" aria-invalid={err("country") ? true : undefined} />
-                      {err("country") && <p role="alert" className="text-sm text-destructive">{err("country")}</p>}
+                      <select id="tm-country" className={field} value={countryCode} onChange={(e) => setCountryCode(e.target.value)} aria-invalid={err("country_code") ? true : undefined}>
+                        <option value="">—</option>
+                        {COUNTRY_OPTIONS}
+                      </select>
+                      {err("country_code") && <p role="alert" className="text-sm text-destructive">{err("country_code")}</p>}
+                      <p className="text-xs text-muted-foreground">{t("testimonialPage.nationalityHint", { defaultValue: "You appear on the world map at this country." })}</p>
                     </div>
                   </div>
                 </Section>

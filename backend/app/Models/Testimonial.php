@@ -30,7 +30,7 @@ class Testimonial extends Model
     public const REFERRED = ['1-10', '11-50', '51-200', '200+'];
 
     protected $fillable = [
-        'audience', 'student_id', 'agent_id', 'name', 'headline', 'country', 'quote',
+        'audience', 'student_id', 'agent_id', 'name', 'headline', 'country', 'country_code', 'quote',
         'photo_path', 'title', 'university', 'degree', 'program', 'intake_year', 'services', 'found_us',
         'recommend', 'partner_since', 'students_referred',
         'consent_public', 'consent_at', 'status', 'sort_order', 'approved_at',

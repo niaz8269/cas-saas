@@ -51,7 +51,7 @@ it("uploads the photo, sends everything and then shows a thank-you", async () =>
   await user.upload(await screen.findByLabelText("Upload photo", { selector: "input" }).catch(() => document.getElementById("tm-photo") as HTMLInputElement), new File(["x"], "me.jpg", { type: "image/jpeg" }))
   expect(await screen.findByRole("img", { name: "Your photo" })).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText(/Nationality/), "Pakistani")
+  await user.selectOptions(screen.getByLabelText(/Nationality/), "PK")
   await user.type(screen.getByLabelText(/University you are enrolled in/), "Jilin University")
   await user.selectOptions(screen.getByLabelText(/Degree/), "bachelor")
   await user.type(screen.getByLabelText(/Major/), "MBBS")
@@ -64,7 +64,7 @@ it("uploads the photo, sends everything and then shows a thank-you", async () =>
   const upload = fetchMock.mock.calls.find(([u]) => String(u).endsWith("/testimonial/photo"))!
   expect(upload[1].body).toBeInstanceOf(FormData)
   expect(body).toMatchObject({
-    display_name: "Sara Khan", country: "Pakistani", university: "Jilin University", degree: "bachelor", program: "MBBS",
+    display_name: "Sara Khan", country_code: "PK", university: "Jilin University", degree: "bachelor", program: "MBBS",
     photo_path: "/uploads/testimonials/11111111-1111-1111-1111-111111111111.webp", services: ["admission"], consent_public: true,
   })
   expect(body).not.toHaveProperty("rating")
