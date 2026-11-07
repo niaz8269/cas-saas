@@ -1,4 +1,4 @@
-import { BarChart3, Eye, EyeOff, FileCheck2, GraduationCap, Handshake, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
+import { BarChart3, Building2, ScrollText, Settings2, Eye, EyeOff, FileCheck2, GraduationCap, Handshake, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
 import { forwardRef, useState, type ComponentProps, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -14,7 +14,7 @@ const PANEL_PHOTO = "/images/hero-beijing-800-v2.webp"
  * Shared frame for every sign-in / register screen: a calm navy brand panel on
  * large screens and a clean centred card everywhere. Only the form changes.
  */
-export type AuthAudience = "staff" | "student" | "agent"
+export type AuthAudience = "staff" | "admin" | "student" | "agent"
 
 export function AuthShell({
   title,
@@ -50,6 +50,14 @@ export function AuthShell({
         { icon: Users, text: t("authShell.agent.p1", { defaultValue: "Submit and follow every student you refer" }) },
         { icon: Wallet, text: t("authShell.agent.p2", { defaultValue: "Clear commission statements, always up to date" }) },
         { icon: Handshake, text: t("authShell.agent.p3", { defaultValue: "A dedicated CAS team behind each application" }) },
+      ],
+    },
+    admin: {
+      headline: t("authShell.admin.headline", { defaultValue: "Full control of the CAS platform." }),
+      points: [
+        { icon: Settings2, text: t("authShell.admin.p1", { defaultValue: "Manage users, roles and access for every team" }) },
+        { icon: Building2, text: t("authShell.admin.p2", { defaultValue: "Maintain universities, programs, fees and content" }) },
+        { icon: ScrollText, text: t("authShell.admin.p3", { defaultValue: "Audit trail and reports across the whole business" }) },
       ],
     },
     staff: {
