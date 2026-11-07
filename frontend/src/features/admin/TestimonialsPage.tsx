@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Check, Plus, Trash2, X } from "lucide-react"
+import { BadgeCheck, Check, Plus, Trash2, X } from "lucide-react"
 import { useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -71,13 +71,23 @@ export default function TestimonialsPage() {
           {rows.map((r) => (
             <li key={r.id} className="rounded-xl border bg-card p-4 shadow-sm">
               <div className="flex flex-wrap items-center gap-2">
+                {r.photo_path && <img src={r.photo_path.startsWith("/") ? r.photo_path : `/${r.photo_path}`} alt="" className="size-8 rounded-full object-cover" />}
                 <span className="text-sm font-semibold">{r.name}</span>
                 <Badge variant="secondary" className="capitalize">{r.audience}</Badge>
                 <Badge className={cn("capitalize", BADGE[r.status])}>{r.status}</Badge>
                 {!r.consent_public && <Badge className="bg-cas-red-50 text-destructive">No consent</Badge>}
-                <span className="text-xs text-muted-foreground">{[r.headline, r.country].filter(Boolean).join(" · ")}</span>
+                {(r.student_id || r.agent_id) && <span className="inline-flex items-center gap-0.5 text-xs text-success"><BadgeCheck className="size-3.5" aria-hidden="true" /> From their account</span>}
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">“{r.quote}”</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {[r.headline, r.degree, r.program, r.university, r.intake_year ? `Intake ${r.intake_year}` : null, r.country, r.partner_since ? `Partner since ${r.partner_since}` : null, r.students_referred ? `${r.students_referred} students` : null].filter(Boolean).join(" · ")}
+              </p>
+              {r.title && <p className="mt-2 text-sm font-semibold">{r.title}</p>}
+              <p className={r.title ? "mt-1 text-sm text-muted-foreground" : "mt-2 text-sm text-muted-foreground"}>“{r.quote}”</p>
+              {(r.services?.length || r.recommend !== null || r.found_us) ? (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {[r.services?.length ? `Used: ${r.services.join(", ")}` : null, r.recommend === null ? null : r.recommend ? "Would recommend" : "Not sure about recommending", r.found_us ? `Found us via: ${r.found_us}` : null].filter(Boolean).join(" · ")}
+                </p>
+              ) : null}
               <div className="mt-3 flex flex-wrap gap-2">
                 {r.status !== "approved" && r.consent_public && (
                   <Button size="sm" onClick={() => setState.mutate({ id: r.id, to: "approved" })} disabled={setState.isPending}><Check className="size-4" /> Publish</Button>
@@ -104,10 +114,11 @@ function AddForm({ onDone }: { onDone: () => void }) {
   const [headline, setHeadline] = useState("")
   const [country, setCountry] = useState("")
   const [quote, setQuote] = useState("")
+  const [title, setTitle] = useState("")
   const [consent, setConsent] = useState(false)
 
   const save = useMutation({
-    mutationFn: () => createTestimonial({ audience, name: name.trim(), headline: headline.trim() || undefined, country: country.trim() || undefined, quote: quote.trim(), consent_public: consent }),
+    mutationFn: () => createTestimonial({ audience, name: name.trim(), headline: headline.trim() || undefined, country: country.trim() || undefined, quote: quote.trim(), title: title.trim() || undefined, consent_public: consent }),
     onSuccess: onDone,
   })
   const err = save.error instanceof ApiError ? save.error : null
@@ -134,6 +145,12 @@ function AddForm({ onDone }: { onDone: () => void }) {
         <div className="space-y-1.5">
           <Label htmlFor="tm-country">Country</Label>
           <Input id="tm-country" value={country} onChange={(e) => setCountry(e.target.value)} />
+        </div>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-1.5 sm:col-span-2">
+          <Label htmlFor="tm-title">Headline</Label>
+          <Input id="tm-title" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
       </div>
       <div className="space-y-1.5">

@@ -171,6 +171,7 @@ Route::prefix('v1')->group(function () {
             Route::get('auth/me', [StudentAuthController::class, 'me']);
             Route::get('testimonial', [TestimonialController::class, 'mine']);
             Route::post('testimonial', [TestimonialController::class, 'submit'])->middleware('throttle:10,1');
+            Route::post('testimonial/photo', [TestimonialController::class, 'uploadPhoto'])->middleware('throttle:10,1');
             Route::post('auth/verification/resend', [StudentAuthController::class, 'resendVerification'])
                 ->middleware('throttle:6,1');
             // Application wizard — browsing (static segments precede any

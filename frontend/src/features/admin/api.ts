@@ -340,6 +340,19 @@ export interface TestimonialRow {
   country: string | null
   quote: string
   consent_public: boolean
+  photo_path: string | null
+  title: string | null
+  university: string | null
+  degree: string | null
+  program: string | null
+  intake_year: number | null
+  services: string[] | null
+  found_us: string | null
+  recommend: boolean | null
+  partner_since: string | null
+  students_referred: string | null
+  student_id: number | null
+  agent_id: number | null
   status: "pending" | "approved" | "rejected"
   sort_order: number
   created_at: string | null
@@ -354,7 +367,7 @@ export const listTestimonials = (params: { status?: string; audience?: string; p
   return api<Paginated<TestimonialRow>>(`/testimonials?${qs.toString()}`)
 }
 
-export const createTestimonial = (payload: { audience: string; name: string; headline?: string; country?: string; quote: string; consent_public: boolean }) =>
+export const createTestimonial = (payload: { audience: string; name: string; headline?: string; country?: string; quote: string; title?: string; university?: string; degree?: string; program?: string; consent_public: boolean }) =>
   api<{ data: TestimonialRow }>("/testimonials", { method: "POST", body: JSON.stringify(payload) })
 
 export const updateTestimonial = (id: number, payload: Partial<Pick<TestimonialRow, "status" | "quote" | "name" | "headline" | "country" | "sort_order">>) =>
