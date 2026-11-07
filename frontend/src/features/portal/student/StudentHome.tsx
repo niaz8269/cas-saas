@@ -88,6 +88,11 @@ export default function StudentHome() {
           </PortalCard>
         </Link>
       </div>
+
+      <Link to="/portal/student/testimonial" className="block rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:bg-muted/50">
+        <span className="font-medium text-cas-navy">{t("testimonialPage.title", { defaultValue: "Share your experience" })}</span>
+        <span className="block text-xs text-muted-foreground">{t("testimonialPage.homeHint", { defaultValue: "Tell future students what it was like." })}</span>
+      </Link>
     </div>
   )
 }

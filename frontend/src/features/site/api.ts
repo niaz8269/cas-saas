@@ -296,3 +296,16 @@ export function getSiteCostGuide() {
 
 export const postEnquiry = (payload: EnquiryPayload) =>
   siteApi<{ message: string }>("/public/enquiries", { method: "POST", body: JSON.stringify(payload) })
+
+export interface SiteTestimonial {
+  id: number
+  audience: "student" | "agent"
+  name: string
+  headline: string | null
+  country: string | null
+  quote: string
+}
+
+export function getSiteTestimonials(audience: "student" | "agent") {
+  return siteApi<{ data: SiteTestimonial[] }>(`/public/testimonials?audience=${audience}`)
+}

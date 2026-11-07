@@ -18,6 +18,8 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 
+import Testimonials from "@/features/site/Testimonials"
+
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 // Hero files live in /public so the page can preload them (see SeoController).
@@ -360,6 +362,8 @@ export default function SiteHome() {
           </div>
         )}
       </SiteSection>
+
+      <Testimonials audience="student" />
 
       {/* ── Final search / CTA ───────────────────────────────── */}
       <section className="rounded-sm border bg-gradient-to-r from-cas-red-50 to-card p-8 text-center sm:p-12">

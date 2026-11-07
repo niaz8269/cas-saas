@@ -96,6 +96,11 @@ export default function AgentHome() {
           </div>
         )}
       </section>
+
+      <Link to="/portal/agent/testimonial" className="block rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:bg-muted/50">
+        <span className="font-medium text-cas-navy">{t("testimonialPage.title", { defaultValue: "Share your experience" })}</span>
+        <span className="block text-xs text-muted-foreground">{t("testimonialPage.homeHintAgent", { defaultValue: "Tell other agencies what it is like to partner with CAS." })}</span>
+      </Link>
     </div>
   )
 }
