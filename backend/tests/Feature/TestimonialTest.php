@@ -13,7 +13,7 @@ uses(RefreshDatabase::class);
 function makeTestimonial(array $over = []): Testimonial
 {
     return Testimonial::create(array_merge([
-        'audience' => 'student', 'name' => 'Ali', 'headline' => 'MBBS student',
+        'audience' => 'student', 'name' => 'Ali', 'headline' => 'MBBS student', 'country' => 'Pakistan', 'country_code' => 'PK',
         'quote' => 'CAS guided me through every step of my application.',
         'consent_public' => true, 'consent_at' => now(), 'status' => 'approved', 'approved_at' => now(),
     ], $over));
@@ -186,7 +186,7 @@ it('refuses to publish a testimonial whose author did not agree to it', function
 
 it('needs consent confirmed when staff enter one by hand', function () {
     actingAsStaffWith(['content.view.global', 'content.manage.global']);
-    $payload = ['audience' => 'student', 'name' => 'Omar', 'quote' => 'Written to us by email, shared with permission.'];
+    $payload = ['audience' => 'student', 'name' => 'Omar', 'country_code' => 'EG', 'quote' => 'Written to us by email, shared with permission.'];
 
     $this->postJson('/api/v1/testimonials', $payload)->assertStatus(422)->assertJsonValidationErrors(['consent_public']);
     $this->postJson('/api/v1/testimonials', $payload + ['consent_public' => true])->assertCreated();
@@ -284,7 +284,22 @@ it('accepts a photo upload without an account and only the photo this app stored
 
 it('marks staff-entered testimonials with their source', function () {
     actingAsStaffWith(['content.view.global', 'content.manage.global']);
-    $this->postJson('/api/v1/testimonials', ['audience' => 'student', 'name' => 'Omar', 'quote' => 'Written to us by email, shared with permission.', 'consent_public' => true])->assertCreated();
+    $this->postJson('/api/v1/testimonials', ['audience' => 'student', 'name' => 'Omar', 'country_code' => 'EG', 'quote' => 'Written to us by email, shared with permission.', 'consent_public' => true])->assertCreated();
 
     expect(Testimonial::sole()->source)->toBe('staff');
+});
+
+it('keeps a student off the site until their nationality, which places them on the globe, is known', function () {
+    actingAsStaffWith(['content.view.global', 'content.manage.global']);
+
+    $this->postJson('/api/v1/testimonials', ['audience' => 'student', 'name' => 'Omar', 'quote' => 'Written to us by email, shared with permission.', 'consent_public' => true])
+        ->assertStatus(422)->assertJsonValidationErrors(['country_code']);
+
+    $t = makeTestimonial(['status' => 'pending', 'country' => null, 'country_code' => null]);
+    $this->patchJson("/api/v1/testimonials/{$t->id}", ['status' => 'approved'])->assertStatus(422);
+    expect($t->fresh()->status)->toBe('pending');
+
+    // A partner needs no country: no globe for partners.
+    $partner = makeTestimonial(['audience' => 'agent', 'status' => 'pending', 'country_code' => null]);
+    $this->patchJson("/api/v1/testimonials/{$partner->id}", ['status' => 'approved'])->assertOk();
 });

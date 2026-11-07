@@ -28,9 +28,9 @@ const field = "h-10 w-full rounded-md border bg-background px-3 text-sm"
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <fieldset className="space-y-3 border-t pt-5 first:border-t-0 first:pt-0">
-      <legend className="text-sm font-semibold text-cas-navy">{title}</legend>
-      {hint && <p className="-mt-1 text-xs text-muted-foreground">{hint}</p>}
+    <fieldset className="space-y-4">
+      <legend className="mb-1 text-sm font-semibold text-cas-navy">{title}</legend>
+      {hint && <p className="-mt-2 text-xs text-muted-foreground">{hint}</p>}
       {children}
     </fieldset>
   )
@@ -170,7 +170,7 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
   const year = new Date().getFullYear()
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); send.mutate() }} className="space-y-5" noValidate>
+    <form onSubmit={(e) => { e.preventDefault(); send.mutate() }} className="space-y-8" noValidate>
       {rejectedNote && (
         <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
           {t("testimonialPage.rejected", { defaultValue: "We could not use your earlier text. You are welcome to write a new one." })}
@@ -181,7 +181,7 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
         <>
           <Section title={t("testimonialPage.aboutYouTitle", { defaultValue: "About you" })}>
             <PhotoField path={photoPath} preview={photoPreview} onChange={(p, v) => { setPhotoPath(p); setPhotoPreview(v) }} error={err("photo_path")} upload={upload} />
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="tm-display">{t("testimonialPage.fullName", { defaultValue: "Your name" })}<Req /></Label>
                 <Input id="tm-display" value={displayName} maxLength={120} onChange={(e) => setDisplayName(e.target.value)} aria-invalid={err("display_name") ? true : undefined} />
@@ -194,18 +194,17 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
                   {COUNTRY_OPTIONS}
                 </select>
                 {err("country_code") && <p role="alert" className="text-sm text-destructive">{err("country_code")}</p>}
-                <p className="text-xs text-muted-foreground">{t("testimonialPage.nationalityHint", { defaultValue: "You appear on the world map at this country." })}</p>
               </div>
             </div>
           </Section>
 
           <Section title={t("testimonialPage.studiesTitle", { defaultValue: "Your studies in China" })}>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="tm-university">{t("testimonialPage.university", { defaultValue: "University you are enrolled in" })}<Req /></Label>
-                <Input id="tm-university" value={university} maxLength={160} onChange={(e) => setUniversity(e.target.value)} aria-invalid={err("university") ? true : undefined} />
-                {err("university") && <p role="alert" className="text-sm text-destructive">{err("university")}</p>}
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="tm-university">{t("testimonialPage.university", { defaultValue: "University you are enrolled in" })}<Req /></Label>
+              <Input id="tm-university" value={university} maxLength={160} onChange={(e) => setUniversity(e.target.value)} aria-invalid={err("university") ? true : undefined} />
+              {err("university") && <p role="alert" className="text-sm text-destructive">{err("university")}</p>}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="tm-degree">{t("testimonialPage.degree", { defaultValue: "Degree" })}<Req /></Label>
                 <select id="tm-degree" className={field} value={degree} onChange={(e) => setDegree(e.target.value)} aria-invalid={err("degree") ? true : undefined}>
@@ -219,61 +218,21 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
                 <Input id="tm-program" value={program} maxLength={160} onChange={(e) => setProgram(e.target.value)} placeholder="MBBS, Engineering…" aria-invalid={err("program") ? true : undefined} />
                 {err("program") && <p role="alert" className="text-sm text-destructive">{err("program")}</p>}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="tm-intake">{t("testimonialPage.intake", { defaultValue: "Intake year (optional)" })}</Label>
-                <select id="tm-intake" className={field} value={intakeYear} onChange={(e) => setIntakeYear(e.target.value)}>
-                  <option value="">—</option>
-                  {[0, 1, 2, 3, 4, 5].map((d) => <option key={d} value={year + 1 - d}>{year + 1 - d}</option>)}
-                </select>
-              </div>
             </div>
           </Section>
         </>
-      ) : (
-        <Section title={t("testimonialPage.businessTitle", { defaultValue: "About your agency (optional)" })}>
-        {isPublic && (
-          <>
-            <PhotoField path={photoPath} preview={photoPreview} onChange={(p, v) => { setPhotoPath(p); setPhotoPreview(v) }} error={err("photo_path")} upload={upload} optional />
-            <div className="space-y-2">
-              <Label htmlFor="tm-agent-name">{t("testimonialPage.agencyName", { defaultValue: "Agency name (or your name)" })}<Req /></Label>
-              <Input id="tm-agent-name" value={displayName} maxLength={120} onChange={(e) => setDisplayName(e.target.value)} aria-invalid={err("display_name") ? true : undefined} />
-              {err("display_name") && <p role="alert" className="text-sm text-destructive">{err("display_name")}</p>}
-            </div>
-          </>
-        )}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="tm-headline">{t("testimonialPage.agencyLine", { defaultValue: "Type and city" })}</Label>
-              <Input id="tm-headline" value={headline} maxLength={160} onChange={(e) => setHeadline(e.target.value)} placeholder="Partner agency, Lahore" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tm-country">{t("testimonialPage.country", { defaultValue: "Your country" })}</Label>
-              <Input id="tm-country" value={country} maxLength={80} onChange={(e) => setCountry(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tm-since">{t("testimonialPage.partnerSince", { defaultValue: "Partner since (year)" })}</Label>
-              <select id="tm-since" className={field} value={partnerSince} onChange={(e) => setPartnerSince(e.target.value)}>
-                <option value="">—</option>
-                {[0, 1, 2, 3, 4, 5, 6].map((d) => <option key={d} value={String(year - d)}>{year - d}</option>)}
-              </select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tm-referred">{t("testimonialPage.referred", { defaultValue: "Students sent to CAS" })}</Label>
-              <select id="tm-referred" className={field} value={referred} onChange={(e) => setReferred(e.target.value)}>
-                <option value="">—</option>
-                {REFERRED.map((r) => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
+      ) : isPublic ? (
+        <Section title={t("testimonialPage.aboutAgencyTitle", { defaultValue: "About you" })}>
+          <PhotoField path={photoPath} preview={photoPreview} onChange={(p, v) => { setPhotoPath(p); setPhotoPreview(v) }} error={err("photo_path")} upload={upload} optional />
+          <div className="space-y-2">
+            <Label htmlFor="tm-agent-name">{t("testimonialPage.agencyName", { defaultValue: "Agency name (or your name)" })}<Req /></Label>
+            <Input id="tm-agent-name" value={displayName} maxLength={120} onChange={(e) => setDisplayName(e.target.value)} aria-invalid={err("display_name") ? true : undefined} />
+            {err("display_name") && <p role="alert" className="text-sm text-destructive">{err("display_name")}</p>}
           </div>
         </Section>
-      )}
+      ) : null}
 
       <Section title={t("testimonialPage.storyTitle", { defaultValue: "Your story" })}>
-        <div className="space-y-2">
-          <Label htmlFor="tm-title">{t("testimonialPage.headlineLabel", { defaultValue: "A short headline (optional)" })}</Label>
-          <Input id="tm-title" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)}
-            placeholder={isStudent ? "Smooth from offer to arrival" : "A partner we can rely on"} />
-        </div>
         <div className="space-y-2">
           <Label htmlFor="tm-quote">{t("testimonialPage.quote", { defaultValue: "Your experience" })}<Req /></Label>
           <Textarea id="tm-quote" rows={5} maxLength={1200} value={quote} onChange={(e) => setQuote(e.target.value)}
@@ -284,50 +243,98 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
         </div>
       </Section>
 
-      <Section title={isStudent ? t("testimonialPage.servicesTitle", { defaultValue: "What did CAS help you with?" }) : t("testimonialPage.strengthsTitle", { defaultValue: "What do you value most?" })}
-        hint={t("testimonialPage.pickAny", { defaultValue: "Pick any that apply." })}>
-        <Chips options={isStudent ? STUDENT_SERVICES : PARTNER_STRENGTHS} value={services} onChange={setServices} />
-      </Section>
-
-      <Section title={t("testimonialPage.recommendTitle", { defaultValue: "Would you recommend CAS to a friend or colleague?" })}>
-        <div role="radiogroup" aria-label="Recommend" className="inline-grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
-          {([[true, "Yes"], [false, "Not sure"]] as const).map(([v, label]) => (
-            <button key={label} type="button" role="radio" aria-checked={recommend === v} onClick={() => setRecommend(v)}
-              className={cn("rounded-md px-6 py-2 text-sm font-medium transition-colors", recommend === v ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground")}>
-              {label}
-            </button>
-          ))}
-        </div>
-      </Section>
-
-      {isStudent && (
-        <Section title={t("testimonialPage.privateTitle", { defaultValue: "Just for us (never shown)" })}>
+      <details className="group rounded-xl border bg-subtle/60 open:bg-card">
+        <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium text-cas-navy marker:hidden">
+          {t("testimonialPage.moreDetails", { defaultValue: "Add more details (optional)" })}
+          <span aria-hidden="true" className="text-lg leading-none text-slate-400 transition-transform group-open:rotate-45">+</span>
+        </summary>
+        <div className="space-y-6 border-t px-4 py-5">
           <div className="space-y-2">
-            <Label htmlFor="tm-found">{t("testimonialPage.foundUs", { defaultValue: "How did you hear about CAS?" })}</Label>
-            <select id="tm-found" className={field} value={foundUs} onChange={(e) => setFoundUs(e.target.value)}>
-              <option value="">—</option>
-              {FOUND_US.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
+            <Label htmlFor="tm-title">{t("testimonialPage.headlineLabel", { defaultValue: "A short headline" })}</Label>
+            <Input id="tm-title" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)}
+              placeholder={isStudent ? "Smooth from offer to arrival" : "A partner we can rely on"} />
+          </div>
+
+          {isStudent ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="tm-intake">{t("testimonialPage.intake", { defaultValue: "Intake year" })}</Label>
+                <select id="tm-intake" className={field} value={intakeYear} onChange={(e) => setIntakeYear(e.target.value)}>
+                  <option value="">—</option>
+                  {[0, 1, 2, 3, 4, 5].map((d) => <option key={d} value={year + 1 - d}>{year + 1 - d}</option>)}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tm-found">{t("testimonialPage.foundUs", { defaultValue: "How did you hear about CAS?" })}</Label>
+                <select id="tm-found" className={field} value={foundUs} onChange={(e) => setFoundUs(e.target.value)}>
+                  <option value="">—</option>
+                  {FOUND_US.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
+                <p className="text-xs text-muted-foreground">{t("testimonialPage.privateNote", { defaultValue: "Only for us, never shown." })}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="tm-headline">{t("testimonialPage.agencyLine", { defaultValue: "Type and city" })}</Label>
+                <Input id="tm-headline" value={headline} maxLength={160} onChange={(e) => setHeadline(e.target.value)} placeholder="Partner agency, Lahore" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tm-country">{t("testimonialPage.country", { defaultValue: "Your country" })}</Label>
+                <Input id="tm-country" value={country} maxLength={80} onChange={(e) => setCountry(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tm-since">{t("testimonialPage.partnerSince", { defaultValue: "Partner since (year)" })}</Label>
+                <select id="tm-since" className={field} value={partnerSince} onChange={(e) => setPartnerSince(e.target.value)}>
+                  <option value="">—</option>
+                  {[0, 1, 2, 3, 4, 5, 6].map((d) => <option key={d} value={String(year - d)}>{year - d}</option>)}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tm-referred">{t("testimonialPage.referred", { defaultValue: "Students sent to CAS" })}</Label>
+                <select id="tm-referred" className={field} value={referred} onChange={(e) => setReferred(e.target.value)}>
+                  <option value="">—</option>
+                  {REFERRED.map((r) => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">{isStudent ? t("testimonialPage.servicesTitle", { defaultValue: "What did CAS help you with?" }) : t("testimonialPage.strengthsTitle", { defaultValue: "What do you value most?" })}</p>
+            <Chips options={isStudent ? STUDENT_SERVICES : PARTNER_STRENGTHS} value={services} onChange={setServices} />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">{t("testimonialPage.recommendTitle", { defaultValue: "Would you recommend CAS to a friend or colleague?" })}</p>
+            <div role="radiogroup" aria-label="Recommend" className="inline-grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
+              {([[true, "Yes"], [false, "Not sure"]] as const).map(([v, label]) => (
+                <button key={label} type="button" role="radio" aria-checked={recommend === v} onClick={() => setRecommend(v)}
+                  className={cn("rounded-md px-6 py-2 text-sm font-medium transition-colors", recommend === v ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground")}>
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </details>
+
+      {isPublic && (
+        <Section title={t("testimonialPage.contactTitle", { defaultValue: "How can we reach you?" })}>
+          <div className="space-y-2">
+            <Label htmlFor="tm-email">{t("testimonialPage.email", { defaultValue: "Your email" })}<Req /></Label>
+            <Input id="tm-email" type="email" autoComplete="email" inputMode="email" value={email} maxLength={190} onChange={(e) => setEmail(e.target.value)} aria-invalid={err("contact_email") ? true : undefined} />
+            <p className="text-xs text-muted-foreground">{t("testimonialPage.emailHint", { defaultValue: "So we can reach you if we have a question. It is never shown on the website." })}</p>
+            {err("contact_email") && <p role="alert" className="text-sm text-destructive">{err("contact_email")}</p>}
+          </div>
+          {/* Honeypot: people never see or fill this; bots do. */}
+          <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+            <label>Website<input tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} /></label>
           </div>
         </Section>
       )}
 
-      {isPublic && (
-      <Section title={t("testimonialPage.contactTitle", { defaultValue: "Just for us (never shown)" })}>
-        <div className="space-y-2">
-          <Label htmlFor="tm-email">{t("testimonialPage.email", { defaultValue: "Your email" })}<Req /></Label>
-          <Input id="tm-email" type="email" autoComplete="email" inputMode="email" value={email} maxLength={190} onChange={(e) => setEmail(e.target.value)} aria-invalid={err("contact_email") ? true : undefined} />
-          <p className="text-xs text-muted-foreground">{t("testimonialPage.emailHint", { defaultValue: "So we can reach you if we have a question. It is never shown on the website." })}</p>
-          {err("contact_email") && <p role="alert" className="text-sm text-destructive">{err("contact_email")}</p>}
-        </div>
-        {/* Honeypot: people never see or fill this; bots do. */}
-        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-          <label>Website<input tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} /></label>
-        </div>
-      </Section>
-    )}
-
-    <Section title={t("testimonialPage.showTitle", { defaultValue: "Showing it on our website" })}>
+      <div className="space-y-5">
         <div>
           <label className="flex items-start gap-2.5 text-sm text-muted-foreground">
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} aria-invalid={err("consent_public") ? true : undefined}
@@ -336,12 +343,12 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
           </label>
           {err("consent_public") && <p role="alert" className="mt-1 text-xs text-destructive">{err("consent_public")}</p>}
         </div>
-      </Section>
 
-      {error && !Object.keys(error.errors ?? {}).length && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
-      <Button type="submit" className="h-11 w-full sm:w-auto" disabled={send.isPending}>
-        {send.isPending ? t("testimonialPage.sending", { defaultValue: "Sending…" }) : t("testimonialPage.send", { defaultValue: "Send" })}
-      </Button>
+        {error && !Object.keys(error.errors ?? {}).length && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
+        <Button type="submit" className="h-11 w-full" disabled={send.isPending}>
+          {send.isPending ? t("testimonialPage.sending", { defaultValue: "Sending…" }) : t("testimonialPage.send", { defaultValue: "Send" })}
+        </Button>
+      </div>
     </form>
   )
 }

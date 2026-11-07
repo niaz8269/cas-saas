@@ -223,6 +223,7 @@ class TestimonialController extends Controller
             'name' => ['required', 'string', 'max:120'],
             'headline' => ['nullable', 'string', 'max:160'],
             'country' => ['nullable', 'string', 'max:80'],
+            'country_code' => ['required_if:audience,student', 'nullable', Rule::in(array_keys(CountryList::NAMES))],
             'quote' => ['required', 'string', 'min:10', 'max:1200'],
             'title' => ['nullable', 'string', 'max:120'],
             'university' => ['nullable', 'string', 'max:160'],
@@ -235,6 +236,9 @@ class TestimonialController extends Controller
             'sort_order' => ['sometimes', 'integer', 'min:0', 'max:1000'],
         ], ['consent_public.accepted' => 'Confirm that this person agreed to be shown on the website.']);
 
+        if (! empty($data['country_code'])) {
+            $data['country'] = CountryList::name($data['country_code']);
+        }
         $data['consent_public'] = true;
         $data['consent_at'] = now();
         $data['source'] = 'staff';
@@ -259,6 +263,8 @@ class TestimonialController extends Controller
         if (($data['status'] ?? null) === 'approved' && $testimonial->status !== 'approved') {
             // Never publish a testimonial whose author did not agree to it.
             abort_unless($testimonial->consent_public, 422, 'This person did not agree to be shown publicly.');
+            // Students appear on the globe at their nationality, so one without it could not be shown anywhere.
+            abort_if($testimonial->audience === 'student' && ! $testimonial->country_code, 422, 'Add the nationality of the student first: the testimonial is shown on the globe at that country.');
             $data['approved_at'] = now();
         }
 

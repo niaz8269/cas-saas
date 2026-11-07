@@ -369,7 +369,7 @@ export const listTestimonials = (params: { status?: string; audience?: string; p
   return api<Paginated<TestimonialRow>>(`/testimonials?${qs.toString()}`)
 }
 
-export const createTestimonial = (payload: { audience: string; name: string; headline?: string; country?: string; quote: string; title?: string; university?: string; degree?: string; program?: string; consent_public: boolean }) =>
+export const createTestimonial = (payload: { audience: string; name: string; headline?: string; country?: string; country_code?: string; quote: string; title?: string; university?: string; degree?: string; program?: string; consent_public: boolean }) =>
   api<{ data: TestimonialRow }>("/testimonials", { method: "POST", body: JSON.stringify(payload) })
 
 export const updateTestimonial = (id: number, payload: Partial<Pick<TestimonialRow, "status" | "quote" | "name" | "headline" | "country" | "sort_order">>) =>

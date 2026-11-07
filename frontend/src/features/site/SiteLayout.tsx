@@ -40,7 +40,7 @@ const NAV_PRIMARY: NavItemT[] = [
   },
   { to: "/site/universities", labelKey: "nav.universities" },
   { to: "/site/programs", labelKey: "nav.programs" },
-  { to: "/site/pricing", labelKey: "nav.pricing" },
+  { to: "/site/services", labelKey: "nav.ourServices" },
   { to: "/site/partner", labelKey: "nav.partner" },
 ]
 

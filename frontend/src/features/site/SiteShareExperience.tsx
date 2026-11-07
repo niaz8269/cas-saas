@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
 
-import { SitePageHeader } from "@/features/site/components"
 import { TestimonialForm } from "@/features/testimonials/TestimonialForm"
 import { submitPublicTestimonial, uploadPublicTestimonialPhoto } from "@/features/testimonials/publicApi"
 import { useSeo } from "@/lib/seo"
@@ -27,14 +26,17 @@ export default function SiteShareExperience() {
   })
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <SitePageHeader
-        title={t("shareExperience.title", { defaultValue: "Share your experience" })}
-        subtitle={t("shareExperience.subtitle", { defaultValue: "Studying in China, or working with us as a partner? Your words help the next person decide." })}
-      />
+    <div className="mx-auto max-w-xl space-y-8 py-4">
+      <header className="text-center">
+        <p className="text-xs font-semibold tracking-[0.18em] text-cas-red uppercase">{t("shareExperience.eyebrow", { defaultValue: "Testimonials" })}</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-cas-navy">{t("shareExperience.title", { defaultValue: "Share your experience" })}</h1>
+        <p className="mx-auto mt-3 max-w-md text-sm text-slate-600">
+          {t("shareExperience.subtitle", { defaultValue: "Studying in China, or working with us as a partner? Your words help the next person decide." })}
+        </p>
+      </header>
 
       {sent ? (
-        <div className="rounded-sm border bg-card p-8 text-center shadow-sm" role="status">
+        <div className="rounded-2xl border bg-card p-10 text-center shadow-sm" role="status">
           <CheckCircle2 className="mx-auto size-12 text-success" aria-hidden="true" />
           <h2 className="mt-3 text-xl font-semibold text-cas-navy">{t("shareExperience.thanksTitle", { defaultValue: "Thank you!" })}</h2>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -45,7 +47,7 @@ export default function SiteShareExperience() {
           </Link>
         </div>
       ) : (
-        <div className="rounded-sm border bg-card p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
           <div role="tablist" aria-label={t("shareExperience.iAm", { defaultValue: "I am" })} className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
             {(["student", "agent"] as const).map((k) => (
               <button

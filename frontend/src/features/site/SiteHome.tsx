@@ -365,6 +365,22 @@ export default function SiteHome() {
 
       <Testimonials audience="student" />
 
+      {/* Always visible, so the link to share is on the home page even before any testimonial is published. */}
+      <section className="flex flex-col items-start justify-between gap-4 rounded-xl border bg-card p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
+        <div>
+          <h2 className="text-lg font-semibold text-cas-navy">{t("home.share.title", { defaultValue: "Studied or worked with CAS?" })}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("home.share.body", { defaultValue: "Tell us how it went. Your words help the next student or partner decide." })}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link to="/site/share-your-experience" className="inline-flex h-10 items-center rounded-full bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
+            {t("home.share.student", { defaultValue: "Share your experience" })}
+          </Link>
+          <Link to="/site/share-your-experience?as=agent" className="inline-flex h-10 items-center rounded-full border px-5 text-sm font-semibold text-cas-navy hover:bg-muted">
+            {t("home.share.partner", { defaultValue: "I am a partner" })}
+          </Link>
+        </div>
+      </section>
+
       {/* ── Final search / CTA ───────────────────────────────── */}
       <section className="rounded-sm border bg-gradient-to-r from-cas-red-50 to-card p-8 text-center sm:p-12">
         <Building2 className="mx-auto size-9 text-cas-navy" />
