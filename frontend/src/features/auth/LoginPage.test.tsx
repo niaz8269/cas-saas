@@ -26,7 +26,7 @@ it("renders the branded login form", () => {
   renderLogin()
 
   expect(
-    screen.getByAltText("CAS — Consultancy for Abroad Study"),
+    screen.getAllByAltText("CAS — Consultancy for Abroad Study")[0],
   ).toBeInTheDocument()
   expect(screen.getByLabelText("Email")).toBeInTheDocument()
   expect(screen.getByLabelText("Password")).toBeInTheDocument()

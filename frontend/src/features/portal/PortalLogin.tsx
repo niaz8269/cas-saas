@@ -6,12 +6,11 @@ import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { z } from "zod"
 
-import casLogo from "@/assets/cas-logo.png"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { AuthShell, PasswordInput } from "@/features/auth/AuthShell"
 import { portalLogin, type AgentProfileData, type StudentProfileData } from "@/features/portal/api"
-import { langDef } from "@/i18n/languages"
 import { ApiError } from "@/lib/api"
 import { usePortalAuthStore, type PortalKind } from "@/stores/portalAuth"
 import { cn } from "@/lib/utils"
@@ -24,7 +23,7 @@ function safeRedirect(value: string | null): string | null {
 }
 
 export default function PortalLogin() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const redirect = safeRedirect(searchParams.get("redirect"))
@@ -85,16 +84,18 @@ export default function PortalLogin() {
   })
 
   return (
-    <main dir={langDef(i18n.language).dir} className="flex min-h-dvh flex-col items-center justify-center bg-subtle p-6">
-      <div className="w-full max-w-sm">
-        <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto mb-8 h-14 w-auto" />
-
-        <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h1 className="text-lg font-semibold text-cas-navy">{t("portal.loginTitle")}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{t("portal.loginSubtitle")}</p>
-
-          {/* Audience toggle */}
-          <div role="tablist" aria-label={t("portal.portalTypeAria")} className="mt-4 grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
+    <AuthShell
+      title={t("portal.loginTitle")}
+      subtitle={t("portal.loginSubtitle")}
+      footer={
+        <>
+          {t("portal.newStudent")}{" "}
+          <Link to="/portal/register" className="font-medium text-cas-navy hover:underline">{t("portal.createAccount")}</Link>
+        </>
+      }
+    >
+      {/* Audience toggle */}
+          <div role="tablist" aria-label={t("portal.portalTypeAria")} className="grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1">
             {(["student", "agent"] as const).map((k) => (
               <button
                 key={k}
@@ -112,7 +113,8 @@ export default function PortalLogin() {
             ))}
           </div>
 
-          <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 space-y-4">
+
+          <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-5 space-y-4">
             {errors.root && (
               <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">
                 {errors.root.message}
@@ -128,7 +130,7 @@ export default function PortalLogin() {
 
             <div className="space-y-2">
               <Label htmlFor="password">{t("portal.password")}</Label>
-              <Input id="password" type="password" autoComplete="current-password"
+              <PasswordInput id="password" autoComplete="current-password"
                 aria-invalid={errors.password ? true : undefined} {...register("password")} />
               {errors.password && <p role="alert" className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
@@ -138,16 +140,6 @@ export default function PortalLogin() {
             </Button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            {t("portal.newStudent")}{" "}
-            <Link to="/portal/register" className="font-medium text-cas-navy hover:underline">{t("portal.createAccount")}</Link>
-          </p>
-        </div>
-
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          {t("portal.copyright", { year: new Date().getFullYear() })}
-        </p>
-      </div>
-    </main>
+    </AuthShell>
   )
 }

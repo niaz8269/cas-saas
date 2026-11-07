@@ -1846,5 +1846,13 @@
     "cta": "We can match you to CSC-listed programs and help you apply on time.",
     "allScholarships": "All scholarships",
     "ctaButton": "Get a free study plan"
+  },
+  "authShell": {
+    "headline": "Your path to studying in China starts here.",
+    "pointUniversities": "Hundreds of Chinese universities and programs in one place",
+    "pointTrack": "Track your application from offer to arrival",
+    "pointSecure": "Your documents stay private and secure",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   }
 }
