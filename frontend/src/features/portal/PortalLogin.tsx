@@ -130,7 +130,10 @@ export default function PortalLogin() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">{t("portal.password")}</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">{t("portal.password")}</Label>
+                <Link to="/portal/forgot-password" className="text-sm font-medium text-cas-navy hover:underline">{t("portal.forgotPassword", { defaultValue: "Forgot password?" })}</Link>
+              </div>
               <PasswordInput id="password" autoComplete="current-password"
                 aria-invalid={errors.password ? true : undefined} {...register("password")} />
               {errors.password && <p role="alert" className="text-sm text-destructive">{errors.password.message}</p>}

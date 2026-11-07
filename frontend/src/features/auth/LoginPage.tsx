@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -133,7 +133,10 @@ export default function LoginPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <Link to="/admin/forgot-password" className="text-sm font-medium text-cas-navy hover:underline">Forgot password?</Link>
+          </div>
           <PasswordInput
             id="password"
             autoComplete="current-password"
