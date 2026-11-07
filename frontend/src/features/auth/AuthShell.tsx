@@ -1,4 +1,4 @@
-import { Eye, EyeOff, GraduationCap, ShieldCheck, Sparkles } from "lucide-react"
+import { BarChart3, Eye, EyeOff, FileCheck2, GraduationCap, Handshake, Plane, ShieldCheck, Sparkles, Users, Wallet } from "lucide-react"
 import { forwardRef, useState, type ComponentProps, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -14,12 +14,15 @@ const PANEL_PHOTO = "/images/hero-beijing-800-v2.webp"
  * Shared frame for every sign-in / register screen: a calm navy brand panel on
  * large screens and a clean centred card everywhere. Only the form changes.
  */
+export type AuthAudience = "staff" | "student" | "agent"
+
 export function AuthShell({
   title,
   subtitle,
   children,
   footer,
   wide = false,
+  audience = "student",
 }: {
   title: string
   subtitle?: string
@@ -27,17 +30,41 @@ export function AuthShell({
   footer?: ReactNode
   /** Roomier card for the longer register forms. */
   wide?: boolean
+  /** Decides what the brand panel says: staff, students and partner agents hear different things. */
+  audience?: AuthAudience
 }) {
   const { t, i18n } = useTranslation()
 
-  const points = [
-    { icon: GraduationCap, text: t("authShell.pointUniversities", { defaultValue: "Hundreds of Chinese universities and programs in one place" }) },
-    { icon: Sparkles, text: t("authShell.pointTrack", { defaultValue: "Track your application from offer to arrival" }) },
-    { icon: ShieldCheck, text: t("authShell.pointSecure", { defaultValue: "Your documents stay private and secure" }) },
-  ]
+  const copy = {
+    student: {
+      headline: t("authShell.student.headline", { defaultValue: "Your path to studying in China starts here." }),
+      points: [
+        { icon: GraduationCap, text: t("authShell.student.p1", { defaultValue: "Hundreds of Chinese universities and programs in one place" }) },
+        { icon: Sparkles, text: t("authShell.student.p2", { defaultValue: "Track your application from offer to arrival" }) },
+        { icon: ShieldCheck, text: t("authShell.student.p3", { defaultValue: "Your documents stay private and secure" }) },
+      ],
+    },
+    agent: {
+      headline: t("authShell.agent.headline", { defaultValue: "Grow your agency with a trusted China partner." }),
+      points: [
+        { icon: Users, text: t("authShell.agent.p1", { defaultValue: "Submit and follow every student you refer" }) },
+        { icon: Wallet, text: t("authShell.agent.p2", { defaultValue: "Clear commission statements, always up to date" }) },
+        { icon: Handshake, text: t("authShell.agent.p3", { defaultValue: "A dedicated CAS team behind each application" }) },
+      ],
+    },
+    staff: {
+      headline: t("authShell.staff.headline", { defaultValue: "One workspace for the whole CAS team." }),
+      points: [
+        { icon: FileCheck2, text: t("authShell.staff.p1", { defaultValue: "Leads, applications and documents in one place" }) },
+        { icon: Plane, text: t("authShell.staff.p2", { defaultValue: "Offers, visas and arrivals, step by step" }) },
+        { icon: BarChart3, text: t("authShell.staff.p3", { defaultValue: "Invoices, payments and commissions at a glance" }) },
+      ],
+    },
+  }[audience]
+  const { headline, points } = copy
 
   return (
-    <div dir={langDef(i18n.language).dir} className="grid min-h-dvh bg-subtle lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+    <div dir={langDef(i18n.language).dir} className="grid min-h-dvh overflow-x-hidden bg-subtle lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       {/* Brand panel — desktop only */}
       <aside className="relative hidden overflow-hidden bg-cas-navy-700 text-white lg:flex lg:flex-col lg:justify-between lg:p-12">
         <img src={PANEL_PHOTO} alt="" aria-hidden="true" className="absolute inset-0 size-full object-cover opacity-25" />
@@ -49,7 +76,7 @@ export function AuthShell({
 
         <div className="relative max-w-md">
           <h2 className="text-3xl leading-tight font-semibold tracking-tight">
-            {t("authShell.headline", { defaultValue: "Your path to studying in China starts here." })}
+            {headline}
           </h2>
           <ul className="mt-8 space-y-4">
             {points.map(({ icon: Icon, text }) => (
@@ -67,21 +94,21 @@ export function AuthShell({
       </aside>
 
       {/* Form side */}
-      <main className="flex flex-col items-center justify-center px-5 py-10 sm:px-8">
-        <div className={cn("w-full", wide ? "max-w-md" : "max-w-sm")}>
-          <a href="/" className="mb-8 block lg:hidden">
-            <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto h-14 w-auto" />
+      <main className="flex flex-col items-center justify-center px-5 py-4 sm:px-8">
+        <div className={cn("w-full", wide ? "max-w-xl" : "max-w-sm")}>
+          <a href="/" className="mb-4 block lg:hidden">
+            <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="mx-auto h-11 w-auto" />
           </a>
 
-          <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
+          <div className="rounded-2xl border bg-card p-5 shadow-sm sm:p-6">
             <h1 className="text-xl font-semibold tracking-tight text-cas-navy">{title}</h1>
             {subtitle && <p className="mt-1.5 text-sm text-muted-foreground">{subtitle}</p>}
-            <div className="mt-6">{children}</div>
+            <div className="mt-4">{children}</div>
           </div>
 
-          {footer && <div className="mt-5 text-center text-sm text-muted-foreground">{footer}</div>}
+          {footer && <div className="mt-3 text-center text-sm text-muted-foreground">{footer}</div>}
 
-          <p className="mt-8 text-center text-xs text-muted-foreground lg:hidden">
+          <p className="mt-4 text-center text-xs text-muted-foreground lg:hidden">
             © {new Date().getFullYear()} CAS — Consultancy for Abroad Study
           </p>
         </div>

@@ -85,6 +85,7 @@ export default function PortalLogin() {
 
   return (
     <AuthShell
+      audience={kind}
       title={t("portal.loginTitle")}
       subtitle={t("portal.loginSubtitle")}
       footer={

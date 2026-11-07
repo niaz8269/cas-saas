@@ -75,6 +75,7 @@ export default function LoginPage() {
 
   return (
     <AuthShell
+      audience="staff"
       title="Sign in"
       subtitle="Use your CAS staff account"
       footer={

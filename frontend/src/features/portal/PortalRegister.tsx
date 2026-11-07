@@ -51,6 +51,7 @@ export default function PortalRegister() {
   return (
     <AuthShell
       wide
+      audience={kind}
       title={t(kind === "student" ? "portal.register.studentTitle" : "portal.register.agentTitle")}
       subtitle={t(kind === "student" ? "portal.register.studentSubtitle" : "portal.register.agentSubtitle")}
       footer={
@@ -128,19 +129,17 @@ function StudentForm() {
   })
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-5 space-y-4">
-      {errors.root && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+      {errors.root && <p role="alert" className="sm:col-span-2 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
-      <div className="grid grid-cols-2 gap-3">
-        <Field id="first_name" label={t("portal.register.firstName")} error={errors.first_name?.message} autoComplete="given-name" {...register("first_name")} />
-        <Field id="last_name" label={t("portal.register.lastName")} error={errors.last_name?.message} autoComplete="family-name" {...register("last_name")} />
-      </div>
+      <Field id="first_name" label={t("portal.register.firstName")} error={errors.first_name?.message} autoComplete="given-name" {...register("first_name")} />
+      <Field id="last_name" label={t("portal.register.lastName")} error={errors.last_name?.message} autoComplete="family-name" {...register("last_name")} />
       <Field id="email" type="email" label={t("portal.email")} error={errors.email?.message} autoComplete="email" inputMode="email" {...register("email")} />
       <Field id="phone" type="tel" label={t("portal.register.phone")} error={errors.phone?.message} autoComplete="tel" {...register("phone")} />
       <Field id="password" type="password" label={t("portal.password")} error={errors.password?.message} autoComplete="new-password" {...register("password")} />
       <Field id="password_confirmation" type="password" label={t("portal.register.confirmPassword")} error={errors.password_confirmation?.message} autoComplete="new-password" {...register("password_confirmation")} />
 
-      <Button type="submit" className="h-11 w-full" disabled={mutation.isPending}>
+      <Button type="submit" className="mt-1 h-10 w-full sm:col-span-2" disabled={mutation.isPending}>
         {mutation.isPending ? t("portal.register.submitting") : t("portal.register.submit")}
       </Button>
     </form>
@@ -207,18 +206,16 @@ function AgentForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-5 space-y-4">
-      {errors.root && <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
+    <form onSubmit={handleSubmit((v) => mutation.mutate(v))} noValidate className="mt-4 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+      {errors.root && <p role="alert" className="sm:col-span-2 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{errors.root.message}</p>}
 
       <Field id="company_name" label={t("portal.register.companyName")} error={errors.company_name?.message} autoComplete="organization" {...register("company_name")} />
       <Field id="contact_name" label={t("portal.register.contactName")} error={errors.contact_name?.message} autoComplete="name" {...register("contact_name")} />
-      <div className="grid grid-cols-2 gap-3">
-        <Field id="email" type="email" label={t("portal.email")} error={errors.email?.message} autoComplete="email" inputMode="email" {...register("email")} />
-        <Field id="phone" type="tel" label={t("portal.register.phone")} error={errors.phone?.message} autoComplete="tel" {...register("phone")} />
-      </div>
+      <Field id="email" type="email" label={t("portal.email")} error={errors.email?.message} autoComplete="email" inputMode="email" {...register("email")} />
+      <Field id="phone" type="tel" label={t("portal.register.phone")} error={errors.phone?.message} autoComplete="tel" {...register("phone")} />
       <Field id="website" label={t("portal.register.website")} error={errors.website?.message} placeholder="https://" {...register("website")} />
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="country_id">{t("portal.register.country")}</Label>
         <Select value={watch("country_id")} onValueChange={(v) => setValue("country_id", v, { shouldValidate: true })}>
           <SelectTrigger id="country_id" aria-label={t("portal.register.country")} aria-invalid={errors.country_id ? true : undefined}>
@@ -228,14 +225,15 @@ function AgentForm() {
             {(countries.data?.data ?? []).map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
           </SelectContent>
         </Select>
-        {errors.country_id && <p role="alert" className="text-sm text-destructive">{errors.country_id.message}</p>}
+        {errors.country_id && <p role="alert" className="text-xs text-destructive">{errors.country_id.message}</p>}
       </div>
 
-      <Field id="address" label={t("portal.register.address")} error={errors.address?.message} autoComplete="street-address" {...register("address")} />
       <Field id="password" type="password" label={t("portal.password")} error={errors.password?.message} autoComplete="new-password" {...register("password")} />
       <Field id="password_confirmation" type="password" label={t("portal.register.confirmPassword")} error={errors.password_confirmation?.message} autoComplete="new-password" {...register("password_confirmation")} />
 
-      <Button type="submit" className="h-11 w-full" disabled={mutation.isPending}>
+      <Field id="address" wrapperClassName="sm:col-span-2" label={t("portal.register.address")} error={errors.address?.message} autoComplete="street-address" {...register("address")} />
+
+      <Button type="submit" className="mt-1 h-10 w-full sm:col-span-2" disabled={mutation.isPending}>
         {mutation.isPending ? t("portal.register.submitting") : t("portal.register.submitAgent")}
       </Button>
     </form>
@@ -244,12 +242,12 @@ function AgentForm() {
 
 // ── Shared labelled input ─────────────────────────────────────────────────────
 
-const Field = ({ id, label, error, type, ...props }: { id: string; label: string; error?: string } & ComponentProps<typeof Input>) => (
-  <div className="space-y-2">
+const Field = ({ id, label, error, type, wrapperClassName, ...props }: { id: string; label: string; error?: string; wrapperClassName?: string } & ComponentProps<typeof Input>) => (
+  <div className={cn("space-y-1.5", wrapperClassName)}>
     <Label htmlFor={id}>{label}</Label>
     {type === "password"
       ? <PasswordInput id={id} aria-invalid={error ? true : undefined} {...props} />
       : <Input id={id} type={type} aria-invalid={error ? true : undefined} {...props} />}
-    {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+    {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
   </div>
 )
