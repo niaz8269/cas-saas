@@ -15,6 +15,7 @@ use Database\Seeders\MirrorPhotosSeeder;
 use Database\Seeders\MoeMbbsSeeder;
 use Database\Seeders\OfficialIntakeDatesSeeder;
 use Database\Seeders\RegisteredMajorsSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SasCatalogSeeder;
 use Database\Seeders\VerifiedCatalogSeeder;
 use Database\Seeders\WikipediaProfileSeeder;
@@ -28,16 +29,29 @@ beforeEach(function () {
     $this->seed();
 });
 
-it('seeds the eight staff roles on the staff guard', function () {
-    expect(Role::where('guard_name', 'staff')->count())->toBe(8);
+it('seeds the five staff roles on the staff guard', function () {
+    expect(Role::where('guard_name', 'staff')->count())->toBe(5);
 
     foreach ([
-        'Super Admin', 'Management', 'Admin', 'Counselor',
-        'Admissions', 'Finance', 'Visa', 'Marketing',
+        'Super Admin', 'Admin', 'Counselor', 'Finance', 'Visa',
     ] as $role) {
         expect(Role::where('name', $role)->where('guard_name', 'staff')->exists())
             ->toBeTrue("missing role: {$role}");
     }
+});
+
+it('folds the retired roles into Admin and moves their users across', function () {
+    foreach (['Management', 'Admissions', 'Marketing'] as $name) {
+        $user = User::factory()->create();
+        $user->assignRole(Role::findOrCreate($name, 'staff'));
+
+        (new RolesAndPermissionsSeeder)->run();
+
+        expect(Role::where('name', $name)->exists())->toBeFalse()
+            ->and($user->fresh()->hasRole('Admin'))->toBeTrue();
+    }
+
+    expect(Role::where('guard_name', 'staff')->count())->toBe(5);
 });
 
 it('seeds a demo account per role with the Super Admin bypass working', function () {

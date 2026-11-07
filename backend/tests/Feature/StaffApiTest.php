@@ -19,12 +19,12 @@ it('lists staff (id + name only) for any authenticated staff member', function (
 
 it('filters the staff directory by role', function () {
     actingAsStaffWith([]);
-    $role = Role::findOrCreate('Admissions', 'staff');
+    $role = Role::findOrCreate('Finance', 'staff');
     $officer = User::factory()->create(['name' => 'Ophelia Officer']);
     $officer->assignRole($role);
     User::factory()->create(['name' => 'Regular Rita']);
 
-    $response = $this->getJson('/api/v1/staff?role=Admissions')->assertOk();
+    $response = $this->getJson('/api/v1/staff?role=Finance')->assertOk();
 
     expect($response->json('data'))->toHaveCount(1)
         ->and($response->json('data.0.name'))->toBe('Ophelia Officer');

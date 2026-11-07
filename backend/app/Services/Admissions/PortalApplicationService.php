@@ -26,7 +26,7 @@ use Illuminate\Validation\ValidationException;
 class PortalApplicationService
 {
     /** The role whose members verify and process incoming applications. */
-    private const ADMISSIONS_ROLE = 'Admissions';
+    private const ADMISSIONS_ROLE = 'Admin';
 
     public function __construct(
         private readonly ApplicationWorkflow $workflow,
@@ -221,11 +221,11 @@ class PortalApplicationService
         return $submitted;
     }
 
-    /** Notify Management / Super Admin of a new submission (excluding the officer). */
+    /** Notify Admin / Super Admin of a new submission (excluding the officer). */
     private function notifyManagers(Application $application, ?int $excludeUserId): void
     {
         $this->notifications->pushToRoles(
-            ['Super Admin', 'Management'],
+            ['Super Admin', 'Admin'],
             'application.submitted',
             'New application submitted',
             "{$application->application_code} was submitted and routed to Admissions.",

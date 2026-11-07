@@ -239,8 +239,8 @@ export default function ApplicationDetailPage() {
   const documents = useQuery({ queryKey: ["application-documents", id], queryFn: () => listApplicationDocuments(id) })
   const types = useQuery({ queryKey: ["document-types"], queryFn: listDocumentTypes })
   const officers = useQuery({
-    queryKey: ["staff-directory", "Admissions"],
-    queryFn: () => listStaff("Admissions"),
+    queryKey: ["staff-directory", "Admin"],
+    queryFn: () => listStaff("Admin"),
     enabled: reassignOpen,
   })
 
