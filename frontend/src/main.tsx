@@ -35,6 +35,7 @@ const StaffForgotPasswordPage = lazy(() => import("@/features/auth/PasswordPages
 const StaffResetPasswordPage = lazy(() => import("@/features/auth/PasswordPages").then((m) => ({ default: () => <m.ResetPasswordPage mode="staff" /> })))
 const StudentTestimonial = lazy(() => import("@/features/portal/TestimonialPage").then((m) => ({ default: () => <m.default kind="student" /> })))
 const AgentTestimonial = lazy(() => import("@/features/portal/TestimonialPage").then((m) => ({ default: () => <m.default kind="agent" /> })))
+const HomePageManager = lazy(() => import("@/features/admin/HomePageManager"))
 const TestimonialsAdmin = lazy(() => import("@/features/admin/TestimonialsPage"))
 const PortalLogin = lazy(() => import("@/features/portal/PortalLogin"))
 const PortalRegister = lazy(() => import("@/features/portal/PortalRegister"))
@@ -206,6 +207,7 @@ const router = createBrowserRouter([
           { path: "/partner-requests", element: <PartnerRequestsPage /> },
           { path: "/content", element: <ContentPage /> },
           { path: "/testimonials", element: <TestimonialsAdmin /> },
+          { path: "/home-page", element: <HomePageManager /> },
           { path: "/campaigns", element: <MarketingPage /> },
           { path: "/integrations", element: <IntegrationsPage /> },
           { path: "/error-log", element: <ErrorLogPage /> },

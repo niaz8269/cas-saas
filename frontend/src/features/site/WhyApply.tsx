@@ -3,10 +3,12 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 /** "Why apply with CAS" block before the footer. Every claim is backed by the platform. */
-export default function WhyApply() {
+export interface WhyPoint { title: string; body: string; link?: { to: string; label: string } }
+
+export default function WhyApply({ title, items }: { title?: string; items?: WhyPoint[] } = {}) {
   const { t } = useTranslation()
 
-  const points = [
+  const points: WhyPoint[] = items ?? [
     { title: t("home.why.freeTitle"), body: t("home.why.freeBody"), link: { to: "/site/pricing", label: t("home.why.freeLink") } },
     { title: t("home.why.easyTitle"), body: t("home.why.easyBody") },
     { title: t("home.why.supportTitle"), body: t("home.why.supportBody"), link: { to: "/site/contact", label: t("home.why.supportLink") } },
@@ -16,7 +18,7 @@ export default function WhyApply() {
     <section className="rounded-sm bg-subtle px-4 py-12 sm:px-10 sm:py-16">
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_2.2fr] lg:items-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">{t("home.why.title")}</h2>
+          <h2 className="text-2xl font-bold text-cas-navy sm:text-3xl">{title ?? t("home.why.title")}</h2>
           <div className="mx-auto mt-8 flex w-48 items-end justify-center gap-3" aria-hidden="true">
             <span className="flex size-20 items-center justify-center rounded-full bg-cas-navy text-white"><GraduationCap className="size-10" /></span>
             <span className="flex size-20 items-center justify-center rounded-full bg-cas-red text-white"><Handshake className="size-10" /></span>

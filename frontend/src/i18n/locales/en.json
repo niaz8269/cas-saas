@@ -1206,6 +1206,12 @@
       "hrs": "Hrs",
       "min": "Min",
       "sec": "Sec"
+    },
+    "share": {
+      "title": "Studied or worked with CAS?",
+      "body": "Tell us how it went. Your words help the next student or partner decide.",
+      "student": "Share your experience",
+      "partner": "I am a partner"
     }
   },
   "portal": {

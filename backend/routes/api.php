@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\V1\DepartmentController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\ErrorLogController;
 use App\Http\Controllers\Api\V1\GuardianController;
+use App\Http\Controllers\Api\V1\HomeSectionController;
 use App\Http\Controllers\Api\V1\Ingest\IngestApplicationController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
@@ -95,6 +96,8 @@ Route::prefix('v1')->group(function () {
         // Content: blogs / news / events (published only)
         Route::get('posts', [PublicPostController::class, 'index']);
         Route::get('posts/{slug}', [PublicPostController::class, 'show']);
+        // The home page layout and any text/image changes made in the admin panel
+        Route::get('home', [HomeSectionController::class, 'publicIndex']);
         // Testimonials the author agreed to and staff approved
         Route::get('testimonials', [TestimonialController::class, 'publicIndex']);
     });
@@ -265,6 +268,14 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:content.manage.global,staff');
         Route::delete('posts/{post}', [PostController::class, 'destroy'])
             ->middleware('permission:content.manage.global,staff');
+
+        // Home page manager (content module)
+        Route::get('home-sections', [HomeSectionController::class, 'index'])->middleware('permission:content.view.global,staff');
+        Route::post('home-sections', [HomeSectionController::class, 'store'])->middleware('permission:content.manage.global,staff');
+        Route::post('home-sections/reorder', [HomeSectionController::class, 'reorder'])->middleware('permission:content.manage.global,staff');
+        Route::match(['put', 'patch'], 'home-sections/{section}', [HomeSectionController::class, 'update'])->middleware('permission:content.manage.global,staff');
+        Route::post('home-sections/{section}/reset', [HomeSectionController::class, 'reset'])->middleware('permission:content.manage.global,staff');
+        Route::delete('home-sections/{section}', [HomeSectionController::class, 'destroy'])->middleware('permission:content.manage.global,staff');
 
         // Testimonials: review, edit, approve (content module)
         Route::get('testimonials', [TestimonialController::class, 'index'])
