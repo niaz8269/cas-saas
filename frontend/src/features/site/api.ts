@@ -326,3 +326,10 @@ export interface SiteTestimonialSummary {
 export function getSiteTestimonials(audience: "student" | "agent") {
   return siteApi<{ data: SiteTestimonial[]; summary: SiteTestimonialSummary }>(`/public/testimonials?audience=${audience}`)
 }
+
+import type { HomeSectionData } from "@/features/site/homeContent"
+
+/** The home page's sections in order, with any changes made in the admin panel. */
+export function getSiteHome() {
+  return siteApi<{ data: HomeSectionData[] }>("/public/home")
+}

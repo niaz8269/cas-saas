@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   ListChecks,
   Megaphone,
+  LayoutTemplate,
   MessageSquareQuote,
   Newspaper,
   Plane,
@@ -71,6 +72,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Operations",
     items: [
       { title: "Content", to: "/content", icon: Newspaper, module: "content" },
+      { title: "Home page", to: "/home-page", icon: LayoutTemplate, module: "content" },
       { title: "Testimonials", to: "/testimonials", icon: MessageSquareQuote, module: "content" },
       { title: "Campaigns", to: "/campaigns", icon: Megaphone, module: "marketing" },
       { title: "Visa", to: "/visa", icon: Plane, module: "visa" },

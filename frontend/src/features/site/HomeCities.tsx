@@ -25,7 +25,7 @@ function CityCard({ city, tall }: { city: SiteCityStat; tall?: boolean }) {
 }
 
 /** Study-by-city shortcut right under the hero: each card opens that city's universities. */
-export default function HomeCities({ cities, isPending }: { cities?: SiteCityStat[]; isPending: boolean }) {
+export default function HomeCities({ cities, isPending, title, subtitle, seeMore }: { cities?: SiteCityStat[]; isPending: boolean; title?: string; subtitle?: string; seeMore?: string }) {
   const { t } = useTranslation()
 
   // Cities with a real city photo first, then by number of universities.
@@ -35,8 +35,8 @@ export default function HomeCities({ cities, isPending }: { cities?: SiteCitySta
 
   return (
     <section>
-      <h2 className="text-center text-2xl font-bold text-cas-navy sm:text-[2rem]">{t("home.cities.title")}</h2>
-      <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-muted-foreground">{t("home.cities.subtitle")}</p>
+      <h2 className="text-center text-2xl font-bold text-cas-navy sm:text-[2rem]">{title ?? t("home.cities.title")}</h2>
+      <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-muted-foreground">{subtitle ?? t("home.cities.subtitle")}</p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {isPending && Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-52 rounded-sm" />)}
@@ -49,7 +49,7 @@ export default function HomeCities({ cities, isPending }: { cities?: SiteCitySta
       )}
       <p className="mt-5">
         <Link to="/site/cities" className="inline-flex items-center gap-1 text-sm font-semibold text-cas-red-600 hover:underline">
-          {t("home.cities.seeMore")} <ArrowRight className="size-4" />
+          {seeMore ?? t("home.cities.seeMore")} <ArrowRight className="size-4" />
         </Link>
       </p>
     </section>

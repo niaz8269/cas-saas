@@ -376,3 +376,29 @@ export const updateTestimonial = (id: number, payload: Partial<Pick<TestimonialR
   api<{ data: TestimonialRow }>(`/testimonials/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
 
 export const deleteTestimonial = (id: number) => api<void>(`/testimonials/${id}`, { method: "DELETE" })
+
+import type { HomeContent } from "@/features/site/homeContent"
+
+export interface HomeSectionRow {
+  id: number
+  key: string
+  type: string
+  sort_order: number
+  is_visible: boolean
+  content: HomeContent | null
+}
+
+export const listHomeSections = () => api<{ data: HomeSectionRow[] }>("/home-sections")
+
+export const updateHomeSection = (id: number, payload: { is_visible?: boolean; content?: HomeContent | null }) =>
+  api<{ data: HomeSectionRow }>(`/home-sections/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+export const resetHomeSection = (id: number) => api<{ data: HomeSectionRow }>(`/home-sections/${id}/reset`, { method: "POST" })
+
+export const reorderHomeSections = (order: number[]) =>
+  api<{ data: HomeSectionRow[] }>("/home-sections/reorder", { method: "POST", body: JSON.stringify({ order }) })
+
+export const createHomeSection = (type: "banner" | "text") =>
+  api<{ data: HomeSectionRow }>("/home-sections", { method: "POST", body: JSON.stringify({ type }) })
+
+export const deleteHomeSection = (id: number) => api<void>(`/home-sections/${id}`, { method: "DELETE" })
