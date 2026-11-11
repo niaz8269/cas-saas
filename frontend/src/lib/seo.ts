@@ -1,7 +1,8 @@
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 
-const SITE_NAME = "CAS — Consultancy for Abroad Study"
+const SITE_NAME = "CAS-Consultancy for Abroad Study"
+const ALTERNATE_NAMES = ["CAS", "CAS Education", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
 
 /** Production origin for canonical/OG URLs. Falls back to the live origin so
  *  canonicals are always self-referential and valid wherever this deploys. */
@@ -52,7 +53,8 @@ export function useSeo({ title, description, canonicalPath, image, jsonLd }: Seo
 
   useEffect(() => {
     const base = baseUrl()
-    const fullTitle = title ? `${title} | CAS` : SITE_NAME
+    // The home page leads with the full company name: it is the name search engines show for the site.
+    const fullTitle = canonicalPath === "/" ? `${SITE_NAME} | ${title ?? "Study in China"}` : title ? `${title} | CAS` : SITE_NAME
     const url = base + (canonicalPath ?? pathname)
     const img = image ?? `${base}/og-image.png`
 
@@ -92,11 +94,11 @@ export function organizationJsonLd(): Record<string, unknown> {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     name: SITE_NAME,
-    alternateName: "CAS Education",
+    alternateName: ALTERNATE_NAMES,
     url: base,
     logo: `${base}/og-image.png`,
     description:
-      "CAS — Consultancy for Abroad Study places international students into Ministry of Education–listed universities across China, with full support from application to arrival.",
+      "CAS-Consultancy for Abroad Study places international students into Ministry of Education–listed universities across China, with full support from application to arrival.",
     sameAs: ["https://www.cas.moe"],
   }
 }

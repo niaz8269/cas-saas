@@ -8,7 +8,12 @@
 | results do not truncate them. `{site}` is appended as " | CAS".
 */
 return [
-    'site_name' => 'CAS — Consultancy for Abroad Study',
+    // The name Google should show for the whole site. Keep it identical in the page title, og:site_name,
+    // the WebSite and Organization data, and the visible logo/footer text.
+    'site_name' => 'CAS-Consultancy for Abroad Study',
+    // Other names people use; sent to Google as WebSite alternateName.
+    'alternate_names' => ['CAS', 'CAS Education', 'CAS Consultancy for Abroad Study', 'Consultancy for Abroad Study'],
+
     'short_name' => 'CAS',
 
     // Public origin used in canonicals, sitemaps and social tags (no trailing slash).
@@ -27,7 +32,7 @@ return [
 
     // Static public pages: path => [title, description, priority, changefreq]
     'pages' => [
-        '' => ['Study in China: Universities, Programs & Scholarships', 'Find MBBS, engineering and business programs at {universities} Chinese universities and colleges. See application windows, tuition and scholarships, and apply with CAS.', 1.0, 'daily'],
+        '' => ['Study in China', 'Find MBBS, engineering and business programs at {universities} Chinese universities and colleges. See application windows, tuition and scholarships, and apply with CAS.', 1.0, 'daily'],
         'site/universities' => ['Universities in China for International Students', 'Browse {universities} Chinese universities and colleges with programs, tuition, application windows and scholarships for international students. Filter by city or MoE-approved MBBS.', 0.9, 'daily'],
         'site/programs' => ['Find Programs to Study in China', 'Search {programs} programs in China by degree, language and budget: bachelor, master, PhD, English-taught MBBS, engineering and business.', 0.9, 'daily'],
         'site/scholarships' => ['Scholarships to Study in China', 'Chinese Government (CSC), provincial and university scholarships for international students, with eligibility and application windows.', 0.9, 'weekly'],

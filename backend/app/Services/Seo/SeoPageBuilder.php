@@ -342,7 +342,8 @@ class SeoPageBuilder
 
         return [
             'status' => $status,
-            'title' => $title === 'CAS' || $noindex ? $title : $title.' | CAS',
+            // The home page leads with the full company name, so it is the name search engines show for the site.
+            'title' => $canonical === '/' ? config('seo.site_name').' | '.$title : ($title === 'CAS' || $noindex ? $title : $title.' | CAS'),
             'description' => $description,
             'canonical' => $this->abs($canonical),
             'image' => $image ?: $this->abs(config('seo.default_image')),
@@ -361,7 +362,7 @@ class SeoPageBuilder
             '@context' => 'https://schema.org',
             '@type' => 'EducationalOrganization',
             'name' => config('seo.site_name'),
-            'alternateName' => 'CAS',
+            'alternateName' => config('seo.alternate_names'),
             'url' => $this->abs('/'),
             'logo' => $this->abs('/cas-logo-copy.png'),
             'foundingDate' => '2012',
@@ -377,6 +378,7 @@ class SeoPageBuilder
             '@context' => 'https://schema.org',
             '@type' => 'WebSite',
             'name' => config('seo.site_name'),
+            'alternateName' => config('seo.alternate_names'),
             'url' => $this->abs('/'),
             'potentialAction' => ['@type' => 'SearchAction', 'target' => $this->abs('/site/universities').'?q={search_term_string}', 'query-input' => 'required name=search_term_string'],
         ];
