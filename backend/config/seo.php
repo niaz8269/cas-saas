@@ -30,6 +30,9 @@ return [
 
     'default_image' => '/og-image.png',
 
+    // How long a prerendered public page is reused (0 disables). Keeps crawler bursts off the database.
+    'page_cache_seconds' => env('SEO_PAGE_CACHE_SECONDS', env('APP_ENV') === 'testing' ? 0 : 900),
+
     // Static public pages: path => [title, description, priority, changefreq]
     'pages' => [
         '' => ['Study in China', 'Find MBBS, engineering and business programs at {universities} Chinese universities and colleges. See application windows, tuition and scholarships, and apply with CAS.', 1.0, 'daily'],
