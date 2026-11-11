@@ -46,6 +46,8 @@ class DatabaseSeeder extends Seeder
             NewsSeeder::class,
             HomeSectionSeeder::class,
             GuidesSeeder::class,
+            SeoArticlesSeeder::class,
+            ArticleDepthSeeder::class,
         ]);
     }
 }
