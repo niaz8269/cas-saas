@@ -89,7 +89,7 @@ class PasswordResetController extends Controller
         $data = $request->validate([
             'email' => ['required', 'email'],
             'token' => ['required', 'string'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(10)->letters()->numbers()],
         ]);
         $email = mb_strtolower(trim($data['email']));
         $key = $this->key($audience, $email);

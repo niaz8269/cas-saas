@@ -110,7 +110,7 @@ export function ForgotPasswordPage({ mode }: { mode: "staff" | "portal" }) {
 
 const resetSchema = z
   .object({
-    password: z.string().min(8, "Use at least 8 characters"),
+    password: z.string().min(10, "Use at least 10 characters, with letters and numbers").regex(/[A-Za-z]/, "Use at least 10 characters, with letters and numbers").regex(/[0-9]/, "Use at least 10 characters, with letters and numbers"),
     password_confirmation: z.string(),
   })
   .refine((d) => d.password === d.password_confirmation, { message: "Passwords don't match", path: ["password_confirmation"] })

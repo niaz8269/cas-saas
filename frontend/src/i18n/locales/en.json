@@ -1289,7 +1289,7 @@
       "errorWebsite": "Website is required",
       "errorCountry": "Please select your country",
       "errorAddress": "Address is required",
-      "errorPasswordMin": "Use at least 8 characters",
+      "errorPasswordMin": "Use at least 10 characters, with letters and numbers",
       "errorPasswordMatch": "Passwords don't match"
     }
   },

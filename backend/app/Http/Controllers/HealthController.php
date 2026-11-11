@@ -16,8 +16,6 @@ class HealthController extends Controller
     {
         return response()->json([
             'status' => 'ok',
-            'app' => config('app.name'),
-            'env' => app()->environment(),
             'time' => now()->toIso8601String(),
         ]);
     }

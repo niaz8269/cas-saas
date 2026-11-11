@@ -6,7 +6,7 @@ it('reports liveness on /health', function () {
         ->assertJson([
             'status' => 'ok',
         ])
-        ->assertJsonStructure(['status', 'app', 'env', 'time']);
+        ->assertJsonStructure(['status', 'time']);
 });
 
 it('reports per-dependency checks on /ready', function () {

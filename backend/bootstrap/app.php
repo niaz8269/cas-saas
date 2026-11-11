@@ -2,6 +2,7 @@
 
 use App\Exceptions\ChecklistIncompleteException;
 use App\Http\Middleware\AuthenticateApiSource;
+use App\Http\Middleware\SecurityHeaders;
 use App\Services\Monitoring\ErrorLogger;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -24,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(SecurityHeaders::class);
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
