@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
             HomeSectionSeeder::class,
             GuidesSeeder::class,
             SeoArticlesSeeder::class,
+            ArticleDepthSeeder::class,
         ]);
     }
 }
