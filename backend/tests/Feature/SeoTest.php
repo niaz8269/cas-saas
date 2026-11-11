@@ -17,7 +17,10 @@ it('serves the homepage with a title, canonical, structured data and crawlable l
 
     $html = get('/')->assertOk()->getContent();
 
-    expect($html)->toContain('<title>Study in China: Universities, Programs &amp; Scholarships | CAS</title>')
+    expect($html)->toContain('<title>CAS-Consultancy for Abroad Study | Study in China</title>')
+        ->and($html)->toContain('<meta property="og:site_name" content="CAS-Consultancy for Abroad Study" />')
+        ->and($html)->toContain('"@type":"WebSite","name":"CAS-Consultancy for Abroad Study"')
+        ->and($html)->toContain('"alternateName":["CAS","CAS Education"')
         ->and($html)->toContain('<link rel="canonical" href="https://example.test/" />')
         ->and($html)->toContain('"@type":"WebSite"')
         ->and($html)->toContain('<h1>Study in China</h1>')
