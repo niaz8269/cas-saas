@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Public;
 
+use App\Support\CountryList;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,13 +23,14 @@ class PublicEnquiryRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:190', 'required_without:phone'],
             'phone' => ['nullable', 'string', 'max:30', 'required_without:email'],
-            'country' => ['nullable', 'string', 'size:2', Rule::exists('countries', 'iso2')],
+            // Any real country: the CRM links it to a country record when it has one, and keeps the lead either way.
+            'country' => ['nullable', 'string', 'size:2', Rule::in(array_keys(CountryList::NAMES))],
             'message' => ['nullable', 'string', 'max:2000'],
             'interested_university_id' => ['nullable', 'integer', Rule::exists('universities', 'id')],
             'interested_program_id' => ['nullable', 'integer', Rule::exists('programs', 'id')],
             'source_url' => ['nullable', 'string', 'max:255'],
             // Which website form this came from (study-plan wizard vs plain enquiry).
-            'form_type' => ['nullable', Rule::in(['enquiry', 'study_plan', 'contact'])],
+            'form_type' => ['nullable', Rule::in(['enquiry', 'study_plan', 'contact', 'home_popup'])],
             // Structured qualifying answers (study-plan wizard) → stored in lead meta.
             'details' => ['nullable', 'array', 'max:20'],
             'details.*' => ['nullable', 'string', 'max:200'],

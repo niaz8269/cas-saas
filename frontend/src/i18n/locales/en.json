@@ -1025,6 +1025,34 @@
     "notSure": "Not sure where to start?",
     "freeConsultation": "Get a free consultation »"
   },
+  "homePopup": {
+    "title": "Apply to Study in China with CAS",
+    "subtitle": "Tell us what you want to study. A CAS advisor will contact you with the right universities, fees and dates.",
+    "degree": "Select degree",
+    "degrees": { "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree" },
+    "program": "Select program",
+    "programs": {
+      "mbbs": "MBBS (Clinical Medicine)",
+      "dentistry": "Dentistry (BDS)",
+      "tcm": "Traditional Chinese Medicine",
+      "engineering": "Engineering",
+      "computer": "Computer Science and IT",
+      "business": "Business and Management",
+      "language": "Chinese Language",
+      "other": "Other / not sure yet"
+    },
+    "name": "Name",
+    "nationality": "Nationality",
+    "email": "Email",
+    "whatsapp": "WhatsApp number",
+    "submit": "Submit",
+    "close": "Close",
+    "errorDegree": "Please choose a degree",
+    "errorProgram": "Please choose a program",
+    "errorName": "Please enter your name",
+    "errorCountry": "Please choose your nationality",
+    "errorContact": "Please enter an email or a WhatsApp number"
+  },
   "enquiry": {
     "title": "Enquire",
     "titleAbout": "Enquire about {{name}}",
