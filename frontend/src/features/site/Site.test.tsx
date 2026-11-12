@@ -86,7 +86,9 @@ it("renders the CUCAS-style home with hero, search and sections", async () => {
   expect(screen.getByRole("heading", { name: "Study in China", level: 1 })).toBeInTheDocument()
   expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument()
   expect(screen.getByLabelText("Search universities or programs")).toBeInTheDocument()
-  expect(screen.getByText("Weekly Programs")).toBeInTheDocument()
+  expect(screen.getByText("Programs Open for Applications")).toBeInTheDocument()
+  expect(screen.getByText("How applying with CAS works")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: /See all open programs/ })).toHaveAttribute("href", "/site/programs?language=English")
   expect(screen.getByText("Highlights")).toBeInTheDocument()
   // Live data from the public API renders in the university sections.
   expect((await screen.findAllByText("Jilin Medical University")).length).toBeGreaterThan(0)

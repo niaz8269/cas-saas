@@ -81,6 +81,9 @@ export default function SiteHome() {
     enabled: !!weekly?.university?.slug,
   })
   const today = new Date().setHours(0, 0, 0, 0)
+  // Totals for the whole catalog (not just this page of results): programs and universities with an open window.
+  const openProgramCount = programs.data?.meta?.total ?? openPrograms.length
+  const openUniversityCount = openUniversities.data?.meta?.total ?? 0
   const weeklyWindow = weeklyUniversity.data?.data.intakes.find((i) => i.status !== "closed" && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
 
   const runSearch = (e: React.FormEvent) => {
@@ -209,7 +212,24 @@ export default function SiteHome() {
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> {tx(s, "title", t("home.weekly.title"))}
         </h2>
-        <div className="mt-10 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
+        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground sm:text-base">{t("home.weekly.intro")}</p>
+        {(openProgramCount > 0 || openUniversityCount > 0) && (
+          <dl className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-3 text-center">
+            {openProgramCount > 0 && (
+              <div className="flex flex-col-reverse rounded-sm border bg-card px-4 py-3 shadow-sm">
+                <dt className="text-xs text-muted-foreground">{t("home.weekly.statPrograms")}</dt>
+                <dd className="text-2xl font-bold text-cas-navy">{openProgramCount.toLocaleString()}</dd>
+              </div>
+            )}
+            {openUniversityCount > 0 && (
+              <div className="flex flex-col-reverse rounded-sm border bg-card px-4 py-3 shadow-sm">
+                <dt className="text-xs text-muted-foreground">{t("home.weekly.statUniversities")}</dt>
+                <dd className="text-2xl font-bold text-cas-navy">{openUniversityCount.toLocaleString()}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+        <div className="mt-8 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
           <PhotoBanner src="/images/art-3.svg" image={weeklyUniversity.data?.data.cover_url ? { src: weeklyUniversity.data.data.cover_url, credit: weeklyUniversity.data.data.cover_credit ?? undefined } : null} className="min-h-48" />
           <div className="p-6">
             {weekly ? (
@@ -241,6 +261,29 @@ export default function SiteHome() {
             ) : (
               <Skeleton className="h-48 w-full" />
             )}
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-center text-base font-semibold text-cas-navy">{t("home.weekly.howTitle")}</h3>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-3">
+            {([1, 2, 3] as const).map((n) => (
+              <li key={n} className="flex gap-3 rounded-sm border bg-card p-4 shadow-sm">
+                <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-white">{n}</span>
+                <span>
+                  <span className="block text-sm font-semibold text-cas-navy">{t(`home.weekly.step${n}Title`)}</span>
+                  <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">{t(`home.weekly.step${n}Body`)}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <Link to="/site/programs?language=English" className="inline-flex h-10 items-center gap-2 rounded-sm bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
+              {t("home.weekly.seeAll")} <ArrowRight className="size-4" />
+            </Link>
+            <Link to="/site/study-plan" className="inline-flex h-10 items-center rounded-sm border border-cas-navy px-5 text-sm font-semibold text-cas-navy hover:bg-cas-navy-50">
+              {t("home.weekly.freePlan")}
+            </Link>
           </div>
         </div>
       </section>
