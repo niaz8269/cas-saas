@@ -1027,10 +1027,10 @@
   },
   "homePopup": {
     "title": "Apply to Study in China with CAS",
-    "subtitle": "Tell us what you want to study. A CAS advisor will contact you with the right universities, fees and dates.",
-    "degree": "Select degree",
+    "subtitle": "A CAS advisor will contact you shortly.",
+    "degree": "Degree",
     "degrees": { "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree" },
-    "program": "Select program",
+    "program": "Program",
     "programs": {
       "mbbs": "MBBS (Clinical Medicine)",
       "dentistry": "Dentistry (BDS)",
@@ -1044,7 +1044,7 @@
     "name": "Name",
     "nationality": "Nationality",
     "email": "Email",
-    "whatsapp": "WhatsApp number",
+    "whatsapp": "WhatsApp",
     "submit": "Submit",
     "close": "Close",
     "errorDegree": "Please choose a degree",

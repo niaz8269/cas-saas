@@ -20,7 +20,7 @@ function isAutomated(): boolean {
 const DEGREES = ["bachelor", "master", "phd", "non_degree"] as const
 const PROGRAMS = ["mbbs", "dentistry", "tcm", "engineering", "computer", "business", "language", "other"] as const
 
-const selectClass = "h-11 w-full rounded-none border border-input bg-background px-3 text-sm focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:outline-none"
+const selectClass = "h-8 w-full rounded-none border border-input bg-background px-2 text-base sm:text-sm focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:outline-none"
 
 /**
  * Quick-enquiry pop-up for the home page. Posts to the same public enquiry endpoint as every other website
@@ -89,40 +89,42 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[92dvh] overflow-y-auto rounded-none sm:max-w-md" aria-describedby="home-popup-desc">
+      <DialogContent className="max-h-[90dvh] gap-2 overflow-y-auto rounded-none p-4 sm:max-w-[19.5rem]" aria-describedby="home-popup-desc">
         {mutation.isSuccess ? (
-          <div className="py-6 text-center">
-            <CheckCircle2 className="mx-auto size-10 text-green-600" />
-            <DialogTitle className="mt-3 text-lg text-cas-navy">{t("enquiry.thankYou")}</DialogTitle>
-            <DialogDescription id="home-popup-desc" className="mt-1">{t("enquiry.thankYouBody")}</DialogDescription>
-            <Button className="mt-5 rounded-none" onClick={() => setOpen(false)}>{t("homePopup.close")}</Button>
+          <div className="py-3 text-center">
+            <CheckCircle2 className="mx-auto size-8 text-green-600" />
+            <DialogTitle className="mt-2 text-base text-cas-navy">{t("enquiry.thankYou")}</DialogTitle>
+            <DialogDescription id="home-popup-desc" className="mt-1 text-xs">{t("enquiry.thankYouBody")}</DialogDescription>
+            <Button className="mt-3 h-8 rounded-none" onClick={() => setOpen(false)}>{t("homePopup.close")}</Button>
           </div>
         ) : (
           <>
-            <DialogHeader>
-              <DialogTitle className="text-center text-xl font-semibold text-cas-navy">{t("homePopup.title")}</DialogTitle>
-              <DialogDescription id="home-popup-desc" className="text-center">{t("homePopup.subtitle")}</DialogDescription>
+            <DialogHeader className="gap-0.5">
+              <DialogTitle className="px-5 text-center text-sm leading-tight font-semibold text-cas-navy">{t("homePopup.title")}</DialogTitle>
+              <DialogDescription id="home-popup-desc" className="text-center text-[11px] leading-tight">{t("homePopup.subtitle")}</DialogDescription>
             </DialogHeader>
 
-            <form className="space-y-3" onSubmit={submit} noValidate>
+            <form className="space-y-1.5" onSubmit={submit} noValidate>
               {mutation.isError && Object.keys(errors).length === 0 && (
-                <p role="alert" className="rounded-none bg-cas-red-50 px-3 py-2 text-sm text-destructive">{t("enquiry.errorGeneric")}</p>
+                <p role="alert" className="rounded-none bg-cas-red-50 px-2 py-1 text-xs text-destructive">{t("enquiry.errorGeneric")}</p>
               )}
 
-              <Field error={errors.degree}>
-                <select aria-label={t("homePopup.degree")} className={selectClass} value={values.degree} onChange={set("degree")}>
-                  <option value="">{t("homePopup.degree")}</option>
-                  {DEGREES.map((d) => <option key={d} value={d}>{t(`homePopup.degrees.${d}`)}</option>)}
-                </select>
-              </Field>
-              <Field error={errors.program}>
-                <select aria-label={t("homePopup.program")} className={selectClass} value={values.program} onChange={set("program")}>
-                  <option value="">{t("homePopup.program")}</option>
-                  {PROGRAMS.map((p) => <option key={p} value={p}>{t(`homePopup.programs.${p}`)}</option>)}
-                </select>
-              </Field>
+              <div className="grid grid-cols-2 gap-1.5">
+                <Field error={errors.degree}>
+                  <select aria-label={t("homePopup.degree")} className={selectClass} value={values.degree} onChange={set("degree")}>
+                    <option value="">{t("homePopup.degree")}</option>
+                    {DEGREES.map((d) => <option key={d} value={d}>{t(`homePopup.degrees.${d}`)}</option>)}
+                  </select>
+                </Field>
+                <Field error={errors.program}>
+                  <select aria-label={t("homePopup.program")} className={selectClass} value={values.program} onChange={set("program")}>
+                    <option value="">{t("homePopup.program")}</option>
+                    {PROGRAMS.map((p) => <option key={p} value={p}>{t(`homePopup.programs.${p}`)}</option>)}
+                  </select>
+                </Field>
+              </div>
               <Field error={errors.first_name}>
-                <Input aria-label={t("homePopup.name")} placeholder={t("homePopup.name")} value={values.name} onChange={set("name")} autoComplete="name" className="h-11 rounded-none" />
+                <Input aria-label={t("homePopup.name")} placeholder={t("homePopup.name")} value={values.name} onChange={set("name")} autoComplete="name" className="h-8 rounded-none px-2 text-base sm:text-sm" />
               </Field>
               <Field error={errors.country}>
                 <select aria-label={t("homePopup.nationality")} className={selectClass} value={values.country} onChange={set("country")}>
@@ -130,19 +132,21 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                   {COUNTRIES.map((c) => <option key={c.iso2} value={c.iso2}>{c.name}</option>)}
                 </select>
               </Field>
-              <Field error={errors.email}>
-                <Input aria-label={t("homePopup.email")} type="email" placeholder={t("homePopup.email")} value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" className="h-11 rounded-none" />
-              </Field>
-              <Field error={errors.phone}>
-                <Input aria-label={t("homePopup.whatsapp")} placeholder={t("homePopup.whatsapp")} value={values.phone} onChange={set("phone")} autoComplete="tel" inputMode="tel" className="h-11 rounded-none" />
-              </Field>
+              <div className="grid grid-cols-2 gap-1.5">
+                <Field error={errors.email}>
+                  <Input aria-label={t("homePopup.email")} type="email" placeholder={t("homePopup.email")} value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" className="h-8 rounded-none px-2 text-base sm:text-sm" />
+                </Field>
+                <Field error={errors.phone}>
+                  <Input aria-label={t("homePopup.whatsapp")} placeholder={t("homePopup.whatsapp")} value={values.phone} onChange={set("phone")} autoComplete="tel" inputMode="tel" className="h-8 rounded-none px-2 text-base sm:text-sm" />
+                </Field>
+              </div>
 
               {/* Honeypot: hidden from people, off the tab order; the server drops anything that fills it. */}
               <div className="hidden" aria-hidden="true">
                 <label>Company<input tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} /></label>
               </div>
 
-              <Button type="submit" className="h-11 w-full rounded-none bg-cas-red text-white hover:bg-cas-red/90" disabled={mutation.isPending}>
+              <Button type="submit" className="h-8 w-full rounded-none bg-cas-navy text-sm text-white hover:bg-cas-navy-700" disabled={mutation.isPending}>
                 {mutation.isPending ? t("enquiry.sending") : t("homePopup.submit")}
               </Button>
             </form>
@@ -155,9 +159,9 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
 
 function Field({ error, children }: { error?: string; children: React.ReactNode }) {
   return (
-    <div>
+    <div className="min-w-0">
       {children}
-      {error && <p role="alert" className="mt-1 text-sm text-destructive">{error}</p>}
+      {error && <p role="alert" className="mt-0.5 text-xs text-destructive">{error}</p>}
     </div>
   )
 }
