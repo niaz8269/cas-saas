@@ -171,7 +171,9 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
 
   await user.click(screen.getByRole("button", { name: "Leave Message" }))
 
-  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8617640412827")
+  const whatsappLinks = screen.getAllByRole("link", { name: /WhatsApp/ })
+  expect(whatsappLinks.length).toBeGreaterThanOrEqual(2)
+  whatsappLinks.forEach((link) => expect(link).toHaveAttribute("href", "https://wa.me/8617640412827"))
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
   expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@cas.moe")
 })
@@ -394,4 +396,24 @@ it("lists what CAS offers on the Our Services page, with what each service inclu
   expect(screen.getByRole("heading", { name: "How it works" })).toBeInTheDocument()
   expect(screen.getByRole("link", { name: /See how our fees work/ })).toHaveAttribute("href", "/site/pricing")
   expect(screen.getByRole("link", { name: /MBBS in China/ })).toHaveAttribute("href", "/site/mbbs-in-china")
+})
+
+it("sends the 'All universities' back link to the universities list, not the home page", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) => Promise.resolve(jsonResponse(String(url).includes("/public/universities?") ? LIST : DETAIL))))
+
+  renderWithProviders(
+    <Routes>
+      <Route path="/site/universities" element={<div>Universities list page</div>} />
+      <Route path="/site/universities/:slug" element={<SiteUniversity />} />
+      <Route path="/" element={<div>Home page</div>} />
+    </Routes>,
+    { route: "/site/universities/jilin-medical-university" },
+  )
+
+  const back = await screen.findByRole("link", { name: /All universities/ })
+  expect(back).toHaveAttribute("href", "/site/universities")
+  await user.click(back)
+  expect(await screen.findByText("Universities list page")).toBeInTheDocument()
+  expect(screen.queryByText("Home page")).not.toBeInTheDocument()
 })

@@ -9,6 +9,7 @@ import casLogoWhite from "@/assets/cas-logo-white.png"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
+import SiteWhatsAppButton from "@/features/site/SiteWhatsAppButton"
 import { loadTawk } from "@/lib/tawk"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
@@ -350,6 +351,7 @@ export default function SiteLayout() {
 
       {/* Persistent conversion chrome: HELP tab + bottom help bar + counsellor widget */}
       <SiteHelpDock />
+      <SiteWhatsAppButton />
     </div>
   )
 }
