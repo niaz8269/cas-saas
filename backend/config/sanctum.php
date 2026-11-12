@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => env('SANCTUM_EXPIRATION', 10080), // minutes: sign in again after a week
 
     /*
     |--------------------------------------------------------------------------

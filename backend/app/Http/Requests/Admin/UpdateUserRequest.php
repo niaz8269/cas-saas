@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['sometimes', 'email', 'max:190', Rule::unique('users', 'email')->ignore($id)],
             'phone' => ['sometimes', 'nullable', 'string', 'max:30'],
             // Optional: only rotates the password when a non-empty value is sent.
-            'password' => ['sometimes', 'nullable', 'string', 'min:8', 'max:255'],
+            'password' => ['sometimes', 'nullable', 'string', Password::min(10)->letters()->numbers(), 'max:255'],
             'branch_id' => ['sometimes', 'nullable', 'integer', Rule::exists('branches', 'id')],
             'department_id' => ['sometimes', 'nullable', 'integer', Rule::exists('departments', 'id')],
             'status' => ['sometimes', Rule::in(StoreUserRequest::STATUSES)],

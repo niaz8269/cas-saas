@@ -119,13 +119,13 @@ export default function UserFormDialog({
   const onSubmit = (v: Values) => {
     const pw = v.password?.trim() ?? ""
     // Password required on create; optional on edit but must be strong if set.
-    if (!isEdit && pw.length < 8) {
-      setError("password", { type: "manual", message: "At least 8 characters" })
+    if (!isEdit && (pw.length < 10 || !/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw))) {
+      setError("password", { type: "manual", message: "At least 10 characters, with letters and numbers" })
 
       return
     }
-    if (isEdit && pw && pw.length < 8) {
-      setError("password", { type: "manual", message: "At least 8 characters" })
+    if (isEdit && pw && (pw.length < 10 || !/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw))) {
+      setError("password", { type: "manual", message: "At least 10 characters, with letters and numbers" })
 
       return
     }
@@ -171,7 +171,7 @@ export default function UserFormDialog({
             <Field
               label={isEdit ? "New password" : "Password"}
               error={errors.password?.message}
-              hint={isEdit ? "Leave blank to keep current" : "Min. 8 characters"}
+              hint={isEdit ? "Leave blank to keep current" : "Min. 10 characters, letters and numbers"}
             >
               <Input type="password" autoComplete="new-password" {...register("password")} />
             </Field>

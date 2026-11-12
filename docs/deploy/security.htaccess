@@ -1,0 +1,22 @@
+# Hardening rules for the web root (goes at the top of public_html/.htaccess, after the other deploy snippets).
+
+# Never serve hidden files, backups, dumps, logs or source/config files, even if one is left behind by mistake.
+<FilesMatch "(^\.|\.(env|git|bak|backup|old|orig|save|swp|sql|sqlite|log|ini|lock|dist|yml|yaml)$|^(composer|package)(-lock)?\.json$|^artisan$)">
+    Require all denied
+</FilesMatch>
+
+# No directory listings, no content-type guessing.
+Options -Indexes -MultiViews
+
+# Uploaded and static folders hold images only: nothing in them may ever run as a script.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(uploads|photos|images|logos|assets|wm|storage)/.*\.(php|phtml|phar|php[0-9]|pl|py|cgi|sh|asp|aspx|jsp)(/.*)?$ - [F,L,NC]
+</IfModule>
+
+# Do not leak the server and PHP versions.
+<IfModule mod_headers.c>
+    Header unset X-Powered-By
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>
+ServerSignature Off

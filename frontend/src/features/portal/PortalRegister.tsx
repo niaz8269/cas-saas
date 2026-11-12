@@ -103,7 +103,7 @@ function StudentForm() {
           last_name: z.string().min(1, t("portal.register.errorLastName")),
           email: z.string().min(1, t("portal.errorEmailRequired")).email(t("portal.errorEmailInvalid")),
           phone: z.string().min(1, t("portal.register.errorPhone")),
-          password: z.string().min(8, t("portal.register.errorPasswordMin")),
+          password: z.string().min(10, t("portal.register.errorPasswordMin")).regex(/[A-Za-z]/, t("portal.register.errorPasswordMin")).regex(/[0-9]/, t("portal.register.errorPasswordMin")),
           password_confirmation: z.string(),
           accept_terms: z.boolean().refine((v) => v, t("portal.register.errorTerms", { defaultValue: "Please accept the Terms & Conditions and Privacy Policy" })),
         })
@@ -174,7 +174,7 @@ function AgentForm() {
           website: z.string().min(1, t("portal.register.errorWebsite")),
           country_id: z.string().min(1, t("portal.register.errorCountry")),
           address: z.string().min(1, t("portal.register.errorAddress")),
-          password: z.string().min(8, t("portal.register.errorPasswordMin")),
+          password: z.string().min(10, t("portal.register.errorPasswordMin")).regex(/[A-Za-z]/, t("portal.register.errorPasswordMin")).regex(/[0-9]/, t("portal.register.errorPasswordMin")),
           password_confirmation: z.string(),
           accept_terms: z.boolean().refine((v) => v, t("portal.register.errorTerms", { defaultValue: "Please accept the Terms & Conditions and Privacy Policy" })),
         })

@@ -34,7 +34,7 @@ class AgentRegisterRequest extends FormRequest
             'website' => ['required', 'string', 'max:190'],
             'address' => ['required', 'string', 'max:255'],
             'country_id' => ['required', 'integer', Rule::exists('countries', 'id')],
-            'password' => ['required', 'string', 'confirmed', Password::min(8)],
+            'password' => ['required', 'string', 'confirmed', Password::min(10)->letters()->numbers()],
             'accept_terms' => ['accepted'],
             'device_name' => ['sometimes', 'string', 'max:100'],
         ];

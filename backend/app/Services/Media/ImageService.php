@@ -45,6 +45,7 @@ class ImageService
             $target = rtrim((string) config('media.public_path'), '/').$relative;
 
             File::ensureDirectoryExists(dirname($target));
+            $this->guardUploadsFolder(rtrim((string) config('media.public_path'), '/').'/uploads');
             File::put($target, $binary);
 
             return ['path' => $relative, 'url' => $relative];
@@ -53,6 +54,18 @@ class ImageService
         Storage::disk(self::DISK)->put($key, $binary);
 
         return ['path' => $key, 'url' => $this->url($key)];
+    }
+
+    /** Writes an .htaccess into the uploads folder so nothing in it can ever execute as a script. */
+    private function guardUploadsFolder(string $dir): void
+    {
+        $file = $dir.'/.htaccess';
+
+        if (is_file($file)) {
+            return;
+        }
+
+        File::put($file, "Options -Indexes -ExecCGI\n<FilesMatch \"(?i)\\.(php|phtml|phar|php[0-9]|pl|py|cgi|sh|asp|aspx|jsp)$\">\n    Require all denied\n</FilesMatch>\n");
     }
 
     /**

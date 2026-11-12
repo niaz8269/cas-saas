@@ -2,6 +2,7 @@
 
 use App\Exceptions\ChecklistIncompleteException;
 use App\Http\Middleware\AuthenticateApiSource;
+use App\Http\Middleware\SecurityHeaders;
 use App\Services\Monitoring\ErrorLogger;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -24,6 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // There is no web login page: an unauthenticated API call is a plain 401, never a redirect (which ended in a 500).
+        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') || $request->expectsJson() ? null : '/login');
+        $middleware->append(SecurityHeaders::class);
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
@@ -32,6 +36,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // Every /api URL answers in JSON, even when the caller (a crawler, a browser tab) sends no Accept header:
+        // otherwise an unauthenticated request tries to redirect to a login page that does not exist and ends in a 500.
+        $exceptions->shouldRenderJsonWhen(fn (Request $request, Throwable $e) => $request->is('api/*') || $request->expectsJson());
+
         // Capture unhandled server errors into the admin error monitor. The
         // logger applies its own skip-list (validation/auth/404/…) and never
         // throws, so default logging still runs.

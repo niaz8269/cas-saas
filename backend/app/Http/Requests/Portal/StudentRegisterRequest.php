@@ -32,7 +32,7 @@ class StudentRegisterRequest extends FormRequest
                 'required', 'string', 'email', 'max:190',
                 Rule::unique('students', 'email')->whereNull('deleted_at'),
             ],
-            'password' => ['required', 'string', 'confirmed', Password::min(8)],
+            'password' => ['required', 'string', 'confirmed', Password::min(10)->letters()->numbers()],
             'phone' => ['required', 'string', 'max:30'],
             'country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
             'accept_terms' => ['accepted'],
