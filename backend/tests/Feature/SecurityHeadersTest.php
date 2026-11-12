@@ -35,3 +35,7 @@ it('puts a script-blocking .htaccess in the uploads folder', function () {
     expect(File::get($public.'/uploads/.htaccess'))->toContain('Require all denied')->toContain('php');
     File::deleteDirectory($public);
 });
+
+it('answers an unauthenticated API request with 401 JSON even without an Accept header', function () {
+    $this->call('GET', '/api/v1/users')->assertStatus(401)->assertJsonPath('code', 'UNAUTHENTICATED');
+});
