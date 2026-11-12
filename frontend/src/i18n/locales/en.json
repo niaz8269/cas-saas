@@ -1025,6 +1025,10 @@
     "notSure": "Not sure where to start?",
     "freeConsultation": "Get a free consultation »"
   },
+  "whatsappButton": {
+    "label": "Chat with CAS on WhatsApp",
+    "message": "Hello CAS, I would like to know more about studying in China."
+  },
   "homePopup": {
     "title": "Apply to Study in China",
     "subtitle": "Tell us what you want to study and a CAS advisor will contact you with the right universities, fees and dates.",
