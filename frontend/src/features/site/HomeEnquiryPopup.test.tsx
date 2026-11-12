@@ -17,8 +17,8 @@ it("opens after a short delay with the CAS title and the degree choices", async 
   renderWithProviders(<HomeEnquiryPopup delayMs={10} />)
 
   expect(await screen.findByRole("dialog")).toBeInTheDocument()
-  expect(screen.getByText("Apply to Study in China with CAS")).toBeInTheDocument()
-  const degree = screen.getByLabelText("Select degree") as HTMLSelectElement
+  expect(screen.getByText("Apply to Study in China")).toBeInTheDocument()
+  const degree = screen.getByLabelText("Degree") as HTMLSelectElement
   expect(Array.from(degree.options).map((o) => o.text)).toEqual(["Select degree", "Bachelors", "Master", "PhD", "Non-Degree"])
 })
 
@@ -29,7 +29,7 @@ it("asks for the missing details instead of submitting", async () => {
   renderWithProviders(<HomeEnquiryPopup delayMs={10} />)
 
   await screen.findByRole("dialog")
-  await user.click(screen.getByRole("button", { name: "Submit" }))
+  await user.click(screen.getByRole("button", { name: "Submit enquiry" }))
 
   expect(await screen.findByText("Please choose a degree")).toBeInTheDocument()
   expect(screen.getByText("Please enter your name")).toBeInTheDocument()
@@ -45,12 +45,12 @@ it("sends the visitor to the enquiry endpoint as a lead with their degree and pr
   renderWithProviders(<HomeEnquiryPopup delayMs={10} />)
 
   await screen.findByRole("dialog")
-  await user.selectOptions(screen.getByLabelText("Select degree"), "master")
-  await user.selectOptions(screen.getByLabelText("Select program"), "engineering")
-  await user.type(screen.getByLabelText("Name"), "Ali Raza")
+  await user.selectOptions(screen.getByLabelText("Degree"), "master")
+  await user.selectOptions(screen.getByLabelText("Program"), "engineering")
+  await user.type(screen.getByLabelText("Full name"), "Ali Raza")
   await user.selectOptions(screen.getByLabelText("Nationality"), "PK")
   await user.type(screen.getByLabelText("WhatsApp number"), "+92 300 1234567")
-  await user.click(screen.getByRole("button", { name: "Submit" }))
+  await user.click(screen.getByRole("button", { name: "Submit enquiry" }))
 
   await screen.findByText("Thank you!")
   const call = fetchMock.mock.calls.find(([u]) => String(u).includes("/public/enquiries"))!
