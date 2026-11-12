@@ -19,7 +19,7 @@ it("opens after a short delay with the CAS title and the degree choices", async 
   expect(await screen.findByRole("dialog")).toBeInTheDocument()
   expect(screen.getByText("Apply to Study in China")).toBeInTheDocument()
   const degree = screen.getByLabelText("Degree") as HTMLSelectElement
-  expect(Array.from(degree.options).map((o) => o.text)).toEqual(["Select degree", "Bachelors", "Master", "PhD", "Non-Degree"])
+  expect(Array.from(degree.options).map((o) => o.text)).toEqual(["Select degree", "Diploma", "Bachelors", "Master", "PhD", "Non-Degree"])
 })
 
 it("asks for the missing details instead of submitting", async () => {

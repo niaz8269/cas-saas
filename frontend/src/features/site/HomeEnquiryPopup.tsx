@@ -18,7 +18,7 @@ function isAutomated(): boolean {
   return Boolean((navigator as Navigator & { webdriver?: boolean }).webdriver) || /bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)
 }
 
-const DEGREES = ["bachelor", "master", "phd", "non_degree"] as const
+const DEGREES = ["diploma", "bachelor", "master", "phd", "non_degree"] as const
 const PROGRAMS = ["mbbs", "dentistry", "tcm", "engineering", "computer", "business", "language", "other"] as const
 
 /** 16px text on phones keeps iOS from zooming into a field; 14px from the small breakpoint up. */
