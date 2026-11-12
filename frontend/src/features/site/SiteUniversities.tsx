@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import SearchSuggestion from "@/features/site/SearchSuggestion"
 import { getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, UniCard } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
@@ -106,6 +107,8 @@ export default function SiteUniversities() {
           <ShieldCheck className="size-4" /> {t("universities.moeListedOnly")}
         </button>
       </div>
+
+      <SearchSuggestion suggestion={data?.suggestion} />
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">
