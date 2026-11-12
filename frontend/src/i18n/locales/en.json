@@ -1034,7 +1034,7 @@
     "subtitle": "Tell us what you want to study and a CAS advisor will contact you with the right universities, fees and dates.",
     "degree": "Degree",
     "degreePlaceholder": "Select degree",
-    "degrees": { "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree" },
+    "degrees": { "diploma": "Diploma", "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree" },
     "program": "Program",
     "programPlaceholder": "Select program",
     "programs": {
