@@ -17,7 +17,7 @@ function WhatsAppGlyph({ className }: { className?: string }) {
  */
 export default function SiteWhatsAppButton() {
   const { t } = useTranslation()
-  const href = `${CONTACT.whatsapp}?text=${encodeURIComponent(t("whatsappButton.message"))}`
+  const href = `${CONTACT.whatsappButton}?text=${encodeURIComponent(t("whatsappButton.message"))}`
 
   return (
     <a

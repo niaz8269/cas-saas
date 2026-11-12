@@ -125,7 +125,7 @@ export default function SiteHelpDock() {
                     <p className="mt-0.5 text-xs text-cas-navy/70">{t("helpDock.freeGuidance")}</p>
                     <div className="mt-3 flex items-stretch justify-between gap-3">
                       <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} name={t("helpDock.wechat")} value={WECHAT_ID} />
-                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={CONTACT.whatsappDisplay} href={WHATSAPP} />
+                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={PHONE_DISPLAY} href={WHATSAPP} />
                     </div>
                   </div>
                 </div>

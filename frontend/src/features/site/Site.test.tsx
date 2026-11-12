@@ -173,7 +173,7 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
 
   const whatsappLinks = screen.getAllByRole("link", { name: /WhatsApp/ })
   expect(whatsappLinks.length).toBeGreaterThanOrEqual(2)
-  whatsappLinks.forEach((link) => expect(link).toHaveAttribute("href", "https://wa.me/8618041566030"))
+  whatsappLinks.forEach((link) => expect(link).toHaveAttribute("href", "https://wa.me/8617640412827"))
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
   expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@cas.moe")
 })
