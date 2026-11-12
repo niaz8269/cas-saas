@@ -26,6 +26,7 @@ import HeroUpdates from "@/features/site/HeroUpdates"
 import { DEFAULT_SECTION_ORDER, FEATURED_TAB1, FEATURED_TAB2, HIGHLIGHTS, POPULAR_SEARCHES } from "@/features/site/homeDefaults"
 import { baseLocale, sectionContent, type HomeSectionData } from "@/features/site/homeContent"
 import HomeCities from "@/features/site/HomeCities"
+import HomeEnquiryPopup from "@/features/site/HomeEnquiryPopup"
 import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
 
@@ -440,6 +441,7 @@ export default function SiteHome() {
 
   return (
     <div className="flex flex-col gap-16 sm:gap-24">
+      <HomeEnquiryPopup />
       {ordered.map((s) => {
         const render = blocks[s.type]
         if (!render) return null

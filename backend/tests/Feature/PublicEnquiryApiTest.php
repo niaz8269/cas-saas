@@ -95,3 +95,14 @@ it('reuses one CAS Website source across enquiries', function () {
 
     expect(ApiSource::where('name', 'CAS Website')->count())->toBe(1);
 });
+
+it('accepts the nationality of any real country, even one not yet in the CRM country table', function () {
+    $this->postJson('/api/v1/public/enquiries', [
+        'first_name' => 'Marie', 'email' => 'marie@example.com', 'country' => 'FR',
+        'message' => 'Quick enquiry from the home page.',
+    ])->assertStatus(202);
+
+    expect(Lead::where('email', 'marie@example.com')->exists())->toBeTrue();
+
+    $this->postJson('/api/v1/public/enquiries', ['first_name' => 'X', 'email' => 'x@example.com', 'country' => 'ZZ'])->assertStatus(422);
+});

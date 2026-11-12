@@ -276,6 +276,7 @@ export interface EnquiryPayload {
   last_name?: string
   email?: string
   phone?: string
+  country?: string
   message?: string
   interested_university_id?: number
   source_url?: string
