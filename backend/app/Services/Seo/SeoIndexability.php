@@ -29,12 +29,15 @@ class SeoIndexability
         }
 
         $rows = University::where('status', 'active')->whereNotNull('city')
-            ->withCount(['programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+            ->withCount([
+                'programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false),
+                'programs as registered_majors_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', true),
+            ])
             ->withExists('intakes as has_intakes')
             ->get(['id', 'city', 'overview', 'moe_listed']);
 
         return self::$cities = $rows
-            ->filter(fn ($u) => self::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes))
+            ->filter(fn ($u) => self::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes, (int) $u->registered_majors_count))
             ->pluck('city')->unique()->values()->all();
     }
 
@@ -43,8 +46,17 @@ class SeoIndexability
         return in_array($city, self::substantiveCities(), true);
     }
 
-    public static function universityHasSubstance(University $university, int $confirmedPrograms, bool $hasIntakes): bool
+    /**
+     * A university's own list of majors registered with the Ministry of Education is real, specific content
+     * (no two universities share one), so a page with enough of them is worth indexing even before CAS has
+     * confirmed programs or dates. Tune the bar with SEO_MIN_REGISTERED_MAJORS.
+     */
+    public static function universityHasSubstance(University $university, int $confirmedPrograms, bool $hasIntakes, int $registeredMajors = 0): bool
     {
-        return $university->moe_listed || $university->overview !== null || $confirmedPrograms > 0 || $hasIntakes;
+        return $university->moe_listed
+            || $university->overview !== null
+            || $confirmedPrograms > 0
+            || $hasIntakes
+            || $registeredMajors >= (int) config('seo.min_registered_majors', 12);
     }
 }

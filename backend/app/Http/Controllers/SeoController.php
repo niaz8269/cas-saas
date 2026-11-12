@@ -95,11 +95,14 @@ class SeoController extends Controller
                 // Every active institution. Those with confirmed programs or a full profile rank higher
                 // than the ones that so far only list the Ministry's registered majors.
                 $rows = University::where('status', 'active')
-                    ->withCount(['programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+                    ->withCount([
+                        'programs as confirmed_programs_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', false),
+                        'programs as registered_majors_count' => fn ($q) => $q->where('status', 'active')->where('registry_only', true),
+                    ])
                     ->withExists('intakes as has_intakes')
                     ->orderBy('name')
                     ->get(['id', 'slug', 'name', 'cover_path', 'overview', 'moe_listed', 'updated_at'])
-                    ->filter(fn ($u) => SeoIndexability::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes));
+                    ->filter(fn ($u) => SeoIndexability::universityHasSubstance($u, (int) $u->confirmed_programs_count, (bool) $u->has_intakes, (int) $u->registered_majors_count));
                 foreach ($rows as $u) {
                     $img = $this->images->url($u->cover_path);
                     $rich = true;

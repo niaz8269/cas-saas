@@ -8,6 +8,7 @@ use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -122,9 +123,10 @@ class SeoPageBuilder
             $u->institution_type ? 'Type: '.$u->institution_type : null,
             $u->nearest_airport ? 'Nearest airport: '.$u->nearest_airport : null,
             $u->moe_listed ? 'Approved by the Ministry of Education for English-taught MBBS ('.($u->moe_mbbs_year ?: '2026-27').')' : null,
-            $programs->count().' programs for international students',
+            $programs->where('registry_only', false)->count() > 0 ? $programs->where('registry_only', false)->count().' programs for international students' : null,
         ]);
         $body .= $this->ul(array_map('e', $facts));
+        $body .= $this->registeredMajorsSection($u, $programs);
         if ($intakes->isNotEmpty()) {
             $body .= '<h2>Application windows</h2>'.$this->ul($intakes->map(fn ($i) => e($i->name.($i->application_open_date ? ', opens '.$i->application_open_date->format('j M Y') : '').($i->application_deadline ? ', closes '.$i->application_deadline->format('j M Y') : '')))->all());
         }
@@ -156,7 +158,7 @@ class SeoPageBuilder
 
         // Pages that so far hold only a name, a place and the Ministry's registered majors stay out of search
         // results until they have confirmed programs, application windows or a full profile (then they switch on by themselves).
-        $indexable = SeoIndexability::universityHasSubstance($u, $programs->where('registry_only', false)->count(), $intakes->isNotEmpty());
+        $indexable = SeoIndexability::universityHasSubstance($u, $programs->where('registry_only', false)->count(), $intakes->isNotEmpty(), $programs->where('registry_only', true)->count());
 
         return $this->page($title, $description, $canonical, image: $image, jsonLd: array_map(fn ($d) => array_filter($d, fn ($v) => $v !== null && $v !== ''), $ld), crumbs: [['Home', '/'], ['Universities', '/site/universities'], [$u->name, $canonical]], body: $body, noindex: ! $indexable, follow: true);
     }
@@ -191,6 +193,32 @@ class SeoPageBuilder
         $body .= '<p>'.$this->link('/site/cities', 'All cities').'</p>';
 
         return $this->page($title, $description, $canonical, image: $image, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body, noindex: ! SeoIndexability::cityHasSubstance($city), follow: true);
+    }
+
+    /**
+     * The majors this university has registered with the Ministry of Education, grouped by level. They are
+     * public on the university page already; listing them here gives the crawlable page real, unique text.
+     */
+    private function registeredMajorsSection(University $u, Collection $programs): string
+    {
+        $registered = $programs->where('registry_only', true)->sortBy('name');
+        if ($registered->isEmpty()) {
+            return '';
+        }
+
+        $labels = ['bachelor' => "Bachelor's degree majors", 'master' => "Master's degree majors", 'phd' => 'Doctoral majors', 'non_degree' => 'Non-degree and language programs'];
+        $html = '<h2>Majors registered with the Ministry of Education</h2><p>'.e($u->name).' has '.$registered->count().' major'.($registered->count() === 1 ? '' : 's').' registered with China\'s Ministry of Education. '
+            .'Whether each one is open to international applicants, the teaching language, fees and dates are confirmed by CAS on request.</p>';
+
+        foreach ($labels as $level => $label) {
+            $names = $registered->where('level', $level)->pluck('name')->unique()->values();
+            if ($names->isEmpty()) {
+                continue;
+            }
+            $html .= '<h3>'.e($label).' ('.$names->count().')</h3>'.$this->ul($names->take(60)->map('e')->all());
+        }
+
+        return $html.'<p>'.$this->link('/site/study-plan', 'Ask CAS which of these suit you').'</p>';
     }
 
     private function post(string $slug): ?array
