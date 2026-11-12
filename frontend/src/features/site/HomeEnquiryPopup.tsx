@@ -89,7 +89,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[90dvh] gap-2 overflow-y-auto rounded-none p-4 sm:max-w-[19.5rem]" aria-describedby="home-popup-desc">
+      <DialogContent className="max-h-[90dvh] gap-3 overflow-y-auto rounded-none p-4 sm:max-w-[19.5rem]" aria-describedby="home-popup-desc">
         {mutation.isSuccess ? (
           <div className="py-3 text-center">
             <CheckCircle2 className="mx-auto size-8 text-green-600" />
@@ -104,25 +104,23 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
               <DialogDescription id="home-popup-desc" className="text-center text-[11px] leading-tight">{t("homePopup.subtitle")}</DialogDescription>
             </DialogHeader>
 
-            <form className="space-y-1.5" onSubmit={submit} noValidate>
+            <form className="space-y-2" onSubmit={submit} noValidate>
               {mutation.isError && Object.keys(errors).length === 0 && (
                 <p role="alert" className="rounded-none bg-cas-red-50 px-2 py-1 text-xs text-destructive">{t("enquiry.errorGeneric")}</p>
               )}
 
-              <div className="grid grid-cols-2 gap-1.5">
-                <Field error={errors.degree}>
-                  <select aria-label={t("homePopup.degree")} className={selectClass} value={values.degree} onChange={set("degree")}>
-                    <option value="">{t("homePopup.degree")}</option>
-                    {DEGREES.map((d) => <option key={d} value={d}>{t(`homePopup.degrees.${d}`)}</option>)}
-                  </select>
-                </Field>
-                <Field error={errors.program}>
-                  <select aria-label={t("homePopup.program")} className={selectClass} value={values.program} onChange={set("program")}>
-                    <option value="">{t("homePopup.program")}</option>
-                    {PROGRAMS.map((p) => <option key={p} value={p}>{t(`homePopup.programs.${p}`)}</option>)}
-                  </select>
-                </Field>
-              </div>
+              <Field error={errors.degree}>
+                <select aria-label={t("homePopup.degree")} className={selectClass} value={values.degree} onChange={set("degree")}>
+                  <option value="">{t("homePopup.degree")}</option>
+                  {DEGREES.map((d) => <option key={d} value={d}>{t(`homePopup.degrees.${d}`)}</option>)}
+                </select>
+              </Field>
+              <Field error={errors.program}>
+                <select aria-label={t("homePopup.program")} className={selectClass} value={values.program} onChange={set("program")}>
+                  <option value="">{t("homePopup.program")}</option>
+                  {PROGRAMS.map((p) => <option key={p} value={p}>{t(`homePopup.programs.${p}`)}</option>)}
+                </select>
+              </Field>
               <Field error={errors.first_name}>
                 <Input aria-label={t("homePopup.name")} placeholder={t("homePopup.name")} value={values.name} onChange={set("name")} autoComplete="name" className="h-8 rounded-none px-2 text-base sm:text-sm" />
               </Field>
@@ -132,7 +130,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                   {COUNTRIES.map((c) => <option key={c.iso2} value={c.iso2}>{c.name}</option>)}
                 </select>
               </Field>
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
                 <Field error={errors.email}>
                   <Input aria-label={t("homePopup.email")} type="email" placeholder={t("homePopup.email")} value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" className="h-8 rounded-none px-2 text-base sm:text-sm" />
                 </Field>
