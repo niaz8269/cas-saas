@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import SearchSuggestion from "@/features/site/SearchSuggestion"
 import { getSiteScholarships, type SiteScholarship } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
@@ -80,6 +81,8 @@ export default function SiteScholarships() {
           {types.map((ty) => <option key={ty} value={ty}>{ty}</option>)}
         </select>
       </div>
+
+      <SearchSuggestion suggestion={data?.suggestion} />
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">

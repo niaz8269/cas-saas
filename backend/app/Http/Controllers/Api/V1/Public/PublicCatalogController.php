@@ -11,9 +11,11 @@ use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
 use App\Services\Public\AudienceResolver;
+use App\Services\Search\FuzzySearch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 /**
@@ -26,7 +28,7 @@ use Illuminate\Support\Str;
  */
 class PublicCatalogController extends Controller
 {
-    public function __construct(private readonly AudienceResolver $audiences) {}
+    public function __construct(private readonly AudienceResolver $audiences, private readonly FuzzySearch $fuzzy) {}
 
     /** Resolve the audience for this request and expose it to the resources. */
     private function audience(Request $request): string
@@ -41,22 +43,26 @@ class PublicCatalogController extends Controller
     {
         $audience = $this->audience($request);
 
-        $universities = University::query()
+        $buildUniversities = fn (array $terms) => University::query()
             ->where('status', 'active')
             ->with('country:id,name,iso2')
             ->withCount(['programs' => fn ($q) => $q->where('status', 'active')])
-            ->when($request->filled('q'), function ($query) use ($request) {
-                $term = '%'.$request->string('q').'%';
-                $query->where(fn ($q) => $q
-                    ->where('name', 'like', $term)
-                    ->orWhere('name_zh', 'like', $term)
-                    ->orWhere('city', 'like', $term)
-                    ->orWhere('province', 'like', $term)
-                    // A university also matches when it offers a program with that name (e.g. "MBBS").
-                    ->orWhereHas('programs', fn ($p) => $p
-                        ->where('status', 'active')
-                        ->where('registry_only', false)
-                        ->where(fn ($n) => $n->where('name', 'like', $term)->orWhere('name_zh', 'like', $term))));
+            ->when($terms !== [], function ($query) use ($terms) {
+                $query->where(function ($outer) use ($terms) {
+                    foreach ($terms as $text) {
+                        $term = '%'.$text.'%';
+                        $outer->orWhere(fn ($q) => $q
+                            ->where('name', 'like', $term)
+                            ->orWhere('name_zh', 'like', $term)
+                            ->orWhere('city', 'like', $term)
+                            ->orWhere('province', 'like', $term)
+                            // A university also matches when it offers a program with that name (e.g. "MBBS").
+                            ->orWhereHas('programs', fn ($p) => $p
+                                ->where('status', 'active')
+                                ->where('registry_only', false)
+                                ->where(fn ($n) => $n->where('name', 'like', $term)->orWhere('name_zh', 'like', $term))));
+                    }
+                });
             })
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
@@ -65,8 +71,14 @@ class PublicCatalogController extends Controller
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('intakes', fn ($i) => $i
                 ->where('status', 'open')
                 ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
-            ->orderBy('name')
-            ->paginate(min($request->integer('per_page', 24), 50));
+            ->orderBy('name');
+
+        [$universities, $suggestion] = $this->searchWithSpellingFallback(
+            $request,
+            'universities',
+            $buildUniversities,
+            fn () => $this->universityPhrases(),
+        );
 
         // Distinct cities for the directory filter (active universities only).
         $cities = cache()->remember('public.cities.v1', now()->addMinutes(10), fn () => University::query()
@@ -78,7 +90,7 @@ class PublicCatalogController extends Controller
             ->pluck('city'));
 
         return PublicUniversityResource::collection($universities)
-            ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience]);
+            ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience, 'suggestion' => $suggestion]);
     }
 
     /**
@@ -196,13 +208,17 @@ class PublicCatalogController extends Controller
     {
         $audience = $this->audience($request);
 
-        $programs = Program::query()
+        $buildPrograms = fn (array $terms) => Program::query()
             ->where('status', 'active')
             // Majors only registered with the Ministry (no international details yet) show on their university's page, not in the program finder.
             ->when(! $request->filled('filter.university_slug'), fn ($q) => $q->where('registry_only', false))
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
             ->with('university:id,name,slug,cover_path,cover_credit')
-            ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('name', 'like', '%'.$request->string('q').'%')->orWhere('name_zh', 'like', '%'.$request->string('q').'%')))
+            ->when($terms !== [], fn ($q) => $q->where(function ($outer) use ($terms) {
+                foreach ($terms as $text) {
+                    $outer->orWhere(fn ($w) => $w->where('name', 'like', '%'.$text.'%')->orWhere('name_zh', 'like', '%'.$text.'%'));
+                }
+            }))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('university.intakes', fn ($i) => $i
                 ->where('status', 'open')
@@ -213,10 +229,11 @@ class PublicCatalogController extends Controller
             // Degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
             ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
             ->orderByRaw('tuition_fee is null, tuition_fee')
-            ->orderBy('name')
-            ->paginate(min($request->integer('per_page', 24), 50));
+            ->orderBy('name');
 
-        return PublicProgramResource::collection($programs)->additional(['audience' => $audience]);
+        [$programs, $suggestion] = $this->searchWithSpellingFallback($request, 'programs', $buildPrograms, fn () => $this->programPhrases());
+
+        return PublicProgramResource::collection($programs)->additional(['audience' => $audience, 'suggestion' => $suggestion]);
     }
 
     /**
@@ -275,18 +292,23 @@ class PublicCatalogController extends Controller
     {
         $audience = $this->audience($request);
 
-        $scholarships = Scholarship::query()
+        $buildScholarships = fn (array $terms) => Scholarship::query()
             ->where('status', 'active')
             ->where(fn ($q) => $q->where('scope', 'government')->orWhereHas('university', fn ($u) => $u->where('status', 'active')))
             ->with('university:id,name,slug,cover_path,cover_credit')
-            ->when($request->filled('q'), function ($query) use ($request) {
-                $term = '%'.$request->string('q').'%';
-                $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('type', 'like', $term));
+            ->when($terms !== [], function ($query) use ($terms) {
+                $query->where(function ($outer) use ($terms) {
+                    foreach ($terms as $text) {
+                        $term = '%'.$text.'%';
+                        $outer->orWhere(fn ($q) => $q->where('name', 'like', $term)->orWhere('type', 'like', $term));
+                    }
+                });
             })
             ->when($request->filled('filter.type'), fn ($q) => $q->where('type', $request->input('filter.type')))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
-            ->orderBy('name')
-            ->paginate(min($request->integer('per_page', 24), 50));
+            ->orderBy('name');
+
+        [$scholarships, $suggestion] = $this->searchWithSpellingFallback($request, 'scholarships', $buildScholarships, fn () => $this->scholarshipPhrases());
 
         // Distinct scholarship types for the filter (active + on active universities).
         $types = Scholarship::query()
@@ -299,6 +321,70 @@ class PublicCatalogController extends Controller
             ->pluck('type');
 
         return PublicScholarshipResource::collection($scholarships)
-            ->additional(['types' => $types, 'audience' => $audience]);
+            ->additional(['types' => $types, 'audience' => $audience, 'suggestion' => $suggestion]);
+    }
+
+    /**
+     * Runs the search as typed. When it finds nothing, retries with misspelled words corrected to the closest real
+     * words on the site ("herbin" finds "Harbin"); the response then says what was searched instead.
+     *
+     * @param  \Closure(array<int, string>): \Illuminate\Database\Eloquent\Builder<*>  $build  Builds the query for a list of search texts.
+     * @param  \Closure(): iterable<string>  $phrases  Every name the search looks at.
+     * @return array{0: LengthAwarePaginator<int, *>, 1: array{original: string, query: string}|null}
+     */
+    private function searchWithSpellingFallback(Request $request, string $domain, \Closure $build, \Closure $phrases): array
+    {
+        $perPage = min($request->integer('per_page', 24), 50);
+        $text = trim($request->string('q')->value());
+
+        $results = $build($text !== '' ? [$text] : [])->paginate($perPage);
+
+        if ($text === '' || $results->total() > 0) {
+            return [$results, null];
+        }
+
+        $fixed = $this->fuzzy->corrections($domain, $text, $phrases);
+        if ($fixed === []) {
+            return [$results, null];
+        }
+
+        // Best guess first; the next-closest spelling is only tried when the better one finds nothing.
+        foreach ($fixed as $spelling) {
+            $retry = $build([$spelling])->paginate($perPage);
+            if ($retry->total() > 0) {
+                return [$retry, ['original' => $text, 'query' => $spelling]];
+            }
+        }
+
+        return [$results, null];
+    }
+
+    /** @return \Generator<int, string> */
+    private function universityPhrases(): \Generator
+    {
+        foreach (University::query()->where('status', 'active')->get(['name', 'city', 'province']) as $u) {
+            yield (string) $u->name;
+            yield (string) $u->city;
+            yield (string) $u->province;
+        }
+
+        yield from $this->programPhrases();
+    }
+
+    /** @return \Generator<int, string> */
+    private function programPhrases(): \Generator
+    {
+        foreach (Program::query()->where('status', 'active')->where('registry_only', false)->distinct()->pluck('name') as $name) {
+            yield (string) $name;
+        }
+    }
+
+    /** @return \Generator<int, string> */
+    private function scholarshipPhrases(): \Generator
+    {
+        foreach (Scholarship::query()->where('status', 'active')->get(['name', 'type']) as $s) {
+            yield (string) $s->name;
+            yield (string) $s->type;
+        }
     }
 }

@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import SearchSuggestion from "@/features/site/SearchSuggestion"
 import { getSitePrograms, type SiteProgram } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
@@ -126,6 +127,8 @@ export default function SiteProgramFinder() {
           aria-label={t("programs.maxFeeAria")}
         />
       </div>
+
+      <SearchSuggestion suggestion={data?.suggestion} />
 
       {isError && (
         <div className="rounded-sm border bg-card p-8 text-center shadow-sm">

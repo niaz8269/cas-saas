@@ -1029,6 +1029,9 @@
     "label": "Chat with CAS on WhatsApp",
     "message": "Hello CAS, I would like to know more about studying in China."
   },
+  "searchSuggestion": {
+    "text": "No matches for <strong>{{original}}</strong>. Showing results for <strong>{{query}}</strong>."
+  },
   "homePopup": {
     "title": "Apply to Study in China",
     "subtitle": "Tell us what you want to study and a CAS advisor will contact you with the right universities, fees and dates.",

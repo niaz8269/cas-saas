@@ -197,6 +197,8 @@ export interface SiteUniversityDetail extends SiteUniversityCard {
 
 export interface Paginated<T> {
   data: T[]
+  // Set when the search found nothing as typed and the closest correctly spelled words were searched instead.
+  suggestion?: { original: string; query: string } | null
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
