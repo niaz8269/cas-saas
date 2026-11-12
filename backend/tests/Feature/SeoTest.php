@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Program;
 use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -102,4 +103,23 @@ it('sends no cookies with public pages so they can be cached', function () {
     foreach (['/', '/site/universities/seo-uni', '/sitemap.xml', '/robots.txt'] as $url) {
         expect(get($url)->assertOk()->headers->getCookies())->toBe([]);
     }
+});
+
+it('indexes a university page once it lists enough Ministry-registered majors, and shows them', function () {
+    config(['seo.min_registered_majors' => 3]);
+    $rich = University::factory()->create(['slug' => 'majors-uni', 'name' => 'Majors Uni', 'status' => 'active', 'moe_listed' => false, 'overview' => null, 'city' => 'Majorville']);
+    foreach (['Mining Engineering', 'Big Data Management', 'Digital Economy'] as $name) {
+        Program::factory()->create(['university_id' => $rich->id, 'name' => $name, 'level' => 'bachelor', 'registry_only' => true, 'teaching_language' => null, 'tuition_fee' => null]);
+    }
+    $thin = University::factory()->create(['slug' => 'few-majors-uni', 'status' => 'active', 'moe_listed' => false, 'overview' => null, 'city' => 'Fewville']);
+    Program::factory()->create(['university_id' => $thin->id, 'name' => 'Only One', 'level' => 'bachelor', 'registry_only' => true, 'teaching_language' => null, 'tuition_fee' => null]);
+
+    $page = get('/site/universities/majors-uni')->assertOk()->assertHeader('X-Robots-Tag', 'index, follow, max-image-preview:large');
+    expect($page->getContent())->toContain('Majors registered with the Ministry of Education')->toContain('Mining Engineering')->toContain('Bachelor&#039;s degree majors (3)');
+
+    get('/site/universities/few-majors-uni')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, follow');
+    get('/site/cities/majorville')->assertHeader('X-Robots-Tag', 'index, follow, max-image-preview:large');
+
+    $sitemap = get('/sitemaps/universities.xml')->getContent();
+    expect($sitemap)->toContain('/site/universities/majors-uni')->not->toContain('few-majors-uni');
 });

@@ -30,6 +30,9 @@ return [
 
     'default_image' => '/og-image.png',
 
+    // A university page with at least this many Ministry-registered majors is indexed even before CAS has confirmed programs or dates.
+    'min_registered_majors' => (int) env('SEO_MIN_REGISTERED_MAJORS', 12),
+
     // How long a prerendered public page is reused (0 disables). Keeps crawler bursts off the database.
     'page_cache_seconds' => env('SEO_PAGE_CACHE_SECONDS', env('APP_ENV') === 'testing' ? 0 : 900),
 
