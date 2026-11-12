@@ -108,7 +108,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                 {(["panelPoint1", "panelPoint2", "panelPoint3"] as const).map((key) => (
                   <li key={key} className="flex gap-3">
                     <span aria-hidden="true" className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="size-3.5" /></span>
-                    <span>{t("homePopup.${key}")}</span>
+                    <span>{t(`homePopup.${key}`)}</span>
                   </li>
                 ))}
               </ul>

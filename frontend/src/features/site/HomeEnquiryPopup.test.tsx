@@ -10,7 +10,10 @@ import { homePopupState } from "./homePopupState"
 const EMPTY = { data: [] }
 
 beforeEach(() => { homePopupState.shown = false })
-afterEach(() => vi.unstubAllGlobals())
+afterEach(() => {
+  vi.unstubAllGlobals()
+  vi.restoreAllMocks()
+})
 
 it("opens after a short delay with the CAS title and the degree choices", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(EMPTY)))
@@ -66,4 +69,15 @@ it("does not open for automated browsers such as search engine crawlers", async 
 
   await new Promise((r) => setTimeout(r, 80))
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+})
+
+it("shows the three benefits in the brand panel as real text, never a raw translation key", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(EMPTY)))
+  renderWithProviders(<HomeEnquiryPopup delayMs={10} />)
+
+  const dialog = await screen.findByRole("dialog")
+  expect(dialog).toHaveTextContent("Free guidance from a CAS advisor")
+  expect(dialog).toHaveTextContent("Full application and visa support")
+  expect(dialog).toHaveTextContent("Universities listed by China's Ministry of Education")
+  expect(dialog.textContent).not.toMatch(/homePopup\.|\$\{/)
 })
