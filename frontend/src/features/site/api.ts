@@ -280,7 +280,7 @@ export interface EnquiryPayload {
   message?: string
   interested_university_id?: number
   source_url?: string
-  form_type?: "enquiry" | "study_plan" | "contact"
+  form_type?: "enquiry" | "study_plan" | "contact" | "home_popup"
   details?: Record<string, string>
 }
 

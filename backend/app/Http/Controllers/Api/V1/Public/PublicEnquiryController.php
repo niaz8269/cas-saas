@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\V1\Public;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\PublicEnquiryRequest;
+use App\Mail\NewEnquiryMail;
 use App\Models\ApiSource;
 use App\Models\Lead;
 use App\Services\Leads\LeadIngestionService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 /**
  * Public website enquiry form → a source-attributed lead (report §1.1:
@@ -65,7 +68,36 @@ class PublicEnquiryController extends Controller
             $lead->update(['meta' => $meta]);
         }
 
+        if ($request->input('form_type') === 'home_popup') {
+            $this->emailEnquiry($request, $plan);
+        }
+
         return $this->accepted();
+    }
+
+    /**
+     * The pop-up form also goes to the CAS enquiry inbox. A mail problem never loses the enquiry (the lead is
+     * already saved) and never changes what the visitor sees.
+     *
+     * @param  array<string, mixed>  $plan
+     */
+    private function emailEnquiry(PublicEnquiryRequest $request, array $plan): void
+    {
+        $name = trim($request->input('first_name').' '.$request->input('last_name'));
+
+        try {
+            Mail::to(config('mail.enquiry_to'))->send(new NewEnquiryMail($name, $request->input('email') ?: null, [
+                'Name' => $name,
+                'Email' => $request->input('email'),
+                'WhatsApp / phone' => $request->input('phone'),
+                'Nationality' => $plan['nationality'] ?? null,
+                'Degree' => $plan['degree'] ?? null,
+                'Program' => $plan['program'] ?? null,
+                'Page' => $request->input('source_url'),
+            ]));
+        } catch (Throwable $e) {
+            report($e);
+        }
     }
 
     private function accepted(): JsonResponse

@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\NewEnquiryMail;
 use App\Models\ApiSource;
 use App\Models\Country;
 use App\Models\Lead;
@@ -7,6 +8,7 @@ use App\Models\Program;
 use App\Models\Student;
 use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 
 uses(RefreshDatabase::class);
 
@@ -105,4 +107,34 @@ it('accepts the nationality of any real country, even one not yet in the CRM cou
     expect(Lead::where('email', 'marie@example.com')->exists())->toBeTrue();
 
     $this->postJson('/api/v1/public/enquiries', ['first_name' => 'X', 'email' => 'x@example.com', 'country' => 'ZZ'])->assertStatus(422);
+});
+
+it('emails the pop-up enquiry to the CAS inbox with the visitor on Reply-To, and still saves the lead', function () {
+    Mail::fake();
+
+    $this->postJson('/api/v1/public/enquiries', [
+        'first_name' => 'Ali', 'last_name' => 'Raza', 'email' => 'ali@example.com', 'phone' => '+92 300 1234567', 'country' => 'PK',
+        'form_type' => 'home_popup', 'source_url' => 'https://cas.moe/',
+        'details' => ['degree' => 'Master', 'program' => 'Engineering', 'nationality' => 'Pakistan'],
+    ])->assertStatus(202);
+
+    Mail::assertSent(NewEnquiryMail::class, function ($mail) {
+        return $mail->hasTo('enquiry@cas.moe')
+            && $mail->hasReplyTo('ali@example.com')
+            && str_contains($mail->envelope()->subject, 'Ali Raza (Master / Engineering)')
+            && str_contains($mail->render(), 'Pakistan');
+    });
+    expect(Lead::where('email', 'ali@example.com')->exists())->toBeTrue();
+});
+
+it('does not email ordinary enquiries or honeypot spam, and a mail failure never loses the lead', function () {
+    Mail::fake();
+
+    $this->postJson('/api/v1/public/enquiries', ['first_name' => 'Plain', 'email' => 'plain@example.com'])->assertStatus(202);
+    $this->postJson('/api/v1/public/enquiries', ['first_name' => 'Bot', 'email' => 'bot@example.com', 'form_type' => 'home_popup', 'company' => 'Acme'])->assertStatus(202);
+    Mail::assertNothingSent();
+
+    Mail::shouldReceive('to')->andThrow(new RuntimeException('smtp down'));
+    $this->postJson('/api/v1/public/enquiries', ['first_name' => 'Ok', 'email' => 'ok@example.com', 'form_type' => 'home_popup'])->assertStatus(202);
+    expect(Lead::where('email', 'ok@example.com')->exists())->toBeTrue();
 });

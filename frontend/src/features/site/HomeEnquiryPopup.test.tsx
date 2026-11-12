@@ -55,7 +55,7 @@ it("sends the visitor to the enquiry endpoint as a lead with their degree and pr
   await screen.findByText("Thank you!")
   const call = fetchMock.mock.calls.find(([u]) => String(u).includes("/public/enquiries"))!
   const body = JSON.parse((call[1] as RequestInit).body as string)
-  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", phone: "+92 300 1234567", country: "PK" })
+  expect(body).toMatchObject({ first_name: "Ali", last_name: "Raza", phone: "+92 300 1234567", country: "PK", form_type: "home_popup" })
   expect(body.details).toMatchObject({ degree: "Master", program: "Engineering", nationality: "Pakistan" })
 })
 

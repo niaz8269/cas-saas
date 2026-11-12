@@ -20,7 +20,7 @@ function isAutomated(): boolean {
 const DEGREES = ["bachelor", "master", "phd", "non_degree"] as const
 const PROGRAMS = ["mbbs", "dentistry", "tcm", "engineering", "computer", "business", "language", "other"] as const
 
-const selectClass = "h-11 w-full rounded-sm border border-input bg-background px-3 text-sm focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:outline-none"
+const selectClass = "h-11 w-full rounded-none border border-input bg-background px-3 text-sm focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:outline-none"
 
 /**
  * Quick-enquiry pop-up for the home page. Posts to the same public enquiry endpoint as every other website
@@ -61,6 +61,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
         phone: values.phone.trim() || undefined,
         country: values.country || undefined,
         message: `Quick enquiry from the home page. Degree: ${degree}. Program: ${program}.${countryName ? ` Nationality: ${countryName}.` : ""}`,
+        form_type: "home_popup",
         source_url: typeof window !== "undefined" ? window.location.href : undefined,
         details: { degree, program, ...(countryName ? { nationality: countryName } : {}) },
         ...(company ? { company } : {}),
@@ -88,13 +89,13 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[92dvh] overflow-y-auto sm:max-w-md" aria-describedby="home-popup-desc">
+      <DialogContent className="max-h-[92dvh] overflow-y-auto rounded-none sm:max-w-md" aria-describedby="home-popup-desc">
         {mutation.isSuccess ? (
           <div className="py-6 text-center">
             <CheckCircle2 className="mx-auto size-10 text-green-600" />
             <DialogTitle className="mt-3 text-lg text-cas-navy">{t("enquiry.thankYou")}</DialogTitle>
             <DialogDescription id="home-popup-desc" className="mt-1">{t("enquiry.thankYouBody")}</DialogDescription>
-            <Button className="mt-5" onClick={() => setOpen(false)}>{t("homePopup.close")}</Button>
+            <Button className="mt-5 rounded-none" onClick={() => setOpen(false)}>{t("homePopup.close")}</Button>
           </div>
         ) : (
           <>
@@ -105,7 +106,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
 
             <form className="space-y-3" onSubmit={submit} noValidate>
               {mutation.isError && Object.keys(errors).length === 0 && (
-                <p role="alert" className="rounded-sm bg-cas-red-50 px-3 py-2 text-sm text-destructive">{t("enquiry.errorGeneric")}</p>
+                <p role="alert" className="rounded-none bg-cas-red-50 px-3 py-2 text-sm text-destructive">{t("enquiry.errorGeneric")}</p>
               )}
 
               <Field error={errors.degree}>
@@ -121,7 +122,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                 </select>
               </Field>
               <Field error={errors.first_name}>
-                <Input aria-label={t("homePopup.name")} placeholder={t("homePopup.name")} value={values.name} onChange={set("name")} autoComplete="name" className="h-11" />
+                <Input aria-label={t("homePopup.name")} placeholder={t("homePopup.name")} value={values.name} onChange={set("name")} autoComplete="name" className="h-11 rounded-none" />
               </Field>
               <Field error={errors.country}>
                 <select aria-label={t("homePopup.nationality")} className={selectClass} value={values.country} onChange={set("country")}>
@@ -130,10 +131,10 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                 </select>
               </Field>
               <Field error={errors.email}>
-                <Input aria-label={t("homePopup.email")} type="email" placeholder={t("homePopup.email")} value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" className="h-11" />
+                <Input aria-label={t("homePopup.email")} type="email" placeholder={t("homePopup.email")} value={values.email} onChange={set("email")} autoComplete="email" inputMode="email" className="h-11 rounded-none" />
               </Field>
               <Field error={errors.phone}>
-                <Input aria-label={t("homePopup.whatsapp")} placeholder={t("homePopup.whatsapp")} value={values.phone} onChange={set("phone")} autoComplete="tel" inputMode="tel" className="h-11" />
+                <Input aria-label={t("homePopup.whatsapp")} placeholder={t("homePopup.whatsapp")} value={values.phone} onChange={set("phone")} autoComplete="tel" inputMode="tel" className="h-11 rounded-none" />
               </Field>
 
               {/* Honeypot: hidden from people, off the tab order; the server drops anything that fills it. */}
@@ -141,7 +142,7 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
                 <label>Company<input tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} /></label>
               </div>
 
-              <Button type="submit" className="h-11 w-full bg-cas-red text-white hover:bg-cas-red/90" disabled={mutation.isPending}>
+              <Button type="submit" className="h-11 w-full rounded-none bg-cas-red text-white hover:bg-cas-red/90" disabled={mutation.isPending}>
                 {mutation.isPending ? t("enquiry.sending") : t("homePopup.submit")}
               </Button>
             </form>
