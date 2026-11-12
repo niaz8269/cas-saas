@@ -1034,10 +1034,15 @@
   },
   "homePopup": {
     "title": "Apply to Study in China",
+    "panelTitle": "Start your study journey in China with CAS",
+    "panelPoint1": "Free guidance from a CAS advisor",
+    "panelPoint2": "Full application and visa support",
+    "panelPoint3": "Universities listed by China's Ministry of Education",
+    "panelFoot": "www.cas.moe",
     "subtitle": "Tell us what you want to study and a CAS advisor will contact you with the right universities, fees and dates.",
     "degree": "Degree",
     "degreePlaceholder": "Select degree",
-    "degrees": { "diploma": "Diploma", "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree" },
+    "degrees": { "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree", "diploma": "Diploma" },
     "program": "Program",
     "programPlaceholder": "Select program",
     "programs": {
