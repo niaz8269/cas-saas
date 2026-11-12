@@ -84,3 +84,22 @@ it('hides the crawlable text behind a loading screen but keeps it in the page', 
         ->and($html)->toContain('id="cas-seo"')
         ->and($html)->toContain('clip:rect(0 0 0 0)');
 });
+
+it('keeps a city page out of search results until one of its universities has substance', function () {
+    University::factory()->create(['slug' => 'thin-uni', 'status' => 'active', 'moe_listed' => false, 'overview' => null, 'city' => 'Thinville']);
+    University::factory()->create(['slug' => 'rich-uni', 'status' => 'active', 'moe_listed' => true, 'city' => 'Richburg']);
+
+    get('/site/cities/thinville')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, follow');
+    get('/site/cities/richburg')->assertOk()->assertHeader('X-Robots-Tag', 'index, follow, max-image-preview:large');
+
+    $sitemap = get('/sitemaps/cities.xml')->getContent();
+    expect($sitemap)->toContain('/site/cities/richburg')->and($sitemap)->not->toContain('/site/cities/thinville');
+});
+
+it('sends no cookies with public pages so they can be cached', function () {
+    University::factory()->create(['slug' => 'seo-uni', 'status' => 'active', 'moe_listed' => true, 'city' => 'Dalian']);
+
+    foreach (['/', '/site/universities/seo-uni', '/sitemap.xml', '/robots.txt'] as $url) {
+        expect(get($url)->assertOk()->headers->getCookies())->toBe([]);
+    }
+});

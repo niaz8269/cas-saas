@@ -10,6 +10,7 @@ use App\Services\Seo\SeoPageBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 /**
@@ -24,7 +25,10 @@ class SeoController extends Controller
     public function shell(Request $request): Response|RedirectResponse
     {
         $path = $request->path();
-        $page = $this->builder->build($path === '/' ? '' : $path);
+        // Building a page queries the whole catalog; crawlers fetch thousands of pages, so keep a short-lived copy.
+        $ttl = (int) config('seo.page_cache_seconds');
+        $build = fn () => $this->builder->build($path === '/' ? '' : $path);
+        $page = $ttl > 0 && $request->query() === [] ? Cache::remember('seo:page:'.md5($path), $ttl, $build) : $build();
 
         if (isset($page['redirect'])) {
             return redirect($page['redirect'], 301);
@@ -105,6 +109,9 @@ class SeoController extends Controller
             case 'cities':
                 $latest = University::where('status', 'active')->whereNotNull('city')->selectRaw('city, max(updated_at) as updated')->groupBy('city')->orderBy('city')->get();
                 foreach ($latest as $row) {
+                    if (! SeoIndexability::cityHasSubstance($row->city)) {
+                        continue;
+                    }
                     $urls[] = ['loc' => $site.'/site/cities/'.Str::slug($row->city), 'lastmod' => $row->updated ? substr((string) $row->updated, 0, 10) : null, 'changefreq' => 'monthly', 'priority' => 0.6];
                 }
                 break;

@@ -190,7 +190,7 @@ class SeoPageBuilder
         $body .= '<h2>Universities in '.e($city).'</h2>'.$this->ul($inCity->map(fn ($u) => $this->link('/site/universities/'.$u->slug, $u->name).($u->moe_listed ? ' (MoE-approved for English MBBS)' : ''))->all());
         $body .= '<p>'.$this->link('/site/cities', 'All cities').'</p>';
 
-        return $this->page($title, $description, $canonical, image: $image, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body);
+        return $this->page($title, $description, $canonical, image: $image, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body, noindex: ! SeoIndexability::cityHasSubstance($city), follow: true);
     }
 
     private function post(string $slug): ?array
