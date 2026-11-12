@@ -65,7 +65,7 @@ export default function SiteUniversity() {
       <div className="rounded-sm border bg-card p-10 text-center shadow-sm">
         <p className="text-sm text-muted-foreground">{t("university.notAvailable")}</p>
         <Button asChild variant="secondary" size="sm" className="mt-4">
-          <Link to="/site"><ArrowLeft className="size-4" /> {t("university.backToUniversities")}</Link>
+          <Link to="/site/universities"><ArrowLeft className="size-4" /> {t("university.backToUniversities")}</Link>
         </Button>
       </div>
     )
@@ -79,7 +79,7 @@ export default function SiteUniversity() {
 
   return (
     <div className="space-y-6">
-      <Link to="/site" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link to="/site/universities" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-4" /> {t("university.allUniversities")}
       </Link>
 
