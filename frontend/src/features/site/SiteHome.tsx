@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueries, useQuery } from "@tanstack/react-query"
 import {
   ArrowRight,
   BookOpen,
@@ -71,17 +71,26 @@ export default function SiteHome() {
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
   const outstanding = programs.data?.data.slice(0, 5) ?? []
 
-  // "Weekly program": a different open-window English-taught program each calendar week.
+  // Three open-window English-taught programs from three different universities; the set changes every calendar week.
   const openPrograms = programs.data?.data ?? []
   const weekNumber = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) / (7 * 86_400_000))
-  const weekly = openPrograms.length ? openPrograms[weekNumber % openPrograms.length] : undefined
-  const weeklyUniversity = useQuery({
-    queryKey: ["site-university", weekly?.university?.slug],
-    queryFn: () => getSiteUniversity(weekly!.university!.slug as string),
-    enabled: !!weekly?.university?.slug,
+  const spotlight: typeof openPrograms = []
+  for (let i = 0; i < openPrograms.length && spotlight.length < 3; i++) {
+    const candidate = openPrograms[(weekNumber * 3 + i) % openPrograms.length]
+    if (!spotlight.some((x) => x.university?.slug === candidate.university?.slug)) spotlight.push(candidate)
+  }
+  // Each card shows its own university's open application window.
+  const spotlightUniversities = useQueries({
+    queries: spotlight.map((p) => ({
+      queryKey: ["site-university", p.university?.slug],
+      queryFn: () => getSiteUniversity(p.university!.slug as string),
+      enabled: !!p.university?.slug,
+    })),
   })
   const today = new Date().setHours(0, 0, 0, 0)
-  const weeklyWindow = weeklyUniversity.data?.data.intakes.find((i) => i.status !== "closed" && (!i.application_deadline || new Date(i.application_deadline).getTime() >= today))
+  // Totals for the whole catalog (not just this page of results): programs and universities with an open window.
+  const openProgramCount = programs.data?.meta?.total ?? openPrograms.length
+  const openUniversityCount = openUniversities.data?.meta?.total ?? 0
 
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -209,38 +218,78 @@ export default function SiteHome() {
         <h2 className="flex items-center justify-center gap-2 text-2xl font-bold text-cas-navy sm:text-[2rem]">
           <span className="size-2.5 animate-pulse rounded-full bg-cas-red" /> {tx(s, "title", t("home.weekly.title"))}
         </h2>
-        <div className="mt-10 grid gap-0 overflow-hidden rounded-sm border bg-card shadow-sm md:grid-cols-[1fr_1.4fr]">
-          <PhotoBanner src="/images/art-3.svg" image={weeklyUniversity.data?.data.cover_url ? { src: weeklyUniversity.data.data.cover_url, credit: weeklyUniversity.data.data.cover_credit ?? undefined } : null} className="min-h-48" />
-          <div className="p-6">
-            {weekly ? (
-              <>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-lg font-bold text-cas-navy">{weekly.university?.name ?? t("home.weekly.featuredUniversity")}</h3>
-                    <p className="text-sm text-muted-foreground">{weekly.name}{weekly.teaching_language ? ` · ${weekly.teaching_language}` : ""}</p>
-                  </div>
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-3 text-sm">
-                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.language")}</p><p className="font-semibold">{weekly.teaching_language ?? t("home.weekly.englishDefault")}</p></div>
-                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{weekly.level.replace("_", "-")}</p></div>
-                  <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, weekly.tuition_fee, weekly.currency)}</p></div>
-                </div>
-                {weeklyWindow && (
-                  <div className="mt-4 rounded-sm bg-subtle px-3 py-2">
-                    <p className="mb-1 text-sm font-medium">{weeklyWindow.name}</p>
-                    <AdmissionWindow opens={weeklyWindow.application_open_date} closes={weeklyWindow.application_deadline} />
-                  </div>
-                )}
-                <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><CheckCircle2 className="size-4 text-cas-red-600" /> {tx(s, "supportLine", t("home.weekly.fullSupport"))}</li>
-                </ul>
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-                  <Link to={tx(s, "applyLink", "/site/study-plan")} className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-5 text-sm font-bold text-white hover:bg-cas-red-600">{tx(s, "applyLabel", t("home.weekly.applyForSeat"))} <ArrowRight className="size-4" /></Link>
-                </div>
-              </>
-            ) : (
-              <Skeleton className="h-48 w-full" />
+        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground sm:text-base">{t("home.weekly.intro")}</p>
+        {(openProgramCount > 0 || openUniversityCount > 0) && (
+          <dl className="mt-6 flex flex-wrap justify-center gap-3 text-center">
+            {openProgramCount > 0 && (
+              <div className="flex w-44 flex-col-reverse rounded-sm border bg-card px-4 py-3 shadow-sm sm:w-52">
+                <dt className="text-xs text-muted-foreground">{t("home.weekly.statPrograms")}</dt>
+                <dd className="text-2xl font-bold text-cas-navy">{openProgramCount.toLocaleString()}</dd>
+              </div>
             )}
+            {openUniversityCount > 0 && (
+              <div className="flex w-44 flex-col-reverse rounded-sm border bg-card px-4 py-3 shadow-sm sm:w-52">
+                <dt className="text-xs text-muted-foreground">{t("home.weekly.statUniversities")}</dt>
+                <dd className="text-2xl font-bold text-cas-navy">{openUniversityCount.toLocaleString()}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {spotlight.length === 0 && [0, 1, 2].map((i) => <Skeleton key={i} className="h-96 w-full" />)}
+          {spotlight.map((program, i) => {
+            const detail = spotlightUniversities[i]?.data?.data
+            const openWindow = detail?.intakes.find((x) => x.status !== "closed" && (!x.application_deadline || new Date(x.application_deadline).getTime() >= today))
+            const cover = program.university?.cover_url ?? detail?.cover_url
+
+            return (
+              <article key={program.id} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-shadow hover:shadow-md">
+                <PhotoBanner src="/images/art-3.svg" image={cover ? { src: cover, credit: program.university?.cover_credit ?? detail?.cover_credit ?? undefined } : null} className="h-40" />
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="text-base font-bold text-cas-navy">{program.university?.name ?? t("home.weekly.featuredUniversity")}</h3>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{program.name}{program.teaching_language ? ` · ${program.teaching_language}` : ""}</p>
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                    <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{program.level.replace("_", "-")}</p></div>
+                    <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, program.tuition_fee, program.currency)}</p></div>
+                  </div>
+                  {openWindow ? (
+                    <div className="mt-4 rounded-sm bg-subtle px-3 py-2">
+                      <p className="mb-1 text-sm font-medium">{openWindow.name}</p>
+                      <AdmissionWindow opens={openWindow.application_open_date} closes={openWindow.application_deadline} />
+                    </div>
+                  ) : (
+                    spotlightUniversities[i]?.isPending && <Skeleton className="mt-4 h-16 w-full" />
+                  )}
+                  <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><CheckCircle2 className="size-4 shrink-0 text-cas-red-600" /> {tx(s, "supportLine", t("home.weekly.fullSupport"))}</p>
+                  <div className="mt-auto pt-5">
+                    <Link to={tx(s, "applyLink", "/site/study-plan")} className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-sm bg-cas-red px-5 text-sm font-bold text-white hover:bg-cas-red-600">{tx(s, "applyLabel", t("home.weekly.applyForSeat"))} <ArrowRight className="size-4" /></Link>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-center text-base font-semibold text-cas-navy">{t("home.weekly.howTitle")}</h3>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-3">
+            {([1, 2, 3] as const).map((n) => (
+              <li key={n} className="flex gap-3 rounded-sm border bg-card p-4 shadow-sm">
+                <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-full bg-cas-navy text-sm font-bold text-white">{n}</span>
+                <span>
+                  <span className="block text-sm font-semibold text-cas-navy">{t(`home.weekly.step${n}Title`)}</span>
+                  <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">{t(`home.weekly.step${n}Body`)}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <Link to="/site/programs?language=English" className="inline-flex h-10 items-center gap-2 rounded-sm bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
+              {t("home.weekly.seeAll")} <ArrowRight className="size-4" />
+            </Link>
+            <Link to="/site/study-plan" className="inline-flex h-10 items-center rounded-sm border border-cas-navy px-5 text-sm font-semibold text-cas-navy hover:bg-cas-navy-50">
+              {t("home.weekly.freePlan")}
+            </Link>
           </div>
         </div>
       </section>
