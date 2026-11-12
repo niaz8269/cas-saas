@@ -171,7 +171,9 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
 
   await user.click(screen.getByRole("button", { name: "Leave Message" }))
 
-  expect(screen.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/8617640412827")
+  const whatsappLinks = screen.getAllByRole("link", { name: /WhatsApp/ })
+  expect(whatsappLinks.length).toBeGreaterThanOrEqual(2)
+  whatsappLinks.forEach((link) => expect(link).toHaveAttribute("href", "https://wa.me/8618041566030"))
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
   expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@cas.moe")
 })

@@ -21,12 +21,12 @@ const brandQr = (data: string, color: string) =>
  * QR image can be dropped at public/images/wechat-qr-v2.jpg; until it exists a code
  * carrying the WeChat ID is shown.
  */
-function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: string; name: string; value: string }) {
+function QrTile({ kind, alt, name, value, href }: { kind: "wechat" | "whatsapp"; alt: string; name: string; value: string; href?: string }) {
   const [missing, setMissing] = useState(false)
   const own = kind === "wechat" && !missing
   const color = kind === "wechat" ? WECHAT_GREEN : GREEN
 
-  return (
+  const tile = (
     <figure className="flex w-[9.25rem] flex-col items-center rounded-md border border-white/70 bg-white/50 p-3 shadow-sm">
       <div className="relative size-28 rounded-md bg-white p-1.5 shadow-md ring-1 ring-cas-navy/10">
         <img
@@ -48,6 +48,15 @@ function QrTile({ kind, alt, name, value }: { kind: "wechat" | "whatsapp"; alt: 
         <span className="mt-0.5 block text-[11px] whitespace-nowrap text-cas-navy/65">{value}</span>
       </figcaption>
     </figure>
+  )
+
+  // A tile with a link (WhatsApp) opens the chat when the QR code or the number is clicked.
+  return href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`${name} ${value}`} className="block rounded-md transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-cas-navy focus-visible:outline-none">
+      {tile}
+    </a>
+  ) : (
+    tile
   )
 }
 
@@ -116,7 +125,7 @@ export default function SiteHelpDock() {
                     <p className="mt-0.5 text-xs text-cas-navy/70">{t("helpDock.freeGuidance")}</p>
                     <div className="mt-3 flex items-stretch justify-between gap-3">
                       <QrTile kind="wechat" alt={t("helpDock.wechatQrAlt")} name={t("helpDock.wechat")} value={WECHAT_ID} />
-                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={PHONE_DISPLAY} />
+                      <QrTile kind="whatsapp" alt={t("helpDock.whatsapp")} name={t("helpDock.whatsapp")} value={CONTACT.whatsappDisplay} href={WHATSAPP} />
                     </div>
                   </div>
                 </div>

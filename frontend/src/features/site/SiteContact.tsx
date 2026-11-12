@@ -45,7 +45,7 @@ export default function SiteContact() {
               </li>
               <li className="flex items-start gap-3">
                 <MessageCircle className="mt-0.5 size-5 text-cas-navy" />
-                <span><span className="block font-medium">{t("contact.whatsapp")}</span><a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-cas-navy">{CONTACT.phoneDisplay}</a></span>
+                <span><span className="block font-medium">{t("contact.whatsapp")}</span><a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-cas-navy">{CONTACT.whatsappDisplay}</a></span>
               </li>
             </ul>
           </div>

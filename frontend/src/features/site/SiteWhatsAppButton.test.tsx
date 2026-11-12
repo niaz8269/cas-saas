@@ -9,7 +9,7 @@ it("links to a WhatsApp chat with the CAS number and a prefilled message, openin
   renderWithProviders(<SiteWhatsAppButton />)
 
   const link = screen.getByRole("link", { name: "Chat with CAS on WhatsApp" })
-  expect(link).toHaveAttribute("href", expect.stringMatching(/^https:\/\/wa\.me\/8617640412827\?text=Hello%20CAS/))
+  expect(link).toHaveAttribute("href", expect.stringMatching(/^https:\/\/wa\.me\/8618041566030\?text=Hello%20CAS/))
   expect(link).toHaveAttribute("target", "_blank")
   expect(link.getAttribute("rel")).toContain("noopener")
   expect(link.className).toContain("left-4")
