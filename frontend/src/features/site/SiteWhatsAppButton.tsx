@@ -26,7 +26,7 @@ export default function SiteWhatsAppButton() {
       rel="noopener noreferrer"
       aria-label={t("whatsappButton.label")}
       title={t("whatsappButton.label")}
-      className="fixed bottom-4 left-4 z-40 inline-flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#128C7E] focus-visible:ring-offset-2 focus-visible:outline-none sm:bottom-6 sm:left-6 lg:bottom-[4.75rem]"
+      className="fixed bottom-3 left-3 z-40 inline-flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#128C7E] focus-visible:ring-offset-2 focus-visible:outline-none sm:bottom-4 sm:left-4 lg:bottom-[3.75rem]"
     >
       <WhatsAppGlyph className="size-8" />
     </a>
