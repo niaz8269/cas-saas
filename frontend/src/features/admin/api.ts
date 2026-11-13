@@ -89,6 +89,15 @@ export const approveAgentRequest = (id: number) =>
 export const rejectAgentRequest = (id: number) =>
   api<{ data: AgentRequest }>(`/agents/${id}/reject`, { method: "POST" })
 
+/** Switch a person between the Student and Partner portals (the old record is kept and deactivated). */
+export interface RoleSwitchResult { data: { role: "partner" | "student"; id: number; code: string } }
+
+export const convertStudentToPartner = (studentId: number | string) =>
+  api<RoleSwitchResult>(`/students/${studentId}/convert-to-partner`, { method: "POST" })
+
+export const convertPartnerToStudent = (agentId: number) =>
+  api<RoleSwitchResult>(`/agents/${agentId}/convert-to-student`, { method: "POST" })
+
 // ── Content: blogs / news / events ─────────────────────────────────────────
 
 export type PostType = "news" | "blog" | "event"

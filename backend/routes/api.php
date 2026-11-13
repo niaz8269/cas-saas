@@ -256,6 +256,10 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:agents.manage.global,staff');
         Route::post('agents/{agent}/reject', [AgentController::class, 'reject'])
             ->middleware('permission:agents.manage.global,staff');
+        Route::post('agents/{agent}/convert-to-student', [AgentController::class, 'convertPartnerToStudent'])
+            ->middleware('permission:agents.manage.global,staff');
+        Route::post('students/{student}/convert-to-partner', [AgentController::class, 'convertStudentToPartner'])
+            ->middleware('permission:agents.manage.global,staff');
 
         // Content: blogs / news / events
         Route::get('posts', [PostController::class, 'index'])

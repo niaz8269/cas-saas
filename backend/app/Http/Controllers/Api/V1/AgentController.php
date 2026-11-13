@@ -7,6 +7,9 @@ use App\Http\Resources\AgentRequestResource;
 use App\Mail\AgentApprovedMail;
 use App\Mail\AgentRejectedMail;
 use App\Models\Agent;
+use App\Models\Student;
+use App\Services\Accounts\AccountRoleSwitcher;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Mail;
@@ -63,5 +66,21 @@ class AgentController extends Controller
         }
 
         return new AgentRequestResource($agent->load('country'));
+    }
+
+    /** Switch a student account to a partner account (the student record is kept, deactivated and linked). */
+    public function convertStudentToPartner(Request $request, Student $student, AccountRoleSwitcher $switcher): JsonResponse
+    {
+        $agent = $switcher->studentToPartner($student, $request);
+
+        return response()->json(['data' => ['role' => 'partner', 'id' => $agent->id, 'code' => $agent->agent_code]]);
+    }
+
+    /** Switch a partner account to a student account (refused while the partner still owns records). */
+    public function convertPartnerToStudent(Request $request, Agent $agent, AccountRoleSwitcher $switcher): JsonResponse
+    {
+        $student = $switcher->partnerToStudent($agent, $request);
+
+        return response()->json(['data' => ['role' => 'student', 'id' => $student->id, 'code' => $student->student_code]]);
     }
 }
