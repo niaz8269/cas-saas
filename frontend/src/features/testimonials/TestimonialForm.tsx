@@ -150,6 +150,7 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
         services: services.length ? services : undefined, recommend: recommend ?? undefined, consent_public: consent,
       }
       if (isPublic) Object.assign(payload, { audience: kind, contact_email: email.trim(), website: trap, display_name: displayName.trim(), photo_path: photoPath || undefined })
+      else if (!isStudent) Object.assign(payload, { display_name: displayName.trim() || undefined, photo_path: photoPath || undefined })
       if (isStudent) {
         Object.assign(payload, {
           display_name: displayName.trim(), country_code: countryCode || undefined, photo_path: photoPath || undefined, university: university.trim() || undefined,
@@ -221,16 +222,17 @@ export function TestimonialForm({ kind, mode, defaultName = "", upload, submit, 
             </div>
           </Section>
         </>
-      ) : isPublic ? (
+      ) : (
         <Section title={t("testimonialPage.aboutAgencyTitle", { defaultValue: "About you" })}>
           <PhotoField path={photoPath} preview={photoPreview} onChange={(p, v) => { setPhotoPath(p); setPhotoPreview(v) }} error={err("photo_path")} upload={upload} optional />
           <div className="space-y-2">
-            <Label htmlFor="tm-agent-name">{t("testimonialPage.agencyName", { defaultValue: "Agency name (or your name)" })}<Req /></Label>
+            <Label htmlFor="tm-agent-name">{t("testimonialPage.agencyName", { defaultValue: "Agency name (or your name)" })}{isPublic && <Req />}</Label>
             <Input id="tm-agent-name" value={displayName} maxLength={120} onChange={(e) => setDisplayName(e.target.value)} aria-invalid={err("display_name") ? true : undefined} />
+            {!isPublic && <p className="text-xs text-muted-foreground">{t("testimonialPage.shownAs", { defaultValue: "This is how you will be shown on the website." })}</p>}
             {err("display_name") && <p role="alert" className="text-sm text-destructive">{err("display_name")}</p>}
           </div>
         </Section>
-      ) : null}
+      )}
 
       <Section title={t("testimonialPage.storyTitle", { defaultValue: "Your story" })}>
         <div className="space-y-2">

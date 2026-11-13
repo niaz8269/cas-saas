@@ -153,6 +153,7 @@ Route::prefix('v1')->group(function () {
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
             Route::get('testimonial', [TestimonialController::class, 'mine']);
             Route::post('testimonial', [TestimonialController::class, 'submit'])->middleware('throttle:10,1');
+            Route::post('testimonial/photo', [TestimonialController::class, 'uploadPhoto'])->middleware('throttle:10,1');
             // In-app notification feed.
             Route::get('notifications', [PortalNotificationController::class, 'index']);
             Route::get('notifications/unread-count', [PortalNotificationController::class, 'unreadCount']);

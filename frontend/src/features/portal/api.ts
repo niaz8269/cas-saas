@@ -671,11 +671,11 @@ export interface TestimonialPayload {
 }
 
 /** Upload a student's own picture (converted to WebP on the server); returns its stored path. */
-export const uploadTestimonialPhoto = (file: File) => {
+export const uploadTestimonialPhoto = (kind: PortalKind) => (file: File) => {
   const body = new FormData()
   body.append("image", file)
 
-  return portalApi<{ path: string; url: string | null }>("/student/testimonial/photo", { method: "POST", body })
+  return portalApi<{ path: string; url: string | null }>(`/${kind}/testimonial/photo`, { method: "POST", body })
 }
 
 export const getMyTestimonial = (kind: PortalKind) =>
