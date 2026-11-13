@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event"
 import type { DraftApplication, WizardProgram } from "@/features/portal/api"
 import { renderWithProviders } from "@/test/utils"
 
-import { CourseStep, CustomFieldsCard, ReviewStep } from "./applySteps"
+import { CourseStep, CustomFieldsCard, DocumentsStep, ReviewStep } from "./applySteps"
 
 it("renders a radio custom field and reports the chosen option", async () => {
   const user = userEvent.setup()
@@ -115,4 +115,22 @@ it("still finds the program when the search has a typing mistake", async () => {
 
   expect(screen.getByText("Civil Engineering")).toBeInTheDocument()
   expect(screen.queryByText("Clinical Medicine")).not.toBeInTheDocument()
+})
+
+it("shows what to upload for each document and lists optional ones apart, without needing them", () => {
+  renderWithProviders(
+    <DocumentsStep
+      draft={{
+        id: 1, application_code: "APP-1", status: "draft",
+        required_documents: [{ id: 1, name: "Study Plan / Personal Statement", category: null, is_sensitive: false, instruction: "Master: 800-1000 words. PhD: 1000-1500 words." }],
+        optional_documents: [{ id: 2, name: "Experience Letter", category: null, is_sensitive: false, instruction: "If you have one." }],
+      }}
+      uploaded={{}} onUploaded={() => {}} onError={() => {}}
+    />,
+  )
+
+  expect(screen.getByText("Master: 800-1000 words. PhD: 1000-1500 words.")).toBeInTheDocument()
+  expect(screen.getByText("Optional, if you have them")).toBeInTheDocument()
+  expect(screen.getByText("Experience Letter")).toBeInTheDocument()
+  expect(screen.getByText("Optional")).toBeInTheDocument()
 })

@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             OfficialIntakeDatesSeeder::class,
             RegisteredMajorsSeeder::class,
             DocumentTypeSeeder::class,
+            PostgraduateScholarshipDocumentsSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,
             UniversityEmblemSeeder::class,
