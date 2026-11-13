@@ -124,13 +124,13 @@ class DocumentService
     /**
      * @return array{url: string, expires_at: string}
      */
-    public function downloadUrl(Document $document, ?int $actorId, ?string $ip): array
+    public function downloadUrl(Document $document, ?int $actorId, ?string $ip, string $action = 'download'): array
     {
         $expiresAt = now()->addMinutes(10);
 
         $url = Storage::disk(self::disk())->temporaryUrl($document->file_path, $expiresAt);
 
-        $this->log($document, $actorId, 'download', $ip);
+        $this->log($document, $actorId, $action, $ip);
 
         return ['url' => $url, 'expires_at' => $expiresAt->toIso8601String()];
     }

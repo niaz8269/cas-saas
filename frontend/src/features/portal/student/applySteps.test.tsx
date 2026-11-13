@@ -134,3 +134,81 @@ it("shows what to upload for each document and lists optional ones apart, withou
   expect(screen.getByText("Experience Letter")).toBeInTheDocument()
   expect(screen.getByText("Optional")).toBeInTheDocument()
 })
+
+// ── Several files per document, and looking at them ─────────────────────────
+
+import { waitFor } from "@testing-library/react"
+import { jsonResponse } from "@/test/utils"
+
+const FILES = [
+  { id: 11, document_type_id: 1, file_name: "letter-1.pdf", mime: "application/pdf", size: 1000, status: "pending", version: 1, type: null, uploaded_at: null },
+  { id: 12, document_type_id: 1, file_name: "photo.jpg", mime: "image/jpeg", size: 1000, status: "pending", version: 2, type: null, uploaded_at: null },
+]
+
+function renderDocuments(extra?: (url: string, init?: RequestInit) => Response | undefined) {
+  const fetchMock = vi.fn().mockImplementation((url: string, init?: RequestInit) => {
+    const custom = extra?.(String(url), init)
+    if (custom) return Promise.resolve(custom)
+    if (String(url).includes("/documents/presign")) return Promise.resolve(jsonResponse({ url: "https://storage.test/put", key: "k", headers: {} }))
+    if (String(url) === "https://storage.test/put") return Promise.resolve(new Response(null, { status: 200 }))
+    if (String(url).endsWith("/view")) return Promise.resolve(jsonResponse({ url: "https://files.test/doc", expires_at: "x", file_name: "letter-1.pdf", mime: "application/pdf" }))
+    if (init?.method === "DELETE") return Promise.resolve(jsonResponse({ message: "Document removed." }))
+    if (String(url).endsWith("/documents")) return Promise.resolve(init?.method === "POST" ? jsonResponse({ data: FILES[0] }, 201) : jsonResponse({ data: FILES }))
+
+    return Promise.resolve(jsonResponse({}))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+  const onUploaded = vi.fn()
+  const onRemoved = vi.fn()
+  renderWithProviders(
+    <DocumentsStep
+      draft={{ id: 7, application_code: "APP-7", status: "draft", required_documents: [{ id: 1, name: "Recommendation Letters", category: null, is_sensitive: false }] }}
+      uploaded={{}} onUploaded={onUploaded} onRemoved={onRemoved} onError={() => {}}
+    />,
+  )
+
+  return { fetchMock, onUploaded, onRemoved }
+}
+
+it("shows every file already uploaded for a document, and the input takes more than one", async () => {
+  renderDocuments()
+
+  expect(await screen.findByRole("button", { name: "View letter-1.pdf" })).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "View photo.jpg" })).toBeInTheDocument()
+  expect(screen.getByLabelText("Upload Recommendation Letters")).toHaveAttribute("multiple")
+  expect(screen.getByText("Add more")).toBeInTheDocument()
+})
+
+it("uploads each chosen file", async () => {
+  const user = userEvent.setup()
+  const { fetchMock } = renderDocuments()
+
+  await screen.findByRole("button", { name: "View letter-1.pdf" })
+  await user.upload(screen.getByLabelText("Upload Recommendation Letters"), [
+    new File(["a"], "a.pdf", { type: "application/pdf" }),
+    new File(["b"], "b.jpg", { type: "image/jpeg" }),
+  ])
+
+  await waitFor(() => expect(fetchMock.mock.calls.filter(([u]) => String(u).includes("/documents/presign"))).toHaveLength(2))
+})
+
+it("opens a file in a popup when it is clicked", async () => {
+  const user = userEvent.setup()
+  renderDocuments()
+
+  await user.click(await screen.findByRole("button", { name: "View letter-1.pdf" }))
+
+  expect(await screen.findByRole("dialog")).toBeInTheDocument()
+  expect(await screen.findByTitle("letter-1.pdf")).toHaveAttribute("src", "https://files.test/doc")
+  expect(screen.getByRole("link", { name: "Open in a new tab" })).toHaveAttribute("href", "https://files.test/doc")
+})
+
+it("removes one file and only tells the wizard when the last one is gone", async () => {
+  const user = userEvent.setup()
+  const { fetchMock, onRemoved } = renderDocuments()
+
+  await user.click(await screen.findByRole("button", { name: "Remove letter-1.pdf" }))
+
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/documents/11"), expect.objectContaining({ method: "DELETE" })))
+  expect(onRemoved).not.toHaveBeenCalled()
+})

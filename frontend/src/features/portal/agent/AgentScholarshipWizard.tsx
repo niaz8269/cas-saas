@@ -190,7 +190,8 @@ export default function AgentScholarshipWizard() {
 
       {step === 5 && draft && (
         <DocumentsStep kind="agent" draft={draft} uploaded={uploaded}
-          onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))} onError={setError} />
+          onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))}
+          onRemoved={(typeId) => setUploaded((u) => { const rest = { ...u }; delete rest[typeId]; return rest })} onError={setError} />
       )}
 
       {step === 6 && draft && (

@@ -1,8 +1,16 @@
-import { Check, GraduationCap, Loader2, Plus, Search, ShieldCheck, Upload, X } from "lucide-react"
-import { useMemo, useState, type ReactNode } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { Check, FileText, GraduationCap, Loader2, Plus, Search, ShieldCheck, Upload, X } from "lucide-react"
+import { useEffect, useMemo, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -14,13 +22,18 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  getApplicationDocumentLink,
+  listApplicationDocuments,
+  removeApplicationDocument,
   uploadApplicationDocument,
   type CountryRow,
+  type DraftDocumentFile,
   type Degree,
   type DraftApplication,
   type Funding,
   type FundingOptions,
   type PortalCustomField,
+  type RequiredDoc,
   type WizardEducation,
   type WizardGuardian,
   type WizardProgram,
@@ -270,34 +283,63 @@ export function DocumentsStep(props: {
   draft: DraftApplication
   uploaded: Record<number, string>
   onUploaded: (typeId: number, name: string, previewUrl?: string) => void
+  /** Called when the last file of a document type is taken off, so the step can be blocked again. */
+  onRemoved?: (typeId: number) => void
   onError: (msg: string) => void
   /** Which portal is uploading — selects the /{kind}/applications path. */
   kind?: PortalKind
 }) {
   const { t } = useTranslation()
   const { draft, uploaded, kind = "student" } = props
+  const queryClient = useQueryClient()
+  const [viewing, setViewing] = useState<DraftDocumentFile | null>(null)
+
+  // What is already on the draft: lets a resumed draft show its files, and keeps several files per document.
+  const key = ["application-documents", kind, draft.id]
+  const files = useQuery({ queryKey: key, queryFn: () => listApplicationDocuments(kind, draft.id) })
+  const all = useMemo(() => (Array.isArray(files.data?.data) ? files.data.data : []), [files.data])
+  useEffect(() => {
+    const latest = new Map<number, string>()
+    all.forEach((f) => latest.set(f.document_type_id, f.file_name))
+    latest.forEach((name, typeId) => { if (!uploaded[typeId]) props.onUploaded(typeId, name) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [all])
+
+  const refresh = () => queryClient.invalidateQueries({ queryKey: key })
+  const remove = async (file: DraftDocumentFile) => {
+    try {
+      await removeApplicationDocument(kind, draft.id, file.id)
+      const left = all.filter((f) => f.id !== file.id && f.document_type_id === file.document_type_id)
+      if (left.length === 0) props.onRemoved?.(file.document_type_id)
+      await refresh()
+    } catch (err) {
+      props.onError(err instanceof ApiError ? err.message : t("wizard.documents.removeFailed", { defaultValue: "Could not remove the file. Please try again." }))
+    }
+  }
+
+  const row = (doc: RequiredDoc, optional?: boolean) => (
+    <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction} optional={optional}
+      files={all.filter((f) => f.document_type_id === doc.id)} onView={setViewing} onRemove={remove}
+      onUploaded={(typeId, name, previewUrl) => { props.onUploaded(typeId, name, previewUrl); refresh() }} onError={props.onError} />
+  )
 
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        {t("wizard.documents.uploadClear")} <strong>JPG / PDF</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.
+        {t("wizard.documents.uploadClear")} <strong>JPG / PDF</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.{" "}
+        {t("wizard.documents.severalFiles", { defaultValue: "You can add more than one file to each document, and click a file to look at it." })}
       </p>
       {draft.required_documents.length === 0 && (
         <PortalCard><p className="text-sm text-muted-foreground">{t("wizard.documents.noDocsRequired")}</p></PortalCard>
       )}
-      {draft.required_documents.map((doc) => (
-        <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction}
-          uploadedName={uploaded[doc.id]} onUploaded={props.onUploaded} onError={props.onError} />
-      ))}
+      {draft.required_documents.map((doc) => row(doc))}
       {(draft.optional_documents?.length ?? 0) > 0 && (
         <>
           <p className="pt-2 text-sm font-medium">{t("wizard.documents.optionalTitle", { defaultValue: "Optional, if you have them" })}</p>
-          {draft.optional_documents?.map((doc) => (
-            <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction} optional
-              uploadedName={uploaded[doc.id]} onUploaded={props.onUploaded} onError={props.onError} />
-          ))}
+          {draft.optional_documents?.map((doc) => row(doc, true))}
         </>
       )}
+      <DocumentPreview kind={kind} applicationId={draft.id} file={viewing} onClose={() => setViewing(null)} />
     </div>
   )
 }
@@ -310,57 +352,116 @@ function DocumentRow(props: {
   instruction?: string | null
   /** Shown with an "Optional" tag; never needed to continue. */
   optional?: boolean
-  uploadedName?: string
+  files: DraftDocumentFile[]
+  onView: (file: DraftDocumentFile) => void
+  onRemove: (file: DraftDocumentFile) => void
   onUploaded: (typeId: number, name: string, previewUrl?: string) => void
   onError: (msg: string) => void
 }) {
   const { t } = useTranslation()
   const [pending, setPending] = useState(false)
+  const hasFiles = props.files.length > 0
 
-  const onFile = async (file: File | undefined) => {
-    if (!file) return
-    if (file.type !== "image/jpeg" && file.type !== "application/pdf") {
-      props.onError(t("wizard.documents.onlyJpg"))
-
-      return
-    }
+  const onFiles = async (list: FileList | null) => {
+    const picked = Array.from(list ?? [])
+    if (picked.length === 0) return
     setPending(true)
     try {
-      await uploadApplicationDocument(props.kind, props.applicationId, props.docTypeId, file)
-      // A local object URL lets the applicant preview it on the review step.
-      props.onUploaded(props.docTypeId, file.name, file.type === "application/pdf" ? undefined : URL.createObjectURL(file))
-    } catch (err) {
-      props.onError(err instanceof ApiError ? err.message : t("wizard.documents.uploadFailed"))
+      for (const file of picked) {
+        if (file.type !== "image/jpeg" && file.type !== "application/pdf") {
+          props.onError(t("wizard.documents.onlyJpg"))
+          continue
+        }
+        try {
+          await uploadApplicationDocument(props.kind, props.applicationId, props.docTypeId, file)
+          // A local object URL lets the applicant preview it on the review step.
+          props.onUploaded(props.docTypeId, file.name, file.type === "application/pdf" ? undefined : URL.createObjectURL(file))
+        } catch (err) {
+          props.onError(err instanceof ApiError ? err.message : t("wizard.documents.uploadFailed"))
+        }
+      }
     } finally {
       setPending(false)
     }
   }
 
   return (
-    <PortalCard className="flex items-center justify-between gap-3">
-      <div className="flex min-w-0 items-center gap-2">
-        {props.uploadedName
-          ? <Check className="size-5 shrink-0 text-success" />
-          : <span className="size-5 shrink-0 rounded-full border" aria-hidden="true" />}
-        <div className="min-w-0">
-          <p className="text-sm font-medium">
-            {props.name}
-            {props.optional && <span className="ml-2 rounded-full bg-subtle px-2 py-0.5 text-xs font-normal text-muted-foreground">{t("wizard.documents.optional", { defaultValue: "Optional" })}</span>}
-          </p>
-          {props.instruction && <p className="text-xs text-muted-foreground">{props.instruction}</p>}
-          {props.uploadedName && <p className="truncate text-xs text-muted-foreground">{props.uploadedName}</p>}
+    <PortalCard className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          {hasFiles
+            ? <Check className="size-5 shrink-0 text-success" />
+            : <span className="size-5 shrink-0 rounded-full border" aria-hidden="true" />}
+          <div className="min-w-0">
+            <p className="text-sm font-medium">
+              {props.name}
+              {props.optional && <span className="ml-2 rounded-full bg-subtle px-2 py-0.5 text-xs font-normal text-muted-foreground">{t("wizard.documents.optional", { defaultValue: "Optional" })}</span>}
+            </p>
+            {props.instruction && <p className="text-xs text-muted-foreground">{props.instruction}</p>}
+          </div>
         </div>
+        <label className={cn(
+          "inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-md border px-3 text-sm font-medium",
+          hasFiles ? "text-muted-foreground" : "bg-cas-navy text-white",
+        )}>
+          {pending ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+          {hasFiles ? t("wizard.documents.addMore", { defaultValue: "Add more" }) : t("wizard.documents.upload")}
+          <input type="file" multiple aria-label={`${t("wizard.documents.upload")} ${props.name}`} accept=".jpg,.jpeg,.pdf,image/jpeg,application/pdf" className="hidden" disabled={pending}
+            onChange={(e) => { onFiles(e.target.files); e.target.value = "" }} />
+        </label>
       </div>
-      <label className={cn(
-        "inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-md border px-3 text-sm font-medium",
-        props.uploadedName ? "text-muted-foreground" : "bg-cas-navy text-white",
-      )}>
-        {pending ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
-        {props.uploadedName ? t("wizard.documents.replace") : t("wizard.documents.upload")}
-        <input type="file" accept=".jpg,.jpeg,.pdf,image/jpeg,application/pdf" className="hidden" disabled={pending}
-          onChange={(e) => onFile(e.target.files?.[0])} />
-      </label>
+
+      {hasFiles && (
+        <ul className="space-y-1.5 border-t pt-3">
+          {props.files.map((f) => (
+            <li key={f.id} className="flex items-center justify-between gap-2 rounded-md bg-subtle px-2.5 py-1.5">
+              <button type="button" onClick={() => props.onView(f)} className="flex min-w-0 items-center gap-2 text-left text-sm text-cas-navy hover:underline"
+                aria-label={`${t("wizard.documents.view", { defaultValue: "View" })} ${f.file_name}`}>
+                <FileText className="size-4 shrink-0" aria-hidden="true" />
+                <span className="truncate">{f.file_name}</span>
+              </button>
+              <button type="button" onClick={() => props.onRemove(f)} className="shrink-0 rounded p-1 text-muted-foreground hover:text-destructive"
+                aria-label={`${t("wizard.documents.remove", { defaultValue: "Remove" })} ${f.file_name}`}>
+                <X className="size-4" aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </PortalCard>
+  )
+}
+
+/** Looks at an uploaded file in a popup: pictures inline, PDFs in a frame, with a link to open it in its own tab. */
+function DocumentPreview({ kind, applicationId, file, onClose }: { kind: PortalKind; applicationId: number; file: DraftDocumentFile | null; onClose: () => void }) {
+  const { t } = useTranslation()
+  const link = useQuery({
+    queryKey: ["application-document-link", kind, applicationId, file?.id],
+    queryFn: () => getApplicationDocumentLink(kind, applicationId, file!.id),
+    enabled: !!file,
+    staleTime: 5 * 60 * 1000,
+  })
+  const isPdf = (link.data?.mime ?? file?.mime) === "application/pdf"
+
+  return (
+    <Dialog open={!!file} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-h-[92dvh] gap-3 sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle className="truncate pr-6 text-base">{file?.file_name}</DialogTitle>
+          <DialogDescription className="sr-only">{t("wizard.documents.previewOf", { defaultValue: "Preview of the uploaded file" })}</DialogDescription>
+        </DialogHeader>
+        {link.isPending && <p className="py-10 text-center text-sm text-muted-foreground"><Loader2 className="mx-auto mb-2 size-5 animate-spin" />{t("wizard.documents.opening", { defaultValue: "Opening…" })}</p>}
+        {link.isError && <p role="alert" className="py-10 text-center text-sm text-destructive">{t("wizard.documents.openFailed", { defaultValue: "Could not open this file." })}</p>}
+        {link.data && (isPdf
+          ? <iframe src={link.data.url} title={link.data.file_name} className="h-[70dvh] w-full rounded-md border" />
+          : <img src={link.data.url} alt={link.data.file_name} className="mx-auto max-h-[70dvh] max-w-full rounded-md object-contain" />)}
+        {link.data && (
+          <a href={link.data.url} target="_blank" rel="noreferrer" className="text-center text-xs font-medium text-cas-navy underline underline-offset-2">
+            {t("wizard.documents.openNewTab", { defaultValue: "Open in a new tab" })}
+          </a>
+        )}
+      </DialogContent>
+    </Dialog>
   )
 }
 

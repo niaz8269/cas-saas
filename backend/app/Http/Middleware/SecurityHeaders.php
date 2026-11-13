@@ -24,7 +24,7 @@ class SecurityHeaders
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
             'Permissions-Policy' => 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
             'Cross-Origin-Opener-Policy' => 'same-origin',
-            'Content-Security-Policy' => "frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'",
+            'Content-Security-Policy' => "frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'self'",
         ];
 
         if ($request->isSecure()) {

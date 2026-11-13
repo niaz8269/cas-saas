@@ -177,7 +177,8 @@ export default function StudentScholarshipWizard() {
 
       {step === 4 && draft && (
         <DocumentsStep draft={draft} uploaded={uploaded}
-          onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))} onError={setError} />
+          onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))}
+          onRemoved={(typeId) => setUploaded((u) => { const rest = { ...u }; delete rest[typeId]; return rest })} onError={setError} />
       )}
 
       {step === 5 && draft && (

@@ -11,6 +11,7 @@ import {
   getAgentStudent,
   getApplyAvailability,
   getApplyCountries,
+  getApplicationDraft,
   getApplyFundingOptions,
   submitApplication,
   type AgentCreateApplicationPayload,
@@ -30,6 +31,7 @@ import {
   ReviewStep,
   Stepper,
 } from "@/features/portal/student/applySteps"
+import { useApplyAutosave } from "@/features/portal/student/useApplyAutosave"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.student", "wizard.steps.course", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -73,6 +75,48 @@ export default function AgentApplyWizard() {
   const [uploaded, setUploaded] = useState<Record<number, string>>({})
   const [agreed, setAgreed] = useState(false)
 
+  // Carry on with an application that was saved as a draft (from the Applications page).
+  const draftParam = Number(params.get("draft")) || 0
+  const resume = useQuery({
+    queryKey: ["apply", "draft", "agent", draftParam],
+    queryFn: () => getApplicationDraft("agent", draftParam),
+    enabled: draftParam > 0,
+  })
+  useEffect(() => {
+    const d = resume.data?.data
+    if (!d) return
+    setStudent({ id: d.student.id, name: d.student.full_name ?? "" })
+    setProgram(d.program)
+    setDegree(d.degree)
+    setFunding(d.funding)
+    setScholarshipId(d.scholarship_id ? String(d.scholarship_id) : "")
+    setIntakeId(d.intake_id ? String(d.intake_id) : "")
+    setCustomAnswers(Object.fromEntries(Object.entries(d.custom_fields ?? {}).map(([k, v]) => [k, String(v)])))
+    setDraft({ id: d.id, application_code: d.application_code, status: d.status, required_documents: d.required_documents, optional_documents: d.optional_documents })
+    setStep(4)
+  }, [resume.data])
+
+  // Keep an unfinished form through a refresh until it is saved as a draft on the server.
+  const autosave = useApplyAutosave({
+    storageKey: "cas-apply-agent",
+    enabled: !draft && draftParam === 0,
+    snapshot: { step: Math.min(step, 3), student, degree, funding, program, intakeId, scholarshipId, customAnswers, profile, guardians, education, emergency },
+    onRestore: (s) => {
+      setStep(s.step)
+      setStudent(s.student)
+      setDegree(s.degree)
+      setFunding(s.funding)
+      setProgram(s.program)
+      setIntakeId(s.intakeId)
+      setScholarshipId(s.scholarshipId)
+      setCustomAnswers(s.customAnswers)
+      setProfile(s.profile)
+      setGuardians(s.guardians)
+      setEducation(s.education)
+      setEmergency(s.emergency)
+    },
+  })
+
   const availability = useQuery({
     queryKey: ["agent-apply", "availability", degree, funding],
     queryFn: () => getApplyAvailability("agent", degree as Degree, funding as Funding),
@@ -106,6 +150,8 @@ export default function AgentApplyWizard() {
     if (!data?.profile || loadedFor.current === data.id) return
 
     loadedFor.current = data.id
+    // What was typed before a refresh wins over what is on file.
+    if (autosave.restored) return
 
     setProfile(Object.fromEntries(
       Object.entries(data.profile)
@@ -122,7 +168,7 @@ export default function AgentApplyWizard() {
     if (family.length) setGuardians(family)
     if (emergencyOnFile) setEmergency(emergencyOnFile)
     if (data.education?.length) setEducation(data.education)
-  }, [applicant.data])
+  }, [applicant.data, autosave.restored])
 
   const resetDraft = () => {
     setDraft(null)
@@ -148,9 +194,10 @@ export default function AgentApplyWizard() {
     onSuccess: (res) => {
       setDraft(res.data)
       setError(null)
+      autosave.clear()
       setStep(4)
     },
-    onError: (err) => setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotStart")),
+    onError: (err) => setError(err instanceof ApiError ? (err.errors?.program_id?.[0] ?? err.message) : t("wizard.errors.couldNotStart")),
   })
 
   const submit = useMutation({
@@ -203,6 +250,15 @@ export default function AgentApplyWizard() {
 
       {error && (
         <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
+      )}
+
+      {autosave.restored && (
+        <p role="status" className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-cas-navy-50 px-3 py-2 text-sm text-cas-navy">
+          {t("wizard.restored", { defaultValue: "We brought back what you had filled in." })}
+          <button type="button" className="font-medium underline underline-offset-2" onClick={() => { autosave.clear(); window.location.assign(window.location.pathname) }}>
+            {t("wizard.startOver", { defaultValue: "Start over" })}
+          </button>
+        </p>
       )}
 
       {step === 0 && (
@@ -259,6 +315,7 @@ export default function AgentApplyWizard() {
           draft={draft}
           uploaded={uploaded}
           onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))}
+          onRemoved={(typeId) => setUploaded((u) => { const rest = { ...u }; delete rest[typeId]; return rest })}
           onError={setError}
         />
       )}

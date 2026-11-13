@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { ChevronRight, FileText, PartyPopper, Plus } from "lucide-react"
+import { FileText, PartyPopper, Plus } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { getStudentApplications } from "@/features/portal/api"
+import ApplicationTrack from "@/features/portal/ApplicationTrack"
 import {
   EmptyState,
   ListSkeleton,
@@ -13,8 +14,7 @@ import {
   PortalCard,
   StatusBadge,
 } from "@/features/portal/components"
-import { APPLICATION_BADGE, label } from "@/features/portal/status"
-import { cn } from "@/lib/utils"
+import { APPLICATION_BADGE } from "@/features/portal/status"
 
 export default function StudentApplications() {
   const { t } = useTranslation()
@@ -60,24 +60,14 @@ export default function StudentApplications() {
               </div>
             )}
 
-            {/* Where this application has been, oldest first. */}
-            {app.progress && app.progress.length > 0 && (
-              <ol className="mt-3 flex flex-wrap items-center gap-x-1 gap-y-1.5 border-t pt-3">
-                {app.progress.map((step, i) => (
-                  <li key={i} className="flex items-center gap-1">
-                    {i > 0 && <ChevronRight className="size-3 text-muted-foreground/50 rtl:rotate-180" aria-hidden="true" />}
-                    <span className={cn(
-                      "rounded-full px-2 py-0.5 text-[11px] capitalize",
-                      i === app.progress!.length - 1
-                        ? "bg-cas-navy-50 font-medium text-cas-navy"
-                        : "bg-subtle text-muted-foreground",
-                    )}>
-                      {label(step.status)}
-                    </span>
-                  </li>
-                ))}
-              </ol>
+            {app.status === "draft" && app.program && (
+              <Button asChild size="sm" className="mt-3 self-start">
+                <Link to={`/portal/student/apply?draft=${app.id}`}>{t("studentPortal.applications.continue", { defaultValue: "Continue this application" })}</Link>
+              </Button>
             )}
+
+            {/* Where this application has been, oldest first, with the date of each step. */}
+            <div className="mt-3"><ApplicationTrack steps={app.progress ?? []} /></div>
           </PortalCard>
         ))}
       </div>

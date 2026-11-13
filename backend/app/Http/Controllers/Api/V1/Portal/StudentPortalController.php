@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Portal\AgentStudentDetailResource;
 use App\Http\Resources\Portal\StudentApplicationResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
 use App\Http\Resources\Portal\StudentInvoiceResource;
@@ -24,6 +25,15 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class StudentPortalController extends Controller
 {
+    /**
+     * The student's own applicant record (profile, family, education) as saved with their earlier applications, so a
+     * new application starts pre-filled instead of from a blank form.
+     */
+    public function applicant(Request $request): AgentStudentDetailResource
+    {
+        return new AgentStudentDetailResource($request->user()->load(['guardians', 'education']));
+    }
+
     public function applications(Request $request): AnonymousResourceCollection
     {
         $applications = $request->user()->applications()
