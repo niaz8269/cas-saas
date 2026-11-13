@@ -67,6 +67,9 @@ class StudentApplicationController extends Controller
                 'required_documents' => $this->documentPayload(
                     $this->catalog->requiredDocuments($application->program, $application->scholarship),
                 ),
+                'optional_documents' => $this->documentPayload(
+                    $this->catalog->optionalDocuments($application->program, $application->scholarship),
+                ),
             ],
         ], 201);
     }

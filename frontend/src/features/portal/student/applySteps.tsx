@@ -286,9 +286,18 @@ export function DocumentsStep(props: {
         <PortalCard><p className="text-sm text-muted-foreground">{t("wizard.documents.noDocsRequired")}</p></PortalCard>
       )}
       {draft.required_documents.map((doc) => (
-        <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name}
+        <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction}
           uploadedName={uploaded[doc.id]} onUploaded={props.onUploaded} onError={props.onError} />
       ))}
+      {(draft.optional_documents?.length ?? 0) > 0 && (
+        <>
+          <p className="pt-2 text-sm font-medium">{t("wizard.documents.optionalTitle", { defaultValue: "Optional, if you have them" })}</p>
+          {draft.optional_documents?.map((doc) => (
+            <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction} optional
+              uploadedName={uploaded[doc.id]} onUploaded={props.onUploaded} onError={props.onError} />
+          ))}
+        </>
+      )}
     </div>
   )
 }
@@ -298,6 +307,9 @@ function DocumentRow(props: {
   applicationId: number
   docTypeId: number
   name: string
+  instruction?: string | null
+  /** Shown with an "Optional" tag; never needed to continue. */
+  optional?: boolean
   uploadedName?: string
   onUploaded: (typeId: number, name: string, previewUrl?: string) => void
   onError: (msg: string) => void
@@ -331,7 +343,11 @@ function DocumentRow(props: {
           ? <Check className="size-5 shrink-0 text-success" />
           : <span className="size-5 shrink-0 rounded-full border" aria-hidden="true" />}
         <div className="min-w-0">
-          <p className="text-sm font-medium">{props.name}</p>
+          <p className="text-sm font-medium">
+            {props.name}
+            {props.optional && <span className="ml-2 rounded-full bg-subtle px-2 py-0.5 text-xs font-normal text-muted-foreground">{t("wizard.documents.optional", { defaultValue: "Optional" })}</span>}
+          </p>
+          {props.instruction && <p className="text-xs text-muted-foreground">{props.instruction}</p>}
           {props.uploadedName && <p className="truncate text-xs text-muted-foreground">{props.uploadedName}</p>}
         </div>
       </div>

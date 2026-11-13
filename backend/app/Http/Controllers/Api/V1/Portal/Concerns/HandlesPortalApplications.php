@@ -212,6 +212,7 @@ trait HandlesPortalApplications
             'name' => $type->name,
             'category' => $type->category,
             'is_sensitive' => $type->is_sensitive,
+            'instruction' => $type->instruction,
         ])->values()->all();
     }
 }

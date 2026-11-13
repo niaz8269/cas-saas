@@ -143,8 +143,11 @@ it('seeds the catalog', function () {
 });
 
 it('seeds the application document checklist', function () {
-    expect(DocumentType::count())->toBe(9)
-        ->and(DocumentType::requiredFor('application')->count())->toBe(4);
+    // 9 base types plus the 7 added for a Master's / PhD scholarship application.
+    expect(DocumentType::count())->toBe(16)
+        ->and(DocumentType::requiredFor('application')->count())->toBe(4)
+        ->and(DocumentType::requiredFor('scholarship_postgraduate')->count())->toBe(8)
+        ->and(DocumentType::requiredFor('scholarship_postgraduate_optional')->count())->toBe(2);
 });
 
 it('seeds reference data: countries, departments, branches', function () {

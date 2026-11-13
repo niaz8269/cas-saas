@@ -1729,6 +1729,8 @@
     },
     "documents": {
       "uploadClear": "Upload a clear",
+      "optional": "Optional",
+      "optionalTitle": "Optional, if you have them",
       "uploadEachDoc": "photo or scan of each document. Application",
       "noDocsRequired": "No documents are required.",
       "onlyJpg": "Only JPG images and PDF files are accepted.",

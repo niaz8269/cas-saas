@@ -170,7 +170,35 @@ class ApplicationCatalog
             $types = $types->concat($this->resolveTypes($scholarship->criteria['documents'] ?? []));
         }
 
+        // A Master's or PhD scholarship application has its own required checklist.
+        if ($this->isPostgraduateScholarship($program, $scholarship)) {
+            $types = $types->concat(DocumentType::requiredFor('scholarship_postgraduate')->get());
+        }
+
         return $types->unique('id')->sortBy('name')->values();
+    }
+
+    /**
+     * Documents worth uploading when available but never needed to submit (an experience letter, research papers).
+     *
+     * @return Collection<int, DocumentType>
+     */
+    public function optionalDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
+    {
+        if (! $this->isPostgraduateScholarship($program, $scholarship)) {
+            return collect();
+        }
+
+        $required = $this->requiredDocuments($program, $scholarship)->pluck('id');
+
+        return DocumentType::requiredFor('scholarship_postgraduate_optional')->get()
+            ->reject(fn (DocumentType $type) => $required->contains($type->id))
+            ->sortBy('name')->values();
+    }
+
+    private function isPostgraduateScholarship(?Program $program, ?Scholarship $scholarship): bool
+    {
+        return $scholarship !== null && in_array($program?->level, ['master', 'phd', 'doctor', 'doctoral'], true);
     }
 
     /** The field types the admin can attach to a course/university (report item 11). */

@@ -410,6 +410,8 @@ export interface RequiredDoc {
   name: string
   category: string | null
   is_sensitive: boolean
+  /** A short line telling the applicant what exactly to upload (for example the word count of a study plan). */
+  instruction?: string | null
 }
 
 export interface CountryRow {
@@ -486,6 +488,8 @@ export interface DraftApplication {
   application_code: string
   status: string
   required_documents: RequiredDoc[]
+  /** Worth uploading when available (an experience letter, research papers) but never needed to submit. */
+  optional_documents?: RequiredDoc[]
 }
 
 /** The agent applies on behalf of one of their own students (adds student_id). */
