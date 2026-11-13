@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Check, ChevronLeft, Loader2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button"
 import {
   createStudentApplication,
   getApplicationAvailability,
+  getApplicationDraft,
   getCountries,
   getFundingOptions,
+  getStudentApplicant,
   submitStudentApplication,
   type CreateApplicationPayload,
   type Degree,
@@ -31,6 +33,7 @@ import {
 } from "@/features/portal/student/applySteps"
 import { ProcessingFeeNotice, ProcessingFeeStep } from "@/features/portal/student/ProcessingFee"
 import { getSiteUniversity } from "@/features/site/api"
+import { useApplyAutosave } from "@/features/portal/student/useApplyAutosave"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.course", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -73,6 +76,71 @@ export default function StudentApplyWizard() {
   const [uploaded, setUploaded] = useState<Record<number, string>>({})
   const [previews, setPreviews] = useState<Record<number, string>>({})
   const [agreed, setAgreed] = useState(false)
+
+  // Carry on with an application that was saved as a draft (from My applications).
+  const draftParam = Number(searchParams.get("draft")) || 0
+  const resume = useQuery({
+    queryKey: ["apply", "draft", "student", draftParam],
+    queryFn: () => getApplicationDraft("student", draftParam),
+    enabled: draftParam > 0,
+  })
+  useEffect(() => {
+    const d = resume.data?.data
+    if (!d) return
+    setProgram(d.program)
+    setDegree(d.degree)
+    setFunding(d.funding)
+    setScholarshipId(d.scholarship_id ? String(d.scholarship_id) : "")
+    setIntakeId(d.intake_id ? String(d.intake_id) : "")
+    setCustomAnswers(Object.fromEntries(Object.entries(d.custom_fields ?? {}).map(([k, v]) => [k, String(v)])))
+    setFeeAcknowledged(true)
+    setDraft({ id: d.id, application_code: d.application_code, status: d.status, required_documents: d.required_documents, optional_documents: d.optional_documents })
+    setStep(3)
+  }, [resume.data])
+
+  // Keep an unfinished form through a refresh until it is saved as a draft on the server.
+  const autosave = useApplyAutosave({
+    storageKey: "cas-apply-student",
+    enabled: !draft && draftParam === 0,
+    snapshot: { step: Math.min(step, 2), degree, funding, program, intakeId, scholarshipId, customAnswers, profile, guardians, education, emergency, feeAcknowledged },
+    onRestore: (s) => {
+      setStep(s.step)
+      setDegree(s.degree)
+      setFunding(s.funding)
+      setProgram(s.program)
+      setIntakeId(s.intakeId)
+      setScholarshipId(s.scholarshipId)
+      setCustomAnswers(s.customAnswers)
+      setProfile(s.profile)
+      setGuardians(s.guardians)
+      setEducation(s.education)
+      setEmergency(s.emergency)
+      setFeeAcknowledged(s.feeAcknowledged)
+    },
+  })
+
+  // The details this student gave with an earlier application: a new application starts pre-filled.
+  const applicant = useQuery({ queryKey: ["student", "applicant"], queryFn: getStudentApplicant })
+  const prefilled = useRef(false)
+  useEffect(() => {
+    const data = applicant.data?.data
+    if (!data || prefilled.current) return
+    prefilled.current = true
+    // What was typed before a refresh wins over what is on file.
+    if (autosave.restored) return
+
+    setProfile(Object.fromEntries(
+      Object.entries(data.profile ?? {})
+        .filter(([, v]) => v !== null && v !== "")
+        .map(([k, v]) => [k, String(v)]),
+    ))
+    const onFile = data.guardians ?? []
+    const emergencyOnFile = onFile.find((g) => g.relation === "Emergency contact")
+    const family = onFile.filter((g) => g.relation !== "Emergency contact")
+    if (family.length) setGuardians(family)
+    if (emergencyOnFile) setEmergency(emergencyOnFile)
+    if (data.education?.length) setEducation(data.education)
+  }, [applicant.data, autosave.restored])
 
   const availability = useQuery({
     queryKey: ["apply", "availability", degree, funding],
@@ -126,9 +194,10 @@ export default function StudentApplyWizard() {
     onSuccess: (res) => {
       setDraft(res.data)
       setError(null)
+      autosave.clear()
       setStep(3)
     },
-    onError: (err) => setError(err instanceof ApiError ? err.message : t("wizard.errors.couldNotStartYours")),
+    onError: (err) => setError(err instanceof ApiError ? (err.errors?.program_id?.[0] ?? err.message) : t("wizard.errors.couldNotStartYours")),
   })
 
   const submit = useMutation({
@@ -211,6 +280,15 @@ export default function StudentApplyWizard() {
 
       {error && (
         <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
+      )}
+
+      {autosave.restored && (
+        <p role="status" className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-cas-navy-50 px-3 py-2 text-sm text-cas-navy">
+          {t("wizard.restored", { defaultValue: "We brought back what you had filled in." })}
+          <button type="button" className="font-medium underline underline-offset-2" onClick={() => { autosave.clear(); window.location.assign(window.location.pathname) }}>
+            {t("wizard.startOver", { defaultValue: "Start over" })}
+          </button>
+        </p>
       )}
 
       {step === 0 && (

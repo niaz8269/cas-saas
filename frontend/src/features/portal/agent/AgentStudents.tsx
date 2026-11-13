@@ -78,7 +78,10 @@ export default function AgentStudents() {
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{s.full_name}</p>
               <p className="truncate font-mono text-xs text-muted-foreground">
-                {s.student_code}{s.country ? ` · ${s.country}` : ""} · {t("agentPortal.students.appCount", { count: s.applications_count })}
+                {s.student_code}{s.country ? ` · ${s.country}` : ""} ·{" "}
+                {s.applications_count > 0
+                  ? <Link to={`/portal/agent/applications?student=${s.id}`} className="font-sans text-cas-navy underline underline-offset-2">{t("agentPortal.students.appCount", { count: s.applications_count })}</Link>
+                  : t("agentPortal.students.appCount", { count: s.applications_count })}
               </p>
             </div>
 

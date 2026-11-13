@@ -35,6 +35,10 @@ class AgentApplicationResource extends JsonResource
                 'name' => $this->program->name, 'level' => $this->program->level,
             ] : null),
             'intake' => $this->whenLoaded('intake', fn () => $this->intake?->name),
+            'progress' => $this->whenLoaded('statusHistory', fn () => $this->statusHistory->map(fn ($entry) => [
+                'status' => $entry->to_status,
+                'at' => $entry->created_at?->toIso8601String(),
+            ])->values()),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

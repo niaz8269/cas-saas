@@ -109,6 +109,7 @@ export interface AgentApplicationRow {
   university: string | null
   program: { name: string; level: string } | null
   intake: string | null
+  progress?: { status: string; at: string | null }[]
 }
 
 export interface AgentPayableRow {
@@ -162,8 +163,8 @@ export interface AgentStudentDetail {
 export const getAgentStudent = (id: number) =>
   portalApi<{ data: AgentStudentDetail }>(`/agent/students/${id}`)
 
-export const getAgentApplications = (params: { status?: string; page?: number } = {}) =>
-  portalApi<Paginated<AgentApplicationRow>>(`/agent/applications${query(params)}`)
+export const getAgentApplications = (params: { status?: string; studentId?: number; page?: number } = {}) =>
+  portalApi<Paginated<AgentApplicationRow>>(`/agent/applications${query({ status: params.status, student_id: params.studentId, page: params.page })}`)
 
 export const getAgentCommissions = (params: { status?: string; page?: number } = {}) =>
   portalApi<Paginated<AgentPayableRow> & { totals: Record<string, number> }>(`/agent/commissions${query(params)}`)
@@ -513,6 +514,30 @@ export const createApplication = (
 export const createStudentApplication = (payload: CreateApplicationPayload) =>
   createApplication("student", payload)
 
+/** Everything needed to carry on with an application saved as a draft. */
+export interface SavedDraft {
+  id: number
+  application_code: string
+  status: string
+  student_id: number
+  student: { id: number; full_name: string | null }
+  degree: Degree
+  funding: Funding
+  scholarship_id: number | null
+  intake_id: number | null
+  custom_fields: Record<string, unknown>
+  program: WizardProgram
+  required_documents: RequiredDoc[]
+  optional_documents: RequiredDoc[]
+}
+
+export const getApplicationDraft = (kind: PortalKind, applicationId: number) =>
+  portalApi<{ data: SavedDraft }>(`/${kind}/applications/${applicationId}/draft`)
+
+/** The student's own saved applicant record, so a new application starts pre-filled. */
+export const getStudentApplicant = () =>
+  portalApi<{ data: AgentStudentDetail }>("/student/applicant")
+
 /** Presign → direct PUT → register, scoped to a draft application (JPG or PDF). */
 export async function uploadApplicationDocument(
   kind: PortalKind,
@@ -658,7 +683,7 @@ function query(params: Record<string, string | number | undefined>): string {
   const search = new URLSearchParams()
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === "") continue
-    search.set(key === "status" ? "filter[status]" : key, String(value))
+    search.set(key === "status" ? "filter[status]" : key === "student_id" ? "filter[student_id]" : key, String(value))
   }
   const s = search.toString()
 

@@ -145,3 +145,68 @@ it("pre-selects the student from the ?student= query and skips the picker", asyn
   expect(await screen.findByText(/Ali Raza/)).toBeInTheDocument()
   expect(await screen.findByText("Bachelor of Medicine")).toBeInTheDocument()
 })
+
+it("carries on with a saved draft at the documents step instead of starting again", async () => {
+  const fetchMock = withAgentApi((input) => {
+    if (String(input).includes("/agent/applications/99/draft")) {
+      return Promise.resolve(jsonResponse({
+        data: {
+          id: 99, application_code: "APP-99", status: "draft", student_id: 7, student: { id: 7, full_name: "Ali Raza" },
+          degree: "mbbs", funding: "self", scholarship_id: null, intake_id: null, custom_fields: {}, program: PROGRAM,
+          required_documents: [{ id: 1, name: "Passport", category: "identity", is_sensitive: true }], optional_documents: [],
+        },
+      }))
+    }
+    if (String(input).includes("/agent/applications/99/documents")) return Promise.resolve(jsonResponse({ data: [] }))
+
+    return Promise.resolve(jsonResponse({}))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<AgentApplyWizard />, { route: "/portal/agent/apply?draft=99" })
+
+  expect(await screen.findByText("Passport")).toBeInTheDocument()
+  expect(screen.getByText(/Ali Raza/)).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: /Upload all required documents/ })).toBeDisabled()
+  expect(fetchMock.mock.calls.some(([u, i]) => String(u).endsWith("/agent/applications") && (i as RequestInit)?.method === "POST")).toBe(false)
+})
+
+it("brings back a half-filled application after the page is refreshed", async () => {
+  sessionStorage.setItem("cas-apply-agent", JSON.stringify({
+    step: 2, student: { id: 7, name: "Ali Raza" }, degree: "mbbs", funding: "self", program: PROGRAM, intakeId: "", scholarshipId: "",
+    customAnswers: { portfolio_url: "https://example.com" }, profile: { city: "Typed before refresh" },
+    guardians: [{ relation: "father", name: "" }, { relation: "mother", name: "" }], education: [{ degree_name: "", level: "" }],
+    emergency: { relation: "Emergency contact", name: "" },
+  }))
+  vi.stubGlobal("fetch", withAgentApi(() => Promise.resolve(jsonResponse({}))))
+
+  renderWithProviders(<AgentApplyWizard />)
+
+  expect(await screen.findByText("We brought back what you had filled in.")).toBeInTheDocument()
+  expect(await screen.findByDisplayValue("Typed before refresh")).toBeInTheDocument()
+  sessionStorage.clear()
+})
+
+it("says clearly when the student already has an application for that program", async () => {
+  sessionStorage.clear()
+  const message = "Ali Raza already has an application for this program (APP-1, under review). Follow it under Applications instead of starting another."
+  vi.stubGlobal("fetch", withAgentApi((input, init) => {
+    if (String(input).endsWith("/agent/applications") && init?.method === "POST") {
+      return Promise.resolve(jsonResponse({ message, errors: { program_id: [message] } }, 422))
+    }
+
+    return Promise.resolve(jsonResponse({}))
+  }))
+  sessionStorage.setItem("cas-apply-agent", JSON.stringify({
+    step: 3, student: { id: 7, name: "Ali Raza" }, degree: "mbbs", funding: "self", program: PROGRAM, intakeId: "", scholarshipId: "",
+    customAnswers: { portfolio_url: "https://example.com" }, profile: {}, guardians: [{ relation: "father", name: "" }, { relation: "mother", name: "" }],
+    education: [{ degree_name: "", level: "" }], emergency: { relation: "Emergency contact", name: "" },
+  }))
+  const user = userEvent.setup()
+
+  renderWithProviders(<AgentApplyWizard />)
+  await user.click(await screen.findByRole("button", { name: "Save & add documents" }))
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("already has an application for this program (APP-1, under review)")
+  sessionStorage.clear()
+})

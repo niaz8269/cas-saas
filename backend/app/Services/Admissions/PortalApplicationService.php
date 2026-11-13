@@ -53,7 +53,33 @@ class PortalApplicationService
         $customFields = $this->catalog->validateCustomFields($program, $data['custom_fields'] ?? []);
 
         return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId, $customFields) {
+            // A student can apply to many programs, but only once to each: an unfinished draft for this
+            // program is picked up again, and an application already in progress is explained, not doubled.
+            $existing = Application::query()
+                ->where('student_id', $student->id)
+                ->where('program_id', $program->id)
+                ->whereNotIn('status', ['rejected', 'withdrawn'])
+                ->latest('id')
+                ->first();
+
+            if ($existing !== null && $existing->status !== 'draft') {
+                throw ValidationException::withMessages([
+                    'program_id' => "{$student->full_name} already has an application for this program ({$existing->application_code}, "
+                        .str_replace('_', ' ', $existing->status).'). Follow it under Applications instead of starting another.',
+                ]);
+            }
+
             $this->applicantData->write($student, $data);
+
+            if ($existing !== null) {
+                $existing->forceFill([
+                    'scholarship_id' => $scholarship?->id,
+                    'intake_id' => $intakeId,
+                    'custom_fields' => $customFields !== [] ? $customFields : null,
+                ])->save();
+
+                return $existing;
+            }
 
             return $this->workflow->create([
                 'student_id' => $student->id,

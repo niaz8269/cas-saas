@@ -70,8 +70,9 @@ class StudentApplicationController extends Controller
                 'optional_documents' => $this->documentPayload(
                     $this->catalog->optionalDocuments($application->program, $application->scholarship),
                 ),
+                'resumed' => ! $application->wasRecentlyCreated,
             ],
-        ], 201);
+        ], $application->wasRecentlyCreated ? 201 : 200);
     }
 
     /** The application must belong to the student and still be a draft. */

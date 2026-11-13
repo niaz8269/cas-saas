@@ -45,6 +45,7 @@ const AgentHome = lazy(() => import("@/features/portal/agent/AgentHome"))
 const AgentAddStudent = lazy(() => import("@/features/portal/agent/AgentAddStudent"))
 const AgentStudents = lazy(() => import("@/features/portal/agent/AgentStudents"))
 const AgentApplyWizard = lazy(() => import("@/features/portal/agent/AgentApplyWizard"))
+const AgentApplications = lazy(() => import("@/features/portal/agent/AgentApplications"))
 const AgentScholarshipWizard = lazy(() => import("@/features/portal/agent/AgentScholarshipWizard"))
 const AgentCommissions = lazy(() => import("@/features/portal/agent/AgentCommissions"))
 const StudentHome = lazy(() => import("@/features/portal/student/StudentHome"))
@@ -159,6 +160,7 @@ const router = createBrowserRouter([
           { path: "/portal/agent", element: <AgentHome /> },
           { path: "/portal/agent/students", element: <AgentStudents /> },
           { path: "/portal/agent/students/new", element: <AgentAddStudent /> },
+          { path: "/portal/agent/applications", element: <AgentApplications /> },
           { path: "/portal/agent/apply", element: <AgentApplyWizard /> },
           { path: "/portal/agent/apply-scholarship", element: <AgentScholarshipWizard /> },
           { path: "/portal/agent/commissions", element: <AgentCommissions /> },

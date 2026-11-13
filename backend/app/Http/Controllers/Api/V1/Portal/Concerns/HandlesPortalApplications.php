@@ -169,6 +169,52 @@ trait HandlesPortalApplications
         return new StudentDocumentResource($document->load('type:id,name,category'));
     }
 
+    /**
+     * Everything the wizard needs to carry on with a saved draft: the chosen program, funding, intake and answers,
+     * and the document checklist. The applicant's personal details live on their record, not here.
+     */
+    public function draftDetail(Request $request, Application $application): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+        abort_unless($application->program_id !== null, 404);
+
+        $application->loadMissing('program.university.country', 'program.intakes', 'scholarship:id,name,coverage,type', 'student');
+        $program = $application->program;
+        $program->setAttribute(
+            'applicant_service_charge',
+            $this->catalog->serviceChargeFor($program, $this->applicantRate(), $application->scholarship_id),
+        );
+
+        $name = strtoupper($program->name);
+        $degree = match (true) {
+            str_contains($name, 'MBBS') => 'mbbs',
+            str_contains($name, 'BDS') || str_contains($name, 'STOMATOLOG') => 'bds',
+            $program->level === 'master' => 'master',
+            in_array($program->level, ['phd', 'doctor', 'doctoral'], true) => 'phd',
+            $program->level === 'diploma' => 'diploma',
+            default => 'bs',
+        };
+        $funding = $application->scholarship_id === null
+            ? 'self'
+            : (str_contains(strtolower(($application->scholarship->coverage ?? '').' '.($application->scholarship->type ?? '')), 'partial') ? 'partial' : 'scholarship');
+
+        return response()->json(['data' => [
+            'id' => $application->id,
+            'application_code' => $application->application_code,
+            'status' => $application->status,
+            'student_id' => $application->student_id,
+            'student' => ['id' => $application->student_id, 'full_name' => $application->student?->full_name],
+            'degree' => $degree,
+            'funding' => $funding,
+            'scholarship_id' => $application->scholarship_id,
+            'intake_id' => $application->intake_id,
+            'custom_fields' => $application->custom_fields ?? (object) [],
+            'program' => (new ApplicantProgramResource($program))->toArray($request),
+            'required_documents' => $this->documentPayload($this->catalog->requiredDocuments($program, $application->scholarship)),
+            'optional_documents' => $this->documentPayload($this->catalog->optionalDocuments($program, $application->scholarship)),
+        ]]);
+    }
+
     /** Every file uploaded so far on the draft (a document type can hold several). */
     public function documentsOnDraft(Request $request, Application $application): JsonResponse
     {

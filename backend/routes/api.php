@@ -141,6 +141,7 @@ Route::prefix('v1')->group(function () {
             Route::post('applications', [AgentApplicationController::class, 'store']);
             Route::post('applications/{application}/documents/presign', [AgentApplicationController::class, 'presignDocument']);
             Route::post('applications/{application}/documents', [AgentApplicationController::class, 'storeDocument']);
+            Route::get('applications/{application}/draft', [AgentApplicationController::class, 'draftDetail']);
             Route::get('applications/{application}/documents', [AgentApplicationController::class, 'documentsOnDraft']);
             Route::get('applications/{application}/documents/{document}/view', [AgentApplicationController::class, 'viewDocument']);
             Route::delete('applications/{application}/documents/{document}', [AgentApplicationController::class, 'removeDocument']);
@@ -196,10 +197,12 @@ Route::prefix('v1')->group(function () {
             Route::post('applications', [StudentApplicationController::class, 'store']);
             Route::post('applications/{application}/documents/presign', [StudentApplicationController::class, 'presignDocument']);
             Route::post('applications/{application}/documents', [StudentApplicationController::class, 'storeDocument']);
+            Route::get('applications/{application}/draft', [StudentApplicationController::class, 'draftDetail']);
             Route::get('applications/{application}/documents', [StudentApplicationController::class, 'documentsOnDraft']);
             Route::get('applications/{application}/documents/{document}/view', [StudentApplicationController::class, 'viewDocument']);
             Route::delete('applications/{application}/documents/{document}', [StudentApplicationController::class, 'removeDocument']);
             Route::post('applications/{application}/submit', [StudentApplicationController::class, 'submit']);
+            Route::get('applicant', [StudentPortalController::class, 'applicant']);
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);
             // A message to the CAS team (lands on the student's communications timeline).

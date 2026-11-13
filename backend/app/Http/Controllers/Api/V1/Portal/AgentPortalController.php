@@ -162,8 +162,10 @@ class AgentPortalController extends Controller
                 'university:id,name',
                 'program:id,name,level',
                 'intake:id,name',
+                'statusHistory',
             ])
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
+            ->when($request->filled('filter.student_id'), fn ($q) => $q->where('student_id', $request->integer('filter.student_id')))
             ->latest()
             ->paginate(min($request->integer('per_page', 25), 100));
 
