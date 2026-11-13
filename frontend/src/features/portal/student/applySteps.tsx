@@ -1,5 +1,5 @@
-import { Check, GraduationCap, Loader2, Plus, ShieldCheck, Upload, X } from "lucide-react"
-import { useState, type ReactNode } from "react"
+import { Check, GraduationCap, Loader2, Plus, Search, ShieldCheck, Upload, X } from "lucide-react"
+import { useMemo, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
@@ -29,6 +29,7 @@ import { PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
 import { DEGREES, EMPTY_EDUCATION, FUNDING, type Profile } from "@/features/portal/student/applyShared"
 import { ApiError } from "@/lib/api"
+import { fuzzyIncludes } from "@/lib/fuzzy"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
 
@@ -486,6 +487,33 @@ export function CourseStep(props: {
   const fundingTiles = FUNDING.filter((f) => f.value === "self" || fundingAvailable?.[f.value])
   const noScholarships = !!fundingAvailable && !fundingAvailable.scholarship && !fundingAvailable.partial
 
+  // Search and filters work on the list that is already loaded, so they respond instantly.
+  const [search, setSearch] = useState("")
+  const [university, setUniversity] = useState("")
+  const [city, setCity] = useState("")
+  const [language, setLanguage] = useState("")
+  const options = useMemo(() => {
+    const uniq = (values: (string | null | undefined)[]) => [...new Set(values.filter((v): v is string => !!v))].sort((a, b) => a.localeCompare(b))
+
+    return {
+      universities: uniq(programs.map((p) => p.university.name)),
+      cities: uniq(programs.map((p) => p.university.city)),
+      languages: uniq(programs.map((p) => p.teaching_language)),
+    }
+  }, [programs])
+  const shown = useMemo(() => {
+    return programs.filter((p) => {
+      if (university && p.university.name !== university) return false
+      if (city && p.university.city !== city) return false
+      if (language && p.teaching_language !== language) return false
+
+      return fuzzyIncludes(search, `${p.name} ${p.university.name} ${p.university.city ?? ""}`)
+    })
+  }, [programs, search, university, city, language])
+  const filtering = !!(search || university || city || language)
+  const clearFilters = () => { setSearch(""); setUniversity(""); setCity(""); setLanguage("") }
+  const filterSelect = "h-10 w-full rounded-md border bg-background px-3 text-sm"
+
   return (
     <div className="space-y-4">
       <div>
@@ -520,6 +548,43 @@ export function CourseStep(props: {
       {degree && funding && (
         <div>
           <p className="mb-2 text-sm font-medium">{t("wizard.course.availablePrograms")}</p>
+          {programs.length > 1 && (
+            <div className="mb-3 space-y-2">
+              <div className="relative">
+                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                <Input
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={t("wizard.course.searchPrograms", { defaultValue: "Search by program, university or city" })}
+                  aria-label={t("wizard.course.searchPrograms", { defaultValue: "Search by program, university or city" })}
+                  className="h-10 pl-9"
+                />
+              </div>
+              <div className="grid gap-2 sm:grid-cols-3">
+                <select className={filterSelect} value={university} onChange={(e) => setUniversity(e.target.value)} aria-label={t("wizard.course.filterUniversity", { defaultValue: "University" })}>
+                  <option value="">{t("wizard.course.allUniversities", { defaultValue: "All universities" })}</option>
+                  {options.universities.map((u) => <option key={u} value={u}>{u}</option>)}
+                </select>
+                <select className={filterSelect} value={city} onChange={(e) => setCity(e.target.value)} aria-label={t("wizard.course.filterCity", { defaultValue: "City" })}>
+                  <option value="">{t("wizard.course.allCities", { defaultValue: "All cities" })}</option>
+                  {options.cities.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select className={filterSelect} value={language} onChange={(e) => setLanguage(e.target.value)} aria-label={t("wizard.course.filterLanguage", { defaultValue: "Teaching language" })}>
+                  <option value="">{t("wizard.course.allLanguages", { defaultValue: "All languages" })}</option>
+                  {options.languages.map((l) => <option key={l} value={l}>{l}</option>)}
+                </select>
+              </div>
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span role="status">{t("wizard.course.showingPrograms", { defaultValue: "Showing {{shown}} of {{total}} programs", shown: shown.length, total: programs.length })}</span>
+                {filtering && (
+                  <button type="button" onClick={clearFilters} className="font-medium text-cas-navy underline underline-offset-2">
+                    {t("wizard.course.clearFilters", { defaultValue: "Clear filters" })}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           {loading && <p className="text-sm text-muted-foreground">{t("wizard.course.findingPrograms")}</p>}
           {failed && <p className="text-sm text-destructive">{t("wizard.course.couldNotLoadPrograms")}</p>}
           {!loading && !failed && programs.length === 0 && (
@@ -527,8 +592,13 @@ export function CourseStep(props: {
               {t("wizard.course.noProgramsMatch")}
             </p>
           )}
+          {!loading && !failed && programs.length > 0 && shown.length === 0 && (
+            <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
+              {t("wizard.course.noSearchMatch", { defaultValue: "No programs match your search. Try different words or clear the filters." })}
+            </p>
+          )}
           <div className="space-y-2">
-            {programs.map((p) => {
+            {shown.map((p) => {
               const active = program?.id === p.id
 
               return (
