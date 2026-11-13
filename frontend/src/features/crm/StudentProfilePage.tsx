@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   ArrowLeft,
+  ArrowRightLeft,
   Bot,
   Mail,
   Pencil,
@@ -25,6 +26,8 @@ import {
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
+import { convertStudentToPartner } from "@/features/admin/api"
+import SwitchRoleDialog from "@/features/admin/SwitchRoleDialog"
 import { listApplications } from "@/features/admissions/api"
 import { APPLICATION_STATUS_BADGE, statusLabel } from "@/features/admissions/status"
 import { useCan } from "@/features/auth/useCan"
@@ -70,6 +73,8 @@ export default function StudentProfilePage() {
   const [noteType, setNoteType] = useState<ActivityType>("note")
   const [actionError, setActionError] = useState<string | null>(null)
   const [editOpen, setEditOpen] = useState(false)
+  const [switchOpen, setSwitchOpen] = useState(false)
+  const canSwitchRole = can("agents.manage.global")
 
   const student = useQuery({ queryKey: ["student", id], queryFn: () => getStudent(id) })
   const timeline = useQuery({ queryKey: ["student-timeline", id], queryFn: () => getTimeline(id) })
@@ -161,6 +166,12 @@ export default function StudentProfilePage() {
               {s.status.replace("_", " ")}
             </Badge>
           </div>
+
+          {canSwitchRole && s.status !== "converted" && (
+            <Button variant="secondary" size="sm" className="mt-3" onClick={() => setSwitchOpen(true)}>
+              <ArrowRightLeft className="size-3.5" /> Change to Partner
+            </Button>
+          )}
 
           {actionError && (
             <p role="alert" className="mt-3 rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">
@@ -347,6 +358,15 @@ export default function StudentProfilePage() {
       </div>
 
       <StudentFormDialog open={editOpen} onOpenChange={setEditOpen} student={s} />
+      <SwitchRoleDialog
+        open={switchOpen}
+        onOpenChange={setSwitchOpen}
+        name={s.full_name}
+        from="Student"
+        to="Partner"
+        action={() => convertStudentToPartner(s.id)}
+        onDone={() => queryClient.invalidateQueries({ queryKey: ["student", id] })}
+      />
     </div>
   )
 }

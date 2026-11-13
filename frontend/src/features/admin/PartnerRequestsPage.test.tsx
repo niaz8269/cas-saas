@@ -59,3 +59,56 @@ it("hides approve/reject for staff without the manage permission", async () => {
   expect(screen.queryByRole("button", { name: /Approve/ })).not.toBeInTheDocument()
   expect(screen.queryByRole("button", { name: /Reject/ })).not.toBeInTheDocument()
 })
+
+const ACTIVE_LIST = { ...LIST, data: [{ ...REQ, status: "active" }] }
+
+it("changes an active partner to a student after a confirmation", async () => {
+  const user = userEvent.setup()
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    if ((init?.method ?? "GET").toUpperCase() === "POST" && url.includes("/agents/3/convert-to-student")) {
+      return Promise.resolve(jsonResponse({ data: { role: "student", id: 9, code: "STU-2026-00009" } }))
+    }
+
+    return Promise.resolve(jsonResponse(ACTIVE_LIST))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<PartnerRequestsPage />)
+  await user.click(await screen.findByRole("button", { name: /Change to Student/ }))
+
+  expect(await screen.findByText(/Change Sara Khan to Student\?/)).toBeInTheDocument()
+  expect(fetchMock).not.toHaveBeenCalledWith(expect.stringContaining("convert-to-student"), expect.anything())
+
+  await user.click(screen.getAllByRole("button", { name: /Change to Student/ }).at(-1)!)
+  await waitFor(() =>
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/agents/3/convert-to-student"), expect.objectContaining({ method: "POST" })),
+  )
+})
+
+it("shows the server's reason when a partner cannot be switched", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((_input: RequestInfo | URL, init?: RequestInit) => {
+    if ((init?.method ?? "GET").toUpperCase() === "POST") {
+      return Promise.resolve(jsonResponse({ message: "x", errors: { account: ["This partner still has referred students."] } }, 422))
+    }
+
+    return Promise.resolve(jsonResponse(ACTIVE_LIST))
+  }))
+
+  renderWithProviders(<PartnerRequestsPage />)
+  await user.click(await screen.findByRole("button", { name: /Change to Student/ }))
+  await user.click(screen.getAllByRole("button", { name: /Change to Student/ }).at(-1)!)
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("This partner still has referred students.")
+})
+
+it("does not offer the switch without the manage permission", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["agents.view.global"]) })
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(ACTIVE_LIST)))
+
+  renderWithProviders(<PartnerRequestsPage />)
+
+  expect(await screen.findByText("Bright Future")).toBeInTheDocument()
+  expect(screen.queryByRole("button", { name: /Change to Student/ })).not.toBeInTheDocument()
+})

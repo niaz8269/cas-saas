@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Check, ExternalLink, Search, X } from "lucide-react"
+import { ArrowRightLeft, Check, ExternalLink, Search, X } from "lucide-react"
 import { useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -23,10 +23,12 @@ import {
 } from "@/components/ui/table"
 import {
   approveAgentRequest,
+  convertPartnerToStudent,
   listAgentRequests,
   rejectAgentRequest,
   type AgentRequest,
 } from "@/features/admin/api"
+import SwitchRoleDialog from "@/features/admin/SwitchRoleDialog"
 import { isSuperAdmin } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth"
@@ -48,6 +50,7 @@ export default function PartnerRequestsPage() {
   const [status, setStatus] = useState<(typeof STATUS_FILTERS)[number]>("pending")
   const [q, setQ] = useState("")
   const [page, setPage] = useState(1)
+  const [switching, setSwitching] = useState<AgentRequest | null>(null)
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["agent-requests", { status, q, page }],
@@ -64,7 +67,7 @@ export default function PartnerRequestsPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-xl font-semibold text-cas-navy">Partner requests</h1>
-        <p className="text-sm text-muted-foreground">Review agent/partner sign-ups and approve or reject them.</p>
+        <p className="text-sm text-muted-foreground">Review agent/partner sign-ups, approve or reject them, or change an active partner to a student.</p>
       </div>
 
       {/* Toolbar */}
@@ -145,6 +148,10 @@ export default function PartnerRequestsPage() {
                         <Check className="size-4" /> Approve
                       </Button>
                     </div>
+                  ) : a.status === "active" && canManage ? (
+                    <Button size="sm" variant="secondary" onClick={() => setSwitching(a)}>
+                      <ArrowRightLeft className="size-4" /> Change to Student
+                    </Button>
                   ) : (
                     <span className="text-xs text-muted-foreground">—</span>
                   )}
@@ -154,6 +161,18 @@ export default function PartnerRequestsPage() {
           </TableBody>
         </Table>
       </div>
+
+      {switching && (
+        <SwitchRoleDialog
+          open
+          onOpenChange={(v) => { if (!v) setSwitching(null) }}
+          name={switching.contact_name ?? switching.company_name}
+          from="Partner"
+          to="Student"
+          action={() => convertPartnerToStudent(switching.id)}
+          onDone={() => { setSwitching(null); invalidate() }}
+        />
+      )}
 
       {data && data.meta.last_page > 1 && (
         <div className="flex items-center justify-between text-sm text-muted-foreground">
