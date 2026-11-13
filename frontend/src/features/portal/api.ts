@@ -538,6 +538,23 @@ export async function uploadApplicationDocument(
   return registered.data
 }
 
+/** A file uploaded on a draft; a document type can hold several. */
+export interface DraftDocumentFile extends StudentDocumentRow {
+  document_type_id: number
+}
+
+export const listApplicationDocuments = (kind: PortalKind, applicationId: number) =>
+  portalApi<{ data: DraftDocumentFile[] }>(`/${kind}/applications/${applicationId}/documents`)
+
+/** A short-lived link for looking at one uploaded file. */
+export const getApplicationDocumentLink = (kind: PortalKind, applicationId: number, documentId: number) =>
+  portalApi<{ url: string; expires_at: string; file_name: string; mime: string | null }>(
+    `/${kind}/applications/${applicationId}/documents/${documentId}/view`,
+  )
+
+export const removeApplicationDocument = (kind: PortalKind, applicationId: number, documentId: number) =>
+  portalApi<{ message: string }>(`/${kind}/applications/${applicationId}/documents/${documentId}`, { method: "DELETE" })
+
 export const submitApplication = (kind: PortalKind, applicationId: number) =>
   portalApi<{ data: { id: number; application_code: string; status: string } }>(
     `/${kind}/applications/${applicationId}/submit`,

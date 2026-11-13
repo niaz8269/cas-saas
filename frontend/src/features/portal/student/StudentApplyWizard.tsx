@@ -271,6 +271,7 @@ export default function StudentApplyWizard() {
             setUploaded((u) => ({ ...u, [typeId]: name }))
             if (previewUrl) setPreviews((p) => ({ ...p, [typeId]: previewUrl }))
           }}
+          onRemoved={(typeId) => setUploaded((u) => { const rest = { ...u }; delete rest[typeId]; return rest })}
           onError={setError}
         />
       )}

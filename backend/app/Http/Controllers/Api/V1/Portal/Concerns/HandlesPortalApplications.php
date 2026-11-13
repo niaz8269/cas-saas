@@ -6,6 +6,7 @@ use App\Http\Resources\Portal\ApplicantProgramResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
 use App\Models\Application;
 use App\Models\Country;
+use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Major;
 use App\Models\Program;
@@ -166,6 +167,51 @@ trait HandlesPortalApplications
         );
 
         return new StudentDocumentResource($document->load('type:id,name,category'));
+    }
+
+    /** Every file uploaded so far on the draft (a document type can hold several). */
+    public function documentsOnDraft(Request $request, Application $application): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+
+        $documents = $application->documents()->with('type:id,name,category')->orderBy('id')->get();
+
+        return response()->json(['data' => $documents->map(fn (Document $d) => [
+            ...(new StudentDocumentResource($d))->toArray($request),
+            'document_type_id' => $d->document_type_id,
+        ])->values()]);
+    }
+
+    /** A short-lived link to look at one uploaded file (the access is logged). */
+    public function viewDocument(Request $request, Application $application, Document $document): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+        $this->abortUnlessOnDraft($application, $document);
+
+        return response()->json([
+            ...$this->documents->downloadUrl($document, null, $request->ip(), 'view'),
+            'file_name' => $document->file_name,
+            'mime' => $document->mime,
+        ]);
+    }
+
+    /** Take a wrongly uploaded file off the draft. */
+    public function removeDocument(Request $request, Application $application, Document $document): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+        $this->abortUnlessOnDraft($application, $document);
+
+        $document->delete();
+
+        return response()->json(['message' => 'Document removed.']);
+    }
+
+    private function abortUnlessOnDraft(Application $application, Document $document): void
+    {
+        abort_unless(
+            $document->documentable_type === Application::class && $document->documentable_id === $application->id,
+            404,
+        );
     }
 
     /** Submit the completed draft to CAS (draft → under_review). */

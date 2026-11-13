@@ -259,6 +259,7 @@ export default function AgentApplyWizard() {
           draft={draft}
           uploaded={uploaded}
           onUploaded={(typeId, name) => setUploaded((u) => ({ ...u, [typeId]: name }))}
+          onRemoved={(typeId) => setUploaded((u) => { const rest = { ...u }; delete rest[typeId]; return rest })}
           onError={setError}
         />
       )}

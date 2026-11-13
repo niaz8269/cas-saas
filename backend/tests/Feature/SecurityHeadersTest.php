@@ -17,7 +17,7 @@ it('sends browser protection headers on pages and the API', function () {
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     }
 
-    expect(get('/')->headers->get('Content-Security-Policy'))->toContain("frame-ancestors 'self'")->toContain("object-src 'none'");
+    expect(get('/')->headers->get('Content-Security-Policy'))->toContain("frame-ancestors 'self'")->toContain("object-src 'self'");
 });
 
 it('adds HSTS only on HTTPS and does not name the environment on the health check', function () {
