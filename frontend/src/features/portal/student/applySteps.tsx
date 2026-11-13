@@ -29,6 +29,7 @@ import { PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
 import { DEGREES, EMPTY_EDUCATION, FUNDING, type Profile } from "@/features/portal/student/applyShared"
 import { ApiError } from "@/lib/api"
+import { fuzzyIncludes } from "@/lib/fuzzy"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
 
@@ -501,15 +502,12 @@ export function CourseStep(props: {
     }
   }, [programs])
   const shown = useMemo(() => {
-    const words = search.toLowerCase().split(/\s+/).filter(Boolean)
-
     return programs.filter((p) => {
       if (university && p.university.name !== university) return false
       if (city && p.university.city !== city) return false
       if (language && p.teaching_language !== language) return false
-      const haystack = `${p.name} ${p.university.name} ${p.university.city ?? ""}`.toLowerCase()
 
-      return words.every((w) => haystack.includes(w))
+      return fuzzyIncludes(search, `${p.name} ${p.university.name} ${p.university.city ?? ""}`)
     })
   }, [programs, search, university, city, language])
   const filtering = !!(search || university || city || language)

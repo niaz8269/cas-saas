@@ -106,3 +106,13 @@ it("filters by university, city and teaching language, and clears them again", a
   await user.click(screen.getByRole("button", { name: "Clear filters" }))
   expect(screen.getByText("Showing 3 of 3 programs")).toBeInTheDocument()
 })
+
+it("still finds the program when the search has a typing mistake", async () => {
+  const user = userEvent.setup()
+  renderCourse()
+
+  await user.type(screen.getByRole("searchbox"), "herbin enginering")
+
+  expect(screen.getByText("Civil Engineering")).toBeInTheDocument()
+  expect(screen.queryByText("Clinical Medicine")).not.toBeInTheDocument()
+})
