@@ -64,12 +64,13 @@ const COLUMNS: Col[] = [
     title: "megaMenu.colAbout",
     checkAll: { label: "megaMenu.contactUs", to: "/site/contact" },
     links: [
-      ["megaMenu.aboutCas", "/site/about"],
+      ["nav.whyCas", "/site/about"],
       ["megaMenu.ourServices", "/site/services"],
       ["megaMenu.whyChina", "/site/why-china"],
       ["megaMenu.faq", "/site/faq"],
       ["megaMenu.news", "/site/news"],
       ["megaMenu.freeStudyPlan", "/site/study-plan"],
+      ["nav.partner", "/site/partner"],
     ],
   },
 ]
