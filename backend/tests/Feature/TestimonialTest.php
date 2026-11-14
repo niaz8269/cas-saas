@@ -303,3 +303,27 @@ it('keeps a student off the site until their nationality, which places them on t
     $partner = makeTestimonial(['audience' => 'agent', 'status' => 'pending', 'country_code' => null]);
     $this->patchJson("/api/v1/testimonials/{$partner->id}", ['status' => 'approved'])->assertOk();
 });
+
+it('lets a partner choose the name it is shown under and add a photo or logo', function () {
+    actingAsAgent(['name' => 'Bright Future Consultancy']);
+    $file = UploadedFile::fake()->image('logo.png', 300, 300);
+
+    $photo = $this->postJson('/api/v1/agent/testimonial/photo', ['image' => $file])->assertCreated();
+
+    $this->postJson('/api/v1/agent/testimonial', [
+        'quote' => 'CAS is a reliable partner: clear commissions and fast replies on every case.',
+        'display_name' => 'Sara Khan', 'photo_path' => $photo->json('path'), 'consent_public' => true,
+    ])->assertCreated();
+
+    $t = Testimonial::sole();
+    expect($t->name)->toBe('Sara Khan')->and($t->photo_path)->toContain('testimonials/');
+});
+
+it('refuses a partner photo that this app did not store', function () {
+    actingAsAgent();
+
+    $this->postJson('/api/v1/agent/testimonial', [
+        'quote' => 'CAS is a reliable partner: clear commissions and fast replies on every case.',
+        'photo_path' => 'https://evil.example/pixel.png', 'consent_public' => true,
+    ])->assertStatus(422)->assertJsonValidationErrors(['photo_path']);
+});

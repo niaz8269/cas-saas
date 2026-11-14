@@ -86,7 +86,7 @@ it("shows the server's message for each missing required field", async () => {
   expect(screen.getByText(/Please confirm that we may show/)).toBeInTheDocument()
 })
 
-it("asks a partner for agency details instead of study details or a photo", async () => {
+it("asks a partner for agency details and an optional photo or logo, not study details", async () => {
   usePortalAuthStore.setState({ kind: "agent" })
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ data: null })))
 
@@ -95,6 +95,33 @@ it("asks a partner for agency details instead of study details or a photo", asyn
   expect(await screen.findByLabelText("Students sent to CAS")).toBeInTheDocument()
   expect(screen.getByLabelText("Partner since (year)")).toBeInTheDocument()
   expect(screen.getByRole("button", { name: "Commissions" })).toBeInTheDocument()
-  expect(screen.queryByRole("button", { name: "Upload photo" })).not.toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Upload photo" })).toBeInTheDocument()
+  expect(screen.getByLabelText(/Agency name/)).toBeInTheDocument()
   expect(screen.queryByLabelText(/University you are enrolled in/)).not.toBeInTheDocument()
+})
+
+it("lets a partner set the name it is shown under and add a photo or logo", async () => {
+  const user = userEvent.setup()
+  usePortalAuthStore.setState({ token: "t", kind: "agent", profile: { id: 3, name: "Bright Future", email: null, status: "active", code: "AGT-1" } })
+  let body: Record<string, unknown> = {}
+  const fetchMock = mockApi((init) => { body = JSON.parse(init.body as string) })
+
+  renderWithProviders(<TestimonialPage kind="agent" />)
+
+  const name = await screen.findByLabelText(/Agency name/)
+  expect(name).toHaveValue("Bright Future")
+  expect(screen.getByRole("button", { name: "Upload photo" })).toBeInTheDocument()
+
+  await user.clear(name)
+  await user.type(name, "Sara Khan")
+  await user.upload(document.getElementById("tm-photo") as HTMLInputElement, new File(["x"], "logo.png", { type: "image/png" }))
+  expect(await screen.findByRole("img", { name: "Your photo" })).toBeInTheDocument()
+  expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/agent/testimonial/photo"), expect.objectContaining({ method: "POST" }))
+
+  await user.type(screen.getByLabelText(/Your experience/), "CAS is a reliable partner with clear commissions and quick replies.")
+  await user.click(screen.getByRole("checkbox"))
+  await user.click(screen.getByRole("button", { name: "Send" }))
+
+  await screen.findByText(/Thank you/)
+  expect(body).toMatchObject({ display_name: "Sara Khan", photo_path: "/uploads/testimonials/11111111-1111-1111-1111-111111111111.webp" })
 })

@@ -45,7 +45,7 @@ export default function TestimonialPage({ kind }: { kind: PortalKind }) {
             kind={kind}
             mode="portal"
             defaultName={profile?.name ?? ""}
-            upload={uploadTestimonialPhoto}
+            upload={uploadTestimonialPhoto(kind)}
             submit={(payload) => submitTestimonial(kind, payload)}
             onSent={() => queryClient.invalidateQueries({ queryKey: ["my-testimonial", kind] })}
             rejectedNote={existing?.status === "rejected"}

@@ -142,7 +142,7 @@ class TestimonialController extends Controller
         return response()->json(['data' => $this->ownQuery($request)->latest()->first()]);
     }
 
-    /** A student's own picture: converted to WebP, kept until they submit their testimonial. */
+    /** A student's or partner's own picture: converted to WebP, kept until they submit their testimonial. */
     public function uploadPhoto(Request $request, ImageService $images): JsonResponse
     {
         $request->validate([
@@ -177,7 +177,7 @@ class TestimonialController extends Controller
             'audience' => $audience,
             'student_id' => $audience === 'student' ? $account->id : null,
             'agent_id' => $audience === 'agent' ? $account->id : null,
-            'name' => $audience === 'agent' ? (string) ($account->name ?? 'Partner') : trim($data['display_name']),
+            'name' => filled($data['display_name'] ?? null) ? trim($data['display_name']) : (string) ($account->name ?? 'Partner'),
             'headline' => $data['headline'] ?? null,
             'country' => isset($data['country_code']) ? CountryList::name($data['country_code']) : ($data['country'] ?? null),
             'country_code' => $data['country_code'] ?? null,
@@ -307,6 +307,9 @@ class TestimonialController extends Controller
                 'found_us' => ['nullable', Rule::in(Testimonial::FOUND_US)],
             ]
             : $common + [
+                // A partner may choose how it is shown (company or person) and add a photo or logo; both are optional.
+                'display_name' => ['nullable', 'string', 'min:2', 'max:120'],
+                'photo_path' => ['nullable', 'string', 'max:255', 'regex:'.self::PHOTO_PATTERN],
                 'headline' => ['nullable', 'string', 'max:160'],
                 'country' => ['nullable', 'string', 'max:80'],
                 'partner_since' => ['nullable', 'digits:4'],
