@@ -184,6 +184,12 @@ export interface SiteUniversityCard {
   requirements: string[]
   representative_professor: SiteRepProfessor | null
   programs_count?: number
+  /** Programs with details for international students. */
+  confirmed_programs_count?: number
+  /** Majors the university has registered with the Ministry of Education. */
+  registered_majors_count?: number
+  /** The first few program names, so a card shows what the university teaches. */
+  programs_preview?: string[]
 }
 
 export interface SiteUniversityDetail extends SiteUniversityCard {

@@ -91,6 +91,23 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
           </div>
         </div>
         {u.about && <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{u.about}</p>}
+
+        {/* What this university teaches: the first few programs, or an honest note when none are listed yet. */}
+        {u.programs_preview && u.programs_preview.length > 0 ? (
+          <ul aria-label={t("components.programsLabel")} className="mt-3 flex flex-wrap gap-1.5">
+            {u.programs_preview.map((name) => (
+              <li key={name} className="max-w-full truncate rounded-full bg-subtle px-2.5 py-0.5 text-xs text-slate-600">{name}</li>
+            ))}
+            {(u.programs_count ?? 0) > u.programs_preview.length && (
+              <li className="rounded-full px-1.5 py-0.5 text-xs font-medium text-cas-navy">
+                {t("components.moreMajors", { count: (u.programs_count ?? 0) - u.programs_preview.length })}
+              </li>
+            )}
+          </ul>
+        ) : (
+          u.programs_preview && <p className="mt-3 text-xs text-muted-foreground">{t("components.noProgramsYet")}</p>
+        )}
+
         <div className="mt-auto flex items-center justify-between pt-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-navy-50 px-2.5 py-1 text-xs font-medium text-cas-navy">
             <GraduationCap className="size-3.5" /> {t("components.programCount", { count: u.programs_count ?? 0 })}

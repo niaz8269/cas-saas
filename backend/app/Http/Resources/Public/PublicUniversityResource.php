@@ -61,6 +61,11 @@ class PublicUniversityResource extends JsonResource
                 'photo_url' => $images->url($rep['photo'] ?? null),
             ] : null,
             'programs_count' => $this->whenCounted('programs'),
+            // Set for lists of cards: confirmed programs for international students, majors registered with the
+            // Ministry of Education, and the first few program names.
+            'confirmed_programs_count' => $this->when(array_key_exists('confirmed_programs_count', $this->resource->getAttributes()), fn () => (int) $this->resource->getAttribute('confirmed_programs_count')),
+            'registered_majors_count' => $this->when(array_key_exists('registered_majors_count', $this->resource->getAttributes()), fn () => (int) $this->resource->getAttribute('registered_majors_count')),
+            'programs_preview' => $this->when(array_key_exists('programs_preview', $this->resource->getAttributes()), fn () => $this->resource->getAttribute('programs_preview')),
             // Detail-only nested collections (present when eager-loaded). The
             // intake deadlines are gated to registered users; nested program /
             // scholarship resources gate their own fee/amount specifics.
