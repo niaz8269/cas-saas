@@ -39,7 +39,7 @@
     "promoMobile": "浏览大学与入学日期"
   },
   "footer": {
-    "blurb": "CAS——留学咨询机构（Consultancy for Abroad Study）——自 2012 年起，作为教育部认可院校的官方授权代理，为学生提供前往中国一流大学深造的指导。",
+    "blurb": "CAS——留学咨询机构（Consultancy for Abroad Study）——自 2012 年起，作为教育部认可院校的官方授权代理机构，为学生提供前往中国一流大学深造的指导。",
     "explore": "探索",
     "exploreUniversities": "院校",
     "explorePrograms": "专业",
@@ -56,7 +56,7 @@
     "whatsappUs": "WhatsApp 联系",
     "freeConsultation": "免费咨询",
     "rights": "© {{year}} CAS Education。保留所有权利。",
-    "authorized": "自 2012 年起的官方授权代理。",
+    "authorized": "自 2012 年起的官方授权代理机构。",
     "photoCredits": "图片来源",
     "exploreMbbs": "中国留学 MBBS",
     "exploreCsc": "CSC 奖学金"
@@ -242,7 +242,7 @@
   },
   "about": {
     "seoTitle": "关于 CAS",
-    "seoDescription": "关于 CAS——留学咨询机构（Consultancy for Abroad Study）。自 2012 年起作为官方授权代理，为学生申请中国教育部认可院校提供服务。",
+    "seoDescription": "关于 CAS——留学咨询机构（Consultancy for Abroad Study）。自 2012 年起作为官方授权代理机构，为学生申请中国教育部认可院校提供服务。",
     "headerEyebrow": "我们的故事",
     "headerTitle": "关于 CAS",
     "headerSubtitle": "CAS——留学咨询机构（Consultancy for Abroad Study）——帮助来自世界各地的学生就读中国各地的教育部认可院校。我们全程为你服务：选择合适的专业、递交申请、争取奖学金，并在签证和抵达阶段为你提供支持。",
@@ -399,7 +399,7 @@
     "seoDescription": "成为 CAS 合作代理或招生人员：通过一个门户申请中国大学，实时跟踪每份申请，并在每个阶段查看您的佣金。",
     "headerEyebrow": "面向机构与招生人员",
     "headerTitle": "与 CAS 合作",
-    "headerSubtitle": "通过授权代理把您的学生送入中国大学。在一个门户中提交并跟踪申请，并查看每笔佣金所处的阶段。",
+    "headerSubtitle": "通过授权代理机构把您的学生送入中国大学。在一个门户中提交并跟踪申请，并查看每笔佣金所处的阶段。",
     "becomePartner": "申请成为合作伙伴",
     "signIn": "合作伙伴登录",
     "talkToUs": "先联系我们",
@@ -568,7 +568,7 @@
     },
     "why": {
       "authorizedAgent": {
-        "title": "官方授权代理",
+        "title": "官方授权代理机构",
         "body": "自 2012 年起直接与院校合作——你的申请交由可信、负责任的团队处理。"
       },
       "freeToStart": {
@@ -1035,7 +1035,7 @@
   "home": {
     "seo": {
       "title": "留学中国——院校、专业与奖学金",
-      "description": "与 CAS 一起留学中国，自 2012 年起的官方授权代理。在教育部认可院校找到 MBBS、工程和商科专业，享受奖学金和从申请到抵达的全程支持。"
+      "description": "与 CAS 一起留学中国，自 2012 年起的官方授权代理机构。在教育部认可院校找到 MBBS、工程和商科专业，享受奖学金和从申请到抵达的全程支持。"
     },
     "hero": {
       "title": "留学中国",

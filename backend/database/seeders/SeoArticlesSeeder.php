@@ -103,7 +103,7 @@ class SeoArticlesSeeder extends Seeder
 
     private const CHECKED = '<p><em>Checked against official university and Ministry of Education pages in November 2026. Rules, fees and dates change from year to year, so confirm the details for your intake with the university and your own regulator.</em></p>';
 
-    private const CTA = '<h2>Need help choosing?</h2><p>CAS is an authorized agent that places international students into Chinese universities. <a href="/site/study-plan">Get a free study plan</a>, <a href="/site/contact">talk to a counselor</a>, or see <a href="/site/services">everything we do for students</a>.</p>';
+    private const CTA = '<h2>Need help choosing?</h2><p>CAS is an authorized agency that places international students into Chinese universities. <a href="/site/study-plan">Get a free study plan</a>, <a href="/site/contact">talk to a counselor</a>, or see <a href="/site/services">everything we do for students</a>.</p>';
 
     // ── the articles ────────────────────────────────────────────────────────
 

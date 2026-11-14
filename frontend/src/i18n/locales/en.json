@@ -41,7 +41,7 @@
     "applyNow": "Apply now"
   },
   "footer": {
-    "blurb": "CAS — Consultancy for Abroad Study — has guided students to world-class Chinese universities since 2012, as an official authorized agent for Ministry of Education–listed institutions.",
+    "blurb": "CAS — Consultancy for Abroad Study — has guided students to world-class Chinese universities since 2012, as an official authorized agency for Ministry of Education–listed institutions.",
     "explore": "Explore",
     "exploreUniversities": "Universities",
     "explorePrograms": "Programs",
@@ -58,7 +58,7 @@
     "whatsappUs": "WhatsApp us",
     "freeConsultation": "Free consultation",
     "rights": "© {{year}} CAS Education. All rights reserved.",
-    "authorized": "Official authorized agent since 2012.",
+    "authorized": "Official authorized agency since 2012.",
     "photoCredits": "Photo credits",
     "exploreMbbs": "MBBS in China",
     "exploreCsc": "CSC Scholarship",
@@ -250,7 +250,7 @@
   },
   "about": {
     "seoTitle": "About CAS",
-    "seoDescription": "About CAS — Consultancy for Abroad Study. An official authorized agent placing students into Ministry of Education–listed universities in China since 2012.",
+    "seoDescription": "About CAS — Consultancy for Abroad Study. An official authorized agency placing students into Ministry of Education–listed universities in China since 2012.",
     "headerEyebrow": "Our story",
     "headerTitle": "About CAS",
     "headerSubtitle": "CAS — Consultancy for Abroad Study — helps students from around the world study at Ministry of Education–listed universities across China. We handle the whole journey: choosing the right program, applying, securing scholarships, and supporting you through visa and arrival.",
@@ -416,7 +416,7 @@
     "seoDescription": "Partner with CAS as an agent or recruiter: apply to Chinese universities through one portal, track every application live and see your commission at each stage.",
     "headerEyebrow": "For agencies and recruiters",
     "headerTitle": "Partner with CAS",
-    "headerSubtitle": "Place your students in Chinese universities through an authorized agent. Submit and track applications in one portal and see where each commission stands.",
+    "headerSubtitle": "Place your students in Chinese universities through an authorized agency. Submit and track applications in one portal and see where each commission stands.",
     "becomePartner": "Apply as a partner",
     "signIn": "Partner sign in",
     "talkToUs": "Talk to us first",
@@ -585,7 +585,7 @@
     },
     "why": {
       "authorizedAgent": {
-        "title": "Official authorized agent",
+        "title": "Official authorized agency",
         "body": "Working directly with universities since 2012 — your application is in trusted, accountable hands."
       },
       "freeToStart": {
@@ -1124,7 +1124,7 @@
     },
     "seo": {
       "title": "Study in China",
-      "description": "Study in China with CAS, an official authorized agent since 2012. Find MBBS, engineering and business programs at Ministry of Education–listed universities, with scholarships and full application-to-arrival support."
+      "description": "Study in China with CAS, an official authorized agency since 2012. Find MBBS, engineering and business programs at Ministry of Education–listed universities, with scholarships and full application-to-arrival support."
     },
     "hero": {
       "title": "Study in China",

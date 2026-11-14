@@ -39,7 +39,7 @@
     "promoMobile": "Parcourir les universités et les dates d’admission"
   },
   "footer": {
-    "blurb": "CAS — Consultancy for Abroad Study — accompagne les étudiants vers des universités chinoises de renommée mondiale depuis 2012, en tant qu'agent officiel agréé des établissements listés par le Ministère de l'Éducation.",
+    "blurb": "CAS — Consultancy for Abroad Study — accompagne les étudiants vers des universités chinoises de renommée mondiale depuis 2012, en tant qu'agence officielle agréée des établissements listés par le Ministère de l'Éducation.",
     "explore": "Explorer",
     "exploreUniversities": "Universités",
     "explorePrograms": "Programmes",
@@ -56,7 +56,7 @@
     "whatsappUs": "Écrivez-nous sur WhatsApp",
     "freeConsultation": "Consultation gratuite",
     "rights": "© {{year}} CAS Education. Tous droits réservés.",
-    "authorized": "Agent officiel agréé depuis 2012.",
+    "authorized": "Agence officielle agréée depuis 2012.",
     "photoCredits": "Crédits photo",
     "exploreMbbs": "MBBS en Chine",
     "exploreCsc": "Bourse CSC"
@@ -242,7 +242,7 @@
   },
   "about": {
     "seoTitle": "À propos de CAS",
-    "seoDescription": "À propos de CAS — Consultancy for Abroad Study. Un agent officiel agréé qui place des étudiants dans des universités chinoises listées par le Ministère de l'Éducation depuis 2012.",
+    "seoDescription": "À propos de CAS — Consultancy for Abroad Study. Une agence officielle agréée qui place des étudiants dans des universités chinoises listées par le Ministère de l'Éducation depuis 2012.",
     "headerEyebrow": "Notre histoire",
     "headerTitle": "À propos de CAS",
     "headerSubtitle": "CAS — Consultancy for Abroad Study — aide les étudiants du monde entier à étudier dans des universités listées par le Ministère de l'Éducation à travers la Chine. Nous prenons en charge l'ensemble du parcours : choisir le bon programme, candidater, obtenir des bourses et vous accompagner tout au long du visa et de l'arrivée.",
@@ -399,7 +399,7 @@
     "seoDescription": "Devenez agent ou recruteur partenaire de CAS : candidatez aux universités chinoises depuis un seul portail, suivez chaque dossier en direct et voyez votre commission à chaque étape.",
     "headerEyebrow": "Pour agences et recruteurs",
     "headerTitle": "Devenir partenaire de CAS",
-    "headerSubtitle": "Placez vos étudiants dans des universités chinoises par l’intermédiaire d’un agent autorisé. Déposez et suivez les candidatures dans un seul portail et voyez où en est chaque commission.",
+    "headerSubtitle": "Placez vos étudiants dans des universités chinoises par l’intermédiaire d’une agence autorisée. Déposez et suivez les candidatures dans un seul portail et voyez où en est chaque commission.",
     "becomePartner": "Devenir partenaire",
     "signIn": "Connexion partenaire",
     "talkToUs": "Nous parler d’abord",
@@ -568,7 +568,7 @@
     },
     "why": {
       "authorizedAgent": {
-        "title": "Agent officiel agréé",
+        "title": "Agence officielle agréée",
         "body": "En collaboration directe avec les universités depuis 2012 — votre candidature est entre des mains fiables et responsables."
       },
       "freeToStart": {
@@ -1035,7 +1035,7 @@
   "home": {
     "seo": {
       "title": "Étudier en Chine — Universités, programmes et bourses",
-      "description": "Étudiez en Chine avec CAS, un agent officiel agréé depuis 2012. Trouvez des programmes de MBBS, d'ingénierie et de commerce dans des universités listées par le Ministère de l'Éducation, avec des bourses et un accompagnement complet de la candidature à l'arrivée."
+      "description": "Étudiez en Chine avec CAS, une agence officielle agréée depuis 2012. Trouvez des programmes de MBBS, d'ingénierie et de commerce dans des universités listées par le Ministère de l'Éducation, avec des bourses et un accompagnement complet de la candidature à l'arrivée."
     },
     "hero": {
       "title": "Étudier en Chine",
