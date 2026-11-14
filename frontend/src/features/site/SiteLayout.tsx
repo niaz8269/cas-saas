@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
-import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
+import { useEffect, useLayoutEffect, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
@@ -18,37 +18,22 @@ import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
-type NavItemT = { to: string; labelKey: string; dropdown?: [string, string][] }
+type NavItemT = { to: string; labelKey: string }
 
-// Primary top-nav — mirrors the reference header, adapted to CAS's services.
-// "Why CAS" carries a stats dropdown, like the reference's "WHY CUCAS".
+// Primary top-nav. "Why CAS" and "Partner" live in the ☰ browse menu (SiteMegaMenu) instead.
 // Labels are i18n keys resolved at render (report — 5-language support).
 const NAV_PRIMARY: NavItemT[] = [
-  {
-    to: "/site/about",
-    labelKey: "nav.whyCas",
-    dropdown: [
-      ["whyCasMenu.universities", "/site/universities"],
-      ["whyCasMenu.programs", "/site/programs?level=bachelor"],
-      ["whyCasMenu.scholarships", "/site/scholarships"],
-      ["whyCasMenu.cities", "/site/cities"],
-      ["whyCasMenu.mbbs", "/site/mbbs-in-china"],
-      ["whyCasMenu.csc", "/site/csc-scholarship"],
-      ["whyCasMenu.localServices", "/site/services"],
-      ["whyCasMenu.howItWorks", "/site/about?section=process"],
-      ["whyCasMenu.learningCenter", "/site/news?view=guides"],
-    ],
-  },
   { to: "/site/universities", labelKey: "nav.universities" },
   { to: "/site/programs", labelKey: "nav.programs" },
   { to: "/site/services", labelKey: "nav.ourServices" },
-  { to: "/site/partner", labelKey: "nav.partner" },
 ]
 
-// Fuller list for the mobile drawer (its own distinct URLs — nav bar and
-// drawer are never visible at once, but this keeps every link unique).
+// Fuller list for the mobile drawer, which has no browse menu: every link is here, each with its own distinct URL
+// (nav bar and drawer are never visible at once, but this keeps every link unique).
 const NAV = [
-  ...NAV_PRIMARY.map(({ to, labelKey }) => ({ to: `${to}${to.includes("?") ? "&" : "?"}m=1`, labelKey })),
+  { to: "/site/about?m=1", labelKey: "nav.whyCas" },
+  ...NAV_PRIMARY.map(({ to, labelKey }) => ({ to: `${to}?m=1`, labelKey })),
+  { to: "/site/partner?m=1", labelKey: "nav.partner" },
   { to: "/site/scholarships?m=1", labelKey: "nav.scholarships" },
   { to: "/site/study-plan?m=1", labelKey: "nav.freeStudyPlan" },
   { to: "/site/news?m=1", labelKey: "nav.news" },
@@ -56,16 +41,11 @@ const NAV = [
 
 const WHATSAPP = CONTACT.whatsapp
 
-/** A desktop nav link that reveals a single-column dropdown on hover, like the
- *  reference's "WHY CUCAS" menu (dashed separators + a caret pointer). */
+/** A desktop nav link. */
 function NavItem({ item }: { item: NavItemT }) {
   const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const show = () => { if (timer.current) clearTimeout(timer.current); setOpen(true) }
-  const hide = () => { timer.current = setTimeout(() => setOpen(false), 120) }
 
-  const link = (
+  return (
     <NavLink
       to={item.to}
       className={({ isActive }) => cn(
@@ -75,33 +55,6 @@ function NavItem({ item }: { item: NavItemT }) {
     >
       {t(item.labelKey)}
     </NavLink>
-  )
-
-  if (!item.dropdown) return link
-
-  return (
-    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
-      {link}
-      <div
-        className={cn(
-          "absolute top-full left-1/2 z-40 -translate-x-1/2 pt-3 transition-all duration-150",
-          open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-1 opacity-0",
-        )}
-      >
-        <div className="relative w-60 rounded-sm bg-white py-1 shadow-xl ring-1 ring-black/5">
-          <span className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-white" />
-          <ul>
-            {item.dropdown.map(([labelKey, to], i) => (
-              <li key={labelKey} className={cn("mx-4", i < item.dropdown!.length - 1 && "border-b border-dashed border-gray-200")}>
-                <Link to={to} onClick={() => setOpen(false)} className="block py-2.5 text-sm text-gray-600 transition-colors hover:text-cas-red-600">
-                  {t(labelKey)}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
   )
 }
 
