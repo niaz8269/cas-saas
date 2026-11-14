@@ -394,7 +394,7 @@ class SeoPageBuilder
             'url' => $this->abs('/'),
             'logo' => $this->abs('/cas-logo-copy.png'),
             'foundingDate' => '2012',
-            'description' => 'Authorized agent placing international students into Chinese universities.',
+            'description' => 'Authorized agency placing international students into Chinese universities.',
             'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Dalian', 'addressRegion' => 'Liaoning', 'addressCountry' => 'CN'],
         ];
     }
