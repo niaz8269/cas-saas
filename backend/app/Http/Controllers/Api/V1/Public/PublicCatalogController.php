@@ -15,7 +15,9 @@ use App\Services\Search\FuzzySearch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -89,8 +91,42 @@ class PublicCatalogController extends Controller
             ->orderBy('city')
             ->pluck('city'));
 
+        $this->attachProgramPreview($universities);
+
         return PublicUniversityResource::collection($universities)
             ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience, 'suggestion' => $suggestion]);
+    }
+
+    /**
+     * What each university card needs to show its programs: how many it has (confirmed for international students, and
+     * majors it has registered with the Ministry of Education), and the first few names. One query for the whole list.
+     *
+     * @param  Collection<int, University>|AbstractPaginator  $universities
+     */
+    private function attachProgramPreview(Collection|AbstractPaginator $universities): void
+    {
+        // A paginator hands back its page of models, not its pagination envelope.
+        $universities = $universities instanceof AbstractPaginator ? $universities->getCollection() : $universities;
+        $ids = $universities->pluck('id')->all();
+        if ($ids === []) {
+            return;
+        }
+
+        $rows = Program::query()
+            ->whereIn('university_id', $ids)
+            ->where('status', 'active')
+            ->orderBy('registry_only')
+            ->orderBy('name')
+            ->get(['university_id', 'name', 'registry_only'])
+            ->groupBy('university_id');
+
+        foreach ($universities as $university) {
+            $list = $rows->get($university->id, collect());
+            $university->setAttribute('programs_count', $list->count());
+            $university->setAttribute('confirmed_programs_count', $list->where('registry_only', false)->count());
+            $university->setAttribute('registered_majors_count', $list->where('registry_only', true)->count());
+            $university->setAttribute('programs_preview', $list->pluck('name')->unique()->take(4)->values()->all());
+        }
     }
 
     /**
@@ -165,6 +201,7 @@ class PublicCatalogController extends Controller
         abort_unless($city, 404);
 
         $inCity = $all->filter(fn ($u) => $u->city === $city)->values();
+        $this->attachProgramPreview($inCity);
         $keep = ['Studying in '.$city, 'Geography', 'Climate', 'Economy', 'Culture', 'Education', 'Transport', 'Transportation', 'Cuisine', 'Tourism', 'Demographics'];
         $sections = [];
         foreach ($inCity as $u) {

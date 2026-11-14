@@ -67,6 +67,10 @@
   },
   "components": {
     "moeListed": "MoE-approved MBBS",
+    "programsLabel": "Programs",
+    "moreMajors_one": "+{{count}} more",
+    "moreMajors_other": "+{{count}} more",
+    "noProgramsYet": "Programs are being added. Ask our advisors which courses are open.",
     "programCount_one": "{{count}} program",
     "programCount_other": "{{count}} programs",
     "view": "View"
