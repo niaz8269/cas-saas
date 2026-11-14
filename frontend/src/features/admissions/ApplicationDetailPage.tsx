@@ -3,6 +3,8 @@ import { ArrowLeft, Check, Download, FileText, FileUp, Plus, Trash2, UserCog } f
 import { useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
+import { submittedByLabel } from "@/features/admissions/submitter"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -471,6 +473,17 @@ export default function ApplicationDetailPage() {
                 <>{" · "}{app.program?.name} at {app.university?.name}{app.intake ? ` · ${app.intake.name}` : ""}</>
               )}
               {app.source && <> · <span>received via <span className="font-medium text-foreground">{app.source.name}</span></span></>}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Submitted by <span className="font-medium text-foreground">{submittedByLabel(app.submitted_via)}</span>
+              {app.agent && (
+                <>
+                  {" · "}Partner:{" "}
+                  <Link to={`/applications?agent=${app.agent.id}&agentName=${encodeURIComponent(app.agent.name)}`} className="text-cas-navy hover:underline">
+                    {app.agent.name} ({app.agent.agent_code})
+                  </Link>
+                </>
+              )}
             </p>
           </div>
 

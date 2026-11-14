@@ -49,6 +49,8 @@ class ApplicationWorkflow
     {
         return DB::transaction(function () use ($data, $actor) {
             $application = Application::create([
+                // An actor means staff entered it; portal and ingest callers say who they are.
+                'submitted_via' => $actor ? 'staff' : null,
                 ...$data,
                 'application_code' => $this->nextCode(),
                 'status' => 'draft',

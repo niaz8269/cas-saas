@@ -48,7 +48,7 @@ class AgentApplicationController extends Controller
         // from student->agent_id).
         $student = Student::findOrFail($validated['student_id']);
 
-        $application = $this->applications->createDraft($student, $validated);
+        $application = $this->applications->createDraft($student, $validated, 'agent');
         $application->loadMissing('program', 'scholarship');
 
         return response()->json([
@@ -75,7 +75,7 @@ class AgentApplicationController extends Controller
         // The request already validated the student belongs to this agent.
         $student = Student::findOrFail($validated['student_id']);
 
-        $application = $this->applications->createScholarshipDraft($student, $validated);
+        $application = $this->applications->createScholarshipDraft($student, $validated, 'agent');
         $application->loadMissing('scholarship');
 
         return response()->json([
