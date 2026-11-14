@@ -34,6 +34,7 @@ class ApplicationController extends Controller
         'program:id,name,level',
         'scholarship:id,name',
         'source:id,name',
+        'agent:id,agent_code,name',
         'admissionsOfficer:id,name',
     ];
 
@@ -57,7 +58,7 @@ class ApplicationController extends Controller
             'applications-'.now()->format('Ymd-His').'.csv',
             $this->filteredApplications($request),
             ['Code', 'Student', 'Student code', 'University', 'Program', 'Kind', 'Scholarship',
-                'Status', 'To verify', 'Source', 'Officer', 'Documents', 'Submitted', 'Created'],
+                'Status', 'To verify', 'Source', 'Submitted by', 'Partner', 'Officer', 'Documents', 'Submitted', 'Created'],
             fn (Application $a) => [
                 $a->application_code,
                 $a->student?->full_name,
@@ -69,6 +70,8 @@ class ApplicationController extends Controller
                 $a->status,
                 $a->review ? 'yes' : 'no',
                 $a->source?->name,
+                $a->submitted_via ?? 'not recorded',
+                $a->agent?->name,
                 $a->admissionsOfficer?->name,
                 $a->documents_count,
                 $a->submitted_at?->toDateString(),
@@ -91,6 +94,16 @@ class ApplicationController extends Controller
             ->when($request->filled('filter.university_id'), fn ($q) => $q->where('university_id', $request->input('filter.university_id')))
             ->when($request->filled('filter.student_id'), fn ($q) => $q->where('student_id', $request->input('filter.student_id')))
             ->when($request->filled('filter.review'), fn ($q) => $q->where('review', $request->boolean('filter.review')))
+            ->when($request->filled('filter.submitted_via'), function ($q) use ($request) {
+                $via = $request->input('filter.submitted_via');
+
+                return $via === 'unknown' ? $q->whereNull('submitted_via') : $q->where('submitted_via', $via);
+            })
+            // A partner's applications together: its own, plus those of its students that carry no partner of their own.
+            ->when($request->filled('filter.agent_id'), fn ($q) => $q->where(fn ($inner) => $inner
+                ->where('agent_id', $request->integer('filter.agent_id'))
+                ->orWhere(fn ($sq) => $sq->whereNull('agent_id')
+                    ->whereHas('student', fn ($stq) => $stq->where('agent_id', $request->integer('filter.agent_id'))))))
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(fn ($q) => $q
@@ -122,6 +135,7 @@ class ApplicationController extends Controller
             'program.university:id,application_form',
             'scholarship:id,name,criteria',
             'source:id,name',
+            'agent:id,agent_code,name',
             'admissionsOfficer:id,name',
             'intake:id,name',
             'offers',

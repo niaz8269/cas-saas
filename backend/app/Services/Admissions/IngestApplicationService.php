@@ -53,6 +53,7 @@ class IngestApplicationService
                 'university_id' => $program->university_id,
                 'program_id' => $program->id,
                 'source_id' => $source->id,
+                'submitted_via' => 'ingest',
                 'review' => true,
                 'agent_id' => $student->agent_id,
                 'custom_fields' => ! empty($data['custom_fields']) ? $data['custom_fields'] : null,

@@ -27,6 +27,11 @@ class ApplicationResource extends JsonResource
             'source' => $this->whenLoaded('source', fn () => $this->source ? [
                 'id' => $this->source->id, 'name' => $this->source->name,
             ] : null),
+            // Who submitted it: student | agent | staff | ingest, or null when it was not recorded.
+            'submitted_via' => $this->submitted_via,
+            'agent' => $this->whenLoaded('agent', fn () => $this->agent ? [
+                'id' => $this->agent->id, 'name' => $this->agent->name, 'agent_code' => $this->agent->agent_code,
+            ] : null),
             'status' => $this->status,
             'submitted_at' => $this->submitted_at?->toIso8601String(),
             'student' => $this->whenLoaded('student', fn () => [

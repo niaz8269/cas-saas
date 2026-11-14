@@ -58,6 +58,8 @@ export interface ApplicantProfile {
   custom: Record<string, string>
 }
 
+export type SubmittedVia = "student" | "agent" | "staff" | "ingest"
+
 export interface ApplicationListItem {
   id: number
   application_code: string
@@ -66,6 +68,9 @@ export interface ApplicationListItem {
   preferences: ApplicationPreference[]
   review?: boolean
   source?: { id: number; name: string } | null
+  /** Who submitted it; null when it was not recorded (older applications of a partner's student). */
+  submitted_via?: SubmittedVia | null
+  agent?: { id: number; name: string; agent_code: string } | null
   applicant?: ApplicantProfile
   status: string
   submitted_at: string | null
@@ -119,13 +124,15 @@ export interface DocumentTypeItem {
 }
 
 export function listApplications(
-  params: { q?: string; status?: string; page?: number; student_id?: number; review?: boolean } = {},
+  params: { q?: string; status?: string; page?: number; student_id?: number; review?: boolean; submitted_via?: string; agent_id?: number } = {},
 ) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.status) search.set("filter[status]", params.status)
   if (params.student_id) search.set("filter[student_id]", String(params.student_id))
   if (params.review) search.set("filter[review]", "1")
+  if (params.submitted_via) search.set("filter[submitted_via]", params.submitted_via)
+  if (params.agent_id) search.set("filter[agent_id]", String(params.agent_id))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 

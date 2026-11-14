@@ -36,6 +36,7 @@ class Application extends Model
         'scholarship_id',
         'preferences',
         'agent_id',
+        'submitted_via',
         'source_id',
         'assigned_admissions_id',
         'status',

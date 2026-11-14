@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { FileText, Search } from "lucide-react"
+import { FileText, Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import ExportButton from "@/components/ExportButton"
 import { Badge } from "@/components/ui/badge"
@@ -29,14 +29,17 @@ import {
   APPLICATION_TRANSITIONS,
   statusLabel,
 } from "@/features/admissions/status"
+import { submittedByLabel, SUBMITTED_BY_OPTIONS } from "@/features/admissions/submitter"
 import { cn } from "@/lib/utils"
 
 /** Build the export query string matching the list's current filters. */
-function applicationExportQuery(q: string, status: string, toVerify: boolean): string {
+function applicationExportQuery(q: string, status: string, toVerify: boolean, submittedBy: string, agentId?: number): string {
   const p = new URLSearchParams()
   if (q) p.set("q", q)
   if (status !== "all") p.set("filter[status]", status)
   if (toVerify) p.set("filter[review]", "1")
+  if (submittedBy !== "all") p.set("filter[submitted_via]", submittedBy)
+  if (agentId) p.set("filter[agent_id]", String(agentId))
   const s = p.toString()
 
   return s ? `?${s}` : ""
@@ -50,6 +53,18 @@ export default function ApplicationsPage() {
   const [toVerify, setToVerify] = useState(false)
   const [page, setPage] = useState(1)
 
+  // "Submitted by" and one partner's applications live in the address, so a view can be shared or reopened.
+  const [params, setParams] = useSearchParams()
+  const submittedBy = params.get("by") ?? "all"
+  const agentId = Number(params.get("agent")) || undefined
+  const agentName = params.get("agentName") ?? ""
+  const changeParams = (next: Record<string, string | undefined>) => {
+    const merged = new URLSearchParams(params)
+    Object.entries(next).forEach(([k, v]) => (v ? merged.set(k, v) : merged.delete(k)))
+    setParams(merged, { replace: true })
+    setPage(1)
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setQ(searchInput)
@@ -60,12 +75,14 @@ export default function ApplicationsPage() {
   }, [searchInput])
 
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["applications", { q, status, toVerify, page }],
+    queryKey: ["applications", { q, status, toVerify, submittedBy, agentId, page }],
     queryFn: () =>
       listApplications({
         q: q || undefined,
         status: status === "all" ? undefined : status,
         review: toVerify || undefined,
+        submitted_via: submittedBy === "all" ? undefined : submittedBy,
+        agent_id: agentId,
         page,
       }),
     placeholderData: keepPreviousData,
@@ -106,6 +123,17 @@ export default function ApplicationsPage() {
           </SelectContent>
         </Select>
 
+        <Select value={submittedBy} onValueChange={(value) => changeParams({ by: value === "all" ? undefined : value })}>
+          <SelectTrigger className="w-44 bg-background" aria-label="Filter by who submitted">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SUBMITTED_BY_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>{o.value === "all" ? "Submitted by: everyone" : o.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Button
           type="button"
           variant="outline"
@@ -123,9 +151,25 @@ export default function ApplicationsPage() {
         </Button>
 
         <div className="ml-auto">
-          <ExportButton path={`/applications/export${applicationExportQuery(q, status, toVerify)}`} filename="applications.csv" />
+          <ExportButton path={`/applications/export${applicationExportQuery(q, status, toVerify, submittedBy, agentId)}`} filename="applications.csv" />
         </div>
       </div>
+
+      {agentId && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-cas-navy/20 bg-cas-navy-50 px-4 py-2.5 text-sm text-cas-navy">
+          <p>
+            All applications of partner <strong>{agentName || `#${agentId}`}</strong>
+            {meta ? `: ${meta.total} from its students, together` : ""}
+          </p>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1 font-medium underline underline-offset-2"
+            onClick={() => changeParams({ agent: undefined, agentName: undefined })}
+          >
+            <X className="size-3.5" aria-hidden="true" /> Show all partners
+          </button>
+        </div>
+      )}
 
       <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
         <Table>
@@ -134,6 +178,7 @@ export default function ApplicationsPage() {
               <TableHead>Code</TableHead>
               <TableHead>Student</TableHead>
               <TableHead>University / Program</TableHead>
+              <TableHead>Submitted by</TableHead>
               <TableHead>Officer</TableHead>
               <TableHead className="text-right">Docs</TableHead>
               <TableHead>Status</TableHead>
@@ -143,7 +188,7 @@ export default function ApplicationsPage() {
             {isPending &&
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 6 }).map((_, cell) => (
+                  {Array.from({ length: 7 }).map((_, cell) => (
                     <TableCell key={cell}>
                       <Skeleton className="h-4 w-full max-w-28" />
                     </TableCell>
@@ -153,7 +198,7 @@ export default function ApplicationsPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
+                <TableCell colSpan={7} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load applications.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>
                     Try again
@@ -164,7 +209,7 @@ export default function ApplicationsPage() {
 
             {!isPending && !isError && applications.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+                <TableCell colSpan={7} className="py-12 text-center">
                   <FileText className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No applications found</p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -210,6 +255,23 @@ export default function ApplicationsPage() {
                       <p>{application.university?.name ?? "—"}</p>
                       <p className="text-xs text-muted-foreground">{application.program?.name ?? ""}</p>
                     </>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm">{submittedByLabel(application.submitted_via)}</p>
+                  {application.agent && (
+                    <button
+                      type="button"
+                      className="text-left text-xs text-cas-navy hover:underline"
+                      title={`Open all applications of ${application.agent.name}`}
+                      onClick={(event) => {
+                        // The row itself opens the application; this opens the whole partner.
+                        event.stopPropagation()
+                        changeParams({ agent: String(application.agent!.id), agentName: application.agent!.name })
+                      }}
+                    >
+                      {application.submitted_via === "student" ? "Partner: " : ""}{application.agent.name}
+                    </button>
                   )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">

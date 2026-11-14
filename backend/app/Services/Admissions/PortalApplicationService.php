@@ -42,7 +42,7 @@ class PortalApplicationService
      *
      * @param  array<string, mixed>  $data  validated payload
      */
-    public function createDraft(Student $student, array $data): Application
+    public function createDraft(Student $student, array $data, string $via = 'student'): Application
     {
         $program = Program::where('status', 'active')->findOrFail($data['program_id']);
 
@@ -52,7 +52,7 @@ class PortalApplicationService
         // spec (report item 11) — deny-by-default, unknown keys dropped.
         $customFields = $this->catalog->validateCustomFields($program, $data['custom_fields'] ?? []);
 
-        return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId, $customFields) {
+        return DB::transaction(function () use ($student, $data, $program, $scholarship, $intakeId, $customFields, $via) {
             // A student can apply to many programs, but only once to each: an unfinished draft for this
             // program is picked up again, and an application already in progress is explained, not doubled.
             $existing = Application::query()
@@ -88,6 +88,7 @@ class PortalApplicationService
                 'scholarship_id' => $scholarship?->id,
                 'intake_id' => $intakeId,
                 'agent_id' => $student->agent_id,
+                'submitted_via' => $via,
                 'custom_fields' => $customFields !== [] ? $customFields : null,
             ], null);
         });
@@ -100,11 +101,11 @@ class PortalApplicationService
      *
      * @param  array<string, mixed>  $data  validated payload
      */
-    public function createScholarshipDraft(Student $student, array $data): Application
+    public function createScholarshipDraft(Student $student, array $data, string $via = 'student'): Application
     {
         $scholarship = Scholarship::where('scope', 'government')->findOrFail($data['scholarship_id']);
 
-        return DB::transaction(function () use ($student, $data, $scholarship) {
+        return DB::transaction(function () use ($student, $data, $scholarship, $via) {
             $this->applicantData->write($student, $data);
 
             return $this->workflow->create([
@@ -114,6 +115,7 @@ class PortalApplicationService
                 'scholarship_id' => $scholarship->id,
                 'preferences' => array_values($data['preferences'] ?? []),
                 'agent_id' => $student->agent_id,
+                'submitted_via' => $via,
             ], null);
         });
     }

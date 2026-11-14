@@ -301,3 +301,78 @@ it("surfaces the missing checklist on a blocked submit", async () => {
   expect(within(alert).getByText("Academic Transcript")).toBeInTheDocument()
   expect(within(alert).getByText("Passport Photo")).toBeInTheDocument()
 })
+
+// ── Who submitted it ─────────────────────────────────────────────────────────
+
+const BY_AGENT = { ...APPLICATION, id: 22, application_code: "APP-2026-00022", submitted_via: "agent", agent: { id: 9, name: "Bright Future", agent_code: "AGT-2026-00009" } }
+const BY_STUDENT = { ...APPLICATION, id: 23, application_code: "APP-2026-00023", submitted_via: "student", agent: { id: 9, name: "Bright Future", agent_code: "AGT-2026-00009" } }
+const BY_STAFF = { ...APPLICATION, id: 24, application_code: "APP-2026-00024", submitted_via: "staff", agent: null }
+const UNKNOWN = { ...APPLICATION, id: 25, application_code: "APP-2026-00025", submitted_via: null, agent: null }
+
+function stubSubmitters() {
+  const fetchMock = vi.fn().mockImplementation(() =>
+    Promise.resolve(jsonResponse({ data: [BY_AGENT, BY_STUDENT, BY_STAFF, UNKNOWN], meta: { current_page: 1, last_page: 1, per_page: 25, total: 4, from: 1, to: 4 } })),
+  )
+  vi.stubGlobal("fetch", fetchMock)
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global"]) })
+
+  return fetchMock
+}
+
+const decoded = (fetchMock: ReturnType<typeof vi.fn>) => fetchMock.mock.calls.map((c) => decodeURIComponent(String(c[0])))
+
+it("says who submitted each application: partner, student, staff, or not recorded", async () => {
+  stubSubmitters()
+  renderWithProviders(<ApplicationsPage />)
+
+  const agentRow = (await screen.findByText("APP-2026-00022")).closest("tr")!
+  expect(within(agentRow).getByText("Partner")).toBeInTheDocument()
+  expect(within(agentRow).getByRole("button", { name: "Bright Future" })).toBeInTheDocument()
+
+  const studentRow = screen.getByText("APP-2026-00023").closest("tr")!
+  expect(within(studentRow).getByText("Student")).toBeInTheDocument()
+  expect(within(studentRow).getByRole("button", { name: "Partner: Bright Future" })).toBeInTheDocument()
+
+  expect(within(screen.getByText("APP-2026-00024").closest("tr")!).getByText("Staff")).toBeInTheDocument()
+  expect(within(screen.getByText("APP-2026-00025").closest("tr")!).getByText("Not recorded")).toBeInTheDocument()
+})
+
+it("opens all of one partner's applications together when its name is clicked", async () => {
+  const fetchMock = stubSubmitters()
+  const user = userEvent.setup()
+  renderWithProviders(<ApplicationsPage />)
+
+  const row = (await screen.findByText("APP-2026-00022")).closest("tr")!
+  await user.click(within(row).getByRole("button", { name: "Bright Future" }))
+
+  await waitFor(() => expect(decoded(fetchMock).some((u) => u.includes("filter[agent_id]=9"))).toBe(true))
+  expect(await screen.findByText(/All applications of partner/)).toHaveTextContent("Bright Future")
+  // The click opened the partner, not the application.
+  expect(screen.queryByText("Application not found")).not.toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: /Show all partners/ }))
+  await waitFor(() => expect(screen.queryByText(/All applications of partner/)).not.toBeInTheDocument())
+})
+
+it("filters by who submitted from the dropdown", async () => {
+  const fetchMock = stubSubmitters()
+  const user = userEvent.setup()
+  renderWithProviders(<ApplicationsPage />)
+  await screen.findByText("APP-2026-00022")
+
+  await user.click(screen.getByRole("combobox", { name: "Filter by who submitted" }))
+  await user.click(await screen.findByRole("option", { name: "Partners" }))
+
+  await waitFor(() => expect(decoded(fetchMock).some((u) => u.includes("filter[submitted_via]=agent"))).toBe(true))
+})
+
+it("shows who submitted on the application itself, with a link to the partner's applications", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global"]) })
+  stubFetch({ submitted_via: "agent", agent: { id: 9, name: "Bright Future", agent_code: "AGT-2026-00009" } })
+
+  renderDetail()
+
+  expect(await screen.findByText(/Submitted by/)).toBeInTheDocument()
+  const link = screen.getByRole("link", { name: /Bright Future \(AGT-2026-00009\)/ })
+  expect(link).toHaveAttribute("href", expect.stringContaining("/applications?agent=9"))
+})
