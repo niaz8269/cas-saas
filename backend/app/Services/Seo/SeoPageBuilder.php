@@ -371,7 +371,7 @@ class SeoPageBuilder
         return [
             'status' => $status,
             // The home page leads with the full company name, so it is the name search engines show for the site.
-            'title' => $canonical === '/' ? config('seo.site_name').' | '.$title : ($title === 'CAS' || $noindex ? $title : $title.' | CAS'),
+            'title' => $canonical === '/' ? config('seo.site_name').': '.$title : ($title === 'CAS' || $noindex ? $title : $title.' | CAS'),
             'description' => $description,
             'canonical' => $this->abs($canonical),
             'image' => $image ?: $this->abs(config('seo.default_image')),

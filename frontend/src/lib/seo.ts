@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 
-const SITE_NAME = "CAS-Consultancy for Abroad Study"
-const ALTERNATE_NAMES = ["CAS", "CAS Education", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
+const SITE_NAME = "CAS"
+const ALTERNATE_NAMES = ["CAS Education", "CAS-Consultancy for Abroad Study", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
 
 /** Production origin for canonical/OG URLs. Falls back to the live origin so
  *  canonicals are always self-referential and valid wherever this deploys. */
@@ -53,8 +53,8 @@ export function useSeo({ title, description, canonicalPath, image, jsonLd }: Seo
 
   useEffect(() => {
     const base = baseUrl()
-    // The home page leads with the full company name: it is the name search engines show for the site.
-    const fullTitle = canonicalPath === "/" ? `${SITE_NAME} | ${title ?? "Study in China"}` : title ? `${title} | CAS` : SITE_NAME
+    // The home page leads with the brand name, "CAS: ...": it is the name search engines show for the site.
+    const fullTitle = canonicalPath === "/" ? `${SITE_NAME}: ${title ?? "Study in China"}` : title ? `${title} | CAS` : SITE_NAME
     const url = base + (canonicalPath ?? pathname)
     const img = image ?? `${base}/og-image.png`
 
