@@ -12,24 +12,22 @@ beforeEach(() => {
 /** The desktop navigation bar, not the mobile drawer or the footer. */
 const topNav = () => screen.getAllByRole("navigation")[0]
 
-it("keeps Why CAS and Partner out of the top bar", () => {
+it("shows Why CAS first in the top bar and keeps Partner out of it", () => {
   renderWithProviders(<SiteLayout />, { route: "/site" })
 
   // The bar's own links are the uppercase ones; the dropdown panel sits inside the same <nav>.
   const barLinks = within(topNav()).getAllByRole("link").filter((l) => l.className.includes("uppercase")).map((l) => l.textContent)
 
-  expect(barLinks).toEqual(["Universities", "Programs", "Our Services"])
+  expect(barLinks).toEqual(["Why CAS", "Universities", "Programs", "Our Services"])
 })
 
-it("puts Why CAS and Partner in the dropdown menu, pointing at the same pages", async () => {
+it("keeps Partner in the browse dropdown, pointing at the partner page", async () => {
   const user = userEvent.setup()
   renderWithProviders(<SiteLayout />, { route: "/site" })
 
   await user.click(screen.getByRole("button", { name: /Browse everything/i }))
 
-  const why = screen.getByRole("link", { name: "Why CAS" })
   const partner = screen.getByRole("link", { name: "Partner" })
-  expect(why).toHaveAttribute("href", expect.stringContaining("/site/about"))
   expect(partner).toHaveAttribute("href", expect.stringContaining("/site/partner"))
 })
 
