@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  */
 class BuildCityProfiles extends Command
 {
-    protected $signature = 'catalog:build-city-profiles {--only=* : city names to limit the run}';
+    protected $signature = 'catalog:build-city-profiles {--only=* : city names to limit the run} {--missing : skip cities that already have a profile}';
 
     protected $description = 'Fetch the city profile text for every city that has a university';
 
@@ -46,6 +46,11 @@ class BuildCityProfiles extends Command
             ->get(['city', 'province'])->groupBy('city');
         if ($this->option('only')) {
             $cities = $cities->only($this->option('only'));
+        }
+
+        if ($this->option('missing')) {
+            $have = CityProfile::query()->pluck('slug')->all();
+            $cities = $cities->reject(fn ($rows, $city) => in_array(Str::slug($city), $have, true));
         }
 
         $skipped = [];
