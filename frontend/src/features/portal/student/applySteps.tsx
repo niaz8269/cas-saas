@@ -42,6 +42,7 @@ import { PortalCard } from "@/features/portal/components"
 import { money } from "@/features/portal/status"
 import { DEGREES, EMPTY_EDUCATION, FUNDING, type Profile } from "@/features/portal/student/applyShared"
 import { ApiError } from "@/lib/api"
+import { formatDuration } from "@/lib/duration"
 import { fuzzyIncludes } from "@/lib/fuzzy"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
@@ -739,7 +740,7 @@ export function CourseStep(props: {
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
                     {p.teaching_language && <Chip>{p.teaching_language}</Chip>}
-                    {p.duration_months && <Chip>{t("wizard.course.durationMonths", { months: p.duration_months })}</Chip>}
+                    {p.duration_months && <Chip>{formatDuration(p.duration_months, t)}</Chip>}
                     {p.tuition_fee != null && <Chip>{t("wizard.course.tuitionPerYear", { amount: money(p.tuition_fee, p.currency) })}</Chip>}
                     {p.hostel_fee != null && <Chip>{t("wizard.course.hostelPerYear", { amount: money(p.hostel_fee, p.currency) })}</Chip>}
                     {p.university.moe_listed && <Chip>{t("wizard.course.moeListed")}</Chip>}

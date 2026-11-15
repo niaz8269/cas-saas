@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import SearchSuggestion from "@/features/site/SearchSuggestion"
 import { getSitePrograms, type SiteProgram } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
+import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 
 // Display labels are i18n keys resolved at render; option `value`s are the
@@ -157,7 +158,7 @@ export default function SiteProgramFinder() {
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {p.teaching_language}</span>}
-                {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {t("programs.months", { count: p.duration_months })}</span>}
+                {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" /> {formatDuration(p.duration_months, t)}</span>}
                 {p.university?.slug && (
                   <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-red-600">
                     <School className="size-3.5" /> {p.university.name}

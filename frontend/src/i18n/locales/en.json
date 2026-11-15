@@ -1875,6 +1875,10 @@
     "universities": "Browse universities",
     "programs": "Find a program"
   },
+  "duration": {
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years"
+  },
   "city": {
     "seoTitle": "Study in {{city}}: Universities & Programs",
     "seoTitleFallback": "Study in China by city",
