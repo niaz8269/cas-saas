@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Testimonials from "@/features/site/Testimonials"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSiteHome, getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
+import { getHomeSpotlight, getSiteHome, getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
 // Hero files live in /public so the page can preload them (see SeoController).
 const heroLg = "/images/hero-beijing-v2.webp"
 const heroMd = "/images/hero-beijing-1400-v2.webp"
@@ -64,10 +64,21 @@ export default function SiteHome() {
 
   // Real data only: featured universities and programs are the ones with a published admission window that is open.
   const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12 }) })
+  // What the team picked by hand (admin → Home page → Hand-picked), in their order. A list with nothing picked fills itself.
+  const picks = useQuery({ queryKey: ["home-spotlight"], queryFn: getHomeSpotlight, staleTime: 60_000 })
+  const heroIds = picks.data?.data.hero_universities ?? []
+  const chosenUniversities = useQuery({
+    queryKey: ["site-universities", "home-chosen", heroIds],
+    queryFn: () => getSiteUniversities({ ids: heroIds, perPage: 3 }),
+    enabled: heroIds.length > 0,
+  })
   const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, perPage: 6, openIntake: true }) })
   const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
-  const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
+  const chosen = chosenUniversities.data?.data ?? []
+  const automaticUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
+  // Wait for the hand-picked list before showing the cards, so they do not change after loading.
+  const featuredUnis = picks.isPending ? [] : heroIds.length > 0 ? chosen : automaticUnis
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
   const outstanding = programs.data?.data.slice(0, 5) ?? []
 
@@ -160,7 +171,7 @@ export default function SiteHome() {
                       </Link>
                     ))}
                   </div>
-                  <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} />
+                  <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} spotlight={picks.data?.data} />
                 </div>
               )}
             </div>

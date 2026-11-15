@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PublicPostResource;
+use App\Models\HomeSpotlightItem;
 use App\Models\Post;
 use App\Services\Search\FuzzySearch;
 use Illuminate\Http\Request;
@@ -38,6 +39,8 @@ class PublicPostController extends Controller
                     $outer->orWhere('title', 'like', '%'.$term.'%');
                 }
             }))
+            ->when($request->filled('ids'), fn ($q) => $q->whereIn('id', HomeSpotlightItem::parseIds($request->input('ids')))
+                ->reorder()->orderByRaw(HomeSpotlightItem::orderExpression(HomeSpotlightItem::parseIds($request->input('ids')))))
             ->with('author:id,name')
             ->orderByDesc('published_at');
 

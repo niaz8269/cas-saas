@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\ErrorLogController;
 use App\Http\Controllers\Api\V1\GuardianController;
 use App\Http\Controllers\Api\V1\HomeSectionController;
+use App\Http\Controllers\Api\V1\HomeSpotlightController;
 use App\Http\Controllers\Api\V1\Ingest\IngestApplicationController;
 use App\Http\Controllers\Api\V1\Ingest\LeadIngestController;
 use App\Http\Controllers\Api\V1\IntakeController;
@@ -98,6 +99,7 @@ Route::prefix('v1')->group(function () {
         Route::get('posts/{slug}', [PublicPostController::class, 'show']);
         // The home page layout and any text/image changes made in the admin panel
         Route::get('home', [HomeSectionController::class, 'publicIndex']);
+        Route::get('home-spotlight', [HomeSpotlightController::class, 'publicShow']);
         // Testimonials the author agreed to and staff approved
         Route::get('testimonials', [TestimonialController::class, 'publicIndex']);
     });
@@ -284,6 +286,9 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:content.manage.global,staff');
 
         // Home page manager (content module)
+        Route::get('home-spotlight', [HomeSpotlightController::class, 'show'])->middleware('permission:content.view.global,staff');
+        Route::get('home-spotlight/options/{list}', [HomeSpotlightController::class, 'options'])->middleware('permission:content.view.global,staff');
+        Route::put('home-spotlight', [HomeSpotlightController::class, 'update'])->middleware('permission:content.manage.global,staff');
         Route::get('home-sections', [HomeSectionController::class, 'index'])->middleware('permission:content.view.global,staff');
         Route::post('home-sections', [HomeSectionController::class, 'store'])->middleware('permission:content.manage.global,staff');
         Route::post('home-sections/reorder', [HomeSectionController::class, 'reorder'])->middleware('permission:content.manage.global,staff');
