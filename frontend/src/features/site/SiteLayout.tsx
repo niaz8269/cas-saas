@@ -64,6 +64,38 @@ const SOCIALS = [
   { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/consultancy-for-abroad-study-cas-39b4a282/", topBar: true },
 ] as const
 
+/** The WeChat account in the top bar: on hover (or keyboard focus) its QR code opens in a small popup to scan. */
+function TopBarWeChat() {
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  return (
+    <span className="relative inline-flex" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={`WeChat ${CONTACT.wechatTopBar}`}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => { if (e.key === "Escape") setOpen(false) }}
+        className="flex cursor-pointer items-center gap-1.5 hover:underline focus-visible:underline focus-visible:outline-none"
+      >
+        <WeChatGlyph className="size-4" />
+        {CONTACT.wechatTopBar}
+      </button>
+      {open && (
+        <div role="dialog" aria-label={t("topBar.wechatQr", { defaultValue: "WeChat QR code" })} className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2">
+          <div className="w-52 rounded-md bg-white p-3 text-center text-ink shadow-xl ring-1 ring-black/10">
+            <img src={CONTACT.wechatTopBarQr} alt={t("topBar.wechatQrAlt", { defaultValue: "WeChat QR code for CAS-Edu", id: CONTACT.wechatTopBar })} className="mx-auto size-44 rounded-sm" />
+            <p className="mt-2 text-xs text-muted-foreground">{t("topBar.wechatScan", { defaultValue: "Scan to add us on WeChat" })}</p>
+          </div>
+        </div>
+      )}
+    </span>
+  )
+}
+
 /** The thin red strip above the navigation: contacts on the left, social links on the right. Hidden on phones. */
 function TopBar() {
   const { t } = useTranslation()
@@ -78,10 +110,7 @@ function TopBar() {
             </a>
           </li>
           <li>
-            <span className="flex items-center gap-1.5">
-              <WeChatGlyph className="size-4" />
-              <span className="sr-only">WeChat</span> {CONTACT.wechat}
-            </span>
+            <TopBarWeChat />
           </li>
           <li>
             <a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-1.5 hover:underline">
