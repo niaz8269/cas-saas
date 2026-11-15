@@ -14,9 +14,12 @@ beforeEach(() => {
   useAuthStore.setState({ token: "t", user: { id: 1, name: "Admin", email: "a@x.com", roles: ["Super Admin"], permissions: [], last_login_at: null } as never })
 })
 
+const NO_PICKS = { data: { hero_universities: [], update_universities: [], update_programs: [], update_scholarships: [], update_posts: [] }, limits: { hero_universities: 3, update_universities: 6, update_programs: 6, update_scholarships: 6, update_posts: 6 } }
+
 function mockApi() {
-  const fetchMock = vi.fn().mockImplementation((_u: string, init?: RequestInit) => Promise.resolve(
-    init?.method && init.method !== "GET" ? jsonResponse({ data: ROWS[0] }) : jsonResponse({ data: ROWS }),
+  const fetchMock = vi.fn().mockImplementation((u: string, init?: RequestInit) => Promise.resolve(
+    String(u).includes("/home-spotlight") ? jsonResponse(NO_PICKS)
+      : init?.method && init.method !== "GET" ? jsonResponse({ data: ROWS[0] }) : jsonResponse({ data: ROWS }),
   ))
   vi.stubGlobal("fetch", fetchMock)
 

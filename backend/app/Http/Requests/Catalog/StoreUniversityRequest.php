@@ -34,8 +34,6 @@ class StoreUniversityRequest extends FormRequest
             'visibility.*' => ['array'],
             'visibility.*.*' => ['string', Rule::in(['public', 'student', 'agent', 'counselor'])],
             'moe_listed' => ['sometimes', 'boolean'],
-            // Position on the public home page (1 = first); empty = not shown there.
-            'home_rank' => ['nullable', 'integer', 'min:1', 'max:999'],
             'nearest_airport' => ['nullable', 'string', 'max:150'],
             'about' => ['nullable', 'string', 'max:20000'],
             'requirements' => ['nullable', 'array'],

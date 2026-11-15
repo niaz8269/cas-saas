@@ -7,6 +7,7 @@ use App\Http\Resources\Public\PublicProgramResource;
 use App\Http\Resources\Public\PublicScholarshipResource;
 use App\Http\Resources\Public\PublicUniversityResource;
 use App\Models\CityProfile;
+use App\Models\HomeSpotlightItem;
 use App\Models\Intake;
 use App\Models\Program;
 use App\Models\Scholarship;
@@ -71,14 +72,15 @@ class PublicCatalogController extends Controller
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
             ->when($request->filled('filter.province'), fn ($q) => $q->where('province', $request->input('filter.province')))
+            // Exactly these items, in this order (the home page's hand-picked lists).
+            ->when($request->filled('filter.ids'), fn ($q) => $q->whereIn('id', HomeSpotlightItem::parseIds($request->input('filter.ids'))))
             ->when($request->boolean('filter.moe_listed'), fn ($q) => $q->where('moe_listed', true))
             // Universities with a published admission window that has not yet closed.
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('intakes', fn ($i) => $i
                 ->where('status', 'open')
                 ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
-            // The universities the team chose for the home page, in the order they chose.
-            ->when($request->boolean('filter.featured'), fn ($q) => $q->whereNotNull('home_rank')->orderBy('home_rank'))
-            ->orderBy('name');
+            ->orderBy('name')
+            ->when($request->filled('filter.ids'), fn ($q) => $q->reorder()->orderByRaw(HomeSpotlightItem::orderExpression(HomeSpotlightItem::parseIds($request->input('filter.ids')))));
 
         [$universities, $suggestion] = $this->searchWithSpellingFallback(
             $request,
@@ -288,6 +290,8 @@ class PublicCatalogController extends Controller
                 }
             }))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
+            // Exactly these items, in this order (the home page's hand-picked lists).
+            ->when($request->filled('filter.ids'), fn ($q) => $q->whereIn('id', HomeSpotlightItem::parseIds($request->input('filter.ids'))))
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('university.intakes', fn ($i) => $i
                 ->where('status', 'open')
                 ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
@@ -297,7 +301,8 @@ class PublicCatalogController extends Controller
             // Degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
             ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
             ->orderByRaw('tuition_fee is null, tuition_fee')
-            ->orderBy('name');
+            ->orderBy('name')
+            ->when($request->filled('filter.ids'), fn ($q) => $q->reorder()->orderByRaw(HomeSpotlightItem::orderExpression(HomeSpotlightItem::parseIds($request->input('filter.ids')))));
 
         [$programs, $suggestion] = $this->searchWithSpellingFallback($request, 'programs', $buildPrograms, fn () => $this->programPhrases());
 
@@ -373,8 +378,11 @@ class PublicCatalogController extends Controller
                 });
             })
             ->when($request->filled('filter.type'), fn ($q) => $q->where('type', $request->input('filter.type')))
+            // Exactly these items, in this order (the home page's hand-picked lists).
+            ->when($request->filled('filter.ids'), fn ($q) => $q->whereIn('id', HomeSpotlightItem::parseIds($request->input('filter.ids'))))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
-            ->orderBy('name');
+            ->orderBy('name')
+            ->when($request->filled('filter.ids'), fn ($q) => $q->reorder()->orderByRaw(HomeSpotlightItem::orderExpression(HomeSpotlightItem::parseIds($request->input('filter.ids')))));
 
         [$scholarships, $suggestion] = $this->searchWithSpellingFallback($request, 'scholarships', $buildScholarships, fn () => $this->scholarshipPhrases());
 

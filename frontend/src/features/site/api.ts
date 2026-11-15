@@ -220,14 +220,14 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; province?: string; openIntake?: boolean; featured?: boolean; page?: number; perPage?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; province?: string; openIntake?: boolean; ids?: number[]; page?: number; perPage?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.moe) search.set("filter[moe_listed]", "1")
   if (params.city) search.set("filter[city]", params.city)
   if (params.province) search.set("filter[province]", params.province)
+  if (params.ids?.length) search.set("filter[ids]", params.ids.join(","))
   if (params.openIntake) search.set("filter[open_intake]", "1")
-  if (params.featured) search.set("filter[featured]", "1")
   if (params.perPage) search.set("per_page", String(params.perPage))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
@@ -238,22 +238,24 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
 export const getSiteUniversity = (slug: string) =>
   siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
 
-export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; page?: number } = {}) {
+export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; ids?: number[]; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.level) search.set("filter[level]", params.level)
   if (params.language) search.set("filter[language]", params.language)
   if (params.maxFee) search.set("filter[max_fee]", params.maxFee)
   if (params.openIntake) search.set("filter[open_intake]", "1")
+  if (params.ids?.length) search.set("filter[ids]", params.ids.join(","))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
   return siteApi<Paginated<SiteProgram>>(`/public/programs${qs ? `?${qs}` : ""}`)
 }
 
-export function getSiteScholarships(params: { q?: string; type?: string; page?: number } = {}) {
+export function getSiteScholarships(params: { q?: string; type?: string; ids?: number[]; page?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
+  if (params.ids?.length) search.set("filter[ids]", params.ids.join(","))
   if (params.type) search.set("filter[type]", params.type)
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
@@ -279,8 +281,9 @@ export interface SitePost {
   register_url: string | null
 }
 
-export function getSitePosts(params: { type?: string; q?: string; page?: number; lang?: string } = {}) {
+export function getSitePosts(params: { type?: string; q?: string; ids?: number[]; page?: number; lang?: string } = {}) {
   const search = new URLSearchParams()
+  if (params.ids?.length) search.set("ids", params.ids.join(","))
   if (params.type) search.set("type", params.type)
   if (params.q) search.set("q", params.q)
   if (params.page && params.page > 1) search.set("page", String(params.page))
@@ -356,3 +359,10 @@ import type { HomeSectionData } from "@/features/site/homeContent"
 export function getSiteHome() {
   return siteApi<{ data: HomeSectionData[] }>("/public/home")
 }
+
+// ── Home page: what staff chose by hand ────────────────────────────────────
+
+export type HomeSpotlightIds = Record<"hero_universities" | "update_universities" | "update_programs" | "update_scholarships" | "update_posts", number[]>
+
+/** Ids of the items staff picked, in their order. An empty list means the site picks automatically. */
+export const getHomeSpotlight = () => siteApi<{ data: HomeSpotlightIds }>("/public/home-spotlight")

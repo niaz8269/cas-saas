@@ -35,7 +35,6 @@ class UniversityResource extends JsonResource
             'cover_url' => $images->url($this->cover_path),
             'status' => $this->status,
             'moe_listed' => $this->moe_listed,
-            'home_rank' => $this->home_rank,
             'moe_mbbs_year' => $this->moe_mbbs_year,
             'moe_mbbs_source_url' => $this->moe_mbbs_source_url,
             'cover_source_url' => $this->cover_source_url,
