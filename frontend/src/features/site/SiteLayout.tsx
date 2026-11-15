@@ -97,13 +97,13 @@ function TopBarWeChat() {
 }
 
 /** The thin red strip above the navigation: contacts on the left, social links on the right. Hidden on phones. */
-function TopBar() {
+function TopBar({ offset }: { offset: number }) {
   const { t } = useTranslation()
   return (
     <div className="hidden bg-cas-red text-white md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-[13px] sm:px-6">
-        <p className="hidden shrink-0 lg:block">{t("topBar.admissions")}</p>
-        <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
+        {/* offset = distance from the bar's left edge to the "W" of "WHY CAS" (0 when the desktop nav is hidden) */}
+        <ul data-topbar-contacts className="flex flex-wrap items-center gap-x-6 gap-y-1" style={{ marginInlineStart: offset }}>
           <li>
             <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${CONTACT.phoneDisplay}`} className="flex items-center gap-1.5 hover:underline">
               <WhatsAppGlyph className="size-4" /> {CONTACT.phoneDisplay}
@@ -118,6 +118,7 @@ function TopBar() {
             </a>
           </li>
         </ul>
+        <p className="ms-auto hidden shrink-0 xl:block">{t("topBar.admissions")}</p>
         <ul className="flex shrink-0 items-center gap-3">
           {SOCIALS.filter((s) => s.topBar).map(({ icon: Icon, label, url }) => (
             <li key={label}>
@@ -264,6 +265,35 @@ export default function SiteLayout() {
   }, [])
   const solid = !isHome || scrolled
 
+  // Line the top-bar contacts up with the first nav link ("WHY CAS"), at any
+  // screen size: measure the gap and hand it to the bar (the page is CSS-zoomed,
+  // so rects are divided by the zoom to get layout pixels).
+  const navRef = useRef<HTMLElement>(null)
+  const [barOffset, setBarOffset] = useState(0)
+  useLayoutEffect(() => {
+    const measure = () => {
+      const link = navRef.current?.querySelector<HTMLElement>("a, button")
+      const contacts = document.querySelector<HTMLElement>("[data-topbar-contacts]")
+      const container = contacts?.parentElement
+      if (!link || !container || link.offsetParent === null || window.innerWidth < 1024) { setBarOffset(0); return }
+      const zoom = parseFloat(document.documentElement.style.getPropertyValue("--site-zoom")) || 1
+      const cs = getComputedStyle(container)
+      const left = container.getBoundingClientRect().left + parseFloat(cs.paddingLeft) * zoom
+      const rtl = document.dir === "rtl" || container.closest("[dir=rtl]") !== null
+      const x = rtl ? container.getBoundingClientRect().right - parseFloat(cs.paddingRight) * zoom - link.getBoundingClientRect().right
+        : link.getBoundingClientRect().left - left
+      setBarOffset(Math.max(0, Math.round(x / zoom)))
+    }
+    measure()
+    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure)
+    ro?.observe(document.documentElement)
+    if (navRef.current) ro?.observe(navRef.current)
+    window.addEventListener("resize", measure)
+    void document.fonts?.ready.then(measure)
+
+    return () => { ro?.disconnect(); window.removeEventListener("resize", measure) }
+  }, [i18n.language, pathname])
+
   // Scale the whole public site with the screen, so the design looks the same
   // from a phone to a 32-inch monitor and wide screens have no empty margins:
   // 1x on phones and tablets, 1.1x up to a 1440px laptop, then in proportion
@@ -290,7 +320,7 @@ export default function SiteLayout() {
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
       <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/70 backdrop-blur-md")}>
-        <TopBar />
+        <TopBar offset={barOffset} />
         {/* Main nav */}
         <div className="relative">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -298,7 +328,7 @@ export default function SiteLayout() {
               <img src={casLogo} alt="CAS — Consultancy for Abroad Study" className="h-6 w-auto drop-shadow-sm sm:h-9 lg:h-10" />
             </Link>
 
-            <nav className="hidden items-center gap-6 lg:flex">
+            <nav ref={navRef} className="hidden items-center gap-6 lg:flex">
               {NAV_PRIMARY.map((item) => <NavItem key={item.to} item={item} />)}
               <SiteMegaMenu />
             </nav>
