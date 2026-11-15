@@ -1,4 +1,6 @@
 import { ArrowUp, CalendarDays, Mail, MessageCircle, MoreHorizontal, Phone, X } from "lucide-react"
+
+import { WeChatGlyph, WhatsAppGlyph } from "@/features/site/brandIcons"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -38,7 +40,7 @@ function QrTile({ kind, alt, name, value, href }: { kind: "wechat" | "whatsapp";
         {!own && (
           <span aria-hidden className="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md">
             <span className="flex size-7 items-center justify-center rounded-full text-white" style={{ backgroundColor: `#${color}` }}>
-              {kind === "wechat" ? <MessageCircle className="size-4" /> : <Phone className="size-4" />}
+              {kind === "wechat" ? <WeChatGlyph className="size-4" /> : <WhatsAppGlyph className="size-4" />}
             </span>
           </span>
         )}

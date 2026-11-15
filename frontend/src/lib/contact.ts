@@ -9,6 +9,9 @@ export const CONTACT = {
   // Used only by the floating WhatsApp button at the bottom left of the site; every other WhatsApp link and the QR code use the number above.
   whatsappButton: "https://wa.me/8618041566030",
   wechat: "CAS-KAMI",
+  // The WeChat account shown in the thin bar at the top of every page, with its own QR code.
+  wechatTopBar: "CAS-Edu",
+  wechatTopBarQr: "/images/wechat-qr-cas-edu.jpg",
   emailEnquiry: "enquiry@cas.moe",
   emailAdmissions: "admissions@cas.moe",
   emailGeneral: "info@cas.moe",

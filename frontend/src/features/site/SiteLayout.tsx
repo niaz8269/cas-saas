@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
+import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, Phone, X, Youtube } from "lucide-react"
 import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
@@ -8,6 +8,7 @@ import casLogo from "@/assets/cas-logo.png"
 import casLogoWhite from "@/assets/cas-logo-white.png"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
+import { WeChatGlyph, WhatsAppGlyph } from "@/features/site/brandIcons"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteWhatsAppButton from "@/features/site/SiteWhatsAppButton"
 import { loadTawk } from "@/lib/tawk"
@@ -57,37 +58,68 @@ const NAV = [
 const WHATSAPP = CONTACT.whatsapp
 
 const SOCIALS = [
-  { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/casmoe" },
-  { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/casmoe" },
-  { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/@casmoe" },
-  { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/company/casmoe" },
+  { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/share/1F7EUukSv2/", topBar: true },
+  { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/casmoe", topBar: false },
+  { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/@casmoe", topBar: false },
+  { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/consultancy-for-abroad-study-cas-39b4a282/", topBar: true },
 ] as const
 
-/** The thin red strip above the navigation: admissions contacts on the left, social links on the right. Hidden on phones. */
+/** The WeChat account in the top bar: on hover (or keyboard focus) its QR code opens in a small popup to scan. */
+function TopBarWeChat() {
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  return (
+    <span className="relative inline-flex" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={`WeChat ${CONTACT.wechatTopBar}`}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => { if (e.key === "Escape") setOpen(false) }}
+        className="flex cursor-pointer items-center gap-1.5 hover:underline focus-visible:underline focus-visible:outline-none"
+      >
+        <WeChatGlyph className="size-4" />
+        {CONTACT.wechatTopBar}
+      </button>
+      {open && (
+        <div role="dialog" aria-label={t("topBar.wechatQr", { defaultValue: "WeChat QR code" })} className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2">
+          <div className="w-52 rounded-md bg-white p-3 text-center text-ink shadow-xl ring-1 ring-black/10">
+            <img src={CONTACT.wechatTopBarQr} alt={t("topBar.wechatQrAlt", { defaultValue: "WeChat QR code for CAS-Edu", id: CONTACT.wechatTopBar })} className="mx-auto size-44 rounded-sm" />
+            <p className="mt-2 text-xs text-muted-foreground">{t("topBar.wechatScan", { defaultValue: "Scan to add us on WeChat" })}</p>
+          </div>
+        </div>
+      )}
+    </span>
+  )
+}
+
+/** The thin red strip above the navigation: contacts on the left, social links on the right. Hidden on phones. */
 function TopBar() {
   const { t } = useTranslation()
-
   return (
     <div className="hidden bg-cas-red text-white md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-[13px] sm:px-6">
         <p className="hidden shrink-0 lg:block">{t("topBar.admissions")}</p>
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
           <li>
-            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:underline">
-              <MessageCircle className="size-3.5" aria-hidden="true" /> {CONTACT.phoneDisplay}
+            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${CONTACT.phoneDisplay}`} className="flex items-center gap-1.5 hover:underline">
+              <WhatsAppGlyph className="size-4" /> {CONTACT.phoneDisplay}
             </a>
           </li>
           <li>
-            <span className="flex items-center gap-1.5"><span className="font-semibold">WeChat</span> {CONTACT.wechat}</span>
+            <TopBarWeChat />
           </li>
           <li>
-            <a href={`mailto:${CONTACT.emailAdmissions}`} className="flex items-center gap-1.5 hover:underline">
-              <Mail className="size-3.5" aria-hidden="true" /> {CONTACT.emailAdmissions}
+            <a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-1.5 hover:underline">
+              <Mail className="size-3.5" aria-hidden="true" /> {CONTACT.emailGeneral}
             </a>
           </li>
         </ul>
         <ul className="flex shrink-0 items-center gap-3">
-          {SOCIALS.map(({ icon: Icon, label, url }) => (
+          {SOCIALS.filter((s) => s.topBar).map(({ icon: Icon, label, url }) => (
             <li key={label}>
               <a href={url} target="_blank" rel="noreferrer" aria-label={label} className="inline-flex hover:opacity-80">
                 <Icon className="size-4" aria-hidden="true" />
@@ -369,7 +401,7 @@ export default function SiteLayout() {
             <ul className="mt-3 space-y-2 text-sm">
               <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> {CONTACT.phoneDisplay}</a></li>
               <li><a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> {CONTACT.emailGeneral}</a></li>
-              <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> {t("footer.whatsappUs")}</a></li>
+              <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><WhatsAppGlyph className="size-4" /> {t("footer.whatsappUs")}</a></li>
             </ul>
             <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-red px-4 py-2 text-sm font-semibold text-white hover:bg-cas-red-600">
               {t("footer.freeConsultation")}
