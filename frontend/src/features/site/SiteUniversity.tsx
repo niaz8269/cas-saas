@@ -29,6 +29,7 @@ import { AdmissionWindow } from "@/features/site/components"
 import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
+import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
@@ -377,7 +378,7 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
             <div>
               <h3 className="font-medium">{p.name}</h3>
               {p.name_zh && <p className="text-xs text-muted-foreground">{p.name_zh}</p>}
-              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
+              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? ` · ${formatDuration(p.duration_months, t)}` : ""}</p>
             </div>
             {p.registry_only ? (
               <Badge variant="outline" className="border-transparent bg-subtle text-muted-foreground">{t("university.registeredMajor")}</Badge>
