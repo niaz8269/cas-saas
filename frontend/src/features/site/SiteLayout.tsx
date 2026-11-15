@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, MessageCircle, Phone, X, Youtube } from "lucide-react"
+import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, Phone, X, Youtube } from "lucide-react"
 import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
@@ -8,6 +8,7 @@ import casLogo from "@/assets/cas-logo.png"
 import casLogoWhite from "@/assets/cas-logo-white.png"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
+import { WeChatGlyph, WhatsAppGlyph } from "@/features/site/brandIcons"
 import SiteHelpDock from "@/features/site/SiteHelpDock"
 import SiteWhatsAppButton from "@/features/site/SiteWhatsAppButton"
 import { loadTawk } from "@/lib/tawk"
@@ -65,17 +66,22 @@ const SOCIALS = [
 
 /** The thin red strip above the navigation: contacts on the left, social links on the right. Hidden on phones. */
 function TopBar() {
+  const { t } = useTranslation()
   return (
     <div className="hidden bg-cas-red text-white md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-[13px] sm:px-6">
+        <p className="hidden shrink-0 lg:block">{t("topBar.admissions")}</p>
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
           <li>
-            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:underline">
-              <MessageCircle className="size-3.5" aria-hidden="true" /> {CONTACT.phoneDisplay}
+            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${CONTACT.phoneDisplay}`} className="flex items-center gap-1.5 hover:underline">
+              <WhatsAppGlyph className="size-4" /> {CONTACT.phoneDisplay}
             </a>
           </li>
           <li>
-            <span className="flex items-center gap-1.5"><span className="font-semibold">WeChat</span> {CONTACT.wechat}</span>
+            <span className="flex items-center gap-1.5">
+              <WeChatGlyph className="size-4" />
+              <span className="sr-only">WeChat</span> {CONTACT.wechat}
+            </span>
           </li>
           <li>
             <a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-1.5 hover:underline">
@@ -366,7 +372,7 @@ export default function SiteLayout() {
             <ul className="mt-3 space-y-2 text-sm">
               <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 hover:text-white"><Phone className="size-4" /> {CONTACT.phoneDisplay}</a></li>
               <li><a href={`mailto:${CONTACT.emailGeneral}`} className="flex items-center gap-2 hover:text-white"><Mail className="size-4" /> {CONTACT.emailGeneral}</a></li>
-              <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><MessageCircle className="size-4" /> {t("footer.whatsappUs")}</a></li>
+              <li><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white"><WhatsAppGlyph className="size-4" /> {t("footer.whatsappUs")}</a></li>
             </ul>
             <Link to="/site/contact" className="mt-4 inline-flex rounded-sm bg-cas-red px-4 py-2 text-sm font-semibold text-white hover:bg-cas-red-600">
               {t("footer.freeConsultation")}

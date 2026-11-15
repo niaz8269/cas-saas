@@ -986,6 +986,9 @@
     "leaveAMessage": "Leave a message",
     "message": "Message"
   },
+  "topBar": {
+    "admissions": "International Students Admissions:"
+  },
   "megaMenu": {
     "colPartner": "Partner With Us",
     "partnerWithUs": "Partner With Us",

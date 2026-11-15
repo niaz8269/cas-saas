@@ -46,15 +46,15 @@ it("still offers Why CAS and Partner With Us in the mobile menu, which has no dr
   expect(within(drawer!).getByRole("link", { name: "Why CAS" })).toBeInTheDocument()
 })
 
-it("shows a contact bar above the navigation with the phone, WeChat, email and the two social links", () => {
+it("shows a contact bar with the admissions label, WhatsApp and WeChat (with their icons), the email and the two social links", () => {
   renderWithProviders(<SiteLayout />, { route: "/site" })
 
-  expect(screen.queryByText("International Students Admissions:")).not.toBeInTheDocument()
-  expect(screen.getAllByRole("link", { name: "+86 176 4041 2827" })[0]).toHaveAttribute("href", "https://wa.me/8617640412827")
+  expect(screen.getByText("International Students Admissions:")).toBeInTheDocument()
+  expect(screen.getAllByRole("link", { name: "WhatsApp +86 176 4041 2827" })[0]).toHaveAttribute("href", "https://wa.me/8617640412827")
   expect(screen.getAllByRole("link", { name: "info@cas.moe" })[0]).toHaveAttribute("href", "mailto:info@cas.moe")
   expect(screen.getAllByText("CAS-KAMI").length).toBeGreaterThan(0)
 
-  const bar = screen.getAllByRole("link", { name: "+86 176 4041 2827" })[0].closest("div.bg-cas-red") as HTMLElement
+  const bar = screen.getAllByRole("link", { name: "WhatsApp +86 176 4041 2827" })[0].closest("div.bg-cas-red") as HTMLElement
   expect(within(bar).getByRole("link", { name: "Facebook" })).toHaveAttribute("href", "https://www.facebook.com/share/1F7EUukSv2/")
   expect(within(bar).getByRole("link", { name: "LinkedIn" })).toHaveAttribute("href", "https://www.linkedin.com/in/consultancy-for-abroad-study-cas-39b4a282/")
   // Instagram and YouTube are left out of the bar for now.

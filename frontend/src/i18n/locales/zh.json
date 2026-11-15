@@ -959,6 +959,9 @@
     "message": "留言内容",
     "scanToChat": "扫码咨询"
   },
+  "topBar": {
+    "admissions": "国际学生招生："
+  },
   "megaMenu": {
     "colPartner": "与我们合作",
     "partnerWithUs": "与我们合作",
