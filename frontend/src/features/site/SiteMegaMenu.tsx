@@ -64,7 +64,7 @@ const COLUMNS: Col[] = [
     title: "megaMenu.colAbout",
     checkAll: { label: "megaMenu.contactUs", to: "/site/contact" },
     links: [
-      ["nav.whyCas", "/site/about"],
+      ["megaMenu.aboutCas", "/site/about"],
       ["megaMenu.ourServices", "/site/services"],
       ["megaMenu.whyChina", "/site/why-china"],
       ["megaMenu.faq", "/site/faq"],
