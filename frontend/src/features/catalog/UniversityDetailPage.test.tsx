@@ -180,14 +180,16 @@ it("shows agreements read-only to commission viewers (finance)", async () => {
   expect(screen.queryByRole("button", { name: /Add agreement/ })).not.toBeInTheDocument()
 })
 
-it("shows official source links to staff (they are admin-only)", async () => {
+it("no longer shows an Official links section or the university's own website on the page", async () => {
   useAuthStore.setState({ token: "token", user: makeUser(["universities.view.global"]) })
   stubFetchByUrl(true)
 
   renderDetail()
 
-  expect(await screen.findByRole("heading", { name: "Official links" })).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /MoE English-taught MBBS list 2026-27/ })).toHaveAttribute("href", "https://moe.example/list.pdf")
-  expect(screen.getByRole("link", { name: /Admission notice/ })).toHaveAttribute("href", "https://jlmu.example/notice")
+  // The intake's own "Official source" link is still there once the page has loaded.
   expect(await screen.findByRole("link", { name: /Official source/ })).toHaveAttribute("href", "https://jlmu.example/intake")
+  expect(screen.queryByRole("heading", { name: "Official links" })).not.toBeInTheDocument()
+  expect(screen.queryByRole("link", { name: /MoE English-taught MBBS list/ })).not.toBeInTheDocument()
+  expect(screen.queryByRole("link", { name: /Admission notice/ })).not.toBeInTheDocument()
+  expect(screen.queryByText("www.jlmu.cn")).not.toBeInTheDocument()
 })

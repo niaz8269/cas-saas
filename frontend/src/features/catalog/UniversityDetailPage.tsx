@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   CalendarClock,
   ExternalLink,
-  Globe,
   MapPin,
   Pencil,
   Plane,
@@ -177,11 +176,6 @@ export default function UniversityDetailPage() {
       </Button>
     ) : undefined
 
-  const officialLinks = [
-    uni.moe_mbbs_source_url ? ["MoE English-taught MBBS list" + (uni.moe_mbbs_year ? ` ${uni.moe_mbbs_year}` : ""), uni.moe_mbbs_source_url] : null,
-    uni.cover_source_url ? ["Cover photo source", uni.cover_source_url] : null,
-    ...(uni.guide_links ?? []).map(([label, href]) => [label || href, href]),
-  ].filter((l): l is string[] => !!l)
   const deadline = nextDeadline(intakes.data?.data ?? [])
   const rep = uni.representative_professor
   const requirements = uni.requirements ?? []
@@ -220,11 +214,6 @@ export default function UniversityDetailPage() {
                     <span className="inline-flex items-center gap-1">
                       <Plane className="size-3.5" /> {uni.nearest_airport}
                     </span>
-                  )}
-                  {uni.website && (
-                    <a href={uni.website.startsWith("http") ? uni.website : `https://${uni.website}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
-                      <Globe className="size-3.5" /> {uni.website}
-                    </a>
                   )}
                 </div>
                 {uni.address && <p className="mt-1 text-sm text-muted-foreground">{uni.address}</p>}
@@ -405,17 +394,6 @@ export default function UniversityDetailPage() {
           <p className="text-sm text-muted-foreground">No intakes yet.</p>
         )}
       </Section>
-
-      {/* Official links: shown only here in the admin portal, never on the public site */}
-      {officialLinks.length > 0 && (
-        <Section title="Official links">
-          <ul className="space-y-1 text-sm">
-            {officialLinks.map(([label, href], i) => (
-              <li key={i}><a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-cas-navy hover:underline">{label} <ExternalLink className="size-3.5" /></a></li>
-            ))}
-          </ul>
-        </Section>
-      )}
 
       {/* Scholarships */}
       <Section title="Scholarships" action={addButton("Add scholarship", "scholarship")}>
