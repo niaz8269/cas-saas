@@ -308,7 +308,7 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   // Programs tab.
   await user.click(screen.getByRole("button", { name: /Programs/ }))
   expect(screen.getByText("MBBS")).toBeInTheDocument()
-  expect(screen.getByText("English")).toBeInTheDocument()
+  expect(screen.getAllByText("English").length).toBeGreaterThan(0)
 
   // Scholarships tab.
   await user.click(screen.getByRole("button", { name: /Scholarships/ }))
@@ -425,4 +425,40 @@ it("says which kind of partner the page is for when opened from the Partner With
   renderWithProviders(<SitePartner />, { route: "/site/partner?type=college" })
 
   expect(await screen.findByText(/For agencies and recruiters · College/)).toBeInTheDocument()
+})
+
+it("searches and filters a university's program list", async () => {
+  const user = userEvent.setup()
+  const program = (id: number, name: string, level: string, lang: string, extra: Record<string, unknown> = {}) =>
+    ({ id, name, level, teaching_language: lang, duration_months: 48, tuition_fee: 30000, currency: "CNY", requirements: null, ...extra })
+  const MANY = {
+    data: {
+      ...DETAIL.data,
+      programs: [
+        program(1, "Accounting", "bachelor", "Chinese"),
+        program(2, "Anesthesiology", "master", "English", { tuition_fee: 20000, csc_listed: true }),
+        program(3, "Archaeology", "phd", "Chinese", { tuition_fee: null }),
+      ],
+    },
+  }
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(MANY)))
+  renderWithProviders(<Routes><Route path="/site/universities/:slug" element={<SiteUniversity />} /></Routes>, { route: "/site/universities/jilin-medical-university" })
+  await user.click(await screen.findByRole("button", { name: /Programs/ }))
+
+  expect(screen.getByText("3 of 3 programs")).toBeInTheDocument()
+
+  await user.type(screen.getByRole("textbox", { name: "Search programs" }), "anes")
+  expect(screen.getByText("1 of 3 programs")).toBeInTheDocument()
+  expect(screen.queryByText("Accounting")).not.toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: "Clear filters" }))
+  await user.selectOptions(screen.getByLabelText("Filter by teaching language"), "Chinese")
+  expect(screen.getByText("2 of 3 programs")).toBeInTheDocument()
+
+  await user.selectOptions(screen.getByLabelText("Filter by level"), "phd")
+  expect(screen.getByText("Archaeology")).toBeInTheDocument()
+  expect(screen.queryByText("Accounting")).not.toBeInTheDocument()
+
+  await user.type(screen.getByRole("textbox", { name: "Search programs" }), "zzz")
+  expect(screen.getByText("No program matches your filters.")).toBeInTheDocument()
 })

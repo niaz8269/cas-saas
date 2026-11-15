@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Public\PublicProgramResource;
 use App\Http\Resources\Public\PublicScholarshipResource;
 use App\Http\Resources\Public\PublicUniversityResource;
+use App\Models\CityProfile;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
@@ -68,6 +69,7 @@ class PublicCatalogController extends Controller
             })
             ->when($request->filled('filter.country_id'), fn ($q) => $q->where('country_id', $request->input('filter.country_id')))
             ->when($request->filled('filter.city'), fn ($q) => $q->where('city', $request->input('filter.city')))
+            ->when($request->filled('filter.province'), fn ($q) => $q->where('province', $request->input('filter.province')))
             ->when($request->boolean('filter.moe_listed'), fn ($q) => $q->where('moe_listed', true))
             // Universities with a published admission window that has not yet closed.
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('intakes', fn ($i) => $i
@@ -83,18 +85,29 @@ class PublicCatalogController extends Controller
         );
 
         // Distinct cities for the directory filter (active universities only).
-        $cities = cache()->remember('public.cities.v1', now()->addMinutes(10), fn () => University::query()
+        $province = $request->input('filter.province');
+        $cities = cache()->remember('public.cities.v1.'.md5((string) $province), now()->addMinutes(10), fn () => University::query()
             ->where('status', 'active')
             ->whereNotNull('city')
             ->where('city', '!=', '')
+            ->when($province, fn ($q) => $q->where('province', $province))
             ->distinct()
             ->orderBy('city')
             ->pluck('city'));
 
+        // Distinct provinces for the directory filter.
+        $provinces = cache()->remember('public.provinces.v1', now()->addMinutes(10), fn () => University::query()
+            ->where('status', 'active')
+            ->whereNotNull('province')
+            ->where('province', '!=', '')
+            ->distinct()
+            ->orderBy('province')
+            ->pluck('province'));
+
         $this->attachProgramPreview($universities);
 
         return PublicUniversityResource::collection($universities)
-            ->additional(['cities' => $cities, 'city_stats' => $this->cityStats(), 'audience' => $audience, 'suggestion' => $suggestion]);
+            ->additional(['cities' => $cities, 'provinces' => $provinces, 'city_stats' => $this->cityStats(), 'audience' => $audience, 'suggestion' => $suggestion]);
     }
 
     /**
@@ -211,10 +224,14 @@ class PublicCatalogController extends Controller
             }
         }
 
+        $profile = CityProfile::query()->where('slug', $slug)->first();
+
         return response()->json([
             'city' => $city,
             'province' => $inCity->first()->province,
-            'sections' => $sections,
+            'sections' => $profile ? [] : $sections,
+            // What the city is like (history, places to visit, climate, ...), when it has been built.
+            'profile' => $profile ? ['summary' => $profile->summary, 'sections' => $profile->sections ?? [], 'source_url' => $profile->source_url] : null,
             'universities' => PublicUniversityResource::collection($inCity)->additional(['audience' => $audience])->toResponse($request)->getData(true)['data'],
         ]);
     }
