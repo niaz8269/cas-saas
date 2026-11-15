@@ -21,23 +21,37 @@ it("shows Why CAS first in the top bar and keeps Partner out of it", () => {
   expect(barLinks).toEqual(["Why CAS", "Universities", "Programs", "Our Services"])
 })
 
-it("keeps Partner in the browse dropdown, pointing at the partner page", async () => {
+it("has a Partner With Us column in the browse dropdown, one link per kind of partner", async () => {
   const user = userEvent.setup()
   renderWithProviders(<SiteLayout />, { route: "/site" })
 
   await user.click(screen.getByRole("button", { name: /Browse everything/i }))
 
-  const partner = screen.getByRole("link", { name: "Partner" })
-  expect(partner).toHaveAttribute("href", expect.stringContaining("/site/partner"))
+  const column = screen.getByText("Partner With Us", { selector: "p" }).closest("div")!
+  const kinds = ["University", "College", "School", "Academy", "Edu. Consultant", "Individual"]
+  for (const kind of kinds) {
+    expect(within(column).getByRole("link", { name: kind })).toHaveAttribute("href", expect.stringContaining(`/site/partner?type=${kind === "Edu. Consultant" ? "consultant" : kind.toLowerCase()}`))
+  }
+  expect(within(column).getByRole("link", { name: "Partner With Us »" })).toHaveAttribute("href", expect.stringContaining("/site/partner"))
 })
 
-it("still offers both in the mobile menu, which has no dropdown", async () => {
+it("still offers Why CAS and Partner With Us in the mobile menu, which has no dropdown", async () => {
   const user = userEvent.setup()
   renderWithProviders(<SiteLayout />, { route: "/site" })
 
   await user.click(screen.getByRole("button", { name: /open menu/i }))
 
-  const drawer = screen.getAllByRole("navigation").find((n) => within(n).queryByRole("link", { name: "Free study plan" }) && within(n).queryByRole("link", { name: "Partner" }))
+  const drawer = screen.getAllByRole("navigation").find((n) => within(n).queryByRole("link", { name: "Free study plan" }) && within(n).queryByRole("link", { name: "Partner With Us" }))
   expect(drawer).toBeTruthy()
   expect(within(drawer!).getByRole("link", { name: "Why CAS" })).toBeInTheDocument()
+})
+
+it("shows a contact bar above the navigation with the admissions contacts and social links", () => {
+  renderWithProviders(<SiteLayout />, { route: "/site" })
+
+  expect(screen.getByText("International Students Admissions:")).toBeInTheDocument()
+  expect(screen.getAllByRole("link", { name: "+86 176 4041 2827" })[0]).toHaveAttribute("href", "https://wa.me/8617640412827")
+  expect(screen.getAllByRole("link", { name: "admissions@cas.moe" })[0]).toHaveAttribute("href", "mailto:admissions@cas.moe")
+  expect(screen.getAllByText("CAS-KAMI").length).toBeGreaterThan(0)
+  for (const name of ["Facebook", "YouTube"]) expect(screen.getAllByRole("link", { name })[0]).toHaveAttribute("href", expect.stringContaining("http"))
 })

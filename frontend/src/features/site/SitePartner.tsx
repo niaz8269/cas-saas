@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import Testimonials from "@/features/site/Testimonials"
 import { ArrowRight, BadgeCheck, Banknote, Building2, ChevronRight, ClipboardList, FileCheck2, LineChart, Megaphone, UserPlus, type LucideIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
@@ -24,9 +24,14 @@ const PORTAL: { icon: LucideIcon; key: string }[] = [
 ]
 
 const REGISTER = "/portal/register?as=agent"
+const PARTNER_TYPES = ["university", "college", "school", "academy", "consultant", "individual"]
 
 export default function SitePartner() {
   const { t } = useTranslation()
+  // The "Partner With Us" menu links here with ?type=university (and so on): the page says which kind it is for.
+  const [params] = useSearchParams()
+  const requested = params.get("type")
+  const partnerType = requested && PARTNER_TYPES.includes(requested) ? requested : null
   const unis = useQuery({ queryKey: ["partner-unis"], queryFn: () => getSiteUniversities({ perPage: 1 }), staleTime: 3_600_000 })
   const progs = useQuery({ queryKey: ["partner-programs"], queryFn: () => getSitePrograms({}), staleTime: 3_600_000 })
   const mbbs = useQuery({ queryKey: ["partner-mbbs"], queryFn: () => getSiteUniversities({ moe: true, perPage: 1 }), staleTime: 3_600_000 })
@@ -52,7 +57,7 @@ export default function SitePartner() {
   return (
     <div className="space-y-14">
       <SitePageHeader
-        eyebrow={t("partner.headerEyebrow")}
+        eyebrow={partnerType ? `${t("partner.headerEyebrow")} · ${t(`megaMenu.partnerTypes.${partnerType}`)}` : t("partner.headerEyebrow")}
         title={t("partner.headerTitle")}
         subtitle={t("partner.headerSubtitle")}
         image={HEADER_IMAGES.default}

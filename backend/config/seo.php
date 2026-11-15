@@ -51,7 +51,7 @@ return [
         'site/news' => ['News & Updates on Studying in China', 'Admission deadlines, scholarship openings and guides for international students applying to Chinese universities.', 0.7, 'daily'],
         'site/contact' => ['Contact CAS & Free Consultation', 'Request a free consultation with a CAS counselor about studying in China: universities, scholarships, visas and fees.', 0.6, 'monthly'],
         'site/pricing' => ['CAS Pricing: Free Plan & Clear Service Fees', 'Free consultation and study plan; paid services are quoted clearly and up front. No hidden fees.', 0.5, 'monthly'],
-        'site/partner' => ['Partner with CAS: Agency & Recruitment Cooperation', 'Refer students to {universities} Chinese universities and colleges through an authorized agency, with a partner portal and clear commissions.', 0.5, 'monthly'],
+        'site/partner' => ['Partner With Us: Agency & Recruitment Cooperation', 'Refer students to {universities} Chinese universities and colleges through an authorized agency, with a partner portal and clear commissions.', 0.5, 'monthly'],
         'site/faq' => ['FAQ: Studying in China with CAS', 'Answers about choosing a university, scholarships, applying, student visas, arrival support and fees.', 0.6, 'monthly'],
         'site/study-plan' => ['Get a Free Study Plan for China', 'Tell us your goal and budget and a CAS advisor sends a personalised shortlist of universities, programs and scholarships.', 0.5, 'monthly'],
         'site/share-your-experience' => ['Share Your Experience with CAS', 'Students and partners: tell others what it was like to work with CAS.', 0.3, 'yearly'],

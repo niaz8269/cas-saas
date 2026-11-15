@@ -256,7 +256,7 @@ it("renders the pricing and partner pages", async () => {
   expect(screen.getByText("Getting started")).toBeInTheDocument()
 
   renderWithProviders(<SitePartner />)
-  expect(screen.getByRole("heading", { name: "Partner with CAS", level: 1 })).toBeInTheDocument()
+  expect(screen.getByRole("heading", { name: "Partner With Us", level: 1 })).toBeInTheDocument()
   expect(screen.getAllByRole("link", { name: /Apply as a partner/ }).length).toBeGreaterThan(0)
 })
 
@@ -418,4 +418,11 @@ it("sends the 'All universities' back link to the universities list, not the hom
   await user.click(back)
   expect(await screen.findByText("Universities list page")).toBeInTheDocument()
   expect(screen.queryByText("Home page")).not.toBeInTheDocument()
+})
+
+it("says which kind of partner the page is for when opened from the Partner With Us menu", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({ data: [], meta: { total: 0 } }))))
+  renderWithProviders(<SitePartner />, { route: "/site/partner?type=college" })
+
+  expect(await screen.findByText(/For agencies and recruiters · College/)).toBeInTheDocument()
 })

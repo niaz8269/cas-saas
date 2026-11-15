@@ -8,7 +8,7 @@
     "universities": "Universities",
     "programs": "Programs",
     "pricing": "Pricing",
-    "partner": "Partner",
+    "partner": "Partner With Us",
     "scholarships": "Scholarships",
     "freeStudyPlan": "Free study plan",
     "news": "News",
@@ -419,7 +419,7 @@
     "seoTitle": "Become a Study-in-China Partner Agent",
     "seoDescription": "Partner with CAS as an agent or recruiter: apply to Chinese universities through one portal, track every application live and see your commission at each stage.",
     "headerEyebrow": "For agencies and recruiters",
-    "headerTitle": "Partner with CAS",
+    "headerTitle": "Partner With Us",
     "headerSubtitle": "Place your students in Chinese universities through an authorized agency. Submit and track applications in one portal and see where each commission stands.",
     "becomePartner": "Apply as a partner",
     "signIn": "Partner sign in",
@@ -986,7 +986,20 @@
     "leaveAMessage": "Leave a message",
     "message": "Message"
   },
+  "topBar": {
+    "admissions": "International Students Admissions:"
+  },
   "megaMenu": {
+    "colPartner": "Partner With Us",
+    "partnerWithUs": "Partner With Us",
+    "partnerTypes": {
+      "university": "University",
+      "college": "College",
+      "school": "School",
+      "academy": "Academy",
+      "consultant": "Edu. Consultant",
+      "individual": "Individual"
+    },
     "browseEverything": "Browse everything",
     "colDestinations": "Destinations",
     "allDestinations": "All destinations",

@@ -56,6 +56,50 @@ const NAV = [
 
 const WHATSAPP = CONTACT.whatsapp
 
+const SOCIALS = [
+  { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/casmoe" },
+  { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/casmoe" },
+  { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/@casmoe" },
+  { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/company/casmoe" },
+] as const
+
+/** The thin red strip above the navigation: admissions contacts on the left, social links on the right. Hidden on phones. */
+function TopBar() {
+  const { t } = useTranslation()
+
+  return (
+    <div className="hidden bg-cas-red text-white md:block">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-[13px] sm:px-6">
+        <p className="hidden shrink-0 lg:block">{t("topBar.admissions")}</p>
+        <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
+          <li>
+            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:underline">
+              <MessageCircle className="size-3.5" aria-hidden="true" /> {CONTACT.phoneDisplay}
+            </a>
+          </li>
+          <li>
+            <span className="flex items-center gap-1.5"><span className="font-semibold">WeChat</span> {CONTACT.wechat}</span>
+          </li>
+          <li>
+            <a href={`mailto:${CONTACT.emailAdmissions}`} className="flex items-center gap-1.5 hover:underline">
+              <Mail className="size-3.5" aria-hidden="true" /> {CONTACT.emailAdmissions}
+            </a>
+          </li>
+        </ul>
+        <ul className="flex shrink-0 items-center gap-3">
+          {SOCIALS.map(({ icon: Icon, label, url }) => (
+            <li key={label}>
+              <a href={url} target="_blank" rel="noreferrer" aria-label={label} className="inline-flex hover:opacity-80">
+                <Icon className="size-4" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 /** A desktop nav link that reveals a single-column dropdown on hover, like the
  *  reference's "WHY CUCAS" menu (dashed separators + a caret pointer). */
 function NavItem({ item }: { item: NavItemT }) {
@@ -214,6 +258,7 @@ export default function SiteLayout() {
 
       {/* Header — light frosted overlay over the hero, solid once scrolled/elsewhere */}
       <header className={cn("fixed inset-x-0 top-0 z-30 transition-colors duration-300", solid ? "bg-white shadow-sm" : "bg-white/70 backdrop-blur-md")}>
+        <TopBar />
         {/* Main nav */}
         <div className="relative">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -271,7 +316,7 @@ export default function SiteLayout() {
         </div>
       </header>
 
-      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6")}>
+      <main className={cn("w-full flex-1", isHome ? "pb-8" : "mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6 md:pt-[8.25rem]")}>
         <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
           <Outlet />
         </Suspense>
@@ -286,12 +331,7 @@ export default function SiteLayout() {
               {t("footer.blurb")}
             </p>
             <div className="mt-4 flex gap-3">
-              {[
-                { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/casmoe" },
-                { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/casmoe" },
-                { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/@casmoe" },
-                { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/company/casmoe" },
-              ].map(({ icon: Icon, label, url }) => (
+              {SOCIALS.map(({ icon: Icon, label, url }) => (
                 <a key={label} href={url} target="_blank" rel="noreferrer" aria-label={label}
                   className="inline-flex size-9 items-center justify-center rounded-full bg-white/10 hover:bg-cas-red hover:text-white">
                   <Icon className="size-4" />
