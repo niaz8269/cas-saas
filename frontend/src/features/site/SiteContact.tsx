@@ -41,7 +41,7 @@ export default function SiteContact() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 size-5 text-cas-navy" />
-                <span><span className="block font-medium">{t("contact.emailLabel")}</span><a href={`mailto:${CONTACT.emailEnquiry}`} className="text-muted-foreground hover:text-cas-navy">{CONTACT.emailEnquiry}</a></span>
+                <span><span className="block font-medium">{t("contact.emailLabel")}</span><a href={`mailto:${CONTACT.emailGeneral}`} className="text-muted-foreground hover:text-cas-navy">{CONTACT.emailGeneral}</a></span>
               </li>
               <li className="flex items-start gap-3">
                 <MessageCircle className="mt-0.5 size-5 text-cas-navy" />

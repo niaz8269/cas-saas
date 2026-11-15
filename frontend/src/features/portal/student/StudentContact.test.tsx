@@ -20,7 +20,7 @@ it("offers WhatsApp, email and WeChat, with the student's code in the WhatsApp t
   const whatsapp = screen.getByRole("link", { name: /WhatsApp/ })
   expect(whatsapp.getAttribute("href")).toContain("https://wa.me/8617640412827?text=")
   expect(decodeURIComponent(whatsapp.getAttribute("href") ?? "")).toContain("STU-2026-00005")
-  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", expect.stringContaining("mailto:enquiry@cas.moe"))
+  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", expect.stringContaining("mailto:info@cas.moe"))
   expect(screen.getByText("CAS-KAMI")).toBeInTheDocument()
   expect(screen.getByAltText("CAS WeChat QR code")).toBeInTheDocument()
 })

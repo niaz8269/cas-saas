@@ -177,7 +177,7 @@ it("opens the counsellor widget with CAS's own contact channels", async () => {
   expect(whatsappLinks.length).toBeGreaterThanOrEqual(2)
   whatsappLinks.forEach((link) => expect(link).toHaveAttribute("href", "https://wa.me/8617640412827"))
   expect(screen.getByRole("link", { name: /Call us/ })).toHaveAttribute("href", "tel:+8617640412827")
-  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:enquiry@cas.moe")
+  expect(screen.getByRole("link", { name: /Email/ })).toHaveAttribute("href", "mailto:info@cas.moe")
 })
 
 it("submits the hero lead panel to the public enquiries endpoint", async () => {

@@ -109,7 +109,7 @@ return [
     */
 
     // Inbox that receives the website pop-up enquiries.
-    'enquiry_to' => env('ENQUIRY_MAIL_TO', 'enquiry@cas.moe'),
+    'enquiry_to' => env('ENQUIRY_MAIL_TO', 'info@cas.moe'),
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),

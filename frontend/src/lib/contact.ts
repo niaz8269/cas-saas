@@ -12,7 +12,6 @@ export const CONTACT = {
   // The WeChat account shown in the thin bar at the top of every page, with its own QR code.
   wechatTopBar: "CAS-Edu",
   wechatTopBarQr: "/images/wechat-qr-cas-edu.jpg",
-  emailEnquiry: "enquiry@cas.moe",
   emailAdmissions: "admissions@cas.moe",
   emailGeneral: "info@cas.moe",
 } as const

@@ -9,7 +9,7 @@ import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 
 // CAS's own channels (mirrors the footer) — never the reference's.
-const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailEnquiry: EMAIL, wechat: WECHAT_ID } = CONTACT
+const { phone: PHONE, phoneDisplay: PHONE_DISPLAY, whatsapp: WHATSAPP, emailGeneral: EMAIL, wechat: WECHAT_ID } = CONTACT
 
 const GREEN = "25D366"
 const WECHAT_GREEN = "07C160"

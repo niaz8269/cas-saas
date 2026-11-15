@@ -52,13 +52,13 @@ export default function StudentContact() {
           </span>
         </a>
         <a
-          href={`mailto:${CONTACT.emailEnquiry}?subject=${encodeURIComponent(t("studentPortal.contact.emailSubject", { code }))}`}
+          href={`mailto:${CONTACT.emailGeneral}?subject=${encodeURIComponent(t("studentPortal.contact.emailSubject", { code }))}`}
           className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-sm transition-colors hover:bg-muted/50"
         >
           <Mail className="size-6 shrink-0 text-cas-navy" aria-hidden="true" />
           <span>
             <span className="block text-sm font-semibold">{t("studentPortal.contact.email")}</span>
-            <span className="block text-xs text-muted-foreground">{CONTACT.emailEnquiry}</span>
+            <span className="block text-xs text-muted-foreground">{CONTACT.emailGeneral}</span>
           </span>
         </a>
       </div>
