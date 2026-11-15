@@ -39,6 +39,7 @@ const schema = z.object({
   slug: z.string().max(190).regex(/^[a-z0-9-]*$/, "Lowercase letters, numbers and hyphens only").optional(),
   status: z.enum(["active", "inactive"]),
   moe_listed: z.boolean(),
+  home_rank: z.string().regex(/^(\d{1,3})?$/, "Whole number 1–999, or leave empty"),
   city: z.string().max(100).optional(),
   address: z.string().max(255).optional(),
   nearest_airport: z.string().max(150).optional(),
@@ -62,6 +63,7 @@ function toValues(u?: University): Values {
     slug: u?.slug ?? "",
     status: (u?.status as "active" | "inactive") ?? "active",
     moe_listed: u?.moe_listed ?? false,
+    home_rank: u?.home_rank ? String(u.home_rank) : "",
     city: u?.city ?? "",
     address: u?.address ?? "",
     nearest_airport: u?.nearest_airport ?? "",
@@ -92,6 +94,7 @@ function toPayload(v: Values): UniversityPayload {
     slug: v.slug || undefined,
     status: v.status,
     moe_listed: v.moe_listed,
+    home_rank: Number(v.home_rank) > 0 ? Number(v.home_rank) : null,
     city: v.city || undefined,
     address: v.address || undefined,
     nearest_airport: v.nearest_airport || undefined,
@@ -223,7 +226,15 @@ export default function UniversityFormDialog({
                 <option value="inactive">Inactive</option>
               </select>
             </label>
+            <label className="flex items-center gap-2 text-sm">
+              Home page position
+              <Input className="w-20" inputMode="numeric" placeholder="—" aria-label="Home page position" {...register("home_rank")} />
+            </label>
           </div>
+          <p className="-mt-2 text-xs text-muted-foreground">
+            Shows this university on the public home page: 1 is the first card, 2 the second, and so on. Leave empty to keep it off the home page.
+            {errors.home_rank?.message && <span className="ms-1 text-destructive">{errors.home_rank.message}</span>}
+          </p>
 
           {/* Location */}
           <div className="grid gap-3 sm:grid-cols-2">

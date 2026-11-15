@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Public\PublicProgramResource;
 use App\Http\Resources\Public\PublicScholarshipResource;
 use App\Http\Resources\Public\PublicUniversityResource;
+use App\Models\Intake;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
@@ -73,6 +74,8 @@ class PublicCatalogController extends Controller
             ->when($request->boolean('filter.open_intake'), fn ($q) => $q->whereHas('intakes', fn ($i) => $i
                 ->where('status', 'open')
                 ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
+            // The universities the team chose for the home page, in the order they chose.
+            ->when($request->boolean('filter.featured'), fn ($q) => $q->whereNotNull('home_rank')->orderBy('home_rank'))
             ->orderBy('name');
 
         [$universities, $suggestion] = $this->searchWithSpellingFallback(
@@ -112,6 +115,15 @@ class PublicCatalogController extends Controller
             return;
         }
 
+        $deadlines = Intake::query()
+            ->whereIn('university_id', $ids)
+            ->where('status', 'open')
+            ->whereNotNull('application_deadline')
+            ->where('application_deadline', '>=', now()->toDateString())
+            ->selectRaw('university_id, MIN(application_deadline) as next_deadline')
+            ->groupBy('university_id')
+            ->pluck('next_deadline', 'university_id');
+
         $rows = Program::query()
             ->whereIn('university_id', $ids)
             ->where('status', 'active')
@@ -122,6 +134,8 @@ class PublicCatalogController extends Controller
 
         foreach ($universities as $university) {
             $list = $rows->get($university->id, collect());
+            $deadline = $deadlines->get($university->id);
+            $university->setAttribute('open_deadline', $deadline ? substr((string) $deadline, 0, 10) : null);
             $university->setAttribute('programs_count', $list->count());
             $university->setAttribute('confirmed_programs_count', $list->where('registry_only', false)->count());
             $university->setAttribute('registered_majors_count', $list->where('registry_only', true)->count());

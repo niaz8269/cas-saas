@@ -25,6 +25,8 @@ export interface University {
   cover_url: string | null
   status: "active" | "inactive"
   moe_listed: boolean
+  /** Position on the public home page (1 = first); null = not shown there. */
+  home_rank?: number | null
   moe_mbbs_year?: string | null
   moe_mbbs_source_url?: string | null
   cover_source_url?: string | null
@@ -86,6 +88,7 @@ export interface UniversityPayload {
   cover_path?: string
   status?: "active" | "inactive"
   moe_listed?: boolean
+  home_rank?: number | null
   nearest_airport?: string
   about?: string
   requirements?: string[]

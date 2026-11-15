@@ -52,12 +52,14 @@ class University extends Model
         'application_form',
         'representative_professor',
         'visibility',
+        'home_rank',
     ];
 
     protected function casts(): array
     {
         return [
             'moe_listed' => 'boolean',
+            'home_rank' => 'integer',
             'requirements' => 'array',
             'guide' => 'array',
             'overview' => 'array',

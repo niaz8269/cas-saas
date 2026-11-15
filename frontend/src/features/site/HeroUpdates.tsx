@@ -28,11 +28,11 @@ const abbr = (name: string) =>
 const fmtDate = (d: string | number | Date) =>
   new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 
-function Row({ to, left, right }: { to: string; left: ReactNode; right: string }) {
+function Row({ to, left, right }: { to: string; left: ReactNode; right?: string }) {
   return (
     <Link to={to} className="flex items-center justify-between gap-4 border-b border-white/5 px-4 py-2.5 text-sm transition-colors last:border-0 hover:bg-white/5">
       <span className="min-w-0 truncate text-white/90">{left}</span>
-      <span className="shrink-0 text-xs text-white/55">({right})</span>
+      {right && <span className="shrink-0 text-xs text-white/55">({right})</span>}
     </Link>
   )
 }
@@ -64,9 +64,6 @@ export default function HeroUpdates({ universities, programs }: { universities: 
     enabled: open,
     staleTime: 60_000,
   })
-
-  // Rolling "last application" date (~2 months out) so rows never read as stale.
-  const lastApp = fmtDate(Date.now() + 60 * 86_400_000)
 
   return (
     <div className="relative mt-3">
@@ -108,7 +105,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={u.id}
                   to={u.slug ? `/site/universities/${u.slug}` : "/site/universities?src=updates"}
                   left={<>{u.name} <span className="text-white/45">| {abbr(u.name)}{u.city ? ` | ${u.city}` : ""}</span></>}
-                  right={t("heroUpdates.lastApplication", { date: lastApp })}
+                  right={u.open_deadline ? t("heroUpdates.lastApplication", { date: fmtDate(`${u.open_deadline}T00:00:00`) }) : undefined}
                 />
               ))
               : <Note>{t("heroUpdates.noUniversities")}</Note>)}
@@ -119,7 +116,6 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={p.id}
                   to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
                   left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level.replace("_", "-")}</span></span></>}
-                  right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))
               : <Note>{t("heroUpdates.noPrograms")}</Note>)}

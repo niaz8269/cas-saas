@@ -178,6 +178,8 @@ export interface SiteUniversityCard {
   wikipedia_url?: string | null
   moe_listed: boolean
   moe_mbbs_year?: string | null
+  /** Real closing date of the nearest open admission window (YYYY-MM-DD), when there is one. */
+  open_deadline?: string | null
   nearest_airport: string | null
   about: string | null
   overview?: SiteOverviewSection[] | null
@@ -208,12 +210,13 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; openIntake?: boolean; page?: number; perPage?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; openIntake?: boolean; featured?: boolean; page?: number; perPage?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.moe) search.set("filter[moe_listed]", "1")
   if (params.city) search.set("filter[city]", params.city)
   if (params.openIntake) search.set("filter[open_intake]", "1")
+  if (params.featured) search.set("filter[featured]", "1")
   if (params.perPage) search.set("per_page", String(params.perPage))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()

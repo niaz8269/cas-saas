@@ -64,10 +64,13 @@ export default function SiteHome() {
 
   // Real data only: featured universities and programs are the ones with a published admission window that is open.
   const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12 }) })
+  // The universities the team picked for the home page (admin → Universities → Home page position), in their order.
+  const chosenUniversities = useQuery({ queryKey: ["site-universities", "home-chosen"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12, featured: true }) })
   const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, perPage: 6, openIntake: true }) })
   const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
-  const featuredUnis = (openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
+  const chosen = chosenUniversities.data?.data ?? []
+  const featuredUnis = (chosen.length ? chosen : openUniversities.data?.data.length ? openUniversities.data.data : universities.data?.data)?.slice(0, 6) ?? []
   const moreUnis = universities.data?.data.slice(0, 10) ?? []
   const outstanding = programs.data?.data.slice(0, 5) ?? []
 
@@ -160,7 +163,7 @@ export default function SiteHome() {
                       </Link>
                     ))}
                   </div>
-                  <HeroUpdates universities={universities.data?.data ?? []} programs={programs.data?.data ?? []} />
+                  <HeroUpdates universities={chosen.length ? chosen : universities.data?.data ?? []} programs={programs.data?.data ?? []} />
                 </div>
               )}
             </div>

@@ -28,3 +28,19 @@ it("wires the New Stories tab to the latest published posts", async () => {
   const link = await screen.findByRole("link", { name: /March 2026 intake open/ })
   expect(link).toHaveAttribute("href", "/site/news/march-2026-intake")
 })
+
+it("shows a university's real closing date, and no date when it has no open window", async () => {
+  const user = userEvent.setup()
+  vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({ data: [] }))))
+  const base = { id: 1, name: "Zhejiang University", slug: "zju", city: "Hangzhou" }
+  const universities = [
+    { ...base, open_deadline: "2027-03-31" },
+    { ...base, id: 2, name: "Fudan University", slug: "fudan", city: "Shanghai", open_deadline: null },
+  ] as never
+
+  renderWithProviders(<HeroUpdates universities={universities} programs={[]} />)
+  await user.click(screen.getByRole("button", { name: "Show latest updates" }))
+
+  expect(screen.getByText("(Last application: Mar 31, 2027)")).toBeInTheDocument()
+  expect(screen.getAllByText(/Last application/)).toHaveLength(1)
+})
