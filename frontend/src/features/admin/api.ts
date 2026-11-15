@@ -411,3 +411,17 @@ export const createHomeSection = (type: "banner" | "text") =>
   api<{ data: HomeSectionRow }>("/home-sections", { method: "POST", body: JSON.stringify({ type }) })
 
 export const deleteHomeSection = (id: number) => api<void>(`/home-sections/${id}`, { method: "DELETE" })
+
+// ── Home page: hand-picked items ───────────────────────────────────────────
+
+export type SpotlightList = "hero_universities" | "update_universities" | "update_programs" | "update_scholarships" | "update_posts"
+export interface SpotlightItem { id: number; label: string; sub: string | null }
+
+export const getHomeSpotlight = () =>
+  api<{ data: Record<SpotlightList, SpotlightItem[]>; limits: Record<SpotlightList, number> }>("/home-spotlight")
+
+export const saveHomeSpotlight = (lists: Partial<Record<SpotlightList, number[]>>) =>
+  api<{ data: Record<SpotlightList, SpotlightItem[]> }>("/home-spotlight", { method: "PUT", body: JSON.stringify({ lists }) })
+
+export const searchSpotlightOptions = (list: SpotlightList, q: string) =>
+  api<{ data: SpotlightItem[] }>(`/home-spotlight/options/${list}?q=${encodeURIComponent(q)}`)

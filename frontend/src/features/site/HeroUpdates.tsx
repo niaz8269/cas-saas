@@ -4,7 +4,7 @@ import { type ReactNode, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import { getSiteScholarships, getSitePosts, type SiteProgram, type SiteUniversityCard } from "@/features/site/api"
+import { getSiteScholarships, getSitePosts, getSitePrograms, getSiteUniversities, type HomeSpotlightIds, type SiteProgram, type SiteUniversityCard } from "@/features/site/api"
 import { cn } from "@/lib/utils"
 
 // Display labels are i18n keys resolved at render (report — 5-language support).
@@ -28,11 +28,11 @@ const abbr = (name: string) =>
 const fmtDate = (d: string | number | Date) =>
   new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 
-function Row({ to, left, right }: { to: string; left: ReactNode; right: string }) {
+function Row({ to, left, right }: { to: string; left: ReactNode; right?: string }) {
   return (
     <Link to={to} className="flex items-center justify-between gap-4 border-b border-white/5 px-4 py-2.5 text-sm transition-colors last:border-0 hover:bg-white/5">
       <span className="min-w-0 truncate text-white/90">{left}</span>
-      <span className="shrink-0 text-xs text-white/55">({right})</span>
+      {right && <span className="shrink-0 text-xs text-white/55">({right})</span>}
     </Link>
   )
 }
@@ -46,27 +46,41 @@ function Note({ children }: { children: ReactNode }) {
  * ranked cards that opens a tabbed, scrollable panel of the latest updates
  * across universities, programs, scholarships and stories.
  */
-export default function HeroUpdates({ universities, programs }: { universities: SiteUniversityCard[]; programs: SiteProgram[] }) {
+export default function HeroUpdates({ universities: autoUniversities, programs: autoPrograms, spotlight }: { universities: SiteUniversityCard[]; programs: SiteProgram[]; spotlight?: HomeSpotlightIds }) {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<TabKey>("universities")
   const lang = i18n.language.slice(0, 2)
 
   // Scholarships + latest posts load lazily — only when the panel is first opened.
+  // Each tab shows what staff picked, in their order; a tab with nothing picked fills itself as before.
+  const pickedUniversities = spotlight?.update_universities ?? []
+  const pickedPrograms = spotlight?.update_programs ?? []
+  const pickedScholarships = spotlight?.update_scholarships ?? []
+  const pickedPosts = spotlight?.update_posts ?? []
+  const chosenUniversities = useQuery({
+    queryKey: ["site-universities", "hero-updates", pickedUniversities],
+    queryFn: () => getSiteUniversities({ ids: pickedUniversities, perPage: 6 }),
+    enabled: open && pickedUniversities.length > 0,
+  })
+  const chosenPrograms = useQuery({
+    queryKey: ["site-programs", "hero-updates", pickedPrograms],
+    queryFn: () => getSitePrograms({ ids: pickedPrograms }),
+    enabled: open && pickedPrograms.length > 0,
+  })
+  const universities = pickedUniversities.length > 0 ? chosenUniversities.data?.data ?? [] : autoUniversities
+  const programs = pickedPrograms.length > 0 ? chosenPrograms.data?.data ?? [] : autoPrograms
   const scholarships = useQuery({
-    queryKey: ["site-scholarships", "hero-updates"],
-    queryFn: () => getSiteScholarships({}),
+    queryKey: ["site-scholarships", "hero-updates", pickedScholarships],
+    queryFn: () => getSiteScholarships({ ids: pickedScholarships }),
     enabled: open,
   })
   const posts = useQuery({
-    queryKey: ["site-posts", "hero-updates", lang],
-    queryFn: () => getSitePosts({ lang }),
+    queryKey: ["site-posts", "hero-updates", lang, pickedPosts],
+    queryFn: () => getSitePosts({ lang, ids: pickedPosts }),
     enabled: open,
     staleTime: 60_000,
   })
-
-  // Rolling "last application" date (~2 months out) so rows never read as stale.
-  const lastApp = fmtDate(Date.now() + 60 * 86_400_000)
 
   return (
     <div className="relative mt-3">
@@ -108,7 +122,7 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={u.id}
                   to={u.slug ? `/site/universities/${u.slug}` : "/site/universities?src=updates"}
                   left={<>{u.name} <span className="text-white/45">| {abbr(u.name)}{u.city ? ` | ${u.city}` : ""}</span></>}
-                  right={t("heroUpdates.lastApplication", { date: lastApp })}
+                  right={u.open_deadline ? t("heroUpdates.lastApplication", { date: fmtDate(`${u.open_deadline}T00:00:00`) }) : undefined}
                 />
               ))
               : <Note>{t("heroUpdates.noUniversities")}</Note>)}
@@ -119,7 +133,6 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                   key={p.id}
                   to={p.university?.slug ? `/site/universities/${p.university.slug}` : "/site/programs?src=updates"}
                   left={<>{p.name} <span className="text-white/45">| {p.university?.name ?? "—"} | <span className="capitalize">{p.level.replace("_", "-")}</span></span></>}
-                  right={t("heroUpdates.lastApplication", { date: lastApp })}
                 />
               ))
               : <Note>{t("heroUpdates.noPrograms")}</Note>)}
@@ -145,12 +158,12 @@ export default function HeroUpdates({ universities, programs }: { universities: 
                     key={p.id}
                     to={`/site/news/${p.slug}`}
                     left={p.title}
-                    right={t("heroUpdates.updated", { date: p.published_at ? fmtDate(p.published_at) : lastApp })}
+                    right={p.published_at ? t("heroUpdates.updated", { date: fmtDate(p.published_at) }) : undefined}
                   />
                 ))
                 // Fall back to the curated stories when nothing is published yet.
                 : NEW_STORIES.map(([titleKey, to]) => (
-                  <Row key={titleKey} to={to} left={t(titleKey)} right={t("heroUpdates.updated", { date: lastApp })} />
+                  <Row key={titleKey} to={to} left={t(titleKey)} />
                 )))}
           </div>
         </div>

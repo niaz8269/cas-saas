@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { createHomeSection, deleteHomeSection, listHomeSections, reorderHomeSections, resetHomeSection, updateHomeSection, type HomeSectionRow } from "@/features/admin/api"
 import HomeSectionEditor from "@/features/admin/HomeSectionEditor"
+import HomeSpotlightManager from "@/features/admin/HomeSpotlightManager"
 import { SECTION_DEFS } from "@/features/admin/homeSchema"
 import { ApiError } from "@/lib/api"
 import { isSuperAdmin } from "@/lib/navigation"
@@ -120,6 +121,8 @@ export default function HomePageManager() {
       <p className="text-xs text-muted-foreground">
         Standard sections cannot be deleted, but you can hide them. Lists such as universities, cities and programs fill themselves from your catalog.
       </p>
+
+      <HomeSpotlightManager canManage={canManage} />
 
       {editing && <HomeSectionEditor key={editing.id} section={editing} onClose={() => setEditing(null)} />}
     </div>

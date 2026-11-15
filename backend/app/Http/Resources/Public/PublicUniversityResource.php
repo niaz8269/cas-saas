@@ -44,6 +44,8 @@ class PublicUniversityResource extends JsonResource
             'cover_downloadable' => app(BrandedDownload::class)->isAvailable($this->resource),
             'cover_is_city' => (bool) $this->cover_is_city,
             'moe_listed' => $this->moe_listed,
+            // Real closing date of the nearest open admission window, when there is one.
+            'open_deadline' => $this->getAttribute('open_deadline'),
             'moe_mbbs_year' => $this->moe_mbbs_year,
             'founded_year' => $this->founded_year,
             'institution_type' => $this->institution_type,
