@@ -8,7 +8,7 @@
     "universities": "Universités",
     "programs": "Programmes",
     "pricing": "Tarifs",
-    "partner": "Partenaire",
+    "partner": "Devenez partenaire",
     "scholarships": "Bourses",
     "freeStudyPlan": "Plan d'études gratuit",
     "news": "Actualités"
@@ -398,7 +398,7 @@
     "seoTitle": "Devenir agent partenaire pour les études en Chine",
     "seoDescription": "Devenez agent ou recruteur partenaire de CAS : candidatez aux universités chinoises depuis un seul portail, suivez chaque dossier en direct et voyez votre commission à chaque étape.",
     "headerEyebrow": "Pour agences et recruteurs",
-    "headerTitle": "Devenir partenaire de CAS",
+    "headerTitle": "Devenez partenaire",
     "headerSubtitle": "Placez vos étudiants dans des universités chinoises par l’intermédiaire d’une agence autorisée. Déposez et suivez les candidatures dans un seul portail et voyez où en est chaque commission.",
     "becomePartner": "Devenir partenaire",
     "signIn": "Connexion partenaire",
@@ -959,7 +959,20 @@
     "message": "Message",
     "scanToChat": "Scannez pour discuter"
   },
+  "topBar": {
+    "admissions": "Admissions des étudiants internationaux :"
+  },
   "megaMenu": {
+    "colPartner": "Devenez partenaire",
+    "partnerWithUs": "Devenez partenaire",
+    "partnerTypes": {
+      "university": "Université",
+      "college": "Collège",
+      "school": "École",
+      "academy": "Académie",
+      "consultant": "Consultant en éducation",
+      "individual": "Particulier"
+    },
     "browseEverything": "Tout parcourir",
     "colDestinations": "Destinations",
     "allDestinations": "Toutes les destinations",

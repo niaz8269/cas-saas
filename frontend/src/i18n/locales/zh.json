@@ -8,7 +8,7 @@
     "universities": "院校",
     "programs": "专业",
     "pricing": "价格",
-    "partner": "合作伙伴",
+    "partner": "与我们合作",
     "scholarships": "奖学金",
     "freeStudyPlan": "免费留学方案",
     "news": "资讯"
@@ -398,7 +398,7 @@
     "seoTitle": "成为赴华留学合作代理",
     "seoDescription": "成为 CAS 合作代理或招生人员：通过一个门户申请中国大学，实时跟踪每份申请，并在每个阶段查看您的佣金。",
     "headerEyebrow": "面向机构与招生人员",
-    "headerTitle": "与 CAS 合作",
+    "headerTitle": "与我们合作",
     "headerSubtitle": "通过授权代理机构把您的学生送入中国大学。在一个门户中提交并跟踪申请，并查看每笔佣金所处的阶段。",
     "becomePartner": "申请成为合作伙伴",
     "signIn": "合作伙伴登录",
@@ -959,7 +959,20 @@
     "message": "留言内容",
     "scanToChat": "扫码咨询"
   },
+  "topBar": {
+    "admissions": "国际学生招生："
+  },
   "megaMenu": {
+    "colPartner": "与我们合作",
+    "partnerWithUs": "与我们合作",
+    "partnerTypes": {
+      "university": "大学",
+      "college": "高等院校",
+      "school": "学校",
+      "academy": "培训学院",
+      "consultant": "教育顾问",
+      "individual": "个人"
+    },
     "browseEverything": "浏览全部",
     "colDestinations": "目的地",
     "allDestinations": "全部目的地",

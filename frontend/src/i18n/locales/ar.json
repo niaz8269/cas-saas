@@ -8,7 +8,7 @@
     "universities": "الجامعات",
     "programs": "البرامج",
     "pricing": "الأسعار",
-    "partner": "شراكة",
+    "partner": "كن شريكًا معنا",
     "scholarships": "المنح الدراسية",
     "freeStudyPlan": "خطة دراسية مجانية",
     "news": "الأخبار"
@@ -410,7 +410,7 @@
     "seoTitle": "كن وكيلًا شريكًا للدراسة في الصين",
     "seoDescription": "كن وكيلًا أو مسؤول استقطاب شريكًا لـ CAS: قدّم إلى الجامعات الصينية من بوابة واحدة، وتابع كل طلب مباشرةً، واطّلع على عمولتك في كل مرحلة.",
     "headerEyebrow": "للوكالات ومسؤولي الاستقطاب",
-    "headerTitle": "كن شريكًا لـ CAS",
+    "headerTitle": "كن شريكًا معنا",
     "headerSubtitle": "ضع طلابك في الجامعات الصينية عبر وكالة معتمدة. قدّم الطلبات وتابعها في بوابة واحدة، واطّلع على موضع كل عمولة.",
     "becomePartner": "قدّم طلب الشراكة",
     "signIn": "دخول الشركاء",
@@ -971,7 +971,20 @@
     "message": "رسالة",
     "scanToChat": "امسح الرمز للدردشة"
   },
+  "topBar": {
+    "admissions": "قبول الطلاب الدوليين:"
+  },
   "megaMenu": {
+    "colPartner": "كن شريكًا معنا",
+    "partnerWithUs": "كن شريكًا معنا",
+    "partnerTypes": {
+      "university": "جامعة",
+      "college": "كلية",
+      "school": "مدرسة",
+      "academy": "أكاديمية",
+      "consultant": "مستشار تعليمي",
+      "individual": "فرد"
+    },
     "browseEverything": "تصفّح كل شيء",
     "colDestinations": "الوجهات",
     "allDestinations": "جميع الوجهات",

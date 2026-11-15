@@ -8,7 +8,7 @@
     "universities": "Universitas",
     "programs": "Program",
     "pricing": "Harga",
-    "partner": "Mitra",
+    "partner": "Bermitra dengan Kami",
     "scholarships": "Beasiswa",
     "freeStudyPlan": "Rencana studi gratis",
     "news": "Berita"
@@ -398,7 +398,7 @@
     "seoTitle": "Jadi agen mitra untuk studi di Tiongkok",
     "seoDescription": "Jadilah agen atau perekrut mitra CAS: daftarkan ke universitas Tiongkok dari satu portal, pantau tiap pendaftaran secara langsung, dan lihat komisi Anda di setiap tahap.",
     "headerEyebrow": "Untuk agensi dan perekrut",
-    "headerTitle": "Bermitra dengan CAS",
+    "headerTitle": "Bermitra dengan Kami",
     "headerSubtitle": "Tempatkan mahasiswa Anda di universitas Tiongkok melalui agensi resmi. Ajukan dan pantau pendaftaran di satu portal, dan lihat posisi tiap komisi.",
     "becomePartner": "Daftar sebagai mitra",
     "signIn": "Masuk mitra",
@@ -959,7 +959,20 @@
     "message": "Pesan",
     "scanToChat": "Pindai untuk chat"
   },
+  "topBar": {
+    "admissions": "Penerimaan Mahasiswa Internasional:"
+  },
   "megaMenu": {
+    "colPartner": "Bermitra dengan Kami",
+    "partnerWithUs": "Bermitra dengan Kami",
+    "partnerTypes": {
+      "university": "Universitas",
+      "college": "Kolese",
+      "school": "Sekolah",
+      "academy": "Akademi",
+      "consultant": "Konsultan Pendidikan",
+      "individual": "Perorangan"
+    },
     "browseEverything": "Jelajahi semuanya",
     "colDestinations": "Tujuan",
     "allDestinations": "Semua tujuan",

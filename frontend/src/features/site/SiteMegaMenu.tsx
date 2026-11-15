@@ -70,14 +70,25 @@ const COLUMNS: Col[] = [
       ["megaMenu.faq", "/site/faq"],
       ["megaMenu.news", "/site/news"],
       ["megaMenu.freeStudyPlan", "/site/study-plan"],
-      ["nav.partner", "/site/partner"],
+    ],
+  },
+  {
+    title: "megaMenu.colPartner",
+    checkAll: { label: "megaMenu.partnerWithUs", to: "/site/partner" },
+    links: [
+      ["megaMenu.partnerTypes.university", "/site/partner?type=university"],
+      ["megaMenu.partnerTypes.college", "/site/partner?type=college"],
+      ["megaMenu.partnerTypes.school", "/site/partner?type=school"],
+      ["megaMenu.partnerTypes.academy", "/site/partner?type=academy"],
+      ["megaMenu.partnerTypes.consultant", "/site/partner?type=consultant"],
+      ["megaMenu.partnerTypes.individual", "/site/partner?type=individual"],
     ],
   },
 ]
 
 /**
  * CUCAS-style mega-menu: a hamburger (☰) trigger in the navbar that reveals a
- * full-width, 5-column dropdown on hover (click/keyboard-friendly too). The
+ * full-width, 6-column dropdown on hover (click/keyboard-friendly too). The
  * panel is anchored to the sticky <header>, so it spans the full width like the
  * reference; hover intent is shared between the trigger and the panel.
  */
@@ -120,7 +131,7 @@ export default function SiteMegaMenu() {
         )}
       >
         <div className="border-t-2 border-cas-red bg-card shadow-sm">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-8 px-4 py-8 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-8 px-4 py-8 sm:grid-cols-3 sm:px-6 lg:grid-cols-6">
             {COLUMNS.map((col) => (
               <div key={col.title}>
                 <p className="text-xs font-bold tracking-wider text-cas-red-600 uppercase">{t(col.title)}</p>
