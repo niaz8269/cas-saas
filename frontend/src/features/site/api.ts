@@ -117,10 +117,20 @@ export interface SitePhotoCredit {
   text_source_url: string | null
 }
 
+export type SiteCityGroup = "history" | "places" | "geography" | "economy" | "culture" | "education" | "transport" | "people"
+
+export interface SiteCityProfile {
+  summary: string | null
+  sections: (SiteOverviewSection & { group: SiteCityGroup })[]
+  source_url: string | null
+}
+
 export interface SiteCity {
   city: string
   province: string | null
   sections: SiteOverviewSection[]
+  /** What the city is like (history, places to visit, climate, ...); null until it has been built. */
+  profile?: SiteCityProfile | null
   universities: SiteUniversityCard[]
 }
 
@@ -210,18 +220,19 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; openIntake?: boolean; featured?: boolean; page?: number; perPage?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; province?: string; openIntake?: boolean; featured?: boolean; page?: number; perPage?: number } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
   if (params.moe) search.set("filter[moe_listed]", "1")
   if (params.city) search.set("filter[city]", params.city)
+  if (params.province) search.set("filter[province]", params.province)
   if (params.openIntake) search.set("filter[open_intake]", "1")
   if (params.featured) search.set("filter[featured]", "1")
   if (params.perPage) search.set("per_page", String(params.perPage))
   if (params.page && params.page > 1) search.set("page", String(params.page))
   const qs = search.toString()
 
-  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[]; city_stats?: SiteCityStat[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
+  return siteApi<Paginated<SiteUniversityCard> & { cities?: string[]; provinces?: string[]; city_stats?: SiteCityStat[] }>(`/public/universities${qs ? `?${qs}` : ""}`)
 }
 
 export const getSiteUniversity = (slug: string) =>

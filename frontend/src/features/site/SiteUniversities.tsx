@@ -49,6 +49,7 @@ export default function SiteUniversities() {
   const [moe, setMoe] = useState(params.get("moe") === "1")
   const openIntake = !!topic?.openIntake
   const [city, setCity] = useState(params.get("city") ?? "")
+  const [province, setProvince] = useState(params.get("province") ?? "")
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -58,13 +59,14 @@ export default function SiteUniversities() {
   }, [searchInput])
 
   const { data, isPending, isError } = useQuery({
-    queryKey: ["site-universities", { q, moe, city, page, openIntake }],
-    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, openIntake, page }),
+    queryKey: ["site-universities", { q, moe, city, province, page, openIntake }],
+    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, province: province || undefined, openIntake, page }),
     placeholderData: keepPreviousData,
   })
 
   const universities = sort ? [...(data?.data ?? [])].sort(sort.cmp) : data?.data ?? []
   const cities = data?.cities ?? []
+  const provinces = data?.provinces ?? []
   const meta = data?.meta
 
   return (
@@ -86,6 +88,15 @@ export default function SiteUniversities() {
             aria-label={t("universities.searchAriaLabel")}
           />
         </div>
+        <select
+          value={province}
+          onChange={(e) => { setProvince(e.target.value); setCity(""); setPage(1) }}
+          aria-label={t("universities.filterByProvinceAriaLabel")}
+          className="h-11 rounded-sm border bg-background px-3 text-sm text-foreground"
+        >
+          <option value="">{t("universities.allProvinces")}</option>
+          {provinces.map((p) => <option key={p} value={p}>{p}</option>)}
+        </select>
         <select
           value={city}
           onChange={(e) => { setCity(e.target.value); setPage(1) }}

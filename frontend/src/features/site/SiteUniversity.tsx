@@ -13,20 +13,23 @@ import {
   Lock,
   MapPin,
   Plane,
+  Search,
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AdmissionWindow } from "@/features/site/components"
 import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
+import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
@@ -303,23 +306,79 @@ const PROGRAMS_PAGE = 24
 function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   const { t } = useTranslation()
   const [shown, setShown] = useState(PROGRAMS_PAGE)
+  const [q, setQ] = useState("")
+  const [level, setLevel] = useState("")
+  const [language, setLanguage] = useState("")
+  const [cscOnly, setCscOnly] = useState(false)
+  const [status, setStatus] = useState<"" | "confirmed" | "registered">("")
+  const [sort, setSort] = useState<"name" | "fee">("name")
+
+  const levels = useMemo(() => [...new Set(u.programs.map((p) => p.level))], [u.programs])
+  const languages = useMemo(() => [...new Set(u.programs.map((p) => p.teaching_language).filter((x): x is string => !!x))].sort(), [u.programs])
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase()
+    const rows = u.programs.filter((p) =>
+      (!term || p.name.toLowerCase().includes(term) || (p.name_zh ?? "").toLowerCase().includes(term)) &&
+      (!level || p.level === level) &&
+      (!language || p.teaching_language === language) &&
+      (!cscOnly || p.csc_listed) &&
+      (status === "" || (status === "registered" ? !!p.registry_only : !p.registry_only)))
+
+    // Lowest tuition first; programs without a published fee go last.
+    return sort === "fee" ? [...rows].sort((a, b) => (a.tuition_fee == null ? 1 : 0) - (b.tuition_fee == null ? 1 : 0) || Number(a.tuition_fee) - Number(b.tuition_fee)) : rows
+  }, [u.programs, q, level, language, cscOnly, status, sort])
+
   if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
   const hasRegistered = u.programs.some((p) => p.registry_only)
+  const filtering = q.trim() !== "" || level !== "" || language !== "" || cscOnly || status !== ""
+  const reset = () => { setQ(""); setLevel(""); setLanguage(""); setCscOnly(false); setStatus(""); setShown(PROGRAMS_PAGE) }
+  const selectCls = "h-10 rounded-sm border bg-background px-3 text-sm text-foreground"
 
   return (
     <div className="space-y-4">
+    <div className="flex flex-wrap items-center gap-3 rounded-sm border bg-card p-3 shadow-sm">
+      <div className="relative min-w-52 flex-1 sm:max-w-sm">
+        <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input value={q} onChange={(e) => { setQ(e.target.value); setShown(PROGRAMS_PAGE) }} placeholder={t("university.programSearchPlaceholder")} aria-label={t("university.programSearchAria")} className="h-10 bg-background pl-9" />
+      </div>
+      <select value={level} onChange={(e) => { setLevel(e.target.value); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterLevel")} className={selectCls}>
+        <option value="">{t("university.allLevels")}</option>
+        {levels.map((l) => <option key={l} value={l}>{levelLabel(l)}</option>)}
+      </select>
+      <select value={language} onChange={(e) => { setLanguage(e.target.value); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterLanguage")} className={selectCls}>
+        <option value="">{t("university.allLanguages")}</option>
+        {languages.map((l) => <option key={l} value={l}>{l}</option>)}
+      </select>
+      {hasRegistered && (
+        <select value={status} onChange={(e) => { setStatus(e.target.value as "" | "confirmed" | "registered"); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterStatus")} className={selectCls}>
+          <option value="">{t("university.allStatuses")}</option>
+          <option value="confirmed">{t("university.statusConfirmed")}</option>
+          <option value="registered">{t("university.registeredMajor")}</option>
+        </select>
+      )}
+      <button type="button" aria-pressed={cscOnly} onClick={() => { setCscOnly((v) => !v); setShown(PROGRAMS_PAGE) }} className={cn("h-10 rounded-sm border px-3 text-sm font-medium transition-colors", cscOnly ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground")}>
+        {t("university.cscListed")}
+      </button>
+      <select value={sort} onChange={(e) => setSort(e.target.value as "name" | "fee")} aria-label={t("university.sortPrograms")} className={selectCls}>
+        <option value="name">{t("university.sortProgramName")}</option>
+        <option value="fee">{t("university.sortProgramFee")}</option>
+      </select>
+      {filtering && <button type="button" onClick={reset} className="text-sm text-cas-navy hover:underline">{t("city.clear")}</button>}
+    </div>
+    <p className="text-sm text-muted-foreground" aria-live="polite">{t("university.programsShowing", { count: filtered.length, total: u.programs.length })}</p>
+    {filtered.length === 0 && <Empty text={t("university.programsNoMatch")} />}
     {hasRegistered && (
       <p className="rounded-sm border border-cas-navy/15 bg-cas-navy-50 px-4 py-3 text-sm text-cas-navy">{t("university.registryNote")}</p>
     )}
     <div className="grid gap-3 sm:grid-cols-2">
-      {u.programs.slice(0, shown).map((p) => (
+      {filtered.slice(0, shown).map((p) => (
         <div key={p.id} className="rounded-sm border bg-card p-4 shadow-sm">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="font-medium">{p.name}</h3>
               {p.name_zh && <p className="text-xs text-muted-foreground">{p.name_zh}</p>}
-              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? t("university.durationMonths", { count: p.duration_months }) : ""}</p>
+              <p className="text-xs text-muted-foreground">{levelLabel(p.level)}{p.duration_months ? ` · ${formatDuration(p.duration_months, t)}` : ""}</p>
             </div>
             {p.registry_only ? (
               <Badge variant="outline" className="border-transparent bg-subtle text-muted-foreground">{t("university.registeredMajor")}</Badge>
@@ -347,10 +406,10 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
         </div>
       ))}
     </div>
-    {shown < u.programs.length && (
+    {shown < filtered.length && (
       <div className="text-center">
         <Button type="button" variant="outline" onClick={() => setShown((n) => n + PROGRAMS_PAGE * 2)}>
-          {t("university.showMorePrograms", { shown: Math.min(shown, u.programs.length), total: u.programs.length })}
+          {t("university.showMorePrograms", { shown: Math.min(shown, filtered.length), total: filtered.length })}
         </Button>
       </div>
     )}

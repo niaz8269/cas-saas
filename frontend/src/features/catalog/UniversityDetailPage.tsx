@@ -337,7 +337,7 @@ export default function UniversityDetailPage() {
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <div className="text-right text-muted-foreground tabular-nums">
-                    {program.duration_months ? `${program.duration_months} mo · ` : ""}
+                    {program.duration_months ? `${Math.round((program.duration_months / 12) * 10) / 10} yr · ` : ""}
                     {money(program.tuition_fee, program.currency)}/yr
                   </div>
                   {canManage && (
