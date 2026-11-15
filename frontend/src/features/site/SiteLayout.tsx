@@ -101,9 +101,10 @@ function TopBar({ offset }: { offset: number }) {
   const { t } = useTranslation()
   return (
     <div className="hidden bg-cas-red text-white md:block">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-1.5 text-[13px] sm:px-6">
-        {/* offset = distance from the bar's left edge to the "W" of "WHY CAS" (0 when the desktop nav is hidden) */}
-        <ul data-topbar-contacts className="flex flex-wrap items-center gap-x-6 gap-y-1" style={{ marginInlineStart: offset }}>
+      <div className="flex items-center gap-4 px-3 py-1.5 text-[13px]">
+        {/* The label sits at the bar's far left; offset = distance from there to the "W" of "WHY CAS", so the contacts start right above it (just after the label when the desktop nav is hidden). */}
+        <p data-topbar-label className="shrink-0 whitespace-nowrap" style={{ minWidth: offset || undefined, marginInlineEnd: offset ? "-1rem" : undefined }}>{t("topBar.admissions")}</p>
+        <ul data-topbar-contacts className="flex flex-wrap items-center gap-x-6 gap-y-1">
           <li>
             <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${CONTACT.phoneDisplay}`} className="flex items-center gap-1.5 hover:underline">
               <WhatsAppGlyph className="size-4" /> {CONTACT.phoneDisplay}
@@ -118,8 +119,7 @@ function TopBar({ offset }: { offset: number }) {
             </a>
           </li>
         </ul>
-        <p className="ms-auto hidden shrink-0 xl:block">{t("topBar.admissions")}</p>
-        <ul className="flex shrink-0 items-center gap-3">
+        <ul className="ms-auto flex shrink-0 items-center gap-3">
           {SOCIALS.filter((s) => s.topBar).map(({ icon: Icon, label, url }) => (
             <li key={label}>
               <a href={url} target="_blank" rel="noreferrer" aria-label={label} className="inline-flex hover:opacity-80">
@@ -273,15 +273,12 @@ export default function SiteLayout() {
   useLayoutEffect(() => {
     const measure = () => {
       const link = navRef.current?.querySelector<HTMLElement>("a, button")
-      const contacts = document.querySelector<HTMLElement>("[data-topbar-contacts]")
-      const container = contacts?.parentElement
-      if (!link || !container || link.offsetParent === null || window.innerWidth < 1024) { setBarOffset(0); return }
+      const label = document.querySelector<HTMLElement>("[data-topbar-label]")
+      if (!link || !label || link.offsetParent === null || window.innerWidth < 1024) { setBarOffset(0); return }
       const zoom = parseFloat(document.documentElement.style.getPropertyValue("--site-zoom")) || 1
-      const cs = getComputedStyle(container)
-      const left = container.getBoundingClientRect().left + parseFloat(cs.paddingLeft) * zoom
-      const rtl = document.dir === "rtl" || container.closest("[dir=rtl]") !== null
-      const x = rtl ? container.getBoundingClientRect().right - parseFloat(cs.paddingRight) * zoom - link.getBoundingClientRect().right
-        : link.getBoundingClientRect().left - left
+      const rtl = label.closest("[dir=rtl]") !== null
+      const x = rtl ? label.getBoundingClientRect().right - link.getBoundingClientRect().right
+        : link.getBoundingClientRect().left - label.getBoundingClientRect().left
       setBarOffset(Math.max(0, Math.round(x / zoom)))
     }
     measure()
