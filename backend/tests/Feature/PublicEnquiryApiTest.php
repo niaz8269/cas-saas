@@ -119,7 +119,7 @@ it('emails the pop-up enquiry to the CAS inbox with the visitor on Reply-To, and
     ])->assertStatus(202);
 
     Mail::assertSent(NewEnquiryMail::class, function ($mail) {
-        return $mail->hasTo('enquiry@cas.moe')
+        return $mail->hasTo('info@cas.moe')
             && $mail->hasReplyTo('ali@example.com')
             && str_contains($mail->envelope()->subject, 'Ali Raza (Master / Engineering)')
             && str_contains($mail->render(), 'Pakistan');
