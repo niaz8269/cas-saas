@@ -20,7 +20,7 @@ export default function SiteCities() {
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["site-cities"],
-    queryFn: () => getSiteUniversities({ perPage: 50 }),
+    queryFn: () => getSiteUniversities({ perPage: 1, include: ["city_stats"] }),
   })
 
   const cities = data?.city_stats ?? []

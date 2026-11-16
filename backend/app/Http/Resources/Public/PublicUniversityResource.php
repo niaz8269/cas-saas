@@ -5,8 +5,10 @@ namespace App\Http\Resources\Public;
 use App\Models\University;
 use App\Services\Media\BrandedDownload;
 use App\Services\Media\ImageService;
+use App\Services\Media\Thumbnails;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 /**
  * A university for the public website. Whitelists website-safe fields
@@ -27,6 +29,8 @@ class PublicUniversityResource extends JsonResource
         $rep = $this->representative_professor;
         // Intake deadlines gated per the record's audience config (ADR-0015).
         $deadlinesVisible = $this->resource->audienceCanSee('deadlines', $request->attributes->get('audience', 'public'));
+        // Lists of cards need a name, a place, a photo and a line of text, not the whole profile: a page of 24 was ~150 KB.
+        $compact = (bool) $request->attributes->get('compact_universities', false);
 
         return [
             'id' => $this->id,
@@ -40,6 +44,8 @@ class PublicUniversityResource extends JsonResource
             'logo_url' => $images->url($this->logo_path),
             'emblem_url' => $images->url($this->emblem_path),
             'cover_url' => $images->url($this->cover_path),
+            // A small (480 px) copy of the cover for cards; null until it has been made.
+            'cover_thumb_url' => app(Thumbnails::class)->urlFor($this->cover_path),
             'cover_credit' => $this->cover_credit,
             'cover_downloadable' => app(BrandedDownload::class)->isAvailable($this->resource),
             'cover_is_city' => (bool) $this->cover_is_city,
@@ -52,16 +58,16 @@ class PublicUniversityResource extends JsonResource
             'student_count' => $this->student_count,
             'wikipedia_url' => $this->wikipedia_url,
             'nearest_airport' => $this->nearest_airport,
-            'about' => $this->about,
-            'overview' => $this->overview,
+            'about' => $compact && $this->about ? Str::limit($this->about, 220) : $this->about,
+            'overview' => $this->when(! $compact, fn () => $this->overview),
             // Source links in the guide are admin-only.
-            'guide' => $this->guide ? array_merge($this->guide, ['links' => []]) : null,
-            'requirements' => $this->requirements ?? [],
-            'representative_professor' => $rep ? [
+            'guide' => $this->when(! $compact, fn () => $this->guide ? array_merge($this->guide, ['links' => []]) : null),
+            'requirements' => $this->when(! $compact, fn () => $this->requirements ?? []),
+            'representative_professor' => $compact ? null : ($rep ? [
                 'name' => $rep['name'] ?? null,
                 'title' => $rep['title'] ?? null,
                 'photo_url' => $images->url($rep['photo'] ?? null),
-            ] : null,
+            ] : null),
             'programs_count' => $this->whenCounted('programs'),
             // Set for lists of cards: confirmed programs for international students, majors registered with the
             // Ministry of Education, and the first few program names.

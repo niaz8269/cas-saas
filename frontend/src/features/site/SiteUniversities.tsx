@@ -60,7 +60,7 @@ export default function SiteUniversities() {
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["site-universities", { q, moe, city, province, page, openIntake }],
-    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, province: province || undefined, openIntake, page }),
+    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, province: province || undefined, openIntake, page, include: ["lists"] }),
     placeholderData: keepPreviousData,
   })
 
@@ -138,7 +138,7 @@ export default function SiteUniversities() {
           </div>
         )}
 
-        {universities.map((u) => <UniCard key={u.id} u={u} />)}
+        {universities.map((u) => <UniCard key={u.id} u={u} as="h2" />)}
       </div>
 
       {meta && meta.total > 0 && meta.last_page > 1 && (

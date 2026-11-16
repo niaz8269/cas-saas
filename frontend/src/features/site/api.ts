@@ -178,6 +178,8 @@ export interface SiteUniversityCard {
   logo_url: string | null
   emblem_url?: string | null
   cover_url: string | null
+  /** A small (480 px) copy of the cover for cards, when one has been made. */
+  cover_thumb_url?: string | null
   cover_credit?: string | null
   cover_downloadable?: boolean
   /** True when the cover is a photo of the city because no campus photo was available. */
@@ -220,9 +222,10 @@ export interface Paginated<T> {
   meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null }
 }
 
-export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; province?: string; openIntake?: boolean; ids?: number[]; page?: number; perPage?: number } = {}) {
+export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: string; province?: string; openIntake?: boolean; ids?: number[]; page?: number; perPage?: number; /** Extras that are only sent when asked for: the city and province lists, and the per-city statistics. */ include?: ("lists" | "city_stats")[] } = {}) {
   const search = new URLSearchParams()
   if (params.q) search.set("q", params.q)
+  if (params.include?.length) search.set("include", params.include.join(","))
   if (params.moe) search.set("filter[moe_listed]", "1")
   if (params.city) search.set("filter[city]", params.city)
   if (params.province) search.set("filter[province]", params.province)

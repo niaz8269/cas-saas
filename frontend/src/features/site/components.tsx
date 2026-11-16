@@ -42,7 +42,7 @@ export function PhotoBanner({ src, image, className, children }: { src: string; 
 }
 
 /** University card shared by the home page and the universities listing. */
-export function UniCard({ u }: { u: SiteUniversityCard }) {
+export function UniCard({ u, as: Heading = "h3" }: { u: SiteUniversityCard; /** The card's heading level: h2 when the page has no heading between its title and the cards. */ as?: "h2" | "h3" }) {
   const { t } = useTranslation()
   // A campus photo if one is available; otherwise a credited photo of the city (never an unrelated image).
   const cover = u.cover_url ? { src: u.cover_url, credit: u.cover_credit ?? null, own: !u.cover_is_city } : null
@@ -57,8 +57,12 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
         {cover && (
           <>
             <img
-              src={cover.src}
+              src={u.cover_thumb_url ?? cover.src}
+              srcSet={u.cover_thumb_url ? `${u.cover_thumb_url} 480w, ${cover.src} 960w` : undefined}
+              sizes="(min-width: 1024px) 24rem, (min-width: 640px) 45vw, 100vw"
               alt=""
+              width={480}
+              height={176}
               loading="lazy"
               decoding="async"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -81,7 +85,7 @@ export function UniCard({ u }: { u: SiteUniversityCard }) {
             <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
           ) : null}
           <div className="min-w-0">
-            <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</h3>
+            <Heading className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</Heading>
             {u.name_zh && <p className="text-xs text-muted-foreground">{u.name_zh}</p>}
             {[u.city, u.province, u.country].filter(Boolean).length > 0 && (
               <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">

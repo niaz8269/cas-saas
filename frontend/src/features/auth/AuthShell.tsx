@@ -2,8 +2,8 @@ import { BarChart3, Building2, ScrollText, Settings2, Eye, EyeOff, FileCheck2, G
 import { forwardRef, useState, type ComponentProps, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
-import casLogo from "@/assets/cas-logo.png"
-import casLogoWhite from "@/assets/cas-logo-white.png"
+import casLogo from "@/assets/cas-logo.webp"
+import casLogoWhite from "@/assets/cas-logo-white.webp"
 import { Input } from "@/components/ui/input"
 import { langDef } from "@/i18n/languages"
 import { cn } from "@/lib/utils"

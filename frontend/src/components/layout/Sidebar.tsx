@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 
-import casLogo from "@/assets/cas-logo.png"
+import casLogo from "@/assets/cas-logo.webp"
 import { visibleNavGroups } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth"

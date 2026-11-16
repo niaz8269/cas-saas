@@ -1,23 +1,24 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, Phone, X, Youtube } from "lucide-react"
-import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
+import { lazy, useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 
-import casLogo from "@/assets/cas-logo.png"
-import casLogoWhite from "@/assets/cas-logo-white.png"
+import casLogo from "@/assets/cas-logo.webp"
+import casLogoWhite from "@/assets/cas-logo-white.webp"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import { WeChatGlyph, WhatsAppGlyph } from "@/features/site/brandIcons"
-import SiteHelpDock from "@/features/site/SiteHelpDock"
-import SiteWhatsAppButton from "@/features/site/SiteWhatsAppButton"
-import { loadTawk } from "@/lib/tawk"
+import { loadTawkWhenIdle } from "@/lib/tawk"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
 import LanguageSwitcher from "@/i18n/LanguageSwitcher"
 import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
+
+const SiteHelpDock = lazy(() => import("@/features/site/SiteHelpDock"))
+const SiteWhatsAppButton = lazy(() => import("@/features/site/SiteWhatsAppButton"))
 
 type NavItemT = { to: string; labelKey: string; dropdown?: [string, string][] }
 
@@ -251,7 +252,7 @@ export default function SiteLayout() {
   const loggedIn = Boolean(portalToken && portalKind)
 
   // Live chat (Tawk.to) on the public website only, loaded once after first paint.
-  useEffect(() => { loadTawk() }, [])
+  useEffect(() => loadTawkWhenIdle(), [])
 
   // Header is transparent over the home hero and turns solid once scrolled
   // (or on any non-home page). The logo stays the real colour mark throughout.
@@ -449,8 +450,11 @@ export default function SiteLayout() {
       </footer>
 
       {/* Persistent conversion chrome: HELP tab + bottom help bar + counsellor widget */}
-      <SiteHelpDock />
-      <SiteWhatsAppButton />
+      {/* Floating help buttons are not needed to read the page: load them after it. */}
+      <Suspense fallback={null}>
+        <SiteHelpDock />
+        <SiteWhatsAppButton />
+      </Suspense>
     </div>
   )
 }

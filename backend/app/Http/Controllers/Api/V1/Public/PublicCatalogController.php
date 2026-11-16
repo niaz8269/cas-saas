@@ -47,6 +47,7 @@ class PublicCatalogController extends Controller
     public function universities(Request $request): AnonymousResourceCollection
     {
         $audience = $this->audience($request);
+        $request->attributes->set('compact_universities', true);
 
         $buildUniversities = fn (array $terms) => University::query()
             ->where('status', 'active')
@@ -89,9 +90,13 @@ class PublicCatalogController extends Controller
             fn () => $this->universityPhrases(),
         );
 
+        // The directory's filter lists and the destinations page's city statistics are big (the statistics alone are
+        // ~60 KB), so they are sent only to the pages that ask for them: ?include=lists,city_stats.
+        $include = array_filter(explode(',', (string) $request->input('include')));
+
         // Distinct cities for the directory filter (active universities only).
         $province = $request->input('filter.province');
-        $cities = cache()->remember('public.cities.v1.'.md5((string) $province), now()->addMinutes(10), fn () => University::query()
+        $cities = ! in_array('lists', $include, true) ? null : cache()->remember('public.cities.v1.'.md5((string) $province), now()->addMinutes(10), fn () => University::query()
             ->where('status', 'active')
             ->whereNotNull('city')
             ->where('city', '!=', '')
@@ -101,7 +106,7 @@ class PublicCatalogController extends Controller
             ->pluck('city'));
 
         // Distinct provinces for the directory filter.
-        $provinces = cache()->remember('public.provinces.v1', now()->addMinutes(10), fn () => University::query()
+        $provinces = ! in_array('lists', $include, true) ? null : cache()->remember('public.provinces.v1', now()->addMinutes(10), fn () => University::query()
             ->where('status', 'active')
             ->whereNotNull('province')
             ->where('province', '!=', '')
@@ -112,7 +117,11 @@ class PublicCatalogController extends Controller
         $this->attachProgramPreview($universities);
 
         return PublicUniversityResource::collection($universities)
-            ->additional(['cities' => $cities, 'provinces' => $provinces, 'city_stats' => $this->cityStats(), 'audience' => $audience, 'suggestion' => $suggestion]);
+            ->additional(array_filter([
+                'cities' => $cities,
+                'provinces' => $provinces,
+                'city_stats' => in_array('city_stats', $include, true) ? $this->cityStats() : null,
+            ], fn ($v) => $v !== null) + ['audience' => $audience, 'suggestion' => $suggestion]);
     }
 
     /**
@@ -225,6 +234,7 @@ class PublicCatalogController extends Controller
     public function city(Request $request, string $slug): JsonResponse
     {
         $audience = $this->audience($request);
+        $request->attributes->set('compact_universities', true);
         $all = University::query()->where('status', 'active')->whereNotNull('city')->orderBy('name')->get();
         $city = $all->first(fn ($u) => Str::slug($u->city) === $slug)?->city;
         abort_unless($city, 404);

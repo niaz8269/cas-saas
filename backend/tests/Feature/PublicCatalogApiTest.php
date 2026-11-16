@@ -60,7 +60,7 @@ it('filters by city and returns the distinct city list', function () {
     University::factory()->create(['name' => 'Beta Tech', 'city' => 'Beijing', 'status' => 'active']);
     University::factory()->create(['name' => 'Hidden', 'city' => 'Beijing', 'status' => 'inactive']);
 
-    $response = $this->getJson('/api/v1/public/universities?filter[city]=Beijing')
+    $response = $this->getJson('/api/v1/public/universities?filter[city]=Beijing&include=lists')
         ->assertOk()
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.name', 'Beta Tech');
