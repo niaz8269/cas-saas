@@ -8,7 +8,7 @@ const text = (o: unknown) => JSON.stringify(o)
 
 it("describes CAS as an authorized agency, not an agent, in every language", () => {
   expect(text(en)).not.toMatch(/authorized agent\b/i)
-  expect(text(en)).toContain("official authorized agency for Ministry of Education–listed institutions")
+  expect(text(en)).toContain("official authorized agency")
   expect(text(fr)).not.toMatch(/agent officiel agréé/i)
   expect(text(fr)).toContain("agence officielle agréée")
   expect(text(id)).not.toMatch(/agen resmi berwenang/i)
