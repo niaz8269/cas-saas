@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Award, Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -14,8 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import RowActions from "@/components/RowActions"
 import { useCan } from "@/features/auth/useCan"
-import { listScholarshipsByScope, type Scholarship } from "@/features/catalog/api"
+import { deleteScholarship, listScholarshipsByScope, type Scholarship } from "@/features/catalog/api"
 import ScholarshipFormDialog from "@/features/catalog/dialogs/ScholarshipFormDialog"
 import { cn } from "@/lib/utils"
 
@@ -25,6 +26,7 @@ const money = (value: string | number | null, currency: string | null): string =
 export default function ScholarshipsPage() {
   const can = useCan()
   const canManage = can("scholarships.manage.global")
+  const queryClient = useQueryClient()
 
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
@@ -82,6 +84,7 @@ export default function ScholarshipsPage() {
               <TableHead>Tuition after</TableHead>
               <TableHead>Stipend / mo</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="sticky right-0 w-12 bg-subtle"><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -96,7 +99,7 @@ export default function ScholarshipsPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
+                <TableCell colSpan={7} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load scholarships.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>Try again</Button>
                 </TableCell>
@@ -105,7 +108,7 @@ export default function ScholarshipsPage() {
 
             {!isPending && !isError && rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+                <TableCell colSpan={7} className="py-12 text-center">
                   <Award className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No government scholarships yet</p>
                   {canManage && <p className="mt-1 text-sm text-muted-foreground">Add one with “New scholarship”.</p>}
@@ -124,6 +127,13 @@ export default function ScholarshipsPage() {
                   <Badge variant="outline" className={cn("border-transparent capitalize", s.status === "active" ? "bg-green-50 text-green-700" : "bg-muted text-muted-foreground")}>
                     {s.status}
                   </Badge>
+                </TableCell>
+                <TableCell className="sticky right-0 bg-card text-right">
+                  <RowActions
+                    name={s.name}
+                    onEdit={canManage ? () => openEdit(s) : undefined}
+                    onDelete={canManage ? () => deleteScholarship(s.id).then(() => queryClient.invalidateQueries({ queryKey: ["scholarships"] })) : undefined}
+                  />
                 </TableCell>
               </TableRow>
             ))}

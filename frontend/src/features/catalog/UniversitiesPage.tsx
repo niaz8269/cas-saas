@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Plus, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -22,8 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import RowActions from "@/components/RowActions"
 import { useCan } from "@/features/auth/useCan"
-import { listUniversities } from "@/features/catalog/api"
+import { deleteUniversity, listUniversities } from "@/features/catalog/api"
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
 import { cn } from "@/lib/utils"
 
@@ -35,6 +36,8 @@ const STATUS_BADGE: Record<string, string> = {
 export default function UniversitiesPage() {
   const navigate = useNavigate()
   const can = useCan()
+  const queryClient = useQueryClient()
+  const canManage = can("universities.manage.global")
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
@@ -116,13 +119,14 @@ export default function UniversitiesPage() {
               <TableHead className="text-right">Programs</TableHead>
               <TableHead className="text-right">Intakes</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isPending &&
               Array.from({ length: 5 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 6 }).map((_, cell) => (
+                  {Array.from({ length: 7 }).map((_, cell) => (
                     <TableCell key={cell}>
                       <Skeleton className="h-4 w-full max-w-32" />
                     </TableCell>
@@ -132,7 +136,7 @@ export default function UniversitiesPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
+                <TableCell colSpan={7} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load universities.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>
                     Try again
@@ -143,7 +147,7 @@ export default function UniversitiesPage() {
 
             {!isPending && !isError && universities.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+                <TableCell colSpan={7} className="py-12 text-center">
                   <School className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No universities found</p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -177,6 +181,15 @@ export default function UniversitiesPage() {
                   >
                     {university.status}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <RowActions
+                    name={university.name}
+                    onOpen={() => navigate(`/universities/${university.id}`)}
+                    onEdit={canManage ? () => navigate(`/universities/${university.id}?edit=1`) : undefined}
+                    onDelete={canManage ? () => deleteUniversity(university.id).then(() => queryClient.invalidateQueries({ queryKey: ["universities"] })) : undefined}
+                    deleteNote="Its programs, intakes and scholarships disappear from the site with it."
+                  />
                 </TableCell>
               </TableRow>
             ))}

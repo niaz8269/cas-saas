@@ -256,6 +256,8 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:users.manage.global,staff');
         Route::patch('users/{user}', [UserController::class, 'update'])
             ->middleware('permission:users.manage.global,staff');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])
+            ->middleware('permission:users.manage.global,staff');
         Route::get('roles', [RoleController::class, 'index'])
             ->middleware('permission:users.manage.global,staff');
         Route::get('roles/matrix', [RoleController::class, 'matrix'])

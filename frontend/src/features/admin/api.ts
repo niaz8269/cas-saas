@@ -425,3 +425,6 @@ export const saveHomeSpotlight = (lists: Partial<Record<SpotlightList, number[]>
 
 export const searchSpotlightOptions = (list: SpotlightList, q: string) =>
   api<{ data: SpotlightItem[] }>(`/home-spotlight/options/${list}?q=${encodeURIComponent(q)}`)
+
+export const deleteUser = (id: number) =>
+  api<{ message: string }>(`/users/${id}`, { method: "DELETE" })

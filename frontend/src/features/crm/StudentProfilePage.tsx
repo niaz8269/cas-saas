@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useSearchParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -72,7 +72,9 @@ export default function StudentProfilePage() {
   const [note, setNote] = useState("")
   const [noteType, setNoteType] = useState<ActivityType>("note")
   const [actionError, setActionError] = useState<string | null>(null)
-  const [editOpen, setEditOpen] = useState(false)
+  // "Edit" in the student list opens this page with the editor already open.
+  const [searchParams] = useSearchParams()
+  const [editOpen, setEditOpen] = useState(searchParams.get("edit") === "1")
   const [switchOpen, setSwitchOpen] = useState(false)
   const canSwitchRole = can("agents.manage.global")
 
