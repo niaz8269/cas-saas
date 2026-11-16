@@ -2,6 +2,7 @@
 
 use App\Exceptions\ChecklistIncompleteException;
 use App\Http\Middleware\AuthenticateApiSource;
+use App\Http\Middleware\CanonicalHost;
 use App\Http\Middleware\SecurityHeaders;
 use App\Services\Monitoring\ErrorLogger;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // There is no web login page: an unauthenticated API call is a plain 401, never a redirect (which ended in a 500).
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') || $request->expectsJson() ? null : '/login');
+        $middleware->prepend(CanonicalHost::class);
         $middleware->append(SecurityHeaders::class);
         $middleware->alias([
             'role' => RoleMiddleware::class,
