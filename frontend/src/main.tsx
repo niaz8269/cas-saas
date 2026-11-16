@@ -67,6 +67,7 @@ const SiteCities = lazy(() => import("@/features/site/SiteCities"))
 const SiteCity = lazy(() => import("@/features/site/SiteCity"))
 const SiteMbbs = lazy(() => import("@/features/site/SiteMbbs"))
 const SiteCsc = lazy(() => import("@/features/site/SiteCsc"))
+const SiteTopic = lazy(() => import("@/features/site/SiteTopic"))
 import SiteNotFound from "@/features/site/SiteNotFound"
 const SitePrivacy = lazy(() => import("@/features/site/SitePrivacy"))
 const SiteShareExperience = lazy(() => import("@/features/site/SiteShareExperience"))
@@ -142,6 +143,7 @@ const router = createBrowserRouter([
       { path: "/site/share-your-experience", element: <SiteShareExperience /> },
       { path: "/site/terms", element: <SiteTerms /> },
       { path: "/site/privacy", element: <SitePrivacy /> },
+      { path: "/site/:topic", element: <SiteTopic /> },
       { path: "/site/*", element: <SiteNotFound /> },
     ],
   },

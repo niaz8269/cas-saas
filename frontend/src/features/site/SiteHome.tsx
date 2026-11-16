@@ -30,6 +30,7 @@ import { useSeo } from "@/lib/seo"
 
 // Below the fold, or shown only later: loaded after the first screen.
 const Testimonials = lazy(() => import("@/features/site/Testimonials"))
+const TopicLinks = lazy(() => import("@/features/site/TopicLinks"))
 const HomeEnquiryPopup = lazy(() => import("@/features/site/HomeEnquiryPopup"))
 
 
@@ -520,6 +521,9 @@ export default function SiteHome() {
           ? <div key={s.key}>{node}</div>
           : <div key={s.key} className="mx-auto w-full max-w-7xl px-4 empty:hidden sm:px-6">{node}</div>
       })}
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+        <Suspense fallback={null}><TopicLinks /></Suspense>
+      </div>
     </div>
   )
 }

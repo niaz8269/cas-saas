@@ -44,6 +44,7 @@ use App\Http\Controllers\Api\V1\ProgramController;
 use App\Http\Controllers\Api\V1\Public\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Public\PublicEnquiryController;
 use App\Http\Controllers\Api\V1\Public\PublicMediaController;
+use App\Http\Controllers\Api\V1\Public\PublicTopicController;
 use App\Http\Controllers\Api\V1\PublicPostController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
@@ -97,6 +98,9 @@ Route::prefix('v1')->group(function () {
         // Content: blogs / news / events (published only)
         Route::get('posts', [PublicPostController::class, 'index']);
         Route::get('posts/{slug}', [PublicPostController::class, 'show']);
+        // Landing pages for the main searches (BDS in China, MBBS for Pakistani students, Chinese language, ...)
+        Route::get('topics', [PublicTopicController::class, 'index']);
+        Route::get('topics/{slug}', [PublicTopicController::class, 'show']);
         // The home page layout and any text/image changes made in the admin panel
         Route::get('home', [HomeSectionController::class, 'publicIndex']);
         Route::get('home-spotlight', [HomeSpotlightController::class, 'publicShow']);

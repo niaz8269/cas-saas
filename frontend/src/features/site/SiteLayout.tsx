@@ -408,6 +408,10 @@ export default function SiteLayout() {
               <li><Link to="/site/scholarships?type=government" className="hover:text-white">{t("footer.exploreScholarships")}</Link></li>
               <li><Link to="/site/mbbs-in-china" className="hover:text-white">{t("footer.exploreMbbs")}</Link></li>
               <li><Link to="/site/csc-scholarship" className="hover:text-white">{t("footer.exploreCsc")}</Link></li>
+              <li><Link to="/site/bds-in-china" className="hover:text-white">BDS in China</Link></li>
+              <li><Link to="/site/engineering-in-china" className="hover:text-white">Engineering in China</Link></li>
+              <li><Link to="/site/chinese-language-program" className="hover:text-white">Chinese Language Program</Link></li>
+              <li><Link to="/site/study-in-china-for-pakistani-students" className="hover:text-white">Study in China for Pakistani Students</Link></li>
               <li><Link to="/site/why-china?read=intro" className="hover:text-white">{t("footer.exploreWhyChina")}</Link></li>
               <li><Link to="/site/news?view=all" className="hover:text-white">{t("footer.exploreNews")}</Link></li>
               <li><Link to="/site/share-your-experience" className="hover:text-white">{t("footer.shareExperience", { defaultValue: "Share your experience" })}</Link></li>
