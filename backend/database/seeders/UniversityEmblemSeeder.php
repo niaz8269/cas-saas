@@ -21,6 +21,8 @@ class UniversityEmblemSeeder extends Seeder
         'xinjiang-medical-university' => 'xjmu',
         'zhejiang-university-of-science-and-technology' => 'zust',
         'jiangsu-university' => 'ujs',
+        // Logo and seal from the college's own website header (School of International Education).
+        'shenyang-medical-college' => 'shenyang-medical-college',
     ];
 
     public function run(): void
