@@ -356,7 +356,17 @@ class SeoPageBuilder
     /** @param array<string, mixed> $t */
     private function topic(array $t): array
     {
-        $html = '<h1>'.e($t['h1']).'</h1><p>'.e($t['intro']).'</p>';
+        $html = '<h1>'.e($t['h1']).'</h1><p><strong>'.e($t['answer']).'</strong></p><p>'.e($t['intro']).'</p>';
+        if ($f = $t['facts']) {
+            $line = 'On CAS right now: '.$f['programs'].' matching programs at '.$f['universities'].' universities.';
+            if ($f['tuition']) {
+                $line .= ' Public tuition runs from '.number_format($f['tuition']['min']).' to '.number_format($f['tuition']['max']).' CNY a year across '.$f['tuition']['programs'].' programs.';
+            }
+            $html .= '<p>'.e($line).'</p>';
+            if ($f['deadlines']) {
+                $html .= '<h2>Next application deadlines</h2>'.$this->ul(array_map(fn ($d) => $this->link('/site/universities/'.$d['slug'], $d['university']).': '.e($d['date']), $f['deadlines']));
+            }
+        }
         foreach ($t['sections'] as $s) {
             $html .= '<h2>'.e($s['h']).'</h2>';
             foreach ($s['p'] ?? [] as $p) {
@@ -378,7 +388,11 @@ class SeoPageBuilder
             .'<p>'.$this->link('/site/programs?q='.urlencode((string) $t['search']), 'Find programs').' · '.$this->link('/site/study-plan', 'Get a free study plan').' · '.$this->link('/site/contact', 'Talk to a counselor').'</p>';
 
         $canonical = '/site/'.$t['slug'];
-        $ld = $entities ? [['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities]] : [];
+        $html .= '<p>Last reviewed '.e($t['updated']).'.</p>';
+        $ld = [['@context' => 'https://schema.org', '@type' => 'WebPage', 'name' => $t['h1'], 'description' => $t['description'], 'dateModified' => $t['updated'], 'publisher' => ['@type' => 'Organization', 'name' => config('seo.site_name')]]];
+        if ($entities) {
+            $ld[] = ['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities];
+        }
 
         return $this->page($t['title'], $t['description'], $canonical, jsonLd: $ld, crumbs: [['Home', '/'], [$t['h1'], $canonical]], body: $html);
     }
