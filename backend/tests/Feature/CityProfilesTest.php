@@ -14,7 +14,7 @@ it('filters the university list by province and lists the provinces', function (
     University::factory()->create(['slug' => 'b', 'status' => 'active', 'city' => 'Ningbo', 'province' => 'Zhejiang']);
     University::factory()->create(['slug' => 'c', 'status' => 'active', 'city' => 'Xi\'an', 'province' => 'Shaanxi']);
 
-    $res = getJson('/api/v1/public/universities?filter[province]=Zhejiang')->assertOk();
+    $res = getJson('/api/v1/public/universities?filter[province]=Zhejiang&include=lists')->assertOk();
 
     expect(collect($res->json('data'))->pluck('slug')->sort()->values()->all())->toBe(['a', 'b'])
         ->and($res->json('provinces'))->toBe(['Shaanxi', 'Zhejiang'])

@@ -60,7 +60,7 @@ export default function SiteUniversities() {
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["site-universities", { q, moe, city, province, page, openIntake }],
-    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, province: province || undefined, openIntake, page }),
+    queryFn: () => getSiteUniversities({ q: q || undefined, moe, city: city || undefined, province: province || undefined, openIntake, page, include: ["lists"] }),
     placeholderData: keepPreviousData,
   })
 

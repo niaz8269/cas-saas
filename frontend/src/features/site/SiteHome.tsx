@@ -65,7 +65,7 @@ export default function SiteHome() {
   const [contentTab, setContentTab] = useState("questions")
 
   // Real data only: featured universities and programs are the ones with a published admission window that is open.
-  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12 }) })
+  const universities = useQuery({ queryKey: ["site-universities", "home"], queryFn: () => getSiteUniversities({ page: 1, perPage: 12, include: ["city_stats"] }) })
   // What the team picked by hand (admin → Home page → Hand-picked), in their order. A list with nothing picked fills itself.
   const picks = useQuery({ queryKey: ["home-spotlight"], queryFn: getHomeSpotlight, staleTime: 60_000 })
   const heroIds = picks.data?.data.hero_universities ?? []

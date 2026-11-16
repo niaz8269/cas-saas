@@ -41,3 +41,15 @@ it('gives a card the small copy of its photo once it exists, and the original un
         ->and($row['cover_url'])->toBe('/photos/abc.webp')
         ->and(getimagesize($dir.'/photos/thumbs/abc.webp')[0])->toBe(480);
 })->skip(! function_exists('imagewebp'), 'needs the GD WebP extension');
+
+it('sends the directory lists and the city statistics only to pages that ask for them', function () {
+    University::factory()->create(['slug' => 'a', 'status' => 'active', 'city' => 'Hangzhou', 'province' => 'Zhejiang']);
+
+    $plain = getJson('/api/v1/public/universities')->assertOk()->json();
+    expect($plain)->not->toHaveKeys(['cities', 'provinces', 'city_stats']);
+
+    $withLists = getJson('/api/v1/public/universities?include=lists')->json();
+    expect($withLists['cities'])->toBe(['Hangzhou'])->and($withLists['provinces'])->toBe(['Zhejiang'])->and($withLists)->not->toHaveKey('city_stats');
+
+    expect(getJson('/api/v1/public/universities?include=city_stats')->json('city_stats.0.city'))->toBe('Hangzhou');
+});
