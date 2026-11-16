@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Public\PublicMediaController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\SeoController;
+use App\Services\Seo\LegacyRedirects;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
@@ -31,6 +32,11 @@ Route::get('/ready', [HealthController::class, 'ready']);
 // Staff app and portals (single-page app routes): same shell, never indexed.
 Route::fallback(function (Request $request) {
     abort_if(str_starts_with($request->path(), 'api/') || ! $request->isMethod('GET'), 404);
+
+    // Addresses from the previous version of the website go to their new page with a permanent redirect.
+    if ($to = app(LegacyRedirects::class)->target($request->path())) {
+        return redirect($to, 301);
+    }
 
     return app(SeoController::class)->shell($request);
 });
