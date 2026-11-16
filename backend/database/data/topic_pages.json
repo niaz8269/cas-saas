@@ -86,7 +86,8 @@
    "dentistry",
    "dental",
    "bds"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "bds-in-china-for-pakistani-students",
@@ -154,7 +155,8 @@
    "dentistry",
    "dental",
    "bds"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "bds-in-china-for-indian-students",
@@ -222,7 +224,8 @@
    "dentistry",
    "dental",
    "bds"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "engineering-in-china",
@@ -296,7 +299,8 @@
   "answer": "Engineering degrees in China take about four years at bachelor's level and two to three at master's. Many universities teach in English, and Chinese-taught programs usually ask for an HSK certificate.",
   "facts_terms": [
    "engineering"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "civil-engineering-in-china",
@@ -361,7 +365,8 @@
   "answer": "Civil engineering in China is a four-year bachelor's or a two-to-three-year master's, taught in English at many universities.",
   "facts_terms": [
    "civil engineering"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "mechanical-engineering-in-china",
@@ -426,7 +431,8 @@
   "answer": "Mechanical engineering in China is a four-year bachelor's or a two-to-three-year master's, taught in English at many universities.",
   "facts_terms": [
    "mechanical engineering"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "aerospace-engineering-in-china",
@@ -492,7 +498,8 @@
   "facts_terms": [
    "aerospace",
    "aeronautic"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "biomedical-engineering-in-china",
@@ -557,7 +564,8 @@
   "answer": "Biomedical engineering in China is offered at engineering and medical universities, often with English-taught master's tracks.",
   "facts_terms": [
    "biomedical engineering"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "automotive-engineering-in-china",
@@ -623,7 +631,8 @@
   "facts_terms": [
    "automotive",
    "vehicle"
-  ]
+  ],
+  "facts_level": null
  },
  {
   "slug": "chinese-language-program",
@@ -694,7 +703,8 @@
   "answer": "A Chinese language program is a non-degree course at a Chinese university that lasts from a few weeks to one or two years. Courses longer than 180 days normally use an X1 visa.",
   "facts_terms": [
    "chinese language"
-  ]
+  ],
+  "facts_level": "non_degree"
  },
  {
   "slug": "chinese-language-program-scholarship",
@@ -749,7 +759,8 @@
   "answer": "Chinese language study can be funded by the Chinese Government Scholarship (CSC), provincial awards and university scholarships, each with its own deadline.",
   "facts_terms": [
    "chinese language"
-  ]
+  ],
+  "facts_level": "non_degree"
  },
  {
   "slug": "study-in-china-for-six-months",
@@ -804,7 +815,8 @@
   "answer": "Six months of study in China is one semester. Study of 180 days or less normally uses an X2 visa and longer study uses X1.",
   "facts_terms": [
    "chinese language"
-  ]
+  ],
+  "facts_level": "non_degree"
  },
  {
   "slug": "mbbs-in-china-for-pakistani-students",
@@ -881,7 +893,8 @@
   "facts_terms": [
    "mbbs",
    "clinical medicine"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "mbbs-in-china-for-indian-students",
@@ -948,7 +961,8 @@
   "facts_terms": [
    "mbbs",
    "clinical medicine"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "mbbs-in-china-for-bangladeshi-students",
@@ -1004,7 +1018,8 @@
   "facts_terms": [
    "mbbs",
    "clinical medicine"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "mbbs-in-china-fees",
@@ -1067,7 +1082,8 @@
   "facts_terms": [
    "mbbs",
    "clinical medicine"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "mbbs-in-china-admission-requirements",
@@ -1130,7 +1146,8 @@
   "facts_terms": [
    "mbbs",
    "clinical medicine"
-  ]
+  ],
+  "facts_level": "bachelor"
  },
  {
   "slug": "study-in-china-for-pakistani-students",
@@ -1194,7 +1211,8 @@
   ],
   "updated": "2026-11-17",
   "answer": "Pakistani students can apply to Chinese universities after FSc or a bachelor's degree, and can apply for CSC, provincial and university scholarships.",
-  "facts_terms": []
+  "facts_terms": [],
+  "facts_level": null
  },
  {
   "slug": "study-in-china-for-indian-students",
@@ -1254,7 +1272,8 @@
   ],
   "updated": "2026-11-17",
   "answer": "Indian students apply to China mainly for medicine, engineering, business and Chinese language. For medicine and dentistry, confirm the Indian regulator's current rules first.",
-  "facts_terms": []
+  "facts_terms": [],
+  "facts_level": null
  },
  {
   "slug": "study-in-china-for-bangladeshi-students",
@@ -1307,7 +1326,8 @@
   ],
   "updated": "2026-11-17",
   "answer": "Bangladeshi students apply to Chinese universities after HSC or a bachelor's degree and can apply for CSC and university scholarships.",
-  "facts_terms": []
+  "facts_terms": [],
+  "facts_level": null
  },
  {
   "slug": "study-in-china-scholarships",
@@ -1360,7 +1380,8 @@
   ],
   "updated": "2026-11-17",
   "answer": "The main scholarships to study in China are the Chinese Government Scholarship (CSC), provincial government scholarships and university scholarships. Some are fully funded, and all are competitive.",
-  "facts_terms": null
+  "facts_terms": null,
+  "facts_level": null
  },
  {
   "slug": "study-in-china-consultants",
@@ -1413,6 +1434,7 @@
   ],
   "updated": "2026-11-17",
   "answer": "Before you pay any study in China agent, check that it is authorized by the universities it recommends, that fees are in writing, and that the admission letter comes from the university itself.",
-  "facts_terms": null
+  "facts_terms": null,
+  "facts_level": null
  }
 ]

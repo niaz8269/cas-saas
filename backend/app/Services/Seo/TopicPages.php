@@ -32,7 +32,7 @@ class TopicPages
         if (! $page) {
             return null;
         }
-        $facts = isset($page['facts_terms']) ? app(TopicFacts::class)->for($page['facts_terms']) : null;
+        $facts = isset($page['facts_terms']) ? app(TopicFacts::class)->for($page['facts_terms'], $page['facts_level'] ?? null) : null;
 
         return $page + ['related_links' => $this->related($page), 'facts' => $facts];
     }

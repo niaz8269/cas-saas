@@ -43,7 +43,7 @@ it('lists every topic in the sitemap and keeps copy and related links consistent
 it('shows real catalog facts on a topic page', function () {
     $uni = University::factory()->create(['status' => 'active', 'slug' => 'dent-uni', 'name' => 'Dent Uni']);
     foreach ([20000, 30000, 40000] as $fee) {
-        Program::factory()->create(['university_id' => $uni->id, 'name' => 'Stomatology '.$fee, 'status' => 'active', 'registry_only' => false, 'currency' => 'CNY', 'tuition_fee' => $fee]);
+        Program::factory()->create(['university_id' => $uni->id, 'name' => 'Stomatology '.$fee, 'level' => 'bachelor', 'status' => 'active', 'registry_only' => false, 'currency' => 'CNY', 'tuition_fee' => $fee]);
     }
     Intake::factory()->create(['university_id' => $uni->id, 'program_id' => Program::first()->id, 'status' => 'open', 'application_deadline' => now()->addMonth()]);
 
@@ -52,4 +52,13 @@ it('shows real catalog facts on a topic page', function () {
 
     $html = get('/site/bds-in-china')->getContent();
     expect($html)->toContain('On CAS right now: 3 matching programs at 1 universities')->and($html)->toContain('Last reviewed 2026-11-17')->and($html)->toContain('dateModified');
+});
+
+it('serves the "every program" topics and keeps BDS facts to bachelor programs', function () {
+    $uni = University::factory()->create(['status' => 'active']);
+    Program::factory()->create(['university_id' => $uni->id, 'name' => 'Stomatology (BDS)', 'level' => 'bachelor', 'status' => 'active', 'registry_only' => false]);
+    Program::factory()->create(['university_id' => $uni->id, 'name' => 'Stomatology', 'level' => 'master', 'status' => 'active', 'registry_only' => false]);
+
+    getJson('/api/v1/public/topics/study-in-china-for-pakistani-students')->assertOk()->assertJsonPath('data.facts.programs', 2);
+    getJson('/api/v1/public/topics/bds-in-china')->assertOk()->assertJsonPath('data.facts.programs', 1);
 });
