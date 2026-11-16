@@ -369,3 +369,19 @@ export type HomeSpotlightIds = Record<"hero_universities" | "update_universities
 
 /** Ids of the items staff picked, in their order. An empty list means the site picks automatically. */
 export const getHomeSpotlight = () => siteApi<{ data: HomeSpotlightIds }>("/public/home-spotlight")
+
+export interface SiteTopic {
+  slug: string
+  title: string
+  description: string
+  h1: string
+  eyebrow: string
+  intro: string
+  sections: { h: string; p?: string[]; ul?: string[] }[]
+  faq: { q: string; a: string }[]
+  search: string
+  related_links: { title: string; path: string }[]
+}
+
+export const getSiteTopics = () => siteApi<{ data: { slug: string; title: string; eyebrow: string }[] }>("/public/topics")
+export const getSiteTopic = (slug: string) => siteApi<{ data: SiteTopic }>(`/public/topics/${slug}`)

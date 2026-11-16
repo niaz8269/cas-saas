@@ -7,6 +7,7 @@ use App\Models\University;
 use App\Services\Media\ImageService;
 use App\Services\Seo\SeoIndexability;
 use App\Services\Seo\SeoPageBuilder;
+use App\Services\Seo\TopicPages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,7 +21,7 @@ use Illuminate\Support\Str;
  */
 class SeoController extends Controller
 {
-    public function __construct(private readonly SeoPageBuilder $builder, private readonly ImageService $images) {}
+    public function __construct(private readonly SeoPageBuilder $builder, private readonly ImageService $images, private readonly TopicPages $topics) {}
 
     public function shell(Request $request): Response|RedirectResponse
     {
@@ -89,6 +90,9 @@ class SeoController extends Controller
             case 'pages':
                 foreach (config('seo.pages') as $path => [, , $priority, $freq]) {
                     $urls[] = ['loc' => $site.($path === '' ? '/' : '/'.$path), 'changefreq' => $freq, 'priority' => $priority];
+                }
+                foreach (array_keys($this->topics->all()) as $slug) {
+                    $urls[] = ['loc' => $site.'/site/'.$slug, 'changefreq' => 'monthly', 'priority' => 0.8];
                 }
                 break;
             case 'universities':

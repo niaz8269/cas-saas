@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
  */
 class SeoPageBuilder
 {
-    public function __construct(private readonly ImageService $images) {}
+    public function __construct(private readonly ImageService $images, private readonly TopicPages $topics) {}
 
     /** @return array<string, mixed> */
     public function build(string $path): array
@@ -46,6 +46,10 @@ class SeoPageBuilder
         }
         if (preg_match('#^site/news/([^/]+)$#', $path, $m)) {
             return $this->post($m[1]) ?? $this->notFound();
+        }
+
+        if (preg_match('#^site/([^/]+)$#', $path, $m) && ($topic = $this->topics->find($m[1]))) {
+            return $this->topic($topic);
         }
 
         if (str_starts_with($path, 'site/') || $path === 'site') {
@@ -349,6 +353,36 @@ class SeoPageBuilder
     }
 
     /** @return list<array{title: string, items: list<array{q: string, a: string}>}> */
+    /** @param array<string, mixed> $t */
+    private function topic(array $t): array
+    {
+        $html = '<h1>'.e($t['h1']).'</h1><p>'.e($t['intro']).'</p>';
+        foreach ($t['sections'] as $s) {
+            $html .= '<h2>'.e($s['h']).'</h2>';
+            foreach ($s['p'] ?? [] as $p) {
+                $html .= '<p>'.e($p).'</p>';
+            }
+            if (! empty($s['ul'])) {
+                $html .= $this->ul(array_map('e', $s['ul']));
+            }
+        }
+        $entities = [];
+        if ($t['faq']) {
+            $html .= '<h2>Frequently asked questions</h2>';
+            foreach ($t['faq'] as $f) {
+                $html .= '<h3>'.e($f['q']).'</h3><p>'.e($f['a']).'</p>';
+                $entities[] = ['@type' => 'Question', 'name' => $f['q'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']]];
+            }
+        }
+        $html .= '<h2>Related</h2>'.$this->ul(array_map(fn ($l) => $this->link($l['path'], $l['title']), $t['related_links']))
+            .'<p>'.$this->link('/site/programs?q='.urlencode((string) $t['search']), 'Find programs').' · '.$this->link('/site/study-plan', 'Get a free study plan').' · '.$this->link('/site/contact', 'Talk to a counselor').'</p>';
+
+        $canonical = '/site/'.$t['slug'];
+        $ld = $entities ? [['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities]] : [];
+
+        return $this->page($t['title'], $t['description'], $canonical, jsonLd: $ld, crumbs: [['Home', '/'], [$t['h1'], $canonical]], body: $html);
+    }
+
     private function faqData(): array
     {
         $path = database_path('data/faq.json');
