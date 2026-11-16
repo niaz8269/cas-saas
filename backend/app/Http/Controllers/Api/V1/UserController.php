@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Validation\ValidationException;
@@ -82,6 +83,25 @@ class UserController extends Controller
         }
 
         return new UserResource($user->load(self::SHOW_RELATIONS));
+    }
+
+    /** Removes a staff account (soft delete, so what they did stays in the audit trail). */
+    public function destroy(Request $request, User $user): JsonResponse
+    {
+        $actor = $request->user();
+
+        if ($user->is($actor)) {
+            throw ValidationException::withMessages(['user' => 'You cannot delete your own account.']);
+        }
+        // Only a Super Admin may remove a Super Admin account.
+        if ($user->hasRole('Super Admin') && ! $actor->hasRole('Super Admin')) {
+            abort(403, 'Only a Super Admin can delete a Super Admin account.');
+        }
+
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted.']);
     }
 
     /**

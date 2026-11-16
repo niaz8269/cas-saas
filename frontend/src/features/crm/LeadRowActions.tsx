@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ExternalLink, MoreHorizontal, UserCheck, UserPlus } from "lucide-react"
+import { ExternalLink, MoreHorizontal, Pencil, Trash2, UserCheck, UserPlus } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { assignLead, convertLead, listStaff, type LeadListItem } from "@/features/crm/api"
+import { assignLead, convertLead, deleteLead, listStaff, type LeadListItem } from "@/features/crm/api"
 import { useCan } from "@/features/auth/useCan"
 import { ApiError } from "@/lib/api"
 
@@ -38,6 +38,7 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
 
   const [assignOpen, setAssignOpen] = useState(false)
   const [convertOpen, setConvertOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
   const [selectedStaff, setSelectedStaff] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -60,6 +61,21 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
       setError(null)
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : "Assignment failed."),
+  })
+
+  const canEdit = can("leads.update.global") || can("leads.update.assigned")
+  const canDelete = can("leads.delete.global")
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteLead(lead.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leads"] })
+      setDeleteOpen(false)
+    },
+    onError: (err) => {
+      setDeleteOpen(false)
+      setError(err instanceof ApiError ? err.message : "Could not delete the lead.")
+    },
   })
 
   const convertMutation = useMutation({
@@ -89,6 +105,11 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
               <UserPlus className="size-4" /> View student
             </DropdownMenuItem>
           )}
+          {canEdit && (
+            <DropdownMenuItem onSelect={() => navigate(`/leads/${lead.id}`)}>
+              <Pencil className="size-4" /> Edit
+            </DropdownMenuItem>
+          )}
           {(canAssign || canConvert) && <DropdownMenuSeparator />}
           {canAssign && (
             <DropdownMenuItem onSelect={() => setAssignOpen(true)}>
@@ -98,6 +119,12 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
           {canConvert && (
             <DropdownMenuItem onSelect={() => setConvertOpen(true)}>
               <UserPlus className="size-4" /> Convert to student
+            </DropdownMenuItem>
+          )}
+          {canDelete && <DropdownMenuSeparator />}
+          {canDelete && (
+            <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
+              <Trash2 className="size-4" /> Delete
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -132,6 +159,22 @@ export default function LeadRowActions({ lead }: { lead: LeadListItem }) {
             <Button variant="secondary" onClick={() => setAssignOpen(false)}>Cancel</Button>
             <Button disabled={!selectedStaff || assignMutation.isPending} onClick={() => assignMutation.mutate()}>
               {assignMutation.isPending ? "Assigning…" : "Assign"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirm */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete {lead.full_name || `lead ${lead.id}`}?</DialogTitle>
+            <DialogDescription>It is removed from the lists right away. Its history is kept.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setDeleteOpen(false)}>Cancel</Button>
+            <Button variant="destructive" disabled={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>
+              {deleteMutation.isPending ? "Deleting…" : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -210,3 +210,9 @@ export const updateGuardian = (studentId: number | string, guardianId: number, p
 
 export const deleteGuardian = (studentId: number | string, guardianId: number) =>
   api<{ message: string }>(`/students/${studentId}/guardians/${guardianId}`, { method: "DELETE" })
+
+export const deleteStudent = (id: number) =>
+  api<{ message: string }>(`/students/${id}`, { method: "DELETE" })
+
+export const deleteLead = (id: number) =>
+  api<{ message: string }>(`/leads/${id}`, { method: "DELETE" })

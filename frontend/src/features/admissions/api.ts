@@ -241,3 +241,6 @@ export const rejectDocument = (id: number) =>
 
 export const deleteDocument = (id: number) =>
   api<{ message: string }>(`/documents/${id}`, { method: "DELETE" })
+
+export const deleteApplication = (id: number) =>
+  api<{ message: string }>(`/applications/${id}`, { method: "DELETE" })

@@ -334,3 +334,6 @@ export const deleteScholarship = (id: number) =>
 
 export const createAgreement = (payload: Record<string, unknown>) =>
   api<{ data: Agreement }>("/agreements", { method: "POST", body: JSON.stringify(payload) })
+
+export const deleteUniversity = (id: number) =>
+  api<undefined>(`/universities/${id}`, { method: "DELETE" })

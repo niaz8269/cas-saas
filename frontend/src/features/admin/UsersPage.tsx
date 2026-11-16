@@ -1,7 +1,8 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Check, Pencil, Plus, Search, ShieldAlert } from "lucide-react"
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Check, Plus, Search, ShieldAlert } from "lucide-react"
 import { Fragment, useEffect, useState } from "react"
 
+import RowActions from "@/components/RowActions"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { getRoleMatrix, listAuditLogs, listUsers, type AuditEntry, type StaffUser } from "@/features/admin/api"
+import { deleteUser, getRoleMatrix, listAuditLogs, listUsers, type AuditEntry, type StaffUser } from "@/features/admin/api"
 import UserFormDialog from "@/features/admin/UserFormDialog"
 import { isSuperAdmin } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
@@ -75,6 +76,7 @@ function StaffTable() {
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<StaffUser | null>(null)
   const currentUser = useAuthStore((s) => s.user)
+  const queryClient = useQueryClient()
   const superAdmin = isSuperAdmin(currentUser)
 
   const openCreate = () => { setEditing(null); setFormOpen(true) }
@@ -154,17 +156,12 @@ function StaffTable() {
                   <TableCell><Badge variant="outline" className={cn("border-transparent capitalize", STATUS_BADGE[u.status])}>{u.status}</Badge></TableCell>
                   <TableCell className="text-muted-foreground tabular-nums">{u.last_login_at ? new Date(u.last_login_at).toLocaleDateString() : "Never"}</TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="size-8"
-                      onClick={() => openEdit(u)}
-                      disabled={isProtected}
-                      title={isProtected ? "Only a Super Admin can edit this account" : "Edit user"}
-                      aria-label={`Edit ${u.name}`}
-                    >
-                      <Pencil className="size-4" />
-                    </Button>
+                    <RowActions
+                      name={u.name}
+                      onEdit={isProtected ? undefined : () => openEdit(u)}
+                      onDelete={isProtected || u.id === currentUser?.id ? undefined : () => deleteUser(u.id).then(() => queryClient.invalidateQueries({ queryKey: ["users"] }))}
+                      deleteNote="They can no longer sign in. What they did stays in the audit log."
+                    />
                   </TableCell>
                 </TableRow>
               )

@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { useState, type ReactNode } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useSearchParams } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -90,7 +90,9 @@ export default function UniversityDetailPage() {
 
   const queryClient = useQueryClient()
   const [dialog, setDialog] = useState<null | "program" | "intake" | "scholarship" | "agreement" | "contact">(null)
-  const [editOpen, setEditOpen] = useState(false)
+  // "Edit" in the university list opens this page with the editor already open.
+  const [searchParams] = useSearchParams()
+  const [editOpen, setEditOpen] = useState(searchParams.get("edit") === "1")
   const [editingScholarship, setEditingScholarship] = useState<Scholarship | null>(null)
   const [editingProgram, setEditingProgram] = useState<Program | null>(null)
   const [editingContact, setEditingContact] = useState<UniversityContact | null>(null)

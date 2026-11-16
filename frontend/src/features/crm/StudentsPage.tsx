@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
 import { GraduationCap, Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -24,8 +24,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import RowActions from "@/components/RowActions"
 import { useCan } from "@/features/auth/useCan"
-import { listStudents } from "@/features/crm/api"
+import { deleteStudent, listStudents } from "@/features/crm/api"
 import StudentFormDialog from "@/features/crm/StudentFormDialog"
 import { STUDENT_STATUS_BADGE, STUDENT_STATUSES } from "@/features/crm/status"
 import { cn } from "@/lib/utils"
@@ -43,6 +44,7 @@ function studentExportQuery(q: string, status: string): string {
 export default function StudentsPage() {
   const navigate = useNavigate()
   const can = useCan()
+  const queryClient = useQueryClient()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
@@ -133,13 +135,14 @@ export default function StudentsPage() {
               <TableHead>Branch</TableHead>
               <TableHead>Counselor</TableHead>
               <SortableHead label="Status" field="status" sort={sort} onSortChange={changeSort} />
+              <TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isPending &&
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 6 }).map((_, cell) => (
+                  {Array.from({ length: 7 }).map((_, cell) => (
                     <TableCell key={cell}>
                       <Skeleton className="h-4 w-full max-w-28" />
                     </TableCell>
@@ -149,7 +152,7 @@ export default function StudentsPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
+                <TableCell colSpan={7} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load students.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>
                     Try again
@@ -160,7 +163,7 @@ export default function StudentsPage() {
 
             {!isPending && !isError && students.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+                <TableCell colSpan={7} className="py-12 text-center">
                   <GraduationCap className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No students found</p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -193,6 +196,15 @@ export default function StudentsPage() {
                   >
                     {student.status.replace("_", " ")}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <RowActions
+                    name={student.full_name}
+                    onOpen={() => navigate(`/students/${student.id}`)}
+                    onEdit={can("students.update.global") || can("students.update.assigned") ? () => navigate(`/students/${student.id}?edit=1`) : undefined}
+                    onDelete={can("students.delete.global") ? () => deleteStudent(student.id).then(() => queryClient.invalidateQueries({ queryKey: ["students"] })) : undefined}
+                    deleteNote="Their applications and documents disappear from the lists with them."
+                  />
                 </TableCell>
               </TableRow>
             ))}

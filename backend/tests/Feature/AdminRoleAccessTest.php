@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Application;
+use App\Models\Lead;
 use App\Models\Post;
 use App\Models\Program;
 use App\Models\Scholarship;
@@ -72,4 +73,21 @@ it('lets the Admin role edit users but never a Super Admin account', function ()
 
     expect(patchJson("/api/v1/users/{$staff->id}", ['name' => 'New Name'])->status())->not->toBe(403)
         ->and(patchJson("/api/v1/users/{$super->id}", ['name' => 'Hijacked'])->status())->toBe(403);
+});
+
+it('lets the Admin role delete a user or a lead, but not itself or a Super Admin', function () {
+    $staff = User::factory()->create();
+    $super = User::factory()->create();
+    $super->assignRole('Super Admin');
+    $lead = Lead::factory()->create();
+    $me = auth('staff')->user() ?? User::query()->role('Admin')->first();
+
+    deleteJson("/api/v1/users/{$staff->id}")->assertOk();
+    expect(User::find($staff->id))->toBeNull();
+
+    deleteJson("/api/v1/users/{$super->id}")->assertForbidden();
+    deleteJson("/api/v1/users/{$me->id}")->assertUnprocessable();
+
+    deleteJson("/api/v1/leads/{$lead->id}")->assertOk();
+    expect(Lead::find($lead->id))->toBeNull();
 });

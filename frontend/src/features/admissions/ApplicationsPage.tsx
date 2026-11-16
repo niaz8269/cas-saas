@@ -1,4 +1,6 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
+import RowActions from "@/components/RowActions"
+import { useCan } from "@/features/auth/useCan"
 import { FileText, Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -23,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { listApplications } from "@/features/admissions/api"
+import { deleteApplication, listApplications } from "@/features/admissions/api"
 import {
   APPLICATION_STATUS_BADGE,
   APPLICATION_TRANSITIONS,
@@ -47,6 +49,8 @@ function applicationExportQuery(q: string, status: string, toVerify: boolean, su
 
 export default function ApplicationsPage() {
   const navigate = useNavigate()
+  const can = useCan()
+  const queryClient = useQueryClient()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
   const [status, setStatus] = useState<string>("all")
@@ -182,13 +186,14 @@ export default function ApplicationsPage() {
               <TableHead>Officer</TableHead>
               <TableHead className="text-right">Docs</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isPending &&
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index}>
-                  {Array.from({ length: 7 }).map((_, cell) => (
+                  {Array.from({ length: 8 }).map((_, cell) => (
                     <TableCell key={cell}>
                       <Skeleton className="h-4 w-full max-w-28" />
                     </TableCell>
@@ -198,7 +203,7 @@ export default function ApplicationsPage() {
 
             {isError && (
               <TableRow>
-                <TableCell colSpan={7} className="py-10 text-center">
+                <TableCell colSpan={8} className="py-10 text-center">
                   <p className="text-sm text-destructive">Failed to load applications.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={() => refetch()}>
                     Try again
@@ -209,7 +214,7 @@ export default function ApplicationsPage() {
 
             {!isPending && !isError && applications.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="py-12 text-center">
+                <TableCell colSpan={8} className="py-12 text-center">
                   <FileText className="mx-auto size-8 text-muted-foreground" />
                   <p className="mt-3 text-sm font-medium">No applications found</p>
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -285,6 +290,15 @@ export default function ApplicationsPage() {
                   >
                     {statusLabel(application.status)}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <RowActions
+                    name={application.application_code}
+                    onOpen={() => navigate(`/applications/${application.id}`)}
+                    onEdit={can("applications.update.global") ? () => navigate(`/applications/${application.id}`) : undefined}
+                    onDelete={can("applications.delete.global") ? () => deleteApplication(application.id).then(() => queryClient.invalidateQueries({ queryKey: ["applications"] })) : undefined}
+                    deleteNote="Its documents and offers go with it."
+                  />
                 </TableCell>
               </TableRow>
             ))}
