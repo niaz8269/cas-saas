@@ -13,10 +13,13 @@ export default function ApplyButton({
   universitySlug,
   className,
   children,
+  label,
 }: {
   universitySlug: string | null
   className?: string
   children: ReactNode
+  /** Spoken name when several Apply buttons share a page, e.g. "Apply for MBBS at Jilin University". */
+  label?: string
 }) {
   const navigate = useNavigate()
   const token = usePortalAuthStore((s) => s.token)
@@ -35,7 +38,7 @@ export default function ApplyButton({
   }
 
   return (
-    <button type="button" onClick={handleClick} className={className}>
+    <button type="button" onClick={handleClick} className={className} aria-label={label}>
       {children}
     </button>
   )

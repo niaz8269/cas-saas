@@ -47,6 +47,7 @@ export class SiteApiError extends Error {
 export interface SiteUniversityRef {
   name: string
   slug: string | null
+  city?: string | null
   cover_url?: string | null
   cover_credit?: string | null
   cover_downloadable?: boolean
@@ -241,8 +242,12 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
 export const getSiteUniversity = (slug: string) =>
   siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
 
-export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; ids?: number[]; page?: number } = {}) {
+export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; csc?: boolean; city?: string; province?: string; sort?: string; ids?: number[]; page?: number } = {}) {
   const search = new URLSearchParams()
+  if (params.csc) search.set("filter[csc]", "1")
+  if (params.city) search.set("filter[city]", params.city)
+  if (params.province) search.set("filter[province]", params.province)
+  if (params.sort) search.set("sort", params.sort)
   if (params.q) search.set("q", params.q)
   if (params.level) search.set("filter[level]", params.level)
   if (params.language) search.set("filter[language]", params.language)

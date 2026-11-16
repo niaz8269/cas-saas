@@ -50,6 +50,7 @@ class PublicProgramResource extends JsonResource
             'university' => $this->whenLoaded('university', fn () => [
                 'name' => $this->university?->name,
                 'slug' => $this->university?->slug,
+                'city' => $this->university?->city,
                 'cover_url' => app(ImageService::class)->url($this->university?->cover_path),
                 'cover_credit' => $this->university?->cover_credit,
             ]),
