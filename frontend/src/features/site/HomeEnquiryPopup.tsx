@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
-import casLogoWhite from "@/assets/cas-logo-white.png"
+import casLogoWhite from "@/assets/cas-logo-white.webp"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"

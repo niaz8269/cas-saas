@@ -178,6 +178,8 @@ export interface SiteUniversityCard {
   logo_url: string | null
   emblem_url?: string | null
   cover_url: string | null
+  /** A small (480 px) copy of the cover for cards, when one has been made. */
+  cover_thumb_url?: string | null
   cover_credit?: string | null
   cover_downloadable?: boolean
   /** True when the cover is a photo of the city because no campus photo was available. */

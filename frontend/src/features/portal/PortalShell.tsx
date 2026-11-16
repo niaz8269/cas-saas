@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 
-import casLogo from "@/assets/cas-logo.png"
+import casLogo from "@/assets/cas-logo.webp"
 import { portalLogout } from "@/features/portal/api"
 import PortalNotificationBell from "@/features/portal/PortalNotificationBell"
 import StudentVerifyBanner from "@/features/portal/StudentVerifyBanner"

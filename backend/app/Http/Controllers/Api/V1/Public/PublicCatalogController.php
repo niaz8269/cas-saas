@@ -47,6 +47,7 @@ class PublicCatalogController extends Controller
     public function universities(Request $request): AnonymousResourceCollection
     {
         $audience = $this->audience($request);
+        $request->attributes->set('compact_universities', true);
 
         $buildUniversities = fn (array $terms) => University::query()
             ->where('status', 'active')
@@ -225,6 +226,7 @@ class PublicCatalogController extends Controller
     public function city(Request $request, string $slug): JsonResponse
     {
         $audience = $this->audience($request);
+        $request->attributes->set('compact_universities', true);
         $all = University::query()->where('status', 'active')->whereNotNull('city')->orderBy('name')->get();
         $city = $all->first(fn ($u) => Str::slug($u->city) === $slug)?->city;
         abort_unless($city, 404);

@@ -8,11 +8,10 @@ import {
   Search,
 } from "lucide-react"
 import type { TFunction } from "i18next"
-import { useState, type ReactNode } from "react"
+import { lazy, Suspense, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 
-import Testimonials from "@/features/site/Testimonials"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getHomeSpotlight, getSiteHome, getSitePrograms, getSiteUniversities, getSiteUniversity } from "@/features/site/api"
@@ -26,9 +25,12 @@ import HeroUpdates from "@/features/site/HeroUpdates"
 import { DEFAULT_SECTION_ORDER, FEATURED_TAB1, FEATURED_TAB2, HIGHLIGHTS, POPULAR_SEARCHES } from "@/features/site/homeDefaults"
 import { baseLocale, sectionContent, type HomeSectionData } from "@/features/site/homeContent"
 import HomeCities from "@/features/site/HomeCities"
-import HomeEnquiryPopup from "@/features/site/HomeEnquiryPopup"
 import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
+
+// Below the fold, or shown only later: loaded after the first screen.
+const Testimonials = lazy(() => import("@/features/site/Testimonials"))
+const HomeEnquiryPopup = lazy(() => import("@/features/site/HomeEnquiryPopup"))
 
 
 const DOT_GRID = {
@@ -72,7 +74,12 @@ export default function SiteHome() {
     queryFn: () => getSiteUniversities({ ids: heroIds, perPage: 3 }),
     enabled: heroIds.length > 0,
   })
-  const openUniversities = useQuery({ queryKey: ["site-universities", "home-open"], queryFn: () => getSiteUniversities({ page: 1, perPage: 6, openIntake: true }) })
+  // Only the count is needed when the hero is hand-picked, so ask for one row; wait for the picks so it is one request, not two.
+  const openUniversities = useQuery({
+    queryKey: ["site-universities", "home-open", heroIds.length > 0],
+    queryFn: () => getSiteUniversities({ page: 1, perPage: heroIds.length > 0 ? 1 : 6, openIntake: true }),
+    enabled: !picks.isPending,
+  })
   const programs = useQuery({ queryKey: ["site-programs", "home-open"], queryFn: () => getSitePrograms({ openIntake: true, language: "English" }) })
 
   const chosen = chosenUniversities.data?.data ?? []
@@ -429,7 +436,7 @@ export default function SiteHome() {
       </SiteSection>
     ),
 
-    testimonials: () => <Testimonials audience="student" />,
+    testimonials: () => <Suspense fallback={null}><Testimonials audience="student" /></Suspense>,
 
     // Always visible (unless hidden here), so the link to share is on the home page even before any testimonial is published.
     share: (s) => (
@@ -501,7 +508,9 @@ export default function SiteHome() {
 
   return (
     <div className="flex flex-col gap-16 sm:gap-24">
-      <HomeEnquiryPopup />
+      <Suspense fallback={null}>
+        <HomeEnquiryPopup />
+      </Suspense>
       {ordered.map((s) => {
         const render = blocks[s.type]
         if (!render) return null

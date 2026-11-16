@@ -138,7 +138,7 @@ export default function SiteUniversities() {
           </div>
         )}
 
-        {universities.map((u) => <UniCard key={u.id} u={u} />)}
+        {universities.map((u) => <UniCard key={u.id} u={u} as="h2" />)}
       </div>
 
       {meta && meta.total > 0 && meta.last_page > 1 && (
