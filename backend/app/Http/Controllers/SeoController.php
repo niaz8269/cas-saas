@@ -184,6 +184,11 @@ class SeoController extends Controller
         }
         $head .= '<meta property="og:url" content="'.e($p['canonical']).'" />'."\n";
         $head .= '<meta property="og:image" content="'.e($p['image']).'" />'."\n";
+        // The default social card is 1200x630; a university's own photo has no fixed size, so only say it for the default.
+        if ($p['image'] === rtrim((string) config('seo.site_url'), '/').config('seo.default_image')) {
+            $head .= '<meta property="og:image:width" content="1200" />'."\n".'<meta property="og:image:height" content="630" />'."\n".'<meta property="og:image:alt" content="CAS: study in China" />'."\n";
+        }
+        $head .= '<meta property="og:locale" content="en_US" />'."\n";
         $head .= '<meta name="twitter:card" content="summary_large_image" />'."\n";
         $head .= "<meta name=\"twitter:title\" content=\"{$t}\" />\n";
         if ($d) {

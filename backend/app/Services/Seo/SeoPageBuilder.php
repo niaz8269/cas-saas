@@ -2,6 +2,7 @@
 
 namespace App\Services\Seo;
 
+use App\Models\CityProfile;
 use App\Models\Intake;
 use App\Models\Post;
 use App\Models\Program;
@@ -73,10 +74,14 @@ class SeoPageBuilder
             'site/csc-scholarship' => $this->cscBody(),
             'site/scholarships' => $this->scholarshipsBody(),
             'site/news' => $this->newsBody(),
+            'site/faq' => $this->faqBody($title),
             default => $this->simpleBody($title, $description),
         };
 
         $ld = $path === '' ? [$this->organization(), $this->website()] : [];
+        if ($path === 'site/faq' && ($faq = $this->faqJsonLd())) {
+            $ld[] = $faq;
+        }
 
         return $this->page($title, $description, $canonical, jsonLd: $ld, crumbs: $crumbs, body: $body);
     }
@@ -188,11 +193,29 @@ class SeoPageBuilder
         $title = $this->fit(['Study in '.$city.': Universities, Programs & Dates', 'Study in '.$city.': Universities & Programs']);
         $image = $this->absolute($this->images->url($inCity->first(fn ($u) => filled($u->cover_path))?->cover_path));
 
-        $body = '<h1>Study in '.e($city).'</h1><p>'.e($intro ?: $description).'</p>'.$cityText;
+        // What the city is like, from the profile built from its Wikipedia article (history, places to visit, climate, ...).
+        $profile = CityProfile::query()->where('slug', $slug)->first();
+        if ($profile && $profile->summary) {
+            $intro = Str::before($profile->summary, "\n\n");
+            $description = $this->clip($intro, 155);
+        }
+
+        $body = '<h1>Study in '.e($city).'</h1><p>'.e($intro ?: $description).'</p>'.($profile ? $this->cityProfileText($profile) : $cityText);
         $body .= '<h2>Universities in '.e($city).'</h2>'.$this->ul($inCity->map(fn ($u) => $this->link('/site/universities/'.$u->slug, $u->name).($u->moe_listed ? ' (MoE-approved for English MBBS)' : ''))->all());
         $body .= '<p>'.$this->link('/site/cities', 'All cities').'</p>';
 
-        return $this->page($title, $description, $canonical, image: $image, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body, noindex: ! SeoIndexability::cityHasSubstance($city), follow: true);
+        $ld = [array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'City',
+            'name' => $city,
+            'url' => $this->abs($canonical),
+            'description' => $description,
+            'image' => $image,
+            'containedInPlace' => $inCity->first()->province ? ['@type' => 'AdministrativeArea', 'name' => $inCity->first()->province, 'containedInPlace' => ['@type' => 'Country', 'name' => 'China']] : null,
+            'sameAs' => $profile?->source_url ? [$profile->source_url] : null,
+        ])];
+
+        return $this->page($title, $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body, noindex: ! SeoIndexability::cityHasSubstance($city), follow: true);
     }
 
     /**
@@ -325,9 +348,60 @@ class SeoPageBuilder
         return '<h1>News and updates on studying in China</h1>'.$this->ul($rows->map(fn ($p) => $this->link('/site/news/'.$p->slug, $p->title).' — '.e($p->excerpt))->all());
     }
 
+    /** @return list<array{title: string, items: list<array{q: string, a: string}>}> */
+    private function faqData(): array
+    {
+        $path = database_path('data/faq.json');
+
+        return is_file($path) ? (json_decode((string) file_get_contents($path), true) ?: []) : [];
+    }
+
+    private function faqBody(string $title): string
+    {
+        $html = '<h1>'.e($title).'</h1>';
+        foreach ($this->faqData() as $group) {
+            $html .= '<h2>'.e($group['title']).'</h2>';
+            foreach ($group['items'] as $item) {
+                $html .= '<h3>'.e($item['q']).'</h3><p>'.e($item['a']).'</p>';
+            }
+        }
+
+        return $html.'<p>'.$this->link('/', 'Home').' · '.$this->link('/site/study-plan', 'Get a free study plan').' · '.$this->link('/site/contact', 'Contact CAS').'</p>';
+    }
+
+    /** @return array<string, mixed>|null */
+    private function faqJsonLd(): ?array
+    {
+        $entities = [];
+        foreach ($this->faqData() as $group) {
+            foreach ($group['items'] as $item) {
+                $entities[] = ['@type' => 'Question', 'name' => $item['q'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $item['a']]];
+            }
+        }
+
+        return $entities ? ['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities] : null;
+    }
+
     private function simpleBody(string $title, string $description): string
     {
         return '<h1>'.e($title).'</h1><p>'.e($description).'</p><p>'.$this->link('/', 'Home').' · '.$this->link('/site/universities', 'Universities').' · '.$this->link('/site/programs', 'Programs').'</p>';
+    }
+
+    /** History, places to visit, climate and the rest, as plain HTML: the first paragraphs of each group. */
+    private function cityProfileText(CityProfile $profile): string
+    {
+        $labels = ['history' => 'History', 'places' => 'Places to visit and historic sites', 'geography' => 'Geography and climate', 'economy' => 'Economy', 'culture' => 'Culture and food', 'education' => 'Education', 'transport' => 'Getting around', 'people' => 'People'];
+        $html = '';
+        foreach ($labels as $group => $label) {
+            $paragraphs = collect($profile->sections ?? [])->where('group', $group)
+                ->flatMap(fn ($s) => collect($s['blocks'] ?? [])->where('t', 'p')->pluck('x'))->take(2);
+            if ($paragraphs->isEmpty()) {
+                continue;
+            }
+            $html .= '<h2>'.e($label).'</h2>'.$paragraphs->map(fn ($p) => '<p>'.e($p).'</p>')->implode('');
+        }
+
+        return $html.($profile->source_url ? '<p>Source: Wikipedia (CC BY-SA 4.0).</p>' : '');
     }
 
     private function cityText(?University $u): string
@@ -396,6 +470,17 @@ class SeoPageBuilder
             'foundingDate' => '2012',
             'description' => 'Authorized agency placing international students into Chinese universities.',
             'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Dalian', 'addressRegion' => 'Liaoning', 'addressCountry' => 'CN'],
+            'contactPoint' => [[
+                '@type' => 'ContactPoint',
+                'contactType' => 'admissions',
+                'email' => 'info@cas.moe',
+                'telephone' => '+86 176 4041 2827',
+                'availableLanguage' => ['English', 'Chinese'],
+            ]],
+            'sameAs' => [
+                'https://www.facebook.com/share/1F7EUukSv2/',
+                'https://www.linkedin.com/in/consultancy-for-abroad-study-cas-39b4a282/',
+            ],
         ];
     }
 
