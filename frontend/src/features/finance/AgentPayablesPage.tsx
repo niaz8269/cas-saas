@@ -69,7 +69,7 @@ export default function AgentPayablesPage() {
       <div className="rounded-xl border bg-card p-10 text-center shadow-sm">
         <Banknote className="mx-auto size-8 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">Access denied</p>
-        <p className="mt-1 text-sm text-muted-foreground">You need commission access to view agent payables.</p>
+        <p className="mt-1 text-sm text-muted-foreground">You need commission access to view agency payables.</p>
       </div>
     )
   }
@@ -80,8 +80,8 @@ export default function AgentPayablesPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">Agent payables</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Commission owed to agents, and the payouts recorded against it.</p>
+        <h1 className="text-2xl font-semibold text-foreground">Agency payables</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Commission owed to agencies, and the payouts recorded against it.</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -99,7 +99,7 @@ export default function AgentPayablesPage() {
         <Table>
           <TableHeader className="bg-subtle">
             <TableRow>
-              <TableHead>Agent</TableHead>
+              <TableHead>Agency</TableHead>
               <TableHead>Student</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               <TableHead>Status</TableHead>
@@ -112,7 +112,7 @@ export default function AgentPayablesPage() {
               <TableRow key={i}>{Array.from({ length: 6 }).map((_, c) => <TableCell key={c}><Skeleton className="h-4 w-24" /></TableCell>)}</TableRow>
             ))}
             {!isPending && payables.length === 0 && (
-              <TableRow><TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">No agent payables.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">No agency payables.</TableCell></TableRow>
             )}
             {payables.map((p) => (
               <TableRow key={p.id}>

@@ -67,7 +67,7 @@ export default function PartnerRequestsPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-xl font-semibold text-cas-navy">Partner requests</h1>
-        <p className="text-sm text-muted-foreground">Review agent/partner sign-ups, approve or reject them, or change an active partner to a student.</p>
+        <p className="text-sm text-muted-foreground">Review agency/partner sign-ups, approve or reject them, or change an active partner to a student.</p>
       </div>
 
       {/* Toolbar */}

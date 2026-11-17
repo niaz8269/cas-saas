@@ -42,7 +42,7 @@ class StudentController extends Controller
         return CsvExport::stream(
             'students-'.now()->format('Ymd-His').'.csv',
             $this->filteredStudents($request),
-            ['Code', 'Name', 'Email', 'Phone', 'Passport', 'Status', 'Country', 'Branch', 'Counselor', 'Agent', 'Created'],
+            ['Code', 'Name', 'Email', 'Phone', 'Passport', 'Status', 'Country', 'Branch', 'Counselor', 'Agency', 'Created'],
             fn (Student $s) => [
                 $s->student_code,
                 $s->full_name,

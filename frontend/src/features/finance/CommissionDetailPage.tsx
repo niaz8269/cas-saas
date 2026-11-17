@@ -182,7 +182,7 @@ export default function CommissionDetailPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Agent payables */}
         <section className="rounded-xl border bg-card shadow-sm">
-          <header className="border-b px-5 py-3"><h3 className="text-[15px] font-semibold">Agent payables</h3></header>
+          <header className="border-b px-5 py-3"><h3 className="text-[15px] font-semibold">Agency payables</h3></header>
           <div className="divide-y px-5">
             {(commission.payables?.length ?? 0) === 0 && (
               <p className="py-5 text-sm text-muted-foreground">

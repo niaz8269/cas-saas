@@ -138,7 +138,7 @@ export default function ApiSourceFormDialog({
             <Field label="Type" error={errors.type?.message}>
               <select className="w-full rounded-md border bg-background px-3 py-2 text-sm" {...register("type")}>
                 <option value="website">Website</option>
-                <option value="agent">Agent</option>
+                <option value="agent">Agency</option>
                 <option value="campaign">Campaign</option>
                 <option value="manual">Manual</option>
               </select>

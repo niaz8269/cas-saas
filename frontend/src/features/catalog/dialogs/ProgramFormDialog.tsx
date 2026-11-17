@@ -340,7 +340,7 @@ export default function ProgramFormDialog({
               <div className="grid grid-cols-[1fr_4.5rem_4.5rem] items-center gap-2 text-xs">
                 <span aria-hidden="true" />
                 <span className="text-center font-medium text-muted-foreground">Student</span>
-                <span className="text-center font-medium text-muted-foreground">Agent</span>
+                <span className="text-center font-medium text-muted-foreground">Agency</span>
 
                 <span className="text-muted-foreground">Self-funded</span>
                 <Input type="number" className="h-8 px-2" aria-label="Self-funded student charge" value={selfCharge.student} onChange={(e) => setSelf("student", e.target.value)} />

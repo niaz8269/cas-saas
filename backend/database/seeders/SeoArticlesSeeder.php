@@ -336,7 +336,7 @@ class SeoArticlesSeeder extends Seeder
                     .'<h2>Where to go next</h2><p>Read the <a href="/site/news/csc-scholarship-guide-how-to-apply">CSC guide</a>, the <a href="/site/news/csc-scholarship-checklist-documents-and-timeline">CSC checklist</a> and <a href="/site/news/scholarships-to-study-in-china-every-route-explained">every scholarship route explained</a>. CAS also offers <a href="/site/services#scholarships">scholarship assistance</a>.</p>'
                     .$this->faq([
                         ['What is the best scholarship to study in China?', 'There is no single best. The best one is the one you are eligible for and can apply to well before its deadline.'],
-                        ['Can an agent guarantee my scholarship?', 'No. Nobody can guarantee an award. An agent can help you choose, prepare and submit.'],
+                        ['Can an agency guarantee my scholarship?', 'No. Nobody can guarantee an award. An agency can help you choose, prepare and submit.'],
                         ['How early should I start?', 'About six months before the earliest deadline for your level.'],
                     ])
                     .self::CHECKED.self::CTA,

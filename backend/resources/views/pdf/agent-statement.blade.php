@@ -186,7 +186,7 @@
         <table>
             <tr>
                 <td>CAS — Consultancy for Abroad Study &middot; www.cas.moe</td>
-                <td class="right">Statement of the agent's own commission share &middot; generated {{ $generatedOn }}.</td>
+                <td class="right">Statement of the agency's own commission share &middot; generated {{ $generatedOn }}.</td>
             </tr>
         </table>
     </div>

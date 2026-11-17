@@ -391,7 +391,7 @@ it("shows city cards under the hero that open the city page", async () => {
 it("lists what CAS offers on the Our Services page, with what each service includes and a clear way to start", async () => {
   renderWithProviders(<SiteServices />)
 
-  for (const name of ["Admission service", "Scholarship assistance", "MBBS and medical programs", "Visa assistance", "Airport pickup", "On-campus support", "Chinese language foundation", "Partner program for agents"]) {
+  for (const name of ["Admission service", "Scholarship assistance", "MBBS and medical programs", "Visa assistance", "Airport pickup", "On-campus support", "Chinese language foundation", "Partner program for agencies"]) {
     expect(await screen.findByRole("heading", { name })).toBeInTheDocument()
   }
   expect(screen.getByText("Admission letter and JW202 guidance")).toBeInTheDocument()

@@ -79,7 +79,7 @@ const SERVICES: Service[] = [
     points: ["HSK and Chinese-language course guidance", "Foundation-year and preparatory options", "Help choosing the right level"],
   },
   {
-    icon: Handshake, title: "Partner program for agents", body: "Recruit for China with a dedicated team behind every case you refer.",
+    icon: Handshake, title: "Partner program for agencies", body: "Recruit for China with a dedicated team behind every case you refer.",
     points: ["Refer students through a secure partner portal", "Track every application and commission", "Clear statements and fast replies"],
     link: { to: "/site/partner", label: "Become a partner" },
   },
