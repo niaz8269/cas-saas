@@ -3,6 +3,7 @@ import Testimonials from "@/features/site/Testimonials"
 import { ArrowRight, BadgeCheck, Banknote, Building2, ChevronRight, ClipboardList, FileCheck2, LineChart, Megaphone, UserPlus, type LucideIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
+import PortalLink from "@/features/site/PortalLink"
 
 import { getSitePrograms, getSiteUniversities } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
@@ -63,10 +64,10 @@ export default function SitePartner() {
         image={HEADER_IMAGES.default}
         action={
           <div className="flex flex-wrap gap-3">
-            <Link to={REGISTER} className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
+            <PortalLink to={REGISTER} className="inline-flex h-11 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
               {t("partner.becomePartner")} <ArrowRight className="size-4" />
-            </Link>
-            <Link to="/portal/login" className="inline-flex h-11 items-center rounded-sm border border-white/40 px-6 text-sm font-semibold text-white hover:bg-white/10">{t("partner.signIn")}</Link>
+            </PortalLink>
+            <PortalLink to="/portal/login" className="inline-flex h-11 items-center rounded-sm border border-white/40 px-6 text-sm font-semibold text-white hover:bg-white/10">{t("partner.signIn")}</PortalLink>
           </div>
         }
       />
@@ -165,9 +166,9 @@ export default function SitePartner() {
           <p className="mt-1 text-sm text-white/80">{t("partner.ctaSubtitle")}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link to={REGISTER} className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
+          <PortalLink to={REGISTER} className="inline-flex h-11 shrink-0 items-center gap-2 rounded-sm bg-cas-red px-6 text-sm font-semibold text-white hover:bg-cas-red-600">
             {t("partner.becomePartner")} <ArrowRight className="size-4" />
-          </Link>
+          </PortalLink>
           <Link to="/site/contact" className="inline-flex h-11 shrink-0 items-center rounded-sm border border-white/40 px-6 text-sm font-semibold hover:bg-white/10">{t("partner.talkToUs")}</Link>
         </div>
       </section>

@@ -5,6 +5,7 @@ import { AdmissionWindow } from "@/features/site/components"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
+import PortalLink from "@/features/site/PortalLink"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -122,9 +123,9 @@ export default function SiteScholarships() {
               )}
               <AdmissionWindow opens={s.application_open_date} closes={s.deadline} />
               {s.details_locked && (
-                <Link to="/portal/login" className="inline-flex items-center gap-1 font-semibold text-cas-red hover:underline">
+                <PortalLink to="/portal/login" className="inline-flex items-center gap-1 font-semibold text-cas-red hover:underline">
                   <Lock className="size-3.5" /> {t("scholarships.signInForDetails")}
-                </Link>
+                </PortalLink>
               )}
             </div>
             </div>

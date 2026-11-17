@@ -3,6 +3,7 @@ import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linke
 import { lazy, useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
+import PortalLink from "@/features/site/PortalLink"
 
 import casLogo from "@/assets/cas-logo.webp"
 import casLogoWhite from "@/assets/cas-logo-white.webp"
@@ -334,13 +335,13 @@ export default function SiteLayout() {
             <div className="flex shrink-0 items-center gap-3">
               <LanguageSwitcher className="hidden sm:block" />
               {loggedIn ? (
-                <Link to={`/portal/${portalKind}/apply`} aria-label={t("header.applyNow")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                <PortalLink to={`/portal/${portalKind}/apply`} aria-label={t("header.applyNow")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
                   <ArrowRight className="size-4" /> <span className="hidden sm:inline">{t("header.applyNow")}</span>
-                </Link>
+                </PortalLink>
               ) : (
-                <Link to="/portal/login" aria-label={t("header.signIn")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
+                <PortalLink to="/portal/login" aria-label={t("header.signIn")} className="inline-flex items-center gap-1.5 rounded-sm bg-cas-red px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cas-red-600 sm:px-4">
                   <LogIn className="size-4" /> <span className="hidden sm:inline">{t("header.signIn")}</span>
-                </Link>
+                </PortalLink>
               )}
               <NotificationBell />
               <button

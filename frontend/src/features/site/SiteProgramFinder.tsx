@@ -5,6 +5,7 @@ import { Clock, GraduationCap, Languages, School, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
+import PortalLink from "@/features/site/PortalLink"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -168,7 +169,7 @@ export default function SiteProgramFinder() {
             </div>
             <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
               {p.fee_locked ? (
-                <Link to="/portal/login" className="text-sm font-semibold text-cas-red hover:underline">{t("programs.signInForFees")}</Link>
+                <PortalLink to="/portal/login" className="text-sm font-semibold text-cas-red hover:underline">{t("programs.signInForFees")}</PortalLink>
               ) : (
                 <span className="text-right">
                   <span className="block font-bold tabular-nums text-cas-navy">{money(p.tuition_fee, p.currency, t)}</span>
