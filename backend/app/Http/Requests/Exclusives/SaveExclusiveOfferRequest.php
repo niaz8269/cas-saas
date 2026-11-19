@@ -28,6 +28,7 @@ class SaveExclusiveOfferRequest extends FormRequest
             'audience' => ['required', Rule::in(ExclusiveOffer::AUDIENCES)],
             'university_id' => ['nullable', 'integer', 'exists:universities,id'],
             'program_id' => ['nullable', 'integer', 'exists:programs,id'],
+            'scholarship_id' => ['nullable', 'integer', 'exists:scholarships,id'],
             'summary' => ['nullable', 'string', 'max:2000'],
             'commission_rates' => ['nullable', 'array'],
             'commission_notes' => ['nullable', 'string', 'max:4000'],

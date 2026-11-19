@@ -52,15 +52,32 @@ export interface ExclusiveMaterial {
   download_count?: number
 }
 
+export type ExclusiveType = "university" | "program" | "scholarship" | "other"
+
+/** Name lookups for the pickers: the server searches the whole catalog, 20 at a time. */
+const lookup = (path: string, q: string) => `/${path}?per_page=20${q ? `&q=${encodeURIComponent(q)}` : ""}`
+
+export const searchUniversities = (q: string) =>
+  api<Paginated<{ id: number; name: string }>>(lookup("universities", q)).then((r) => r.data.map((u) => ({ id: u.id, label: u.name })))
+
+export const searchPrograms = (q: string) =>
+  api<Paginated<{ id: number; name: string; university?: { name: string } | null }>>(lookup("programs", q))
+    .then((r) => r.data.map((p) => ({ id: p.id, label: [p.name, p.university?.name].filter(Boolean).join(" \u00b7 ") })))
+
+export const searchScholarships = (q: string) =>
+  api<Paginated<{ id: number; name: string; university?: { name: string } | null }>>(lookup("scholarships", q))
+    .then((r) => r.data.map((s) => ({ id: s.id, label: [s.name, s.university?.name].filter(Boolean).join(" \u00b7 ") })))
+
 export interface ExclusiveOffer {
   id: number
   title: string
   slug: string
-  offer_type: "university" | "program" | "other"
+  offer_type: ExclusiveType
   audience?: Audience
   summary: string | null
   university: { id: number; name: string; slug: string; city: string | null; province?: string | null; logo_url?: string | null; emblem_url?: string | null; cover_url?: string | null; cover_thumb_url?: string | null } | null
   program: { id: number; name: string; level: string } | null
+  scholarship?: { id: number; name: string } | null
   commission_notes: string | null
   fee_structure: FeeRow[]
   fee_notes: string | null
@@ -77,6 +94,7 @@ export interface ExclusiveOffer {
   sort_order?: number
   university_id?: number | null
   program_id?: number | null
+  scholarship_id?: number | null
   commission_rates?: Partial<Record<AgencyLevel, CommissionRate>>
   // Agency view
   commission?: CommissionRate | null
@@ -85,10 +103,11 @@ export interface ExclusiveOffer {
 
 export interface ExclusiveWritePayload {
   title: string
-  offer_type: "university" | "program" | "other"
+  offer_type: ExclusiveType
   audience: Audience
   university_id: number | null
   program_id: number | null
+  scholarship_id: number | null
   summary: string
   commission_rates: Partial<Record<AgencyLevel, { value: number | string }>>
   commission_notes: string

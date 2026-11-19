@@ -3,6 +3,9 @@
 use App\Models\AuditLog;
 use App\Models\ExclusiveMaterial;
 use App\Models\ExclusiveOffer;
+use App\Models\Program;
+use App\Models\Scholarship;
+use App\Models\University;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -161,4 +164,17 @@ it('keeps private exclusives, and their files, from agencies while the CAS team 
     expect($titles)->toBe(['For partners'])->and($titles)->not->toContain('CAS only');
     getJson('/api/v1/agent/exclusive-materials/'.$file->id.'/download')->assertNotFound();
     expect($partners->audience)->toBe('partners');
+});
+
+it('links an exclusive to a program or scholarship and takes the university from it', function () {
+    staffWithRole('Admin');
+    $uni = University::factory()->create();
+    $program = Program::factory()->create(['university_id' => $uni->id]);
+    $scholarship = Scholarship::factory()->create(['university_id' => $uni->id]);
+
+    $a = postJson('/api/v1/exclusives', offerPayload(['offer_type' => 'program', 'program_id' => $program->id, 'scholarship_id' => $scholarship->id]))->assertCreated();
+    expect($a->json('data.university_id'))->toBe($uni->id)->and($a->json('data.program_id'))->toBe($program->id)->and($a->json('data.scholarship_id'))->toBeNull();
+
+    $b = postJson('/api/v1/exclusives', offerPayload(['title' => 'Award', 'offer_type' => 'scholarship', 'scholarship_id' => $scholarship->id]))->assertCreated();
+    expect($b->json('data.university_id'))->toBe($uni->id)->and($b->json('data.scholarship.name'))->toBe($scholarship->name)->and($b->json('data.program_id'))->toBeNull();
 });

@@ -27,6 +27,7 @@ export default function ExclusiveCard({ offer, onOpen, actions, forAgency = fals
 
   const facts: { key: string; text: string }[] = []
   if (offer.program) facts.push({ key: "program", text: offer.program.name })
+  else if (offer.scholarship) facts.push({ key: "scholarship", text: offer.scholarship.name })
   else if (offer.offer_type === "university") facts.push({ key: "type", text: "University package" })
   else if (offer.offer_type === "other") facts.push({ key: "type", text: "Special offer" })
   if (firstFee) facts.push({ key: "fee", text: `${firstFee.label}: ${Number(firstFee.amount).toLocaleString("en-US")} ${firstFee.currency ?? ""}${firstFee.note ? ` ${firstFee.note}` : ""}`.trim() })

@@ -30,6 +30,7 @@ class ExclusiveOfferResource extends JsonResource
             'summary' => $this->summary,
             'university' => $this->whenLoaded('university', fn () => $this->university ? $this->universityCard($this->university) : null),
             'program' => $this->whenLoaded('program', fn () => $this->program ? ['id' => $this->program->id, 'name' => $this->program->name, 'level' => $this->program->level] : null),
+            'scholarship' => $this->whenLoaded('scholarship', fn () => $this->scholarship ? ['id' => $this->scholarship->id, 'name' => $this->scholarship->name] : null),
             'commission_notes' => $this->commission_notes,
             'fee_structure' => $this->fee_structure ?? [],
             'fee_notes' => $this->fee_notes,
@@ -52,6 +53,7 @@ class ExclusiveOfferResource extends JsonResource
             'sort_order' => $this->sort_order,
             'university_id' => $this->university_id,
             'program_id' => $this->program_id,
+            'scholarship_id' => $this->scholarship_id,
             'commission_rates' => (object) ($this->commission_rates ?? []),
         ];
     }

@@ -18,7 +18,7 @@ class ExclusiveOffer extends Model
 {
     use Auditable, SoftDeletes;
 
-    public const TYPES = ['university', 'program', 'other'];
+    public const TYPES = ['university', 'program', 'scholarship', 'other'];
 
     /** partners: approved agencies and the CAS team. private: the CAS team only. */
     public const AUDIENCES = ['partners', 'private'];
@@ -27,7 +27,7 @@ class ExclusiveOffer extends Model
     public const LEVELS = ['partner', 'sub', 'sub_sub'];
 
     protected $fillable = [
-        'title', 'slug', 'offer_type', 'audience', 'university_id', 'program_id', 'summary',
+        'title', 'slug', 'offer_type', 'audience', 'university_id', 'program_id', 'scholarship_id', 'summary',
         'commission_rates', 'commission_notes', 'fee_structure', 'fee_notes',
         'eligible_nationalities', 'restricted_nationalities', 'nationality_notes',
         'conditions', 'status', 'published_at', 'sort_order', 'created_by', 'updated_by',
@@ -53,6 +53,11 @@ class ExclusiveOffer extends Model
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function scholarship(): BelongsTo
+    {
+        return $this->belongsTo(Scholarship::class);
     }
 
     public function materials(): HasMany

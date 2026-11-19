@@ -9,6 +9,8 @@ use App\Http\Resources\Exclusives\ExclusiveMaterialResource;
 use App\Http\Resources\Exclusives\ExclusiveOfferResource;
 use App\Models\ExclusiveMaterial;
 use App\Models\ExclusiveOffer;
+use App\Models\Program;
+use App\Models\Scholarship;
 use App\Services\Content\ExclusiveMaterialStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +28,7 @@ class ExclusiveOfferController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $offers = ExclusiveOffer::query()
-            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level'])
+            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'scholarship:id,name'])
             ->withCount('materials')
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('filter.type'), fn ($q) => $q->where('offer_type', $request->input('filter.type')))
@@ -40,7 +42,7 @@ class ExclusiveOfferController extends Controller
 
     public function show(ExclusiveOffer $exclusive): ExclusiveOfferResource
     {
-        return new ExclusiveOfferResource($exclusive->load(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'materials']));
+        return new ExclusiveOfferResource($exclusive->load(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'scholarship:id,name', 'materials']));
     }
 
     public function store(SaveExclusiveOfferRequest $request): ExclusiveOfferResource
@@ -105,11 +107,32 @@ class ExclusiveOfferController extends Controller
         $data['eligible_nationalities'] = array_values(array_unique($data['eligible_nationalities'] ?? []));
         $data['restricted_nationalities'] = array_values(array_unique($data['restricted_nationalities'] ?? []));
 
-        if ($data['offer_type'] === 'other') {
-            $data['university_id'] = $data['program_id'] = null;
-        }
+        $data = $this->cleanLinks($data);
         // The date it first went live: kept when it is edited, cleared when it goes back to draft.
         $data['published_at'] = $data['status'] === 'published' ? ($existing?->published_at ?? now()) : null;
+
+        return $data;
+    }
+
+    /**
+     * Keeps only the link that matches the type (university, program or scholarship) and fills the university from
+     * the program or scholarship picked, so the form only asks for what the exclusive is about.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function cleanLinks(array $data): array
+    {
+        $type = $data['offer_type'];
+        $data['program_id'] = $type === 'program' ? ($data['program_id'] ?? null) : null;
+        $data['scholarship_id'] = $type === 'scholarship' ? ($data['scholarship_id'] ?? null) : null;
+        $data['university_id'] = $type === 'other' ? null : ($data['university_id'] ?? null);
+
+        if ($data['program_id']) {
+            $data['university_id'] = Program::whereKey($data['program_id'])->value('university_id');
+        } elseif ($data['scholarship_id']) {
+            $data['university_id'] = Scholarship::whereKey($data['scholarship_id'])->value('university_id');
+        }
 
         return $data;
     }

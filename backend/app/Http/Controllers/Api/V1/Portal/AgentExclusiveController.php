@@ -25,7 +25,7 @@ class AgentExclusiveController extends Controller
         $this->authorizeAgency($request);
 
         $offers = ExclusiveOffer::query()
-            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'materials'])
+            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'scholarship:id,name', 'materials'])
             ->where('status', 'published')
             ->where('audience', 'partners')
             ->orderBy('sort_order')->orderByDesc('published_at')
