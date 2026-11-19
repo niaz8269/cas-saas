@@ -1,0 +1,114 @@
+import { ArrowUpRight, FileText, Gem, Lock, MapPin, Package, Users, Wallet } from "lucide-react"
+import type { ReactNode } from "react"
+
+import { toneFor } from "@/features/site/tone"
+import { formatCommission, type ExclusiveOffer } from "@/features/exclusives/api"
+import { cn } from "@/lib/utils"
+
+/**
+ * An exclusive as a card, laid out like the university cards on the public site: cover photo (or a brand tint),
+ * emblem, name and place, a short text, small facts as chips, and a footer with the commission and a view link.
+ * The whole card opens the detail through one button; `actions` (a menu) sits above it.
+ */
+export default function ExclusiveCard({ offer, onOpen, actions, forAgency = false }: {
+  offer: ExclusiveOffer
+  onOpen: () => void
+  /** Staff row menu (edit, delete); shown over the cover. */
+  actions?: ReactNode
+  forAgency?: boolean
+}) {
+  const u = offer.university
+  const cover = u?.cover_thumb_url ?? u?.cover_url ?? null
+  const place = [u?.city, u?.province].filter(Boolean).join(", ")
+  const rate = forAgency ? formatCommission(offer.commission) : formatCommission(offer.commission_rates?.partner)
+  const firstFee = offer.fee_structure.find((f) => f.amount != null && f.amount !== "")
+  const files = offer.materials_count ?? offer.materials?.length ?? 0
+  const restricted = offer.restricted_nationalities.length
+
+  const facts: { key: string; text: string }[] = []
+  if (offer.program) facts.push({ key: "program", text: offer.program.name })
+  else if (offer.offer_type === "university") facts.push({ key: "type", text: "University package" })
+  else if (offer.offer_type === "other") facts.push({ key: "type", text: "Special offer" })
+  if (firstFee) facts.push({ key: "fee", text: `${firstFee.label}: ${Number(firstFee.amount).toLocaleString("en-US")} ${firstFee.currency ?? ""}${firstFee.note ? ` ${firstFee.note}` : ""}`.trim() })
+  if (restricted > 0) facts.push({ key: "restricted", text: `Not open to ${restricted} ${restricted === 1 ? "nationality" : "nationalities"}` })
+  else if (offer.eligible_nationalities.length > 0) facts.push({ key: "eligible", text: `For ${offer.eligible_nationalities.length} ${offer.eligible_nationalities.length === 1 ? "nationality" : "nationalities"}` })
+
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 focus-within:ring-cas-red/40 hover:-translate-y-1 hover:ring-cas-red/40">
+      <div className={cn("relative h-40 overflow-hidden bg-gradient-to-br", toneFor(offer.id))}>
+        {cover && (
+          <>
+            <img src={cover} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+          </>
+        )}
+        {!cover && <Package className="absolute right-4 bottom-3 size-14 text-white/25" aria-hidden />}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+          <span className="inline-flex items-center gap-1 rounded-full bg-cas-red px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+            <Gem className="size-3.5" aria-hidden /> Exclusive
+          </span>
+          {offer.audience && (
+            <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold shadow-sm", offer.audience === "private" ? "bg-slate-800 text-white" : "bg-white/90 text-cas-navy")}>
+              {offer.audience === "private" ? <Lock className="size-3" aria-hidden /> : <Users className="size-3" aria-hidden />}
+              {offer.audience === "private" ? "Private" : "Partners"}
+            </span>
+          )}
+          {offer.status && (
+            <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize shadow-sm", offer.status === "published" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800")}>
+              {offer.status}
+            </span>
+          )}
+        </div>
+        {actions && <div className="absolute top-2 right-2 z-10 rounded-md bg-white/90 shadow-sm">{actions}</div>}
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-start gap-3">
+          {u?.emblem_url ? (
+            <img src={u.emblem_url} alt="" loading="lazy" decoding="async" className="size-12 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5" />
+          ) : u?.logo_url ? (
+            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
+          ) : null}
+          <div className="min-w-0">
+            <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">
+              <button type="button" onClick={onOpen} className="text-left outline-none after:absolute after:inset-0 after:content-['']">{offer.title}</button>
+            </h3>
+            {(u || place) && (
+              <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPin className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">{[u?.name, place].filter(Boolean).join(" · ")}</span>
+              </p>
+            )}
+          </div>
+        </div>
+
+        {offer.summary && <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{offer.summary}</p>}
+
+        {facts.length > 0 && (
+          <ul className="mt-3 flex flex-wrap gap-1.5">
+            {facts.map((f) => <li key={f.key} className="max-w-full truncate rounded-full bg-subtle px-2.5 py-0.5 text-xs text-slate-600">{f.text}</li>)}
+          </ul>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-2 pt-4">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {rate ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-cas-navy px-2.5 py-1 text-xs font-semibold text-white">
+                <Wallet className="size-3.5" aria-hidden /> <span className="sr-only">{forAgency ? "Your commission" : "Partner commission"}: </span>{rate}
+              </span>
+            ) : (
+              <span className="rounded-full bg-subtle px-2.5 py-1 text-xs text-muted-foreground">No rate set</span>
+            )}
+            {files > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-cas-navy-50 px-2.5 py-1 text-xs font-medium text-cas-navy">
+                <FileText className="size-3.5" aria-hidden /> {files} {files === 1 ? "file" : "files"}
+              </span>
+            )}
+          </div>
+          <span className="inline-flex items-center gap-0.5 text-sm font-semibold text-cas-red-600" aria-hidden>
+            View <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
+        </div>
+      </div>
+    </article>
+  )
+}

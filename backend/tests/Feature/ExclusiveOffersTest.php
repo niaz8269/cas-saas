@@ -37,12 +37,13 @@ function offerPayload(array $over = []): array
     return array_merge([
         'title' => 'Dalian MBBS exclusive',
         'offer_type' => 'other',
+        'audience' => 'partners',
         'summary' => 'Only through CAS agencies.',
         'status' => 'published',
         'commission_rates' => [
-            'partner' => ['type' => 'percent', 'value' => 12],
-            'sub' => ['type' => 'percent', 'value' => 8],
-            'sub_sub' => ['type' => 'fixed', 'value' => 300, 'currency' => 'usd'],
+            'partner' => ['value' => 3000],
+            'sub' => ['value' => 2000],
+            'sub_sub' => ['value' => 1000],
         ],
         'commission_notes' => 'Paid after the first-year fee.',
         'fee_structure' => [['label' => 'Tuition', 'amount' => 30000, 'currency' => 'CNY', 'note' => 'per year']],
@@ -57,7 +58,7 @@ it('lets an admin create, edit and remove an exclusive, and keeps the first publ
 
     $created = postJson('/api/v1/exclusives', offerPayload())->assertCreated()->json('data');
     expect($created['slug'])->toBe('dalian-mbbs-exclusive')
-        ->and($created['commission_rates']['sub_sub'])->toEqual(['type' => 'fixed', 'value' => 300, 'currency' => 'USD'])
+        ->and($created['commission_rates']['sub_sub'])->toEqual(['type' => 'fixed', 'value' => 1000, 'currency' => 'CNY'])
         ->and($created['published_at'])->not->toBeNull();
 
     putJson('/api/v1/exclusives/'.$created['id'], offerPayload(['title' => 'Renamed', 'conditions' => 'New terms.']))
@@ -86,20 +87,22 @@ it('lets a counselor read exclusives but not change them, and keeps other roles 
 it('validates commission, fees and nationality entries', function () {
     staffWithRole('Admin');
 
-    postJson('/api/v1/exclusives', offerPayload(['commission_rates' => ['partner' => ['type' => 'percent', 'value' => 140]]]))->assertUnprocessable();
+    postJson('/api/v1/exclusives', offerPayload(['commission_rates' => ['partner' => ['value' => -5]]]))->assertUnprocessable();
     postJson('/api/v1/exclusives', offerPayload(['fee_structure' => [['amount' => 5]]]))->assertUnprocessable();
     postJson('/api/v1/exclusives', offerPayload(['status' => 'live']))->assertUnprocessable();
+    postJson('/api/v1/exclusives', offerPayload(['audience' => 'everyone']))->assertUnprocessable();
+    postJson('/api/v1/exclusives', collect(offerPayload())->except('audience')->all())->assertUnprocessable();
 });
 
 it('shows an agency only published offers, with only its own level commission and no internal fields', function () {
-    ExclusiveOffer::create(offerPayload(['slug' => 'live', 'commission_rates' => ['partner' => ['type' => 'percent', 'value' => 12], 'sub' => ['type' => 'percent', 'value' => 8]]]));
+    ExclusiveOffer::create(offerPayload(['slug' => 'live', 'commission_rates' => ['partner' => ['value' => 3000], 'sub' => ['value' => 2000]]]));
     ExclusiveOffer::create(offerPayload(['title' => 'Hidden draft', 'slug' => 'draft', 'status' => 'draft']));
 
     actingAsAgent(['type' => 'sub']);
     $response = getJson('/api/v1/agent/exclusives')->assertOk()->assertJsonCount(1, 'data');
 
     $offer = $response->json('data.0');
-    expect($offer['commission'])->toMatchArray(['type' => 'percent', 'value' => 8.0])
+    expect($offer['commission'])->toMatchArray(['value' => 2000.0])
         ->and($offer['agency_level'])->toBe('sub')
         ->and($offer)->not->toHaveKeys(['commission_rates', 'status', 'sort_order']);
 });
@@ -137,4 +140,25 @@ it('stores files privately, serves them to agencies only while the offer is publ
     // Back to draft: the agency can no longer fetch the file.
     ExclusiveOffer::find($offer['id'])->update(['status' => 'draft']);
     getJson('/api/v1/agent/exclusive-materials/'.$material['id'].'/download')->assertNotFound();
+});
+
+it('keeps private exclusives, and their files, from agencies while the CAS team sees them', function () {
+    $partners = ExclusiveOffer::create(offerPayload(['slug' => 'for-partners', 'title' => 'For partners']));
+    $private = ExclusiveOffer::create(offerPayload(['slug' => 'cas-only', 'title' => 'CAS only', 'audience' => 'private']));
+    $file = ExclusiveMaterial::create(['exclusive_offer_id' => $private->id, 'title' => 'Internal prices', 'category' => 'price_list', 'disk' => 'local', 'path' => 'exclusives/x.pdf', 'original_name' => 'x.pdf', 'size' => 10]);
+    Storage::disk('local')->put('exclusives/x.pdf', 'pdf');
+
+    // Counselors and admins see both, and can filter by who it is for.
+    staffWithRole('Counselor');
+    getJson('/api/v1/exclusives')->assertOk()->assertJsonCount(2, 'data');
+    expect(collect(getJson('/api/v1/exclusives?filter[audience]=private')->json('data'))->pluck('title')->all())->toBe(['CAS only']);
+    getJson('/api/v1/exclusives/'.$private->id)->assertOk()->assertJsonPath('data.audience', 'private');
+    getJson('/api/v1/exclusive-materials/'.$file->id.'/download')->assertOk();
+
+    // An approved agency sees only the partner exclusives and cannot fetch a private file.
+    actingAsAgent();
+    $titles = collect(getJson('/api/v1/agent/exclusives')->assertOk()->json('data'))->pluck('title')->all();
+    expect($titles)->toBe(['For partners'])->and($titles)->not->toContain('CAS only');
+    getJson('/api/v1/agent/exclusive-materials/'.$file->id.'/download')->assertNotFound();
+    expect($partners->audience)->toBe('partners');
 });

@@ -6,22 +6,7 @@ import { Link } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
 import type { SiteUniversityCard } from "@/features/site/api"
-
-// Light, varied placeholder tints — photo-ready image areas that read light &
-// colourful like the reference, instead of heavy dark blocks.
-const TONES = [
-  "from-sky-100 to-blue-50",
-  "from-amber-100 to-orange-50",
-  "from-emerald-100 to-teal-50",
-  "from-rose-100 to-pink-50",
-  "from-indigo-100 to-sky-50",
-  "from-violet-100 to-fuchsia-50",
-]
-
-function toneFor(seed: number | string): string {
-  const n = typeof seed === "number" ? seed : Number(String(seed).match(/(\d+)/)?.[1] ?? String(seed).length)
-  return TONES[Math.abs(n) % TONES.length]
-}
+import { toneFor } from "@/features/site/tone"
 
 /**
  * A tinted banner area. Only real, supplied images are ever shown on the public

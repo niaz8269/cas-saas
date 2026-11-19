@@ -20,11 +20,14 @@ class ExclusiveOffer extends Model
 
     public const TYPES = ['university', 'program', 'other'];
 
+    /** partners: approved agencies and the CAS team. private: the CAS team only. */
+    public const AUDIENCES = ['partners', 'private'];
+
     /** Agency levels, matching agents.type. */
     public const LEVELS = ['partner', 'sub', 'sub_sub'];
 
     protected $fillable = [
-        'title', 'slug', 'offer_type', 'university_id', 'program_id', 'summary',
+        'title', 'slug', 'offer_type', 'audience', 'university_id', 'program_id', 'summary',
         'commission_rates', 'commission_notes', 'fee_structure', 'fee_notes',
         'eligible_nationalities', 'restricted_nationalities', 'nationality_notes',
         'conditions', 'status', 'published_at', 'sort_order', 'created_by', 'updated_by',

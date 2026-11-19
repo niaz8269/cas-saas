@@ -14,22 +14,24 @@ import {
   AGENCY_LEVELS,
   createExclusive,
   updateExclusive,
+  AUDIENCES,
   type AgencyLevel,
+  type Audience,
   type ExclusiveOffer,
   type ExclusiveWritePayload,
   type FeeRow,
 } from "@/features/exclusives/api"
 import { ApiError } from "@/lib/api"
 
-type RateInput = { type: "percent" | "fixed"; value: string; currency: string }
 
 interface Form {
   title: string
   offer_type: "university" | "program" | "other"
+  audience: Audience
   university_id: number | null
   program_id: number | null
   summary: string
-  rates: Record<AgencyLevel, RateInput>
+  rates: Record<AgencyLevel, string>
   commission_notes: string
   fees: FeeRow[]
   fee_notes: string
@@ -41,22 +43,19 @@ interface Form {
   sort_order: number
 }
 
-const emptyRates = (): Form["rates"] => ({
-  partner: { type: "percent", value: "", currency: "USD" },
-  sub: { type: "percent", value: "", currency: "USD" },
-  sub_sub: { type: "percent", value: "", currency: "USD" },
-})
+const emptyRates = (): Form["rates"] => ({ partner: "", sub: "", sub_sub: "" })
 
 function toForm(o?: ExclusiveOffer): Form {
   const rates = emptyRates()
   for (const level of AGENCY_LEVELS) {
     const r = o?.commission_rates?.[level.value]
-    if (r) rates[level.value] = { type: r.type, value: String(r.value), currency: r.currency ?? "USD" }
+    if (r) rates[level.value] = String(r.value)
   }
 
   return {
     title: o?.title ?? "",
     offer_type: o?.offer_type ?? "program",
+    audience: o?.audience ?? "partners",
     university_id: o?.university_id ?? null,
     program_id: o?.program_id ?? null,
     summary: o?.summary ?? "",
@@ -76,13 +75,14 @@ function toForm(o?: ExclusiveOffer): Form {
 function toPayload(f: Form): ExclusiveWritePayload {
   const commission_rates: ExclusiveWritePayload["commission_rates"] = {}
   for (const level of AGENCY_LEVELS) {
-    const r = f.rates[level.value]
-    if (r.value.trim() !== "") commission_rates[level.value] = { type: r.type, value: r.value, currency: r.type === "fixed" ? r.currency : null }
+    const value = f.rates[level.value].trim()
+    if (value !== "") commission_rates[level.value] = { value }
   }
 
   return {
     title: f.title.trim(),
     offer_type: f.offer_type,
+    audience: f.audience,
     university_id: f.offer_type === "other" ? null : f.university_id,
     program_id: f.offer_type === "program" ? f.program_id : null,
     summary: f.summary,
@@ -212,38 +212,18 @@ export default function ExclusiveFormDialog({ offer, open, onOpenChange }: { off
             </div>
           </Section>
 
-          <Section title="Agency commission" hint="Set a rate for each agency level. A level left empty shows no rate to those agencies.">
+          <Section title="Agency commission (RMB)" hint="The amount in RMB an agency earns at each agency level. A level left empty shows no amount to those agencies.">
             <div className="space-y-2">
-              {AGENCY_LEVELS.map((level) => {
-                const r = form.rates[level.value]
-                const patch = (p: Partial<RateInput>) => set("rates", { ...form.rates, [level.value]: { ...r, ...p } })
-
-                return (
-                  <div key={level.value} className="grid items-end gap-2 sm:grid-cols-[10rem_8rem_1fr_6rem]">
-                    <span className="text-sm font-medium">{level.label}</span>
-                    <div>
-                      <Label className="sr-only" htmlFor={`rt-${level.value}`}>{level.label} type</Label>
-                      <select id={`rt-${level.value}`} className={selectCls} value={r.type} onChange={(e) => patch({ type: e.target.value as RateInput["type"] })}>
-                        <option value="percent">Percent</option>
-                        <option value="fixed">Fixed amount</option>
-                      </select>
-                    </div>
-                    <div>
-                      <Label className="sr-only" htmlFor={`rv-${level.value}`}>{level.label} value</Label>
-                      <Input id={`rv-${level.value}`} type="number" min={0} step="any" value={r.value} onChange={(e) => patch({ value: e.target.value })} placeholder={r.type === "percent" ? "e.g. 10" : "e.g. 300"} />
-                    </div>
-                    {r.type === "fixed" ? (
-                      <div>
-                        <Label className="sr-only" htmlFor={`rc-${level.value}`}>{level.label} currency</Label>
-                        <Input id={`rc-${level.value}`} value={r.currency} maxLength={3} onChange={(e) => patch({ currency: e.target.value.toUpperCase() })} />
-                      </div>
-                    ) : <span className="text-sm text-muted-foreground">%</span>}
-                  </div>
-                )
-              })}
+              {AGENCY_LEVELS.map((level) => (
+                <div key={level.value} className="grid items-center gap-2 sm:grid-cols-[12rem_1fr_3rem]">
+                  <Label htmlFor={`rv-${level.value}`} className="text-sm font-medium">{level.label}</Label>
+                  <Input id={`rv-${level.value}`} type="number" min={0} step="any" value={form.rates[level.value]} onChange={(e) => set("rates", { ...form.rates, [level.value]: e.target.value })} placeholder="e.g. 3000" />
+                  <span className="text-sm text-muted-foreground">RMB</span>
+                </div>
+              ))}
             </div>
             <div>
-              <Label htmlFor="ex-cnotes">Commission notes (when it is paid, tiers, conditions)</Label>
+              <Label htmlFor="ex-cnotes">Commission notes (per student or per intake, when it is paid, tiers, conditions)</Label>
               <Textarea id="ex-cnotes" rows={3} value={form.commission_notes} onChange={(e) => set("commission_notes", e.target.value)} maxLength={4000} />
             </div>
           </Section>
@@ -281,13 +261,22 @@ export default function ExclusiveFormDialog({ offer, open, onOpenChange }: { off
             <Textarea id="ex-cond" rows={5} value={form.conditions} onChange={(e) => set("conditions", e.target.value)} maxLength={8000} placeholder="Age, grades, language, deadlines, refund rules, anything an agency must know before submitting a student." />
           </Section>
 
-          <Section title="Visibility">
+          <Section title="Who can see it">
+            <fieldset className="grid gap-2 sm:grid-cols-2">
+              <legend className="sr-only">Audience</legend>
+              {AUDIENCES.map((a) => (
+                <label key={a.value} className={`flex cursor-pointer gap-3 rounded-md border p-3 text-sm ${form.audience === a.value ? "border-cas-navy bg-cas-navy-50" : ""}`}>
+                  <input type="radio" name="audience" value={a.value} checked={form.audience === a.value} onChange={() => set("audience", a.value)} className="mt-1" />
+                  <span><span className="block font-semibold">{a.label}</span><span className="text-xs text-muted-foreground">{a.hint}</span></span>
+                </label>
+              ))}
+            </fieldset>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <Label htmlFor="ex-status">Status</Label>
                 <select id="ex-status" className={selectCls} value={form.status} onChange={(e) => set("status", e.target.value as Form["status"])}>
-                  <option value="draft">Draft (only staff see it)</option>
-                  <option value="published">Published (approved agencies see it)</option>
+                  <option value="draft">Draft (only staff with manage access see it)</option>
+                  <option value="published">Published (visible to the audience above)</option>
                 </select>
               </div>
               <div>

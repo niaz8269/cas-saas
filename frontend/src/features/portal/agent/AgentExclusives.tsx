@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { ChevronDown, Gem } from "lucide-react"
+import { Gem } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import ExclusiveCard from "@/features/exclusives/ExclusiveCard"
 import ExclusiveDetail, { MaterialList } from "@/features/exclusives/ExclusiveDetail"
-import { formatCommission, type ExclusiveMaterial, type ExclusiveOffer } from "@/features/exclusives/api"
-import { EmptyState, ListSkeleton, LoadError, PageTitle, PortalCard } from "@/features/portal/components"
+import type { ExclusiveMaterial, ExclusiveOffer } from "@/features/exclusives/api"
+import { EmptyState, ListSkeleton, LoadError, PageTitle } from "@/features/portal/components"
 import { portalApi, portalApiBlob } from "@/lib/portalApi"
-import { cn } from "@/lib/utils"
 
 interface AgentExclusives {
   data: ExclusiveOffer[]
@@ -31,7 +32,7 @@ async function downloadAgentMaterial(file: ExclusiveMaterial) {
 /** The Exclusives tab of the agency portal: CAS's exclusive programs and universities, with the files to promote them. */
 export default function AgentExclusives() {
   const { t } = useTranslation()
-  const [open, setOpen] = useState<number | null>(null)
+  const [open, setOpen] = useState<ExclusiveOffer | null>(null)
 
   const { data, isPending, isError, refetch } = useQuery({ queryKey: ["agent-exclusives"], queryFn: getAgentExclusives })
   const download = useMutation({ mutationFn: downloadAgentMaterial })
@@ -53,35 +54,19 @@ export default function AgentExclusives() {
           hint={t("agentPortal.exclusives.emptyHint", { defaultValue: "New exclusive offers will appear here as soon as CAS publishes them." })} />
       )}
 
-      <div className="space-y-3">
-        {data?.data.map((offer) => {
-          const expanded = open === offer.id
-          const rate = formatCommission(offer.commission)
-
-          return (
-            <PortalCard key={offer.id} className="p-0">
-              <button type="button" aria-expanded={expanded} aria-controls={`exclusive-${offer.id}`} onClick={() => setOpen(expanded ? null : offer.id)}
-                className="flex w-full items-center gap-3 p-4 text-left">
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-cas-navy">{offer.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">{[offer.university?.name, offer.program?.name, offer.university?.city].filter(Boolean).join(" · ")}</p>
-                </div>
-                {rate && (
-                  <span className="shrink-0 rounded-full bg-cas-navy px-3 py-1 text-sm font-semibold text-white tabular-nums">
-                    <span className="sr-only">{t("agentPortal.exclusives.yourCommission", { defaultValue: "Your commission" })}: </span>{rate}
-                  </span>
-                )}
-                <ChevronDown className={cn("size-5 shrink-0 text-muted-foreground transition-transform", expanded && "rotate-180")} aria-hidden />
-              </button>
-              {expanded && (
-                <div id={`exclusive-${offer.id}`} className="border-t p-4">
-                  <ExclusiveDetail offer={offer} onDownload={(f) => download.mutate(f)} busyId={busyId} />
-                </div>
-              )}
-            </PortalCard>
-          )
-        })}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {data?.data.map((offer) => <ExclusiveCard key={offer.id} offer={offer} forAgency onOpen={() => setOpen(offer)} />)}
       </div>
+
+      <Dialog open={open != null} onOpenChange={(o) => !o && setOpen(null)}>
+        <DialogContent className="max-h-[90vh] overflow-x-hidden overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{open?.title}</DialogTitle>
+            {open && <DialogDescription>{[open.university?.name, open.program?.name].filter(Boolean).join(" · ")}</DialogDescription>}
+          </DialogHeader>
+          {open && <ExclusiveDetail offer={open} onDownload={(f) => download.mutate(f)} busyId={busyId} />}
+        </DialogContent>
+      </Dialog>
 
       {data && data.library.length > 0 && (
         <section className="mt-6">

@@ -56,7 +56,8 @@ export default function ExclusiveDetail({ offer, onDownload, busyId }: { offer: 
   const own = offer.commission ? formatCommission(offer.commission) : ""
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5 break-words">
+      {offer.audience === "private" && <p className="rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-800">Private: visible to the CAS team only. Agencies cannot see this.</p>}
       {offer.summary && <Text>{offer.summary}</Text>}
 
       <Block title="Your commission">
@@ -73,13 +74,13 @@ export default function ExclusiveDetail({ offer, onDownload, busyId }: { offer: 
       {(offer.fee_structure.length > 0 || offer.fee_notes) && (
         <Block title="Fee structure">
           {offer.fee_structure.length > 0 && (
-            <table className="w-full text-sm">
+            <table className="w-full table-fixed text-sm">
               <tbody>
                 {offer.fee_structure.map((r, i) => (
                   <tr key={i} className="border-b last:border-0">
-                    <th scope="row" className="py-1.5 pr-3 text-left font-normal">{r.label}</th>
-                    <td className="py-1.5 pr-3 text-right font-semibold tabular-nums">{r.amount != null && r.amount !== "" ? `${Number(r.amount).toLocaleString("en-US")} ${r.currency ?? ""}`.trim() : "—"}</td>
-                    <td className="py-1.5 text-muted-foreground">{r.note}</td>
+                    <th scope="row" className="w-2/5 py-1.5 pr-3 text-left align-top font-normal">{r.label}</th>
+                    <td className="py-1.5 pr-3 text-right align-top font-semibold tabular-nums">{r.amount != null && r.amount !== "" ? `${Number(r.amount).toLocaleString("en-US")} ${r.currency ?? ""}`.trim() : "—"}</td>
+                    <td className="py-1.5 align-top text-muted-foreground">{r.note}</td>
                   </tr>
                 ))}
               </tbody>

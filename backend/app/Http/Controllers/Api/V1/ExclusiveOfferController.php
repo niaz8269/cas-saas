@@ -26,10 +26,11 @@ class ExclusiveOfferController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $offers = ExclusiveOffer::query()
-            ->with(['university:id,name,slug,city', 'program:id,name,level'])
+            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level'])
             ->withCount('materials')
             ->when($request->filled('filter.status'), fn ($q) => $q->where('status', $request->input('filter.status')))
             ->when($request->filled('filter.type'), fn ($q) => $q->where('offer_type', $request->input('filter.type')))
+            ->when($request->filled('filter.audience'), fn ($q) => $q->where('audience', $request->input('filter.audience')))
             ->when($request->filled('q'), fn ($q) => $q->where('title', 'like', '%'.$request->string('q').'%'))
             ->orderBy('sort_order')->orderByDesc('updated_at')
             ->paginate(min($request->integer('per_page', 20), 100));
@@ -39,7 +40,7 @@ class ExclusiveOfferController extends Controller
 
     public function show(ExclusiveOffer $exclusive): ExclusiveOfferResource
     {
-        return new ExclusiveOfferResource($exclusive->load(['university:id,name,slug,city', 'program:id,name,level', 'materials']));
+        return new ExclusiveOfferResource($exclusive->load(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'materials']));
     }
 
     public function store(SaveExclusiveOfferRequest $request): ExclusiveOfferResource
@@ -125,8 +126,7 @@ class ExclusiveOfferController extends Controller
         foreach (ExclusiveOffer::LEVELS as $level) {
             $r = $rates[$level] ?? null;
             if (is_array($r) && isset($r['value']) && $r['value'] !== '') {
-                $type = $r['type'] ?? 'percent';
-                $out[$level] = ['type' => $type, 'value' => (float) $r['value'], 'currency' => $type === 'fixed' ? strtoupper((string) ($r['currency'] ?? 'USD')) : null];
+                $out[$level] = ['type' => 'fixed', 'value' => (float) $r['value'], 'currency' => 'CNY'];
             }
         }
 

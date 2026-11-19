@@ -25,8 +25,9 @@ class AgentExclusiveController extends Controller
         $this->authorizeAgency($request);
 
         $offers = ExclusiveOffer::query()
-            ->with(['university:id,name,slug,city', 'program:id,name,level', 'materials'])
+            ->with(['university:id,name,slug,city,province,logo_path,emblem_path,cover_path', 'program:id,name,level', 'materials'])
             ->where('status', 'published')
+            ->where('audience', 'partners')
             ->orderBy('sort_order')->orderByDesc('published_at')
             ->get();
 
@@ -40,9 +41,9 @@ class AgentExclusiveController extends Controller
     {
         $this->authorizeAgency($request);
 
-        // A file of an offer is available only while the offer is published.
+        // A file of an offer is available only while the offer is published and not private.
         if ($material->exclusive_offer_id) {
-            abort_unless(ExclusiveOffer::where('id', $material->exclusive_offer_id)->where('status', 'published')->exists(), 404);
+            abort_unless(ExclusiveOffer::where('id', $material->exclusive_offer_id)->where('status', 'published')->where('audience', 'partners')->exists(), 404);
         }
 
         return $this->files->download($material, $request, ['agent_id' => $request->user()->id]);

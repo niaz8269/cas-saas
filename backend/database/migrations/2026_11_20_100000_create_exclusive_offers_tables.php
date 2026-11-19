@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('title', 200);
             $table->string('slug', 220)->unique();
             $table->string('offer_type', 20)->default('program'); // university | program | other
+            // partners = shown to approved agencies and the CAS team; private = the CAS team only (admins, counselors)
+            $table->string('audience', 20)->default('partners');
             $table->foreignId('university_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('program_id')->nullable()->constrained()->nullOnDelete();
             $table->text('summary')->nullable();
-            // {"partner": {"type": "percent|fixed", "value": 10, "currency": "USD"}, "sub": {...}, "sub_sub": {...}}
+            // Fixed amount in RMB per agency level: {"partner": {"value": 3000}, "sub": {"value": 2000}, "sub_sub": {...}}
             $table->json('commission_rates')->nullable();
             $table->text('commission_notes')->nullable();
             // [{"label": "Tuition", "amount": 30000, "currency": "CNY", "note": "per year"}]
@@ -39,7 +41,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['status', 'sort_order']);
+            $table->index(['audience', 'status', 'sort_order']);
         });
 
         Schema::create('exclusive_materials', function (Blueprint $table) {

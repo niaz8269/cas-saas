@@ -3,6 +3,9 @@
 namespace App\Http\Resources\Exclusives;
 
 use App\Models\ExclusiveOffer;
+use App\Models\University;
+use App\Services\Media\ImageService;
+use App\Services\Media\Thumbnails;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,8 +26,9 @@ class ExclusiveOfferResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'offer_type' => $this->offer_type,
+            'audience' => $this->audience,
             'summary' => $this->summary,
-            'university' => $this->whenLoaded('university', fn () => $this->university ? ['id' => $this->university->id, 'name' => $this->university->name, 'slug' => $this->university->slug, 'city' => $this->university->city] : null),
+            'university' => $this->whenLoaded('university', fn () => $this->university ? $this->universityCard($this->university) : null),
             'program' => $this->whenLoaded('program', fn () => $this->program ? ['id' => $this->program->id, 'name' => $this->program->name, 'level' => $this->program->level] : null),
             'commission_notes' => $this->commission_notes,
             'fee_structure' => $this->fee_structure ?? [],
@@ -49,6 +53,24 @@ class ExclusiveOfferResource extends JsonResource
             'university_id' => $this->university_id,
             'program_id' => $this->program_id,
             'commission_rates' => (object) ($this->commission_rates ?? []),
+        ];
+    }
+
+    /** @return array<string, mixed> The name, place and pictures a card shows, the same ones the public university cards use. */
+    private function universityCard(University $u): array
+    {
+        $images = app(ImageService::class);
+
+        return [
+            'id' => $u->id,
+            'name' => $u->name,
+            'slug' => $u->slug,
+            'city' => $u->city,
+            'province' => $u->province,
+            'logo_url' => $images->url($u->logo_path),
+            'emblem_url' => $images->url($u->emblem_path),
+            'cover_url' => $images->url($u->cover_path),
+            'cover_thumb_url' => app(Thumbnails::class)->urlFor($u->cover_path),
         ];
     }
 }

@@ -16,16 +16,16 @@ class SaveExclusiveOfferRequest extends FormRequest
     /** @return array<string, array<int, mixed>> */
     public function rules(): array
     {
+        // The commission is a fixed amount in RMB for each agency level.
         $rate = fn (string $level) => [
             "commission_rates.$level" => ['nullable', 'array'],
-            "commission_rates.$level.type" => ['nullable', Rule::in(['percent', 'fixed'])],
-            "commission_rates.$level.value" => ['nullable', 'numeric', 'min:0', $this->input("commission_rates.$level.type") === 'percent' ? 'max:100' : 'max:10000000'],
-            "commission_rates.$level.currency" => ['nullable', 'string', 'size:3'],
+            "commission_rates.$level.value" => ['nullable', 'numeric', 'min:0', 'max:100000000'],
         ];
 
         return array_merge([
             'title' => ['required', 'string', 'max:200'],
             'offer_type' => ['required', Rule::in(ExclusiveOffer::TYPES)],
+            'audience' => ['required', Rule::in(ExclusiveOffer::AUDIENCES)],
             'university_id' => ['nullable', 'integer', 'exists:universities,id'],
             'program_id' => ['nullable', 'integer', 'exists:programs,id'],
             'summary' => ['nullable', 'string', 'max:2000'],

@@ -19,11 +19,18 @@ export const MATERIAL_CATEGORIES = [
   { value: "other", label: "Other" },
 ]
 
+/** The commission is a fixed amount in RMB (yuan) for each agency level. */
 export interface CommissionRate {
-  type: "percent" | "fixed"
   value: number
-  currency: string | null
+  currency?: string | null
 }
+
+export type Audience = "partners" | "private"
+
+export const AUDIENCES: { value: Audience; label: string; hint: string }[] = [
+  { value: "partners", label: "Partners", hint: "Approved agencies and the CAS team can see it" },
+  { value: "private", label: "Private", hint: "Only the CAS team (admins and counselors) can see it" },
+]
 
 export interface FeeRow {
   label: string
@@ -50,8 +57,9 @@ export interface ExclusiveOffer {
   title: string
   slug: string
   offer_type: "university" | "program" | "other"
+  audience?: Audience
   summary: string | null
-  university: { id: number; name: string; slug: string; city: string | null } | null
+  university: { id: number; name: string; slug: string; city: string | null; province?: string | null; logo_url?: string | null; emblem_url?: string | null; cover_url?: string | null; cover_thumb_url?: string | null } | null
   program: { id: number; name: string; level: string } | null
   commission_notes: string | null
   fee_structure: FeeRow[]
@@ -78,10 +86,11 @@ export interface ExclusiveOffer {
 export interface ExclusiveWritePayload {
   title: string
   offer_type: "university" | "program" | "other"
+  audience: Audience
   university_id: number | null
   program_id: number | null
   summary: string
-  commission_rates: Partial<Record<AgencyLevel, { type: "percent" | "fixed"; value: number | string; currency?: string | null }>>
+  commission_rates: Partial<Record<AgencyLevel, { value: number | string }>>
   commission_notes: string
   fee_structure: FeeRow[]
   fee_notes: string
@@ -93,11 +102,11 @@ export interface ExclusiveWritePayload {
   sort_order: number
 }
 
-/** "10%" or "300 USD", the way a commission is read. */
+/** "3,000 RMB", the way a commission is read. */
 export function formatCommission(rate: CommissionRate | null | undefined): string {
   if (!rate) return ""
 
-  return rate.type === "percent" ? `${rate.value}%` : `${Number(rate.value).toLocaleString("en-US")} ${rate.currency ?? ""}`.trim()
+  return `${Number(rate.value).toLocaleString("en-US")} RMB`
 }
 
 export const formatBytes = (n: number) => (n >= 1_048_576 ? `${(n / 1_048_576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`)
@@ -110,8 +119,8 @@ const qs = (params: Record<string, string | number | undefined>) => {
   return out ? `?${out}` : ""
 }
 
-export const listExclusives = (params: { q?: string; status?: string; page?: number } = {}) =>
-  api<Paginated<ExclusiveOffer>>(`/exclusives${qs({ "q": params.q, "filter[status]": params.status, "page": params.page && params.page > 1 ? params.page : undefined })}`)
+export const listExclusives = (params: { q?: string; status?: string; audience?: string; page?: number } = {}) =>
+  api<Paginated<ExclusiveOffer>>(`/exclusives${qs({ "q": params.q, "filter[status]": params.status, "filter[audience]": params.audience, "page": params.page && params.page > 1 ? params.page : undefined })}`)
 
 export const getExclusive = (id: number) => api<{ data: ExclusiveOffer }>(`/exclusives/${id}`)
 

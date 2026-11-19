@@ -23,7 +23,7 @@ const OFFER = {
   eligible_nationalities: [], restricted_nationalities: ["Country A"], nationality_notes: null, conditions: "Age 17 to 25.",
   published_at: null, updated_at: null, materials: [MATERIAL], materials_count: 1,
   status: "published", sort_order: 0, university_id: 2, program_id: 3,
-  commission_rates: { partner: { type: "percent", value: 12, currency: null }, sub: { type: "percent", value: 8, currency: null } },
+  audience: "partners", commission_rates: { partner: { value: 3000 }, sub: { value: 2000 } },
 }
 
 beforeEach(() => vi.restoreAllMocks())
@@ -35,15 +35,20 @@ it("lets a counselor read an exclusive, with every agency level's commission, bu
     if (url.includes("/exclusives/1")) return Promise.resolve(jsonResponse({ data: OFFER }))
     if (url.includes("/exclusives/library")) return Promise.resolve(jsonResponse({ data: [] }))
 
-    return Promise.resolve(jsonResponse({ data: [OFFER], meta: { current_page: 1, last_page: 1, per_page: 20, total: 1, from: 1, to: 1 } }))
+    return Promise.resolve(jsonResponse({ data: [OFFER, { ...OFFER, id: 2, title: "CAS-only package", audience: "private" }], meta: { current_page: 1, last_page: 1, per_page: 20, total: 2, from: 1, to: 2 } }))
   }))
   const user = userEvent.setup()
 
   renderWithProviders(<ExclusivesPage />)
 
   expect(await screen.findByText("Dalian MBBS exclusive")).toBeInTheDocument()
+  expect(screen.getByText("CAS-only package")).toBeInTheDocument()
+  expect(screen.getAllByText("Private")).toHaveLength(2)
   expect(screen.queryByRole("button", { name: /New exclusive/ })).not.toBeInTheDocument()
-  expect(screen.getByText("12%")).toBeInTheDocument()
+  expect(screen.getAllByText("3,000 RMB")).toHaveLength(2) // one on each card
+  // The filter button and the card badge both say Partners.
+  expect(screen.getAllByText("Partners")).toHaveLength(2)
+  expect(screen.getAllByText("Dalian Medical University · Dalian")).toHaveLength(2)
 
   await user.click(screen.getByRole("button", { name: "Dalian MBBS exclusive" }))
   const dialog = await screen.findByRole("dialog")
@@ -86,7 +91,7 @@ it("gives an admin the New exclusive button", async () => {
 
 it("shows an agency its own commission, the conditions and the files to download", async () => {
   usePortalAuthStore.setState({ token: "t", kind: "agent", profile: { id: 1, name: "Agency", email: null, status: "active", code: "A-1" } })
-  const agencyOffer = { ...OFFER, commission: { type: "percent", value: 8, currency: null }, agency_level: "sub", commission_rates: undefined, status: undefined }
+  const agencyOffer = { ...OFFER, commission: { value: 2000 }, agency_level: "sub", commission_rates: undefined, status: undefined }
   const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL) => {
     if (String(input).includes("/download")) return Promise.resolve(new Response(new Blob(["pdf"]), { status: 200 }))
 
@@ -98,16 +103,16 @@ it("shows an agency its own commission, the conditions and the files to download
 
   renderWithProviders(<AgentExclusives />)
 
-  const toggle = await screen.findByRole("button", { name: /Dalian MBBS exclusive/ })
-  expect(toggle).toHaveTextContent("8%")
-  expect(toggle).toHaveAttribute("aria-expanded", "false")
+  const open = await screen.findByRole("button", { name: "Dalian MBBS exclusive" })
+  expect(screen.getByText("Your commission:")).toBeInTheDocument()
+  expect(screen.getByText("2,000 RMB")).toBeInTheDocument()
   expect(screen.getByText("Logo pack")).toBeInTheDocument()
 
-  await user.click(toggle)
-  expect(toggle).toHaveAttribute("aria-expanded", "true")
-  expect(screen.getByText("Age 17 to 25.")).toBeInTheDocument()
-  expect(screen.queryByText("Partner agency")).not.toBeInTheDocument()
+  await user.click(open)
+  const dialog = await screen.findByRole("dialog")
+  expect(within(dialog).getByText("Age 17 to 25.")).toBeInTheDocument()
+  expect(within(dialog).queryByText("Partner agency")).not.toBeInTheDocument()
 
-  await user.click(screen.getByRole("button", { name: "Download 2027 brochure" }))
+  await user.click(within(dialog).getByRole("button", { name: "Download 2027 brochure" }))
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/agent/exclusive-materials/9/download"), expect.anything()))
 })
