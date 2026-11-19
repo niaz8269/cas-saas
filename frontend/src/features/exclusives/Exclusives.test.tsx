@@ -54,6 +54,27 @@ it("lets a counselor read an exclusive, with every agency level's commission, bu
   expect(within(dialog).queryByRole("button", { name: "Edit" })).not.toBeInTheDocument()
 })
 
+it("opens the editor from the detail view of the same exclusive, with its files", async () => {
+  useAuthStore.setState({ token: "t", user: staff(["exclusives.view.global", "exclusives.manage.global"]) })
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    const url = String(input)
+    if (url.includes("/exclusives/1")) return Promise.resolve(jsonResponse({ data: OFFER }))
+    if (url.includes("/exclusives/library")) return Promise.resolve(jsonResponse({ data: [] }))
+    if (url.includes("/countries")) return Promise.resolve(jsonResponse({ data: [] }))
+
+    return Promise.resolve(jsonResponse({ data: [OFFER], meta: { current_page: 1, last_page: 1, per_page: 20, total: 1, from: 1, to: 1 } }))
+  }))
+  const user = userEvent.setup()
+
+  renderWithProviders(<ExclusivesPage />)
+  await user.click(await screen.findByRole("button", { name: "Dalian MBBS exclusive" }))
+  await user.click(await screen.findByRole("button", { name: "Edit" }))
+
+  const editor = await screen.findByRole("dialog", { name: "Edit exclusive" })
+  expect(await within(editor).findByText("2027 brochure")).toBeInTheDocument()
+  expect(within(editor).getByLabelText("Title")).toHaveValue("Dalian MBBS exclusive")
+})
+
 it("gives an admin the New exclusive button", async () => {
   useAuthStore.setState({ token: "t", user: staff(["exclusives.view.global", "exclusives.manage.global"]) })
   vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({ data: [], meta: { current_page: 1, last_page: 1, per_page: 20, total: 0, from: null, to: null } }))))

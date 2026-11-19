@@ -28,7 +28,8 @@ export default function MaterialsPanel({ offerId, canManage }: { offerId: number
   const [category, setCategory] = useState("brochure")
   const [error, setError] = useState<string | null>(null)
 
-  const key = offerId ? ["exclusive", offerId] : ["exclusive-library"]
+  // Own keys: the detail views cache the whole offer under ["exclusive", id], which has a different shape.
+  const key = offerId ? ["exclusive-materials", offerId] : ["exclusive-library"]
   const { data } = useQuery({
     queryKey: key,
     queryFn: async () => (offerId ? (await getExclusive(offerId)).data.materials ?? [] : (await listLibrary()).data),
@@ -38,6 +39,7 @@ export default function MaterialsPanel({ offerId, canManage }: { offerId: number
   const refresh = () => {
     void queryClient.invalidateQueries({ queryKey: key })
     void queryClient.invalidateQueries({ queryKey: ["exclusives"] })
+    if (offerId) void queryClient.invalidateQueries({ queryKey: ["exclusive", offerId] })
   }
 
   const upload = useMutation({
