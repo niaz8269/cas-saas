@@ -1,0 +1,92 @@
+import { screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+
+import AgentExclusives from "@/features/portal/agent/AgentExclusives"
+import { usePortalAuthStore } from "@/stores/portalAuth"
+import { useAuthStore } from "@/stores/auth"
+import { jsonResponse, renderWithProviders } from "@/test/utils"
+import type { AuthUser } from "@/types/auth"
+
+import ExclusivesPage from "./ExclusivesPage"
+
+const staff = (permissions: string[]): AuthUser => ({
+  id: 1, name: "Staff", email: "s@cas.moe", phone: null, status: "active",
+  roles: ["Counselor"], permissions, last_login_at: null,
+})
+
+const MATERIAL = { id: 9, exclusive_offer_id: 1, title: "2027 brochure", description: null, category: "brochure", original_name: "brochure.pdf", mime: "application/pdf", size: 204800, created_at: null }
+
+const OFFER = {
+  id: 1, title: "Dalian MBBS exclusive", slug: "dalian-mbbs-exclusive", offer_type: "program", summary: "Only through CAS agencies.",
+  university: { id: 2, name: "Dalian Medical University", slug: "dalian-medical", city: "Dalian" }, program: { id: 3, name: "MBBS", level: "bachelor" },
+  commission_notes: "Paid after the first-year fee.", fee_structure: [{ label: "Tuition", amount: 30000, currency: "CNY", note: "per year" }], fee_notes: null,
+  eligible_nationalities: [], restricted_nationalities: ["Country A"], nationality_notes: null, conditions: "Age 17 to 25.",
+  published_at: null, updated_at: null, materials: [MATERIAL], materials_count: 1,
+  status: "published", sort_order: 0, university_id: 2, program_id: 3,
+  commission_rates: { partner: { type: "percent", value: 12, currency: null }, sub: { type: "percent", value: 8, currency: null } },
+}
+
+beforeEach(() => vi.restoreAllMocks())
+
+it("lets a counselor read an exclusive, with every agency level's commission, but not change it", async () => {
+  useAuthStore.setState({ token: "t", user: staff(["exclusives.view.global"]) })
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    const url = String(input)
+    if (url.includes("/exclusives/1")) return Promise.resolve(jsonResponse({ data: OFFER }))
+    if (url.includes("/exclusives/library")) return Promise.resolve(jsonResponse({ data: [] }))
+
+    return Promise.resolve(jsonResponse({ data: [OFFER], meta: { current_page: 1, last_page: 1, per_page: 20, total: 1, from: 1, to: 1 } }))
+  }))
+  const user = userEvent.setup()
+
+  renderWithProviders(<ExclusivesPage />)
+
+  expect(await screen.findByText("Dalian MBBS exclusive")).toBeInTheDocument()
+  expect(screen.queryByRole("button", { name: /New exclusive/ })).not.toBeInTheDocument()
+  expect(screen.getByText("12%")).toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: "Dalian MBBS exclusive" }))
+  const dialog = await screen.findByRole("dialog")
+  expect(await within(dialog).findByText("Partner agency")).toBeInTheDocument()
+  expect(within(dialog).getByText("Sub-agency")).toBeInTheDocument()
+  expect(within(dialog).getByText("Age 17 to 25.")).toBeInTheDocument()
+  expect(within(dialog).getByText(/Not accepted:/)).toBeInTheDocument()
+  expect(within(dialog).queryByRole("button", { name: "Edit" })).not.toBeInTheDocument()
+})
+
+it("gives an admin the New exclusive button", async () => {
+  useAuthStore.setState({ token: "t", user: staff(["exclusives.view.global", "exclusives.manage.global"]) })
+  vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({ data: [], meta: { current_page: 1, last_page: 1, per_page: 20, total: 0, from: null, to: null } }))))
+
+  renderWithProviders(<ExclusivesPage />)
+
+  expect(await screen.findByRole("button", { name: /New exclusive/ })).toBeInTheDocument()
+})
+
+it("shows an agency its own commission, the conditions and the files to download", async () => {
+  usePortalAuthStore.setState({ token: "t", kind: "agent", profile: { id: 1, name: "Agency", email: null, status: "active", code: "A-1" } })
+  const agencyOffer = { ...OFFER, commission: { type: "percent", value: 8, currency: null }, agency_level: "sub", commission_rates: undefined, status: undefined }
+  const fetchMock = vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    if (String(input).includes("/download")) return Promise.resolve(new Response(new Blob(["pdf"]), { status: 200 }))
+
+    return Promise.resolve(jsonResponse({ data: [agencyOffer], library: [{ ...MATERIAL, id: 10, title: "Logo pack", exclusive_offer_id: null }] }))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+  vi.stubGlobal("URL", Object.assign(URL, { createObjectURL: () => "blob:x", revokeObjectURL: () => {} }))
+  const user = userEvent.setup()
+
+  renderWithProviders(<AgentExclusives />)
+
+  const toggle = await screen.findByRole("button", { name: /Dalian MBBS exclusive/ })
+  expect(toggle).toHaveTextContent("8%")
+  expect(toggle).toHaveAttribute("aria-expanded", "false")
+  expect(screen.getByText("Logo pack")).toBeInTheDocument()
+
+  await user.click(toggle)
+  expect(toggle).toHaveAttribute("aria-expanded", "true")
+  expect(screen.getByText("Age 17 to 25.")).toBeInTheDocument()
+  expect(screen.queryByText("Partner agency")).not.toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: "Download 2027 brochure" }))
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/agent/exclusive-materials/9/download"), expect.anything()))
+})

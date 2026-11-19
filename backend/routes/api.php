@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DepartmentController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\ErrorLogController;
+use App\Http\Controllers\Api\V1\ExclusiveOfferController;
 use App\Http\Controllers\Api\V1\GuardianController;
 use App\Http\Controllers\Api\V1\HomeSectionController;
 use App\Http\Controllers\Api\V1\HomeSpotlightController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Api\V1\MessageTemplateController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\Portal\AgentApplicationController;
 use App\Http\Controllers\Api\V1\Portal\AgentAuthController;
+use App\Http\Controllers\Api\V1\Portal\AgentExclusiveController;
 use App\Http\Controllers\Api\V1\Portal\AgentPortalController;
 use App\Http\Controllers\Api\V1\Portal\PortalNotificationController;
 use App\Http\Controllers\Api\V1\Portal\StudentApplicationController;
@@ -159,6 +161,8 @@ Route::prefix('v1')->group(function () {
             Route::post('scholarship-applications', [AgentApplicationController::class, 'storeScholarshipApplication']);
 
             Route::get('applications', [AgentPortalController::class, 'applications']);
+            Route::get('exclusives', [AgentExclusiveController::class, 'index']);
+            Route::get('exclusive-materials/{material}/download', [AgentExclusiveController::class, 'download']);
             Route::get('commissions', [AgentPortalController::class, 'commissions']);
             Route::get('commissions/statement', [AgentPortalController::class, 'statement']);
             Route::get('testimonial', [TestimonialController::class, 'mine']);
@@ -278,6 +282,18 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:agents.manage.global,staff');
         Route::post('students/{student}/convert-to-partner', [AgentController::class, 'convertStudentToPartner'])
             ->middleware('permission:agents.manage.global,staff');
+
+        // Exclusive programs and universities for agencies: counselors and admins read, admins write
+        Route::get('exclusives', [ExclusiveOfferController::class, 'index'])->middleware('permission:exclusives.view.global,staff');
+        Route::get('exclusives/library', [ExclusiveOfferController::class, 'library'])->middleware('permission:exclusives.view.global,staff');
+        Route::get('exclusives/{exclusive}', [ExclusiveOfferController::class, 'show'])->middleware('permission:exclusives.view.global,staff');
+        Route::get('exclusive-materials/{material}/download', [ExclusiveOfferController::class, 'downloadMaterial'])->middleware('permission:exclusives.view.global,staff');
+        Route::post('exclusives', [ExclusiveOfferController::class, 'store'])->middleware('permission:exclusives.manage.global,staff');
+        Route::put('exclusives/{exclusive}', [ExclusiveOfferController::class, 'update'])->middleware('permission:exclusives.manage.global,staff');
+        Route::delete('exclusives/{exclusive}', [ExclusiveOfferController::class, 'destroy'])->middleware('permission:exclusives.manage.global,staff');
+        Route::post('exclusive-materials', [ExclusiveOfferController::class, 'storeMaterial'])->middleware('permission:exclusives.manage.global,staff');
+        Route::post('exclusives/{exclusive}/materials', [ExclusiveOfferController::class, 'storeMaterial'])->middleware('permission:exclusives.manage.global,staff');
+        Route::delete('exclusive-materials/{material}', [ExclusiveOfferController::class, 'destroyMaterial'])->middleware('permission:exclusives.manage.global,staff');
 
         // Content: blogs / news / events
         Route::get('posts', [PostController::class, 'index'])

@@ -48,6 +48,7 @@ const AgentApplyWizard = lazy(() => import("@/features/portal/agent/AgentApplyWi
 const AgentApplications = lazy(() => import("@/features/portal/agent/AgentApplications"))
 const AgentScholarshipWizard = lazy(() => import("@/features/portal/agent/AgentScholarshipWizard"))
 const AgentCommissions = lazy(() => import("@/features/portal/agent/AgentCommissions"))
+const AgentExclusives = lazy(() => import("@/features/portal/agent/AgentExclusives"))
 const StudentHome = lazy(() => import("@/features/portal/student/StudentHome"))
 const StudentApplyWizard = lazy(() => import("@/features/portal/student/StudentApplyWizard"))
 const StudentScholarshipWizard = lazy(() => import("@/features/portal/student/StudentScholarshipWizard"))
@@ -85,6 +86,7 @@ const SitePostDetail = lazy(() => import("@/features/site/SitePostDetail"))
 const ContentPage = lazy(() => import("@/features/admin/ContentPage"))
 const MarketingPage = lazy(() => import("@/features/marketing/MarketingPage"))
 const PartnerRequestsPage = lazy(() => import("@/features/admin/PartnerRequestsPage"))
+const ExclusivesPage = lazy(() => import("@/features/exclusives/ExclusivesPage"))
 const UsersPage = lazy(() => import("@/features/admin/UsersPage"))
 const SettingsPage = lazy(() => import("@/features/admin/SettingsPage"))
 const IntegrationsPage = lazy(() => import("@/features/admin/IntegrationsPage"))
@@ -166,6 +168,7 @@ const router = createBrowserRouter([
           { path: "/portal/agent/apply", element: <AgentApplyWizard /> },
           { path: "/portal/agent/apply-scholarship", element: <AgentScholarshipWizard /> },
           { path: "/portal/agent/commissions", element: <AgentCommissions /> },
+          { path: "/portal/agent/exclusives", element: <AgentExclusives /> },
           { path: "/portal/student", element: <StudentHome /> },
           { path: "/portal/student/testimonial", element: <StudentTestimonial /> },
           { path: "/portal/agent/testimonial", element: <AgentTestimonial /> },
@@ -209,6 +212,7 @@ const router = createBrowserRouter([
           { path: "/reports", element: <ReportsPage /> },
           { path: "/users", element: <UsersPage /> },
           { path: "/partner-requests", element: <PartnerRequestsPage /> },
+          { path: "/exclusives", element: <ExclusivesPage /> },
           { path: "/content", element: <ContentPage /> },
           { path: "/testimonials", element: <TestimonialsAdmin /> },
           { path: "/home-page", element: <HomePageManager /> },

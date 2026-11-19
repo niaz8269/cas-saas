@@ -3,6 +3,7 @@ import {
   ClipboardList,
   FilePlus2,
   FileText,
+  Gem,
   GraduationCap,
   LayoutGrid,
   LogOut,
@@ -35,6 +36,7 @@ const AGENT_NAV: PortalNavItem[] = [
   { to: "/portal/agent/students", labelKey: "portal.navStudents", icon: GraduationCap },
   { to: "/portal/agent/applications", labelKey: "portal.navApplications", icon: ClipboardList },
   { to: "/portal/agent/apply", labelKey: "portal.navApply", icon: FilePlus2 },
+  { to: "/portal/agent/exclusives", labelKey: "portal.navExclusives", icon: Gem },
   { to: "/portal/agent/commissions", labelKey: "portal.navEarnings", icon: Wallet },
 ]
 
