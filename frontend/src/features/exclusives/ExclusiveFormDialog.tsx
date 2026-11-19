@@ -35,6 +35,11 @@ interface Form {
   university_id: number | null
   program_id: number | null
   scholarship_id: number | null
+  custom_name: string
+  custom_university: string
+  city: string
+  province: string
+  programs: string[]
   /** The name shown for the program, scholarship or university picked. */
   link_label: string | null
   summary: string
@@ -55,6 +60,7 @@ const emptyRates = (): Form["rates"] => ({ partner: "", sub: "", sub_sub: "" })
 /** The program or scholarship name with its university, or just the university name: names only. */
 function linkLabel(o?: ExclusiveOffer): string | null {
   if (!o) return null
+  if (o.custom_name) return o.custom_name
   const name = o.offer_type === "program" ? o.program?.name : o.offer_type === "scholarship" ? o.scholarship?.name : null
   const label = [name, o.university?.name].filter(Boolean).join(" \u00b7 ")
 
@@ -75,6 +81,11 @@ function toForm(o?: ExclusiveOffer): Form {
     university_id: o?.university_id ?? null,
     program_id: o?.program_id ?? null,
     scholarship_id: o?.scholarship_id ?? null,
+    custom_name: o?.custom_name ?? "",
+    custom_university: o?.custom_university ?? "",
+    city: o?.city ?? "",
+    province: o?.province ?? "",
+    programs: o?.programs_list ?? [],
     link_label: linkLabel(o),
     summary: o?.summary ?? "",
     rates,
@@ -104,6 +115,11 @@ function toPayload(f: Form): ExclusiveWritePayload {
     university_id: f.offer_type === "university" ? f.university_id : null,
     program_id: f.offer_type === "program" ? f.program_id : null,
     scholarship_id: f.offer_type === "scholarship" ? f.scholarship_id : null,
+    custom_name: f.custom_name.trim() || null,
+    custom_university: f.custom_university.trim() || null,
+    city: f.city.trim() || null,
+    province: f.province.trim() || null,
+    programs_list: f.programs,
     summary: f.summary,
     commission_rates,
     commission_notes: f.commission_notes,
@@ -119,6 +135,37 @@ function toPayload(f: Form): ExclusiveWritePayload {
 }
 
 const selectCls = "h-9 w-full rounded-md border bg-background px-2 text-sm"
+
+/** The programs advertised for a city: type a name and press Enter or Add; each shows as a chip with a remove button. */
+function ProgramNames({ names, onChange }: { names: string[]; onChange: (names: string[]) => void }) {
+  const [text, setText] = useState("")
+  const add = () => {
+    const name = text.trim()
+    if (name && !names.some((n) => n.toLowerCase() === name.toLowerCase())) onChange([...names, name])
+    setText("")
+  }
+
+  return (
+    <div>
+      <Label htmlFor="ex-plist">Programs we advertise here</Label>
+      <div className="mt-1 flex gap-2">
+        <Input id="ex-plist" value={text} placeholder="e.g. MBBS (English)" maxLength={150}
+          onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add() } }} />
+        <Button type="button" variant="outline" onClick={add}><Plus className="size-4" aria-hidden /> Add</Button>
+      </div>
+      {names.length > 0 && (
+        <ul className="mt-2 flex flex-wrap gap-1.5">
+          {names.map((n) => (
+            <li key={n} className="inline-flex items-center gap-1 rounded-full bg-cas-navy-50 py-0.5 pr-1 pl-3 text-sm text-cas-navy">
+              {n}
+              <button type="button" onClick={() => onChange(names.filter((x) => x !== n))} aria-label={`Remove ${n}`} className="rounded-full p-1 hover:bg-white"><X className="size-3.5" aria-hidden /></button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
   return (
@@ -193,27 +240,53 @@ export default function ExclusiveFormDialog({ offer, open, onOpenChange }: { off
             </div>
             <div>
               <Label htmlFor="ex-type">What is it about?</Label>
-              <select id="ex-type" className={selectCls} value={form.offer_type} onChange={(e) => setForm((f) => ({ ...f, offer_type: e.target.value as ExclusiveType, university_id: null, program_id: null, scholarship_id: null, link_label: null }))}>
+              <select id="ex-type" className={selectCls} value={form.offer_type} onChange={(e) => setForm((f) => ({ ...f, offer_type: e.target.value as ExclusiveType, university_id: null, program_id: null, scholarship_id: null, custom_name: "", custom_university: "", link_label: null }))}>
                 <option value="program">A program</option>
                 <option value="university">A university</option>
                 <option value="scholarship">A scholarship</option>
+                <option value="city">A city or province (no university named)</option>
                 <option value="other">Something else (a campaign, a package)</option>
               </select>
             </div>
             {form.offer_type === "program" && (
               <SearchPicker id="ex-link" label="Program" queryKey="program" placeholder="Search programs by name" search={searchPrograms} value={form.link_label}
-                onPick={(i) => setForm((f) => ({ ...f, program_id: i.id, link_label: i.label, title: f.title || i.label.split(" \u00b7 ")[0] }))}
-                onClear={() => setForm((f) => ({ ...f, program_id: null, link_label: null }))} />
+                onPick={(i) => setForm((f) => ({ ...f, program_id: i.id, custom_name: "", custom_university: "", link_label: i.label, title: f.title || i.label.split(" \u00b7 ")[0] }))}
+                onCustom={(text) => setForm((f) => ({ ...f, program_id: null, custom_name: text, link_label: text, title: f.title || text }))}
+                onClear={() => setForm((f) => ({ ...f, program_id: null, custom_name: "", custom_university: "", link_label: null }))} />
             )}
             {form.offer_type === "scholarship" && (
               <SearchPicker id="ex-link" label="Scholarship" queryKey="scholarship" placeholder="Search scholarships by name" search={searchScholarships} value={form.link_label}
-                onPick={(i) => setForm((f) => ({ ...f, scholarship_id: i.id, link_label: i.label, title: f.title || i.label.split(" \u00b7 ")[0] }))}
-                onClear={() => setForm((f) => ({ ...f, scholarship_id: null, link_label: null }))} />
+                onPick={(i) => setForm((f) => ({ ...f, scholarship_id: i.id, custom_name: "", custom_university: "", link_label: i.label, title: f.title || i.label.split(" \u00b7 ")[0] }))}
+                onCustom={(text) => setForm((f) => ({ ...f, scholarship_id: null, custom_name: text, link_label: text, title: f.title || text }))}
+                onClear={() => setForm((f) => ({ ...f, scholarship_id: null, custom_name: "", custom_university: "", link_label: null }))} />
             )}
             {form.offer_type === "university" && (
               <SearchPicker id="ex-link" label="University" queryKey="university" placeholder="Search universities by name" search={searchUniversities} value={form.link_label}
-                onPick={(i) => setForm((f) => ({ ...f, university_id: i.id, link_label: i.label, title: f.title || i.label }))}
-                onClear={() => setForm((f) => ({ ...f, university_id: null, link_label: null }))} />
+                onPick={(i) => setForm((f) => ({ ...f, university_id: i.id, custom_name: "", link_label: i.label, title: f.title || i.label }))}
+                onCustom={(text) => setForm((f) => ({ ...f, university_id: null, custom_name: text, link_label: text, title: f.title || text }))}
+                onClear={() => setForm((f) => ({ ...f, university_id: null, custom_name: "", link_label: null }))} />
+            )}
+            {(form.offer_type === "program" || form.offer_type === "scholarship") && form.custom_name !== "" && (
+              <div>
+                <Label htmlFor="ex-cuni">University (optional, as you want it shown)</Label>
+                <Input id="ex-cuni" value={form.custom_university} onChange={(e) => set("custom_university", e.target.value)} maxLength={200} />
+              </div>
+            )}
+            {form.offer_type === "city" && (
+              <div className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor="ex-city">City</Label>
+                    <Input id="ex-city" value={form.city} onChange={(e) => set("city", e.target.value)} maxLength={100} />
+                  </div>
+                  <div>
+                    <Label htmlFor="ex-province">Province</Label>
+                    <Input id="ex-province" value={form.province} onChange={(e) => set("province", e.target.value)} maxLength={100} />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">Fill in the city, the province, or both. No university is named.</p>
+                <ProgramNames names={form.programs} onChange={(names) => set("programs", names)} />
+              </div>
             )}
             <div>
               <Label htmlFor="ex-summary">Summary agencies will see first</Label>

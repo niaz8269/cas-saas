@@ -29,6 +29,14 @@ class SaveExclusiveOfferRequest extends FormRequest
             'university_id' => ['nullable', 'integer', 'exists:universities,id'],
             'program_id' => ['nullable', 'integer', 'exists:programs,id'],
             'scholarship_id' => ['nullable', 'integer', 'exists:scholarships,id'],
+            // A program, scholarship or university that is not in the catalog, typed by hand.
+            'custom_name' => ['nullable', 'string', 'max:200'],
+            'custom_university' => ['nullable', 'string', 'max:200'],
+            // A city or province with the programs we advertise there, without naming a university.
+            'city' => ['nullable', 'string', 'max:100', Rule::requiredIf(fn () => $this->input('offer_type') === 'city' && blank($this->input('province')))],
+            'province' => ['nullable', 'string', 'max:100'],
+            'programs_list' => ['nullable', 'array', 'max:40'],
+            'programs_list.*' => ['nullable', 'string', 'max:150'],
             'summary' => ['nullable', 'string', 'max:2000'],
             'commission_rates' => ['nullable', 'array'],
             'commission_notes' => ['nullable', 'string', 'max:4000'],

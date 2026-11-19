@@ -52,7 +52,7 @@ export interface ExclusiveMaterial {
   download_count?: number
 }
 
-export type ExclusiveType = "university" | "program" | "scholarship" | "other"
+export type ExclusiveType = "university" | "program" | "scholarship" | "city" | "other"
 
 /** Name lookups for the pickers: the server matches every word against the name and the university, 50 at a time. */
 export interface LookupResult {
@@ -77,6 +77,13 @@ export interface ExclusiveOffer {
   university: { id: number; name: string; slug: string; city: string | null; province?: string | null; logo_url?: string | null; emblem_url?: string | null; cover_url?: string | null; cover_thumb_url?: string | null } | null
   program: { id: number; name: string; level: string } | null
   scholarship?: { id: number; name: string } | null
+  /** A name typed by hand when the program, scholarship or university is not in the catalog. */
+  custom_name?: string | null
+  custom_university?: string | null
+  /** A city or province with the programs advertised there, no university named. */
+  city?: string | null
+  province?: string | null
+  programs_list?: string[]
   commission_notes: string | null
   fee_structure: FeeRow[]
   fee_notes: string | null
@@ -107,6 +114,11 @@ export interface ExclusiveWritePayload {
   university_id: number | null
   program_id: number | null
   scholarship_id: number | null
+  custom_name: string | null
+  custom_university: string | null
+  city: string | null
+  province: string | null
+  programs_list: string[]
   summary: string
   commission_rates: Partial<Record<AgencyLevel, { value: number | string }>>
   commission_notes: string

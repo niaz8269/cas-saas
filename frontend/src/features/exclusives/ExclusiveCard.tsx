@@ -19,7 +19,8 @@ export default function ExclusiveCard({ offer, onOpen, actions, forAgency = fals
 }) {
   const u = offer.university
   const cover = u?.cover_thumb_url ?? u?.cover_url ?? null
-  const place = [u?.city, u?.province].filter(Boolean).join(", ")
+  const place = (u ? [u.city, u.province] : [offer.city, offer.province]).filter(Boolean).join(", ")
+  const placeName = u?.name ?? offer.custom_university ?? null
   const rate = forAgency ? formatCommission(offer.commission) : formatCommission(offer.commission_rates?.partner)
   const firstFee = offer.fee_structure.find((f) => f.amount != null && f.amount !== "")
   const files = offer.materials_count ?? offer.materials?.length ?? 0
@@ -28,8 +29,12 @@ export default function ExclusiveCard({ offer, onOpen, actions, forAgency = fals
   const facts: { key: string; text: string }[] = []
   if (offer.program) facts.push({ key: "program", text: offer.program.name })
   else if (offer.scholarship) facts.push({ key: "scholarship", text: offer.scholarship.name })
+  else if (offer.custom_name && offer.offer_type !== "university") facts.push({ key: "custom", text: offer.custom_name })
+  else if (offer.offer_type === "city") facts.push({ key: "city", text: "Programs in this city" })
   else if (offer.offer_type === "university") facts.push({ key: "type", text: "University package" })
   else if (offer.offer_type === "other") facts.push({ key: "type", text: "Special offer" })
+  for (const name of (offer.programs_list ?? []).slice(0, 3)) facts.push({ key: `p-${name}`, text: name })
+  if ((offer.programs_list ?? []).length > 3) facts.push({ key: "p-more", text: `+${(offer.programs_list ?? []).length - 3} more` })
   if (firstFee) facts.push({ key: "fee", text: `${firstFee.label}: ${Number(firstFee.amount).toLocaleString("en-US")} ${firstFee.currency ?? ""}${firstFee.note ? ` ${firstFee.note}` : ""}`.trim() })
   if (restricted > 0) facts.push({ key: "restricted", text: `Not open to ${restricted} ${restricted === 1 ? "nationality" : "nationalities"}` })
   else if (offer.eligible_nationalities.length > 0) facts.push({ key: "eligible", text: `For ${offer.eligible_nationalities.length} ${offer.eligible_nationalities.length === 1 ? "nationality" : "nationalities"}` })
@@ -74,9 +79,9 @@ export default function ExclusiveCard({ offer, onOpen, actions, forAgency = fals
             <h3 className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">
               <button type="button" onClick={onOpen} className="text-left outline-none after:absolute after:inset-0 after:content-['']">{offer.title}</button>
             </h3>
-            {(u || place) && (
+            {(placeName || place) && (
               <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">{[u?.name, place].filter(Boolean).join(" · ")}</span>
+                <MapPin className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">{[placeName, place].filter(Boolean).join(" · ")}</span>
               </p>
             )}
           </div>

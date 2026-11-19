@@ -2,20 +2,24 @@ import { useQuery } from "@tanstack/react-query"
 import { Search, X } from "lucide-react"
 import { useEffect, useId, useRef, useState } from "react"
 
-import { cn } from "@/lib/utils"
-
 import type { LookupResult } from "@/features/exclusives/api"
+import { cn } from "@/lib/utils"
 
 export interface PickerItem {
   id: number
   label: string
 }
 
+interface Option extends PickerItem {
+  custom?: boolean
+}
+
 /**
  * A search box with a list under it. It asks the server as you type (so every record can be found, not just the
  * first page), supports the arrow keys, Enter and Escape, and shows the choice as a name with a clear button.
+ * With `onCustom`, whatever was typed can also be used as it is, for a name that is not in the catalog.
  */
-export default function SearchPicker({ id, label, value, placeholder, queryKey, search, onPick, onClear }: {
+export default function SearchPicker({ id, label, value, placeholder, queryKey, search, onPick, onCustom, onClear }: {
   id: string
   label: string
   /** The name of the current choice, or null when nothing is picked. */
@@ -24,6 +28,8 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
   queryKey: string
   search: (q: string) => Promise<LookupResult>
   onPick: (item: PickerItem) => void
+  /** Called with the typed text when it is used as it is. */
+  onCustom?: (text: string) => void
   onClear: () => void
 }) {
   const listId = useId()
@@ -52,9 +58,17 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
     enabled: open && value === null,
   })
 
-  const items = result?.data ?? []
+  const typed = text.trim()
+  const items: Option[] = result?.data ?? []
   const total = result?.total ?? 0
-  const pick = (item: PickerItem) => { onPick(item); setText(""); setOpen(false) }
+  const options: Option[] = onCustom && typed ? [...items, { id: -1, label: `Use "${typed}" as typed (not in the list)`, custom: true }] : items
+
+  const pick = (option: Option) => {
+    if (option.custom) onCustom?.(typed)
+    else onPick(option)
+    setText("")
+    setOpen(false)
+  }
 
   if (value !== null) {
     return (
@@ -81,32 +95,33 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
           aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
-          aria-activedescendant={open && items[active] ? `${listId}-${items[active].id}` : undefined}
+          aria-activedescendant={open && options[active] ? `${listId}-${options[active].id}` : undefined}
           autoComplete="off"
           value={text}
           placeholder={placeholder}
           onFocus={() => setOpen(true)}
           onChange={(e) => { setText(e.target.value); setOpen(true); setActive(0) }}
           onKeyDown={(e) => {
-            if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setActive((a) => Math.min(a + 1, items.length - 1)) }
+            if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setActive((a) => Math.min(a + 1, options.length - 1)) }
             else if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(a - 1, 0)) }
-            else if (e.key === "Enter" && open && items[active]) { e.preventDefault(); pick(items[active]) }
+            else if (e.key === "Enter" && open && options[active]) { e.preventDefault(); pick(options[active]) }
             else if (e.key === "Escape" && open) { e.stopPropagation(); setOpen(false) }
           }}
           className="h-9 w-full rounded-md border bg-card pr-3 pl-9 text-sm outline-none focus-visible:ring-2 focus-visible:ring-cas-navy/40"
         />
       </div>
+      {onCustom && <p className="mt-1 text-xs text-muted-foreground">Not in the list? Type the name and choose &quot;Use as typed&quot;.</p>}
       {open && (
         <ul id={listId} role="listbox" aria-label={label} className="absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-md border bg-card py-1 shadow-lg">
-          {items.map((item, i) => (
-            <li key={item.id} id={`${listId}-${item.id}`} role="option" aria-selected={i === active}
-              onMouseDown={(e) => { e.preventDefault(); pick(item) }} onMouseEnter={() => setActive(i)}
-              className={cn("cursor-pointer px-3 py-2 text-sm", i === active && "bg-cas-navy-50")}>
-              {item.label}
+          {options.map((o, i) => (
+            <li key={o.id} id={`${listId}-${o.id}`} role="option" aria-selected={i === active}
+              onMouseDown={(e) => { e.preventDefault(); pick(o) }} onMouseEnter={() => setActive(i)}
+              className={cn("cursor-pointer px-3 py-2 text-sm", o.custom && "border-t font-medium text-cas-navy", i === active && "bg-cas-navy-50")}>
+              {o.label}
             </li>
           ))}
           {total > items.length && <li role="presentation" className="sticky bottom-0 border-t bg-subtle px-3 py-2 text-xs text-muted-foreground">Showing {items.length} of {total}. Type more of the name, or the university, to narrow it down.</li>}
-          {items.length === 0 && <li role="presentation" className="px-3 py-2 text-sm text-muted-foreground">{isFetching ? "Searching…" : "Nothing found. Try another word."}</li>}
+          {options.length === 0 && <li role="presentation" className="px-3 py-2 text-sm text-muted-foreground">{isFetching ? "Searching…" : "Nothing found. Try another word."}</li>}
         </ul>
       )}
     </div>

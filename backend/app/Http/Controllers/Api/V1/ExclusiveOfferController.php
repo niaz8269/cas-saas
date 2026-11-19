@@ -153,6 +153,13 @@ class ExclusiveOfferController extends Controller
         return $data;
     }
 
+    private function clean(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        return $value === '' ? null : $value;
+    }
+
     /**
      * Keeps only the link that matches the type (university, program or scholarship) and fills the university from
      * the program or scholarship picked, so the form only asks for what the exclusive is about.
@@ -165,13 +172,25 @@ class ExclusiveOfferController extends Controller
         $type = $data['offer_type'];
         $data['program_id'] = $type === 'program' ? ($data['program_id'] ?? null) : null;
         $data['scholarship_id'] = $type === 'scholarship' ? ($data['scholarship_id'] ?? null) : null;
-        $data['university_id'] = $type === 'other' ? null : ($data['university_id'] ?? null);
+        $data['university_id'] = in_array($type, ['other', 'city'], true) ? null : ($data['university_id'] ?? null);
 
         if ($data['program_id']) {
             $data['university_id'] = Program::whereKey($data['program_id'])->value('university_id');
         } elseif ($data['scholarship_id']) {
             $data['university_id'] = Scholarship::whereKey($data['scholarship_id'])->value('university_id');
         }
+
+        // A name typed by hand is kept only when nothing from the catalog was picked.
+        $inCatalog = $data['program_id'] || $data['scholarship_id'] || $data['university_id'];
+        $manual = in_array($type, ['university', 'program', 'scholarship'], true) && ! $inCatalog;
+        $data['custom_name'] = $manual ? $this->clean($data['custom_name'] ?? null) : null;
+        $data['custom_university'] = $manual && $type !== 'university' ? $this->clean($data['custom_university'] ?? null) : null;
+
+        // A city or province, with the programs advertised there.
+        $isCity = $type === 'city';
+        $data['city'] = $isCity ? $this->clean($data['city'] ?? null) : null;
+        $data['province'] = $isCity ? $this->clean($data['province'] ?? null) : null;
+        $data['programs_list'] = $isCity ? array_values(array_unique(array_filter(array_map(fn ($n) => $this->clean($n), $data['programs_list'] ?? [])))) : null;
 
         return $data;
     }

@@ -60,6 +60,16 @@ export default function ExclusiveDetail({ offer, onDownload, busyId }: { offer: 
       {offer.audience === "private" && <p className="rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-800">Private: visible to the CAS team only. Agencies cannot see this.</p>}
       {offer.summary && <Text>{offer.summary}</Text>}
 
+      {offer.offer_type === "city" && (
+        <Block title={[offer.city, offer.province].filter(Boolean).join(", ") || "Location"}>
+          {(offer.programs_list ?? []).length > 0 ? (
+            <ul className="flex flex-wrap gap-1.5">
+              {(offer.programs_list ?? []).map((n) => <li key={n} className="rounded-full bg-cas-navy-50 px-3 py-0.5 text-sm text-cas-navy">{n}</li>)}
+            </ul>
+          ) : <p className="text-sm text-muted-foreground">No programs listed.</p>}
+        </Block>
+      )}
+
       <Block title="Your commission">
         {offer.agency_level !== undefined ? (
           own ? <p className="text-2xl font-semibold text-cas-navy tabular-nums">{own}</p> : <p className="text-sm text-muted-foreground">No rate is set for your agency level yet. Ask your CAS contact.</p>

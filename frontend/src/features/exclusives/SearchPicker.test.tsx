@@ -32,3 +32,14 @@ it("searches the server as you type, picks with the keyboard, and can be changed
   await user.click(screen.getByRole("button", { name: "Change program" }))
   expect(screen.getByRole("combobox", { name: "Program" })).toBeInTheDocument()
 })
+
+it("lets a name that is not in the list be used as typed", async () => {
+  const search = vi.fn(() => Promise.resolve({ total: 0, data: [] }))
+  const onCustom = vi.fn()
+  const user = userEvent.setup()
+  renderWithProviders(<SearchPicker id="p" label="Program" queryKey="c" placeholder="Search programs" search={search} value={null} onPick={vi.fn()} onCustom={onCustom} onClear={vi.fn()} />)
+
+  await user.type(screen.getByRole("combobox", { name: "Program" }), "My New Program")
+  await user.click(await screen.findByRole("option", { name: /Use "My New Program" as typed/ }))
+  expect(onCustom).toHaveBeenCalledWith("My New Program")
+})

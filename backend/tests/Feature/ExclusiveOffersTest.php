@@ -198,3 +198,19 @@ it('looks up programs, scholarships and universities by name or university for t
     staffWithRole('Counselor');
     getJson('/api/v1/exclusives/lookup?type=program')->assertForbidden();
 });
+
+it('takes a program typed by hand, and a city with its programs and no university', function () {
+    staffWithRole('Admin');
+
+    $manual = postJson('/api/v1/exclusives', offerPayload(['offer_type' => 'program', 'custom_name' => ' MBBS (English) ', 'custom_university' => 'New Medical University', 'city' => 'Ignored']))->assertCreated();
+    expect($manual->json('data.custom_name'))->toBe('MBBS (English)')
+        ->and($manual->json('data.custom_university'))->toBe('New Medical University')
+        ->and($manual->json('data.program_id'))->toBeNull()->and($manual->json('data.city'))->toBeNull();
+
+    $city = postJson('/api/v1/exclusives', offerPayload(['title' => 'Dalian offers', 'offer_type' => 'city', 'city' => 'Dalian', 'province' => 'Liaoning', 'programs_list' => ['MBBS', 'Nursing', 'MBBS', ' ']]))->assertCreated();
+    expect($city->json('data.programs_list'))->toBe(['MBBS', 'Nursing'])
+        ->and($city->json('data.city'))->toBe('Dalian')->and($city->json('data.university_id'))->toBeNull()->and($city->json('data.custom_name'))->toBeNull();
+
+    postJson('/api/v1/exclusives', offerPayload(['title' => 'No place', 'offer_type' => 'city']))->assertUnprocessable();
+    postJson('/api/v1/exclusives', offerPayload(['title' => 'Province only', 'offer_type' => 'city', 'province' => 'Hainan']))->assertCreated();
+});
