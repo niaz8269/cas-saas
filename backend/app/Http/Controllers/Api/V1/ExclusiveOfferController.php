@@ -11,6 +11,7 @@ use App\Models\ExclusiveMaterial;
 use App\Models\ExclusiveOffer;
 use App\Models\Program;
 use App\Models\Scholarship;
+use App\Models\University;
 use App\Services\Content\ExclusiveMaterialStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -67,6 +68,44 @@ class ExclusiveOfferController extends Controller
         $exclusive->delete();
 
         return response()->json(['message' => 'Exclusive removed.']);
+    }
+
+    /**
+     * Names for the pickers in the exclusive form: universities, programs or scholarships. Every word typed must
+     * match the name or the university's name, so "mbbs hebei" finds that program at Hebei universities.
+     */
+    public function lookup(Request $request): JsonResponse
+    {
+        $type = $request->string('type')->toString();
+        abort_unless(in_array($type, ['university', 'program', 'scholarship'], true), 422, 'Unknown type.');
+
+        $words = array_filter(preg_split('/\s+/', trim($request->string('q')->toString())) ?: []);
+        $query = match ($type) {
+            'university' => University::query(),
+            'program' => Program::query()->with('university:id,name'),
+            'scholarship' => Scholarship::query()->with('university:id,name'),
+        };
+
+        foreach ($words as $word) {
+            $like = '%'.addcslashes($word, '%_\\').'%';
+            $query->where(function ($q) use ($type, $like) {
+                $q->where('name', 'like', $like);
+                if ($type !== 'university') {
+                    $q->orWhereHas('university', fn ($u) => $u->where('name', 'like', $like));
+                }
+            });
+        }
+
+        $total = (clone $query)->count();
+        $rows = $query->orderBy('name')->limit(50)->get();
+
+        return response()->json([
+            'total' => $total,
+            'data' => $rows->map(fn ($r) => [
+                'id' => $r->id,
+                'label' => $type === 'university' ? $r->name : trim($r->name.($r->university ? ' · '.$r->university->name : '')),
+            ])->values(),
+        ]);
     }
 
     // ── Files ───────────────────────────────────────────────────────────────

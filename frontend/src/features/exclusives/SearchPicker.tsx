@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
+import type { LookupResult } from "@/features/exclusives/api"
+
 export interface PickerItem {
   id: number
   label: string
@@ -20,7 +22,7 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
   value: string | null
   placeholder: string
   queryKey: string
-  search: (q: string) => Promise<PickerItem[]>
+  search: (q: string) => Promise<LookupResult>
   onPick: (item: PickerItem) => void
   onClear: () => void
 }) {
@@ -44,12 +46,14 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
     return () => document.removeEventListener("mousedown", close)
   }, [])
 
-  const { data: items = [], isFetching } = useQuery({
+  const { data: result, isFetching } = useQuery({
     queryKey: ["exclusive-picker", queryKey, debounced],
     queryFn: () => search(debounced),
     enabled: open && value === null,
   })
 
+  const items = result?.data ?? []
+  const total = result?.total ?? 0
   const pick = (item: PickerItem) => { onPick(item); setText(""); setOpen(false) }
 
   if (value !== null) {
@@ -101,6 +105,7 @@ export default function SearchPicker({ id, label, value, placeholder, queryKey, 
               {item.label}
             </li>
           ))}
+          {total > items.length && <li role="presentation" className="sticky bottom-0 border-t bg-subtle px-3 py-2 text-xs text-muted-foreground">Showing {items.length} of {total}. Type more of the name, or the university, to narrow it down.</li>}
           {items.length === 0 && <li role="presentation" className="px-3 py-2 text-sm text-muted-foreground">{isFetching ? "Searching…" : "Nothing found. Try another word."}</li>}
         </ul>
       )}

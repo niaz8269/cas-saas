@@ -285,6 +285,7 @@ Route::prefix('v1')->group(function () {
 
         // Exclusive programs and universities for agencies: counselors and admins read, admins write
         Route::get('exclusives', [ExclusiveOfferController::class, 'index'])->middleware('permission:exclusives.view.global,staff');
+        Route::get('exclusives/lookup', [ExclusiveOfferController::class, 'lookup'])->middleware('permission:exclusives.manage.global,staff');
         Route::get('exclusives/library', [ExclusiveOfferController::class, 'library'])->middleware('permission:exclusives.view.global,staff');
         Route::get('exclusives/{exclusive}', [ExclusiveOfferController::class, 'show'])->middleware('permission:exclusives.view.global,staff');
         Route::get('exclusive-materials/{material}/download', [ExclusiveOfferController::class, 'downloadMaterial'])->middleware('permission:exclusives.view.global,staff');

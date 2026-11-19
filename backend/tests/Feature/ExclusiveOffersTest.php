@@ -178,3 +178,23 @@ it('links an exclusive to a program or scholarship and takes the university from
     $b = postJson('/api/v1/exclusives', offerPayload(['title' => 'Award', 'offer_type' => 'scholarship', 'scholarship_id' => $scholarship->id]))->assertCreated();
     expect($b->json('data.university_id'))->toBe($uni->id)->and($b->json('data.scholarship.name'))->toBe($scholarship->name)->and($b->json('data.program_id'))->toBeNull();
 });
+
+it('looks up programs, scholarships and universities by name or university for the form pickers', function () {
+    staffWithRole('Admin');
+    $hebei = University::factory()->create(['name' => 'Hebei University']);
+    $zhejiang = University::factory()->create(['name' => 'Zhejiang Chinese Medical University']);
+    Program::factory()->create(['university_id' => $hebei->id, 'name' => 'Clinical Medicine (MBBS)']);
+    Program::factory()->create(['university_id' => $zhejiang->id, 'name' => 'Clinical Medicine (MBBS)']);
+
+    $all = getJson('/api/v1/exclusives/lookup?type=program&q=mbbs')->assertOk();
+    expect($all->json('total'))->toBe(2);
+
+    $one = getJson('/api/v1/exclusives/lookup?type=program&q=mbbs+zhejiang')->assertOk();
+    expect($one->json('total'))->toBe(1)->and($one->json('data.0.label'))->toBe('Clinical Medicine (MBBS) · Zhejiang Chinese Medical University');
+
+    expect(getJson('/api/v1/exclusives/lookup?type=university&q=hebei')->json('data.0.label'))->toBe('Hebei University');
+    getJson('/api/v1/exclusives/lookup?type=bogus')->assertUnprocessable();
+
+    staffWithRole('Counselor');
+    getJson('/api/v1/exclusives/lookup?type=program')->assertForbidden();
+});

@@ -54,19 +54,18 @@ export interface ExclusiveMaterial {
 
 export type ExclusiveType = "university" | "program" | "scholarship" | "other"
 
-/** Name lookups for the pickers: the server searches the whole catalog, 20 at a time. */
-const lookup = (path: string, q: string) => `/${path}?per_page=20${q ? `&q=${encodeURIComponent(q)}` : ""}`
+/** Name lookups for the pickers: the server matches every word against the name and the university, 50 at a time. */
+export interface LookupResult {
+  total: number
+  data: { id: number; label: string }[]
+}
 
-export const searchUniversities = (q: string) =>
-  api<Paginated<{ id: number; name: string }>>(lookup("universities", q)).then((r) => r.data.map((u) => ({ id: u.id, label: u.name })))
+const lookup = (type: "university" | "program" | "scholarship") => (q: string) =>
+  api<LookupResult>(`/exclusives/lookup?type=${type}${q ? `&q=${encodeURIComponent(q)}` : ""}`)
 
-export const searchPrograms = (q: string) =>
-  api<Paginated<{ id: number; name: string; university?: { name: string } | null }>>(lookup("programs", q))
-    .then((r) => r.data.map((p) => ({ id: p.id, label: [p.name, p.university?.name].filter(Boolean).join(" \u00b7 ") })))
-
-export const searchScholarships = (q: string) =>
-  api<Paginated<{ id: number; name: string; university?: { name: string } | null }>>(lookup("scholarships", q))
-    .then((r) => r.data.map((s) => ({ id: s.id, label: [s.name, s.university?.name].filter(Boolean).join(" \u00b7 ") })))
+export const searchUniversities = lookup("university")
+export const searchPrograms = lookup("program")
+export const searchScholarships = lookup("scholarship")
 
 export interface ExclusiveOffer {
   id: number
