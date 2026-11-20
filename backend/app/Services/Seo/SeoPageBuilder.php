@@ -79,7 +79,8 @@ class SeoPageBuilder
             'site/scholarships' => $this->scholarshipsBody(),
             'site/news' => $this->newsBody(),
             'site/faq' => $this->faqBody($title),
-            default => $this->simpleBody($title, $description),
+            'site/programs' => $this->programsBody(),
+            default => $this->textBody($path) ?? $this->simpleBody($title, $description),
         };
 
         $ld = $path === '' ? [$this->organization(), $this->website()] : [];
@@ -153,6 +154,7 @@ class SeoPageBuilder
         if ($english->isNotEmpty()) {
             $body .= '<h2>English-taught programs</h2>'.$this->ul($english->take(25)->map('e')->all());
         }
+        $body .= $this->placeSection($u, $neighbours->count());
         $scholarshipNames = $u->scholarships()->where('status', 'active')->orderBy('name')->pluck('name');
         $uniFaqs = $this->faqs->forUniversity($u, $programs, $intakes->count(), $scholarshipNames);
         $body .= $this->faqs->html($uniFaqs);
@@ -452,6 +454,107 @@ class SeoPageBuilder
         }
 
         return $entities ? ['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities] : null;
+    }
+
+    /**
+     * The text a main page shows to visitors (why China, services, about, pricing, partner), printed for crawlers
+     * that do not run the page script. Built from the website copy by database/data/build_page_text.py.
+     */
+    private function textBody(string $path): ?string
+    {
+        static $pages = null;
+        if ($pages === null) {
+            $file = database_path('data/page_text.json');
+            $pages = is_file($file) ? (json_decode((string) file_get_contents($file), true) ?: []) : [];
+        }
+        $page = $pages[$path] ?? null;
+        if (! $page) {
+            return null;
+        }
+
+        $html = '<h1>'.e($page['h1']).'</h1><p>'.e($page['intro']).'</p>';
+        foreach ($page['sections'] as $s) {
+            $html .= '<h2>'.e($s['h']).'</h2>';
+            foreach ($s['p'] ?? [] as $p) {
+                $html .= '<p>'.e($p).'</p>';
+            }
+            if (! empty($s['ul'])) {
+                $html .= $this->ul(array_map('e', $s['ul']));
+            }
+        }
+
+        return $html.'<p>'.implode(' · ', array_map(fn ($l) => $this->link($l[0], $l[1]), $page['links'] ?? [])).'</p>';
+    }
+
+    /** The program finder as text: what the catalog holds today, by level and teaching language, and where to start. */
+    private function programsBody(): string
+    {
+        $facts = cache()->remember('seo.programs_body.v1', now()->addMinutes(30), function () {
+            $base = fn () => Program::query()->where('status', 'active')->where('registry_only', false)->whereHas('university', fn ($q) => $q->where('status', 'active'));
+
+            return [
+                'total' => $base()->count(),
+                'universities' => $base()->distinct()->count('university_id'),
+                'levels' => $base()->selectRaw('level, count(*) as total')->groupBy('level')->pluck('total', 'level')->all(),
+                'english' => $base()->where('teaching_language', 'English')->count(),
+                'chinese' => $base()->where('teaching_language', 'Chinese')->count(),
+                'top' => University::query()->where('status', 'active')
+                    ->withCount(['programs as listed_programs' => fn ($q) => $q->where('status', 'active')->where('registry_only', false)])
+                    ->orderByDesc('listed_programs')->orderBy('name')->limit(20)->get(['name', 'slug', 'city'])
+                    ->filter(fn ($u) => $u->listed_programs > 0)
+                    ->map(fn ($u) => ['name' => $u->name, 'slug' => $u->slug, 'city' => $u->city, 'programs' => $u->listed_programs])->values()->all(),
+            ];
+        });
+
+        $labels = ['bachelor' => "Bachelor's degrees", 'master' => "Master's degrees", 'phd' => 'Doctoral (PhD) degrees', 'non_degree' => 'Non-degree and Chinese language programs', 'diploma' => 'Diploma programs'];
+        $levels = [];
+        foreach ($labels as $level => $label) {
+            if (($facts['levels'][$level] ?? 0) > 0) {
+                $levels[] = e($label).': '.number_format($facts['levels'][$level]).' programs';
+            }
+        }
+
+        $html = '<h1>Find programs to study in China</h1>'
+            .'<p>Search the CAS catalog by degree level, teaching language and yearly budget. It lists '.number_format($facts['total']).' programs for international students at '.number_format($facts['universities']).($facts['universities'] === 1 ? ' university' : ' universities and colleges').' in China, and each program page shows its tuition, duration and application window where the university has published them.</p>';
+        if ($levels) {
+            $html .= '<h2>Programs by degree level</h2>'.$this->ul($levels);
+        }
+        $html .= '<h2>Programs by teaching language</h2>'.$this->ul(array_filter([
+            $facts['english'] > 0 ? number_format($facts['english']).' programs taught in English' : null,
+            $facts['chinese'] > 0 ? number_format($facts['chinese']).' programs taught in Chinese' : null,
+        ]));
+        $html .= '<h2>Popular searches</h2>'.$this->ul(array_map(fn ($t) => $this->link('/site/'.$t['slug'], $t['title']), array_slice($this->topics->index(), 0, 22)));
+        if ($facts['top']) {
+            $html .= '<h2>Universities with the most programs</h2>'.$this->ul(array_map(fn ($u) => $this->link('/site/universities/'.$u['slug'], $u['name']).($u['city'] ? ', '.e($u['city']) : '').' ('.number_format($u['programs']).' programs)', $facts['top']));
+        }
+
+        return $html.'<p>'.$this->link('/site/universities', 'All universities').' · '.$this->link('/site/scholarships', 'Scholarships').' · '.$this->link('/site/study-plan', 'Get a free study plan').'</p>';
+    }
+
+    /**
+     * Where the university is: what its city is like (from the city profile, when one exists) and, when the city
+     * has few other universities, others in the same province. Gives small college pages text of their own.
+     */
+    private function placeSection(University $u, int $inCityNeighbours): string
+    {
+        if (! $u->city) {
+            return '';
+        }
+        $html = '';
+        $profile = CityProfile::query()->where('slug', Str::slug($u->city))->first();
+        if ($profile && $profile->summary) {
+            $html .= '<h2>Studying in '.e($u->city).'</h2><p>'.e(Str::before($profile->summary, "\n\n")).'</p>';
+        }
+
+        if ($u->province && $inCityNeighbours < 3) {
+            $inProvince = University::where('status', 'active')->where('province', $u->province)->where('id', '!=', $u->id)->where('city', '!=', $u->city)
+                ->orderByDesc('moe_listed')->orderBy('name')->limit(8)->get(['name', 'slug', 'city']);
+            if ($inProvince->isNotEmpty()) {
+                $html .= '<h2>Other universities in '.e($u->province).'</h2>'.$this->ul($inProvince->map(fn ($n) => $this->link('/site/universities/'.$n->slug, $n->name).($n->city ? ', '.e($n->city) : ''))->all());
+            }
+        }
+
+        return $html;
     }
 
     private function simpleBody(string $title, string $description): string
