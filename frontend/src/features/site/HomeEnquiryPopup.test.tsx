@@ -71,13 +71,13 @@ it("does not open for automated browsers such as search engine crawlers", async 
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
 })
 
-it("shows the three benefits in the brand panel as real text, never a raw translation key", async () => {
+it("shows only the form, with no side panel, and never a raw translation key", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(EMPTY)))
   renderWithProviders(<HomeEnquiryPopup delayMs={10} />)
 
   const dialog = await screen.findByRole("dialog")
-  expect(dialog).toHaveTextContent("Free guidance from a CAS advisor")
-  expect(dialog).toHaveTextContent("Full application and visa support")
-  expect(dialog).toHaveTextContent("Universities listed by China's Ministry of Education")
+  expect(dialog.querySelector("aside")).toBeNull()
+  expect(dialog).not.toHaveTextContent("Free guidance from a CAS advisor")
+  expect(dialog.querySelector("form")).not.toBeNull()
   expect(dialog.textContent).not.toMatch(/homePopup\.|\$\{/)
 })

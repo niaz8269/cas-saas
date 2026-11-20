@@ -1,10 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
-import { CheckCircle2, Check, ChevronDown, X } from "lucide-react"
+import { CheckCircle2, ChevronDown, X } from "lucide-react"
 import { useEffect, useId, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-
-import casLogoWhite from "@/assets/cas-logo-white.webp"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
@@ -95,27 +93,10 @@ export default function HomeEnquiryPopup({ delayMs = 1200 }: { delayMs?: number 
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
         showCloseButton={false}
-        className="max-h-[94dvh] gap-0 overflow-y-auto rounded-none border-0 p-0 shadow-2xl [scrollbar-width:none] md:max-w-[46rem] [&::-webkit-scrollbar]:hidden"
+        className="max-h-[94dvh] gap-0 overflow-y-auto rounded-none border-0 p-0 shadow-2xl [scrollbar-width:none] md:max-w-[32rem] [&::-webkit-scrollbar]:hidden"
         aria-describedby="home-popup-desc"
       >
-        <div className="grid md:grid-cols-[15.5rem_1fr]">
-          {/* Brand panel: desktop only, so a phone gets the form straight away. */}
-          <aside className="relative hidden flex-col justify-between border-t-4 border-cas-red bg-gradient-to-b from-cas-navy to-cas-navy-700 p-7 text-white md:flex [@media(max-height:640px)]:p-5">
-            <div>
-              <img src={casLogoWhite} alt="CAS - Consultancy for Abroad Study" className="h-11 w-auto" />
-              <p className="mt-8 text-xl leading-snug font-semibold [@media(max-height:640px)]:mt-4 [@media(max-height:640px)]:text-lg">{t("homePopup.panelTitle")}</p>
-              <ul className="mt-6 space-y-4 text-sm leading-snug text-white/90 [@media(max-height:640px)]:mt-4 [@media(max-height:640px)]:space-y-3">
-                {(["panelPoint1", "panelPoint2", "panelPoint3"] as const).map((key) => (
-                  <li key={key} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="size-3.5" /></span>
-                    <span>{t(`homePopup.${key}`)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <p className="mt-8 text-xs text-white/60 [@media(max-height:640px)]:mt-4">{t("homePopup.panelFoot")}</p>
-          </aside>
-
+        <div>
           <div className="min-w-0">
             <div className={cn("relative border-b-4 border-cas-red bg-cas-navy px-5 pt-5 pb-4 text-white md:border-b-0 md:bg-transparent md:px-8 md:pt-8 md:pb-0 md:text-cas-navy", "[@media(max-height:640px)]:pt-4 [@media(max-height:640px)]:pb-3 md:[@media(max-height:640px)]:pt-4")}>
               <DialogClose aria-label={t("homePopup.close")} className="absolute top-3 right-3 p-1 text-white/80 hover:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none md:text-slate-400 md:hover:text-ink md:focus-visible:ring-cas-navy">
