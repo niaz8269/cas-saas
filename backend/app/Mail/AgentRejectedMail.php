@@ -27,7 +27,7 @@ class AgentRejectedMail extends Mailable
                 .'<p>Thank you for your interest in partnering with CAS.</p>'
                 ."<p>After reviewing your application for <strong>{$company}</strong>, we're unable to approve it at this time.</p>"
                 ."<p>If you'd like more information, please get in touch with our team.</p>"
-                .'<p>— CAS Education</p>',
+                .'<p>— CAS</p>',
             );
     }
 }

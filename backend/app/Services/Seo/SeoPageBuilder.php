@@ -116,7 +116,13 @@ class SeoPageBuilder
         $canonical = '/site/universities/'.$u->slug;
         $place = collect([$u->city, $u->province])->filter()->unique()->implode(', ');
         $description = $this->clip(trim($u->about ?: ($u->name.' in '.$place.', China: programs, tuition, application windows and scholarships for international students.')), 155);
-        $title = $this->fit([$u->name.': Programs, Fees & Application Dates', $u->name.': Programs & Dates', $u->name]);
+        // Universities approved for English-taught MBBS lead with the search phrase people use: "MBBS in China".
+        $title = $u->moe_listed
+            ? $this->fit(['MBBS in China - '.$u->name.': Fees & Admission', 'MBBS in China - '.$u->name], clip: false)
+            : $this->fit([$u->name.': Programs, Fees & Application Dates', $u->name.': Programs & Dates', $u->name]);
+        if ($u->moe_listed && ! $u->about) {
+            $description = $this->clip('MBBS in China at '.$u->name.($place ? ', '.$place : '').': approved by the Ministry of Education for English-taught MBBS. Tuition, application dates and how to apply.', 155);
+        }
         $image = $this->absolute($this->images->url($u->cover_path));
 
         $programs = Program::where('university_id', $u->id)->where('status', 'active')->get(['name', 'level', 'teaching_language', 'tuition_fee', 'registry_only']);
@@ -493,7 +499,7 @@ class SeoPageBuilder
         return [
             'status' => $status,
             // The home page leads with the full company name, so it is the name search engines show for the site.
-            'title' => $canonical === '/' ? config('seo.site_name').': '.$title : ($title === 'CAS' || $noindex ? $title : $title.' | CAS'),
+            'title' => $canonical === '/' ? config('seo.site_name').' | '.$title : (in_array($title, ['CAS', config('seo.site_name')], true) || $noindex ? $title : $title.' | CAS'),
             'description' => $description,
             'canonical' => $this->abs($canonical),
             'image' => $image ?: $this->abs(config('seo.default_image')),
@@ -511,7 +517,8 @@ class SeoPageBuilder
         return [
             '@context' => 'https://schema.org',
             '@type' => 'EducationalOrganization',
-            'name' => config('seo.site_name'),
+            // The company, not the website: Google reads the site name from the WebSite data below.
+            'name' => config('seo.short_name'),
             'alternateName' => config('seo.alternate_names'),
             'url' => $this->abs('/'),
             'logo' => $this->abs('/cas-logo-copy.png'),
@@ -560,7 +567,7 @@ class SeoPageBuilder
     }
 
     /** @param list<string> $options first option that fits 60 characters (with " | CAS") wins */
-    private function fit(array $options): string
+    private function fit(array $options, bool $clip = true): string
     {
         foreach ($options as $o) {
             if (mb_strlen($o) <= 54) {
@@ -568,7 +575,8 @@ class SeoPageBuilder
             }
         }
 
-        return $this->clip(end($options), 54);
+        // A name is never cut in the middle when the caller says so: a long title is better than a broken name.
+        return $clip ? $this->clip(end($options), 54) : end($options);
     }
 
     private function clip(string $text, int $max): string

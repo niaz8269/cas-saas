@@ -29,7 +29,7 @@ it('test-sends an email template to a given recipient', function () {
         ->assertJsonPath('data.channel', 'email')
         ->assertJsonPath('data.to', 'ops@cas.moe')
         ->assertJsonPath('data.status', 'sent')
-        ->assertJsonPath('data.subject', 'Welcome to CAS Education');
+        ->assertJsonPath('data.subject', 'Welcome to CAS');
 });
 
 it('defaults the email recipient to the acting admin', function () {

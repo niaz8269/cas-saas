@@ -21,7 +21,7 @@ class EmailDriver implements ChannelDriver
         }
 
         Mail::raw($communication->body ?? '', function ($message) use ($email, $subject) {
-            $message->to($email)->subject($subject ?? 'A message from CAS Education');
+            $message->to($email)->subject($subject ?? 'A message from CAS');
         });
 
         return ['provider' => 'mail', 'provider_msg_id' => (string) Str::uuid(), 'status' => 'sent', 'error' => null];

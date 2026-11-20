@@ -58,7 +58,7 @@
     "getInTouch": "Get in touch",
     "whatsappUs": "WhatsApp us",
     "freeConsultation": "Free consultation",
-    "rights": "© {{year}} CAS Education. All rights reserved.",
+    "rights": "© {{year}} CAS. All rights reserved.",
     "authorized": "Official authorized agency since 2012.",
     "photoCredits": "Photo credits",
     "exploreMbbs": "MBBS in China",
@@ -115,7 +115,10 @@
     "pageOf": "Page {{current}} of {{total}}"
   },
   "university": {
-    "seoTitle": "{{name}} — Programs & Scholarships",
+    "seoTitle": "{{name}}: Programs, Fees & Application Dates",
+    "seoTitleShort": "{{name}}: Programs & Dates",
+    "seoTitleMbbs": "MBBS in China - {{name}}: Fees & Admission",
+    "seoTitleMbbsShort": "MBBS in China - {{name}}",
     "seoTitleFallback": "University in China",
     "seoDescription": "{{name}}{{location}} — explore programs, intakes and scholarships{{moe}}, and apply with CAS.",
     "seoDescriptionLocation": " in {{city}}",
@@ -257,7 +260,7 @@
     "pageOf": "Page {{current}} of {{last}}"
   },
   "cities": {
-    "seoTitle": "Study in China by City — Beijing, Shanghai & More",
+    "seoTitle": "Study in China by City: Beijing, Shanghai & More",
     "seoDescription": "Browse Chinese study destinations by city and explore the Ministry of Education–listed universities in each, with full application support from CAS.",
     "eyebrow": "Destinations",
     "title": "Study in China by city",
@@ -270,7 +273,7 @@
     "view": "View"
   },
   "about": {
-    "seoTitle": "About CAS",
+    "seoTitle": "About CAS: Consultancy for Abroad Study",
     "seoDescription": "About CAS — Consultancy for Abroad Study. An official authorized agency placing students into Ministry of Education–listed universities in China since 2012.",
     "headerEyebrow": "Our story",
     "headerTitle": "About CAS",
@@ -312,7 +315,7 @@
     "ctaButton": "Contact us"
   },
   "pricing": {
-    "seoTitle": "Cost of Studying in China & CAS Fees",
+    "seoTitle": "CAS Pricing: Free Plan & Clear Service Fees",
     "seoDescription": "What studying in China costs, from real university tuition, and what CAS charges: a free study plan, a ¥1,000 application fee, and document and service charges that vary by university, program and degree.",
     "headerEyebrow": "Costs & fees",
     "headerTitle": "What it costs to study in China",
@@ -560,7 +563,7 @@
     "ctaSubtitle": "Apply for a partner account, or talk to our team first."
   },
   "services": {
-    "seoTitle": "Our Services",
+    "seoTitle": "Our Services for Students Going to China",
     "seoDescription": "CAS services for studying in China — admission service, visa assistance, scholarship help, airport pickup and on-campus support, end to end.",
     "eyebrow": "End-to-end support",
     "title": "Our services",
@@ -688,7 +691,7 @@
     }
   },
   "contact": {
-    "seoTitle": "Contact & Free Consultation",
+    "seoTitle": "Contact CAS & Free Consultation",
     "seoDescription": "Contact CAS for a free consultation about studying in China. Get expert guidance on universities, programs, scholarships, admission and visas.",
     "eyebrow": "We're here to help",
     "title": "Get in touch",
@@ -711,7 +714,7 @@
     }
   },
   "faq": {
-    "seoTitle": "FAQ — Studying in China with CAS",
+    "seoTitle": "FAQ: Studying in China",
     "seoDescription": "Answers to common questions about studying in China with CAS: choosing a university and program, scholarships, applying, student visas, arrival support and fees.",
     "eyebrow": "Help centre",
     "title": "Frequently asked questions",
@@ -781,7 +784,7 @@
     "notFoundBody": "This post may have been unpublished or the link is incorrect."
   },
   "news": {
-    "seoTitle": "News & Updates",
+    "seoTitle": "News & Updates on Studying in China",
     "seoDescription": "News and updates from CAS — intake deadlines, scholarship openings and partner-university announcements for studying in China.",
     "headerEyebrow": "News & resources",
     "headerTitle": "Latest from CAS",
@@ -1157,7 +1160,7 @@
       "supportLink": "Talk to us."
     },
     "seo": {
-      "title": "Study in China | Apply to Chinese Universities Online",
+      "title": "Apply to Chinese Universities Online",
       "description": "Study in China with CAS, an authorized agency since 2012. Browse Ministry of Education–listed universities, programs and scholarships, and apply online."
     },
     "hero": {
@@ -1856,7 +1859,7 @@
     "nextTbd": "Next admission dates have not been published by the university yet — ask CAS to confirm them."
   },
   "photoCredits": {
-    "seoTitle": "Photo credits",
+    "seoTitle": "Photo Credits",
     "seoDescription": "Authors and licences of the photos used on the CAS website.",
     "title": "Photo credits",
     "subtitle": "Campus and city photos on this site are freely licensed. Each photo carries the CAS mark; the authors and licences are listed here.",
@@ -1882,7 +1885,8 @@
     "years_other": "{{count}} years"
   },
   "city": {
-    "seoTitle": "Study in {{city}}: Universities & Programs",
+    "seoTitle": "Study in {{city}}: Universities, Programs & Dates",
+    "seoTitleShort": "Study in {{city}}: Universities & Programs",
     "seoTitleFallback": "Study in China by city",
     "seoDescription": "Study in {{city}}: {{count}} universities for international students, with programs, tuition and application windows.",
     "title": "Study in {{city}}",
@@ -1917,7 +1921,7 @@
     }
   },
   "mbbs": {
-    "seoTitle": "MBBS in China: Approved Universities & Fees",
+    "seoTitle": "MBBS in China: Approved Universities, Fees & Dates",
     "seoDescription": "The 43 universities approved by China's Ministry of Education to enrol English-taught MBBS students in 2026–27, with tuition, application windows and how to apply.",
     "eyebrow": "English-taught medicine",
     "title": "MBBS in China",
@@ -1963,7 +1967,7 @@
     "ctaButton": "Get a free study plan"
   },
   "csc": {
-    "seoTitle": "CSC Scholarship: Chinese Government Scholarship Guide",
+    "seoTitle": "CSC Scholarship (Chinese Government Scholarship) Guide",
     "seoDescription": "How the Chinese Government Scholarship (CSC) works: what it covers, who can apply, how to apply and when, and the China-wide scholarships we list.",
     "eyebrow": "Chinese Government Scholarship",
     "title": "CSC Scholarship",

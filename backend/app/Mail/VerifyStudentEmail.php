@@ -32,7 +32,7 @@ class VerifyStudentEmail extends Mailable
                 ."<p><a href=\"{$url}\" style=\"display:inline-block;background:#14357C;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none\">Verify email</a></p>"
                 ."<p>If the button doesn't work, copy this link into your browser:<br><a href=\"{$url}\">{$url}</a></p>"
                 .'<p>If you didn\'t create this account, you can ignore this email.</p>'
-                .'<p>— CAS Education</p>',
+                .'<p>— CAS</p>',
             );
     }
 }

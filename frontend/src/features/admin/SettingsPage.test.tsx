@@ -15,7 +15,7 @@ function makeUser(): AuthUser {
 }
 
 const RULES = { data: [{ id: 1, name: "Email the student when an offer arrives", trigger_def: { event: "application.status", to: "offer_received" }, conditions: {}, actions: [{ type: "communication", channel: "email", template: "offer_received", target: "student" }], is_active: true }] }
-const TEMPLATES = { data: [{ key: "welcome", subject: "Welcome to CAS Education", preview: "Dear {first_name}, welcome…" }] }
+const TEMPLATES = { data: [{ key: "welcome", subject: "Welcome to CAS", preview: "Dear {first_name}, welcome…" }] }
 
 beforeEach(() => {
   vi.restoreAllMocks()
@@ -31,7 +31,7 @@ it("surfaces automations, templates and channel config", async () => {
 
   expect(await screen.findByText("Email the student when an offer arrives")).toBeInTheDocument()
   expect(screen.getByText(/offer received/)).toBeInTheDocument() // rule summary
-  expect(screen.getByText("Welcome to CAS Education")).toBeInTheDocument()
+  expect(screen.getByText("Welcome to CAS")).toBeInTheDocument()
   expect(screen.getByText(/WhatsApp \/ SMS/)).toBeInTheDocument() // channels section
 })
 
@@ -42,7 +42,7 @@ it("fires a template test send and confirms delivery", async () => {
     if (url.includes("/test") && init?.method === "POST") {
       return Promise.resolve(jsonResponse({ data: {
         template: "welcome", channel: "email", to: "admin@cas.moe",
-        subject: "Welcome to CAS Education", body: "Dear Sample…", status: "sent",
+        subject: "Welcome to CAS", body: "Dear Sample…", status: "sent",
       } }))
     }
     return Promise.resolve(jsonResponse(url.includes("message-templates") ? TEMPLATES : RULES))
