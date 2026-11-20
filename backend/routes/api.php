@@ -95,6 +95,7 @@ Route::prefix('v1')->group(function () {
         Route::get('universities/{slug}/cover-download', [PublicMediaController::class, 'coverDownload']);
         Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
         Route::get('cities/{slug}', [PublicCatalogController::class, 'city']);
+        Route::get('page-faqs', [PublicCatalogController::class, 'pageFaqs']);
         // Reference data for the public sign-up forms (student/agent registration)
         Route::get('countries', [CountryController::class, 'index']);
         // Content: blogs / news / events (published only)

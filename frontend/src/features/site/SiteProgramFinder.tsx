@@ -16,6 +16,7 @@ import { SitePageHeader } from "@/features/site/components"
 import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Display labels are i18n keys resolved at render; option `value`s are the
 // query-param values sent to the API and must stay unchanged.
@@ -290,6 +291,7 @@ export default function SiteProgramFinder() {
           <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => goToPage(meta.current_page + 1)}>{t("programs.next")}</Button>
         </nav>
       )}
+      <PageFaqs path="site/programs" />
     </div>
   )
 }

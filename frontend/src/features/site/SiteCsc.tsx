@@ -6,6 +6,7 @@ import { getSiteScholarships } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 /** CSC (Chinese Government Scholarship) guide: what it covers, who can apply, how and when. */
 export default function SiteCsc() {
@@ -44,6 +45,7 @@ export default function SiteCsc() {
           <Link to="/site/study-plan" className="inline-flex h-10 items-center rounded-sm bg-cas-red px-5 text-sm font-semibold hover:bg-cas-red-600">{t("csc.ctaButton")}</Link>
         </div>
       </div>
+      <PageFaqs path="site/csc-scholarship" />
     </div>
   )
 }

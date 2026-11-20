@@ -126,8 +126,17 @@ export interface SiteCityProfile {
   source_url: string | null
 }
 
+export interface SiteFaq {
+  q: string
+  a: string
+}
+
+/** The questions of a fixed page, from the same source the server prints for crawlers. */
+export const getPageFaqs = (path: string) => siteApi<{ data: SiteFaq[] }>(`/public/page-faqs?path=${encodeURIComponent(path)}`)
+
 export interface SiteCity {
   city: string
+  faqs?: SiteFaq[]
   province: string | null
   sections: SiteOverviewSection[]
   /** What the city is like (history, places to visit, climate, ...); null until it has been built. */
@@ -240,7 +249,7 @@ export function getSiteUniversities(params: { q?: string; moe?: boolean; city?: 
 }
 
 export const getSiteUniversity = (slug: string) =>
-  siteApi<{ data: SiteUniversityDetail }>(`/public/universities/${slug}`)
+  siteApi<{ data: SiteUniversityDetail; faqs?: SiteFaq[] }>(`/public/universities/${slug}`)
 
 export function getSitePrograms(params: { q?: string; level?: string; language?: string; maxFee?: string; openIntake?: boolean; csc?: boolean; city?: string; province?: string; sort?: string; ids?: number[]; page?: number } = {}) {
   const search = new URLSearchParams()

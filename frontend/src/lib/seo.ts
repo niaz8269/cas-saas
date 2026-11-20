@@ -43,6 +43,21 @@ function upsertCanonical(href: string) {
   el.setAttribute("href", href)
 }
 
+// The server prints structured data for the page it serves. Remember which page that was, so the data can be
+// dropped when the visitor moves on, and so a page that sends its own FAQ data does not end up with two copies.
+const PRERENDERED_PATH = typeof window !== "undefined" ? window.location.pathname : ""
+if (typeof document !== "undefined") {
+  document.head.querySelectorAll('script[type="application/ld+json"]').forEach((el) => el.setAttribute("data-prerendered", ""))
+}
+
+function removePrerendered(pathname: string, ld: string | null) {
+  const left = pathname !== PRERENDERED_PATH
+  const sendsFaq = Boolean(ld && ld.includes('"FAQPage"'))
+  document.head.querySelectorAll('script[type="application/ld+json"][data-prerendered]').forEach((el) => {
+    if (left || (sendsFaq && (el.textContent ?? "").includes('"FAQPage"'))) el.remove()
+  })
+}
+
 /**
  * Per-page SEO: sets the document title, meta description, canonical URL,
  * Open Graph / Twitter cards and optional JSON-LD structured data. Googlebot
@@ -74,6 +89,8 @@ export function useSeo({ title, description, canonicalPath, image, jsonLd }: Seo
       upsertMeta("property", "og:description", description)
       upsertMeta("name", "twitter:description", description)
     }
+
+    removePrerendered(pathname, ld)
 
     let script: HTMLScriptElement | null = null
     if (ld) {

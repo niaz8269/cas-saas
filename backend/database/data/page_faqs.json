@@ -1,0 +1,157 @@
+{
+  "": {
+    "from_faq": [
+      "Why study in China?",
+      "Can I study in English?",
+      "How does the application process work?",
+      "How much does it cost to study in China?",
+      "Is the consultation really free?"
+    ]
+  },
+  "site/mbbs-in-china": {
+    "items": [
+      {
+        "q": "How long is an MBBS in China?",
+        "a": "The English-taught MBBS programs in our catalog run six years (72 months), and the final year is normally clinical practice."
+      },
+      {
+        "q": "Which universities can enrol international MBBS students?",
+        "a": "Only universities on the Ministry of Education's annual approved list. For 2026–27 there are {mbbs_count}, all listed on this page."
+      },
+      {
+        "q": "Do I need to speak Chinese?",
+        "a": "No Chinese is needed to start, because teaching is in English. Universities add Chinese language courses because hospital training involves speaking with patients."
+      },
+      {
+        "q": "How much does it cost?",
+        "a": "Tuition for the MBBS programs in our catalog is between CNY 26,000 and CNY 50,000 a year, plus accommodation and living costs. Each university page shows its own fees."
+      },
+      {
+        "q": "When do applications open?",
+        "a": "It differs by university. Many open in the months before the September intake and close between May and August. Each university page lists the window we have found and how reliable the source is."
+      }
+    ]
+  },
+  "site/csc-scholarship": {
+    "items": [
+      {
+        "q": "What is the CSC scholarship?",
+        "a": "The Chinese Government Scholarship, administered by the China Scholarship Council (CSC), funds international students to study at Chinese universities."
+      },
+      {
+        "q": "What does the CSC scholarship cover?",
+        "a": "It can cover tuition fees, accommodation or an accommodation allowance, a monthly living stipend and comprehensive medical insurance. What a given award covers depends on its type."
+      },
+      {
+        "q": "Who can apply for the CSC scholarship?",
+        "a": "Applicants must be non-Chinese citizens in good health who meet the admission requirements of their target university. Age limits and language requirements are set in each country's call, so check the notice from the Chinese embassy in your country."
+      },
+      {
+        "q": "How do I apply for the CSC scholarship?",
+        "a": "You apply online through the CSC Study in China system, normally through the Chinese embassy or consulate in your country or through a host university. Choose a program that is open to CSC applicants, prepare your documents, and submit the university application as well."
+      },
+      {
+        "q": "When is the CSC scholarship deadline?",
+        "a": "It depends on your country and the route you use. Embassy calls open and close on different dates, so check your embassy's notice for the current round before you prepare your documents."
+      }
+    ]
+  },
+  "site/scholarships": {
+    "from_faq": [
+      "What scholarships are available?",
+      "Am I eligible for a scholarship?",
+      "Does CAS help with scholarship applications?"
+    ]
+  },
+  "site/programs": {
+    "from_faq": [
+      "What programs can I apply for?",
+      "How do I choose the right university and program?",
+      "Can I study in English?",
+      "Do I need to speak Chinese?"
+    ]
+  },
+  "site/universities": {
+    "from_faq": [
+      "What does “MoE-listed” mean?",
+      "How do I choose the right university and program?",
+      "Are the degrees recognised internationally?"
+    ]
+  },
+  "site/why-china": {
+    "from_faq": [
+      "Why study in China?",
+      "Can I study in English?",
+      "Do I need to speak Chinese?",
+      "Are the degrees recognised internationally?"
+    ]
+  },
+  "site/services": {
+    "from_faq": [
+      "How does the application process work?",
+      "What documents will I need?",
+      "How do I get a student visa?",
+      "Does CAS support me after I arrive?"
+    ]
+  },
+  "site/study-plan": {
+    "from_faq": [
+      "Is the consultation really free?",
+      "How does the application process work?",
+      "How long does it take?",
+      "What documents will I need?"
+    ]
+  },
+  "site/pricing": {
+    "items": [
+      {
+        "q": "What does CAS charge?",
+        "a": "A ¥1,000 application fee, plus document and service charges that vary by university, program and degree. You get the itemised amounts in writing before you pay."
+      },
+      {
+        "q": "Is the first consultation really free?",
+        "a": "Yes. The consultation, the study plan, the university and program shortlist and scholarship guidance have no charge."
+      },
+      {
+        "q": "Who sets the tuition fees?",
+        "a": "The universities do. CAS does not mark tuition up on this site; the fees shown come from the universities’ own listings."
+      },
+      {
+        "q": "Are there hidden charges?",
+        "a": "No. The application fee is ¥1,000, and every other charge is itemised in writing before you agree to anything."
+      },
+      {
+        "q": "Can I use only some of your services?",
+        "a": "Yes. You can take the full application support or only the parts you need, such as the visa or the accommodation."
+      },
+      {
+        "q": "Does a scholarship change what I pay?",
+        "a": "It can. A full scholarship may cover tuition and accommodation and add a stipend, while a partial one covers part. Each scholarship page states what it covers."
+      }
+    ]
+  },
+  "site/partner": {
+    "items": [
+      {
+        "q": "Is there a fee to become a partner?",
+        "a": "No. Registering a partner account is free. You are approved by our team before you can submit applications."
+      },
+      {
+        "q": "How do commissions work?",
+        "a": "A commission is recorded for each placement and moves through stages in your portal. It becomes eligible after the student has arrived, registered and paid the first-year fee."
+      },
+      {
+        "q": "How much commission will I earn?",
+        "a": "Rates depend on the university and the agreement in place. We confirm the rate with you when you are approved."
+      },
+      {
+        "q": "Can I apply for scholarships for my students?",
+        "a": "Yes. The portal has a scholarship application flow next to the standard university application."
+      },
+      {
+        "q": "Which universities can my students apply to?",
+        "a": "Any university in our catalog, including the universities approved for English-taught MBBS."
+      }
+    ]
+  }
+}

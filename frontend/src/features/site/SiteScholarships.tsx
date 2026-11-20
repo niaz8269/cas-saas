@@ -15,6 +15,7 @@ import SearchSuggestion from "@/features/site/SearchSuggestion"
 import { getSiteScholarships, type SiteScholarship } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 function amountLabel(s: SiteScholarship): string | null {
   if (s.coverage) return s.coverage
@@ -140,6 +141,7 @@ export default function SiteScholarships() {
           <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("scholarships.next")}</Button>
         </div>
       )}
+      <PageFaqs path="site/scholarships" />
     </div>
   )
 }

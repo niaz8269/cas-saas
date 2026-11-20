@@ -27,6 +27,7 @@ import { baseLocale, sectionContent, type HomeSectionData } from "@/features/sit
 import HomeCities from "@/features/site/HomeCities"
 import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Below the fold, or shown only later: loaded after the first screen.
 const Testimonials = lazy(() => import("@/features/site/Testimonials"))
@@ -521,6 +522,9 @@ export default function SiteHome() {
           ? <div key={s.key}>{node}</div>
           : <div key={s.key} className="mx-auto w-full max-w-7xl px-4 empty:hidden sm:px-6">{node}</div>
       })}
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+        <PageFaqs path="" />
+      </div>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
         <Suspense fallback={null}><TopicLinks /></Suspense>
       </div>

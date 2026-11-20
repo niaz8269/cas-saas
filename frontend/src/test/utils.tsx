@@ -21,8 +21,19 @@ export function renderWithProviders(
 }
 
 export function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
+  const text = JSON.stringify(body)
+  const response = new Response(text, {
     status,
     headers: { "Content-Type": "application/json" },
   })
+
+  // A mock often hands the same Response to several requests of one page (`mockResolvedValue`), and a real body
+  // can be read only once. These read from the text instead, so every request gets the full answer.
+  Object.defineProperties(response, {
+    json: { value: () => Promise.resolve(JSON.parse(text)) },
+    text: { value: () => Promise.resolve(text) },
+    clone: { value: () => jsonResponse(body, status) },
+  })
+
+  return response
 }
