@@ -1422,6 +1422,14 @@
       "paginationRange": "{{from}}–{{to}} dari {{total}}",
       "prev": "Sebelumnya",
       "next": "Berikutnya"
+    },
+    "exclusives": {
+      "title": "Eksklusif",
+      "subtitle": "Program dan universitas yang hanya tersedia melalui agensi CAS, beserta komisi Anda, biaya, ketentuan, dan berkas promosi.",
+      "downloadError": "Berkas tidak dapat diunduh. Silakan coba lagi.",
+      "emptyTitle": "Belum ada apa-apa",
+      "emptyHint": "Penawaran eksklusif baru akan muncul di sini segera setelah CAS menerbitkannya.",
+      "library": "Pustaka pemasaran"
     }
   },
   "payTo": {
@@ -1808,5 +1816,50 @@
     "cta": "Kami dapat mencocokkan Anda dengan program yang terbuka bagi CSC dan membantu mendaftar tepat waktu.",
     "allScholarships": "Semua beasiswa",
     "ctaButton": "Dapatkan rencana studi gratis"
+  },
+  "exclusives": {
+    "badge": "Eksklusif",
+    "private": "Privat",
+    "partners": "Mitra",
+    "universityPackage": "Paket universitas",
+    "specialOffer": "Penawaran khusus",
+    "cityPrograms": "Program di kota ini",
+    "notOpenTo_one": "Tidak dibuka untuk {{count}} kewarganegaraan",
+    "notOpenTo_other": "Tidak dibuka untuk {{count}} kewarganegaraan",
+    "openFor_one": "Untuk {{count}} kewarganegaraan",
+    "openFor_other": "Untuk {{count}} kewarganegaraan",
+    "more": "+{{count}} lainnya",
+    "yourCommission": "Komisi Anda",
+    "partnerCommission": "Komisi mitra",
+    "noRate": "Jumlah belum ditetapkan",
+    "files_one": "{{count}} berkas",
+    "files_other": "{{count}} berkas",
+    "view": "Lihat",
+    "privateNotice": "Privat: hanya terlihat oleh tim CAS. Agensi tidak dapat melihatnya.",
+    "noRateForLevel": "Belum ada jumlah untuk tingkat agensi Anda. Tanyakan kepada kontak CAS Anda.",
+    "noRates": "Jumlah belum ditetapkan.",
+    "feeStructure": "Rincian biaya",
+    "nationality": "Kewarganegaraan",
+    "openTo": "Dibuka untuk:",
+    "allExcept": "semua kewarganegaraan kecuali yang di bawah ini",
+    "notAccepted": "Tidak diterima:",
+    "conditions": "Ketentuan",
+    "downloads": "Unduhan",
+    "download": "Unduh",
+    "downloadFile": "Unduh {{title}}",
+    "noPrograms": "Tidak ada program yang dicantumkan.",
+    "location": "Lokasi",
+    "category": {
+      "brochure": "Brosur",
+      "banner": "Spanduk / poster",
+      "social": "Unggahan media sosial",
+      "video": "Video",
+      "price_list": "Daftar harga",
+      "contract": "Perjanjian / formulir",
+      "other": "Lainnya"
+    }
+  },
+  "faqList": {
+    "title": "Pertanyaan yang sering diajukan"
   }
 }

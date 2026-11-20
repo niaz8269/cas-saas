@@ -126,6 +126,17 @@ export interface SiteCityProfile {
   source_url: string | null
 }
 
+export interface SiteStats {
+  universities: number
+  programs: number
+  english_programs: number
+  csc_programs: number
+  mbbs_universities: number
+}
+
+/** Headline numbers counted from the live catalog. */
+export const getSiteStats = () => siteApi<{ data: SiteStats }>("/public/stats")
+
 export interface SiteFaq {
   q: string
   a: string

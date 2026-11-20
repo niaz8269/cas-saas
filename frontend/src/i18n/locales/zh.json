@@ -1422,6 +1422,14 @@
       "paginationRange": "第 {{from}}–{{to}} 条，共 {{total}} 条",
       "prev": "上一页",
       "next": "下一页"
+    },
+    "exclusives": {
+      "title": "独家项目",
+      "subtitle": "仅通过 CAS 代理机构提供的专业和院校，包含您的佣金、费用、条件和宣传资料。",
+      "downloadError": "无法下载文件，请重试。",
+      "emptyTitle": "暂无内容",
+      "emptyHint": "CAS 发布新的独家项目后会显示在这里。",
+      "library": "营销资料库"
     }
   },
   "payTo": {
@@ -1808,5 +1816,50 @@
     "cta": "我们可以为您匹配对 CSC 开放的专业，并帮助您按时申请。",
     "allScholarships": "全部奖学金",
     "ctaButton": "获取免费学习方案"
+  },
+  "exclusives": {
+    "badge": "独家",
+    "private": "内部",
+    "partners": "合作伙伴",
+    "universityPackage": "院校项目",
+    "specialOffer": "特别项目",
+    "cityPrograms": "该城市的专业",
+    "notOpenTo_one": "不接受 {{count}} 个国籍",
+    "notOpenTo_other": "不接受 {{count}} 个国籍",
+    "openFor_one": "面向 {{count}} 个国籍",
+    "openFor_other": "面向 {{count}} 个国籍",
+    "more": "另有 {{count}} 个",
+    "yourCommission": "您的佣金",
+    "partnerCommission": "合作伙伴佣金",
+    "noRate": "尚未设置金额",
+    "files_one": "{{count}} 个文件",
+    "files_other": "{{count}} 个文件",
+    "view": "查看",
+    "privateNotice": "内部：仅 CAS 团队可见，代理机构无法查看。",
+    "noRateForLevel": "您的代理级别尚未设置金额，请联系您的 CAS 对接人。",
+    "noRates": "尚未设置金额。",
+    "feeStructure": "费用构成",
+    "nationality": "国籍",
+    "openTo": "开放对象：",
+    "allExcept": "除下列国籍外的所有国籍",
+    "notAccepted": "不接受：",
+    "conditions": "条件",
+    "downloads": "下载",
+    "download": "下载",
+    "downloadFile": "下载 {{title}}",
+    "noPrograms": "未列出专业。",
+    "location": "地点",
+    "category": {
+      "brochure": "宣传册",
+      "banner": "横幅 / 海报",
+      "social": "社交媒体帖子",
+      "video": "视频",
+      "price_list": "价目表",
+      "contract": "协议 / 表格",
+      "other": "其他"
+    }
+  },
+  "faqList": {
+    "title": "常见问题"
   }
 }

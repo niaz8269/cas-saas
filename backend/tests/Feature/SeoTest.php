@@ -197,3 +197,17 @@ it('gives a small college page its province neighbours', function () {
 
     expect(get('/site/universities/lone-college')->getContent())->toContain('<h2>Other universities in Sichuan</h2>')->toContain('href="/site/universities/chengdu-uni"');
 });
+
+it('counts the headline numbers from the catalog and gives the remaining pages their questions', function () {
+    $u = University::factory()->create(['status' => 'active', 'moe_listed' => true]);
+    Program::factory()->create(['university_id' => $u->id, 'status' => 'active', 'registry_only' => false, 'teaching_language' => 'English', 'csc_listed' => true]);
+    Program::factory()->create(['university_id' => $u->id, 'status' => 'active', 'registry_only' => false, 'teaching_language' => 'Chinese', 'csc_listed' => false]);
+    Program::factory()->create(['university_id' => $u->id, 'status' => 'active', 'registry_only' => true, 'teaching_language' => 'English']);
+
+    expect(getJson('/api/v1/public/stats')->assertOk()->json('data'))->toBe(['universities' => 1, 'programs' => 2, 'english_programs' => 1, 'csc_programs' => 1, 'mbbs_universities' => 1]);
+
+    expect(get('/site/about')->getContent())->toContain('"@type":"FAQPage"')->toContain('<h3>What is CAS?</h3>');
+    expect(get('/site/contact')->getContent())->toContain('<h3>How can I reach a CAS counselor?</h3>');
+    expect(get('/site/cities')->getContent())->toContain('<h3>How do I choose a city to study in China?</h3>');
+    expect(get('/site/news')->getContent())->toContain('"@type":"FAQPage"');
+});

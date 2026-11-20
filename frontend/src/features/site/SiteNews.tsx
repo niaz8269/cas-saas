@@ -10,6 +10,7 @@ import { getSitePosts, type SitePost } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Evergreen "learning centre" links (navigation, not CMS content).
 const GUIDES: { icon: LucideIcon; titleKey: string; bodyKey: string; to: string }[] = [
@@ -136,6 +137,7 @@ export default function SiteNews() {
           ))}
         </div>
       </SiteSection>
+      <PageFaqs path="site/news" />
     </div>
   )
 }

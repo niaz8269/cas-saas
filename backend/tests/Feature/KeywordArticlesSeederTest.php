@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use App\Models\Program;
+use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Seo\PageFaqs;
 use Database\Seeders\KeywordArticlesSeeder;
@@ -9,16 +10,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('writes the four keyword articles from catalog data, with question headings, and can run twice', function () {
+it('writes the keyword articles from catalog data, with question headings, and can run twice', function () {
     $u = University::factory()->create(['name' => 'Tech University', 'slug' => 'tech-university', 'status' => 'active', 'city' => 'Harbin']);
     Program::factory()->count(6)->create(['university_id' => $u->id, 'name' => 'Civil Engineering', 'level' => 'bachelor', 'teaching_language' => 'English', 'status' => 'active', 'registry_only' => false, 'tuition_fee' => 20000, 'currency' => 'CNY', 'visibility' => ['tuition_fee' => ['public']]]);
     Program::factory()->create(['university_id' => $u->id, 'name' => 'Stomatology', 'level' => 'bachelor', 'teaching_language' => 'Chinese', 'status' => 'active', 'registry_only' => false]);
     Program::factory()->create(['university_id' => $u->id, 'name' => 'Hidden Engineering', 'level' => 'bachelor', 'teaching_language' => 'English', 'status' => 'active', 'registry_only' => true]);
 
+    University::factory()->create(['name' => 'Approved Med', 'slug' => 'approved-med', 'status' => 'active', 'moe_listed' => true, 'city' => 'Dalian', 'province' => 'Liaoning']);
+    Scholarship::factory()->create(['university_id' => $u->id, 'scope' => 'government', 'status' => 'active', 'name' => 'Test Government Award']);
+
     $this->seed(KeywordArticlesSeeder::class);
     $this->seed(KeywordArticlesSeeder::class);
 
-    expect(Post::count())->toBe(4);
+    expect(Post::count())->toBe(8);
+
+    $medical = Post::where('slug', 'top-medical-universities-in-china-for-international-students')->firstOrFail();
+    expect($medical->body)->toContain('CAS does not rank them')->toContain('<h3>Liaoning</h3>')->toContain('href="/site/universities/approved-med"');
+    expect(Post::where('slug', 'scholarships-in-china-2027-how-to-find-and-apply')->firstOrFail()->body)->toContain('CAS lists 1 active scholarship: 1 China-wide and 0 offered by universities.');
 
     $engineering = Post::where('slug', 'engineering-in-china-for-international-students')->firstOrFail();
     expect($engineering->status)->toBe('published')

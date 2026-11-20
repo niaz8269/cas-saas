@@ -5,6 +5,7 @@ import { SitePageHeader } from "@/features/site/components"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { CONTACT } from "@/lib/contact"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Display text lives in i18n keys resolved via t() at render (report — 5-language support).
 const OFFICES = [
@@ -68,6 +69,7 @@ export default function SiteContact() {
           <EnquiryForm />
         </div>
       </div>
+      <PageFaqs path="site/contact" />
     </div>
   )
 }

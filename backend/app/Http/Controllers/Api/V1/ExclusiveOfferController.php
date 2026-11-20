@@ -7,11 +7,14 @@ use App\Http\Requests\Exclusives\SaveExclusiveOfferRequest;
 use App\Http\Requests\Exclusives\StoreExclusiveMaterialRequest;
 use App\Http\Resources\Exclusives\ExclusiveMaterialResource;
 use App\Http\Resources\Exclusives\ExclusiveOfferResource;
+use App\Models\Agent;
 use App\Models\ExclusiveMaterial;
 use App\Models\ExclusiveOffer;
+use App\Models\Notification;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
+use App\Services\Comms\NotificationService;
 use App\Services\Content\ExclusiveMaterialStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -52,14 +55,38 @@ class ExclusiveOfferController extends Controller
         $data['slug'] = ExclusiveOffer::uniqueSlug($data['title']);
         $data['created_by'] = $request->user()->id;
 
-        return $this->show(ExclusiveOffer::create($data));
+        $offer = ExclusiveOffer::create($data);
+        $this->announce($offer);
+
+        return $this->show($offer);
     }
 
     public function update(SaveExclusiveOfferRequest $request, ExclusiveOffer $exclusive): ExclusiveOfferResource
     {
         $exclusive->update($this->payload($request, $exclusive));
+        $this->announce($exclusive->refresh());
 
-        return $this->show($exclusive->refresh());
+        return $this->show($exclusive);
+    }
+
+    /**
+     * Tells every approved agency, once, that an exclusive is now available to it: a bell entry in the partner
+     * portal. Nothing is sent for drafts or private exclusives, and editing or republishing does not repeat it.
+     */
+    private function announce(ExclusiveOffer $offer): void
+    {
+        if ($offer->status !== 'published' || $offer->audience !== 'partners') {
+            return;
+        }
+        $type = 'exclusive.published';
+        if (Notification::where('type', $type)->where('entity_type', 'exclusive_offer')->where('entity_id', $offer->id)->exists()) {
+            return;
+        }
+
+        $notifications = app(NotificationService::class);
+        Agent::query()->where('status', 'active')->pluck('id')->each(fn (int $agentId) => $notifications->pushToAgent(
+            $agentId, $type, 'New exclusive', '"'.$offer->title.'" is now available in Exclusives.', 'exclusive_offer', $offer->id,
+        ));
     }
 
     public function destroy(ExclusiveOffer $exclusive): JsonResponse
