@@ -12,7 +12,7 @@ return [
     // the WebSite and Organization data, and the visible logo/footer text.
     'site_name' => 'CAS - Study in China',
     // Other names people use; sent to Google as WebSite alternateName.
-    'alternate_names' => ['CAS', 'CAS Education', 'CAS-Consultancy for Abroad Study', 'CAS Consultancy for Abroad Study', 'Consultancy for Abroad Study'],
+    'alternate_names' => ['CAS', 'CAS-Consultancy for Abroad Study', 'CAS Consultancy for Abroad Study', 'Consultancy for Abroad Study'],
 
     'short_name' => 'CAS',
 

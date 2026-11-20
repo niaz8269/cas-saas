@@ -29,7 +29,7 @@ class ResetPasswordMail extends Mailable
                 ."<p><a href=\"{$url}\" style=\"display:inline-block;background:#14357C;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none\">Choose a new password</a></p>"
                 ."<p>If the button doesn't work, copy this link into your browser:<br><a href=\"{$url}\">{$url}</a></p>"
                 .'<p>If you did not ask for this, you can ignore this email: your password stays as it is.</p>'
-                .'<p>— CAS Education</p>',
+                .'<p>— CAS</p>',
             );
     }
 }

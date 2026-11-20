@@ -21,7 +21,7 @@ it('serves the homepage with a title, canonical, structured data and crawlable l
     expect($html)->toContain('<title>CAS - Study in China | Apply to Chinese Universities Online</title>')
         ->and($html)->toContain('<meta property="og:site_name" content="CAS - Study in China" />')
         ->and($html)->toContain('"@type":"WebSite","name":"CAS - Study in China"')
-        ->and($html)->toContain('"alternateName":["CAS","CAS Education","CAS-Consultancy for Abroad Study"')
+        ->and($html)->toContain('"alternateName":["CAS","CAS-Consultancy for Abroad Study"')
         ->and($html)->toContain('<link rel="canonical" href="https://example.test/" />')
         ->and($html)->toContain('"@type":"WebSite"')
         ->and($html)->toContain('<h1>Study in China</h1>')

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 
 const SITE_NAME = "CAS - Study in China"
 const COMPANY_NAME = "CAS"
-const ALTERNATE_NAMES = ["CAS", "CAS Education", "CAS-Consultancy for Abroad Study", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
+const ALTERNATE_NAMES = ["CAS", "CAS-Consultancy for Abroad Study", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
 
 /** Production origin for canonical/OG URLs. Falls back to the live origin so
  *  canonicals are always self-referential and valid wherever this deploys. */

@@ -28,7 +28,7 @@ class AgentApprovedMail extends Mailable
                 ."<p>Good news — your partner application for <strong>{$company}</strong> has been approved.</p>"
                 .'<p>You can now sign in to the CAS partner portal using the email address you registered with.</p>'
                 .'<p>Welcome to the CAS partner network.</p>'
-                .'<p>— CAS Education</p>',
+                .'<p>— CAS</p>',
             );
     }
 }
