@@ -51,12 +51,12 @@ it("injects JSON-LD structured data and cleans it up on unmount", () => {
 })
 
 it("shows the home page as 'CAS: ...' and names the site CAS, with the long name as an alternate", () => {
-  renderAt("/", { title: "Study in China | Apply to Chinese Universities", canonicalPath: "/" })
+  renderAt("/", { title: "Apply to Chinese Universities Online", canonicalPath: "/" })
 
-  expect(document.title).toBe("CAS Education: Study in China | Apply to Chinese Universities")
-  expect(document.querySelector('meta[property="og:site_name"]')?.getAttribute("content")).toBe("CAS Education")
+  expect(document.title).toBe("CAS - Study in China | Apply to Chinese Universities Online")
+  expect(document.querySelector('meta[property="og:site_name"]')?.getAttribute("content")).toBe("CAS - Study in China")
 
   const data = JSON.stringify(organizationJsonLd())
-  expect(data).toContain('"name":"CAS Education"')
+  expect(data).toContain('"name":"CAS"')
   expect(data).toContain("CAS-Consultancy for Abroad Study")
 })
