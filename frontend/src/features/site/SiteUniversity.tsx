@@ -20,6 +20,7 @@ import {
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router-dom"
+import PortalLink from "@/features/site/PortalLink"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -201,9 +202,9 @@ function Empty({ text }: { text: string }) {
 /** Registered-only content is gated (ADR-0015); prompt the visitor to sign in. */
 function SignInGate({ label, className }: { label: string; className?: string }) {
   return (
-    <Link to="/portal/login" className={cn("inline-flex items-center gap-1 font-semibold text-cas-red hover:underline", className)}>
+    <PortalLink to="/portal/login" className={cn("inline-flex items-center gap-1 font-semibold text-cas-red hover:underline", className)}>
       <Lock className="size-3.5" /> {label}
-    </Link>
+    </PortalLink>
   )
 }
 

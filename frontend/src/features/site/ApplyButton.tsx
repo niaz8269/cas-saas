@@ -1,4 +1,5 @@
 import { type ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { usePortalAuthStore } from "@/stores/portalAuth"
@@ -22,6 +23,8 @@ export default function ApplyButton({
   label?: string
 }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const hint = t("newTab", { defaultValue: "(opens in a new tab)" })
   const token = usePortalAuthStore((s) => s.token)
   const kind = usePortalAuthStore((s) => s.kind)
 
@@ -30,16 +33,15 @@ export default function ApplyButton({
       ? `/portal/student/apply?university=${encodeURIComponent(universitySlug)}`
       : "/portal/student/apply"
 
-    if (token && kind === "student") {
-      navigate(target)
-    } else {
-      navigate(`/portal/login?redirect=${encodeURIComponent(target)}`)
-    }
+    // The portal opens in its own tab so the visitor keeps their place on the website.
+    const url = token && kind === "student" ? target : `/portal/login?redirect=${encodeURIComponent(target)}`
+    if (!window.open(url, "_blank", "noopener,noreferrer")) navigate(url)
   }
 
   return (
     <button type="button" onClick={handleClick} className={className} aria-label={label}>
       {children}
+      <span className="sr-only"> {hint}</span>
     </button>
   )
 }
