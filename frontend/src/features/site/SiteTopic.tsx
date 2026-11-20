@@ -28,6 +28,26 @@ export default function SiteTopic() {
   return (
     <div className="space-y-10">
       <SitePageHeader eyebrow={page.eyebrow} title={page.h1} subtitle={page.intro} image={HEADER_IMAGES.default} />
+      <p className="max-w-3xl rounded-sm border-l-4 border-cas-navy bg-cas-navy-50 p-4 text-sm font-medium leading-relaxed text-foreground">{page.answer}</p>
+      {page.facts && (
+        <section className="max-w-3xl rounded-sm border bg-card p-5 text-sm shadow-sm">
+          <h2 className="text-base font-semibold text-cas-navy">On CAS right now</h2>
+          <p className="mt-2">
+            {page.facts.programs} matching programs at {page.facts.universities} universities.
+            {page.facts.tuition && ` Public tuition runs from ${page.facts.tuition.min.toLocaleString("en-US")} to ${page.facts.tuition.max.toLocaleString("en-US")} ${page.facts.tuition.currency} a year across ${page.facts.tuition.programs} programs.`}
+          </p>
+          {page.facts.deadlines.length > 0 && (
+            <>
+              <h3 className="mt-3 font-semibold">Next application deadlines</h3>
+              <ul className="mt-1 list-disc space-y-1 pl-5">
+                {page.facts.deadlines.map((d) => (
+                  <li key={d.slug + d.date}><Link to={`/site/universities/${d.slug}`} className="text-cas-navy hover:underline">{d.university}</Link>: {d.date}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </section>
+      )}
       <article className="max-w-3xl space-y-4 text-sm leading-relaxed text-foreground/90">
         {page.sections.map((s) => (
           <section key={s.h} className="space-y-3">
@@ -48,6 +68,7 @@ export default function SiteTopic() {
           </section>
         )}
       </article>
+      <p className="max-w-3xl text-xs text-muted-foreground">Last reviewed {page.updated}. Fees and dates change each year: confirm them on the university page before you apply.</p>
       {page.related_links.length > 0 && (
         <section className="max-w-3xl">
           <h2 className="text-lg font-semibold text-cas-navy">Related</h2>
