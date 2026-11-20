@@ -42,3 +42,9 @@ it("tells screen readers that it opens a new tab", () => {
 
   expect(screen.getByRole("button", { name: "Apply now (opens in a new tab)" })).toBeInTheDocument()
 })
+
+it("keeps the new-tab notice in the spoken name when the button has its own label", () => {
+  renderWithProviders(<ApplyButton universitySlug="jilin-university" label="Apply for MBBS at Jilin University">Apply</ApplyButton>)
+
+  expect(screen.getByRole("button", { name: "Apply for MBBS at Jilin University (opens in a new tab)" })).toBeInTheDocument()
+})

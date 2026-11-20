@@ -39,7 +39,7 @@ export default function ApplyButton({
   }
 
   return (
-    <button type="button" onClick={handleClick} className={className} aria-label={label}>
+    <button type="button" onClick={handleClick} className={className} aria-label={label ? `${label} ${hint}` : undefined}>
       {children}
       <span className="sr-only"> {hint}</span>
     </button>
