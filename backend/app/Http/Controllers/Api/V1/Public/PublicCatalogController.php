@@ -15,6 +15,7 @@ use App\Models\University;
 use App\Services\Media\ImageService;
 use App\Services\Public\AudienceResolver;
 use App\Services\Search\FuzzySearch;
+use App\Services\Seo\PageFaqs;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -230,6 +231,12 @@ class PublicCatalogController extends Controller
         return response()->json(['data' => $rows]);
     }
 
+    /** The questions shown at the foot of a fixed page (home, CSC, scholarships, ...). */
+    public function pageFaqs(Request $request): JsonResponse
+    {
+        return response()->json(['data' => app(PageFaqs::class)->forPath((string) $request->query('path', ''))]);
+    }
+
     /** A city landing page: its universities and the city sections of their overviews. */
     public function city(Request $request, string $slug): JsonResponse
     {
@@ -259,6 +266,7 @@ class PublicCatalogController extends Controller
             // What the city is like (history, places to visit, climate, ...), when it has been built.
             'profile' => $profile ? ['summary' => $profile->summary, 'sections' => $profile->sections ?? [], 'source_url' => $profile->source_url] : null,
             'universities' => PublicUniversityResource::collection($inCity)->additional(['audience' => $audience])->toResponse($request)->getData(true)['data'],
+            'faqs' => app(PageFaqs::class)->forCity($city, $inCity),
         ]);
     }
 
@@ -277,7 +285,9 @@ class PublicCatalogController extends Controller
             ])
             ->firstOrFail();
 
-        return (new PublicUniversityResource($university))->additional(['audience' => $audience]);
+        $faqs = app(PageFaqs::class)->forUniversity($university, $university->programs, $university->intakes->filter(fn ($i) => $i->application_deadline || $i->application_open_date)->count(), $university->scholarships->pluck('name'));
+
+        return (new PublicUniversityResource($university))->additional(['audience' => $audience, 'faqs' => $faqs]);
     }
 
     /**

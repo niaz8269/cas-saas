@@ -6,6 +6,7 @@ use App\Models\University;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\getJson;
 
 uses(RefreshDatabase::class);
 
@@ -133,4 +134,41 @@ it('leads MBBS-approved universities with "MBBS in China", never cuts a long nam
         ->and($long)->toContain('content="MBBS in China at North China University of Science and Technology');
 
     expect(get('/site/universities/plain-uni')->getContent())->toContain('<title>Plain Uni: Programs, Fees &amp; Application Dates');
+});
+
+it('prints questions and FAQ data on the main pages, university pages, city pages and posts', function () {
+    $u = University::factory()->create(['name' => 'Faq Medical University', 'slug' => 'faq-uni', 'status' => 'active', 'moe_listed' => true, 'city' => 'Dalian', 'province' => 'Liaoning', 'about' => 'About text.']);
+    Program::factory()->create(['university_id' => $u->id, 'name' => 'Clinical Medicine', 'level' => 'bachelor', 'teaching_language' => 'English', 'status' => 'active', 'registry_only' => false]);
+
+    $mbbs = get('/site/mbbs-in-china')->assertOk()->getContent();
+    expect($mbbs)->toContain('"@type":"FAQPage"')->toContain('<h3>How long is an MBBS in China?</h3>')->toContain('there are 1, all listed on this page');
+
+    $home = get('/')->getContent();
+    expect($home)->toContain('"@type":"FAQPage"')->toContain('<h3>Why study in China?</h3>');
+
+    $uni = get('/site/universities/faq-uni')->getContent();
+    expect($uni)->toContain('"@type":"FAQPage"')
+        ->toContain('<h3>Is Faq Medical University approved for English-taught MBBS in China?</h3>')
+        ->toContain('Faq Medical University is in Dalian, Liaoning, China.')
+        ->toContain('CAS lists 1 program for international students at Faq Medical University: 1 bachelor&#039;s.')
+        ->toContain('<h3>Does Faq Medical University teach in English?</h3>');
+
+    $city = get('/site/cities/dalian')->getContent();
+    expect($city)->toContain('<h3>How many universities are in Dalian?</h3>')->toContain('<h3>Which universities in Dalian are approved for English-taught MBBS?</h3>');
+
+    Post::factory()->create(['title' => 'Guide', 'slug' => 'guide', 'status' => 'published', 'published_at' => now(), 'body' => '<h2>Intro</h2><p>Text.</p><h2>How long does it take?</h2><p>The whole process usually takes several months from the first document to the visa.</p><h3>Do I need a visa?</h3><p>Yes, a student visa is required for study that lasts longer than six months.</p>']);
+    $post = get('/site/news/guide')->getContent();
+    expect($post)->toContain('"@type":"FAQPage"')->toContain('"name":"Do I need a visa?"')->not->toContain('"name":"Intro"');
+});
+
+it('serves the page questions, and the university and city questions, to the website', function () {
+    $u = University::factory()->create(['name' => 'Api Uni', 'slug' => 'api-uni', 'status' => 'active', 'moe_listed' => false, 'city' => 'Harbin', 'province' => 'Heilongjiang']);
+
+    expect(getJson('/api/v1/public/page-faqs?path=site/csc-scholarship')->assertOk()->json('data.0.q'))->toBe('What is the CSC scholarship?');
+    expect(getJson('/api/v1/public/page-faqs?path=site/nothing')->assertOk()->json('data'))->toBe([]);
+
+    $questions = collect(getJson('/api/v1/public/universities/api-uni')->assertOk()->json('faqs'))->pluck('q');
+    expect($questions)->toContain('Where is Api Uni?')->toContain('How do I apply to Api Uni?')->not->toContain('Is Api Uni approved for English-taught MBBS in China?');
+
+    expect(getJson('/api/v1/public/cities/harbin')->assertOk()->json('faqs.0.q'))->toBe('How many universities are in Harbin?');
 });

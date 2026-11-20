@@ -21,6 +21,7 @@ import { getSitePrograms, type SiteProgram } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Display labels are i18n keys resolved at render; option `value`s are the
 // query-param values sent to the API and must stay unchanged.
@@ -196,6 +197,7 @@ export default function SiteProgramFinder() {
           <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("programs.next")}</Button>
         </div>
       )}
+      <PageFaqs path="site/programs" />
     </div>
   )
 }

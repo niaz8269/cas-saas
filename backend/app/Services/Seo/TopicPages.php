@@ -34,6 +34,9 @@ class TopicPages
         }
         $facts = isset($page['facts_terms']) ? app(TopicFacts::class)->for($page['facts_terms'], $page['facts_level'] ?? null) : null;
 
+        // Questions answered from the live catalog numbers follow the written ones.
+        $page['faq'] = array_merge($page['faq'] ?? [], app(PageFaqs::class)->forTopicFacts($page['h1'], $facts));
+
         return $page + ['related_links' => $this->related($page), 'facts' => $facts];
     }
 

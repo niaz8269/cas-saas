@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { postEnquiry, SiteApiError, type EnquiryPayload } from "@/features/site/api"
 import { cn } from "@/lib/utils"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Option lists: `value` is the (unchanged) submitted form value; `labelKey`
 // is the i18n key for its display text, resolved via t() at render.
@@ -258,6 +259,7 @@ export default function SiteStudyPlan() {
           )}
         </div>
       </div>
+      <PageFaqs path="site/study-plan" className="mt-10" />
     </div>
   )
 }

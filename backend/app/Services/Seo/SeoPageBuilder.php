@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
  */
 class SeoPageBuilder
 {
-    public function __construct(private readonly ImageService $images, private readonly TopicPages $topics) {}
+    public function __construct(private readonly ImageService $images, private readonly TopicPages $topics, private readonly PageFaqs $faqs) {}
 
     /** @return array<string, mixed> */
     public function build(string $path): array
@@ -86,6 +86,11 @@ class SeoPageBuilder
         if ($path === 'site/faq' && ($faq = $this->faqJsonLd())) {
             $ld[] = $faq;
         }
+        // The same questions the page shows to visitors, printed for crawlers and sent as FAQ data.
+        if ($pageFaqs = $this->faqs->forPath($path)) {
+            $body .= $this->faqs->html($pageFaqs);
+            $ld[] = $this->faqs->jsonLd($pageFaqs);
+        }
 
         return $this->page($title, $description, $canonical, jsonLd: $ld, crumbs: $crumbs, body: $body);
     }
@@ -148,6 +153,9 @@ class SeoPageBuilder
         if ($english->isNotEmpty()) {
             $body .= '<h2>English-taught programs</h2>'.$this->ul($english->take(25)->map('e')->all());
         }
+        $scholarshipNames = $u->scholarships()->where('status', 'active')->orderBy('name')->pluck('name');
+        $uniFaqs = $this->faqs->forUniversity($u, $programs, $intakes->count(), $scholarshipNames);
+        $body .= $this->faqs->html($uniFaqs);
         $body .= '<p>'.$this->link('/site/universities', 'All universities in China');
         if ($u->city) {
             $body .= ' · '.$this->link('/site/cities/'.Str::slug($u->city), 'Study in '.$u->city);
@@ -170,12 +178,13 @@ class SeoPageBuilder
             'address' => array_filter(['@type' => 'PostalAddress', 'addressLocality' => $u->city, 'addressRegion' => $u->province, 'addressCountry' => 'CN']),
             'sameAs' => $u->wikipedia_url ? [$u->wikipedia_url] : null,
         ]];
+        $faqLd = $this->faqs->jsonLd($uniFaqs);
 
         // Pages that so far hold only a name, a place and the Ministry's registered majors stay out of search
         // results until they have confirmed programs, application windows or a full profile (then they switch on by themselves).
         $indexable = SeoIndexability::universityHasSubstance($u, $programs->where('registry_only', false)->count(), $intakes->isNotEmpty(), $programs->where('registry_only', true)->count());
 
-        return $this->page($title, $description, $canonical, image: $image, jsonLd: array_map(fn ($d) => array_filter($d, fn ($v) => $v !== null && $v !== ''), $ld), crumbs: [['Home', '/'], ['Universities', '/site/universities'], [$u->name, $canonical]], body: $body, noindex: ! $indexable, follow: true);
+        return $this->page($title, $description, $canonical, image: $image, jsonLd: array_merge(array_map(fn ($d) => array_filter($d, fn ($v) => $v !== null && $v !== ''), $ld), $faqLd ? [$faqLd] : []), crumbs: [['Home', '/'], ['Universities', '/site/universities'], [$u->name, $canonical]], body: $body, noindex: ! $indexable, follow: true);
     }
 
     private function city(string $slug): ?array
@@ -212,6 +221,8 @@ class SeoPageBuilder
 
         $body = '<h1>Study in '.e($city).'</h1><p>'.e($intro ?: $description).'</p>'.($profile ? $this->cityProfileText($profile) : $cityText);
         $body .= '<h2>Universities in '.e($city).'</h2>'.$this->ul($inCity->map(fn ($u) => $this->link('/site/universities/'.$u->slug, $u->name).($u->moe_listed ? ' (MoE-approved for English MBBS)' : ''))->all());
+        $cityFaqs = $this->faqs->forCity($city, $inCity);
+        $body .= $this->faqs->html($cityFaqs);
         $body .= '<p>'.$this->link('/site/cities', 'All cities').'</p>';
 
         $ld = [array_filter([
@@ -224,6 +235,8 @@ class SeoPageBuilder
             'containedInPlace' => $inCity->first()->province ? ['@type' => 'AdministrativeArea', 'name' => $inCity->first()->province, 'containedInPlace' => ['@type' => 'Country', 'name' => 'China']] : null,
             'sameAs' => $profile?->source_url ? [$profile->source_url] : null,
         ])];
+
+        $ld[] = $this->faqs->jsonLd($cityFaqs);
 
         return $this->page($title, $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['Cities', '/site/cities'], [$city, $canonical]], body: $body, noindex: ! SeoIndexability::cityHasSubstance($city), follow: true);
     }
@@ -276,6 +289,11 @@ class SeoPageBuilder
             'author' => ['@type' => 'Organization', 'name' => config('seo.site_name')],
             'publisher' => ['@type' => 'Organization', 'name' => config('seo.site_name'), 'logo' => ['@type' => 'ImageObject', 'url' => $this->abs('/cas-logo-copy.png')]],
         ]];
+
+        // Headings written as questions are already on the page; send them as FAQ data too.
+        if ($postFaq = $this->faqs->jsonLd($this->faqs->fromHtml($post->body))) {
+            $ld[] = $postFaq;
+        }
 
         return $this->page($this->fit([$post->title]), $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['News', '/site/news'], [$post->title, $canonical]], body: $body, type: 'article');
     }

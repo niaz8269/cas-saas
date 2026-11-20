@@ -12,6 +12,7 @@ import SiteNotFound from "@/features/site/SiteNotFound"
 import { OverviewArticle } from "@/features/site/SiteUniversity"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
+import { FaqList } from "@/features/site/SiteFaqs"
 
 const GROUP_ORDER: SiteCityGroup[] = ["history", "places", "geography", "economy", "culture", "education", "transport", "people"]
 const PAGE = 12
@@ -195,6 +196,7 @@ export default function SiteCity() {
           </div>
         )}
       </SiteSection>
+      <FaqList faqs={Array.isArray(data.faqs) ? data.faqs : []} />
       <p className="text-center text-sm"><Link to="/site/cities" className="text-cas-navy hover:underline">{t("city.allCities")}</Link></p>
     </div>
   )

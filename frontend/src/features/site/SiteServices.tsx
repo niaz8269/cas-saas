@@ -21,6 +21,7 @@ import { Link } from "react-router-dom"
 
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Display text lives in i18n keys resolved via t() at render (report — 5-language support).
 const WHY: { icon: LucideIcon; titleKey: string; bodyKey: string }[] = [
@@ -201,6 +202,7 @@ export default function SiteServices() {
           {t("services.ctaButton")} <ArrowRight className="size-4" />
         </Link>
       </section>
+      <PageFaqs path="site/services" />
     </div>
   )
 }

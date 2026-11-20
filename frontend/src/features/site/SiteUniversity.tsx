@@ -33,6 +33,7 @@ import EnquiryForm from "@/features/site/EnquiryForm"
 import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
+import { FaqList } from "@/features/site/SiteFaqs"
 
 const money = (v: string | number | null | undefined, currency?: string | null) =>
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()
@@ -162,6 +163,7 @@ export default function SiteUniversity() {
 
       {/* Enquiry */}
       <EnquiryForm universityId={u.id} universityName={u.name} />
+      <FaqList faqs={Array.isArray(data.faqs) ? data.faqs : []} />
     </div>
   )
 }
