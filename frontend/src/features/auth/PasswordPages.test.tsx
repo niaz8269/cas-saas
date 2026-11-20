@@ -37,7 +37,7 @@ it("lets portal users pick student or agent", async () => {
   vi.stubGlobal("fetch", fetchMock)
 
   renderForgot("portal", "/portal/forgot-password")
-  await user.click(screen.getByRole("tab", { name: "Agent" }))
+  await user.click(screen.getByRole("tab", { name: "Agency" }))
   await user.type(screen.getByLabelText("Email"), "a@x.com")
   await user.click(screen.getByRole("button", { name: "Send reset link" }))
 

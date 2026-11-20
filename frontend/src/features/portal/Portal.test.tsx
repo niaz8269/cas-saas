@@ -95,7 +95,7 @@ it("submits an agent partner application and shows the pending screen", async ()
   renderWithProviders(<PortalRegister />, { route: "/portal/register" })
 
   // Switch to the agent/partner tab.
-  await user.click(screen.getByRole("tab", { name: "Agent" }))
+  await user.click(screen.getByRole("tab", { name: "Agency" }))
 
   await user.type(screen.getByLabelText("Company / agency name"), "Bright Future")
   await user.type(screen.getByLabelText("Contact person"), "Sara Khan")

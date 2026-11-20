@@ -17,7 +17,7 @@ export type PhotoUpload = (file: File) => Promise<{ path: string; url: string | 
 
 const STUDENT_SERVICES = ["admission", "scholarship", "visa", "arrival", "accommodation", "language"]
 const PARTNER_STRENGTHS = ["commission", "communication", "portal", "speed", "support", "transparency"]
-const FOUND_US: [string, string][] = [["friend", "A friend or family"], ["agent", "An agent"], ["social", "Social media"], ["search", "Online search"], ["event", "An event"], ["other", "Other"]]
+const FOUND_US: [string, string][] = [["friend", "A friend or family"], ["agent", "An agency"], ["social", "Social media"], ["search", "Online search"], ["event", "An event"], ["other", "Other"]]
 const REFERRED = ["1-10", "11-50", "51-200", "200+"]
 const DEGREES = ["bachelor", "master", "phd", "diploma", "non_degree"]
 

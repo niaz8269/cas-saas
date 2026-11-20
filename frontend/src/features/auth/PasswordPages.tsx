@@ -36,7 +36,7 @@ function AudienceTabs({ value, onChange }: { value: "student" | "agent"; onChang
           onClick={() => onChange(k)}
           className={cn("rounded-md py-2 text-sm font-medium capitalize transition-colors", value === k ? "bg-card text-cas-navy shadow-sm" : "text-muted-foreground")}
         >
-          {k === "student" ? "Student" : "Agent"}
+          {k === "student" ? "Student" : "Agency"}
         </button>
       ))}
     </div>

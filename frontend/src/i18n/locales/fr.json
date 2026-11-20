@@ -395,8 +395,8 @@
     "servicesIntro": "Services que nous pouvons prendre en charge"
   },
   "partner": {
-    "seoTitle": "Devenir agent partenaire pour les études en Chine",
-    "seoDescription": "Devenez agent ou recruteur partenaire de CAS : candidatez aux universités chinoises depuis un seul portail, suivez chaque dossier en direct et voyez votre commission à chaque étape.",
+    "seoTitle": "Devenir agence partenaire pour les études en Chine",
+    "seoDescription": "Devenez agence ou recruteur partenaire de CAS : candidatez aux universités chinoises depuis un seul portail, suivez chaque dossier en direct et voyez votre commission à chaque étape.",
     "headerEyebrow": "Pour agences et recruteurs",
     "headerTitle": "Devenez partenaire",
     "headerSubtitle": "Placez vos étudiants dans des universités chinoises par l’intermédiaire d’une agence autorisée. Déposez et suivez les candidatures dans un seul portail et voyez où en est chaque commission.",
@@ -1209,7 +1209,7 @@
     "loginSubtitle": "Accédez à vos dossiers CAS",
     "portalTypeAria": "Type de portail",
     "roleStudent": "Étudiant",
-    "roleAgent": "Agent",
+    "roleAgent": "Agence",
     "email": "E-mail",
     "password": "Mot de passe",
     "signIn": "Se connecter",

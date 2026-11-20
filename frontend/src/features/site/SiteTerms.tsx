@@ -58,10 +58,10 @@ const SECTIONS: { title: string; body: string[] }[] = [
     ],
   },
   {
-    title: "8. Universities, partners and agents",
+    title: "8. Universities, partners and agencies",
     body: [
       "We work with universities and partner organisations. We may share the information needed for your application with them, and their own terms and fees apply to the services they provide.",
-      "Agents and partners who register with CAS work under the partner agreement they sign with us. Registering does not make anyone a CAS employee or give them authority to act for CAS beyond that agreement.",
+      "Agencies and partners who register with CAS work under the partner agreement they sign with us. Registering does not make anyone a CAS employee or give them authority to act for CAS beyond that agreement.",
     ],
   },
   {

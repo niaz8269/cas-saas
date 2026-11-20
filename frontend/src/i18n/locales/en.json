@@ -433,7 +433,7 @@
   },
   "partner": {
     "seoTitle": "Partner With Us: Agency & Recruitment Cooperation",
-    "seoDescription": "Partner with CAS as an agent or recruiter: apply to Chinese universities through one portal, track every application live and see your commission at each stage.",
+    "seoDescription": "Partner with CAS as an agency or recruiter: apply to Chinese universities through one portal, track every application live and see your commission at each stage.",
     "headerEyebrow": "For agencies and recruiters",
     "headerTitle": "Partner With Us",
     "headerSubtitle": "Place your students in Chinese universities through an authorized agency. Submit and track applications in one portal and see where each commission stands.",
@@ -1337,7 +1337,7 @@
     "loginSubtitle": "Access your CAS records",
     "portalTypeAria": "Portal type",
     "roleStudent": "Student",
-    "roleAgent": "Agent",
+    "roleAgent": "Agency",
     "email": "Email",
     "password": "Password",
     "signIn": "Sign in",

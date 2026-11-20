@@ -189,7 +189,7 @@ export default function StudentProfilePage() {
             <Field label="Country" value={s.country?.name} />
             <Field label="Branch" value={s.branch ? `${s.branch.name} (${s.branch.code})` : null} />
             <Field label="Counselor" value={s.counselor?.name} />
-            <Field label="Agent" value={s.agent ? `${s.agent.name} (${s.agent.agent_code})` : null} />
+            <Field label="Agency" value={s.agent ? `${s.agent.name} (${s.agent.agent_code})` : null} />
           </dl>
 
           <GuardiansEditor studentId={id} guardians={s.guardians ?? []} canEdit={canUpdate} />

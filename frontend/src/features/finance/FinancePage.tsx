@@ -121,7 +121,7 @@ export default function FinancePage() {
           <SelectContent>
             <SelectItem value="all">All parties</SelectItem>
             <SelectItem value="student">Student</SelectItem>
-            <SelectItem value="agent">Agent</SelectItem>
+            <SelectItem value="agent">Agency</SelectItem>
             <SelectItem value="university">University</SelectItem>
           </SelectContent>
         </Select>

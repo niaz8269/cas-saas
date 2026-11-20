@@ -395,8 +395,8 @@
     "servicesIntro": "我们可办理的服务"
   },
   "partner": {
-    "seoTitle": "成为赴华留学合作代理",
-    "seoDescription": "成为 CAS 合作代理或招生人员：通过一个门户申请中国大学，实时跟踪每份申请，并在每个阶段查看您的佣金。",
+    "seoTitle": "成为赴华留学合作代理机构",
+    "seoDescription": "成为 CAS 合作代理机构或招生人员：通过一个门户申请中国大学，实时跟踪每份申请，并在每个阶段查看您的佣金。",
     "headerEyebrow": "面向机构与招生人员",
     "headerTitle": "与我们合作",
     "headerSubtitle": "通过授权代理机构把您的学生送入中国大学。在一个门户中提交并跟踪申请，并查看每笔佣金所处的阶段。",
@@ -1209,7 +1209,7 @@
     "loginSubtitle": "查看您的 CAS 记录",
     "portalTypeAria": "门户类型",
     "roleStudent": "学生",
-    "roleAgent": "代理",
+    "roleAgent": "代理机构",
     "email": "邮箱",
     "password": "密码",
     "signIn": "登录",

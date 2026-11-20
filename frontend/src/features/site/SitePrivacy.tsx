@@ -34,7 +34,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: "4. Who we share it with",
     body: [
-      "Only with those who need it to do their part: the universities and scholarship bodies you apply to; the Chinese embassy or consulate and other authorities involved in your visa; partner agents who referred you, so they can follow your progress; our staff, who see only what their role requires; and service providers who help us run the platform, such as hosting, email delivery and document storage.",
+      "Only with those who need it to do their part: the universities and scholarship bodies you apply to; the Chinese embassy or consulate and other authorities involved in your visa; partner agencies who referred you, so they can follow your progress; our staff, who see only what their role requires; and service providers who help us run the platform, such as hosting, email delivery and document storage.",
       "We do not sell your personal information and we do not use it for third-party advertising.",
     ],
   },

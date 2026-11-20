@@ -395,8 +395,8 @@
     "servicesIntro": "Layanan yang dapat kami tangani"
   },
   "partner": {
-    "seoTitle": "Jadi agen mitra untuk studi di Tiongkok",
-    "seoDescription": "Jadilah agen atau perekrut mitra CAS: daftarkan ke universitas Tiongkok dari satu portal, pantau tiap pendaftaran secara langsung, dan lihat komisi Anda di setiap tahap.",
+    "seoTitle": "Jadi agensi mitra untuk studi di Tiongkok",
+    "seoDescription": "Jadilah agensi atau perekrut mitra CAS: daftarkan ke universitas Tiongkok dari satu portal, pantau tiap pendaftaran secara langsung, dan lihat komisi Anda di setiap tahap.",
     "headerEyebrow": "Untuk agensi dan perekrut",
     "headerTitle": "Bermitra dengan Kami",
     "headerSubtitle": "Tempatkan mahasiswa Anda di universitas Tiongkok melalui agensi resmi. Ajukan dan pantau pendaftaran di satu portal, dan lihat posisi tiap komisi.",
@@ -1209,7 +1209,7 @@
     "loginSubtitle": "Akses catatan CAS Anda",
     "portalTypeAria": "Jenis portal",
     "roleStudent": "Siswa",
-    "roleAgent": "Agen",
+    "roleAgent": "Agensi",
     "email": "Email",
     "password": "Kata sandi",
     "signIn": "Masuk",

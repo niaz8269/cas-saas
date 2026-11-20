@@ -67,7 +67,7 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold text-foreground">Performance reports</h2>
-        <p className="mt-1 text-sm text-muted-foreground">University, agent and lead-source contribution.</p>
+        <p className="mt-1 text-sm text-muted-foreground">University, agency and lead-source contribution.</p>
       </div>
 
       {/* Universities */}
@@ -131,13 +131,13 @@ export default function ReportsPage() {
         {/* Agents */}
         <div className="rounded-xl border bg-card p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
-            <h3 className="text-[15px] font-semibold">Agent performance</h3>
+            <h3 className="text-[15px] font-semibold">Agency performance</h3>
             {d.agents.length > 0 && (
               <ExportButton
-                label="Export agent performance"
+                label="Export agency performance"
                 onClick={() => downloadCsv(
-                  "agent-performance.csv",
-                  ["Agent", "Code", "Type", "Students", "Commission earned"],
+                  "agency-performance.csv",
+                  ["Agency", "Code", "Type", "Students", "Commission earned"],
                   d.agents.map((a) => [a.name, a.agent_code, a.type, a.students, a.commission_earned]),
                 )}
               />
@@ -147,14 +147,14 @@ export default function ReportsPage() {
             <Table>
               <TableHeader className="bg-subtle">
                 <TableRow>
-                  <TableHead>Agent</TableHead>
+                  <TableHead>Agency</TableHead>
                   <TableHead className="text-right">Students</TableHead>
                   <TableHead className="text-right">Earned</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {d.agents.length === 0 && (
-                  <TableRow><TableCell colSpan={3} className="py-8 text-center text-sm text-muted-foreground">No agents yet.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={3} className="py-8 text-center text-sm text-muted-foreground">No agencies yet.</TableCell></TableRow>
                 )}
                 {d.agents.map((a) => (
                   <TableRow key={a.agent_code}>

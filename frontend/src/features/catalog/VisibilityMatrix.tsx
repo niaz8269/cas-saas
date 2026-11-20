@@ -8,7 +8,7 @@ import type { VisibilityConfig } from "@/features/catalog/api"
 const AUDIENCES = [
   { key: "public", label: "Public" },
   { key: "student", label: "Student" },
-  { key: "agent", label: "Agent" },
+  { key: "agent", label: "Agency" },
   { key: "counselor", label: "Consultant" },
 ] as const
 
