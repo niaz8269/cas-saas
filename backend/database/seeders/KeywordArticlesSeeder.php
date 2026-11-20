@@ -178,7 +178,7 @@ class KeywordArticlesSeeder extends Seeder
             'title' => 'Engineering in China for International Students',
             'excerpt' => 'Studying engineering in China: the fields you can choose, English-taught or Chinese-taught degrees, entry requirements and how to apply.',
             'category' => 'Engineering in China',
-            'date' => '2026-11-21 09:00:00',
+            'date' => '2026-11-20 09:00:00',
             'cover' => $this->cover($withPhoto),
             'body' => '<p>Engineering is one of the most common reasons international students choose China. Chinese universities teach it at every level, from bachelor&rsquo;s degrees to doctoral research, and a growing number of programs are taught in English. This guide explains how the degrees are organised, what universities ask for, and how to choose and apply.</p>'
                 .$this->summary([
@@ -222,7 +222,7 @@ class KeywordArticlesSeeder extends Seeder
             'title' => 'BDS in China: Studying Dentistry as an International Student',
             'excerpt' => 'How dentistry (BDS, called Stomatology in China) is taught to international students: the degree, the language, entry requirements and what to check before you apply.',
             'category' => 'BDS in China',
-            'date' => '2026-11-21 10:00:00',
+            'date' => '2026-11-20 10:00:00',
             'cover' => $this->cover($withPhoto),
             'body' => '<p>Dentistry in China is taught under the name Stomatology. International students who search for &ldquo;BDS in China&rdquo; are looking for the bachelor&rsquo;s degree in Stomatology, which trains dentists in the same way a BDS does elsewhere. This guide explains the degree, the language it is taught in, and the checks to make before you apply.</p>'
                 .$this->summary([
@@ -263,7 +263,7 @@ class KeywordArticlesSeeder extends Seeder
             'title' => 'Chinese Language Programs in China: How to Choose and Apply',
             'excerpt' => 'Learning Chinese at a university in China: how long the courses run, what the HSK levels mean, who can apply, the visa you need and how to choose a city.',
             'category' => 'Chinese language',
-            'date' => '2026-11-21 11:00:00',
+            'date' => '2026-11-20 11:00:00',
             'cover' => $this->cover($withPhoto),
             'body' => '<p>A Chinese language program at a university in China is the most direct way to learn Mandarin: classes every weekday, a campus where the language is used around you, and a certificate at the end. It is also the usual first step for students who want a Chinese-taught degree. This guide explains how the programs work and how to pick one.</p>'
                 .$this->summary([
@@ -313,7 +313,7 @@ class KeywordArticlesSeeder extends Seeder
             'title' => 'Cost of Studying in China: Tuition, Living Costs and How to Budget',
             'excerpt' => 'What it costs to study in China: yearly tuition from the live catalog, the costs beyond tuition, how scholarships change the total, and how to build a budget.',
             'category' => 'Study in China',
-            'date' => '2026-11-21 12:00:00',
+            'date' => '2026-11-20 12:00:00',
             'cover' => $this->cover($photo),
             'body' => '<p>The cost of studying in China has two parts: what the university charges, and what it costs to live there. Both differ widely by city, level and subject, so the useful question is not &ldquo;how much does it cost?&rdquo; but &ldquo;what will it cost for this program in this city?&rdquo; This guide shows what to count and where to find each number.</p>'
                 .$this->summary(array_merge($short ? [implode('; ', $short).'.'] : [], [
