@@ -90,7 +90,8 @@ export default function SiteCity() {
   const [shown, setShown] = useState(PAGE)
 
   useSeo({
-    title: data ? t("city.seoTitle", { city: data.city }) : t("city.seoTitleFallback"),
+    // The same title the server prints: the longer form only when it fits a search result.
+    title: data ? [t("city.seoTitle", { city: data.city }), t("city.seoTitleShort", { city: data.city, defaultValue: "Study in {{city}}: Universities & Programs" })].find((o) => o.length <= 54) ?? t("city.seoTitle", { city: data.city }) : t("city.seoTitleFallback"),
     description: data ? t("city.seoDescription", { city: data.city, count: data.universities.length }) : undefined,
     canonicalPath: `/site/cities/${slug}`,
   })

@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useMemo, useState } from "react"
+import type { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router-dom"
 
@@ -38,6 +39,21 @@ const money = (v: string | number | null | undefined, currency?: string | null) 
 
 const levelLabel = (l: string) => l.replace(/_/g, "-").replace(/^\w/, (c) => c.toUpperCase())
 
+/**
+ * The same title the server prints for crawlers: MBBS-approved universities lead with "MBBS in China", and the
+ * longer form is used only when it fits a search result (54 characters before " | CAS").
+ */
+function universityTitle(t: TFunction, name: string, mbbs: boolean | undefined): string {
+  if (mbbs) {
+    const long = t("university.seoTitleMbbs", { name, defaultValue: "MBBS in China - {{name}}: Fees & Admission" })
+
+    return long.length <= 54 ? long : t("university.seoTitleMbbsShort", { name, defaultValue: "MBBS in China - {{name}}" })
+  }
+  const options = [t("university.seoTitle", { name }), t("university.seoTitleShort", { name, defaultValue: "{{name}}: Programs & Dates" })]
+
+  return options.find((o) => o.length <= 54) ?? name
+}
+
 export default function SiteUniversity() {
   const { t } = useTranslation()
   const { slug = "" } = useParams()
@@ -50,7 +66,7 @@ export default function SiteUniversity() {
 
   const uni = data?.data
   useSeo({
-    title: uni ? t("university.seoTitle", { name: uni.name }) : t("university.seoTitleFallback"),
+    title: uni ? universityTitle(t, uni.name, uni.moe_listed) : t("university.seoTitleFallback"),
     description: uni
       ? t("university.seoDescription", {
           name: uni.name,

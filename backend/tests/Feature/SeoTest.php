@@ -18,10 +18,10 @@ it('serves the homepage with a title, canonical, structured data and crawlable l
 
     $html = get('/')->assertOk()->getContent();
 
-    expect($html)->toContain('<title>CAS: Study in China | Apply to Chinese Universities Online</title>')
-        ->and($html)->toContain('<meta property="og:site_name" content="CAS" />')
-        ->and($html)->toContain('"@type":"WebSite","name":"CAS"')
-        ->and($html)->toContain('"alternateName":["CAS Education","CAS-Consultancy for Abroad Study"')
+    expect($html)->toContain('<title>CAS Education: Study in China | Apply to Chinese Universities</title>')
+        ->and($html)->toContain('<meta property="og:site_name" content="CAS Education" />')
+        ->and($html)->toContain('"@type":"WebSite","name":"CAS Education"')
+        ->and($html)->toContain('"alternateName":["CAS","CAS-Consultancy for Abroad Study"')
         ->and($html)->toContain('<link rel="canonical" href="https://example.test/" />')
         ->and($html)->toContain('"@type":"WebSite"')
         ->and($html)->toContain('<h1>Study in China</h1>')
@@ -37,7 +37,7 @@ it('gives each university its own title, canonical, image and breadcrumb data', 
 
     $html = get('/site/universities/seo-uni')->assertOk()->getContent();
 
-    expect($html)->toContain('<title>Seo Uni: Programs, Fees &amp; Application Dates | CAS</title>')
+    expect($html)->toContain('<title>MBBS in China - Seo Uni: Fees &amp; Admission | CAS</title>')
         ->and($html)->toContain('rel="canonical" href="https://example.test/site/universities/seo-uni"')
         ->and($html)->toContain('property="og:image" content="https://example.test/photos/x.webp"')
         ->and($html)->toContain('"@type":"CollegeOrUniversity"')
@@ -122,4 +122,15 @@ it('indexes a university page once it lists enough Ministry-registered majors, a
 
     $sitemap = get('/sitemaps/universities.xml')->getContent();
     expect($sitemap)->toContain('/site/universities/majors-uni')->not->toContain('few-majors-uni');
+});
+
+it('leads MBBS-approved universities with "MBBS in China", never cuts a long name, and leaves other universities as they were', function () {
+    University::factory()->create(['name' => 'North China University of Science and Technology', 'slug' => 'long-mbbs', 'status' => 'active', 'moe_listed' => true, 'city' => 'Tangshan', 'about' => null]);
+    University::factory()->create(['name' => 'Plain Uni', 'slug' => 'plain-uni', 'status' => 'active', 'moe_listed' => false, 'city' => 'Dalian', 'about' => 'About text.']);
+
+    $long = get('/site/universities/long-mbbs')->getContent();
+    expect($long)->toContain('<title>MBBS in China - North China University of Science and Technology')
+        ->and($long)->toContain('content="MBBS in China at North China University of Science and Technology');
+
+    expect(get('/site/universities/plain-uni')->getContent())->toContain('<title>Plain Uni: Programs, Fees &amp; Application Dates');
 });
