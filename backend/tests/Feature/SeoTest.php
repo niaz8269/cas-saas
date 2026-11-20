@@ -172,3 +172,28 @@ it('serves the page questions, and the university and city questions, to the web
 
     expect(getJson('/api/v1/public/cities/harbin')->assertOk()->json('faqs.0.q'))->toBe('How many universities are in Harbin?');
 });
+
+it('prints the full text of the main pages and a live summary of the program catalog', function () {
+    $u = University::factory()->create(['name' => 'Big Uni', 'slug' => 'big-uni', 'status' => 'active', 'city' => 'Wuhan', 'province' => 'Hubei']);
+    Program::factory()->count(2)->create(['university_id' => $u->id, 'level' => 'bachelor', 'teaching_language' => 'English', 'status' => 'active', 'registry_only' => false]);
+    Program::factory()->create(['university_id' => $u->id, 'level' => 'master', 'teaching_language' => 'Chinese', 'status' => 'active', 'registry_only' => false]);
+
+    $programs = get('/site/programs')->assertOk()->getContent();
+    expect($programs)->toContain('It lists 3 programs for international students at 1 university in China')
+        ->toContain('Bachelor&#039;s degrees: 2 programs')
+        ->toContain('2 programs taught in English')
+        ->toContain('href="/site/universities/big-uni"');
+
+    expect(get('/site/services')->getContent())->toContain('<h2>What we do for you</h2>')->toContain('Admission service:');
+    expect(get('/site/about')->getContent())->toContain('<h2>How we help</h2>');
+    expect(get('/site/pricing')->getContent())->toContain('<h2>What CAS charges</h2>');
+    expect(get('/site/partner')->getContent())->toContain('<h2>How a commission progresses</h2>');
+    expect(get('/site/why-china')->getContent())->toContain('<h2>Reasons students choose China</h2>');
+});
+
+it('gives a small college page its province neighbours', function () {
+    University::factory()->create(['name' => 'Lone College', 'slug' => 'lone-college', 'status' => 'active', 'city' => 'Aba', 'province' => 'Sichuan', 'about' => 'A college.']);
+    University::factory()->create(['name' => 'Chengdu Uni', 'slug' => 'chengdu-uni', 'status' => 'active', 'city' => 'Chengdu', 'province' => 'Sichuan']);
+
+    expect(get('/site/universities/lone-college')->getContent())->toContain('<h2>Other universities in Sichuan</h2>')->toContain('href="/site/universities/chengdu-uni"');
+});
