@@ -380,6 +380,14 @@ export interface SiteTopic {
   sections: { h: string; p?: string[]; ul?: string[] }[]
   faq: { q: string; a: string }[]
   search: string
+  answer: string
+  updated: string
+  facts: null | {
+    programs: number
+    universities: number
+    tuition: null | { min: number; max: number; currency: string; programs: number }
+    deadlines: { university: string; slug: string; date: string }[]
+  }
   related_links: { title: string; path: string }[]
 }
 

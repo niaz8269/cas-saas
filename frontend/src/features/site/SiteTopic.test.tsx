@@ -7,7 +7,7 @@ import { jsonResponse, renderWithProviders } from "@/test/utils"
 it("shows a topic page with its questions and related links", async () => {
   vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ data: {
     slug: "bds-in-china", title: "BDS in China", description: "d", h1: "BDS in China for international students", eyebrow: "Study in China", intro: "Intro text",
-    sections: [{ h: "Eligibility", p: ["Science stream."] }], faq: [{ q: "How long?", a: "Five years." }], search: "stomatology",
+    sections: [{ h: "Eligibility", p: ["Science stream."] }], faq: [{ q: "How long?", a: "Five years." }], search: "stomatology", answer: "Short answer.", updated: "2026-11-17", facts: { programs: 4, universities: 3, tuition: { min: 20000, max: 50000, currency: "CNY", programs: 4 }, deadlines: [{ university: "Beta Uni", slug: "beta-uni", date: "2027-03-01" }] },
     related_links: [{ title: "MBBS in China", path: "/site/mbbs-in-china" }],
   } })))
 
@@ -15,5 +15,8 @@ it("shows a topic page with its questions and related links", async () => {
 
   expect(await screen.findByRole("heading", { name: "BDS in China for international students" })).toBeInTheDocument()
   expect(screen.getByText("Five years.")).toBeInTheDocument()
+  expect(screen.getByText("Short answer.")).toBeInTheDocument()
+  expect(screen.getByText(/4 matching programs at 3 universities/)).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "Beta Uni" })).toHaveAttribute("href", "/site/universities/beta-uni")
   expect(screen.getByRole("link", { name: "MBBS in China" })).toHaveAttribute("href", "/site/mbbs-in-china")
 })

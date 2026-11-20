@@ -29,8 +29,12 @@ class TopicPages
     public function find(string $slug): ?array
     {
         $page = $this->all()[$slug] ?? null;
+        if (! $page) {
+            return null;
+        }
+        $facts = isset($page['facts_terms']) ? app(TopicFacts::class)->for($page['facts_terms'], $page['facts_level'] ?? null) : null;
 
-        return $page ? $page + ['related_links' => $this->related($page)] : null;
+        return $page + ['related_links' => $this->related($page), 'facts' => $facts];
     }
 
     /** @return list<array{title:string, path:string}> */
