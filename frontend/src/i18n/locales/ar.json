@@ -1446,6 +1446,14 @@
       "paginationRange": "{{from}}–{{to}} من {{total}}",
       "prev": "السابق",
       "next": "التالي"
+    },
+    "exclusives": {
+      "title": "العروض الحصرية",
+      "subtitle": "برامج وجامعات متاحة فقط عبر وكالات CAS، مع عمولتك والرسوم والشروط والملفات الترويجية.",
+      "downloadError": "تعذّر تنزيل الملف. حاول مرة أخرى.",
+      "emptyTitle": "لا يوجد شيء بعد",
+      "emptyHint": "ستظهر العروض الحصرية الجديدة هنا فور نشرها من CAS.",
+      "library": "مكتبة التسويق"
     }
   },
   "payTo": {
@@ -1832,5 +1840,50 @@
     "cta": "يمكننا مطابقتك مع البرامج المفتوحة لمنحة CSC ومساعدتك على التقديم في الوقت المناسب.",
     "allScholarships": "كل المنح",
     "ctaButton": "احصل على خطة دراسية مجانية"
+  },
+  "exclusives": {
+    "badge": "حصري",
+    "private": "خاص",
+    "partners": "الشركاء",
+    "universityPackage": "عرض جامعة",
+    "specialOffer": "عرض خاص",
+    "cityPrograms": "برامج في هذه المدينة",
+    "notOpenTo_one": "غير متاح لجنسية واحدة",
+    "notOpenTo_other": "غير متاح لـ {{count}} جنسيات",
+    "openFor_one": "لجنسية واحدة",
+    "openFor_other": "لـ {{count}} جنسيات",
+    "more": "+{{count}} أخرى",
+    "yourCommission": "عمولتك",
+    "partnerCommission": "عمولة الشريك",
+    "noRate": "لم يُحدَّد مبلغ",
+    "files_one": "ملف واحد",
+    "files_other": "{{count}} ملفات",
+    "view": "عرض",
+    "privateNotice": "خاص: يظهر لفريق CAS فقط. لا تستطيع الوكالات رؤيته.",
+    "noRateForLevel": "لم يُحدَّد مبلغ لمستوى وكالتك بعد. اسأل جهة اتصالك في CAS.",
+    "noRates": "لم تُحدَّد مبالغ.",
+    "feeStructure": "تفاصيل الرسوم",
+    "nationality": "الجنسية",
+    "openTo": "متاح لـ:",
+    "allExcept": "جميع الجنسيات ما عدا المذكورة أدناه",
+    "notAccepted": "غير مقبولة:",
+    "conditions": "الشروط",
+    "downloads": "التنزيلات",
+    "download": "تنزيل",
+    "downloadFile": "تنزيل {{title}}",
+    "noPrograms": "لا توجد برامج مدرجة.",
+    "location": "الموقع",
+    "category": {
+      "brochure": "كتيّب",
+      "banner": "لافتة / ملصق",
+      "social": "منشور لوسائل التواصل",
+      "video": "فيديو",
+      "price_list": "قائمة الأسعار",
+      "contract": "اتفاقية / نموذج",
+      "other": "أخرى"
+    }
+  },
+  "faqList": {
+    "title": "الأسئلة الشائعة"
   }
 }

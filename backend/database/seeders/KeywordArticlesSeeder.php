@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Post;
 use App\Models\Program;
+use App\Models\Scholarship;
 use App\Models\University;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
@@ -12,7 +13,8 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Articles for searches the site had no article for: engineering in China, dentistry (BDS), Chinese language
- * programs and the cost of studying in China.
+ * programs, the cost of studying in China, MBBS for Pakistani students, studying without IELTS, scholarships
+ * for 2027 and the approved medical universities.
  *
  * Same rules as SeoArticlesSeeder: original explainers and no invented figures. Every number is computed from
  * the catalog when the seeder runs, university lists are catalog queries, and anything that changes each year
@@ -160,7 +162,10 @@ class KeywordArticlesSeeder extends Seeder
     /** @return list<array<string, string>> */
     private function articles(): array
     {
-        return [$this->engineering(), $this->dentistry(), $this->language(), $this->costs()];
+        return [
+            $this->engineering(), $this->dentistry(), $this->language(), $this->costs(),
+            $this->mbbsPakistan(), $this->withoutIelts(), $this->scholarships2027(), $this->medicalUniversities(),
+        ];
     }
 
     /** @return array<string, string> */
@@ -335,6 +340,185 @@ class KeywordArticlesSeeder extends Seeder
                     ['Can I pay tuition in instalments?', 'Some universities allow payment by semester and some want the year in advance. Ask before you accept the offer.'],
                     ['Can I work to cover my costs?', 'Do not plan your budget around working. Student visas have strict rules on work, so ask the university&rsquo;s international office what is allowed.'],
                     ['What is the cheapest way to study in China?', 'A scholarship is the largest saving. After that, the choice of city usually makes more difference than the choice between similar universities.'],
+                ])
+                .self::NOTE.self::CTA,
+        ];
+    }
+
+    /** Universities on the Ministry of Education's approved list for English-taught MBBS. */
+    private function approvedMbbs(): Collection
+    {
+        return University::query()->where('status', 'active')->where('moe_listed', true)->orderBy('name')
+            ->get(['id', 'name', 'slug', 'city', 'province', 'cover_path', 'cover_credit', 'moe_mbbs_year']);
+    }
+
+    /** @return array<string, string> */
+    private function mbbsPakistan(): array
+    {
+        $approved = $this->approvedMbbs();
+        $year = $approved->pluck('moe_mbbs_year')->filter()->first();
+        $withPhoto = $approved->first(fn ($u) => $u->cover_credit && str_starts_with((string) $u->cover_path, '/'));
+
+        return [
+            'slug' => 'mbbs-in-china-for-pakistani-students-what-to-check-before-you-apply',
+            'title' => 'MBBS in China for Pakistani Students: What to Check First',
+            'excerpt' => 'A checklist for Pakistani students planning MBBS in China: the approved university list, what PMDC decides, documents, costs and how to apply.',
+            'category' => 'MBBS in China',
+            'date' => '2026-11-20 13:00:00',
+            'cover' => $this->cover($withPhoto),
+            'body' => '<p>Many Pakistani students choose China for an MBBS because the degrees are taught in English and the universities are close to home. The decision has two sides: the university has to be allowed to teach you, and Pakistan has to accept the degree when you return. This guide sets out what to check on each side before you pay anything.</p>'
+                .$this->summary([
+                    'Only universities on China&rsquo;s Ministry of Education approved list may enrol international students in English-taught MBBS'.($year ? ' ('.e($year).')' : '').'; CAS lists '.$this->n($approved->count(), 'approved university', 'approved universities').'.',
+                    'Whether you can practise in Pakistan is decided by the Pakistan Medical and Dental Council (PMDC), so read its current rules before you choose.',
+                    'Collect slow documents early: attested certificates, the police character certificate and the medical examination.',
+                    'Ask every university for its current fee notice in writing.',
+                ])
+                .$this->figure($withPhoto, 'A university approved for English-taught MBBS')
+                .'<h2>Which universities can Pakistani students apply to?</h2><p>China&rsquo;s Ministry of Education publishes a list each year of the universities approved to enrol international students in English-taught MBBS. A university that is not on the list for your intake year may not recruit you for that program, whatever an agent or advertisement says. The list can change from year to year, so check it for the year you will enrol. Our <a href="/site/mbbs-in-china">MBBS in China page</a> shows the current list.</p>'
+                .'<h2>What does PMDC decide?</h2><p>The Pakistan Medical and Dental Council sets the rules for Pakistani students who study medicine abroad: which foreign degrees it accepts, any entry test or minimum marks you need before you leave, and the licensing examination you sit when you return. These rules are Pakistan&rsquo;s, not the university&rsquo;s, and they change. Read the current notice on the PMDC website, and keep a copy of the rules that applied in the year you enrolled.</p>'
+                .'<h2>What are the entry requirements?</h2><ul><li>FSc pre-medical or an equivalent certificate, with the marks the university sets</li><li>Proof of English where the university asks for it</li><li>The age limits the university sets</li><li>A valid passport, a medical examination record and a police character certificate</li></ul><p>Requirements differ by university. The program page on CAS shows what we have confirmed for each one.</p>'
+                .'<h2>Which documents take the longest?</h2><ul><li>Attestation of your certificates by the board and the relevant ministries</li><li>The police character certificate</li><li>The medical examination on the form China uses for foreigners</li><li>A passport with enough validity for the visa</li></ul><p>Start these first: they do not depend on which university you choose.</p>'
+                .'<h2>What does it cost?</h2><p>Count tuition, accommodation, insurance and living costs for each year, plus the one-off costs of the visa, the medical examination and flights. Fees are set year by year, so ask each university for the current notice. See <a href="/site/mbbs-in-china-fees">MBBS in China fees</a> and our guide to the <a href="/site/news/cost-of-studying-in-china-tuition-living-costs-and-budget">cost of studying in China</a>.</p>'
+                .'<h2>Mistakes to avoid</h2><ul><li>Paying a deposit before the university has issued an admission notice</li><li>Trusting a &ldquo;seat guarantee&rdquo; at a university that is not on the approved list</li><li>Assuming last year&rsquo;s fee or PMDC rule still applies</li><li>Applying to one university only</li></ul>'
+                .'<h2>Universities approved for English-taught MBBS</h2>'.$this->list($approved)
+                .'<p>See also <a href="/site/mbbs-in-china-for-pakistani-students">MBBS in China for Pakistani students</a> and <a href="/site/news/mbbs-in-china-2027-how-to-prepare-and-apply">MBBS in China 2027: how to prepare and apply</a>.</p>'
+                .$this->faq([
+                    ['Is an MBBS from China accepted in Pakistan?', 'PMDC decides that, and its rules change. Check the current PMDC notice for foreign medical graduates before you apply.'],
+                    ['Is MBBS in China taught in English?', 'The approved programs are taught in English. Universities add Chinese classes because clinical training involves talking to patients.'],
+                    ['How many universities are approved?', 'CAS lists '.$this->n($approved->count(), 'university', 'universities').' on the Ministry of Education&rsquo;s approved list. The list is published each year.'],
+                    ['When should I apply?', 'Most universities recruit for September, and each sets its own window. The program page shows the window we have confirmed.'],
+                    ['Can I get a scholarship for MBBS?', 'Some scholarships are open to MBBS applicants and many are not. The <a href="/site/scholarships">scholarships page</a> shows what each one covers.'],
+                ])
+                .self::NOTE.self::CTA,
+        ];
+    }
+
+    /** @return array<string, string> */
+    private function withoutIelts(): array
+    {
+        $english = $this->programs()->where('teaching_language', 'English')->count();
+        $match = fn ($q) => $q->where('status', 'active')->where('registry_only', false)->where('teaching_language', 'English');
+        $unis = University::query()->where('status', 'active')->whereHas('programs', $match)->withCount(['programs as matching' => $match])
+            ->orderByDesc('matching')->orderBy('name')->limit(20)->get(['id', 'name', 'slug', 'city', 'cover_path', 'cover_credit']);
+        $withPhoto = $unis->first(fn ($u) => $u->cover_credit && str_starts_with((string) $u->cover_path, '/'));
+
+        return [
+            'slug' => 'study-in-china-without-ielts',
+            'title' => 'Study in China Without IELTS: What Universities Accept',
+            'excerpt' => 'Can you study in China without IELTS? How universities check English, the other kinds of proof some accept, and how to find out for your program.',
+            'category' => 'Study in China',
+            'date' => '2026-11-20 14:00:00',
+            'cover' => $this->cover($withPhoto),
+            'body' => '<p>IELTS is the test most students think of when a degree is taught in English, but it is not the only way Chinese universities check your English. Each university sets its own rule, and the rule can differ between programs at the same university. This guide explains what universities ask for and how to find out what applies to you.</p>'
+                .$this->summary([
+                    'There is no single national rule: each university decides what proof of English it accepts.',
+                    'Some accept other evidence, such as a letter confirming your previous study was taught in English, another test, or their own interview.',
+                    'CAS lists '.$this->n($english, 'program').' taught in English; the program page shows the requirement we have confirmed.',
+                    'Chinese-taught degrees need an HSK certificate instead of an English test.',
+                ])
+                .$this->figure($withPhoto, 'A university with English-taught programs')
+                .'<h2>Do Chinese universities require IELTS?</h2><p>Some do, some accept alternatives, and some decide case by case. A university wants to know that you can follow lectures and write examinations in English. A test score is the simplest proof, which is why many program pages mention IELTS or TOEFL, but it is the ability that matters to them, not one particular test.</p>'
+                .'<h2>What other proof do universities accept?</h2><ul><li>A letter from your school or university confirming that your previous study was taught in English</li><li>Another English test the university names</li><li>An interview or a written test run by the university itself</li><li>Being a native speaker, or holding an earlier qualification from an English-speaking country</li></ul><p>Not every university accepts every one of these. Treat the list as questions to ask, not as a promise.</p>'
+                .'<h2>How do you find out what your program needs?</h2><ol><li>Open the program page on CAS and read the requirements</li><li>If English proof is not stated, ask a CAS counselor to confirm it with the university</li><li>Get the answer in writing before you pay an application fee</li><li>Check again if you apply in a later year: requirements change</li></ol>'
+                .'<h2>Does a scholarship change the requirement?</h2><p>It can. A scholarship has its own conditions on top of the university&rsquo;s, and some ask for a language certificate even where the university would accept a letter. Read the scholarship&rsquo;s own call. Start with our <a href="/site/csc-scholarship">CSC scholarship guide</a>.</p>'
+                .'<h2>What about the visa?</h2><p>The student visa is issued on the university&rsquo;s admission notice and visa application form. Language proof is part of the university&rsquo;s admission decision, so settle it with the university. Our <a href="/site/news/china-x1-student-visa-guide">student visa guide</a> explains the visa steps.</p>'
+                .'<h2>Is skipping the test a good idea?</h2><p>If you can take a test, a score helps: it widens the list of universities and scholarships you can apply to, and it removes a question from your file. If you cannot, choose universities that state clearly what they accept instead, and keep the written confirmation.</p>'
+                .'<h2>Universities with the most English-taught programs</h2><p>From the CAS catalog:</p>'.$this->list($unis)
+                .$this->faq([
+                    ['Can I study in China without IELTS?', 'At some universities, yes. Each university decides what proof of English it accepts, so confirm it for your program in writing.'],
+                    ['Is a medium-of-instruction letter enough?', 'Some universities accept a letter confirming your previous study was in English and some do not. Ask the university before you rely on it.'],
+                    ['Do I need IELTS for MBBS in China?', 'The university sets the rule. Check the program page and confirm with the university; your own medical regulator may also have language rules.'],
+                    ['Do I need English for a Chinese-taught degree?', 'No. A Chinese-taught degree needs the HSK level the university sets.'],
+                    ['Does CAS check this for me?', 'A CAS counselor can confirm the language requirement with the university when preparing your application.'],
+                ])
+                .self::NOTE.self::CTA,
+        ];
+    }
+
+    /** @return array<string, string> */
+    private function scholarships2027(): array
+    {
+        $active = fn () => Scholarship::query()->where('status', 'active');
+        $total = $active()->count();
+        $government = $active()->where('scope', 'government')->orderBy('name')->get(['name', 'coverage']);
+        $university = $active()->where('scope', 'university')->count();
+        $unis = University::query()->where('status', 'active')->whereHas('scholarships', fn ($q) => $q->where('status', 'active'))
+            ->withCount(['scholarships as matching' => fn ($q) => $q->where('status', 'active')])
+            ->orderByDesc('matching')->orderBy('name')->limit(20)->get(['id', 'name', 'slug', 'city', 'cover_path', 'cover_credit']);
+        $withPhoto = $unis->first(fn ($u) => $u->cover_credit && str_starts_with((string) $u->cover_path, '/'));
+        $govList = $government->isNotEmpty()
+            ? '<ul>'.$government->map(fn ($s) => '<li>'.e($s->name).($s->coverage ? ': '.e($s->coverage) : '').'</li>')->implode('').'</ul>'
+            : '';
+
+        return [
+            'slug' => 'scholarships-in-china-2027-how-to-find-and-apply',
+            'title' => 'Scholarships in China 2027: How to Find and Apply',
+            'excerpt' => 'Planning to study in China on a scholarship in 2027? The kinds of awards, what they cover, when to start and how to apply, with the scholarships in our catalog.',
+            'category' => 'Scholarships',
+            'date' => '2026-11-20 15:00:00',
+            'cover' => $this->cover($withPhoto),
+            'body' => '<p>Scholarships are the largest saving available to an international student in China, and the students who win them are usually the ones who start early. Calls for a September intake open months before, and each scheme has its own rules. This guide explains the kinds of award and how to prepare for the 2027 intake.</p>'
+                .$this->summary([
+                    'CAS lists '.$this->n($total, 'active scholarship').': '.number_format($government->count()).' China-wide and '.number_format($university).' offered by universities.',
+                    'Awards are full or partial: tuition, accommodation, a living stipend and insurance, or some of these.',
+                    'Scholarship deadlines are usually earlier than self-funded ones, so prepare documents first.',
+                    'Dates and rules for 2027 are set by each scheme; check the current call before you apply.',
+                ])
+                .$this->figure($withPhoto, 'A university that offers scholarships')
+                .'<h2>What kinds of scholarship are there?</h2><ul><li><strong>Chinese Government Scholarship (CSC):</strong> funded nationally and applied for through an embassy or a host university</li><li><strong>Provincial and city scholarships:</strong> funded by a province or city for students at its universities</li><li><strong>University scholarships:</strong> funded by the university itself, often for new students with strong grades</li><li><strong>Scholarships for language study:</strong> awards aimed at students of Chinese</li></ul>'
+                .($govList !== '' ? '<h2>Which China-wide scholarships does CAS list?</h2>'.$govList : '')
+                .'<h2>What does a scholarship cover?</h2><p>A full scholarship can pay tuition and accommodation and add a monthly stipend and medical insurance. A partial scholarship pays some of these, most often part of the tuition. The page for each scholarship on CAS states what it covers; do not assume one scheme works like another.</p>'
+                .'<h2>When should you start for 2027?</h2><ol><li><strong>Now:</strong> shortlist programs and read each scholarship&rsquo;s conditions</li><li><strong>Before the call opens:</strong> prepare certified transcripts, a study plan or research proposal, and recommendation letters</li><li><strong>When the call opens:</strong> apply to the scholarship and to the university, in the order the scheme requires</li><li><strong>After you apply:</strong> watch for interview requests and keep your documents ready</li></ol><p>The call for each scheme gives its own dates. Our article on <a href="/site/news/china-university-application-deadlines-2027-intakes">application deadlines for 2027 intakes</a> lists the windows we have confirmed.</p>'
+                .'<h2>What makes an application strong?</h2><ul><li>Grades and a field of study that match the program</li><li>A study plan that says what you will study, why at that university, and what you will do afterwards</li><li>Recommendation letters from people who taught or supervised you</li><li>A complete file, submitted before the deadline rather than on it</li></ul>'
+                .'<h2>Universities with the most scholarships in our catalog</h2>'.$this->list($unis)
+                .'<p>Read next: the <a href="/site/csc-scholarship">CSC scholarship guide</a>, the <a href="/site/news/csc-scholarship-checklist-documents-and-timeline">CSC checklist</a> and the full <a href="/site/scholarships">scholarships list</a>.</p>'
+                .$this->faq([
+                    ['When do scholarships for 2027 open?', 'Each scheme sets its own dates. Calls for a September intake usually open months earlier, so check the current call for the scholarship you want.'],
+                    ['Can I apply for more than one scholarship?', 'You can usually apply to several, but most schemes do not let you hold two awards at once. Read each scheme&rsquo;s rules.'],
+                    ['Do scholarships cover living costs?', 'Full scholarships often include a monthly stipend; partial ones usually do not. The scholarship page states what is covered.'],
+                    ['Do I need an admission letter first?', 'It depends on the scheme. Some want a pre-admission notice from the university and some run both steps together.'],
+                    ['Does CAS help with scholarship applications?', 'Yes. A CAS counselor matches you to scholarships you qualify for and helps you prepare the application.'],
+                ])
+                .self::NOTE.self::CTA,
+        ];
+    }
+
+    /** @return array<string, string> */
+    private function medicalUniversities(): array
+    {
+        $approved = $this->approvedMbbs();
+        $year = $approved->pluck('moe_mbbs_year')->filter()->first();
+        $byProvince = $approved->groupBy(fn ($u) => $u->province ?: 'Other')->sortKeys();
+        $withPhoto = $approved->first(fn ($u) => $u->cover_credit && str_starts_with((string) $u->cover_path, '/'));
+        $grouped = $byProvince->map(fn ($unis, $province) => '<h3>'.e($province).'</h3>'.$this->list($unis))->implode('');
+
+        return [
+            'slug' => 'top-medical-universities-in-china-for-international-students',
+            'title' => 'Top Medical Universities in China for International Students',
+            'excerpt' => 'Which medical universities in China can international students choose? The Ministry of Education approved list by province, and how to compare them.',
+            'category' => 'MBBS in China',
+            'date' => '2026-11-20 16:00:00',
+            'cover' => $this->cover($withPhoto),
+            'body' => '<p>Search for the &ldquo;top&rdquo; medical universities in China and you will find many lists that disagree with each other. For an international student the first question is simpler: which universities are allowed to teach you medicine in English? This guide starts from that list and then explains how to compare the universities on it. CAS does not rank them.</p>'
+                .$this->summary([
+                    'The list that matters is the Ministry of Education&rsquo;s approved list for English-taught MBBS'.($year ? ' ('.e($year).')' : '').': '.$this->n($approved->count(), 'university', 'universities').' in the CAS catalog.',
+                    'They are spread across '.$this->n($byProvince->count(), 'province').' and regions, so the choice of city matters.',
+                    'Compare the teaching hospital, the fees, the city and your own regulator&rsquo;s rules, not a league-table position.',
+                    'The list is published each year; check it for the year you will enrol.',
+                ])
+                .$this->figure($withPhoto, 'A university approved for English-taught MBBS')
+                .'<h2>Which medical universities can international students choose?</h2><p>China&rsquo;s Ministry of Education approves a set of universities each year to enrol international students in English-taught MBBS (Clinical Medicine). Only those universities may recruit for that program. The list is the right starting point because it is an official permission, not an opinion.</p>'
+                .'<h2>Approved universities by province</h2>'.$grouped
+                .'<h2>How should you compare them?</h2><ul><li><strong>Teaching hospital:</strong> where you will do your clinical years, and how the internship is arranged for international students</li><li><strong>Language support:</strong> the Chinese classes that prepare you to talk to patients</li><li><strong>Fees:</strong> tuition, accommodation and insurance from the current notice</li><li><strong>City:</strong> climate, living costs and how easy it is to travel home</li><li><strong>Your regulator:</strong> whether your own medical council accepts the degree, and on what conditions</li></ul>'
+                .'<h2>Do rankings matter?</h2><p>International league tables measure research output and reputation across a whole university. They say little about how medicine is taught to international students, and a higher-ranked university is not automatically a better choice for you. Use rankings as one input at most, after the checks above.</p>'
+                .'<h2>What about dentistry and Chinese medicine?</h2><p>The approved list covers English-taught MBBS only. Dentistry and Traditional Chinese Medicine are separate degrees with their own entry rules. Read our guides to <a href="/site/news/bds-in-china-dentistry-for-international-students">BDS in China</a> and <a href="/site/news/study-medicine-in-china-mbbs-bds-tcm">studying medicine in China: MBBS, BDS and TCM</a>.</p>'
+                .'<h2>How do you apply?</h2><ol><li>Shortlist three or four approved universities</li><li>Check your own regulator&rsquo;s rules for each</li><li>Ask each university for its current requirements and fee notice</li><li>Apply online through CAS before the window closes</li></ol><p>See <a href="/site/mbbs-in-china">MBBS in China</a> for the list with fees and dates, and <a href="/site/mbbs-in-china-admission-requirements">admission requirements</a>.</p>'
+                .$this->faq([
+                    ['Which is the best medical university in China?', 'There is no single answer, and CAS does not rank them. Start from the approved list and compare the teaching hospital, fees, city and your regulator&rsquo;s rules.'],
+                    ['How many medical universities in China teach MBBS in English?', 'CAS lists '.$this->n($approved->count(), 'university', 'universities').' on the Ministry of Education&rsquo;s approved list for English-taught MBBS.'],
+                    ['Does the approved list change?', 'Yes. It is published each year, so confirm it for the year you will enrol.'],
+                    ['Is a university that is not on the list a bad university?', 'Not necessarily. It may teach medicine in Chinese or teach other subjects. It simply may not recruit international students for English-taught MBBS.'],
+                    ['Do these universities also offer scholarships?', 'Some do. The <a href="/site/scholarships">scholarships page</a> shows what is available at each university.'],
                 ])
                 .self::NOTE.self::CTA,
         ];

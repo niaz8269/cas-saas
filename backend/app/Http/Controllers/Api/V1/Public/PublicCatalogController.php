@@ -231,6 +231,25 @@ class PublicCatalogController extends Controller
         return response()->json(['data' => $rows]);
     }
 
+    /** Headline numbers for the website, counted from the live catalog so they are never out of date. */
+    public function stats(): JsonResponse
+    {
+        $data = cache()->remember('public.stats.v1', now()->addMinutes(30), function () {
+            $programs = fn () => Program::query()->where('status', 'active')->where('registry_only', false)
+                ->whereHas('university', fn ($q) => $q->where('status', 'active'));
+
+            return [
+                'universities' => University::where('status', 'active')->count(),
+                'programs' => $programs()->count(),
+                'english_programs' => $programs()->where('teaching_language', 'English')->count(),
+                'csc_programs' => $programs()->where('csc_listed', true)->count(),
+                'mbbs_universities' => University::where('status', 'active')->where('moe_listed', true)->count(),
+            ];
+        });
+
+        return response()->json(['data' => $data]);
+    }
+
     /** The questions shown at the foot of a fixed page (home, CSC, scholarships, ...). */
     public function pageFaqs(Request $request): JsonResponse
     {

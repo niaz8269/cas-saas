@@ -1422,6 +1422,14 @@
       "paginationRange": "{{from}}–{{to}} sur {{total}}",
       "prev": "Préc.",
       "next": "Suiv."
+    },
+    "exclusives": {
+      "title": "Exclusivités",
+      "subtitle": "Programmes et universités disponibles uniquement via les agences CAS, avec votre commission, les frais, les conditions et les fichiers promotionnels.",
+      "downloadError": "Impossible de télécharger le fichier. Veuillez réessayer.",
+      "emptyTitle": "Rien pour le moment",
+      "emptyHint": "Les nouvelles offres exclusives apparaîtront ici dès que CAS les publiera.",
+      "library": "Bibliothèque marketing"
     }
   },
   "payTo": {
@@ -1808,5 +1816,50 @@
     "cta": "Nous pouvons vous orienter vers les programmes ouverts au CSC et vous aider à postuler à temps.",
     "allScholarships": "Toutes les bourses",
     "ctaButton": "Obtenir un plan d’études gratuit"
+  },
+  "exclusives": {
+    "badge": "Exclusif",
+    "private": "Privé",
+    "partners": "Partenaires",
+    "universityPackage": "Offre université",
+    "specialOffer": "Offre spéciale",
+    "cityPrograms": "Programmes dans cette ville",
+    "notOpenTo_one": "Fermé à {{count}} nationalité",
+    "notOpenTo_other": "Fermé à {{count}} nationalités",
+    "openFor_one": "Pour {{count}} nationalité",
+    "openFor_other": "Pour {{count}} nationalités",
+    "more": "+{{count}} de plus",
+    "yourCommission": "Votre commission",
+    "partnerCommission": "Commission partenaire",
+    "noRate": "Aucun montant défini",
+    "files_one": "{{count}} fichier",
+    "files_other": "{{count}} fichiers",
+    "view": "Voir",
+    "privateNotice": "Privé : visible uniquement par l'équipe CAS. Les agences ne peuvent pas le voir.",
+    "noRateForLevel": "Aucun montant n'est encore défini pour votre niveau d'agence. Demandez à votre contact CAS.",
+    "noRates": "Aucun montant défini.",
+    "feeStructure": "Structure des frais",
+    "nationality": "Nationalité",
+    "openTo": "Ouvert à :",
+    "allExcept": "toutes les nationalités sauf celles ci-dessous",
+    "notAccepted": "Non acceptées :",
+    "conditions": "Conditions",
+    "downloads": "Téléchargements",
+    "download": "Télécharger",
+    "downloadFile": "Télécharger {{title}}",
+    "noPrograms": "Aucun programme indiqué.",
+    "location": "Lieu",
+    "category": {
+      "brochure": "Brochure",
+      "banner": "Bannière / affiche",
+      "social": "Publication pour les réseaux sociaux",
+      "video": "Vidéo",
+      "price_list": "Liste de prix",
+      "contract": "Accord / formulaire",
+      "other": "Autre"
+    }
+  },
+  "faqList": {
+    "title": "Questions fréquentes"
   }
 }

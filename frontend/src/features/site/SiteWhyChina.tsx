@@ -1,7 +1,9 @@
 import { ArrowRight, Award, Building2, Coins, GraduationCap, Globe2, Landmark, Sparkles, type LucideIcon } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { getSiteStats } from "@/features/site/api"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import PageFaqs from "@/features/site/SiteFaqs"
@@ -18,6 +20,10 @@ const REASONS: { icon: LucideIcon; titleKey: string; bodyKey: string }[] = [
 
 export default function SiteWhyChina() {
   const { t } = useTranslation()
+  // Counted from the live catalog, so the numbers never go out of date; a dash shows while they load.
+  const { data: stats } = useQuery({ queryKey: ["site-stats"], queryFn: getSiteStats, staleTime: 30 * 60 * 1000 })
+  const n = (value: number | undefined) => (typeof value === "number" ? value.toLocaleString("en-US") : "\u2014")
+  const s = stats?.data
 
   useSeo({
     title: t("whyChina.seoTitle"),
@@ -34,7 +40,7 @@ export default function SiteWhyChina() {
       />
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {[[t("whyChina.stats.students.value"), t("whyChina.stats.students.label")], [t("whyChina.stats.english.value"), t("whyChina.stats.english.label")], [t("whyChina.stats.scholarships.value"), t("whyChina.stats.scholarships.label")], [t("whyChina.stats.recognition.value"), t("whyChina.stats.recognition.label")]].map(([v, l]) => (
+        {[[n(s?.universities), t("whyChina.stats.students.label")], [n(s?.english_programs), t("whyChina.stats.english.label")], [n(s?.csc_programs), t("whyChina.stats.scholarships.label")], [n(s?.mbbs_universities), t("whyChina.stats.recognition.label")]].map(([v, l]) => (
           <div key={l} className="rounded-sm border bg-card p-5 text-center shadow-sm">
             <p className="text-2xl font-bold text-cas-navy">{v}</p>
             <p className="mt-1 text-xs text-muted-foreground">{l}</p>

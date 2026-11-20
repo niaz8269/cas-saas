@@ -9,6 +9,7 @@ import { SitePageHeader } from "@/features/site/components"
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { useSeo } from "@/lib/seo"
 import { citySlug } from "@/lib/slug"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 export default function SiteCities() {
   const { t } = useTranslation()
@@ -75,6 +76,7 @@ export default function SiteCities() {
           ))}
         </div>
       )}
+      <PageFaqs path="site/cities" />
     </div>
   )
 }

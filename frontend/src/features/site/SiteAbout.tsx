@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { SitePageHeader, SiteSection } from "@/features/site/components"
 import { formatTotal, useCatalogTotals } from "@/features/site/useCatalogTotals"
 import { useSeo } from "@/lib/seo"
+import PageFaqs from "@/features/site/SiteFaqs"
 
 // Display text carried as i18n KEY strings, resolved via t() at render.
 const STEPS = [
@@ -125,6 +126,7 @@ export default function SiteAbout() {
           {t("about.ctaButton")} <ArrowRight className="size-4" />
         </Link>
       </section>
+      <PageFaqs path="site/about" />
     </div>
   )
 }

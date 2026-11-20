@@ -116,3 +116,19 @@ it("shows an agency its own commission, the conditions and the files to download
   await user.click(within(dialog).getByRole("button", { name: "Download 2027 brochure" }))
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/agent/exclusive-materials/9/download"), expect.anything()))
 })
+
+it("shows the agency card and detail text in the visitor's language", async () => {
+  const i18n = (await import("@/i18n")).default
+  i18n.addResourceBundle("fr", "translation", { exclusives: { badge: "Exclusif", view: "Voir", files_one: "{{count}} fichier", files_other: "{{count}} fichiers", yourCommission: "Votre commission" } }, true, true)
+  await i18n.changeLanguage("fr")
+  try {
+    const { default: ExclusiveCard } = await import("./ExclusiveCard")
+    renderWithProviders(<ExclusiveCard offer={{ ...OFFER, materials_count: 2 } as never} forAgency onOpen={() => {}} />)
+
+    expect(screen.getByText("Exclusif")).toBeInTheDocument()
+    expect(screen.getByText("2 fichiers")).toBeInTheDocument()
+    expect(screen.getByText("Voir")).toBeInTheDocument()
+  } finally {
+    await i18n.changeLanguage("en")
+  }
+})

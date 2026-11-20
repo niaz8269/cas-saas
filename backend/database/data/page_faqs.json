@@ -153,5 +153,59 @@
         "a": "Any university in our catalog, including the universities approved for English-taught MBBS."
       }
     ]
+  },
+  "site/about": {
+    "items": [
+      {
+        "q": "What is CAS?",
+        "a": "CAS - Consultancy for Abroad Study - helps students from around the world study at Ministry of Education–listed universities across China. We handle the whole journey: choosing the right program, applying, securing scholarships, and supporting you through visa and arrival."
+      },
+      {
+        "q": "How can I follow my application?",
+        "a": "Your student portal shows every document, invoice and status update, so you always know the next step."
+      },
+      {
+        "q": "How can I reach a CAS counselor?",
+        "a": "Reach a CAS counselor on WhatsApp, WeChat, email or in the portal, in English."
+      }
+    ],
+    "from_faq": [
+      "What does CAS charge?",
+      "Does CAS support me after I arrive?"
+    ]
+  },
+  "site/contact": {
+    "items": [
+      {
+        "q": "How can I reach a CAS counselor?",
+        "a": "Reach a CAS counselor on WhatsApp, WeChat, email or in the portal, in English."
+      }
+    ],
+    "from_faq": [
+      "Is the consultation really free?",
+      "How does the application process work?",
+      "How long does it take?"
+    ]
+  },
+  "site/cities": {
+    "items": [
+      {
+        "q": "How do I choose a city to study in China?",
+        "a": "Compare the universities in each city, the climate and the cost of living, which differ a great deal from one city to another. Each city page lists its universities and describes what the city is like."
+      }
+    ],
+    "from_faq": [
+      "How do I choose the right university and program?",
+      "How much does it cost to study in China?",
+      "Does CAS support me after I arrive?"
+    ]
+  },
+  "site/news": {
+    "from_faq": [
+      "How much does it cost to study in China?",
+      "What scholarships are available?",
+      "How do I get a student visa?",
+      "How does the application process work?"
+    ]
   }
 }

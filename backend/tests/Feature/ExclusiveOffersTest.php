@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Agent;
 use App\Models\AuditLog;
 use App\Models\ExclusiveMaterial;
 use App\Models\ExclusiveOffer;
+use App\Models\Notification;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
@@ -213,4 +215,26 @@ it('takes a program typed by hand, and a city with its programs and no universit
 
     postJson('/api/v1/exclusives', offerPayload(['title' => 'No place', 'offer_type' => 'city']))->assertUnprocessable();
     postJson('/api/v1/exclusives', offerPayload(['title' => 'Province only', 'offer_type' => 'city', 'province' => 'Hainan']))->assertCreated();
+});
+
+it('tells approved agencies once when an exclusive becomes available to them', function () {
+    $active = actingAsAgent();
+    $pending = Agent::factory()->create(['status' => 'pending']);
+    staffWithRole('Admin');
+    $count = fn () => Notification::where('type', 'exclusive.published')->count();
+
+    // Drafts and private exclusives are not announced.
+    $draft = postJson('/api/v1/exclusives', offerPayload(['status' => 'draft']))->assertCreated()->json('data');
+    postJson('/api/v1/exclusives', offerPayload(['title' => 'Internal', 'audience' => 'private']))->assertCreated();
+    expect($count())->toBe(0);
+
+    // Publishing announces it to active agencies only; saving again does not repeat it.
+    putJson('/api/v1/exclusives/'.$draft['id'], offerPayload())->assertOk();
+    putJson('/api/v1/exclusives/'.$draft['id'], offerPayload(['conditions' => 'Changed.']))->assertOk();
+
+    $sent = Notification::where('type', 'exclusive.published')->get();
+    expect($sent)->toHaveCount(1)
+        ->and($sent->first()->agent_id)->toBe($active->id)
+        ->and($sent->first()->body)->toContain('Dalian MBBS exclusive')
+        ->and(Notification::where('agent_id', $pending->id)->count())->toBe(0);
 });
