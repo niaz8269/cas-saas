@@ -293,7 +293,7 @@ class PublicCatalogController extends Controller
             // Majors only registered with the Ministry (no international details yet) show on their university's page, not in the program finder.
             ->when(! $request->filled('filter.university_slug'), fn ($q) => $q->where('registry_only', false))
             ->whereHas('university', fn ($q) => $q->where('status', 'active'))
-            ->with('university:id,name,slug,cover_path,cover_credit')
+            ->with('university:id,name,slug,city,cover_path,cover_credit')
             ->when($terms !== [], fn ($q) => $q->where(function ($outer) use ($terms) {
                 foreach ($terms as $text) {
                     $outer->orWhere(fn ($w) => $w->where('name', 'like', '%'.$text.'%')->orWhere('name_zh', 'like', '%'.$text.'%'));
@@ -307,10 +307,20 @@ class PublicCatalogController extends Controller
                 ->where(fn ($d) => $d->whereNull('application_deadline')->orWhere('application_deadline', '>=', now()->toDateString()))))
             ->when($request->filled('filter.language'), fn ($q) => $q->where('teaching_language', 'like', '%'.$request->input('filter.language').'%'))
             ->when($request->filled('filter.max_fee'), fn ($q) => $q->where('tuition_fee', '<=', (float) $request->input('filter.max_fee')))
+            ->when($request->boolean('filter.csc'), fn ($q) => $q->where('csc_listed', true))
+            ->when($request->filled('filter.city'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('city', $request->input('filter.city'))))
+            ->when($request->filled('filter.province'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('province', $request->input('filter.province'))))
             ->when($request->filled('filter.university_slug'), fn ($q) => $q->whereHas('university', fn ($uq) => $uq->where('slug', $request->input('filter.university_slug'))))
-            // Degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
-            ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
-            ->orderByRaw('tuition_fee is null, tuition_fee')
+            // Default: degrees first (bachelor, master, doctorate, then non-degree and language courses), cheapest first within each.
+            // ?sort=fee (cheapest first), fee_desc, duration (shortest first) or name override it.
+            ->when(in_array($request->input('sort'), ['fee', 'fee_desc', 'duration', 'name'], true), fn ($q) => match ($request->input('sort')) {
+                'fee' => $q->orderByRaw('tuition_fee is null, tuition_fee'),
+                'fee_desc' => $q->orderByRaw('tuition_fee is null, tuition_fee desc'),
+                'duration' => $q->orderByRaw('duration_months is null, duration_months'),
+                default => $q,
+            }, fn ($q) => $q
+                ->orderByRaw("case level when 'bachelor' then 1 when 'master' then 2 when 'phd' then 3 when 'non_degree' then 4 else 5 end")
+                ->orderByRaw('tuition_fee is null, tuition_fee'))
             ->orderBy('name')
             ->when($request->filled('filter.ids'), fn ($q) => $q->reorder()->orderByRaw(HomeSpotlightItem::orderExpression(HomeSpotlightItem::parseIds($request->input('filter.ids')))));
 

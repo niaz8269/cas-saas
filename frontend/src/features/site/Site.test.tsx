@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Route, Routes } from "react-router-dom"
 
@@ -59,14 +59,14 @@ it("renders the public universities grid", async () => {
 })
 
 it("gates program fees for guests and shows the CAS service fee for members", async () => {
-  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({
+  vi.stubGlobal("fetch", vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({
     data: [
       { id: 1, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72, tuition_fee: null, currency: "CNY", apply_link: null, requirements: null, fee_locked: true, university: { name: "JLMU", slug: "jlmu" } },
       { id: 2, name: "BDS", level: "bachelor", teaching_language: "English", duration_months: 60, tuition_fee: "40000.00", currency: "CNY", apply_link: null, requirements: null, fee_locked: false, service_charge: { amount: 500, currency: "USD" }, university: { name: "JLMU", slug: "jlmu" } },
     ],
     meta: { current_page: 1, last_page: 1, total: 2, from: 1, to: 2 },
     audience: "student",
-  })))
+  }))))
 
   renderWithProviders(<SiteProgramFinder />)
 
@@ -95,14 +95,14 @@ it("renders the CUCAS-style home with hero, search and sections", async () => {
 })
 
 it("finds programs and pre-fills the search from the URL", async () => {
-  const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+  const fetchMock = vi.fn().mockImplementation(() => Promise.resolve(jsonResponse({
     data: [{
       id: 10, name: "MBBS", level: "bachelor", teaching_language: "English", duration_months: 72,
       tuition_fee: "30000.00", currency: "CNY", apply_link: null, requirements: null,
       university: { name: "Jilin Medical", slug: "jilin-medical" },
     }],
     meta: { current_page: 1, last_page: 1, total: 1, from: 1, to: 1 },
-  }))
+  })))
   vi.stubGlobal("fetch", fetchMock)
 
   renderWithProviders(
@@ -112,7 +112,7 @@ it("finds programs and pre-fills the search from the URL", async () => {
 
   expect((screen.getByLabelText("Search programs") as HTMLInputElement).value).toBe("MBBS")
   expect(await screen.findByText("MBBS")).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
+  expect(screen.getByRole("link", { name: "Jilin Medical" })).toHaveAttribute("href", "/site/universities/jilin-medical")
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("q=MBBS"), expect.anything()))
 })
 
@@ -130,7 +130,7 @@ it("lists scholarships with their university and coverage", async () => {
 
   expect(await screen.findByText("Belt & Road Scholarship")).toBeInTheDocument()
   expect(screen.getByText("Full tuition")).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /Jilin Medical/ })).toHaveAttribute("href", "/site/universities/jilin-medical")
+  expect(screen.getByRole("link", { name: "Jilin Medical" })).toHaveAttribute("href", "/site/universities/jilin-medical")
 })
 
 it("renders the about page with the how-we-help steps", () => {
@@ -455,7 +455,7 @@ it("searches and filters a university's program list", async () => {
   await user.selectOptions(screen.getByLabelText("Filter by teaching language"), "Chinese")
   expect(screen.getByText("2 of 3 programs")).toBeInTheDocument()
 
-  await user.selectOptions(screen.getByLabelText("Filter by level"), "phd")
+  await user.click(within(screen.getByRole("group", { name: "Degree level" })).getByRole("button", { name: /phd/i }))
   expect(screen.getByText("Archaeology")).toBeInTheDocument()
   expect(screen.queryByText("Accounting")).not.toBeInTheDocument()
 

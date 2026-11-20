@@ -312,8 +312,14 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
   const [cscOnly, setCscOnly] = useState(false)
   const [status, setStatus] = useState<"" | "confirmed" | "registered">("")
   const [sort, setSort] = useState<"name" | "fee">("name")
+  const [englishOnly, setEnglishOnly] = useState(false)
 
-  const levels = useMemo(() => [...new Set(u.programs.map((p) => p.level))], [u.programs])
+  const levels = useMemo(() => {
+    const order = ["bachelor", "master", "phd", "non_degree"]
+    const rank = (l: string) => (order.indexOf(l) === -1 ? order.length : order.indexOf(l))
+
+    return [...new Set(u.programs.map((p) => p.level))].sort((x, y) => rank(x) - rank(y))
+  }, [u.programs])
   const languages = useMemo(() => [...new Set(u.programs.map((p) => p.teaching_language).filter((x): x is string => !!x))].sort(), [u.programs])
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase()
@@ -322,30 +328,44 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
       (!level || p.level === level) &&
       (!language || p.teaching_language === language) &&
       (!cscOnly || p.csc_listed) &&
+      (!englishOnly || /english/i.test(p.teaching_language ?? "")) &&
       (status === "" || (status === "registered" ? !!p.registry_only : !p.registry_only)))
 
     // Lowest tuition first; programs without a published fee go last.
     return sort === "fee" ? [...rows].sort((a, b) => (a.tuition_fee == null ? 1 : 0) - (b.tuition_fee == null ? 1 : 0) || Number(a.tuition_fee) - Number(b.tuition_fee)) : rows
-  }, [u.programs, q, level, language, cscOnly, status, sort])
+  }, [u.programs, q, level, language, cscOnly, englishOnly, status, sort])
 
   if (!u.programs.length) return <Empty text={t("university.programsEmpty")} />
 
   const hasRegistered = u.programs.some((p) => p.registry_only)
-  const filtering = q.trim() !== "" || level !== "" || language !== "" || cscOnly || status !== ""
-  const reset = () => { setQ(""); setLevel(""); setLanguage(""); setCscOnly(false); setStatus(""); setShown(PROGRAMS_PAGE) }
+  const filtering = q.trim() !== "" || level !== "" || language !== "" || cscOnly || englishOnly || status !== ""
+  const reset = () => { setQ(""); setLevel(""); setLanguage(""); setCscOnly(false); setEnglishOnly(false); setStatus(""); setShown(PROGRAMS_PAGE) }
+  const levelCounts = (l: string) => u.programs.filter((p) => p.level === l).length
   const selectCls = "h-10 rounded-sm border bg-background px-3 text-sm text-foreground"
 
   return (
     <div className="space-y-4">
+    {levels.length > 1 && (
+      <div role="group" aria-label={t("university.levelGroup", { defaultValue: "Degree level" })} className="flex flex-wrap gap-2">
+        {[["", t("university.allLevels"), u.programs.length], ...levels.map((l) => [l, levelLabel(l), levelCounts(l)] as const)].map(([value, label, count]) => (
+          <button key={String(value)} type="button" aria-pressed={level === value} onClick={() => { setLevel(String(value)); setShown(PROGRAMS_PAGE) }}
+            className={cn("inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors", level === value ? "border-cas-navy bg-cas-navy text-white" : "bg-card text-foreground hover:border-cas-navy/50")}>
+            {label} <span className={cn("text-xs tabular-nums", level === value ? "text-white/80" : "text-muted-foreground")}>{count}</span>
+          </button>
+        ))}
+      </div>
+    )}
     <div className="flex flex-wrap items-center gap-3 rounded-sm border bg-card p-3 shadow-sm">
       <div className="relative min-w-52 flex-1 sm:max-w-sm">
         <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input value={q} onChange={(e) => { setQ(e.target.value); setShown(PROGRAMS_PAGE) }} placeholder={t("university.programSearchPlaceholder")} aria-label={t("university.programSearchAria")} className="h-10 bg-background pl-9" />
       </div>
-      <select value={level} onChange={(e) => { setLevel(e.target.value); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterLevel")} className={selectCls}>
-        <option value="">{t("university.allLevels")}</option>
-        {levels.map((l) => <option key={l} value={l}>{levelLabel(l)}</option>)}
-      </select>
+      {levels.length <= 1 && (
+        <select value={level} onChange={(e) => { setLevel(e.target.value); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterLevel")} className={selectCls}>
+          <option value="">{t("university.allLevels")}</option>
+          {levels.map((l) => <option key={l} value={l}>{levelLabel(l)}</option>)}
+        </select>
+      )}
       <select value={language} onChange={(e) => { setLanguage(e.target.value); setShown(PROGRAMS_PAGE) }} aria-label={t("university.filterLanguage")} className={selectCls}>
         <option value="">{t("university.allLanguages")}</option>
         {languages.map((l) => <option key={l} value={l}>{l}</option>)}
@@ -357,6 +377,9 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
           <option value="registered">{t("university.registeredMajor")}</option>
         </select>
       )}
+      <button type="button" aria-pressed={englishOnly} onClick={() => { setEnglishOnly((v) => !v); setShown(PROGRAMS_PAGE) }} className={cn("h-10 rounded-sm border px-3 text-sm font-medium transition-colors", englishOnly ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground")}>
+        {t("university.englishTaught", { defaultValue: "English-taught" })}
+      </button>
       <button type="button" aria-pressed={cscOnly} onClick={() => { setCscOnly((v) => !v); setShown(PROGRAMS_PAGE) }} className={cn("h-10 rounded-sm border px-3 text-sm font-medium transition-colors", cscOnly ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground")}>
         {t("university.cscListed")}
       </button>
@@ -401,7 +424,7 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
               <span className="basis-full text-cas-red-600">{t("university.mbbsNotApproved")}</span>
             )}
             {p.csc_listed && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{t("university.cscListed")}</Badge>}
-            <ApplyButton universitySlug={u.slug} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
+            <ApplyButton universitySlug={u.slug} label={`${t("university.apply")}: ${p.name}, ${levelLabel(p.level)}, ${u.name}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
           </div>
         </div>
       ))}
