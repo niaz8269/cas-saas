@@ -52,6 +52,11 @@ class SeoPageBuilder
         }
 
         if (preg_match('#^site/universities/([^/]+)$#', $path, $m)) {
+            // A university that changed its name: the old address goes to the new page.
+            if ($renamed = config('renamed_universities')[$m[1]] ?? null) {
+                return ['redirect' => '/site/universities/'.$renamed];
+            }
+
             return $this->university($m[1]) ?? $this->notFound();
         }
         if (preg_match('#^site/cities/([^/]+)$#', $path, $m)) {
