@@ -3,6 +3,7 @@ import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linke
 import { lazy, useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
+import PartnerGuide from "@/features/site/PartnerGuide"
 import PortalLink from "@/features/site/PortalLink"
 
 import casLogo from "@/assets/cas-logo.webp"
@@ -381,6 +382,7 @@ export default function SiteLayout() {
         <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
           <Outlet />
         </Suspense>
+        <PartnerGuide />
       </main>
 
       {/* Footer */}

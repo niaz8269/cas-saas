@@ -27,6 +27,19 @@ class SeoPageBuilder
     /** @return array<string, mixed> */
     public function build(string $path): array
     {
+        $page = $this->resolve($path);
+        $guide = config('partner_guides', [])['/'.trim($path, '/')] ?? null;
+        if ($guide && ($page['status'] ?? null) === 200 && ! empty($page['body'])) {
+            // One sentence pointing to the matching guide on xjmu.online (config/partner_guides.php).
+            $page['body'] .= '<p>'.implode('', array_map(fn ($part) => is_array($part) ? $this->link($part[1], $part[0]) : e($part), $guide)).'</p>';
+        }
+
+        return $page;
+    }
+
+    /** @return array<string, mixed> */
+    private function resolve(string $path): array
+    {
         $path = trim($path, '/');
         $pages = config('seo.pages');
 
