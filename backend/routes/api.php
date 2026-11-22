@@ -425,6 +425,7 @@ Route::prefix('v1')->group(function () {
         Route::post('applications/{application}/offers/{offer}/respond', [ApplicationController::class, 'respondToOffer']);
         Route::get('applications/{application}/offers/{offer}/letter', [ApplicationController::class, 'offerLetter']);
         Route::get('applications/{application}/documents', [DocumentController::class, 'forApplication']);
+        Route::get('applications/{application}/package', [ApplicationController::class, 'package'])->middleware('throttle:20,1');
         Route::delete('applications/{application}', [ApplicationController::class, 'destroy']);
 
         // Documents (pre-signed, access-logged)

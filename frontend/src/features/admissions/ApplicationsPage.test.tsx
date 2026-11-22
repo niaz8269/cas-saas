@@ -376,3 +376,51 @@ it("shows who submitted on the application itself, with a link to the partner's 
   const link = screen.getByRole("link", { name: /Bright Future \(AGT-2026-00009\)/ })
   expect(link).toHaveAttribute("href", expect.stringContaining("/applications?agent=9"))
 })
+
+it("downloads one ZIP of the personal information and documents, named by the server", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global", "documents.view.global"]) })
+  const downloads: string[] = []
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL) => {
+    const url = String(input)
+    if (url.includes("/applications/21/package")) {
+      return Promise.resolve(new Response(new Blob(["zip"]), {
+        status: 200,
+        headers: { "Content-Type": "application/zip", "Content-Disposition": "attachment; filename=\"Ali Khan-MBBS-Jilin Medical University.zip\"; filename*=utf-8''Ali%20Khan-MBBS-Jilin%20Medical%20University.zip" },
+      }))
+    }
+    return Promise.resolve(jsonResponse({ data: [APPLICATION], meta: { current_page: 1, last_page: 1, per_page: 25, total: 1, from: 1, to: 1 } }))
+  }))
+  URL.createObjectURL = vi.fn().mockReturnValue("blob:zip")
+  URL.revokeObjectURL = vi.fn()
+  const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (this: HTMLAnchorElement) { downloads.push(this.download) })
+  const user = userEvent.setup()
+
+  renderWithProviders(<ApplicationsPage />)
+  await screen.findByText("APP-2026-00021")
+  await user.click(screen.getByRole("button", { name: "Actions for APP-2026-00021" }))
+  await user.click(await screen.findByRole("menuitem", { name: /Download package \(ZIP\)/ }))
+
+  await waitFor(() => expect(downloads).toEqual(["Ali Khan-MBBS-Jilin Medical University.zip"]))
+  click.mockRestore()
+})
+
+it("hides the package download from accounts that cannot open documents", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global"]) })
+  stubFetch()
+  const user = userEvent.setup()
+
+  renderWithProviders(<ApplicationsPage />)
+  await screen.findByText("APP-2026-00021")
+  await user.click(screen.getByRole("button", { name: "Actions for APP-2026-00021" }))
+
+  expect(screen.queryByRole("menuitem", { name: /Download package/ })).not.toBeInTheDocument()
+})
+
+it("shows the package button on the application page for accounts that can open documents", async () => {
+  useAuthStore.setState({ token: "t", user: makeUser(["applications.view.global", "documents.view.global"]) })
+  stubFetch()
+
+  renderDetail()
+
+  expect(await screen.findByRole("button", { name: /Download package \(ZIP\)/ })).toBeInTheDocument()
+})

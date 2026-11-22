@@ -11,9 +11,11 @@ use App\Http\Requests\Admissions\UpdateApplicationRequest;
 use App\Http\Resources\ApplicationResource;
 use App\Http\Resources\OfferResource;
 use App\Models\Application;
+use App\Models\Document;
 use App\Models\Offer;
 use App\Services\Admissions\ApplicationCatalog;
 use App\Services\Admissions\ApplicationWorkflow;
+use App\Services\Documents\ApplicationPackage;
 use App\Support\BrandAssets;
 use App\Support\CsvExport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -22,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -166,6 +169,27 @@ class ApplicationController extends Controller
         $application->update([...$request->validated(), 'updated_by' => $request->user()->id]);
 
         return new ApplicationResource($application->load(self::LIST_RELATIONS));
+    }
+
+    /**
+     * One ZIP with the student's personal information and every submitted document the caller may see, named
+     * "Student-Program-University.zip". Each file is written to the document access log.
+     */
+    public function package(Request $request, Application $application, ApplicationPackage $package): BinaryFileResponse
+    {
+        $this->authorize('view', $application);
+        $this->authorize('viewAny', Document::class);
+
+        // Several documents of up to 25 MB each can take a while to copy.
+        @set_time_limit(180);
+
+        $built = $package->build($application, $request->user(), $request->ip());
+
+        return response()->download($built['path'], $built['name'], [
+            'Content-Type' => 'application/zip',
+            'X-Package-Documents' => (string) $built['included'],
+            'X-Package-Skipped' => (string) $built['skipped'],
+        ])->deleteFileAfterSend(true);
     }
 
     /** Soft-delete an application (Admin/Ops only; recoverable, audit-logged). */

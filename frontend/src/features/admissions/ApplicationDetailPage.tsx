@@ -30,6 +30,7 @@ import {
   deleteDocument,
   downloadDocument,
   getApplication,
+  downloadApplicationPackage,
   getOfferLetter,
   listApplicationDocuments,
   listDocumentTypes,
@@ -221,6 +222,8 @@ export default function ApplicationDetailPage() {
   const canUpload = can("documents.upload.global") || can("documents.upload.assigned")
   const canVerify = can("documents.verify.global")
   const canDelete = can("documents.delete.global")
+  // The server decides what goes in; the button only shows for accounts that may open documents at all.
+  const canPackage = ["global", "branch", "department", "assigned", "own"].some((scope) => can(`documents.view.${scope}`))
 
   const [actionError, setActionError] = useState<string | null>(null)
   const [missing, setMissing] = useState<string[]>([])
@@ -325,6 +328,13 @@ export default function ApplicationDetailPage() {
     },
     onError: (error) =>
       setActionError(error instanceof ApiError ? error.message : "Could not record the offer."),
+  })
+
+  const packageDownload = useMutation({
+    mutationFn: () => downloadApplicationPackage(id, `application-${id}.zip`),
+    onSuccess: () => setActionError(null),
+    onError: (error) =>
+      setActionError(error instanceof ApiError ? error.message : "Could not prepare the download."),
   })
 
   const offerLetter = useMutation({
@@ -487,12 +497,24 @@ export default function ApplicationDetailPage() {
             </p>
           </div>
 
+          <div className="flex flex-col items-end gap-2">
           <Badge
             variant="outline"
             className={cn("border-transparent capitalize", APPLICATION_STATUS_BADGE[app.status])}
           >
             {statusLabel(app.status)}
           </Badge>
+            {canPackage && (
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={packageDownload.isPending}
+                onClick={() => packageDownload.mutate()}
+              >
+                <Download className="size-4" /> {packageDownload.isPending ? "Preparing ZIP…" : "Download package (ZIP)"}
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="mt-5 border-t pt-5">

@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
 import RowActions from "@/components/RowActions"
 import { useCan } from "@/features/auth/useCan"
-import { FileText, Search, X } from "lucide-react"
+import { Download, FileText, Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
@@ -25,13 +25,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { deleteApplication, listApplications } from "@/features/admissions/api"
+import { deleteApplication, downloadApplicationPackage, listApplications } from "@/features/admissions/api"
 import {
   APPLICATION_STATUS_BADGE,
   APPLICATION_TRANSITIONS,
   statusLabel,
 } from "@/features/admissions/status"
 import { submittedByLabel, SUBMITTED_BY_OPTIONS } from "@/features/admissions/submitter"
+import { ApiError } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 /** Build the export query string matching the list's current filters. */
@@ -50,6 +51,21 @@ function applicationExportQuery(q: string, status: string, toVerify: boolean, su
 export default function ApplicationsPage() {
   const navigate = useNavigate()
   const can = useCan()
+  // The server decides what goes in; the button only shows for accounts that may open documents at all.
+  const canPackage = ["global", "branch", "department", "assigned", "own"].some((scope) => can(`documents.view.${scope}`))
+  const [packaging, setPackaging] = useState<number | null>(null)
+  const [packageError, setPackageError] = useState<string | null>(null)
+  const downloadPackage = async (id: number, code: string) => {
+    setPackaging(id)
+    setPackageError(null)
+    try {
+      await downloadApplicationPackage(id, `${code}.zip`)
+    } catch (e) {
+      setPackageError(e instanceof ApiError ? e.message : "Could not prepare the download.")
+    } finally {
+      setPackaging(null)
+    }
+  }
   const queryClient = useQueryClient()
   const [searchInput, setSearchInput] = useState("")
   const [q, setQ] = useState("")
@@ -158,6 +174,9 @@ export default function ApplicationsPage() {
           <ExportButton path={`/applications/export${applicationExportQuery(q, status, toVerify, submittedBy, agentId)}`} filename="applications.csv" />
         </div>
       </div>
+
+      {packaging !== null && <p role="status" className="px-1 text-sm text-muted-foreground">Preparing the ZIP with the personal information and every document. This can take a few seconds.</p>}
+      {packageError && <p role="alert" className="px-1 text-sm text-destructive">{packageError}</p>}
 
       {agentId && (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-cas-navy/20 bg-cas-navy-50 px-4 py-2.5 text-sm text-cas-navy">
@@ -298,6 +317,7 @@ export default function ApplicationsPage() {
                     onEdit={can("applications.update.global") ? () => navigate(`/applications/${application.id}`) : undefined}
                     onDelete={can("applications.delete.global") ? () => deleteApplication(application.id).then(() => queryClient.invalidateQueries({ queryKey: ["applications"] })) : undefined}
                     deleteNote="Its documents and offers go with it."
+                    extra={canPackage ? [{ label: packaging === application.id ? "Preparing ZIP…" : "Download package (ZIP)", icon: <Download className="size-4" />, disabled: packaging !== null, onSelect: () => downloadPackage(application.id, application.application_code) }] : undefined}
                   />
                 </TableCell>
               </TableRow>
