@@ -83,17 +83,54 @@ export async function apiBlob(path: string, options: RequestInit = {}): Promise<
   return response.blob()
 }
 
+/** The file name in a Content-Disposition header: the UTF-8 form (filename*=) first, then the plain one. */
+export function filenameFromDisposition(header: string | null): string | null {
+  if (!header) return null
+  const utf8 = /filename\*\s*=\s*(?:UTF-8|utf-8)''([^;]+)/i.exec(header)
+  if (utf8) {
+    try {
+      return decodeURIComponent(utf8[1].trim())
+    } catch {
+      /* fall through to the plain name */
+    }
+  }
+  const plain = /filename\s*=\s*(?:"([^"]*)"|([^;]+))/i.exec(header)
+
+  return plain ? (plain[1] ?? plain[2]).trim() : null
+}
+
+/** Like apiBlob, and also returns the file name the server chose (null when it sent none). */
+export async function apiBlobNamed(path: string, options: RequestInit = {}): Promise<{ blob: Blob; filename: string | null }> {
+  const token = useAuthStore.getState().token
+
+  const response = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  })
+
+  if (!response.ok) {
+    if (response.status === 401) useAuthStore.getState().clearAuth()
+    const payload = await response.json().catch(() => null)
+    throw new ApiError(response.status, payload ?? { message: `HTTP ${response.status}` })
+  }
+
+  return { blob: await response.blob(), filename: filenameFromDisposition(response.headers.get("content-disposition")) }
+}
+
 /**
  * Fetch a file (with auth) and trigger a browser download. Used for CSV exports;
  * the server sets the filename via Content-Disposition, `fallbackName` is used
  * if that's absent.
  */
 export async function downloadFile(path: string, fallbackName: string): Promise<void> {
-  const blob = await apiBlob(path)
+  const { blob, filename } = await apiBlobNamed(path)
   const url = URL.createObjectURL(blob)
   const link = document.createElement("a")
   link.href = url
-  link.download = fallbackName
+  link.download = filename ?? fallbackName
   document.body.appendChild(link)
   link.click()
   link.remove()

@@ -1,4 +1,4 @@
-import { api, apiBlob } from "@/lib/api"
+import { api, apiBlob, downloadFile } from "@/lib/api"
 import type { Paginated } from "@/features/catalog/api"
 
 export interface ApplicationPreference {
@@ -244,3 +244,10 @@ export const deleteDocument = (id: number) =>
 
 export const deleteApplication = (id: number) =>
   api<{ message: string }>(`/applications/${id}`, { method: "DELETE" })
+
+/**
+ * One ZIP with the student's personal information and every submitted document the caller may see. The server
+ * names it "Student-Program-University.zip"; `fallbackName` is used only if that header is missing.
+ */
+export const downloadApplicationPackage = (applicationId: number | string, fallbackName: string) =>
+  downloadFile(`/applications/${applicationId}/package`, fallbackName)

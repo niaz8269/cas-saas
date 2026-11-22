@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -18,10 +18,12 @@ interface Props {
   onDelete?: () => Promise<unknown>
   /** Extra sentence in the confirm box, for example what else goes with it. */
   deleteNote?: string
+  /** Further entries between Edit and Delete, for example a download. */
+  extra?: { label: string; icon?: ReactNode; onSelect: () => void; disabled?: boolean }[]
 }
 
 /** The "..." menu at the end of a table row: Open, Edit and Delete (with a confirmation). Stops row clicks. */
-export default function RowActions({ name, onOpen, onEdit, onDelete, deleteNote }: Props) {
+export default function RowActions({ name, onOpen, onEdit, onDelete, deleteNote, extra }: Props) {
   const [confirming, setConfirming] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -31,7 +33,7 @@ export default function RowActions({ name, onOpen, onEdit, onDelete, deleteNote 
     onError: (e) => setError(e instanceof ApiError ? (Object.values(e.errors ?? {})[0]?.[0] ?? e.message) : "Could not delete."),
   })
 
-  if (!onOpen && !onEdit && !onDelete) return null
+  if (!onOpen && !onEdit && !onDelete && !(extra?.length)) return null
 
   return (
     <div onClick={(event) => event.stopPropagation()} className="inline-block">
@@ -44,7 +46,10 @@ export default function RowActions({ name, onOpen, onEdit, onDelete, deleteNote 
         <DropdownMenuContent align="end" className="w-44">
           {onOpen && <DropdownMenuItem onSelect={onOpen}><ExternalLink className="size-4" /> Open</DropdownMenuItem>}
           {onEdit && <DropdownMenuItem onSelect={onEdit}><Pencil className="size-4" /> Edit</DropdownMenuItem>}
-          {onDelete && (onOpen || onEdit) && <DropdownMenuSeparator />}
+          {extra?.map((item) => (
+            <DropdownMenuItem key={item.label} disabled={item.disabled} onSelect={item.onSelect}>{item.icon} {item.label}</DropdownMenuItem>
+          ))}
+          {onDelete && (onOpen || onEdit || extra?.length) && <DropdownMenuSeparator />}
           {onDelete && (
             <DropdownMenuItem variant="destructive" onSelect={() => { setError(null); setConfirming(true) }}>
               <Trash2 className="size-4" /> Delete
