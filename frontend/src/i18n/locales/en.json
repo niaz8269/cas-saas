@@ -1079,7 +1079,13 @@
     "subtitle": "Tell us what you want to study and a CAS advisor will contact you with the right universities, fees and dates.",
     "degree": "Degree",
     "degreePlaceholder": "Select degree",
-    "degrees": { "bachelor": "Bachelors", "master": "Master", "phd": "PhD", "non_degree": "Non-Degree", "diploma": "Diploma" },
+    "degrees": {
+      "bachelor": "Bachelors",
+      "master": "Master",
+      "phd": "PhD",
+      "non_degree": "Non-Degree",
+      "diploma": "Diploma"
+    },
     "program": "Program",
     "programPlaceholder": "Select program",
     "programs": {
@@ -2017,5 +2023,9 @@
     "seoDescription": "How CAS collects, uses, shares and protects personal information.",
     "title": "Privacy Policy",
     "subtitle": "Last updated {{date}}"
+  },
+  "country": {
+    "closeMatches": "Closest matches",
+    "noMatch": "No country matches. Check the spelling."
   }
 }

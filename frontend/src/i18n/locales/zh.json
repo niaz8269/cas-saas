@@ -1861,5 +1861,9 @@
   },
   "faqList": {
     "title": "常见问题"
+  },
+  "country": {
+    "closeMatches": "最接近的结果",
+    "noMatch": "没有匹配的国家，请检查拼写。"
   }
 }

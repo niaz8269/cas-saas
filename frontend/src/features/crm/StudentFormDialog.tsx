@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+
+import CountryCombobox from "@/components/CountryCombobox"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
@@ -58,7 +60,7 @@ export default function StudentFormDialog({
   const navigate = useNavigate()
   const isEdit = Boolean(student)
 
-  const { register, handleSubmit, reset, setError, formState: { errors } } =
+  const { register, handleSubmit, reset, setError, watch, setValue, formState: { errors } } =
     useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(student) })
 
   useEffect(() => {
@@ -153,12 +155,14 @@ export default function StudentFormDialog({
               </select>
             </Field>
             <Field label="Country" error={errors.country_id?.message}>
-              <select className="w-full rounded-md border bg-background px-3 py-2 text-sm" {...register("country_id")}>
-                <option value="">—</option>
-                {(countries.data?.data ?? []).map((c) => (
-                  <option key={c.id} value={String(c.id)}>{c.name}</option>
-                ))}
-              </select>
+              <CountryCombobox
+                id="student-country"
+                ariaLabel="Country"
+                placeholder="Type a country"
+                items={(countries.data?.data ?? []).map((c) => ({ value: String(c.id), label: c.name }))}
+                value={watch("country_id") ?? ""}
+                onChange={(v) => setValue("country_id", v, { shouldDirty: true })}
+              />
             </Field>
           </div>
 

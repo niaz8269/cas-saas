@@ -9,13 +9,13 @@ use function Pest\Laravel\getJson;
 
 uses(RefreshDatabase::class);
 
-it('lists every country in the world except Israel and uninhabited territories', function () {
+it('lists every country in the world except Israel', function () {
     $this->seed(CountrySeeder::class);
     $codes = Country::pluck('iso2')->all();
 
     expect(count($codes))->toBeGreaterThanOrEqual(240)
         ->and($codes)->not->toContain('IL')
-        ->and($codes)->not->toContain('AQ')
+        ->and($codes)->toContain('AQ', 'BV', 'IO')
         ->and($codes)->toContain('PK', 'CN', 'VN', 'TH', 'KG', 'KR', 'KP', 'IR', 'SY', 'PS', 'TW', 'HK', 'VA', 'XK', 'FJ', 'IS', 'NZ', 'AR', 'ZW', 'ET');
 
     // A few that a short list tends to lack, with the names people expect.

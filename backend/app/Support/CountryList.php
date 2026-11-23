@@ -5,14 +5,10 @@ namespace App\Support;
 /** ISO 3166-1 alpha-2 codes with the name we show, used to validate a student's nationality. */
 final class CountryList
 {
-    /**
-     * Left out of the lists people choose their country from: Israel, and the uninhabited or military-only
-     * territories (Antarctica, Bouvet, Heard and McDonald, French Southern, South Georgia, US Minor Outlying,
-     * British Indian Ocean) where nobody registers an agency or applies from.
-     */
-    public const NOT_SELECTABLE = ['IL', 'AQ', 'BV', 'HM', 'TF', 'GS', 'UM', 'IO'];
+    /** Left out of the lists people choose their country from. */
+    public const NOT_SELECTABLE = ['IL'];
 
-    /** @return array<string, string> ISO code => name of every country people can pick, in code order */
+    /** @return array<string, string> ISO code => name of every country people can pick (all of them except Israel), in code order */
     public static function selectable(): array
     {
         return array_diff_key(self::NAMES, array_flip(self::NOT_SELECTABLE));
