@@ -246,9 +246,13 @@ class ApplicationCatalog
      */
     public function requiredDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
     {
-        // Global baseline: every application needs the document types flagged
-        // required_for 'application' (the same set the admin checklist uses).
-        $types = DocumentType::requiredFor('application')->get();
+        // Baseline: a Bachelor and a Master/PhD application each have their own checklist; any other level (and a
+        // catalog where those lists are not set up yet) uses the types flagged required_for 'application'.
+        $group = $this->levelGroup($program);
+        $types = $group !== null ? DocumentType::requiredFor("application_{$group}")->get() : collect();
+        if ($types->isEmpty()) {
+            $types = DocumentType::requiredFor('application')->get();
+        }
 
         // Plus the course-specific set — a university's own form (when defined)
         // overrides the program's. Merged on top of the baseline.
@@ -282,15 +286,36 @@ class ApplicationCatalog
      */
     public function optionalDocuments(?Program $program, ?Scholarship $scholarship = null): Collection
     {
-        if (! $this->isPostgraduateScholarship($program, $scholarship)) {
+        $contexts = array_values(array_filter([
+            $this->levelGroup($program) === 'postgraduate' ? 'application_postgraduate_optional' : null,
+            $this->isPostgraduateScholarship($program, $scholarship) ? 'scholarship_postgraduate_optional' : null,
+        ]));
+
+        if ($contexts === []) {
             return collect();
         }
 
         $required = $this->requiredDocuments($program, $scholarship)->pluck('id');
 
-        return DocumentType::requiredFor('scholarship_postgraduate_optional')->get()
+        return DocumentType::query()
+            ->where(function ($q) use ($contexts) {
+                foreach ($contexts as $context) {
+                    $q->orWhereJsonContains('required_for', $context);
+                }
+            })
+            ->get()
             ->reject(fn (DocumentType $type) => $required->contains($type->id))
             ->sortBy('name')->values();
+    }
+
+    /** Which application checklist a program's level uses: 'bachelor', 'postgraduate' (Master/PhD), or none. */
+    private function levelGroup(?Program $program): ?string
+    {
+        return match ($program?->level) {
+            'bachelor' => 'bachelor',
+            'master', 'phd', 'doctor', 'doctoral' => 'postgraduate',
+            default => null,
+        };
     }
 
     private function isPostgraduateScholarship(?Program $program, ?Scholarship $scholarship): bool

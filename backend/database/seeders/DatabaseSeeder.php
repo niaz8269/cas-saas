@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             RegisteredMajorsSeeder::class,
             DocumentTypeSeeder::class,
             PostgraduateScholarshipDocumentsSeeder::class,
+            ApplicationDocumentsSeeder::class,
             MajorSeeder::class,
             AutomationRuleSeeder::class,
             UniversityEmblemSeeder::class,
