@@ -222,7 +222,6 @@ export default function AgentApplyWizard() {
     .filter((f) => f.required)
     .every((f) => (customAnswers[f.key] ?? "").trim() !== "")
   const canLeaveCourse = !!program && (funding === "self" || !!scholarshipId) && requiredCustomAnswered
-  const allDocsUploaded = (draft?.required_documents ?? []).every((d) => uploaded[d.id])
 
   return (
     <div className="space-y-4 pb-4">
@@ -342,8 +341,8 @@ export default function AgentApplyWizard() {
           </Button>
         )}
         {step === 4 && (
-          <Button className="h-11 w-full" disabled={!allDocsUploaded} onClick={() => setStep(5)}>
-            {allDocsUploaded ? t("wizard.buttons.reviewApplication") : t("wizard.buttons.uploadAllRequired")}
+          <Button className="h-11 w-full" onClick={() => setStep(5)}>
+            {t("wizard.buttons.reviewApplication")}
           </Button>
         )}
         {step === 5 && (

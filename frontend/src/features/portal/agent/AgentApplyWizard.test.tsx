@@ -167,7 +167,8 @@ it("carries on with a saved draft at the documents step instead of starting agai
 
   expect(await screen.findByText("Passport")).toBeInTheDocument()
   expect(screen.getByText(/Ali Raza/)).toBeInTheDocument()
-  expect(screen.getByRole("button", { name: /Upload all required documents/ })).toBeDisabled()
+  // No document is mandatory, so the wizard can move on without any upload.
+  expect(screen.getByRole("button", { name: "Review application" })).toBeEnabled()
   expect(fetchMock.mock.calls.some(([u, i]) => String(u).endsWith("/agent/applications") && (i as RequestInit)?.method === "POST")).toBe(false)
 })
 

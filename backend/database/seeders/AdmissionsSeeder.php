@@ -23,9 +23,9 @@ class AdmissionsSeeder extends Seeder
     private const DOCUMENT_TYPES = [
         // name, category, sensitive, required_for
         ['Passport', 'identity', true, ['application']],
-        ['Passport Photo', 'identity', false, ['application']],
-        ['Academic Transcript', 'academic', false, ['application']],
-        ['School Leaving Certificate', 'academic', false, ['application']],
+        ['Photo', 'identity', false, ['application']],
+        ['High School Transcript', 'academic', false, ['application']],
+        ['High School Diploma/Certificate', 'academic', false, ['application']],
         ['Medical Examination Form', 'medical', false, null],
         ['Police Clearance Certificate', 'identity', true, null],
         ['Bank Statement', 'financial', true, null],

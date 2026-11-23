@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Services\Comms\NotificationService;
 use App\Services\Finance\ProcessingFee;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -121,22 +120,13 @@ class PortalApplicationService
     }
 
     /**
-     * Hand a draft to CAS. Blocks unless every required document (resolved
-     * for the chosen program + scholarship) has a non-rejected upload, then
-     * routes it straight to the Admissions department: an officer is assigned
-     * (so it enters their queue) and notified to verify and process it.
+     * Hand a draft to CAS. No document is mandatory, so a draft is never held back for missing uploads; it is
+     * routed straight to the Admissions department: an officer is assigned (so it enters their queue) and
+     * notified to verify and process it.
      */
     public function submit(Application $application): Application
     {
         abort_unless($application->status === 'draft', 409, 'Only a draft application can be submitted.');
-
-        $missing = $this->missingDocuments($application);
-
-        if ($missing->isNotEmpty()) {
-            throw ValidationException::withMessages([
-                'documents' => 'Please upload: '.$missing->pluck('name')->implode(', ').'.',
-            ]);
-        }
 
         // Funded study carries a one-time processing fee. The application is
         // complete but does NOT reach Admissions until Finance confirms the
@@ -188,32 +178,10 @@ class PortalApplicationService
             ->filter(fn (Application $a) => $this->processingFee->appliesTo($a) && $this->processingFee->isSettledFor($a));
 
         foreach ($drafts as $application) {
-            // A draft whose documents are still short simply stays a draft —
-            // the fee is settled, so the student's next submit will go through.
-            if ($this->missingDocuments($application)->isNotEmpty()) {
-                continue;
-            }
-
             $released[] = $this->handToAdmissions($application);
         }
 
         return $released;
-    }
-
-    /** Required documents with no non-rejected upload yet. */
-    private function missingDocuments(Application $application): Collection
-    {
-        $application->loadMissing('program', 'scholarship');
-
-        $required = $this->catalog->requiredDocuments($application->program, $application->scholarship);
-
-        $covered = $application->documents()
-            ->where('status', '!=', 'rejected')
-            ->pluck('document_type_id')
-            ->filter()
-            ->unique();
-
-        return $required->reject(fn ($type) => $covered->contains($type->id));
     }
 
     /** Assign an Admissions officer, move to under_review, and notify. */

@@ -31,30 +31,26 @@ function documentNames($types): array
     return $types->pluck('name')->sort()->values()->all();
 }
 
-function sorted(array $names): array
-{
-    return collect($names)->sort()->values()->all();
-}
+it('asks a Bachelor application for its documents, in the order the applicant should see them', function () {
+    $required = app(ApplicationCatalog::class)->requiredDocuments(programOfLevel('bachelor'))->pluck('name')->all();
 
-it('asks a Bachelor application for the nine bachelor documents', function () {
-    $required = documentNames(app(ApplicationCatalog::class)->requiredDocuments(programOfLevel('bachelor')));
-
-    expect($required)->toBe(sorted([
-        'Passport', 'Notarized High School Diploma', 'Academic Transcript', 'Study Plan / Statement of Purpose',
-        'Medical Examination Form', 'Police Clearance Certificate', 'Language Proficiency Certificate', 'CSCA Score Report', 'Passport Photo',
-    ]));
+    expect($required)->toBe([
+        'Photo', 'Passport', 'Passport Blank Visa Page', 'High School Diploma/Certificate', 'High School Transcript',
+        'Medical Examination Form', 'Police Clearance Certificate', 'English Proficiency Certificate', 'Study Plan', 'CSCA',
+    ]);
 });
 
-it('asks a Master or PhD application, funded or not, for the ten postgraduate documents and lists two as optional', function (string $level, bool $scholarship) {
+it('asks a Master or PhD application, funded or not, for its documents in order, with two extra ones listed after', function (string $level, bool $scholarship) {
     $catalog = app(ApplicationCatalog::class);
     $program = programOfLevel($level);
     $award = $scholarship ? Scholarship::factory()->create() : null;
 
-    expect(documentNames($catalog->requiredDocuments($program, $award)))->toBe(sorted([
-        'Passport', 'Passport Photo', 'Notarized Degree Certificates', 'Notarized Final Transcripts', 'English Proficiency Letter',
-        'Recommendation Letters', 'Study Plan / Personal Statement', 'Medical Examination Form', 'CV / Resume', 'Police Clearance Certificate',
-    ]))
-        ->and(documentNames($catalog->optionalDocuments($program, $award)))->toBe(['Experience Letter', 'Research Papers / Thesis']);
+    expect($catalog->requiredDocuments($program, $award)->pluck('name')->all())->toBe([
+        'Photo', 'Passport', 'Passport Blank Visa Page', 'Notarized Degree Certificates', 'Notarized Final Transcripts',
+        'English Proficiency Letter', 'Recommendation Letters', 'Study Plan / Personal Statement', 'Medical Examination Form',
+        'CV / Resume', 'Police Clearance Certificate',
+    ])
+        ->and($catalog->optionalDocuments($program, $award)->pluck('name')->all())->toBe(['Experience Letter', 'Research Papers / Thesis']);
 })->with([['master', false], ['phd', false], ['master', true], ['phd', true]]);
 
 it('keeps the optional documents off bachelor applications and the old baseline for other levels', function () {
@@ -62,7 +58,7 @@ it('keeps the optional documents off bachelor applications and the old baseline 
 
     expect($catalog->optionalDocuments(programOfLevel('bachelor')))->toBeEmpty()
         ->and(documentNames($catalog->requiredDocuments(programOfLevel('diploma'))))
-        ->toBe(['Academic Transcript', 'Passport', 'Passport Photo', 'School Leaving Certificate']);
+        ->toBe(['High School Diploma/Certificate', 'High School Transcript', 'Passport', 'Photo']);
 });
 
 it('does not duplicate the document types when the seeder is run again', function () {
@@ -70,4 +66,17 @@ it('does not duplicate the document types when the seeder is run again', functio
     $this->seed(ApplicationDocumentsSeeder::class);
 
     expect(DocumentType::count())->toBe($before);
+});
+
+it('renames the older document types in place, so uploaded files stay attached', function () {
+    $photo = DocumentType::where('name', 'Photo')->firstOrFail();
+    $photo->update(['name' => 'Passport Photo']);
+    $leaving = DocumentType::where('name', 'High School Diploma/Certificate')->firstOrFail();
+    $leaving->update(['name' => 'School Leaving Certificate']);
+
+    $this->seed(ApplicationDocumentsSeeder::class);
+
+    expect($photo->fresh()->name)->toBe('Photo')
+        ->and($leaving->fresh()->name)->toBe('High School Diploma/Certificate')
+        ->and(DocumentType::where('name', 'Passport Photo')->exists())->toBeFalse();
 });

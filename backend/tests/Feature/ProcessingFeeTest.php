@@ -197,7 +197,7 @@ it('waves a later application straight through once the fee is settled', functio
     expect(Invoice::where('party_id', $student->id)->count())->toBe(1);
 });
 
-it('leaves a documents-short draft alone when the fee is confirmed', function () {
+it('releases a settled draft even when no document is attached', function () {
     $student = actingAsStudentPortal();
     $ready = feeReadyDraft($student);
     $this->postJson("/api/v1/student/applications/{$ready}/submit")->assertStatus(409);
@@ -213,7 +213,7 @@ it('leaves a documents-short draft alone when the fee is confirmed', function ()
     $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 500])->assertOk();
 
     expect(Application::find($ready)->status)->toBe('under_review')
-        ->and(Application::find($short)->status)->toBe('draft');
+        ->and(Application::find($short)->status)->toBe('under_review');
 });
 
 it('does not release applications when an unrelated invoice is paid', function () {

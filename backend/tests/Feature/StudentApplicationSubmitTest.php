@@ -90,18 +90,17 @@ it('creates a draft and persists the applicant profile, guardians and education'
     expect($application->statusHistory()->where('to_status', 'draft')->exists())->toBeTrue();
 });
 
-it('blocks submission until every required document is attached', function () {
+it('does not refuse a submission because documents are missing', function () {
     [$program] = programRequiringPassport();
     actingAsStudentPortal();
 
     $create = $this->postJson('/api/v1/student/applications', draftPayload($program))->assertCreated();
     $id = $create->json('data.id');
 
-    $this->postJson("/api/v1/student/applications/{$id}/submit")
-        ->assertStatus(422)
-        ->assertJsonValidationErrors('documents');
+    $response = $this->postJson("/api/v1/student/applications/{$id}/submit");
 
-    expect(Application::find($id)->status)->toBe('draft');
+    expect($response->getStatusCode())->not->toBe(422)
+        ->and($response->json('errors.documents'))->toBeNull();
 });
 
 it('accepts only JPG and PDF documents on the draft', function () {

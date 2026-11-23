@@ -114,7 +114,6 @@ export default function StudentScholarshipWizard() {
 
   const canLeaveScholarship = !!level && !!scholarship
   const hasPreference = preferences.some((p) => p.major.trim() !== "")
-  const allDocsUploaded = (draft?.required_documents ?? []).every((d) => uploaded[d.id])
 
   return (
     <div className="space-y-4 pb-4">
@@ -198,8 +197,8 @@ export default function StudentScholarshipWizard() {
           </Button>
         )}
         {step === 4 && (
-          <Button className="h-11 w-full" disabled={!allDocsUploaded} onClick={() => setStep(5)}>
-            {allDocsUploaded ? t("wizard.buttons.reviewApplication") : t("wizard.buttons.uploadAllRequired")}
+          <Button className="h-11 w-full" onClick={() => setStep(5)}>
+            {t("wizard.buttons.reviewApplication")}
           </Button>
         )}
         {step === 5 && feeInvoice && (

@@ -32,13 +32,29 @@ class ApplicationCatalog
      * General document set required until an admin configures a program's
      * own list (report step 4 "for now use general"). Resolved by name.
      */
+    /**
+     * The order an applicant sees the documents in, by checklist. Anything not listed (a program's own extras, a
+     * scholarship's extras) follows, alphabetically.
+     */
+    private const DOCUMENT_ORDER = [
+        'bachelor' => [
+            'Photo', 'Passport', 'Passport Blank Visa Page', 'High School Diploma/Certificate', 'High School Transcript',
+            'Medical Examination Form', 'Police Clearance Certificate', 'English Proficiency Certificate', 'Study Plan', 'CSCA',
+        ],
+        'postgraduate' => [
+            'Photo', 'Passport', 'Passport Blank Visa Page', 'Notarized Degree Certificates', 'Notarized Final Transcripts',
+            'English Proficiency Letter', 'Recommendation Letters', 'Study Plan / Personal Statement', 'Medical Examination Form',
+            'CV / Resume', 'Police Clearance Certificate',
+        ],
+    ];
+
     public const GENERAL_DOCUMENTS = [
         'Passport',
-        'Passport Photo',
+        'Photo',
         'Medical Examination Form',
         'Police Clearance Certificate',
         'Degree Certificate',
-        'Academic Transcript',
+        'High School Transcript',
         'CV / Resume',
     ];
 
@@ -276,7 +292,11 @@ class ApplicationCatalog
             $types = $types->concat(DocumentType::requiredFor('scholarship_postgraduate')->get());
         }
 
-        return $types->unique('id')->sortBy('name')->values();
+        $order = self::DOCUMENT_ORDER[$group ?? ''] ?? [];
+
+        return $types->unique('id')
+            ->sortBy(fn (DocumentType $type) => [($position = array_search($type->name, $order, true)) === false ? PHP_INT_MAX : $position, $type->name])
+            ->values();
     }
 
     /**

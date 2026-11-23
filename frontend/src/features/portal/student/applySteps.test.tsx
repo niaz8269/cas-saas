@@ -148,7 +148,7 @@ it("lets you try again when the programs could not be loaded", async () => {
   expect(search.retry).toHaveBeenCalled()
 })
 
-it("shows what to upload for each document and lists optional ones apart, without needing them", () => {
+it("shows what to upload for each document, all listed alike with no required or optional tags", () => {
   renderWithProviders(
     <DocumentsStep
       draft={{
@@ -161,9 +161,11 @@ it("shows what to upload for each document and lists optional ones apart, withou
   )
 
   expect(screen.getByText("Master: 800-1000 words. PhD: 1000-1500 words.")).toBeInTheDocument()
-  expect(screen.getByText("Optional, if you have them")).toBeInTheDocument()
   expect(screen.getByText("Experience Letter")).toBeInTheDocument()
-  expect(screen.getByText("Optional")).toBeInTheDocument()
+  expect(screen.getByText("If you have one.")).toBeInTheDocument()
+  expect(screen.queryByText("Optional")).not.toBeInTheDocument()
+  expect(screen.queryByText("Optional, if you have them")).not.toBeInTheDocument()
+  expect(screen.queryByText("Required")).not.toBeInTheDocument()
 })
 
 // ── Several files per document, and looking at them ─────────────────────────

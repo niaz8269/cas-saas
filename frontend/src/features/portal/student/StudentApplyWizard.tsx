@@ -229,7 +229,6 @@ export default function StudentApplyWizard() {
     .filter((f) => f.required)
     .every((f) => (customAnswers[f.key] ?? "").trim() !== "")
   const canLeaveCourse = !!program && (funding === "self" || !!scholarshipId) && requiredCustomAnswered
-  const allDocsUploaded = (draft?.required_documents ?? []).every((d) => uploaded[d.id])
 
   return (
     <div className="space-y-4 pb-4">
@@ -375,8 +374,8 @@ export default function StudentApplyWizard() {
           </Button>
         )}
         {step === 3 && (
-          <Button className="h-11 w-full" disabled={!allDocsUploaded} onClick={() => setStep(4)}>
-            {allDocsUploaded ? t("wizard.buttons.reviewApplication") : t("wizard.buttons.uploadAllRequired")}
+          <Button className="h-11 w-full" onClick={() => setStep(4)}>
+            {t("wizard.buttons.reviewApplication")}
           </Button>
         )}
         {step === 4 && feeInvoice && (
