@@ -1651,7 +1651,11 @@
       "applyBy": "申请截止 {{date}}",
       "scholarship": "奖学金",
       "chooseScholarship": "选择奖学金",
-      "noScholarshipsListed": "该大学暂无奖学金。"
+      "noScholarshipsListed": "该大学暂无奖学金。",
+      "showingFor": "没有“{{original}}”的专业。正在显示“{{query}}”的结果。",
+      "showMore": "显示更多专业（还有 {{left}} 个）",
+      "loadingMore": "加载中…",
+      "tryAgain": "重试"
     },
     "review": {
       "summary": "摘要",

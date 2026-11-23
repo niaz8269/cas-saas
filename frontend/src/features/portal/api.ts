@@ -438,13 +438,43 @@ export const getApplyFundingOptions = (kind: PortalKind, degree: Degree) =>
 
 export const getFundingOptions = (degree: Degree) => getApplyFundingOptions("student", degree)
 
-export const getApplyAvailability = (kind: PortalKind, degree: Degree, funding: Funding) =>
-  portalApi<{ data: WizardProgram[] }>(
-    `/${kind}/applications/availability?degree=${degree}&funding=${funding}`,
-  )
+/** What the filter boxes of the program list offer. */
+export interface ProgramFacets {
+  universities: { id: number; name: string }[]
+  cities: string[]
+  languages: string[]
+}
 
-export const getApplicationAvailability = (degree: Degree, funding: Funding) =>
-  getApplyAvailability("student", degree, funding)
+/** One page of the programs on offer. `meta`, `facets` and `suggestion` are only there when the server sends them. */
+export interface ProgramPage {
+  data: WizardProgram[]
+  meta?: { current_page: number; last_page: number; per_page: number; total: number }
+  facets?: ProgramFacets
+  suggestion?: { original: string; query: string } | null
+}
+
+export interface ProgramQuery {
+  q?: string
+  university?: string
+  university_id?: string
+  city?: string
+  language?: string
+  page?: number
+  per_page?: number
+}
+
+/** The programs of a degree + funding choice, one page at a time; the search and filters run on the server. */
+export const getApplyAvailability = (kind: PortalKind, degree: Degree, funding: Funding, params: ProgramQuery = {}) => {
+  const search = new URLSearchParams({ degree, funding })
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== "" && value !== null) search.set(key, String(value))
+  }
+
+  return portalApi<ProgramPage>(`/${kind}/applications/availability?${search.toString()}`)
+}
+
+export const getApplicationAvailability = (degree: Degree, funding: Funding, params: ProgramQuery = {}) =>
+  getApplyAvailability("student", degree, funding, params)
 
 export const getApplicationRequiredDocuments = (programId: number, scholarshipId?: number | null) =>
   portalApi<{ data: RequiredDoc[] }>(

@@ -9,7 +9,6 @@ import { AgentStudentPicker, type PickedStudent } from "@/features/portal/agent/
 import {
   createApplication,
   getAgentStudent,
-  getApplyAvailability,
   getApplyCountries,
   getApplicationDraft,
   getApplyFundingOptions,
@@ -32,6 +31,7 @@ import {
   Stepper,
 } from "@/features/portal/student/applySteps"
 import { useApplyAutosave } from "@/features/portal/student/useApplyAutosave"
+import { useProgramSearch } from "@/features/portal/useProgramSearch"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.student", "wizard.steps.course", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -117,11 +117,7 @@ export default function AgentApplyWizard() {
     },
   })
 
-  const availability = useQuery({
-    queryKey: ["agent-apply", "availability", degree, funding],
-    queryFn: () => getApplyAvailability("agent", degree as Degree, funding as Funding),
-    enabled: step === 1 && !!degree && !!funding,
-  })
+  const programSearch = useProgramSearch({ kind: "agent", degree, funding, enabled: step === 1 })
 
   const countries = useQuery({
     queryKey: ["agent-apply", "countries"],
@@ -275,9 +271,7 @@ export default function AgentApplyWizard() {
           program={program}
           intakeId={intakeId}
           scholarshipId={scholarshipId}
-          programs={availability.data?.data ?? []}
-          loading={availability.isFetching}
-          failed={availability.isError}
+          programSearch={programSearch}
           fundingAvailable={fundingOpts.data?.data}
           fundingLoading={fundingOpts.isFetching}
           customAnswers={customAnswers}

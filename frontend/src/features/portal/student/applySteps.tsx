@@ -40,11 +40,11 @@ import {
   type WizardProgram,
 } from "@/features/portal/api"
 import { PortalCard } from "@/features/portal/components"
+import type { ProgramSearch } from "@/features/portal/useProgramSearch"
 import { money } from "@/features/portal/status"
 import { DEGREES, EMPTY_EDUCATION, FUNDING, type Profile } from "@/features/portal/student/applyShared"
 import { ApiError } from "@/lib/api"
 import { formatDuration } from "@/lib/duration"
-import { fuzzyIncludes } from "@/lib/fuzzy"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
 
@@ -591,9 +591,8 @@ export function CourseStep(props: {
   program: WizardProgram | null
   intakeId: string
   scholarshipId: string
-  programs: WizardProgram[]
-  loading: boolean
-  failed: boolean
+  /** The programs on offer, searched and paged on the server. */
+  programSearch: ProgramSearch
   fundingAvailable?: FundingOptions
   fundingLoading: boolean
   customAnswers: Record<string, string>
@@ -605,36 +604,11 @@ export function CourseStep(props: {
   onCustomAnswer: (key: string, value: string) => void
 }) {
   const { t } = useTranslation()
-  const { degree, funding, program, programs, loading, failed, fundingAvailable, fundingLoading } = props
+  const { degree, funding, program, programSearch: ps, fundingAvailable, fundingLoading } = props
+  const { programs, loading, failed } = ps
 
   const fundingTiles = FUNDING.filter((f) => f.value === "self" || fundingAvailable?.[f.value])
   const noScholarships = !!fundingAvailable && !fundingAvailable.scholarship && !fundingAvailable.partial
-
-  // Search and filters work on the list that is already loaded, so they respond instantly.
-  const [search, setSearch] = useState("")
-  const [university, setUniversity] = useState("")
-  const [city, setCity] = useState("")
-  const [language, setLanguage] = useState("")
-  const options = useMemo(() => {
-    const uniq = (values: (string | null | undefined)[]) => [...new Set(values.filter((v): v is string => !!v))].sort((a, b) => a.localeCompare(b))
-
-    return {
-      universities: uniq(programs.map((p) => p.university.name)),
-      cities: uniq(programs.map((p) => p.university.city)),
-      languages: uniq(programs.map((p) => p.teaching_language)),
-    }
-  }, [programs])
-  const shown = useMemo(() => {
-    return programs.filter((p) => {
-      if (university && p.university.name !== university) return false
-      if (city && p.university.city !== city) return false
-      if (language && p.teaching_language !== language) return false
-
-      return fuzzyIncludes(search, `${p.name} ${p.university.name} ${p.university.city ?? ""}`)
-    })
-  }, [programs, search, university, city, language])
-  const filtering = !!(search || university || city || language)
-  const clearFilters = () => { setSearch(""); setUniversity(""); setCity(""); setLanguage("") }
   const filterSelect = "h-10 w-full rounded-md border bg-background px-3 text-sm"
 
   return (
@@ -671,57 +645,67 @@ export function CourseStep(props: {
       {degree && funding && (
         <div>
           <p className="mb-2 text-sm font-medium">{t("wizard.course.availablePrograms")}</p>
-          {programs.length > 1 && (
+          {(ps.total > 1 || ps.filtering) && (
             <div className="mb-3 space-y-2">
               <div className="relative">
                 <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
                 <Input
                   type="search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={ps.search}
+                  onChange={(e) => ps.setSearch(e.target.value)}
                   placeholder={t("wizard.course.searchPrograms", { defaultValue: "Search by program, university or city" })}
                   aria-label={t("wizard.course.searchPrograms", { defaultValue: "Search by program, university or city" })}
                   className="h-10 pl-9"
                 />
               </div>
               <div className="grid gap-2 sm:grid-cols-3">
-                <select className={filterSelect} value={university} onChange={(e) => setUniversity(e.target.value)} aria-label={t("wizard.course.filterUniversity", { defaultValue: "University" })}>
+                <select className={filterSelect} value={ps.university} onChange={(e) => ps.setUniversity(e.target.value)} aria-label={t("wizard.course.filterUniversity", { defaultValue: "University" })}>
                   <option value="">{t("wizard.course.allUniversities", { defaultValue: "All universities" })}</option>
-                  {options.universities.map((u) => <option key={u} value={u}>{u}</option>)}
+                  {ps.facets.universities.map((u) => <option key={u.id} value={String(u.id)}>{u.name}</option>)}
                 </select>
-                <select className={filterSelect} value={city} onChange={(e) => setCity(e.target.value)} aria-label={t("wizard.course.filterCity", { defaultValue: "City" })}>
+                <select className={filterSelect} value={ps.city} onChange={(e) => ps.setCity(e.target.value)} aria-label={t("wizard.course.filterCity", { defaultValue: "City" })}>
                   <option value="">{t("wizard.course.allCities", { defaultValue: "All cities" })}</option>
-                  {options.cities.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {ps.facets.cities.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
-                <select className={filterSelect} value={language} onChange={(e) => setLanguage(e.target.value)} aria-label={t("wizard.course.filterLanguage", { defaultValue: "Teaching language" })}>
+                <select className={filterSelect} value={ps.language} onChange={(e) => ps.setLanguage(e.target.value)} aria-label={t("wizard.course.filterLanguage", { defaultValue: "Teaching language" })}>
                   <option value="">{t("wizard.course.allLanguages", { defaultValue: "All languages" })}</option>
-                  {options.languages.map((l) => <option key={l} value={l}>{l}</option>)}
+                  {ps.facets.languages.map((l) => <option key={l} value={l}>{l}</option>)}
                 </select>
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span role="status">{t("wizard.course.showingPrograms", { defaultValue: "Showing {{shown}} of {{total}} programs", shown: shown.length, total: programs.length })}</span>
-                {filtering && (
-                  <button type="button" onClick={clearFilters} className="font-medium text-cas-navy underline underline-offset-2">
+                <span role="status">{t("wizard.course.showingPrograms", { defaultValue: "Showing {{shown}} of {{total}} programs", shown: programs.length, total: ps.total })}</span>
+                {ps.filtering && (
+                  <button type="button" onClick={ps.clear} className="font-medium text-cas-navy underline underline-offset-2">
                     {t("wizard.course.clearFilters", { defaultValue: "Clear filters" })}
                   </button>
                 )}
               </div>
+              {ps.suggestion && (
+                <p className="text-xs text-muted-foreground">
+                  {t("wizard.course.showingFor", { defaultValue: "No programs for \u201c{{original}}\u201d. Showing results for \u201c{{query}}\u201d.", original: ps.suggestion.original, query: ps.suggestion.query })}
+                </p>
+              )}
             </div>
           )}
           {loading && <p className="text-sm text-muted-foreground">{t("wizard.course.findingPrograms")}</p>}
-          {failed && <p className="text-sm text-destructive">{t("wizard.course.couldNotLoadPrograms")}</p>}
-          {!loading && !failed && programs.length === 0 && (
+          {failed && (
+            <p className="text-sm text-destructive">
+              {t("wizard.course.couldNotLoadPrograms")}{" "}
+              <button type="button" onClick={ps.retry} className="font-medium underline underline-offset-2">{t("wizard.course.tryAgain", { defaultValue: "Try again" })}</button>
+            </p>
+          )}
+          {!loading && !failed && ps.total === 0 && !ps.filtering && (
             <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
               {t("wizard.course.noProgramsMatch")}
             </p>
           )}
-          {!loading && !failed && programs.length > 0 && shown.length === 0 && (
+          {!loading && !failed && ps.total === 0 && ps.filtering && (
             <p className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
               {t("wizard.course.noSearchMatch", { defaultValue: "No programs match your search. Try different words or clear the filters." })}
             </p>
           )}
           <div className="space-y-2">
-            {shown.map((p) => {
+            {programs.map((p) => {
               const active = program?.id === p.id
 
               return (
@@ -759,6 +743,13 @@ export function CourseStep(props: {
               )
             })}
           </div>
+          {ps.hasMore && !failed && (
+            <Button type="button" variant="secondary" className="mt-3 w-full" disabled={ps.loadingMore} onClick={ps.loadMore}>
+              {ps.loadingMore
+                ? t("wizard.course.loadingMore", { defaultValue: "Loading…" })
+                : t("wizard.course.showMore", { defaultValue: "Show more programs ({{left}} more)", left: Math.max(ps.total - programs.length, 0) })}
+            </Button>
+          )}
         </div>
       )}
 

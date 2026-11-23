@@ -1675,7 +1675,11 @@
       "applyBy": "التقديم قبل {{date}}",
       "scholarship": "المنحة",
       "chooseScholarship": "اختر منحة",
-      "noScholarshipsListed": "لا توجد منح مدرجة لهذه الجامعة."
+      "noScholarshipsListed": "لا توجد منح مدرجة لهذه الجامعة.",
+      "showingFor": "لا توجد برامج لـ «{{original}}». تعرض نتائج «{{query}}».",
+      "showMore": "عرض المزيد من البرامج ({{left}} أخرى)",
+      "loadingMore": "جارٍ التحميل…",
+      "tryAgain": "حاول مرة أخرى"
     },
     "review": {
       "summary": "الملخّص",

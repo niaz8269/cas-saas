@@ -1651,7 +1651,11 @@
       "applyBy": "daftar sebelum {{date}}",
       "scholarship": "Beasiswa",
       "chooseScholarship": "Pilih beasiswa",
-      "noScholarshipsListed": "Tidak ada beasiswa yang terdaftar untuk universitas ini."
+      "noScholarshipsListed": "Tidak ada beasiswa yang terdaftar untuk universitas ini.",
+      "showingFor": "Tidak ada program untuk “{{original}}”. Menampilkan hasil untuk “{{query}}”.",
+      "showMore": "Tampilkan program lainnya ({{left}} lagi)",
+      "loadingMore": "Memuat…",
+      "tryAgain": "Coba lagi"
     },
     "review": {
       "summary": "Ringkasan",

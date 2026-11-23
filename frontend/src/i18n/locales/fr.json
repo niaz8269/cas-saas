@@ -1651,7 +1651,11 @@
       "applyBy": "candidature avant le {{date}}",
       "scholarship": "Bourse",
       "chooseScholarship": "Choisissez une bourse",
-      "noScholarshipsListed": "Aucune bourse répertoriée pour cette université."
+      "noScholarshipsListed": "Aucune bourse répertoriée pour cette université.",
+      "showingFor": "Aucun programme pour « {{original}} ». Résultats pour « {{query}} ».",
+      "showMore": "Afficher plus de programmes ({{left}} de plus)",
+      "loadingMore": "Chargement…",
+      "tryAgain": "Réessayer"
     },
     "review": {
       "summary": "Résumé",

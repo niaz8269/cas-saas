@@ -2,6 +2,7 @@ import { screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
 import type { DraftApplication, WizardProgram } from "@/features/portal/api"
+import type { ProgramSearch } from "@/features/portal/useProgramSearch"
 import { renderWithProviders } from "@/test/utils"
 
 import { CourseStep, CustomFieldsCard, DocumentsStep, ReviewStep } from "./applySteps"
@@ -66,55 +67,85 @@ const PROGRAMS = [
   prog(3, "Chinese Language", "Beijing Normal University", "Beijing", "Chinese"),
 ]
 
-function renderCourse() {
+// The search itself runs on the server; these tests check what the step shows and asks for.
+function makeSearch(over: Partial<ProgramSearch> = {}): ProgramSearch {
+  return {
+    programs: PROGRAMS, total: 3, loading: false, loadingMore: false, failed: false, hasMore: false, suggestion: null,
+    facets: {
+      universities: [{ id: 1, name: "Harbin Institute of Technology" }, { id: 2, name: "Harbin Medical University" }, { id: 3, name: "Beijing Normal University" }],
+      cities: ["Beijing", "Harbin"], languages: ["Chinese", "English"],
+    },
+    search: "", university: "", city: "", language: "", filtering: false,
+    loadMore: vi.fn(), retry: vi.fn(), clear: vi.fn(),
+    setSearch: vi.fn(), setUniversity: vi.fn(), setCity: vi.fn(), setLanguage: vi.fn(),
+    ...over,
+  }
+}
+
+function renderCourse(search: ProgramSearch) {
   return renderWithProviders(
     <CourseStep
-      degree="master" funding="self" program={null} intakeId="" scholarshipId="" programs={PROGRAMS} loading={false} failed={false}
+      degree="master" funding="self" program={null} intakeId="" scholarshipId="" programSearch={search}
       fundingAvailable={{ self: true, scholarship: false, partial: false }} fundingLoading={false} customAnswers={{}}
       onDegree={() => {}} onFunding={() => {}} onProgram={() => {}} onIntake={() => {}} onScholarship={() => {}} onCustomAnswer={() => {}}
     />,
   )
 }
 
-it("lets you search the available programs by program, university or city", async () => {
-  const user = userEvent.setup()
-  renderCourse()
+it("offers every university, city and teaching language, and shows how many programs match", () => {
+  renderCourse(makeSearch({ total: 20490 }))
 
-  expect(screen.getByText("Showing 3 of 3 programs")).toBeInTheDocument()
-  await user.type(screen.getByRole("searchbox"), "harbin engineering")
-
-  expect(screen.getByText("Civil Engineering")).toBeInTheDocument()
-  expect(screen.queryByText("Clinical Medicine")).not.toBeInTheDocument()
-  expect(screen.queryByText("Chinese Language")).not.toBeInTheDocument()
-  expect(screen.getByText("Showing 1 of 3 programs")).toBeInTheDocument()
+  expect(screen.getByText("Showing 3 of 20490 programs")).toBeInTheDocument()
+  expect(screen.getByRole("option", { name: "Beijing Normal University" })).toBeInTheDocument()
+  expect(screen.getByRole("option", { name: "Beijing" })).toBeInTheDocument()
+  expect(screen.getByRole("option", { name: "English" })).toBeInTheDocument()
+  expect(screen.getByRole("option", { name: "Chinese" })).toBeInTheDocument()
 })
 
-it("filters by university, city and teaching language, and clears them again", async () => {
+it("hands what is typed and chosen to the search", async () => {
   const user = userEvent.setup()
-  renderCourse()
+  const search = makeSearch()
+  renderCourse(search)
+
+  await user.type(screen.getByRole("searchbox"), "s")
+  expect(search.setSearch).toHaveBeenCalledWith("s")
 
   await user.selectOptions(screen.getByLabelText("City"), "Harbin")
-  expect(screen.getByText("Showing 2 of 3 programs")).toBeInTheDocument()
-
-  await user.selectOptions(screen.getByLabelText("University"), "Harbin Medical University")
-  expect(screen.getByText("Clinical Medicine")).toBeInTheDocument()
-  expect(screen.queryByText("Civil Engineering")).not.toBeInTheDocument()
-
+  expect(search.setCity).toHaveBeenCalledWith("Harbin")
+  await user.selectOptions(screen.getByLabelText("University"), "2")
+  expect(search.setUniversity).toHaveBeenCalledWith("2")
   await user.selectOptions(screen.getByLabelText("Teaching language"), "Chinese")
-  expect(screen.getByText(/No programs match your search/)).toBeInTheDocument()
-
-  await user.click(screen.getByRole("button", { name: "Clear filters" }))
-  expect(screen.getByText("Showing 3 of 3 programs")).toBeInTheDocument()
+  expect(search.setLanguage).toHaveBeenCalledWith("Chinese")
 })
 
-it("still finds the program when the search has a typing mistake", async () => {
+it("asks for the next programs, and clears the filters, on request", async () => {
   const user = userEvent.setup()
-  renderCourse()
+  const search = makeSearch({ total: 60, hasMore: true, filtering: true, city: "Harbin" })
+  renderCourse(search)
 
-  await user.type(screen.getByRole("searchbox"), "herbin enginering")
+  await user.click(screen.getByRole("button", { name: /Show more programs \(57 more\)/ }))
+  expect(search.loadMore).toHaveBeenCalled()
 
-  expect(screen.getByText("Civil Engineering")).toBeInTheDocument()
-  expect(screen.queryByText("Clinical Medicine")).not.toBeInTheDocument()
+  await user.click(screen.getByRole("button", { name: "Clear filters" }))
+  expect(search.clear).toHaveBeenCalled()
+})
+
+it("says so when a misspelled search was corrected, and when nothing matches", () => {
+  const { unmount } = renderCourse(makeSearch({ suggestion: { original: "herbin", query: "harbin" }, search: "herbin", filtering: true }))
+  expect(screen.getByText(/Showing results for/)).toBeInTheDocument()
+  unmount()
+
+  renderCourse(makeSearch({ programs: [], total: 0, search: "zzz", filtering: true }))
+  expect(screen.getByText(/No programs match your search/)).toBeInTheDocument()
+})
+
+it("lets you try again when the programs could not be loaded", async () => {
+  const user = userEvent.setup()
+  const search = makeSearch({ programs: [], total: 0, failed: true })
+  renderCourse(search)
+
+  await user.click(screen.getByRole("button", { name: "Try again" }))
+  expect(search.retry).toHaveBeenCalled()
 })
 
 it("shows what to upload for each document and lists optional ones apart, without needing them", () => {
