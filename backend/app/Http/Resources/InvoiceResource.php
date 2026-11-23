@@ -22,6 +22,13 @@ class InvoiceResource extends JsonResource
             'party_type' => $this->party_type,
             'party_id' => $this->party_id,
             'party_name' => $this->when(isset($this->party_name), $this->party_name ?? null),
+            // Who an invoice for someone outside the portal is billed to.
+            'bill_to' => $this->when($this->party_type === 'external', fn () => [
+                'name' => $this->bill_to_name,
+                'email' => $this->bill_to_email,
+                'phone' => $this->bill_to_phone,
+                'address' => $this->bill_to_address,
+            ]),
             'application' => $this->whenLoaded('application', fn () => $this->application ? [
                 'id' => $this->application->id,
                 'application_code' => $this->application->application_code,

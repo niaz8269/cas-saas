@@ -55,6 +55,12 @@ export function PayToDetails({ account, reference }: { account: PayToAccount; re
           </div>
         ))}
       </dl>
+      {account.qr_code_url && (
+        <figure className="mt-3">
+          <img src={account.qr_code_url} alt={t("payTo.qrAlt", { defaultValue: "Payment QR code" })} className="size-36 rounded-md border bg-white object-contain p-1.5" />
+          <figcaption className="mt-1 text-xs text-muted-foreground">{t("payTo.scanToPay", { defaultValue: "Scan to pay" })}</figcaption>
+        </figure>
+      )}
       {account.instructions && <p className="mt-2 text-sm whitespace-pre-line">{account.instructions}</p>}
       <p className="mt-2 text-xs text-muted-foreground">{t("fee.quoteReference", { reference })}</p>
     </div>

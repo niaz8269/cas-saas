@@ -32,20 +32,24 @@ export interface BankAccount {
   bank_address: string | null
   currency: string | null
   instructions: string | null
+  /** A payment QR code (Alipay, WeChat Pay, a bank's own), shown next to the account details. */
+  qr_code_url: string | null
   is_active: boolean
   /** Used for invoices the system raises itself (the application fee). */
   is_default: boolean
   sort_order: number
 }
 
-export type BankAccountInput = Partial<Omit<BankAccount, "id">>
+export type BankAccountInput = Partial<Omit<BankAccount, "id" | "qr_code_url">>
 
 export interface InvoiceItemData {
   id: number
   bank_account_id?: number | null
   bank_account?: BankAccount | null
   invoice_no: string
-  party_type: "student" | "agent" | "university"
+  party_type: "student" | "agent" | "university" | "external"
+  /** Who an invoice for someone outside the portal is billed to. */
+  bill_to?: { name: string | null; email: string | null; phone: string | null; address: string | null }
   party_id: number
   party_name?: string | null
   application?: { id: number; application_code: string; student?: { id: number; full_name: string } | null } | null
@@ -191,7 +195,12 @@ export interface NewInvoiceItem {
 
 export interface CreateInvoicePayload {
   party_type: string
-  party_id: number
+  /** Not sent for an "external" invoice, which has no record behind it. */
+  party_id?: number
+  bill_to_name?: string
+  bill_to_email?: string | null
+  bill_to_phone?: string | null
+  bill_to_address?: string | null
   application_id?: number | null
   currency: string
   status?: string
@@ -211,6 +220,17 @@ export const createBankAccount = (payload: BankAccountInput) =>
 
 export const updateBankAccount = (id: number, payload: BankAccountInput) =>
   api<{ data: BankAccount }>(`/bank-accounts/${id}`, { method: "PATCH", body: JSON.stringify(payload) })
+
+/** Add or replace the account's payment QR code (kept exactly as uploaded, so it still scans). */
+export const uploadBankAccountQr = (id: number, file: File) => {
+  const form = new FormData()
+  form.append("image", file)
+
+  return api<{ data: BankAccount }>(`/bank-accounts/${id}/qr-code`, { method: "POST", body: form })
+}
+
+export const removeBankAccountQr = (id: number) =>
+  api<{ data: BankAccount }>(`/bank-accounts/${id}/qr-code`, { method: "DELETE" })
 
 export const deleteBankAccount = (id: number) =>
   api<{ message: string }>(`/bank-accounts/${id}`, { method: "DELETE" })

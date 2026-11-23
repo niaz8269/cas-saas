@@ -11,10 +11,11 @@ class InvoiceService
 {
     /**
      * @param  list<array{description: string, qty?: float|int, unit_price: float|int, fee_type?: string|null}>  $items
+     * @param  array{name?: ?string, email?: ?string, phone?: ?string, address?: ?string}  $billTo  who an 'external' invoice is billed to
      */
     public function create(
         string $partyType,
-        int $partyId,
+        ?int $partyId,
         ?int $applicationId,
         string $currency,
         array $items,
@@ -22,14 +23,20 @@ class InvoiceService
         string $status = 'issued',
         int $dueDays = 30,
         ?int $bankAccountId = null,
+        array $billTo = [],
     ): Invoice {
-        return DB::transaction(function () use ($partyType, $partyId, $applicationId, $currency, $items, $actor, $status, $dueDays, $bankAccountId) {
+        return DB::transaction(function () use ($partyType, $partyId, $applicationId, $currency, $items, $actor, $status, $dueDays, $bankAccountId, $billTo) {
             $subtotal = collect($items)->sum(fn ($item) => ($item['qty'] ?? 1) * $item['unit_price']);
 
             $invoice = Invoice::create([
                 'invoice_no' => $this->nextNumber('INV', Invoice::class, 'invoice_no'),
                 'party_type' => $partyType,
                 'party_id' => $partyId,
+                // Only an invoice for someone outside the portal carries its own bill-to details.
+                'bill_to_name' => $partyType === 'external' ? ($billTo['name'] ?? null) : null,
+                'bill_to_email' => $partyType === 'external' ? ($billTo['email'] ?? null) : null,
+                'bill_to_phone' => $partyType === 'external' ? ($billTo['phone'] ?? null) : null,
+                'bill_to_address' => $partyType === 'external' ? ($billTo['address'] ?? null) : null,
                 'application_id' => $applicationId,
                 'bank_account_id' => $bankAccountId,
                 'currency' => $currency,

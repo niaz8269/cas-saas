@@ -110,3 +110,59 @@ it('uses the post-scholarship amounts when the application has a scholarship', f
         ->and($lines->firstWhere('fee_type', 'hostel'))->toBeNull()                 // hostel_after 0 → omitted
         ->and($lines->firstWhere('fee_type', 'service_charge')['unit_price'])->toEqual(800);
 });
+
+// ── Invoices for people who are not in the portal ───────────────────────────
+
+it('creates an invoice for someone outside the portal, billed by name', function () {
+    actingAsStaffWith(INVOICE_FINANCE_PERMS);
+
+    $response = $this->postJson('/api/v1/invoices', [
+        'party_type' => 'external',
+        'bill_to_name' => 'Ali Raza',
+        'bill_to_email' => 'ali@example.com',
+        'bill_to_phone' => '+92 300 0000000',
+        'currency' => 'CNY',
+        'items' => [['description' => 'Application service', 'unit_price' => 800]],
+    ])->assertCreated()
+        ->assertJsonPath('data.party_type', 'external')
+        ->assertJsonPath('data.party_id', null)
+        ->assertJsonPath('data.party_name', 'Ali Raza')
+        ->assertJsonPath('data.bill_to.email', 'ali@example.com')
+        ->assertJsonPath('data.total', '800.00');
+
+    $invoice = Invoice::findOrFail($response->json('data.id'));
+    expect($invoice->party_id)->toBeNull()->and($invoice->bill_to_name)->toBe('Ali Raza');
+
+    // It reads back, lists, and takes a payment like any other invoice.
+    $this->getJson("/api/v1/invoices/{$invoice->id}")->assertOk()->assertJsonPath('data.party_name', 'Ali Raza');
+    $this->getJson('/api/v1/invoices')->assertOk()->assertJsonPath('data.0.party_name', 'Ali Raza');
+    $this->postJson("/api/v1/invoices/{$invoice->id}/payments", ['amount' => 800])->assertOk();
+    expect($invoice->refresh()->status)->toBe('paid');
+});
+
+it('needs a name for an outside invoice, and never links it to an application', function () {
+    actingAsStaffWith(INVOICE_FINANCE_PERMS);
+    $items = [['description' => 'Service', 'unit_price' => 100]];
+
+    $this->postJson('/api/v1/invoices', ['party_type' => 'external', 'currency' => 'CNY', 'items' => $items])
+        ->assertStatus(422)->assertJsonValidationErrors(['bill_to_name']);
+    $this->postJson('/api/v1/invoices', ['party_type' => 'external', 'bill_to_name' => 'Ali', 'bill_to_email' => 'nope', 'currency' => 'CNY', 'items' => $items])
+        ->assertStatus(422)->assertJsonValidationErrors(['bill_to_email']);
+    $this->postJson('/api/v1/invoices', ['party_type' => 'external', 'bill_to_name' => 'Ali', 'application_id' => Application::factory()->create()->id, 'currency' => 'CNY', 'items' => $items])
+        ->assertStatus(422)->assertJsonValidationErrors(['application_id']);
+
+    // A portal party still needs its record.
+    $this->postJson('/api/v1/invoices', ['party_type' => 'student', 'currency' => 'CNY', 'items' => $items])
+        ->assertStatus(422)->assertJsonValidationErrors(['party_id']);
+});
+
+it('keeps an outside invoice away from every student', function () {
+    actingAsStaffWith(INVOICE_FINANCE_PERMS);
+    $this->postJson('/api/v1/invoices', [
+        'party_type' => 'external', 'bill_to_name' => 'Ali Raza', 'currency' => 'CNY',
+        'items' => [['description' => 'Service', 'unit_price' => 100]],
+    ])->assertCreated();
+
+    actingAsStudentPortal();
+    $this->getJson('/api/v1/student/invoices')->assertOk()->assertJsonCount(0, 'data');
+});

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\BankAccount;
+use App\Services\Media\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,6 +28,7 @@ class BankAccountResource extends JsonResource
             'bank_address' => $this->bank_address,
             'currency' => $this->currency,
             'instructions' => $this->instructions,
+            'qr_code_url' => app(ImageService::class)->url($this->qr_code_path),
             'is_active' => $this->is_active,
             'is_default' => $this->is_default,
             'sort_order' => $this->sort_order,

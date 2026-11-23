@@ -456,6 +456,10 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:finance.manage.global,staff');
         Route::delete('bank-accounts/{bankAccount}', [BankAccountController::class, 'destroy'])
             ->middleware('permission:finance.manage.global,staff');
+        Route::post('bank-accounts/{bankAccount}/qr-code', [BankAccountController::class, 'uploadQrCode'])
+            ->middleware('permission:finance.manage.global,staff');
+        Route::delete('bank-accounts/{bankAccount}/qr-code', [BankAccountController::class, 'destroyQrCode'])
+            ->middleware('permission:finance.manage.global,staff');
         Route::post('invoices/{invoice}/void', [InvoiceController::class, 'void']);
         Route::post('invoices/{invoice}/refunds', [InvoiceController::class, 'refund']);
         Route::get('commissions', [CommissionController::class, 'index']);

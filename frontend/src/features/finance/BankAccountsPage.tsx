@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ArrowLeft, Landmark, Pencil, Plus, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 
 import { Badge } from "@/components/ui/badge"
@@ -21,7 +21,9 @@ import {
   createBankAccount,
   deleteBankAccount,
   listBankAccounts,
+  removeBankAccountQr,
   updateBankAccount,
+  uploadBankAccountQr,
   type BankAccount,
   type BankAccountInput,
 } from "@/features/finance/api"
@@ -67,6 +69,11 @@ export default function BankAccountsPage() {
   const [form, setForm] = useState<Form>(EMPTY)
   const [removing, setRemoving] = useState<BankAccount | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // The payment QR code: a newly chosen picture, or the wish to drop the one the account has.
+  const [qrFile, setQrFile] = useState<File | null>(null)
+  const [removeQr, setRemoveQr] = useState(false)
+  const qrPreview = useMemo(() => (qrFile ? URL.createObjectURL(qrFile) : null), [qrFile])
+  useEffect(() => () => { if (qrPreview) URL.revokeObjectURL(qrPreview) }, [qrPreview])
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["bank-accounts", "all"],
@@ -78,12 +85,20 @@ export default function BankAccountsPage() {
     setEditing(null)
     setRemoving(null)
     setError(null)
+    setQrFile(null)
+    setRemoveQr(false)
   }
   const fail = (e: unknown) => setError(e instanceof ApiError ? e.message : "Something went wrong.")
 
   const save = useMutation({
-    mutationFn: () =>
-      editing === "new" ? createBankAccount(toPayload(form)) : updateBankAccount((editing as BankAccount).id, toPayload(form)),
+    mutationFn: async () => {
+      const saved = editing === "new"
+        ? await createBankAccount(toPayload(form))
+        : await updateBankAccount((editing as BankAccount).id, toPayload(form))
+
+      if (qrFile) await uploadBankAccountQr(saved.data.id, qrFile)
+      else if (removeQr && editing !== "new") await removeBankAccountQr(saved.data.id)
+    },
     onSuccess: done,
     onError: fail,
   })
@@ -103,10 +118,25 @@ export default function BankAccountsPage() {
   const open = (target: BankAccount | "new") => {
     setError(null)
     setForm(target === "new" ? EMPTY : toForm(target))
+    setQrFile(null)
+    setRemoveQr(false)
     setEditing(target)
   }
 
   const set = (patch: Partial<Form>) => setForm((f) => ({ ...f, ...patch }))
+  const currentQr = editing && editing !== "new" ? editing.qr_code_url : null
+  const shownQr = qrPreview ?? (removeQr ? null : currentQr)
+  const chooseQr = (file: File | undefined) => {
+    if (!file) return
+    if (file.size > 3 * 1024 * 1024) {
+      setError("The QR code picture must be 3 MB or smaller.")
+
+      return
+    }
+    setError(null)
+    setRemoveQr(false)
+    setQrFile(file)
+  }
   const canSave = form.label.trim() && form.bank_name.trim() && form.account_name.trim() && form.account_number.trim()
   const accounts = data?.data ?? []
 
@@ -169,6 +199,7 @@ export default function BankAccountsPage() {
               {a.swift && (<><dt className="text-muted-foreground">SWIFT / BIC</dt><dd className="font-mono">{a.swift}</dd></>)}
               {a.bank_address && (<><dt className="text-muted-foreground">Bank address</dt><dd>{a.bank_address}</dd></>)}
             </dl>
+            {a.qr_code_url && <img src={a.qr_code_url} alt={`Payment QR code for ${a.label}`} className="mt-3 size-24 rounded-md border bg-white object-contain p-1" />}
             {a.instructions && <p className="mt-2 text-sm whitespace-pre-line text-muted-foreground">{a.instructions}</p>}
 
             {canManage && (
@@ -214,6 +245,27 @@ export default function BankAccountsPage() {
                 placeholder="Reference format, remittance notes…"
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ba-qr">QR code (optional)</Label>
+              {shownQr && (
+                <div className="flex items-center gap-3">
+                  <img src={shownQr} alt="Payment QR code" className="size-24 rounded-md border bg-white object-contain p-1" />
+                  <Button type="button" size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => { setQrFile(null); setRemoveQr(true) }}>
+                    Remove QR code
+                  </Button>
+                </div>
+              )}
+              <input
+                id="ba-qr"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={(e) => { chooseQr(e.target.files?.[0]); e.target.value = "" }}
+                className="block w-full text-sm file:mr-3 file:rounded-md file:border file:bg-background file:px-3 file:py-1.5 file:text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                Alipay, WeChat Pay or the bank's own QR code. PNG, JPG or WebP, up to 3 MB. Students see it next to the account details.
+              </p>
             </div>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={form.is_active} onChange={(e) => set({ is_active: e.target.checked })} />

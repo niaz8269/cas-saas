@@ -103,3 +103,32 @@ it("sends the chosen account with the invoice", async () => {
   await waitFor(() => expect(created.body).toBeDefined())
   expect(created.body).toMatchObject({ party_type: "student", party_id: 5, currency: "CNY", status: "issued", bank_account_id: 1 })
 })
+
+it("creates an invoice for someone outside the portal, billed by name with no application", async () => {
+  const user = userEvent.setup()
+  const created: { body?: unknown } = {}
+  stub(created)
+
+  renderWithProviders(<NewInvoiceDialog open onOpenChange={() => {}} />)
+
+  await user.click(await screen.findByRole("tab", { name: "Someone not in the portal" }))
+  expect(screen.queryByLabelText("Search applications")).not.toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Create & issue" })).toBeDisabled()
+
+  await user.type(screen.getByLabelText("Name of the person billed"), "Ali Raza")
+  await user.type(screen.getByLabelText("Phone of the person billed"), "+92 300 0000000")
+  await user.type(screen.getByLabelText("Description for line 1"), "Application service")
+  const price = screen.getByLabelText("Unit price for line 1")
+  await user.clear(price)
+  await user.type(price, "800")
+  await user.selectOptions(await screen.findByLabelText("Bank account for this invoice"), "1")
+  await user.click(screen.getByRole("button", { name: "Create & issue" }))
+
+  await waitFor(() => expect(created.body).toBeDefined())
+  expect(created.body).toMatchObject({
+    party_type: "external", bill_to_name: "Ali Raza", bill_to_phone: "+92 300 0000000", bill_to_email: null, bank_account_id: 1,
+    items: [{ description: "Application service", unit_price: 800 }],
+  })
+  expect(created.body).not.toHaveProperty("party_id")
+  expect(created.body).not.toHaveProperty("application_id")
+})

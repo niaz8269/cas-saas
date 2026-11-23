@@ -36,8 +36,72 @@ class ImageService
         }
 
         $binary = (string) $image->toWebp(self::QUALITY);
-        $key = trim($folder, '/').'/'.Str::uuid()->toString().'.webp';
 
+        return $this->put($binary, trim($folder, '/').'/'.Str::uuid()->toString().'.webp');
+    }
+
+    /**
+     * Store an uploaded PNG, JPG or WebP exactly as it was sent. Used for pictures that must stay pixel-exact, such
+     * as a payment QR code that has to keep scanning. The caller validates that it is an image.
+     *
+     * @return array{path: string, url: string|null}
+     */
+    public function storeOriginal(UploadedFile $file, string $folder): array
+    {
+        // The real picture type, read from the bytes: the file name and the browser's claim are not trusted.
+        $extension = match (@getimagesize($file->getRealPath())[2] ?? null) {
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_WEBP => 'webp',
+            IMAGETYPE_JPEG => 'jpg',
+            default => throw new \InvalidArgumentException('Not a PNG, JPG or WebP picture.'),
+        };
+
+        return $this->put((string) File::get($file->getRealPath()), trim($folder, '/').'/'.Str::uuid()->toString().'.'.$extension);
+    }
+
+    /** Remove a stored image. External URLs and the site's own static files are never touched. */
+    public function delete(?string $path): void
+    {
+        if ($path === null || $path === '' || Str::startsWith($path, ['http://', 'https://'])) {
+            return;
+        }
+
+        if (Str::startsWith($path, '/uploads/')) {
+            File::delete(rtrim((string) config('media.public_path'), '/').$path);
+
+            return;
+        }
+
+        if (! Str::startsWith($path, '/')) {
+            Storage::disk(self::DISK)->delete($path);
+        }
+    }
+
+    /** The bytes of a stored image, for embedding in a PDF. Null when it cannot be read. */
+    public function contents(?string $path): ?string
+    {
+        if ($path === null || $path === '') {
+            return null;
+        }
+
+        try {
+            if (Str::startsWith($path, '/uploads/')) {
+                $file = rtrim((string) config('media.public_path'), '/').$path;
+
+                return is_file($file) ? (string) File::get($file) : null;
+            }
+
+            return Str::startsWith($path, ['http://', 'https://', '/']) ? null : Storage::disk(self::DISK)->get($path);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * @return array{path: string, url: string|null}
+     */
+    private function put(string $binary, string $key): array
+    {
         // No bucket: write into the web root and store a site-relative path, which
         // url() passes straight through like any other public asset.
         if (config('media.images_store') === 'public_path') {

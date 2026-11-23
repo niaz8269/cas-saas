@@ -153,8 +153,15 @@
         <table class="meta">
             <tr>
                 <td>
-                    <div class="lbl">Billed to ({{ $invoice->party_type }})</div>
+                    <div class="lbl">Billed to@if ($invoice->party_type !== 'external') ({{ $invoice->party_type }})@endif</div>
                     <div class="party">{{ $partyName ?? '—' }}</div>
+                    @if ($invoice->party_type === 'external')
+                        <div style="margin-top: 4px; color: #64748B;">
+                            @if ($invoice->bill_to_email){{ $invoice->bill_to_email }}<br>@endif
+                            @if ($invoice->bill_to_phone){{ $invoice->bill_to_phone }}<br>@endif
+                            @if ($invoice->bill_to_address){{ $invoice->bill_to_address }}@endif
+                        </div>
+                    @endif
                     @if ($invoice->application)
                         <div style="margin-top: 4px; color: #64748B;">
                             Application {{ $invoice->application->application_code }}

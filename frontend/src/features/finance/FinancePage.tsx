@@ -211,7 +211,7 @@ export default function FinancePage() {
                 <TableCell className="font-mono text-xs text-muted-foreground">{invoice.invoice_no}</TableCell>
                 <TableCell>
                   <p className="font-medium">{invoice.party_name ?? "—"}</p>
-                  <p className="text-xs text-muted-foreground capitalize">{invoice.party_type}</p>
+                  <p className="text-xs text-muted-foreground capitalize">{invoice.party_type === "external" ? "Not in portal" : invoice.party_type}</p>
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {invoice.application?.application_code ?? "—"}
