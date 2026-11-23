@@ -16,11 +16,11 @@ Regenerate the two CSVs any time with `php artisan cas:audit-content` (they are 
 | City photos | usable | 41 | CC0 / public domain. |
 | Campus photos | attribution | 222 | As above. |
 | Campus photos | usable | 18 | CC0 / public domain. |
-| Campus photos | permission | 2 | Licence could not be confirmed (`/photos/a0adae278cb187.webp`, `/photos/2a4fe872e9c90a.webp`). Kept, flagged: confirm the licence or replace. |
-| University logos | permission | all | Each university's own mark, shown only to identify it. Request permission per university; no watermark, no download route. |
-| University emblems | permission | all | Cropped from the logos; same handling. |
-| Home hero (Beijing skyline with fireworks, supplied by the owner 2026-11-06) and default header photo | verify | 2 | Photographer and licence not recorded. Owner to confirm. The previous hero is kept in `frontend/src/assets/archive/`. |
-| Page header photos supplied by the owner on 2026-11-06: Forbidden City roof (default), Chengdu skyline (universities), hands in sand (scholarships), Beijing at night (cities) | verify | 4 | Photographer and licence not recorded. Owner to confirm. |
+| Campus photos | confirmed | 2 | Licence could not be confirmed from the source (`/photos/a0adae278cb187.webp`, `/photos/2a4fe872e9c90a.webp`). Owner confirmed on 2026-11-07 that the use is cleared. |
+| University logos | confirmed | all | Each university's own mark, shown only to identify it. Owner confirmed on 2026-11-07 that permission is in place; no watermark, no download route. |
+| University emblems | confirmed | all | Cropped from the logos; same handling and the same confirmation. |
+| Home hero (Beijing skyline with fireworks, supplied by the owner 2026-11-06) and default header photo | confirmed | 2 | Owner confirmed on 2026-11-07 that the use is cleared. Photographer and licence are still not recorded here. The previous hero is kept in `frontend/src/assets/archive/`. |
+| Page header photos supplied by the owner on 2026-11-06: Forbidden City roof (default), Chengdu skyline (universities), hands in sand (scholarships), Beijing at night (cities) | confirmed | 4 | Owner confirmed on 2026-11-07 that the use is cleared. Photographer and licence are still not recorded here. |
 | Tianjin header photo (programs, pricing, MBBS) | attribution | 1 | Identical to the Wikimedia Commons photo already credited (KangTyngrwey, CC BY-SA 4.0); the credit is kept. |
 | CAS artwork, brand files, WeChat QR | own | - | Created by CAS. |
 
@@ -44,5 +44,11 @@ How images are shown now:
 | Programs, fees, dates, scholarships | Each university's own pages, restated by CAS | rewritten CAS content | Keep |
 | News, blog, site pages | Written by CAS | original CAS | Keep |
 
-Open items: rewrite the 304 Wikipedia-derived overviews; confirm the hero image sources; request
-logo permissions; resolve the 2 photos with an unconfirmed licence.
+Status (2026-11-07): the 304 Wikipedia-derived overviews and the introductions have been rewritten
+in CAS's voice. The owner has confirmed that the owner-supplied photos, the 2 photos with an
+unconfirmed source licence, and the university logos and emblems may be used. This is the owner's
+statement; the underlying licence or permission documents are not stored in this repository, so
+keep them where you can produce them if a rights holder ever asks.
+
+Open items: none on media. If a rights holder objects, remove the item and re-run
+`php artisan cas:audit-content`.
