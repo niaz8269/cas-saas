@@ -329,6 +329,12 @@ export default function StudentApplyWizard() {
         />
       )}
 
+      {draft && draft.status !== "draft" && (
+        <p role="status" className="rounded-lg bg-subtle px-3 py-2 text-sm text-muted-foreground">
+          {t("wizard.documents.withCas", { defaultValue: "This application is with CAS. You can add, replace or remove documents at any time until it is accepted." })}
+        </p>
+      )}
+
       {step === 3 && draft && (
         <DocumentsStep
           draft={draft}
@@ -373,7 +379,12 @@ export default function StudentApplyWizard() {
             {draft ? t("wizard.buttons.continue") : t("wizard.buttons.saveAddDocuments")}
           </Button>
         )}
-        {step === 3 && (
+        {step === 3 && draft && draft.status !== "draft" && (
+          <Button className="h-11 w-full" onClick={() => navigate("/portal/student/applications", { replace: true })}>
+            {t("wizard.buttons.saveAndClose", { defaultValue: "Save and close" })}
+          </Button>
+        )}
+        {step === 3 && !(draft && draft.status !== "draft") && (
           <Button className="h-11 w-full" onClick={() => setStep(4)}>
             {t("wizard.buttons.reviewApplication")}
           </Button>

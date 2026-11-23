@@ -44,19 +44,24 @@ it('resolves the required documents for a program for an agent', function () {
     $this->getJson('/api/v1/agent/applications/required-documents?program_id=999999')->assertStatus(422);
 });
 
-it('presigns a document upload only on the agents own draft', function () {
+it('presigns a document upload only on the agents own application, while it is not closed', function () {
     $agent = actingAsAgent();
     $type = DocumentType::firstOrCreate(['name' => 'Passport'], ['category' => 'identity']);
     $body = ['document_type_id' => $type->id, 'file_name' => 'passport.jpg', 'mime' => 'image/jpeg', 'size' => 1000];
 
     $mine = Application::factory()->create(['agent_id' => $agent->id, 'status' => 'draft']);
     $theirs = Application::factory()->create(['agent_id' => Agent::factory()->create()->id, 'status' => 'draft']);
-    $submitted = Application::factory()->create(['agent_id' => $agent->id, 'status' => 'under_review']);
+    $submitted = Application::factory()->create(['agent_id' => $agent->id, 'status' => 'documents_pending']);
+    $accepted = Application::factory()->create(['agent_id' => $agent->id, 'status' => 'accepted']);
+    // Made without an agent of its own, for a student of this partner's.
+    $forMyStudent = Application::factory()->create(['agent_id' => null, 'student_id' => Student::factory()->create(['agent_id' => $agent->id])->id, 'status' => 'under_review']);
 
     $this->postJson("/api/v1/agent/applications/{$mine->id}/documents/presign", $body)
         ->assertOk()->assertJsonStructure(['key', 'url', 'expires_at']);
     $this->postJson("/api/v1/agent/applications/{$theirs->id}/documents/presign", $body)->assertNotFound();
-    $this->postJson("/api/v1/agent/applications/{$submitted->id}/documents/presign", $body)->assertStatus(409);
+    $this->postJson("/api/v1/agent/applications/{$submitted->id}/documents/presign", $body)->assertOk();
+    $this->postJson("/api/v1/agent/applications/{$forMyStudent->id}/documents/presign", $body)->assertOk();
+    $this->postJson("/api/v1/agent/applications/{$accepted->id}/documents/presign", $body)->assertStatus(409);
     $this->postJson("/api/v1/agent/applications/{$mine->id}/documents/presign", [...$body, 'mime' => 'text/html'])->assertStatus(422);
 });
 

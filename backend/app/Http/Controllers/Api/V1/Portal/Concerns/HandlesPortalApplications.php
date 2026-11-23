@@ -12,6 +12,7 @@ use App\Models\Major;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Services\Admissions\ApplicationCatalog;
+use App\Services\Comms\NotificationService;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -182,6 +183,18 @@ trait HandlesPortalApplications
             null, // portal upload — no staff actor
             $request->ip(),
         );
+
+        // After the application has left the draft, the officer handling it hears about each new file.
+        if ($application->status !== 'draft' && $application->assigned_admissions_id !== null) {
+            app(NotificationService::class)->push(
+                $application->assigned_admissions_id,
+                'document.uploaded',
+                'New document uploaded',
+                "{$application->application_code}: the applicant added {$document->type?->name}.",
+                entityType: 'application',
+                entityId: $application->id,
+            );
+        }
 
         return new StudentDocumentResource($document->load('type:id,name,category'));
     }

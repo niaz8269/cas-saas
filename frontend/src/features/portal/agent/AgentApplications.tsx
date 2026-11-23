@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
-import { getAgentApplications, type AgentApplicationRow } from "@/features/portal/api"
+import { APPLICANT_OPEN_STATUSES, getAgentApplications, type AgentApplicationRow } from "@/features/portal/api"
 import ApplicationTrack from "@/features/portal/ApplicationTrack"
 import {
   EmptyState,
@@ -112,9 +112,13 @@ export default function AgentApplications() {
                     <StatusBadge status={a.status} map={APPLICATION_BADGE} />
                   </div>
 
-                  {a.status === "draft" && a.program && (
-                    <Button asChild size="sm" className="self-start">
-                      <Link to={`/portal/agent/apply?draft=${a.id}`}>{t("agentPortal.applications.continue", { defaultValue: "Continue this application" })}</Link>
+                  {APPLICANT_OPEN_STATUSES.includes(a.status) && a.program && (
+                    <Button asChild size="sm" className="self-start" variant={a.status === "draft" ? "default" : "secondary"}>
+                      <Link to={`/portal/agent/apply?draft=${a.id}`}>
+                        {a.status === "draft"
+                          ? t("agentPortal.applications.continue", { defaultValue: "Continue this application" })
+                          : t("agentPortal.applications.open", { defaultValue: "Open application and add documents" })}
+                      </Link>
                     </Button>
                   )}
 

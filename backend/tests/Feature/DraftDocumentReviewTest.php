@@ -4,7 +4,9 @@ use App\Models\Application;
 use App\Models\Document;
 use App\Models\DocumentAccessLog;
 use App\Models\DocumentType;
+use App\Models\Notification;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
@@ -81,10 +83,32 @@ it('does the same for a partner applying on behalf of their own student', functi
     expect(Document::count())->toBe(1);
 });
 
-it('does not let an applicant change a draft that was already submitted', function () {
+it('lets an applicant change documents after submitting, until the application is accepted', function () {
     $student = actingAsStudentPortal();
-    [$application, , $documents] = draftWithFiles($student->id, 1);
-    $application->forceFill(['status' => 'under_review'])->save();
+    [$application, , $documents] = draftWithFiles($student->id, 2);
 
-    $this->deleteJson("/api/v1/student/applications/{$application->id}/documents/{$documents[0]->id}")->assertStatus(409);
+    $application->forceFill(['status' => 'documents_pending'])->save();
+    $this->deleteJson("/api/v1/student/applications/{$application->id}/documents/{$documents[0]->id}")->assertOk();
+
+    $application->forceFill(['status' => 'accepted'])->save();
+    $this->deleteJson("/api/v1/student/applications/{$application->id}/documents/{$documents[1]->id}")->assertStatus(409);
+});
+
+it('tells the officer when an applicant adds a document after submitting, but not while it is still a draft', function () {
+    $student = actingAsStudentPortal();
+    $officer = User::factory()->create();
+    [$application, $type] = draftWithFiles($student->id, 0);
+    $application->forceFill(['assigned_admissions_id' => $officer->id])->save();
+    $upload = fn (string $name) => $this->postJson("/api/v1/student/applications/{$application->id}/documents", [
+        'document_type_id' => $type->id,
+        'key' => "students/{$student->id}/applications/{$application->id}/{$name}",
+        'file_name' => $name, 'mime' => 'application/pdf', 'size' => 1000,
+    ])->assertCreated();
+
+    $upload('first.pdf');
+    expect(Notification::where('user_id', $officer->id)->where('type', 'document.uploaded')->count())->toBe(0);
+
+    $application->forceFill(['status' => 'documents_pending'])->save();
+    $upload('second.pdf');
+    expect(Notification::where('user_id', $officer->id)->where('type', 'document.uploaded')->count())->toBe(1);
 });

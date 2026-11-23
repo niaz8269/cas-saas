@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
-import { getStudentApplications } from "@/features/portal/api"
+import { APPLICANT_OPEN_STATUSES, getStudentApplications } from "@/features/portal/api"
 import ApplicationTrack from "@/features/portal/ApplicationTrack"
 import {
   EmptyState,
@@ -60,9 +60,13 @@ export default function StudentApplications() {
               </div>
             )}
 
-            {app.status === "draft" && app.program && (
+            {APPLICANT_OPEN_STATUSES.includes(app.status) && app.program && (
               <Button asChild size="sm" className="mt-3 self-start">
-                <Link to={`/portal/student/apply?draft=${app.id}`}>{t("studentPortal.applications.continue", { defaultValue: "Continue this application" })}</Link>
+                <Link to={`/portal/student/apply?draft=${app.id}`}>
+                  {app.status === "draft"
+                    ? t("studentPortal.applications.continue", { defaultValue: "Continue this application" })
+                    : t("studentPortal.applications.open", { defaultValue: "Open application and add documents" })}
+                </Link>
               </Button>
             )}
 
