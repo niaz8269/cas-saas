@@ -242,3 +242,15 @@ it('refuses exports to staff without access', function () {
     $this->get('/api/v1/invoices/export')->assertForbidden();
     $this->get('/api/v1/leads/export')->assertForbidden();
 });
+
+it('names the student when a partner opens an application that is already with CAS', function () {
+    $agent = actingAsAgent();
+    $student = Student::factory()->create(['agent_id' => $agent->id, 'first_name' => 'Ali', 'last_name' => 'Raza']);
+    $program = Program::factory()->create(['university_id' => University::factory()->create(['status' => 'active'])->id, 'level' => 'bachelor', 'status' => 'active']);
+    // Made without an agent of its own, so the partner reaches it through their student.
+    $application = Application::factory()->create(['agent_id' => null, 'student_id' => $student->id, 'program_id' => $program->id, 'status' => 'documents_pending']);
+
+    $this->getJson("/api/v1/agent/applications/{$application->id}/draft")
+        ->assertOk()
+        ->assertJsonPath('data.student.full_name', 'Ali Raza');
+});
