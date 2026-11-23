@@ -59,6 +59,10 @@ class ApplicationCatalog
                 'university.country:id,name',
                 'intakes' => fn ($q) => $q->where('status', 'open')->orderBy('application_deadline'),
             ])
+            // Programs CAS has confirmed come before the ones only found on the official registry; within those,
+            // English-taught first, then mixed, then Chinese-taught, then the ones with no language recorded.
+            ->orderBy('registry_only')
+            ->orderByRaw("case when teaching_language = 'English' then 0 when teaching_language like '%English%' then 1 when teaching_language is null then 3 else 2 end")
             ->orderByRaw('tuition_fee is null, tuition_fee')
             ->orderBy('name')
             ->orderBy('id')

@@ -1655,7 +1655,8 @@
       "showingFor": "没有“{{original}}”的专业。正在显示“{{query}}”的结果。",
       "showMore": "显示更多专业（还有 {{left}} 个）",
       "loadingMore": "加载中…",
-      "tryAgain": "重试"
+      "tryAgain": "重试",
+      "languageNotConfirmed": "教学语言未确认"
     },
     "review": {
       "summary": "摘要",

@@ -1819,7 +1819,8 @@
       "showingFor": "No programs for “{{original}}”. Showing results for “{{query}}”.",
       "showMore": "Show more programs ({{left}} more)",
       "loadingMore": "Loading…",
-      "tryAgain": "Try again"
+      "tryAgain": "Try again",
+      "languageNotConfirmed": "Language not confirmed"
     },
     "review": {
       "summary": "Summary",

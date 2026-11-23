@@ -1655,7 +1655,8 @@
       "showingFor": "Aucun programme pour « {{original}} ». Résultats pour « {{query}} ».",
       "showMore": "Afficher plus de programmes ({{left}} de plus)",
       "loadingMore": "Chargement…",
-      "tryAgain": "Réessayer"
+      "tryAgain": "Réessayer",
+      "languageNotConfirmed": "Langue non confirmée"
     },
     "review": {
       "summary": "Résumé",

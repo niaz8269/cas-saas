@@ -388,6 +388,8 @@ export interface WizardProgram {
   name: string
   level: string
   teaching_language: string | null
+  /** Only found on the official registry: CAS has not confirmed this program or its language yet. */
+  registry_only?: boolean
   duration_months: number | null
   tuition_fee: string | number | null
   hostel_fee: string | number | null

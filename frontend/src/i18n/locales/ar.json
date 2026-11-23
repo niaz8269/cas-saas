@@ -1679,7 +1679,8 @@
       "showingFor": "لا توجد برامج لـ «{{original}}». تعرض نتائج «{{query}}».",
       "showMore": "عرض المزيد من البرامج ({{left}} أخرى)",
       "loadingMore": "جارٍ التحميل…",
-      "tryAgain": "حاول مرة أخرى"
+      "tryAgain": "حاول مرة أخرى",
+      "languageNotConfirmed": "لغة الدراسة غير مؤكدة"
     },
     "review": {
       "summary": "الملخّص",

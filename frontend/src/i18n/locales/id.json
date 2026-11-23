@@ -1655,7 +1655,8 @@
       "showingFor": "Tidak ada program untuk “{{original}}”. Menampilkan hasil untuk “{{query}}”.",
       "showMore": "Tampilkan program lainnya ({{left}} lagi)",
       "loadingMore": "Memuat…",
-      "tryAgain": "Coba lagi"
+      "tryAgain": "Coba lagi",
+      "languageNotConfirmed": "Bahasa belum dikonfirmasi"
     },
     "review": {
       "summary": "Ringkasan",

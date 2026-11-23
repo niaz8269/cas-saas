@@ -24,6 +24,8 @@ class ApplicantProgramResource extends JsonResource
             'name' => $this->name,
             'level' => $this->level,
             'teaching_language' => $this->teaching_language,
+            // Only found on the official registry: CAS has not confirmed this program or its language yet.
+            'registry_only' => (bool) $this->registry_only,
             'duration_months' => $this->duration_months,
             'tuition_fee' => $this->tuition_fee,
             'hostel_fee' => $this->hostel_fee,

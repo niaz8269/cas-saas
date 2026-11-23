@@ -191,6 +191,26 @@ it('pages the programs, searches by program, university or city, and filters, so
     $this->getJson($base.'&per_page=500')->assertUnprocessable();
 });
 
+it('lists confirmed programs first and English-taught ones before the rest, never calling an unknown language English', function () {
+    actingAsStudentPortal();
+    $uni = University::factory()->create(['status' => 'active']);
+    $make = fn (string $name, ?string $language, bool $registry, int $fee) => Program::factory()->create([
+        'university_id' => $uni->id, 'name' => $name, 'level' => 'bachelor', 'status' => 'active',
+        'teaching_language' => $language, 'registry_only' => $registry, 'tuition_fee' => $fee,
+    ]);
+    $make('Registry Only', null, true, 1000);
+    $make('Chinese Taught', 'Chinese', false, 1000);
+    $make('No Language', null, false, 1000);
+    $make('Both Languages', 'Chinese and English', false, 9000);
+    $make('English Taught', 'English', false, 9000);
+
+    $response = $this->getJson('/api/v1/student/applications/availability?degree=bs&funding=self')->assertOk();
+
+    expect(collect($response->json('data'))->pluck('name')->all())->toBe(['English Taught', 'Both Languages', 'Chinese Taught', 'No Language', 'Registry Only'])
+        ->and(collect($response->json('data'))->firstWhere('name', 'No Language')['teaching_language'])->toBeNull()
+        ->and(collect($response->json('data'))->firstWhere('name', 'Registry Only')['registry_only'])->toBeTrue();
+});
+
 it('lists only universities with a matching scholarship in the scholarship modes, still paged', function () {
     actingAsStudentPortal();
     $funded = University::factory()->create(['status' => 'active']);
