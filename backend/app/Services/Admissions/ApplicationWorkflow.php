@@ -2,7 +2,6 @@
 
 namespace App\Services\Admissions;
 
-use App\Exceptions\ChecklistIncompleteException;
 use App\Models\Activity;
 use App\Models\Application;
 use App\Models\ApplicationStatusHistory;
@@ -91,14 +90,6 @@ class ApplicationWorkflow
 
         if (! in_array($to, $allowed, true)) {
             throw new ConflictHttpException("Illegal transition: {$from} → {$to}.");
-        }
-
-        if ($to === 'submitted') {
-            $missing = $this->missingChecklist($application);
-
-            if ($missing->isNotEmpty()) {
-                throw new ChecklistIncompleteException($missing->values()->all());
-            }
         }
 
         return DB::transaction(function () use ($application, $from, $to, $actor, $note) {

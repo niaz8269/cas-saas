@@ -73,7 +73,7 @@ it('rejects a scholarship application for a student that is not the agent\'s own
     expect(Application::count())->toBe(0);
 });
 
-it('submits an agent scholarship draft to Admissions once documents are attached', function () {
+it('submits an agent scholarship draft to Admissions without needing any document', function () {
     $agent = actingAsAgent();
     $student = Student::factory()->create(['agent_id' => $agent->id]);
     $gov = Scholarship::factory()->create(['scope' => 'government', 'university_id' => null, 'status' => 'active']);
@@ -85,14 +85,7 @@ it('submits an agent scholarship draft to Admissions once documents are attached
         'level' => 'phd',
     ])->json('data.id');
 
-    $this->postJson("/api/v1/agent/applications/{$id}/submit")->assertStatus(422);
-
-    $this->postJson("/api/v1/agent/applications/{$id}/documents", [
-        'document_type_id' => $passport->id,
-        'key' => "students/{$student->id}/applications/{$id}/passport.jpg",
-        'file_name' => 'passport.jpg', 'mime' => 'image/jpeg', 'size' => 1000,
-    ])->assertCreated();
-
+    // No document is mandatory: the draft goes to Admissions whether or not anything is attached yet.
     $this->postJson("/api/v1/agent/applications/{$id}/submit")
         ->assertOk()
         ->assertJsonPath('data.status', 'under_review');

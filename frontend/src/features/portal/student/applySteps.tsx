@@ -323,8 +323,10 @@ export function DocumentsStep(props: {
     }
   }
 
-  const row = (doc: RequiredDoc, optional?: boolean) => (
-    <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction} optional={optional}
+  const documents = [...draft.required_documents, ...(draft.optional_documents ?? [])]
+
+  const row = (doc: RequiredDoc) => (
+    <DocumentRow key={doc.id} kind={kind} applicationId={draft.id} docTypeId={doc.id} name={doc.name} instruction={doc.instruction}
       files={all.filter((f) => f.document_type_id === doc.id)} onView={setViewing} onRemove={remove}
       onUploaded={(typeId, name, previewUrl) => { props.onUploaded(typeId, name, previewUrl); refresh() }} onError={props.onError} />
   )
@@ -335,16 +337,11 @@ export function DocumentsStep(props: {
         {t("wizard.documents.uploadClear")} <strong>JPG / PDF</strong> {t("wizard.documents.uploadEachDoc")} <strong>{draft.application_code}</strong>.{" "}
         {t("wizard.documents.severalFiles", { defaultValue: "You can add more than one file to each document, and click a file to look at it." })}
       </p>
-      {draft.required_documents.length === 0 && (
+      {/* No document is mandatory, so they are all listed alike: upload what you have. */}
+      {documents.length === 0 && (
         <PortalCard><p className="text-sm text-muted-foreground">{t("wizard.documents.noDocsRequired")}</p></PortalCard>
       )}
-      {draft.required_documents.map((doc) => row(doc))}
-      {(draft.optional_documents?.length ?? 0) > 0 && (
-        <>
-          <p className="pt-2 text-sm font-medium">{t("wizard.documents.optionalTitle", { defaultValue: "Optional, if you have them" })}</p>
-          {draft.optional_documents?.map((doc) => row(doc, true))}
-        </>
-      )}
+      {documents.map((doc) => row(doc))}
       <DocumentPreview kind={kind} applicationId={draft.id} file={viewing} onClose={() => setViewing(null)} />
     </div>
   )
@@ -356,8 +353,6 @@ function DocumentRow(props: {
   docTypeId: number
   name: string
   instruction?: string | null
-  /** Shown with an "Optional" tag; never needed to continue. */
-  optional?: boolean
   files: DraftDocumentFile[]
   onView: (file: DraftDocumentFile) => void
   onRemove: (file: DraftDocumentFile) => void
@@ -401,7 +396,6 @@ function DocumentRow(props: {
           <div className="min-w-0">
             <p className="text-sm font-medium">
               {props.name}
-              {props.optional && <span className="ml-2 rounded-full bg-subtle px-2 py-0.5 text-xs font-normal text-muted-foreground">{t("wizard.documents.optional", { defaultValue: "Optional" })}</span>}
             </p>
             {props.instruction && <p className="text-xs text-muted-foreground">{props.instruction}</p>}
           </div>
@@ -875,7 +869,7 @@ export function ReviewStep({ program, draft, agreed, onAgreed, declaration, prof
       {uploaded && (
         <PortalCard className="space-y-2">
           <SectionTitle>{t("wizard.review.documents")}</SectionTitle>
-          {draft.required_documents.map((doc) => {
+          {[...draft.required_documents, ...(draft.optional_documents ?? [])].map((doc) => {
             const name = uploaded[doc.id]
             const preview = previews?.[doc.id]
 

@@ -172,16 +172,15 @@ it('rejects illegal transitions with 409', function () {
         ->assertJsonPath('code', 'CONFLICT');
 });
 
-it('blocks submission while required documents are missing', function () {
+it('does not hold a submission back for missing documents, but still lists what is missing', function () {
     actingAsStaffWith(ADMISSIONS_PERMS);
     DocumentType::factory()->requiredForApplication()->create(['name' => 'Passport']);
     DocumentType::factory()->requiredForApplication()->create(['name' => 'Transcript']);
     $application = Application::factory()->create(['status' => 'under_review']);
 
     $this->postJson("/api/v1/applications/{$application->id}/transition", ['status' => 'submitted'])
-        ->assertStatus(409)
-        ->assertJsonPath('code', 'CHECKLIST_INCOMPLETE')
-        ->assertJsonCount(2, 'missing');
+        ->assertOk()
+        ->assertJsonPath('data.status', 'submitted');
 });
 
 it('submits once the checklist is covered and stamps submitted_at', function () {
@@ -199,22 +198,6 @@ it('submits once the checklist is covered and stamps submitted_at', function () 
         ->assertJsonPath('data.status', 'submitted');
 
     expect($application->fresh()->submitted_at)->not->toBeNull();
-});
-
-it('rejected documents do not satisfy the checklist', function () {
-    actingAsStaffWith(ADMISSIONS_PERMS);
-    $passport = DocumentType::factory()->requiredForApplication()->create(['name' => 'Passport']);
-    $application = Application::factory()->create(['status' => 'under_review']);
-
-    Document::factory()->for($passport, 'type')->create([
-        'documentable_type' => Application::class,
-        'documentable_id' => $application->id,
-        'status' => 'rejected',
-    ]);
-
-    $this->postJson("/api/v1/applications/{$application->id}/transition", ['status' => 'submitted'])
-        ->assertStatus(409)
-        ->assertJsonPath('code', 'CHECKLIST_INCOMPLETE');
 });
 
 it('records an offer and auto-advances submitted applications', function () {
