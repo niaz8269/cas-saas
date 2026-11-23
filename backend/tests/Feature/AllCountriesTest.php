@@ -10,7 +10,7 @@ use function Pest\Laravel\getJson;
 uses(RefreshDatabase::class);
 
 it('lists every country in the world except Israel and uninhabited territories', function () {
-    // The migration has already run on the test database.
+    $this->seed(CountrySeeder::class);
     $codes = Country::pluck('iso2')->all();
 
     expect(count($codes))->toBeGreaterThanOrEqual(240)
@@ -24,7 +24,7 @@ it('lists every country in the world except Israel and uninhabited territories',
 });
 
 it('keeps the names and codes of the countries that were already there', function () {
-    Country::where('iso2', 'CN')->update(['name' => 'China', 'phone_code' => '+86']);
+    Country::create(['name' => 'China', 'iso2' => 'CN', 'phone_code' => '+86']);
 
     CountrySeeder::addRemaining();
 
@@ -35,6 +35,7 @@ it('keeps the names and codes of the countries that were already there', functio
 });
 
 it('serves the full list, in name order, to the agent sign-up form', function () {
+    $this->seed(CountrySeeder::class);
     $names = collect(getJson('/api/v1/public/countries')->assertOk()->json('data'))->pluck('name');
 
     expect($names->count())->toBeGreaterThanOrEqual(240)
