@@ -8,6 +8,7 @@ use App\Http\Requests\Portal\StudentStoreApplicationRequest;
 use App\Http\Requests\Portal\StudentStoreScholarshipApplicationRequest;
 use App\Models\Application;
 use App\Services\Admissions\ApplicationCatalog;
+use App\Services\Admissions\ApplicationWorkflow;
 use App\Services\Admissions\PortalApplicationService;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
@@ -75,10 +76,10 @@ class StudentApplicationController extends Controller
         ], $application->wasRecentlyCreated ? 201 : 200);
     }
 
-    /** The application must belong to the student and still be a draft. */
+    /** The application must belong to the student and not be closed yet (it stays open until it is accepted). */
     protected function authorizeDraft(Request $request, Application $application): void
     {
         abort_unless($application->student_id === $request->user()->id, 404);
-        abort_unless($application->status === 'draft', 409, 'This application can no longer be edited.');
+        abort_unless(in_array($application->status, ApplicationWorkflow::APPLICANT_EDITABLE, true), 409, 'This application can no longer be edited.');
     }
 }

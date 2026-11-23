@@ -302,6 +302,12 @@ export default function AgentApplyWizard() {
         />
       )}
 
+      {draft && draft.status !== "draft" && (
+        <p role="status" className="rounded-lg bg-subtle px-3 py-2 text-sm text-muted-foreground">
+          {t("wizard.documents.withCas", { defaultValue: "This application is with CAS. You can add, replace or remove documents at any time until it is accepted." })}
+        </p>
+      )}
+
       {step === 4 && draft && (
         <DocumentsStep
           kind="agent"
@@ -340,7 +346,12 @@ export default function AgentApplyWizard() {
             {draft ? t("wizard.buttons.continue") : t("wizard.buttons.saveAddDocuments")}
           </Button>
         )}
-        {step === 4 && (
+        {step === 4 && draft && draft.status !== "draft" && (
+          <Button className="h-11 w-full" onClick={() => navigate("/portal/agent/applications", { replace: true })}>
+            {t("wizard.buttons.saveAndClose", { defaultValue: "Save and close" })}
+          </Button>
+        )}
+        {step === 4 && !(draft && draft.status !== "draft") && (
           <Button className="h-11 w-full" onClick={() => setStep(5)}>
             {t("wizard.buttons.reviewApplication")}
           </Button>

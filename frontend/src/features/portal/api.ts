@@ -518,6 +518,9 @@ export interface CreateApplicationPayload {
   custom_fields?: Record<string, string>
 }
 
+/** An application stays open to its student or partner, for adding documents, until it is accepted. */
+export const APPLICANT_OPEN_STATUSES = ["draft", "under_review", "documents_pending", "submitted", "offer_received", "deferred"]
+
 export interface DraftApplication {
   id: number
   application_code: string

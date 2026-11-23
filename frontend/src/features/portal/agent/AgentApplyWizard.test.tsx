@@ -211,3 +211,28 @@ it("says clearly when the student already has an application for that program", 
   expect(await screen.findByRole("alert")).toHaveTextContent("already has an application for this program (APP-1, under review)")
   sessionStorage.clear()
 })
+
+it("opens an application that is already with CAS on its documents, to add files, without asking to submit again", async () => {
+  const fetchMock = withAgentApi((input) => {
+    if (String(input).includes("/agent/applications/99/draft")) {
+      return Promise.resolve(jsonResponse({
+        data: {
+          id: 99, application_code: "APP-99", status: "documents_pending", student_id: 7, student: { id: 7, full_name: "Ali Raza" },
+          degree: "mbbs", funding: "self", scholarship_id: null, intake_id: null, custom_fields: {}, program: PROGRAM,
+          required_documents: [{ id: 1, name: "Passport", category: "identity", is_sensitive: true }], optional_documents: [],
+        },
+      }))
+    }
+    if (String(input).includes("/agent/applications/99/documents")) return Promise.resolve(jsonResponse({ data: [] }))
+
+    return Promise.resolve(jsonResponse({}))
+  })
+  vi.stubGlobal("fetch", fetchMock)
+
+  renderWithProviders(<AgentApplyWizard />, { route: "/portal/agent/apply?draft=99" })
+
+  expect(await screen.findByText("Passport")).toBeInTheDocument()
+  expect(screen.getByText(/This application is with CAS/)).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Save and close" })).toBeEnabled()
+  expect(screen.queryByRole("button", { name: "Review application" })).not.toBeInTheDocument()
+})

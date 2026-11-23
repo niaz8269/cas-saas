@@ -9,6 +9,7 @@ use App\Http\Requests\Portal\AgentStoreScholarshipApplicationRequest;
 use App\Models\Application;
 use App\Models\Student;
 use App\Services\Admissions\ApplicationCatalog;
+use App\Services\Admissions\ApplicationWorkflow;
 use App\Services\Admissions\PortalApplicationService;
 use App\Services\Documents\DocumentService;
 use App\Services\Finance\FeeScheduleService;
@@ -90,10 +91,19 @@ class AgentApplicationController extends Controller
         ], 201);
     }
 
-    /** The draft must be one the acting agent created (attributed to them). */
+    /**
+     * The application must be the acting agent's: one they created, or one for a student of theirs that has no agent
+     * of its own (the same attribution the commission engine uses). It stays open until it is accepted.
+     */
     protected function authorizeDraft(Request $request, Application $application): void
     {
-        abort_unless($application->agent_id === $request->user()->id, 404);
-        abort_unless($application->status === 'draft', 409, 'This application can no longer be edited.');
+        $agentId = $request->user()->id;
+        $application->loadMissing('student:id,agent_id');
+
+        abort_unless(
+            $application->agent_id === $agentId || ($application->agent_id === null && $application->student?->agent_id === $agentId),
+            404,
+        );
+        abort_unless(in_array($application->status, ApplicationWorkflow::APPLICANT_EDITABLE, true), 409, 'This application can no longer be edited.');
     }
 }

@@ -59,3 +59,21 @@ it("shows a friendly empty state", async () => {
 
   expect(await screen.findByText("No applications yet")).toBeInTheDocument()
 })
+
+it("lets the partner open an application that is with CAS, until it is accepted", async () => {
+  const list = {
+    data: [
+      ROW(1, "APP-1", "Civil Engineering", "Harbin Institute of Technology", "documents_pending", []),
+      ROW(2, "APP-2", "Clinical Medicine", "Harbin Medical University", "offer_received", []),
+      ROW(3, "APP-3", "Physics", "Harbin Normal University", "accepted", []),
+      ROW(4, "APP-4", "Chemistry", "Harbin Normal University", "rejected", []),
+    ],
+    meta: { current_page: 1, last_page: 1, per_page: 25, total: 4, from: 1, to: 4 },
+  }
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(list)))
+  renderWithProviders(<AgentApplications />)
+
+  const links = await screen.findAllByRole("link", { name: "Open application and add documents" })
+
+  expect(links.map((l) => l.getAttribute("href"))).toEqual(["/portal/agent/apply?draft=1", "/portal/agent/apply?draft=2"])
+})

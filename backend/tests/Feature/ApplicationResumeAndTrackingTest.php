@@ -88,7 +88,7 @@ it('gives back everything needed to carry on with a saved draft', function () {
         ->assertJsonStructure(['data' => ['required_documents', 'optional_documents', 'custom_fields', 'intake_id']]);
 });
 
-it('keeps a draft private to its owner and out of reach once submitted', function () {
+it('keeps an application private to its owner, open until it is accepted and closed after', function () {
     actingAsStudentPortal();
     $program = trackProgram();
     $other = Application::factory()->create(['student_id' => Student::factory()->create()->id, 'program_id' => $program->id, 'status' => 'draft']);
@@ -96,8 +96,18 @@ it('keeps a draft private to its owner and out of reach once submitted', functio
     $this->getJson("/api/v1/student/applications/{$other->id}/draft")->assertNotFound();
 
     $mine = $this->postJson('/api/v1/student/applications', trackPayload($program))->json('data.id');
-    Application::findOrFail($mine)->forceFill(['status' => 'under_review'])->save();
-    $this->getJson("/api/v1/student/applications/{$mine}/draft")->assertStatus(409);
+
+    // Submitted, with documents asked for, offered: still open to the applicant.
+    foreach (['under_review', 'documents_pending', 'submitted', 'offer_received'] as $status) {
+        Application::findOrFail($mine)->forceFill(['status' => $status])->save();
+        $this->getJson("/api/v1/student/applications/{$mine}/draft")->assertOk();
+    }
+
+    // Accepted (or rejected, withdrawn): closed.
+    foreach (['accepted', 'rejected', 'withdrawn'] as $status) {
+        Application::findOrFail($mine)->forceFill(['status' => $status])->save();
+        $this->getJson("/api/v1/student/applications/{$mine}/draft")->assertStatus(409);
+    }
 });
 
 it('lets a partner pick a student draft up again and track every application with its history', function () {

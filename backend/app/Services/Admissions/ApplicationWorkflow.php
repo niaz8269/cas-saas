@@ -24,6 +24,12 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 class ApplicationWorkflow
 {
     /** @var array<string, list<string>> */
+    /**
+     * Statuses in which the student or their partner can still open the application and add, replace or remove
+     * documents: from the draft right up to acceptance. Accepted, rejected and withdrawn applications are closed.
+     */
+    public const APPLICANT_EDITABLE = ['draft', 'under_review', 'documents_pending', 'submitted', 'offer_received', 'deferred'];
+
     public const TRANSITIONS = [
         'draft' => ['under_review', 'withdrawn'],
         // CAS can decline an application before it ever reaches the university
