@@ -1,24 +1,30 @@
-<table style="width: 100%; margin: 4px 0 8px; border-collapse: collapse;">
-    <tr><td style="width: 32%; color: #64748B; padding: 2px 0;">Bank</td><td><strong>{{ $bank->bank_name }}</strong></td></tr>
-    <tr><td style="color: #64748B; padding: 2px 0;">Account name</td><td>{{ $bank->account_name }}</td></tr>
-    <tr><td style="color: #64748B; padding: 2px 0;">Account number</td><td>{{ $bank->account_number }}</td></tr>
-    @if ($bank->iban)
-        <tr><td style="color: #64748B; padding: 2px 0;">IBAN</td><td>{{ $bank->iban }}</td></tr>
-    @endif
-    @if ($bank->swift)
-        <tr><td style="color: #64748B; padding: 2px 0;">SWIFT / BIC</td><td>{{ $bank->swift }}</td></tr>
-    @endif
-    @if ($bank->bank_address)
-        <tr><td style="color: #64748B; padding: 2px 0;">Bank address</td><td>{{ $bank->bank_address }}</td></tr>
-    @endif
-</table>
 @php($qr = $bank->qrCodeDataUri())
-@if ($qr)
-    <div style="margin: 6px 0;">
-        <img src="{{ $qr }}" alt="Payment QR code" style="width: 110px; height: 110px;">
-        <div style="font-size: 10px; color: #64748B;">Scan to pay</div>
-    </div>
-@endif
+<table class="bank">
+    <tr>
+        <td class="bank-details">
+            <table class="kv">
+                <tr><td class="k">Bank</td><td class="v"><strong>{{ $bank->bank_name }}</strong></td></tr>
+                <tr><td class="k">Account name</td><td class="v">{{ $bank->account_name }}</td></tr>
+                <tr><td class="k">Account number</td><td class="v">{{ $bank->account_number }}</td></tr>
+                @if ($bank->iban)
+                    <tr><td class="k">IBAN</td><td class="v">{{ $bank->iban }}</td></tr>
+                @endif
+                @if ($bank->swift)
+                    <tr><td class="k">SWIFT / BIC</td><td class="v">{{ $bank->swift }}</td></tr>
+                @endif
+                @if ($bank->bank_address)
+                    <tr><td class="k">Bank address</td><td class="v">{{ $bank->bank_address }}</td></tr>
+                @endif
+            </table>
+        </td>
+        @if ($qr)
+            <td class="bank-qr">
+                <img src="{{ $qr }}" alt="Payment QR code">
+                <div>Scan to pay</div>
+            </td>
+        @endif
+    </tr>
+</table>
 @if ($bank->instructions)
-    <div style="margin-bottom: 6px;">{!! nl2br(e($bank->instructions)) !!}</div>
+    <div class="bank-note">{!! nl2br(e($bank->instructions)) !!}</div>
 @endif

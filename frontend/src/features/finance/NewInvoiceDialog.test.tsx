@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react"
+import { screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
 import { jsonResponse, renderWithProviders } from "@/test/utils"
@@ -131,4 +131,27 @@ it("creates an invoice for someone outside the portal, billed by name with no ap
   })
   expect(created.body).not.toHaveProperty("party_id")
   expect(created.body).not.toHaveProperty("application_id")
+})
+
+it("offers Application fee as a fee type and sends it with the line", async () => {
+  const user = userEvent.setup()
+  const created: { body?: unknown } = {}
+  stub(created)
+
+  renderWithProviders(<NewInvoiceDialog open onOpenChange={() => {}} />)
+  await user.click(await screen.findByRole("tab", { name: "Someone not in the portal" }))
+  await user.type(screen.getByLabelText("Name of the person billed"), "Ali Raza")
+
+  const feeType = screen.getByLabelText("Fee type for line 1")
+  expect(within(feeType).getByRole("option", { name: "Application fee" })).toBeInTheDocument()
+  await user.selectOptions(feeType, "application_fee")
+  await user.type(screen.getByLabelText("Description for line 1"), "Application fee")
+  const price = screen.getByLabelText("Unit price for line 1")
+  await user.clear(price)
+  await user.type(price, "100")
+  await user.selectOptions(await screen.findByLabelText("Bank account for this invoice"), "1")
+  await user.click(screen.getByRole("button", { name: "Create & issue" }))
+
+  await waitFor(() => expect(created.body).toBeDefined())
+  expect(created.body).toMatchObject({ items: [{ fee_type: "application_fee", description: "Application fee", unit_price: 100 }] })
 })

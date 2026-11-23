@@ -22,6 +22,7 @@ const FEE_TYPES = [
   { value: "tuition", label: "Tuition" },
   { value: "hostel", label: "Hostel" },
   { value: "service_charge", label: "Service charge" },
+  { value: "application_fee", label: "Application fee" },
   { value: "admission_fee", label: "Admission fee" },
   { value: "visa_fee", label: "Visa fee" },
   { value: "other", label: "Other" },
