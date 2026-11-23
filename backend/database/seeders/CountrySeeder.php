@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
+use App\Support\CountryList;
 use Illuminate\Database\Seeder;
 
 class CountrySeeder extends Seeder
@@ -44,5 +45,26 @@ class CountrySeeder extends Seeder
                 ['name' => $name, 'phone_code' => $phoneCode],
             );
         }
+
+        $this->addRemaining();
+    }
+
+    /**
+     * Every other country in the world, so a sign-up form never lacks one. Countries already in the table keep
+     * their name and phone code; Israel and uninhabited territories are not added.
+     */
+    public static function addRemaining(): int
+    {
+        $have = Country::query()->pluck('iso2')->all();
+        $added = 0;
+
+        foreach (CountryList::selectable() as $iso2 => $name) {
+            if (! in_array($iso2, $have, true)) {
+                Country::create(['name' => $name, 'iso2' => $iso2]);
+                $added++;
+            }
+        }
+
+        return $added;
     }
 }
