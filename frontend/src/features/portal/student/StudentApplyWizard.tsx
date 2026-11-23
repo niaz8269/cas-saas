@@ -7,7 +7,6 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {
   createStudentApplication,
-  getApplicationAvailability,
   getApplicationDraft,
   getCountries,
   getFundingOptions,
@@ -34,6 +33,7 @@ import {
 import { ProcessingFeeNotice, ProcessingFeeStep } from "@/features/portal/student/ProcessingFee"
 import { getSiteUniversity } from "@/features/site/api"
 import { useApplyAutosave } from "@/features/portal/student/useApplyAutosave"
+import { useProgramSearch } from "@/features/portal/useProgramSearch"
 import { ApiError } from "@/lib/api"
 
 const STEPS = ["wizard.steps.course", "wizard.steps.personal", "wizard.steps.background", "wizard.steps.documents", "wizard.steps.review"]
@@ -142,11 +142,8 @@ export default function StudentApplyWizard() {
     if (data.education?.length) setEducation(data.education)
   }, [applicant.data, autosave.restored])
 
-  const availability = useQuery({
-    queryKey: ["apply", "availability", degree, funding],
-    queryFn: () => getApplicationAvailability(degree as Degree, funding as Funding),
-    enabled: step === 0 && !!degree && !!funding,
-  })
+  // Searched and paged on the server; when the application is for one university, only its programs are listed.
+  const programSearch = useProgramSearch({ kind: "student", degree, funding, enabled: step === 0, universitySlug })
 
   const countries = useQuery({ queryKey: ["apply", "countries"], queryFn: getCountries })
 
@@ -157,12 +154,6 @@ export default function StudentApplyWizard() {
     enabled: !!universitySlug,
   })
   const scopedUniversityName = scopedUniversity.data?.data.name ?? null
-
-  // Only offer this university's programs when the flow is scoped to it.
-  const availablePrograms = availability.data?.data ?? []
-  const programs = universitySlug
-    ? availablePrograms.filter((p) => p.university.slug === universitySlug)
-    : availablePrograms
 
   const fundingOpts = useQuery({
     queryKey: ["apply", "funding-options", degree],
@@ -298,9 +289,7 @@ export default function StudentApplyWizard() {
           program={program}
           intakeId={intakeId}
           scholarshipId={scholarshipId}
-          programs={programs}
-          loading={availability.isFetching}
-          failed={availability.isError}
+          programSearch={programSearch}
           fundingAvailable={fundingOpts.data?.data}
           fundingLoading={fundingOpts.isFetching}
           customAnswers={customAnswers}

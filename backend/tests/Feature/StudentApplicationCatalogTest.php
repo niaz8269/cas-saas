@@ -152,3 +152,93 @@ it('uses the admin-configured program docs when present', function () {
         ->assertJsonFragment(['name' => 'Passport'])
         ->assertJsonFragment(['name' => 'CV / Resume']);
 });
+
+it('pages the programs, searches by program, university or city, and filters, so a huge catalog is never loaded at once', function () {
+    actingAsStudentPortal();
+    $dalian = University::factory()->create(['status' => 'active', 'name' => 'Dalian Tech University', 'slug' => 'dalian-tech', 'city' => 'Dalian']);
+    $harbin = University::factory()->create(['status' => 'active', 'name' => 'Harbin Normal University', 'slug' => 'harbin-normal', 'city' => 'Harbin']);
+    foreach (range(1, 12) as $i) {
+        Program::factory()->create(['university_id' => $dalian->id, 'name' => "Engineering Subject $i", 'level' => 'bachelor', 'status' => 'active', 'teaching_language' => 'English']);
+    }
+    Program::factory()->create(['university_id' => $harbin->id, 'name' => 'Education Studies', 'level' => 'bachelor', 'status' => 'active', 'teaching_language' => 'Chinese']);
+    Program::factory()->create(['university_id' => $harbin->id, 'name' => 'Medicine (MBBS)', 'level' => 'bachelor', 'status' => 'active']);
+
+    $base = '/api/v1/student/applications/availability?degree=bs&funding=self';
+
+    // Only one page comes back, with the total, and the filter boxes arrive with the first page only.
+    $first = $this->getJson($base.'&per_page=5')->assertOk()->assertJsonCount(5, 'data')->assertJsonPath('meta.total', 13)->assertJsonPath('meta.last_page', 3);
+    expect($first->json('facets.languages'))->toBe(['Chinese', 'English'])
+        ->and($first->json('facets.cities'))->toBe(['Dalian', 'Harbin'])
+        ->and(collect($first->json('facets.universities'))->pluck('name')->all())->toBe(['Dalian Tech University', 'Harbin Normal University']);
+    $second = $this->getJson($base.'&per_page=5&page=2')->assertOk()->assertJsonCount(5, 'data');
+    expect($second->json('facets'))->toBeNull()
+        ->and(array_intersect(collect($first->json('data'))->pluck('id')->all(), collect($second->json('data'))->pluck('id')->all()))->toBe([]);
+
+    // Search words can come from the program, the university or the city; every word must match.
+    expect($this->getJson($base.'&q=education')->assertOk()->json('meta.total'))->toBe(1)
+        ->and($this->getJson($base.'&q=dalian+engineering')->assertOk()->json('meta.total'))->toBe(12)
+        ->and($this->getJson($base.'&q=harbin')->assertOk()->json('meta.total'))->toBe(1)
+        ->and($this->getJson($base.'&q=engineering+harbin')->assertOk()->json('meta.total'))->toBe(0)
+        ->and($this->getJson($base.'&q=%25')->assertOk()->json('meta.total'))->toBe(0);
+
+    // Filters.
+    expect($this->getJson($base.'&language=Chinese')->assertOk()->json('meta.total'))->toBe(1)
+        ->and($this->getJson($base.'&city=Dalian')->assertOk()->json('meta.total'))->toBe(12)
+        ->and($this->getJson($base.'&university='.$harbin->slug)->assertOk()->json('meta.total'))->toBe(1)
+        ->and($this->getJson($base.'&university_id='.$dalian->id)->assertOk()->json('meta.total'))->toBe(12);
+
+    // A page size above the limit is refused.
+    $this->getJson($base.'&per_page=500')->assertUnprocessable();
+});
+
+it('lists confirmed programs first and English-taught ones before the rest, never calling an unknown language English', function () {
+    actingAsStudentPortal();
+    $uni = University::factory()->create(['status' => 'active']);
+    $make = fn (string $name, ?string $language, bool $registry, int $fee) => Program::factory()->create([
+        'university_id' => $uni->id, 'name' => $name, 'level' => 'bachelor', 'status' => 'active',
+        'teaching_language' => $language, 'registry_only' => $registry, 'tuition_fee' => $fee,
+    ]);
+    $make('Registry Only', null, true, 1000);
+    $make('Chinese Taught', 'Chinese', false, 1000);
+    $make('No Language', null, false, 1000);
+    $make('Both Languages', 'Chinese and English', false, 9000);
+    $make('English Taught', 'English', false, 9000);
+
+    $response = $this->getJson('/api/v1/student/applications/availability?degree=bs&funding=self')->assertOk();
+
+    expect(collect($response->json('data'))->pluck('name')->all())->toBe(['English Taught', 'Both Languages', 'Chinese Taught', 'No Language', 'Registry Only'])
+        ->and(collect($response->json('data'))->firstWhere('name', 'No Language')['teaching_language'])->toBeNull()
+        ->and(collect($response->json('data'))->firstWhere('name', 'Registry Only')['registry_only'])->toBeTrue();
+});
+
+it('lists only universities with a matching scholarship in the scholarship modes, still paged', function () {
+    actingAsStudentPortal();
+    $funded = University::factory()->create(['status' => 'active']);
+    $unfunded = University::factory()->create(['status' => 'active']);
+    Program::factory()->count(3)->create(['university_id' => $funded->id, 'level' => 'master', 'status' => 'active']);
+    Program::factory()->count(2)->create(['university_id' => $unfunded->id, 'level' => 'master', 'status' => 'active']);
+    Scholarship::factory()->create(['university_id' => $funded->id, 'status' => 'active', 'coverage' => 'Full tuition and stipend', 'name' => 'Full Award']);
+
+    $response = $this->getJson('/api/v1/student/applications/availability?degree=master&funding=scholarship&per_page=2')->assertOk();
+
+    expect($response->json('meta.total'))->toBe(3)
+        ->and($response->json('data'))->toHaveCount(2)
+        ->and($response->json('data.0.scholarships.0.name'))->toBe('Full Award');
+});
+
+it('retries a misspelled search with the closest real spelling and says so', function () {
+    actingAsStudentPortal();
+    $uni = University::factory()->create(['status' => 'active', 'name' => 'Harbin Institute of Technology', 'city' => 'Harbin']);
+    Program::factory()->create(['university_id' => $uni->id, 'name' => 'Civil Engineering', 'level' => 'master', 'status' => 'active']);
+    Program::factory()->create(['university_id' => $uni->id, 'name' => 'Clinical Medicine', 'level' => 'master', 'status' => 'active']);
+
+    $response = $this->getJson('/api/v1/student/applications/availability?degree=master&funding=self&q=herbin+enginering')->assertOk();
+
+    expect($response->json('meta.total'))->toBe(1)
+        ->and($response->json('data.0.name'))->toBe('Civil Engineering')
+        ->and($response->json('suggestion'))->toBe(['original' => 'herbin enginering', 'query' => 'harbin engineering']);
+
+    // Nothing close: no program, no suggestion.
+    $none = $this->getJson('/api/v1/student/applications/availability?degree=master&funding=self&q=zzzzqxw')->assertOk();
+    expect($none->json('meta.total'))->toBe(0)->and($none->json('suggestion'))->toBeNull();
+});

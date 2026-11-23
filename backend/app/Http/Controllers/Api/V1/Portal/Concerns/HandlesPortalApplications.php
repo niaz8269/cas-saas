@@ -45,15 +45,32 @@ trait HandlesPortalApplications
         $validated = $request->validate([
             'degree' => ['required', Rule::in(ApplicationCatalog::DEGREES)],
             'funding' => ['required', Rule::in(ApplicationCatalog::FUNDING)],
+            'q' => ['nullable', 'string', 'max:100'],
+            'university' => ['nullable', 'string', 'max:200'],
+            'university_id' => ['nullable', 'integer'],
+            'city' => ['nullable', 'string', 'max:120'],
+            'language' => ['nullable', 'string', 'max:60'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
         ]);
 
-        $programs = $this->catalog->availability(
+        // The list is paged and searched in the database: the catalog holds far too many programs to send at once.
+        [$programs, $suggestion] = $this->catalog->availabilityPage(
             $validated['degree'],
             $validated['funding'],
             $this->applicantRate(),
+            $validated,
+            (int) ($validated['page'] ?? 1),
+            (int) ($validated['per_page'] ?? 25),
         );
 
-        return ApplicantProgramResource::collection($programs)->response();
+        $response = ApplicantProgramResource::collection($programs)->additional(['suggestion' => $suggestion]);
+        // The filter boxes are described once, with the first page.
+        if ((int) ($validated['page'] ?? 1) === 1) {
+            $response->additional(['suggestion' => $suggestion, 'facets' => $this->catalog->availabilityFacets($validated['degree'], $validated['funding'], $validated['university'] ?? null)]);
+        }
+
+        return $response->response();
     }
 
     /** Which funding options a degree can offer (self always; scholarship/

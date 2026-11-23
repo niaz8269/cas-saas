@@ -1815,7 +1815,12 @@
       "applyBy": "apply by {{date}}",
       "scholarship": "Scholarship",
       "chooseScholarship": "Choose a scholarship",
-      "noScholarshipsListed": "No scholarships listed for this university."
+      "noScholarshipsListed": "No scholarships listed for this university.",
+      "showingFor": "No programs for “{{original}}”. Showing results for “{{query}}”.",
+      "showMore": "Show more programs ({{left}} more)",
+      "loadingMore": "Loading…",
+      "tryAgain": "Try again",
+      "languageNotConfirmed": "Language not confirmed"
     },
     "review": {
       "summary": "Summary",
