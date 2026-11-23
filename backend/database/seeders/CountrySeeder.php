@@ -51,7 +51,7 @@ class CountrySeeder extends Seeder
 
     /**
      * Every other country in the world, so a sign-up form never lacks one. Countries already in the table keep
-     * their name and phone code; Israel and uninhabited territories are not added.
+     * their name and phone code; Israel is not added.
      */
     public static function addRemaining(): int
     {

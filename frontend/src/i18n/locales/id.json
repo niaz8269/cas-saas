@@ -1861,5 +1861,9 @@
   },
   "faqList": {
     "title": "Pertanyaan yang sering diajukan"
+  },
+  "country": {
+    "closeMatches": "Kecocokan terdekat",
+    "noMatch": "Tidak ada negara yang cocok. Periksa ejaannya."
   }
 }

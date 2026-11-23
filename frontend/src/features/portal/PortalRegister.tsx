@@ -10,7 +10,7 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import CountryCombobox from "@/components/CountryCombobox"
 import { AuthShell, PasswordInput } from "@/features/auth/AuthShell"
 import { agentRegister, getPublicCountries, portalRegister } from "@/features/portal/api"
 import { ApiError } from "@/lib/api"
@@ -221,14 +221,17 @@ function AgentForm() {
 
       <div className="space-y-1.5">
         <Label htmlFor="country_id">{t("portal.register.country")}</Label>
-        <Select value={watch("country_id")} onValueChange={(v) => setValue("country_id", v, { shouldValidate: true })}>
-          <SelectTrigger id="country_id" aria-label={t("portal.register.country")} aria-invalid={errors.country_id ? true : undefined}>
-            <SelectValue placeholder={t("portal.register.countryPlaceholder")} />
-          </SelectTrigger>
-          <SelectContent>
-            {(countries.data?.data ?? []).map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
-          </SelectContent>
-        </Select>
+        <CountryCombobox
+          id="country_id"
+          ariaLabel={t("portal.register.country")}
+          placeholder={t("portal.register.countryPlaceholder")}
+          items={(countries.data?.data ?? []).map((c) => ({ value: String(c.id), label: c.name }))}
+          value={watch("country_id")}
+          onChange={(v) => setValue("country_id", v, { shouldValidate: true })}
+          invalid={Boolean(errors.country_id)}
+          closeMatchesText={t("country.closeMatches", { defaultValue: "Closest matches" })}
+          noMatchText={t("country.noMatch", { defaultValue: "No country matches. Check the spelling." })}
+        />
         {errors.country_id && <p role="alert" className="text-xs text-destructive">{errors.country_id.message}</p>}
       </div>
 

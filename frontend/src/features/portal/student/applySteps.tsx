@@ -3,6 +3,7 @@ import { Check, FileText, GraduationCap, Loader2, Plus, Search, ShieldCheck, Upl
 import { useEffect, useMemo, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
+import CountryCombobox from "@/components/CountryCombobox"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -93,12 +94,16 @@ export function ProfileStep({ profile, countries, onChange }: {
           <Field label={t("wizard.profile.dateOfBirth")}><Input type="date" value={profile.dob ?? ""} onChange={set("dob")} /></Field>
           <Field label={t("wizard.profile.placeOfBirth")}><Input value={profile.place_of_birth ?? ""} onChange={set("place_of_birth")} /></Field>
           <Field label={t("wizard.profile.nationality")}>
-            <Select value={profile.country_id ?? ""} onValueChange={(v) => onChange("country_id", v)}>
-              <SelectTrigger className="bg-background"><SelectValue placeholder={t("wizard.profile.selectCountry")} /></SelectTrigger>
-              <SelectContent>
-                {countries.map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <CountryCombobox
+              id="profile-country"
+              ariaLabel={t("wizard.profile.nationality")}
+              placeholder={t("wizard.profile.selectCountry")}
+              items={countries.map((c) => ({ value: String(c.id), label: c.name }))}
+              value={profile.country_id ?? ""}
+              onChange={(v) => onChange("country_id", v)}
+              closeMatchesText={t("country.closeMatches", { defaultValue: "Closest matches" })}
+              noMatchText={t("country.noMatch", { defaultValue: "No country matches. Check the spelling." })}
+            />
           </Field>
           <Field label={t("wizard.profile.gender")}>
             <Select value={profile.gender ?? ""} onValueChange={(v) => onChange("gender", v)}>

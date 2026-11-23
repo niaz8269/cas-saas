@@ -1861,5 +1861,9 @@
   },
   "faqList": {
     "title": "Questions fréquentes"
+  },
+  "country": {
+    "closeMatches": "Correspondances les plus proches",
+    "noMatch": "Aucun pays ne correspond. Vérifiez l'orthographe."
   }
 }
