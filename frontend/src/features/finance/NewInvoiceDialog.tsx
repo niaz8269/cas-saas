@@ -52,12 +52,16 @@ export default function NewInvoiceDialog({
   const [status, setStatus] = useState<"issued" | "draft">("issued")
   const [error, setError] = useState<string | null>(null)
   const [bankAccountId, setBankAccountId] = useState("")
+  // An invoice is either for a student's application, or for someone who is not in the portal (named here).
+  const [mode, setMode] = useState<"application" | "other">("application")
+  const [billTo, setBillTo] = useState({ name: "", email: "", phone: "", address: "" })
 
   // Reset everything when the dialog opens.
   useEffect(() => {
     if (open) {
       setSearchInput(""); setQ(""); setApp(null); setRows([]); setCurrency("CNY")
       setDueDays("30"); setStatus("issued"); setError(null); setBankAccountId("")
+      setMode("application"); setBillTo({ name: "", email: "", phone: "", address: "" })
     }
   }, [open])
 
@@ -117,12 +121,25 @@ export default function NewInvoiceDialog({
   const setRow = (i: number, patch: Partial<Row>) =>
     setRows((rs) => rs.map((r, idx) => (idx === i ? { ...r, ...patch } : r)))
 
+  const chooseMode = (next: "application" | "other") => {
+    setMode(next)
+    setError(null)
+    setApp(null)
+    setRows(next === "other" ? [{ ...BLANK_ROW }] : [])
+  }
+
   const mutation = useMutation({
     mutationFn: () =>
       createInvoice({
-        party_type: "student",
-        party_id: schedule.data!.data.party_id,
-        application_id: app!.id,
+        ...(mode === "other"
+          ? {
+              party_type: "external",
+              bill_to_name: billTo.name.trim(),
+              bill_to_email: billTo.email.trim() || null,
+              bill_to_phone: billTo.phone.trim() || null,
+              bill_to_address: billTo.address.trim() || null,
+            }
+          : { party_type: "student", party_id: schedule.data!.data.party_id, application_id: app!.id }),
         currency,
         status,
         due_days: Number(dueDays) || 0,
@@ -147,8 +164,9 @@ export default function NewInvoiceDialog({
   const student = schedule.data?.data.context.student
   // An issued invoice must say where to pay; a draft can wait.
   const needsAccount = status === "issued" && !bankAccountId
+  const hasPayer = mode === "other" ? billTo.name.trim() !== "" : Boolean(app)
   const canSubmit =
-    Boolean(app) && rows.some((r) => r.description.trim()) && !needsAccount && !mutation.isPending && !schedule.isFetching
+    hasPayer && rows.some((r) => r.description.trim()) && !needsAccount && !mutation.isPending && !(mode === "application" && schedule.isFetching)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -156,17 +174,55 @@ export default function NewInvoiceDialog({
         <DialogHeader>
           <DialogTitle>New invoice</DialogTitle>
           <DialogDescription>
-            Pick a student's application — the fee lines are proposed from the course's fee structure. Adjust or add
-            lines before issuing.
+            {mode === "other"
+              ? "For someone who is not in the portal: write who it is for and what they pay, then download the PDF to share it."
+              : "Pick a student's application — the fee lines are proposed from the course's fee structure. Adjust or add lines before issuing."}
           </DialogDescription>
         </DialogHeader>
+
+        <div role="tablist" aria-label="Who is this invoice for" className="grid grid-cols-2 gap-1 rounded-lg bg-subtle p-1 text-sm">
+          {([["application", "A student's application"], ["other", "Someone not in the portal"]] as const).map(([value, text]) => (
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={mode === value}
+              onClick={() => chooseMode(value)}
+              className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mode === value ? "bg-background text-cas-navy shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
 
         {error && (
           <p role="alert" className="rounded-md bg-cas-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
         )}
 
+        {/* Someone outside the portal: who it is for */}
+        {mode === "other" && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1.5 block text-muted-foreground">Name *</span>
+              <Input value={billTo.name} onChange={(e) => setBillTo((b) => ({ ...b, name: e.target.value }))} maxLength={160} aria-label="Name of the person billed" autoFocus />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1.5 block text-muted-foreground">Email (optional)</span>
+              <Input type="email" value={billTo.email} onChange={(e) => setBillTo((b) => ({ ...b, email: e.target.value }))} maxLength={190} aria-label="Email of the person billed" />
+            </label>
+            <label className="text-sm">
+              <span className="mb-1.5 block text-muted-foreground">Phone / WhatsApp / WeChat (optional)</span>
+              <Input value={billTo.phone} onChange={(e) => setBillTo((b) => ({ ...b, phone: e.target.value }))} maxLength={64} aria-label="Phone of the person billed" />
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="mb-1.5 block text-muted-foreground">Address (optional)</span>
+              <Input value={billTo.address} onChange={(e) => setBillTo((b) => ({ ...b, address: e.target.value }))} maxLength={255} aria-label="Address of the person billed" />
+            </label>
+          </div>
+        )}
+
         {/* Step 1: choose an application */}
-        {!app && (
+        {mode === "application" && !app && (
           <div>
             <div className="relative">
               <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -204,9 +260,9 @@ export default function NewInvoiceDialog({
         )}
 
         {/* Step 2: review + edit the lines */}
-        {app && (
+        {(app || mode === "other") && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between rounded-md bg-subtle px-3 py-2 text-sm">
+            {app && <div className="flex items-center justify-between rounded-md bg-subtle px-3 py-2 text-sm">
               <div>
                 <span className="font-medium">{student ?? app.student?.full_name}</span>
                 <span className="ml-2 text-muted-foreground">
@@ -217,9 +273,9 @@ export default function NewInvoiceDialog({
               <button type="button" className="text-xs text-cas-navy hover:underline" onClick={() => { setApp(null); setRows([]) }}>
                 Change
               </button>
-            </div>
+            </div>}
 
-            {schedule.isFetching && <p className="text-sm text-muted-foreground">Loading course fees…</p>}
+            {mode === "application" && schedule.isFetching && <p className="text-sm text-muted-foreground">Loading course fees…</p>}
 
             {/* Lines */}
             <div className="space-y-2">

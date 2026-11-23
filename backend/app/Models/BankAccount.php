@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Auditable;
+use App\Services\Media\ImageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,7 +20,7 @@ class BankAccount extends Model
 
     protected $fillable = [
         'label', 'bank_name', 'account_name', 'account_number', 'iban', 'swift',
-        'bank_address', 'currency', 'instructions', 'is_active', 'is_default', 'sort_order',
+        'bank_address', 'currency', 'instructions', 'qr_code_path', 'is_active', 'is_default', 'sort_order',
     ];
 
     protected function casts(): array
@@ -35,6 +36,20 @@ class BankAccount extends Model
             ->where(fn ($q) => $q->whereNull('currency')->orWhere('currency', strtoupper($currency)))
             ->orderByRaw('currency is null') // an exact-currency account beats a catch-all
             ->first();
+    }
+
+    /** The payment QR code as a data URI, for the invoice PDF (null when there is none or it cannot be read). */
+    public function qrCodeDataUri(): ?string
+    {
+        $bytes = app(ImageService::class)->contents($this->qr_code_path);
+
+        if ($bytes === null) {
+            return null;
+        }
+
+        $mime = str_ends_with((string) $this->qr_code_path, '.png') ? 'image/png' : (str_ends_with((string) $this->qr_code_path, '.webp') ? 'image/webp' : 'image/jpeg');
+
+        return 'data:'.$mime.';base64,'.base64_encode($bytes);
     }
 
     public function invoices(): HasMany

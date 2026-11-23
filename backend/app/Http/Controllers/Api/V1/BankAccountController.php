@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BankAccountResource;
 use App\Models\BankAccount;
 use App\Models\Invoice;
+use App\Services\Media\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -48,6 +49,35 @@ class BankAccountController extends Controller
 
         return (new BankAccountResource($bankAccount->refresh()))
             ->additional(['meta' => ['assigned_invoices' => $assigned]]);
+    }
+
+    /** Add or replace the payment QR code: a PNG, JPG or WebP, kept exactly as uploaded so it still scans. */
+    public function uploadQrCode(Request $request, BankAccount $bankAccount, ImageService $images): BankAccountResource
+    {
+        $request->validate([
+            'image' => ['required', 'file', 'mimes:png,jpg,jpeg,webp', 'max:3072', function (string $attribute, mixed $file, \Closure $fail) {
+                // The type is read from the bytes, not trusted from the name.
+                if (! in_array(@getimagesize($file->getRealPath())[2] ?? null, [IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_WEBP], true)) {
+                    $fail('The file must be a PNG, JPG or WebP picture.');
+                }
+            }],
+        ]);
+
+        $previous = $bankAccount->qr_code_path;
+        $stored = $images->storeOriginal($request->file('image'), 'bank-qr');
+        $bankAccount->update(['qr_code_path' => $stored['path']]);
+        $images->delete($previous);
+
+        return new BankAccountResource($bankAccount->refresh());
+    }
+
+    public function destroyQrCode(BankAccount $bankAccount, ImageService $images): BankAccountResource
+    {
+        $previous = $bankAccount->qr_code_path;
+        $bankAccount->update(['qr_code_path' => null]);
+        $images->delete($previous);
+
+        return new BankAccountResource($bankAccount->refresh());
     }
 
     /**

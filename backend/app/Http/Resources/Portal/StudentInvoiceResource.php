@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Portal;
 
 use App\Models\Invoice;
+use App\Services\Media\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -40,6 +41,7 @@ class StudentInvoiceResource extends JsonResource
                 'swift' => $this->bankAccount->swift,
                 'bank_address' => $this->bankAccount->bank_address,
                 'instructions' => $this->bankAccount->instructions,
+                'qr_code_url' => app(ImageService::class)->url($this->bankAccount->qr_code_path),
             ]),
             'items' => $this->whenLoaded('items', fn () => $this->items->map(fn ($item) => [
                 'description' => $item->description,

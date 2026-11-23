@@ -19,6 +19,9 @@ class StoreInvoiceRequest extends FormRequest
         'university' => 'universities',
     ];
 
+    /** Someone who is not in the portal: billed by name, with no record behind the invoice. */
+    private const EXTERNAL = 'external';
+
     public function authorize(): bool
     {
         return true; // policy-checked in the controller
@@ -30,8 +33,13 @@ class StoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'party_type' => ['required', Rule::in(array_keys(self::PARTY_TABLES))],
-            'party_id' => ['required', 'integer'],
+            'party_type' => ['required', Rule::in([...array_keys(self::PARTY_TABLES), self::EXTERNAL])],
+            'party_id' => [Rule::requiredIf(fn () => $this->input('party_type') !== self::EXTERNAL), 'nullable', 'integer'],
+            // Who an external invoice is billed to (ignored for portal parties, whose details come from their record).
+            'bill_to_name' => [Rule::requiredIf(fn () => $this->input('party_type') === self::EXTERNAL), 'nullable', 'string', 'max:160'],
+            'bill_to_email' => ['nullable', 'email', 'max:190'],
+            'bill_to_phone' => ['nullable', 'string', 'max:64'],
+            'bill_to_address' => ['nullable', 'string', 'max:255'],
             'application_id' => ['nullable', 'integer', Rule::exists('applications', 'id')],
             'currency' => ['required', 'string', 'size:3'],
             // Which CAS account this invoice is paid into (active accounts only).
@@ -53,6 +61,10 @@ class StoreInvoiceRequest extends FormRequest
             $type = $this->input('party_type');
             $id = $this->input('party_id');
             $table = self::PARTY_TABLES[$type] ?? null;
+
+            if ($type === self::EXTERNAL && $this->filled('application_id')) {
+                $v->errors()->add('application_id', 'An invoice for someone outside the portal cannot be linked to an application.');
+            }
 
             if ($table && $id && ! DB::table($table)->where('id', $id)->exists()) {
                 $v->errors()->add('party_id', "No {$type} found for the given party_id.");

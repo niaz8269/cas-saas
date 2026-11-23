@@ -213,3 +213,68 @@ describe("Invoice 'Pay to' panel", () => {
     expect(screen.queryByLabelText(/Choose the bank account/)).not.toBeInTheDocument()
   })
 })
+
+describe("payment QR code", () => {
+  // jsdom has no object URLs, which the picture preview uses.
+  beforeEach(() => {
+    URL.createObjectURL = vi.fn(() => "blob:qr-preview")
+    URL.revokeObjectURL = vi.fn()
+  })
+
+  it("uploads the chosen QR picture after saving a new account", async () => {
+    const user = userEvent.setup()
+    useAuthStore.setState({ token: "t", user: makeUser(["finance.view.global", "finance.manage.global"]) })
+    const calls: { url: string; method: string; body: unknown }[] = []
+    vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      const method = init?.method ?? "GET"
+      calls.push({ url, method, body: init?.body })
+      if (method === "POST" && url.endsWith("/bank-accounts")) return Promise.resolve(jsonResponse({ data: { ...ACCOUNT, id: 7, qr_code_url: null } }, 201))
+      if (method === "POST" && url.endsWith("/bank-accounts/7/qr-code")) return Promise.resolve(jsonResponse({ data: { ...ACCOUNT, id: 7, qr_code_url: "/uploads/bank-qr/x.png" } }))
+
+      return Promise.resolve(jsonResponse({ data: [] }))
+    }))
+
+    renderWithProviders(<BankAccountsPage />)
+    await user.click((await screen.findAllByRole("button", { name: /Add account/ }))[0])
+
+    await user.type(screen.getByLabelText("Label (internal)"), "Alipay")
+    await user.type(screen.getByLabelText("Bank name"), "Alipay")
+    await user.type(screen.getByLabelText("Account name"), "CAS Consultancy Ltd")
+    await user.type(screen.getByLabelText("Account number"), "13800000000")
+    const picture = new File(["png"], "qr.png", { type: "image/png" })
+    await user.upload(screen.getByLabelText("QR code (optional)"), picture)
+    expect(screen.getByAltText("Payment QR code")).toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: "Save" }))
+
+    await waitFor(() => expect(calls.some((c) => c.url.endsWith("/bank-accounts/7/qr-code"))).toBe(true))
+    const upload = calls.find((c) => c.url.endsWith("/bank-accounts/7/qr-code"))!
+    expect(upload.method).toBe("POST")
+    expect((upload.body as FormData).get("image")).toBeInstanceOf(File)
+  })
+
+  it("shows the saved QR code on the account card and can remove it", async () => {
+    const user = userEvent.setup()
+    useAuthStore.setState({ token: "t", user: makeUser(["finance.view.global", "finance.manage.global"]) })
+    const calls: { url: string; method: string }[] = []
+    vi.stubGlobal("fetch", vi.fn().mockImplementation((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      const method = init?.method ?? "GET"
+      calls.push({ url, method })
+      if (method === "PATCH") return Promise.resolve(jsonResponse({ data: { ...ACCOUNT, qr_code_url: "/uploads/bank-qr/x.png" } }))
+      if (method === "DELETE") return Promise.resolve(jsonResponse({ data: { ...ACCOUNT, qr_code_url: null } }))
+
+      return Promise.resolve(jsonResponse({ data: [{ ...ACCOUNT, qr_code_url: "/uploads/bank-qr/x.png" }] }))
+    }))
+
+    renderWithProviders(<BankAccountsPage />)
+    expect(await screen.findByAltText("Payment QR code for BOC CNY Shanghai")).toHaveAttribute("src", "/uploads/bank-qr/x.png")
+
+    await user.click(screen.getByRole("button", { name: /Edit/ }))
+    await user.click(screen.getByRole("button", { name: "Remove QR code" }))
+    await user.click(screen.getByRole("button", { name: "Save" }))
+
+    await waitFor(() => expect(calls.some((c) => c.method === "DELETE" && c.url.endsWith("/bank-accounts/1/qr-code"))).toBe(true))
+  })
+})

@@ -12,6 +12,13 @@
         <tr><td style="color: #64748B; padding: 2px 0;">Bank address</td><td>{{ $bank->bank_address }}</td></tr>
     @endif
 </table>
+@php($qr = $bank->qrCodeDataUri())
+@if ($qr)
+    <div style="margin: 6px 0;">
+        <img src="{{ $qr }}" alt="Payment QR code" style="width: 110px; height: 110px;">
+        <div style="font-size: 10px; color: #64748B;">Scan to pay</div>
+    </div>
+@endif
 @if ($bank->instructions)
     <div style="margin-bottom: 6px;">{!! nl2br(e($bank->instructions)) !!}</div>
 @endif

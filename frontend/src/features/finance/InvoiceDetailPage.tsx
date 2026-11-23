@@ -161,7 +161,9 @@ export default function InvoiceDetailPage() {
             </Link>
             <h2 className="mt-1 font-mono text-2xl font-semibold text-cas-navy">{invoice.invoice_no}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              <span className="capitalize">{invoice.party_type}</span>: {invoice.party_name ?? "—"}
+              <span className="capitalize">{invoice.party_type === "external" ? "Billed to" : invoice.party_type}</span>: {invoice.party_name ?? "—"}
+              {invoice.bill_to?.email ? ` · ${invoice.bill_to.email}` : ""}
+              {invoice.bill_to?.phone ? ` · ${invoice.bill_to.phone}` : ""}
               {invoice.application ? ` · ${invoice.application.application_code}` : ""}
             </p>
           </div>
@@ -221,6 +223,7 @@ export default function InvoiceDetailPage() {
               <dt className="text-muted-foreground">Account number</dt><dd className="font-mono">{invoice.bank_account.account_number}</dd>
               {invoice.bank_account.iban && (<><dt className="text-muted-foreground">IBAN</dt><dd className="font-mono">{invoice.bank_account.iban}</dd></>)}
               {invoice.bank_account.swift && (<><dt className="text-muted-foreground">SWIFT / BIC</dt><dd className="font-mono">{invoice.bank_account.swift}</dd></>)}
+              {invoice.bank_account.qr_code_url && (<><dt className="text-muted-foreground">QR code</dt><dd><img src={invoice.bank_account.qr_code_url} alt="Payment QR code" className="size-20 rounded-md border bg-white object-contain p-1" /></dd></>)}
             </dl>
           ) : (
             <p className="rounded-md bg-amber-50 px-3 py-2 text-warning">

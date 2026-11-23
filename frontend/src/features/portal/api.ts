@@ -206,6 +206,8 @@ export interface PayToAccount {
   swift: string | null
   bank_address: string | null
   instructions: string | null
+  /** A payment QR code, when Finance added one. */
+  qr_code_url?: string | null
 }
 
 export interface StudentInvoiceRow {

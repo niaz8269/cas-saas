@@ -114,7 +114,7 @@ class InvoiceController extends Controller
 
         $invoice = $service->create(
             partyType: $data['party_type'],
-            partyId: $data['party_id'],
+            partyId: isset($data['party_id']) ? (int) $data['party_id'] : null,
             applicationId: $data['application_id'] ?? null,
             currency: strtoupper($data['currency']),
             items: $data['items'],
@@ -122,6 +122,12 @@ class InvoiceController extends Controller
             status: $data['status'] ?? 'issued',
             dueDays: $data['due_days'] ?? 30,
             bankAccountId: $data['bank_account_id'] ?? null,
+            billTo: [
+                'name' => $data['bill_to_name'] ?? null,
+                'email' => $data['bill_to_email'] ?? null,
+                'phone' => $data['bill_to_phone'] ?? null,
+                'address' => $data['bill_to_address'] ?? null,
+            ],
         );
 
         $invoice->load(['items', 'bankAccount', 'application:id,application_code,student_id', 'application.student:id,first_name,last_name']);
@@ -303,7 +309,9 @@ class InvoiceController extends Controller
         ];
 
         foreach ($invoices as $invoice) {
-            $invoice->setAttribute('party_name', $names[$invoice->party_type][$invoice->party_id] ?? null);
+            $invoice->setAttribute('party_name', $invoice->party_type === 'external'
+                ? $invoice->bill_to_name
+                : ($names[$invoice->party_type][$invoice->party_id] ?? null));
         }
     }
 }

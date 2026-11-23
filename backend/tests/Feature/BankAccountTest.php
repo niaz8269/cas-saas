@@ -7,6 +7,8 @@ use App\Models\Student;
 use App\Services\Documents\DocumentService;
 use App\Services\Finance\ProcessingFee;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 
 uses(RefreshDatabase::class);
 
@@ -174,6 +176,69 @@ it('takes a receipt end to end on the private documents disk', function () {
     $link = app(DocumentService::class)->downloadUrl($doc, null, null)['url'];
     $this->get($link)->assertOk();
     $this->get('/storage/'.$presign['key'])->assertForbidden();
+
+    File::deleteDirectory($root);
+});
+
+// ── Payment QR code ─────────────────────────────────────────────────────────
+
+const QR_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
+/** A real 1x1 PNG, so no image library is needed to make one. */
+function qrFile(string $name = 'qr.png'): UploadedFile
+{
+    return UploadedFile::fake()->createWithContent($name, (string) base64_decode(QR_PNG));
+}
+
+it('lets finance add, replace and remove a payment QR code, kept exactly as uploaded', function () {
+    actingAsStaffWith(['finance.view.global', 'finance.manage.global']);
+    $root = sys_get_temp_dir().'/cas-qr-'.uniqid();
+    config(['media.images_store' => 'public_path', 'media.public_path' => $root]);
+    $account = BankAccount::create(bankPayload());
+
+    $first = $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", ['image' => qrFile()])->assertOk();
+    $path = $account->refresh()->qr_code_path;
+
+    expect($path)->toStartWith('/uploads/bank-qr/')->toEndWith('.png')
+        ->and($first->json('data.qr_code_url'))->toBe($path)
+        ->and(md5_file($root.$path))->toBe(md5((string) base64_decode(QR_PNG)));
+
+    // Replacing removes the old file.
+    $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", ['image' => qrFile('second.png')])->assertOk();
+    expect(is_file($root.$path))->toBeFalse()->and($account->refresh()->qr_code_path)->not->toBe($path);
+    $current = $account->qr_code_path;
+
+    $this->deleteJson("/api/v1/bank-accounts/{$account->id}/qr-code")->assertOk()->assertJsonPath('data.qr_code_url', null);
+    expect($account->refresh()->qr_code_path)->toBeNull()->and(is_file($root.$current))->toBeFalse();
+
+    File::deleteDirectory($root);
+});
+
+it('refuses a QR code that is not a picture, and a user without finance.manage', function () {
+    actingAsStaffWith(['finance.view.global', 'finance.manage.global']);
+    $account = BankAccount::create(bankPayload());
+
+    $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", ['image' => UploadedFile::fake()->createWithContent('qr.png', '<?php echo 1;')])
+        ->assertStatus(422)->assertJsonValidationErrors(['image']);
+    $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", [])->assertStatus(422);
+
+    actingAsStaffWith(['finance.view.global']);
+    $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", ['image' => qrFile()])->assertForbidden();
+});
+
+it('shows the QR code to the student on the invoice that uses the account', function () {
+    $root = sys_get_temp_dir().'/cas-qr-'.uniqid();
+    config(['media.images_store' => 'public_path', 'media.public_path' => $root]);
+    $account = BankAccount::create(bankPayload());
+    actingAsStaffWith(['finance.view.global', 'finance.manage.global']);
+    $this->postJson("/api/v1/bank-accounts/{$account->id}/qr-code", ['image' => qrFile()])->assertOk();
+
+    $student = actingAsStudentPortal();
+    Invoice::factory()->create(['party_type' => 'student', 'party_id' => $student->id, 'status' => 'issued', 'bank_account_id' => $account->id]);
+
+    $this->getJson('/api/v1/student/invoices')->assertOk()
+        ->assertJsonPath('data.0.bank_account.qr_code_url', $account->refresh()->qr_code_path);
+    expect($account->qrCodeDataUri())->toStartWith('data:image/png;base64,');
 
     File::deleteDirectory($root);
 });
