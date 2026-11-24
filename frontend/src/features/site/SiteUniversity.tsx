@@ -35,7 +35,7 @@ import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import { FaqList } from "@/features/site/SiteFaqs"
-import { mediumFor } from "@/lib/medicalProgram"
+import { mediumFor } from "@/lib/programLanguage"
 
 const money = (v: string | number | null | undefined, currency?: string | null) =>
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()

@@ -98,7 +98,7 @@ it("offers every university and city, and shows how many programs match", () => 
   expect(screen.getByText("Showing 3 of 20490 programs")).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing Normal University" })).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing" })).toBeInTheDocument()
-  // There is no language filter; the medium is only printed on a medical program (see the test below).
+  // There is no language filter; a program shows the language set on it, if any (see the test below).
   expect(screen.queryByLabelText("Teaching language")).not.toBeInTheDocument()
   expect(screen.queryByRole("option", { name: "English" })).not.toBeInTheDocument()
 })
@@ -245,11 +245,11 @@ it("removes one file and only tells the wizard when the last one is gone", async
   expect(onRemoved).not.toHaveBeenCalled()
 })
 
-it("names the medium of instruction on a medical program, and on no other", () => {
+it("shows the language set on a program, and nothing for a program with none", () => {
   renderCourse(makeSearch({
     programs: [
       prog(7, "MBBS (Clinical Medicine)", "Jilin Medical University", "Jilin", "English"),
-      prog(8, "Civil Engineering", "Harbin Institute of Technology", "Harbin", "English"),
+      { ...prog(8, "Civil Engineering", "Harbin Institute of Technology", "Harbin", "English"), teaching_language: null },
     ],
     total: 2,
   }))

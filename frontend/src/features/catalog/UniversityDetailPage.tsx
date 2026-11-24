@@ -44,7 +44,7 @@ import ScholarshipFormDialog from "@/features/catalog/dialogs/ScholarshipFormDia
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
 import type { Intake, Program, Scholarship, UniversityContact } from "@/features/catalog/api"
 import { cn } from "@/lib/utils"
-import { mediumFor } from "@/lib/medicalProgram"
+import { mediumFor } from "@/lib/programLanguage"
 
 /** Nearest upcoming intake deadline, with whole days remaining. */
 function nextDeadline(intakes: Intake[]): { name: string; date: string; daysLeft: number } | null {

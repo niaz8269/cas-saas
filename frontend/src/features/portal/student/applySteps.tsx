@@ -47,7 +47,7 @@ import { ApiError } from "@/lib/api"
 import { formatDuration } from "@/lib/duration"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
-import { mediumFor } from "@/lib/medicalProgram"
+import { mediumFor } from "@/lib/programLanguage"
 
 /** Labelled, numbered progress rail shared by the apply wizards. */
 export function Stepper({ steps, step }: { steps: string[]; step: number }) {

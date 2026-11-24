@@ -17,7 +17,7 @@ import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import PageFaqs from "@/features/site/SiteFaqs"
-import { mediumFor } from "@/lib/medicalProgram"
+import { mediumFor } from "@/lib/programLanguage"
 
 // Display labels are i18n keys resolved at render; option `value`s are the
 // query-param values sent to the API and must stay unchanged.
