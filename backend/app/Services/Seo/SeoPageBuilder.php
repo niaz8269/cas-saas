@@ -326,7 +326,7 @@ class SeoPageBuilder
             $ld[] = $postFaq;
         }
 
-        return $this->page($this->fit([$post->title]), $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['News', '/site/news'], [$post->title, $canonical]], body: $body, type: 'article');
+        return $this->page($this->wholeWords($post->title, 62), $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['News', '/site/news'], [$post->title, $canonical]], body: $body, type: 'article');
     }
 
     private function notFound(): array
@@ -727,6 +727,19 @@ class SeoPageBuilder
 
         // A name is never cut in the middle when the caller says so: a long title is better than a broken name.
         return $clip ? $this->clip(end($options), 54) : end($options);
+    }
+
+    /** A title kept whole up to $max characters; longer ones are cut at a word boundary, never mid-word and without an ellipsis. */
+    private function wholeWords(string $title, int $max): string
+    {
+        $title = trim(preg_replace('/\s+/u', ' ', strip_tags($title)));
+        if (mb_strlen($title) <= $max) {
+            return $title;
+        }
+        $cut = mb_substr($title, 0, $max);
+        $space = mb_strrpos($cut, ' ');
+
+        return rtrim($space ? mb_substr($cut, 0, $space) : $cut, ' ,.;:-');
     }
 
     private function clip(string $text, int $max): string
