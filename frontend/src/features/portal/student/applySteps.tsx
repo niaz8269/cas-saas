@@ -47,6 +47,7 @@ import { ApiError } from "@/lib/api"
 import { formatDuration } from "@/lib/duration"
 import { cn } from "@/lib/utils"
 import type { PortalKind } from "@/stores/portalAuth"
+import { mediumFor } from "@/lib/programLanguage"
 
 /** Labelled, numbered progress rail shared by the apply wizards. */
 export function Stepper({ steps, step }: { steps: string[]; step: number }) {
@@ -718,6 +719,7 @@ export function CourseStep(props: {
                     {active && <Check className="size-5 shrink-0 text-cas-navy" />}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
+                    {mediumFor(p) && <Chip>{mediumFor(p)}</Chip>}
                     {p.duration_months && <Chip>{formatDuration(p.duration_months, t)}</Chip>}
                     {p.tuition_fee != null && <Chip>{t("wizard.course.tuitionPerYear", { amount: money(p.tuition_fee, p.currency) })}</Chip>}
                     {p.hostel_fee != null && <Chip>{t("wizard.course.hostelPerYear", { amount: money(p.hostel_fee, p.currency) })}</Chip>}

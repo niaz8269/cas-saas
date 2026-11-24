@@ -1,7 +1,7 @@
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import type { TFunction } from "i18next"
-import { Clock, GraduationCap, MapPin, School, Search } from "lucide-react"
+import { Clock, GraduationCap, Languages, MapPin, School, Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
@@ -17,6 +17,7 @@ import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import PageFaqs from "@/features/site/SiteFaqs"
+import { mediumFor } from "@/lib/programLanguage"
 
 // Display labels are i18n keys resolved at render; option `value`s are the
 // query-param values sent to the API and must stay unchanged.
@@ -228,6 +229,7 @@ export default function SiteProgramFinder() {
                 {p.csc_listed && <span className="inline-flex items-center rounded-full border border-cas-navy/20 px-2 py-0.5 text-[11px] text-cas-navy">CSC</span>}
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                {mediumFor(p) && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" aria-hidden /> {mediumFor(p)}</span>}
                 {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" aria-hidden /> {formatDuration(p.duration_months, t)}</span>}
                 {p.university?.slug && (
                   <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-red-600">

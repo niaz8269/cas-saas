@@ -308,8 +308,8 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   // Programs tab.
   await user.click(screen.getByRole("button", { name: /Programs/ }))
   expect(screen.getByText("MBBS")).toBeInTheDocument()
-  // The medium of teaching is not shown on a program.
-  expect(screen.queryByText("English")).not.toBeInTheDocument()
+  // The language set on the program is shown.
+  expect(screen.getAllByText("English").length).toBeGreaterThan(0)
 
   // Scholarships tab.
   await user.click(screen.getByRole("button", { name: /Scholarships/ }))
@@ -453,9 +453,8 @@ it("searches and filters a university's program list", async () => {
   expect(screen.queryByText("Accounting")).not.toBeInTheDocument()
 
   await user.click(screen.getByRole("button", { name: "Clear filters" }))
-  // No filter or label mentions the teaching language.
+  // There is no language filter; each program shows the language set on it.
   expect(screen.queryByLabelText("Filter by teaching language")).not.toBeInTheDocument()
-  expect(screen.queryByText("Chinese")).not.toBeInTheDocument()
 
   await user.click(within(screen.getByRole("group", { name: "Degree level" })).getByRole("button", { name: /phd/i }))
   expect(screen.getByText("Archaeology")).toBeInTheDocument()

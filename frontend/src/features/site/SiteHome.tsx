@@ -28,6 +28,7 @@ import HomeCities from "@/features/site/HomeCities"
 import WhyApply from "@/features/site/WhyApply"
 import { useSeo } from "@/lib/seo"
 import PageFaqs from "@/features/site/SiteFaqs"
+import { mediumFor } from "@/lib/programLanguage"
 
 // Below the fold, or shown only later: loaded after the first screen.
 const Testimonials = lazy(() => import("@/features/site/Testimonials"))
@@ -267,7 +268,7 @@ export default function SiteHome() {
                 <PhotoBanner src="/images/art-3.svg" image={cover ? { src: cover, credit: program.university?.cover_credit ?? detail?.cover_credit ?? undefined } : null} className="h-40" />
                 <div className="flex flex-1 flex-col p-5">
                   <h3 className="text-base font-bold text-cas-navy">{program.university?.name ?? t("home.weekly.featuredUniversity")}</h3>
-                  <p className="mt-0.5 text-sm text-muted-foreground">{program.name}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{program.name}{mediumFor(program) ? ` · ${mediumFor(program)}` : ""}</p>
                   <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{program.level.replace("_", "-")}</p></div>
                     <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, program.tuition_fee, program.currency)}</p></div>

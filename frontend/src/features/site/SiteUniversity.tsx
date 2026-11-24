@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import {
   ArrowLeft,
   ArrowRight,
+  Languages,
   Award,
   CalendarClock,
   CalendarDays,
@@ -34,6 +35,7 @@ import { formatDuration } from "@/lib/duration"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import { FaqList } from "@/features/site/SiteFaqs"
+import { mediumFor } from "@/lib/programLanguage"
 
 const money = (v: string | number | null | undefined, currency?: string | null) =>
   v == null ? null : `${Number(v).toLocaleString()} ${currency ?? ""}`.trim()
@@ -425,6 +427,10 @@ function ProgramsPanel({ u }: { u: SiteUniversityDetail }) {
             ) : null}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            {mediumFor(p) && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" /> {mediumFor(p)}</span>}
+            {!u.moe_listed && p.level === "bachelor" && p.teaching_language === "English" && /MBBS|Clinical Medicine/i.test(p.name) && (
+              <span className="basis-full text-cas-red-600">{t("university.mbbsNotApproved")}</span>
+            )}
             {p.csc_listed && <Badge variant="outline" className="border-transparent bg-cas-navy-50 text-cas-navy">{t("university.cscListed")}</Badge>}
             <ApplyButton universitySlug={u.slug} label={`${t("university.apply")}: ${p.name}, ${levelLabel(p.level)}, ${u.name}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:underline">{t("university.apply")} <ArrowRight className="size-3" /></ApplyButton>
           </div>
