@@ -5,6 +5,7 @@ import { Link, useSearchParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { APPLICANT_OPEN_STATUSES, getAgentApplications, type AgentApplicationRow } from "@/features/portal/api"
+import ApplicationRemoval from "@/features/portal/ApplicationRemoval"
 import ApplicationTrack from "@/features/portal/ApplicationTrack"
 import {
   EmptyState,
@@ -121,6 +122,8 @@ export default function AgentApplications() {
                       </Link>
                     </Button>
                   )}
+
+                  <ApplicationRemoval kind="agent" applicationId={a.id} status={a.status} />
 
                   <ApplicationTrack steps={a.progress ?? []} />
                 </PortalCard>

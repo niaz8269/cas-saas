@@ -156,6 +156,8 @@ Route::prefix('v1')->group(function () {
             Route::get('applications/{application}/documents/{document}/view', [AgentApplicationController::class, 'viewDocument']);
             Route::delete('applications/{application}/documents/{document}', [AgentApplicationController::class, 'removeDocument']);
             Route::post('applications/{application}/submit', [AgentApplicationController::class, 'submit']);
+            Route::post('applications/{application}/withdraw', [AgentApplicationController::class, 'withdraw']);
+            Route::delete('applications/{application}', [AgentApplicationController::class, 'destroy']);
 
             // Government-scholarship variant (reference reads + create draft).
             Route::get('majors', [AgentApplicationController::class, 'majors']);
@@ -215,6 +217,8 @@ Route::prefix('v1')->group(function () {
             Route::get('applications/{application}/documents/{document}/view', [StudentApplicationController::class, 'viewDocument']);
             Route::delete('applications/{application}/documents/{document}', [StudentApplicationController::class, 'removeDocument']);
             Route::post('applications/{application}/submit', [StudentApplicationController::class, 'submit']);
+            Route::post('applications/{application}/withdraw', [StudentApplicationController::class, 'withdraw']);
+            Route::delete('applications/{application}', [StudentApplicationController::class, 'destroy']);
             Route::get('applicant', [StudentPortalController::class, 'applicant']);
             Route::get('applications', [StudentPortalController::class, 'applications']);
             Route::get('visa-case', [StudentPortalController::class, 'visaCase']);

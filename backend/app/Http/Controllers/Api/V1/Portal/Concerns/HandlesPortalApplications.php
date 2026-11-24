@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Portal\Concerns;
 
 use App\Http\Resources\Portal\ApplicantProgramResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
+use App\Models\Agent;
 use App\Models\Application;
 use App\Models\Country;
 use App\Models\Document;
@@ -12,6 +13,7 @@ use App\Models\Major;
 use App\Models\Program;
 use App\Models\Scholarship;
 use App\Services\Admissions\ApplicationCatalog;
+use App\Services\Admissions\ApplicationWorkflow;
 use App\Services\Comms\NotificationService;
 use App\Services\Documents\DocumentService;
 use Illuminate\Http\JsonResponse;
@@ -288,6 +290,50 @@ trait HandlesPortalApplications
             $document->documentable_type === Application::class && $document->documentable_id === $application->id,
             404,
         );
+    }
+
+    /**
+     * Delete an application that is still a draft. It is a soft delete (recoverable by an administrator, and audit-logged).
+     * An application that is already with CAS is withdrawn instead, so the record of it stays.
+     */
+    public function destroy(Request $request, Application $application): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+        abort_unless($application->status === 'draft', 409, 'Only a draft can be deleted. Withdraw an application that is already with CAS.');
+
+        $application->delete();
+
+        return response()->json(['message' => 'Application deleted.']);
+    }
+
+    /** Withdraw an application that is with CAS, any time before it is accepted. It stays on record as withdrawn. */
+    public function withdraw(Request $request, Application $application, ApplicationWorkflow $workflow): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+        abort_if($application->status === 'draft', 409, 'Delete a draft instead of withdrawing it.');
+
+        $validated = $request->validate(['reason' => ['nullable', 'string', 'max:500']]);
+        $by = $request->user() instanceof Agent ? 'the partner' : 'the student';
+        $note = trim("Withdrawn by {$by}. ".($validated['reason'] ?? ''));
+
+        $withdrawn = $workflow->transition($application, 'withdrawn', null, $note);
+
+        if ($withdrawn->assigned_admissions_id !== null) {
+            app(NotificationService::class)->push(
+                $withdrawn->assigned_admissions_id,
+                'application.withdrawn',
+                'Application withdrawn',
+                "{$withdrawn->application_code} was withdrawn by {$by}.",
+                entityType: 'application',
+                entityId: $withdrawn->id,
+            );
+        }
+
+        return response()->json(['data' => [
+            'id' => $withdrawn->id,
+            'application_code' => $withdrawn->application_code,
+            'status' => $withdrawn->status,
+        ]]);
     }
 
     /** Submit the completed draft to CAS (draft → under_review). */
