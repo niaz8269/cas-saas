@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Portal\UpdateApplicantDetailsRequest;
 use App\Http\Resources\Portal\AgentStudentDetailResource;
 use App\Http\Resources\Portal\StudentApplicationResource;
 use App\Http\Resources\Portal\StudentDocumentResource;
@@ -11,6 +12,7 @@ use App\Http\Resources\Portal\StudentVisaCaseResource;
 use App\Models\DocumentType;
 use App\Models\Invoice;
 use App\Models\VisaCase;
+use App\Services\Admissions\ApplicantDetailsUpdater;
 use App\Services\Finance\InvoicePdfRenderer;
 use App\Services\Finance\ProcessingFee;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +34,16 @@ class StudentPortalController extends Controller
     public function applicant(Request $request): AgentStudentDetailResource
     {
         return new AgentStudentDetailResource($request->user()->load(['guardians', 'education']));
+    }
+
+    /** The student correcting or completing their own record, until one of their applications is accepted. */
+    public function updateApplicant(UpdateApplicantDetailsRequest $request, ApplicantDetailsUpdater $updater): AgentStudentDetailResource
+    {
+        $student = $request->user();
+
+        $updater->update($student, $request->validated(), 'the student');
+
+        return new AgentStudentDetailResource($student->refresh()->load(['guardians', 'education']));
     }
 
     public function applications(Request $request): AnonymousResourceCollection

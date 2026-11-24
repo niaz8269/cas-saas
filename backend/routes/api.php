@@ -157,6 +157,8 @@ Route::prefix('v1')->group(function () {
             Route::delete('applications/{application}/documents/{document}', [AgentApplicationController::class, 'removeDocument']);
             Route::post('applications/{application}/submit', [AgentApplicationController::class, 'submit']);
             Route::post('applications/{application}/withdraw', [AgentApplicationController::class, 'withdraw']);
+            Route::post('applications/{application}/change-request', [AgentApplicationController::class, 'requestChange'])->middleware('throttle:20,1');
+            Route::put('students/{student}/details', [AgentPortalController::class, 'updateStudentDetails']);
             Route::delete('applications/{application}', [AgentApplicationController::class, 'destroy']);
 
             // Government-scholarship variant (reference reads + create draft).
@@ -218,6 +220,8 @@ Route::prefix('v1')->group(function () {
             Route::delete('applications/{application}/documents/{document}', [StudentApplicationController::class, 'removeDocument']);
             Route::post('applications/{application}/submit', [StudentApplicationController::class, 'submit']);
             Route::post('applications/{application}/withdraw', [StudentApplicationController::class, 'withdraw']);
+            Route::post('applications/{application}/change-request', [StudentApplicationController::class, 'requestChange'])->middleware('throttle:20,1');
+            Route::put('applicant/details', [StudentPortalController::class, 'updateApplicant']);
             Route::delete('applications/{application}', [StudentApplicationController::class, 'destroy']);
             Route::get('applicant', [StudentPortalController::class, 'applicant']);
             Route::get('applications', [StudentPortalController::class, 'applications']);

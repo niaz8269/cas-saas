@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { APPLICANT_OPEN_STATUSES, getStudentApplications } from "@/features/portal/api"
+import ApplicationChanges from "@/features/portal/ApplicationChanges"
 import ApplicationRemoval from "@/features/portal/ApplicationRemoval"
 import ApplicationTrack from "@/features/portal/ApplicationTrack"
 import {
@@ -71,6 +72,7 @@ export default function StudentApplications() {
               </Button>
             )}
 
+            <div className="mt-3"><ApplicationChanges kind="student" applicationId={app.id} status={app.status} /></div>
             <div className="mt-2"><ApplicationRemoval kind="student" applicationId={app.id} status={app.status} /></div>
 
             {/* Where this application has been, oldest first, with the date of each step. */}

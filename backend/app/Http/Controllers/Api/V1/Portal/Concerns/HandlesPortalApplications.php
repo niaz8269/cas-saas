@@ -12,6 +12,7 @@ use App\Models\DocumentType;
 use App\Models\Major;
 use App\Models\Program;
 use App\Models\Scholarship;
+use App\Services\Admissions\ApplicantDetailsUpdater;
 use App\Services\Admissions\ApplicationCatalog;
 use App\Services\Admissions\ApplicationWorkflow;
 use App\Services\Comms\NotificationService;
@@ -304,6 +305,22 @@ trait HandlesPortalApplications
         $application->delete();
 
         return response()->json(['message' => 'Application deleted.']);
+    }
+
+    /**
+     * Ask CAS to change something the applicant cannot change alone, such as the program or the funding. It goes to the
+     * officer handling the application (or the administrators) and is recorded on the student's timeline.
+     */
+    public function requestChange(Request $request, Application $application, ApplicantDetailsUpdater $updater): JsonResponse
+    {
+        $this->authorizeDraft($request, $application);
+
+        $validated = $request->validate(['message' => ['required', 'string', 'min:5', 'max:1000']]);
+        $by = $request->user() instanceof Agent ? "partner {$request->user()->name}" : 'the student';
+
+        $updater->requestChange($application, trim($validated['message']), $by);
+
+        return response()->json(['message' => 'Your request has been sent to CAS.'], 201);
     }
 
     /** Withdraw an application that is with CAS, any time before it is accepted. It stays on record as withdrawn. */

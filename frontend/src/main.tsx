@@ -43,6 +43,7 @@ const PortalShell = lazy(() => import("@/features/portal/PortalShell"))
 const RequirePortalAuth = lazy(() => import("@/features/portal/RequirePortalAuth"))
 const AgentHome = lazy(() => import("@/features/portal/agent/AgentHome"))
 const AgentAddStudent = lazy(() => import("@/features/portal/agent/AgentAddStudent"))
+const ApplicantDetailsPage = lazy(() => import("@/features/portal/ApplicantDetailsPage"))
 const AgentStudents = lazy(() => import("@/features/portal/agent/AgentStudents"))
 const AgentApplyWizard = lazy(() => import("@/features/portal/agent/AgentApplyWizard"))
 const AgentApplications = lazy(() => import("@/features/portal/agent/AgentApplications"))
@@ -164,6 +165,7 @@ const router = createBrowserRouter([
           { path: "/portal/agent", element: <AgentHome /> },
           { path: "/portal/agent/students", element: <AgentStudents /> },
           { path: "/portal/agent/students/new", element: <AgentAddStudent /> },
+          { path: "/portal/agent/students/:id/details", element: <ApplicantDetailsPage kind="agent" /> },
           { path: "/portal/agent/applications", element: <AgentApplications /> },
           { path: "/portal/agent/apply", element: <AgentApplyWizard /> },
           { path: "/portal/agent/apply-scholarship", element: <AgentScholarshipWizard /> },
@@ -175,6 +177,7 @@ const router = createBrowserRouter([
           { path: "/portal/student/apply", element: <StudentApplyWizard /> },
           { path: "/portal/student/apply-scholarship", element: <StudentScholarshipWizard /> },
           { path: "/portal/student/applications", element: <StudentApplications /> },
+          { path: "/portal/student/details", element: <ApplicantDetailsPage kind="student" /> },
           { path: "/portal/student/visa", element: <StudentVisa /> },
           { path: "/portal/student/contact", element: <StudentContact /> },
           { path: "/portal/student/invoices", element: <StudentInvoices /> },

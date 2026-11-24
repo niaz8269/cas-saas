@@ -569,6 +569,27 @@ export interface SavedDraft {
 export const getApplicationDraft = (kind: PortalKind, applicationId: number) =>
   portalApi<{ data: SavedDraft }>(`/${kind}/applications/${applicationId}/draft`)
 
+/** What a student or partner can send to correct the applicant record after an application has gone in. */
+export interface ApplicantDetailsPayload {
+  profile: Record<string, string>
+  guardians: WizardGuardian[]
+  education: WizardEducation[]
+}
+
+/** Update the applicant record (a student their own, a partner one of their students) until an application is accepted. */
+export const updateApplicantDetails = (kind: PortalKind, studentId: number | undefined, payload: ApplicantDetailsPayload) =>
+  portalApi<{ data: AgentStudentDetail }>(kind === "agent" ? `/agent/students/${studentId}/details` : "/student/applicant/details", {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  })
+
+/** Ask CAS to change something the applicant cannot change alone, such as the program or the funding. */
+export const requestApplicationChange = (kind: PortalKind, applicationId: number, message: string) =>
+  portalApi<{ message: string }>(`/${kind}/applications/${applicationId}/change-request`, {
+    method: "POST",
+    body: JSON.stringify({ message }),
+  })
+
 /** The student's own saved applicant record, so a new application starts pre-filled. */
 export const getStudentApplicant = () =>
   portalApi<{ data: AgentStudentDetail }>("/student/applicant")

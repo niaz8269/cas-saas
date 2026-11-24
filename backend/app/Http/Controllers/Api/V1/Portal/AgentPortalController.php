@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Portal\AgentStoreStudentRequest;
+use App\Http\Requests\Portal\UpdateApplicantDetailsRequest;
 use App\Http\Resources\Portal\AgentApplicationResource;
 use App\Http\Resources\Portal\AgentPayableResource;
 use App\Http\Resources\Portal\AgentStudentDetailResource;
@@ -14,6 +15,7 @@ use App\Models\Application;
 use App\Models\Concerns\Auditable;
 use App\Models\Student;
 use App\Services\Admissions\ApplicantDataWriter;
+use App\Services\Admissions\ApplicantDetailsUpdater;
 use App\Services\Leads\DuplicateDetector;
 use App\Services\Leads\LeadIngestionService;
 use App\Support\BrandAssets;
@@ -61,6 +63,23 @@ class AgentPortalController extends Controller
         abort_unless($student->agent_id === $request->user()->id, 404);
 
         return new AgentStudentDetailResource($student->load(['guardians', 'education']));
+    }
+
+    /**
+     * Correct or complete one of the partner's own students' details, until an application of theirs is accepted.
+     * Anyone else's student is a 404.
+     */
+    public function updateStudentDetails(
+        UpdateApplicantDetailsRequest $request,
+        Student $student,
+        ApplicantDetailsUpdater $updater,
+    ): AgentStudentDetailResource {
+        $agent = $request->user();
+        abort_unless($student->agent_id === $agent->id, 404);
+
+        $updater->update($student, $request->validated(), "partner {$agent->name} ({$agent->agent_code})");
+
+        return new AgentStudentDetailResource($student->refresh()->load(['guardians', 'education']));
     }
 
     /**
