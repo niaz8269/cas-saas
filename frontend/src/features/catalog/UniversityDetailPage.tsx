@@ -44,6 +44,7 @@ import ScholarshipFormDialog from "@/features/catalog/dialogs/ScholarshipFormDia
 import UniversityFormDialog from "@/features/catalog/UniversityFormDialog"
 import type { Intake, Program, Scholarship, UniversityContact } from "@/features/catalog/api"
 import { cn } from "@/lib/utils"
+import { mediumFor } from "@/lib/medicalProgram"
 
 /** Nearest upcoming intake deadline, with whole days remaining. */
 function nextDeadline(intakes: Intake[]): { name: string; date: string; daysLeft: number } | null {
@@ -311,6 +312,7 @@ export default function UniversityDetailPage() {
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-medium">{program.name}</span>
                   <span className="text-xs text-muted-foreground capitalize">{program.level}</span>
+                  {mediumFor(program) && <span className="text-xs text-muted-foreground">· {mediumFor(program)}</span>}
                   <span className="font-mono text-[11px] text-muted-foreground">#{program.id}</span>
                   {program.apply_link && (
                     <a
