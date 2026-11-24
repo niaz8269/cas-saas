@@ -210,10 +210,10 @@
   },
   "programs": {
     "seoTitle": "Find Programs to Study in China",
-    "seoDescription": "Search programs to study in China — MBBS, engineering, business and more — across partner universities. Filter by degree level, teaching language and budget.",
+    "seoDescription": "Search programs to study in China — MBBS, engineering, business and more — across partner universities. Filter by degree level and budget.",
     "eyebrow": "Program finder",
     "title": "Find your program",
-    "subtitle": "Search programs across every partner university and filter by level, teaching language and budget.",
+    "subtitle": "Search programs across every partner university and filter by level and budget.",
     "searchPlaceholder": "e.g. MBBS, Engineering…",
     "searchAria": "Search programs",
     "levelAria": "Level",

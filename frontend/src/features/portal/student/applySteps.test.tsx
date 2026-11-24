@@ -73,11 +73,11 @@ function makeSearch(over: Partial<ProgramSearch> = {}): ProgramSearch {
     programs: PROGRAMS, total: 3, loading: false, loadingMore: false, failed: false, hasMore: false, suggestion: null,
     facets: {
       universities: [{ id: 1, name: "Harbin Institute of Technology" }, { id: 2, name: "Harbin Medical University" }, { id: 3, name: "Beijing Normal University" }],
-      cities: ["Beijing", "Harbin"], languages: ["Chinese", "English"],
+      cities: ["Beijing", "Harbin"],
     },
-    search: "", university: "", city: "", language: "", filtering: false,
+    search: "", university: "", city: "", filtering: false,
     loadMore: vi.fn(), retry: vi.fn(), clear: vi.fn(),
-    setSearch: vi.fn(), setUniversity: vi.fn(), setCity: vi.fn(), setLanguage: vi.fn(),
+    setSearch: vi.fn(), setUniversity: vi.fn(), setCity: vi.fn(),
     ...over,
   }
 }
@@ -92,14 +92,16 @@ function renderCourse(search: ProgramSearch) {
   )
 }
 
-it("offers every university, city and teaching language, and shows how many programs match", () => {
+it("offers every university and city, and shows how many programs match", () => {
   renderCourse(makeSearch({ total: 20490 }))
 
   expect(screen.getByText("Showing 3 of 20490 programs")).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing Normal University" })).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing" })).toBeInTheDocument()
-  expect(screen.getByRole("option", { name: "English" })).toBeInTheDocument()
-  expect(screen.getByRole("option", { name: "Chinese" })).toBeInTheDocument()
+  // The medium of teaching is not mentioned, filtered or shown anywhere in the program list.
+  expect(screen.queryByLabelText("Teaching language")).not.toBeInTheDocument()
+  expect(screen.queryByRole("option", { name: "English" })).not.toBeInTheDocument()
+  expect(screen.queryByText("English")).not.toBeInTheDocument()
 })
 
 it("hands what is typed and chosen to the search", async () => {
@@ -114,8 +116,6 @@ it("hands what is typed and chosen to the search", async () => {
   expect(search.setCity).toHaveBeenCalledWith("Harbin")
   await user.selectOptions(screen.getByLabelText("University"), "2")
   expect(search.setUniversity).toHaveBeenCalledWith("2")
-  await user.selectOptions(screen.getByLabelText("Teaching language"), "Chinese")
-  expect(search.setLanguage).toHaveBeenCalledWith("Chinese")
 })
 
 it("asks for the next programs, and clears the filters, on request", async () => {

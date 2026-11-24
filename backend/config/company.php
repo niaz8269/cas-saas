@@ -8,11 +8,11 @@ return [
     'name' => env('COMPANY_NAME', 'CAS - Study in China'),
     'tagline' => env('COMPANY_TAGLINE', 'Consultancy for Abroad Study'),
     // The registered company name and number, when the invoices should carry them.
-    'legal_name' => env('COMPANY_LEGAL_NAME'),
+    'legal_name' => env('COMPANY_LEGAL_NAME', 'Consultancy for Abroad Study (CAS)'),
     'registration' => env('COMPANY_REGISTRATION'),
     // A street address, when there is one to print; the offices below are always shown.
-    'address' => env('COMPANY_ADDRESS'),
-    'offices' => ['Head Office: Dalian, China', 'Islamabad, Pakistan'],
+    'address' => env('COMPANY_ADDRESS', 'Dalian, Liaoning, China'),
+    'offices' => ['Islamabad office, Pakistan'],
     'email' => env('COMPANY_EMAIL', 'info@cas.moe'),
     'phone' => env('COMPANY_PHONE', '+86 176 4041 2827'),
     'website' => env('COMPANY_WEBSITE', 'www.cas.moe'),

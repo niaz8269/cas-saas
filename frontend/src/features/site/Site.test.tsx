@@ -88,7 +88,7 @@ it("renders the CUCAS-style home with hero, search and sections", async () => {
   expect(screen.getByLabelText("Search universities or programs")).toBeInTheDocument()
   expect(screen.getByText("Programs Open for Applications")).toBeInTheDocument()
   expect(screen.getByText("How applying with CAS works")).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: /See all open programs/ })).toHaveAttribute("href", "/site/programs?language=English")
+  expect(screen.getByRole("link", { name: /See all open programs/ })).toHaveAttribute("href", "/site/programs")
   expect(screen.getByText("Highlights")).toBeInTheDocument()
   // Live data from the public API renders in the university sections.
   expect((await screen.findAllByText("Jilin Medical University")).length).toBeGreaterThan(0)
@@ -308,7 +308,8 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   // Programs tab.
   await user.click(screen.getByRole("button", { name: /Programs/ }))
   expect(screen.getByText("MBBS")).toBeInTheDocument()
-  expect(screen.getAllByText("English").length).toBeGreaterThan(0)
+  // The medium of teaching is not shown on a program.
+  expect(screen.queryByText("English")).not.toBeInTheDocument()
 
   // Scholarships tab.
   await user.click(screen.getByRole("button", { name: /Scholarships/ }))
@@ -452,8 +453,9 @@ it("searches and filters a university's program list", async () => {
   expect(screen.queryByText("Accounting")).not.toBeInTheDocument()
 
   await user.click(screen.getByRole("button", { name: "Clear filters" }))
-  await user.selectOptions(screen.getByLabelText("Filter by teaching language"), "Chinese")
-  expect(screen.getByText("2 of 3 programs")).toBeInTheDocument()
+  // No filter or label mentions the teaching language.
+  expect(screen.queryByLabelText("Filter by teaching language")).not.toBeInTheDocument()
+  expect(screen.queryByText("Chinese")).not.toBeInTheDocument()
 
   await user.click(within(screen.getByRole("group", { name: "Degree level" })).getByRole("button", { name: /phd/i }))
   expect(screen.getByText("Archaeology")).toBeInTheDocument()

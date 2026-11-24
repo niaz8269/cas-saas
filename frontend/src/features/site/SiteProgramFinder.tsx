@@ -1,7 +1,7 @@
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import type { TFunction } from "i18next"
-import { Clock, GraduationCap, Languages, MapPin, School, Search } from "lucide-react"
+import { Clock, GraduationCap, MapPin, School, Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useSearchParams } from "react-router-dom"
@@ -25,12 +25,6 @@ const LEVELS = [
   { value: "bachelor", labelKey: "programs.levelBachelor" },
   { value: "master", labelKey: "programs.levelMaster" },
   { value: "phd", labelKey: "programs.levelPhd" },
-]
-
-const LANGUAGES = [
-  { value: "all", labelKey: "programs.langAny" },
-  { value: "English", labelKey: "programs.langEnglish" },
-  { value: "Chinese", labelKey: "programs.langChinese" },
 ]
 
 const SORTS = [
@@ -84,7 +78,6 @@ export default function SiteProgramFinder() {
   const [searchInput, setSearchInput] = useState(params.get("q") ?? "")
   const q = params.get("q") ?? ""
   const level = params.get("level") ?? "all"
-  const language = params.get("language") ?? "all"
   const maxFee = params.get("maxFee") ?? ""
   const city = params.get("city") ?? ""
   const csc = params.get("csc") === "1"
@@ -117,11 +110,10 @@ export default function SiteProgramFinder() {
   })
 
   const { data, isPending, isError, isFetching } = useQuery({
-    queryKey: ["site-programs", { q, level, language, maxFee, city, csc, sort: serverSort, page }],
+    queryKey: ["site-programs", { q, level, maxFee, city, csc, sort: serverSort, page }],
     queryFn: () => getSitePrograms({
       q: q || undefined,
       level: level === "all" ? undefined : level,
-      language: language === "all" ? undefined : language,
       maxFee: maxFee || undefined,
       city: city || undefined,
       csc: csc || undefined,
@@ -140,7 +132,7 @@ export default function SiteProgramFinder() {
   })()
   const meta = data?.meta
 
-  const activeFilters = [q, level !== "all" ? level : "", language !== "all" ? language : "", maxFee, city, csc ? "1" : ""].filter(Boolean).length
+  const activeFilters = [q, level !== "all" ? level : "", maxFee, city, csc ? "1" : ""].filter(Boolean).length
   const clearAll = () => { setSearchInput(""); setParams(new URLSearchParams(), { replace: true }) }
 
   const resultsRef = useRef<HTMLHeadingElement>(null)
@@ -171,11 +163,6 @@ export default function SiteProgramFinder() {
               {LEVELS.map((l) => <option key={l.value} value={l.value}>{t(l.labelKey)}</option>)}
             </select>
           </Field>
-          <Field id="pf-language" label={t("programs.languageAria")}>
-            <select id="pf-language" className={selectCls} value={language} onChange={(e) => update({ language: e.target.value })}>
-              {LANGUAGES.map((l) => <option key={l.value} value={l.value}>{t(l.labelKey)}</option>)}
-            </select>
-          </Field>
           <Field id="pf-city" label={t("programs.cityLabel", { defaultValue: "City" })}>
             <select id="pf-city" className={selectCls} value={city} onChange={(e) => update({ city: e.target.value })}>
               <option value="">{t("programs.allCities", { defaultValue: "All cities" })}</option>
@@ -191,10 +178,6 @@ export default function SiteProgramFinder() {
             </select>
           </Field>
           <div className="flex items-end gap-2 sm:col-span-2">
-            <button type="button" aria-pressed={language === "English"} onClick={() => update({ language: language === "English" ? "all" : "English" })}
-              className={cn("h-11 rounded-sm border px-4 text-sm font-medium transition-colors", language === "English" ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground")}>
-              {t("programs.englishOnly", { defaultValue: "English-taught only" })}
-            </button>
             <button type="button" aria-pressed={csc} onClick={() => update({ csc: csc ? null : "1" })}
               className={cn("h-11 rounded-sm border px-4 text-sm font-medium transition-colors", csc ? "border-cas-navy bg-cas-navy-50 text-cas-navy" : "bg-background text-muted-foreground hover:text-foreground")}>
               {t("programs.cscOnly", { defaultValue: "CSC scholarship listed" })}
@@ -245,7 +228,6 @@ export default function SiteProgramFinder() {
                 {p.csc_listed && <span className="inline-flex items-center rounded-full border border-cas-navy/20 px-2 py-0.5 text-[11px] text-cas-navy">CSC</span>}
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                {p.teaching_language && <span className="inline-flex items-center gap-1"><Languages className="size-3.5" aria-hidden /> {p.teaching_language}</span>}
                 {p.duration_months && <span className="inline-flex items-center gap-1"><Clock className="size-3.5" aria-hidden /> {formatDuration(p.duration_months, t)}</span>}
                 {p.university?.slug && (
                   <Link to={`/site/universities/${p.university.slug}`} className="inline-flex items-center gap-1 font-medium text-cas-navy hover:text-cas-red-600">

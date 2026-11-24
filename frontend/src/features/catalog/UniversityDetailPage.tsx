@@ -311,9 +311,6 @@ export default function UniversityDetailPage() {
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-medium">{program.name}</span>
                   <span className="text-xs text-muted-foreground capitalize">{program.level}</span>
-                  {program.teaching_language && (
-                    <span className="text-xs text-muted-foreground">· {program.teaching_language}</span>
-                  )}
                   <span className="font-mono text-[11px] text-muted-foreground">#{program.id}</span>
                   {program.apply_link && (
                     <a
