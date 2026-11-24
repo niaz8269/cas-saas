@@ -288,7 +288,7 @@ class SeoController extends Controller
             .'@keyframes casPulse{0%,100%{opacity:.45}50%{opacity:1}}'
             .'#cas-seo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>'
             .'<noscript><style>#cas-splash{display:none}#cas-seo{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}</style></noscript>'
-            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="CAS - Study in China" width="88" height="88" /></div>';
+            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="CAS" width="88" height="88" /></div>';
         $html = str_replace('<div id="root"></div>', '<div id="root">'.$splash.'<main id="cas-seo" style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
 
         return $html;
