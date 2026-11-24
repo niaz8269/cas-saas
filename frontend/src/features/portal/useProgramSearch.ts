@@ -6,7 +6,7 @@ import type { WizardProgram } from "@/features/portal/api"
 import type { PortalKind } from "@/stores/portalAuth"
 
 const PAGE_SIZE = 25
-const NO_FACETS: ProgramFacets = { universities: [], cities: [], languages: [] }
+const NO_FACETS: ProgramFacets = { universities: [], cities: [] }
 
 export interface ProgramSearch {
   programs: WizardProgram[]
@@ -25,11 +25,9 @@ export interface ProgramSearch {
   search: string
   university: string
   city: string
-  language: string
   setSearch: (v: string) => void
   setUniversity: (v: string) => void
   setCity: (v: string) => void
-  setLanguage: (v: string) => void
   filtering: boolean
   clear: () => void
 }
@@ -51,7 +49,6 @@ export function useProgramSearch({ kind, degree, funding, enabled, universitySlu
   const [debounced, setDebounced] = useState("")
   const [university, setUniversity] = useState("")
   const [city, setCity] = useState("")
-  const [language, setLanguage] = useState("")
 
   useEffect(() => {
     const t = setTimeout(() => setDebounced(search.trim()), 300)
@@ -61,13 +58,13 @@ export function useProgramSearch({ kind, degree, funding, enabled, universitySlu
 
   // A different degree or funding starts a fresh search.
   useEffect(() => {
-    setSearch(""); setDebounced(""); setUniversity(""); setCity(""); setLanguage("")
+    setSearch(""); setDebounced(""); setUniversity(""); setCity("")
   }, [degree, funding])
 
   const query = useInfiniteQuery({
-    queryKey: [kind, "availability", degree, funding, universitySlug ?? null, debounced, university, city, language],
+    queryKey: [kind, "availability", degree, funding, universitySlug ?? null, debounced, university, city],
     queryFn: ({ pageParam }) => getApplyAvailability(kind, degree as Degree, funding as Funding, {
-      q: debounced, university_id: university, city, language, university: universitySlug ?? undefined, page: pageParam, per_page: PAGE_SIZE,
+      q: debounced, university_id: university, city, university: universitySlug ?? undefined, page: pageParam, per_page: PAGE_SIZE,
     }),
     initialPageParam: 1,
     getNextPageParam: (last) => (last.meta && last.meta.current_page < last.meta.last_page ? last.meta.current_page + 1 : undefined),
@@ -78,7 +75,7 @@ export function useProgramSearch({ kind, degree, funding, enabled, universitySlu
   const pages = query.data?.pages ?? []
   const programs = pages.flatMap((p) => p.data)
   const first = pages[0]
-  const filtering = !!(search || university || city || language)
+  const filtering = !!(search || university || city)
 
   return {
     programs,
@@ -91,9 +88,9 @@ export function useProgramSearch({ kind, degree, funding, enabled, universitySlu
     hasMore: !!query.hasNextPage,
     loadMore: () => { void query.fetchNextPage() },
     retry: () => { void query.refetch() },
-    search, university, city, language,
-    setSearch, setUniversity, setCity, setLanguage,
+    search, university, city,
+    setSearch, setUniversity, setCity,
     filtering,
-    clear: () => { setSearch(""); setDebounced(""); setUniversity(""); setCity(""); setLanguage("") },
+    clear: () => { setSearch(""); setDebounced(""); setUniversity(""); setCity("") },
   }
 }

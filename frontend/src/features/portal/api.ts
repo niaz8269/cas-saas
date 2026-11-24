@@ -446,7 +446,6 @@ export const getFundingOptions = (degree: Degree) => getApplyFundingOptions("stu
 export interface ProgramFacets {
   universities: { id: number; name: string }[]
   cities: string[]
-  languages: string[]
 }
 
 /** One page of the programs on offer. `meta`, `facets` and `suggestion` are only there when the server sends them. */
@@ -462,7 +461,6 @@ export interface ProgramQuery {
   university?: string
   university_id?: string
   city?: string
-  language?: string
   page?: number
   per_page?: number
 }

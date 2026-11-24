@@ -179,10 +179,10 @@
   },
   "programs": {
     "seoTitle": "寻找留学中国的专业",
-    "seoDescription": "搜索留学中国的专业——MBBS、工程、商科等——覆盖各合作院校。可按学位层次、授课语言和预算筛选。",
+    "seoDescription": "搜索留学中国的专业——MBBS、工程、商科等——覆盖各合作院校。可按学位层次和预算筛选。",
     "eyebrow": "专业查询",
     "title": "找到适合你的专业",
-    "subtitle": "搜索各合作院校的专业，并按层次、授课语言和预算筛选。",
+    "subtitle": "搜索各合作院校的专业，并按层次和预算筛选。",
     "searchPlaceholder": "例如 MBBS、工程…",
     "searchAria": "搜索专业",
     "levelAria": "层次",

@@ -267,7 +267,7 @@ export default function SiteHome() {
                 <PhotoBanner src="/images/art-3.svg" image={cover ? { src: cover, credit: program.university?.cover_credit ?? detail?.cover_credit ?? undefined } : null} className="h-40" />
                 <div className="flex flex-1 flex-col p-5">
                   <h3 className="text-base font-bold text-cas-navy">{program.university?.name ?? t("home.weekly.featuredUniversity")}</h3>
-                  <p className="mt-0.5 text-sm text-muted-foreground">{program.name}{program.teaching_language ? ` · ${program.teaching_language}` : ""}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{program.name}</p>
                   <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div><p className="text-xs text-muted-foreground">{t("home.weekly.level")}</p><p className="font-semibold capitalize">{program.level.replace("_", "-")}</p></div>
                     <div><p className="text-xs text-muted-foreground">{t("home.weekly.tuition")}</p><p className="font-semibold">{money(t, program.tuition_fee, program.currency)}</p></div>
@@ -304,7 +304,7 @@ export default function SiteHome() {
             ))}
           </ol>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <Link to="/site/programs?language=English" className="inline-flex h-10 items-center gap-2 rounded-sm bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
+            <Link to="/site/programs" className="inline-flex h-10 items-center gap-2 rounded-sm bg-cas-navy px-5 text-sm font-semibold text-white hover:bg-cas-navy-700">
               {t("home.weekly.seeAll")} <ArrowRight className="size-4" />
             </Link>
             <Link to="/site/study-plan" className="inline-flex h-10 items-center rounded-sm border border-cas-navy px-5 text-sm font-semibold text-cas-navy hover:bg-cas-navy-50">

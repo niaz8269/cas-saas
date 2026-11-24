@@ -33,7 +33,7 @@ it('renders a professional invoice: letterhead, details, items, totals and payme
         ->toContain('Invoice')->toContain('INV-TEST-1')
         ->toContain('Billed to')->toContain('Ali Khan')
         // The issuer: who is sending this, and how to reach them.
-        ->toContain('CAS - Study in China')->toContain('info@cas.moe')->toContain('+86 176 4041 2827')->toContain('Dalian, China')
+        ->toContain('Consultancy for Abroad Study (CAS)')->toContain('Dalian, Liaoning, China')->toContain('info@cas.moe')->toContain('+86 176 4041 2827')->toContain('Thank you for choosing CAS - Study in China')
         // The invoice's own details and what is owed.
         ->toContain('Invoice date')->toContain('Due date')->toContain('Awaiting payment')
         ->toContain('Application fee')->toContain('Amount due')

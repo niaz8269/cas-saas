@@ -652,7 +652,7 @@ export function CourseStep(props: {
                   className="h-10 pl-9"
                 />
               </div>
-              <div className="grid gap-2 sm:grid-cols-3">
+              <div className="grid gap-2 sm:grid-cols-2">
                 <select className={filterSelect} value={ps.university} onChange={(e) => ps.setUniversity(e.target.value)} aria-label={t("wizard.course.filterUniversity", { defaultValue: "University" })}>
                   <option value="">{t("wizard.course.allUniversities", { defaultValue: "All universities" })}</option>
                   {ps.facets.universities.map((u) => <option key={u.id} value={String(u.id)}>{u.name}</option>)}
@@ -660,10 +660,6 @@ export function CourseStep(props: {
                 <select className={filterSelect} value={ps.city} onChange={(e) => ps.setCity(e.target.value)} aria-label={t("wizard.course.filterCity", { defaultValue: "City" })}>
                   <option value="">{t("wizard.course.allCities", { defaultValue: "All cities" })}</option>
                   {ps.facets.cities.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-                <select className={filterSelect} value={ps.language} onChange={(e) => ps.setLanguage(e.target.value)} aria-label={t("wizard.course.filterLanguage", { defaultValue: "Teaching language" })}>
-                  <option value="">{t("wizard.course.allLanguages", { defaultValue: "All languages" })}</option>
-                  {ps.facets.languages.map((l) => <option key={l} value={l}>{l}</option>)}
                 </select>
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
