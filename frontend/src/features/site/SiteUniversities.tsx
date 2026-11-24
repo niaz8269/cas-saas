@@ -14,6 +14,7 @@ import { SitePageHeader, UniCard } from "@/features/site/components"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import PageFaqs from "@/features/site/SiteFaqs"
+import UniversityDirectory from "@/features/site/UniversityDirectory"
 
 // Contextual "topic" views so distinct index links land on distinct,
 // framed university lists (backend has no topic flags yet, so these set the
@@ -149,6 +150,7 @@ export default function SiteUniversities() {
           <Button variant="secondary" size="sm" disabled={meta.current_page >= meta.last_page} onClick={() => setPage((p) => p + 1)}>{t("universities.next")}</Button>
         </div>
       )}
+      <UniversityDirectory />
       <PageFaqs path="site/universities" />
     </div>
   )

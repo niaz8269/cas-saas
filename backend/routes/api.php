@@ -94,6 +94,7 @@ Route::prefix('v1')->group(function () {
         // CAS-branded copy of a licensed cover photo, with its attribution (previews stay clean)
         Route::get('universities/{slug}/cover-download', [PublicMediaController::class, 'coverDownload']);
         Route::get('photo-credits', [PublicCatalogController::class, 'photoCredits']);
+        Route::get('university-directory', [PublicCatalogController::class, 'universityDirectory']);
         Route::get('cities/{slug}', [PublicCatalogController::class, 'city']);
         Route::get('page-faqs', [PublicCatalogController::class, 'pageFaqs']);
         Route::get('stats', [PublicCatalogController::class, 'stats']);

@@ -44,8 +44,8 @@ export default function SitePhotoCredits() {
                 <span className="font-medium">{r.university} <span className="text-xs text-muted-foreground">({t(r.kind === "city" ? "photoCredits.city" : "photoCredits.campus")})</span></span>
                 <span className="text-muted-foreground">
                   {r.credit}
-                  {r.source_url && <> · <a href={r.source_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">{t("photoCredits.source")}</a></>}
-                  {r.text_source_url && <> · <a href={r.text_source_url} target="_blank" rel="noreferrer" className="underline hover:text-cas-navy">{t("photoCredits.textFrom")}</a></>}
+                  {r.source_url && <> · <a href={r.source_url} target="_blank" rel="nofollow noopener noreferrer" className="underline hover:text-cas-navy">{t("photoCredits.source")}</a></>}
+                  {r.text_source_url && <> · <a href={r.text_source_url} target="_blank" rel="nofollow noopener noreferrer" className="underline hover:text-cas-navy">{t("photoCredits.textFrom")}</a></>}
                 </span>
               </li>
             ))}

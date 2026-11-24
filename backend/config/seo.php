@@ -16,6 +16,16 @@ return [
 
     'short_name' => 'CAS',
 
+    // Words that always link to a partner's own CAS microsite wherever they appear in running text.
+    'brand_links' => [
+        'Dalian Medical University' => 'https://dmu.cas.moe',
+    ],
+
+    // Posts whose address changed: old slug => new slug (the old address answers with a permanent redirect).
+    'renamed_posts' => [
+        'moe-approves-43-universities-english-mbbs-2026-27' => 'moe-approves-43-universities-english-mbbs-2027',
+    ],
+
     // Public origin used in canonicals, sitemaps and social tags (no trailing slash).
     'site_url' => rtrim(env('SITE_URL', env('APP_URL', 'http://localhost:8080')), '/'),
 

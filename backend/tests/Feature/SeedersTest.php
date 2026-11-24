@@ -143,8 +143,8 @@ it('seeds the catalog', function () {
 });
 
 it('seeds the application document checklist', function () {
-    // 9 base types plus the 7 added for a Master's / PhD scholarship application.
-    expect(DocumentType::count())->toBe(16)
+    // The checklist types for every level (no document is mandatory, see ApplicationDocumentsSeeder).
+    expect(DocumentType::count())->toBe(20)
         ->and(DocumentType::requiredFor('application')->count())->toBe(4)
         ->and(DocumentType::requiredFor('scholarship_postgraduate')->count())->toBe(8)
         ->and(DocumentType::requiredFor('scholarship_postgraduate_optional')->count())->toBe(2);

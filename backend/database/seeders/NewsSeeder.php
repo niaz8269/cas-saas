@@ -70,16 +70,23 @@ class NewsSeeder extends Seeder
     {
         return [
             [
-                'slug' => 'moe-approves-43-universities-english-mbbs-2026-27',
-                'title' => 'MoE approves 43 universities to enrol English-taught MBBS students for 2026–27',
-                'excerpt' => 'The Ministry of Education has published its list of universities approved to recruit international undergraduate Clinical Medicine (English-taught) students for the 2026–2027 academic year.',
+                'slug' => 'moe-approves-43-universities-english-mbbs-2027',
+                'title' => 'MoE approves 43 universities for English-taught MBBS in 2027',
+                'excerpt' => 'The Ministry of Education\'s list of 43 universities approved to recruit English-taught MBBS (Clinical Medicine) students for 2027, with each university\'s city and page.',
                 'category' => 'MBBS',
                 // A mosaic of the cover photos of the approved universities (each photo is
                 // credited on the Photo credits page). Built from the catalog, see docs.
                 'cover' => '/images/news-moe-mbbs-listed-2026-27.webp',
                 'date' => '2026-06-24 09:00:00',
-                'body' => '<p>The Ministry of Education\'s Department of International Cooperation and Exchanges has approved <strong>43 universities</strong> to recruit international undergraduate Clinical Medicine (English-taught, MBBS) students for the 2026–2027 academic year, including Jilin University, China Medical University and Dalian Medical University.</p>'
-                    .'<p>Under the Ministry\'s rules, universities that are not on the annual list may not recruit English-taught MBBS students. Check the list before you apply: on this site, universities on it carry the “MoE-approved MBBS” badge, and you can filter the university list to show only them.</p>'
+                'body' => '<p><strong>The Ministry of Education has approved 43 universities to recruit international undergraduate Clinical Medicine (English-taught MBBS) students for 2027.</strong> The approval comes from the Ministry\'s Department of International Cooperation and Exchanges. The list includes Jilin University, China Medical University and Dalian Medical University.</p>'
+                    .'<h2>Key facts</h2><ul>'
+                    .'<li><strong>Universities on the list:</strong> 43</li>'
+                    .'<li><strong>Programme:</strong> undergraduate Clinical Medicine taught in English, the degree known abroad as MBBS</li>'
+                    .'<li><strong>Who approves:</strong> the Ministry of Education, Department of International Cooperation and Exchanges</li>'
+                    .'<li><strong>The rule:</strong> a university that is not on the annual list may not recruit English-taught MBBS students</li>'
+                    .'<li><strong>How to check on CAS:</strong> approved universities carry the &ldquo;MoE-approved MBBS&rdquo; badge, and you can filter the <a href="/site/universities?moe=1">university list</a> to show only them</li>'
+                    .'</ul>'
+                    .'<p>Check the list before you apply, and read the <a href="/site/mbbs-in-china">MBBS in China page</a> for fees, requirements and dates.</p>'
                     .$this->moeApprovedList(),
             ],
             [

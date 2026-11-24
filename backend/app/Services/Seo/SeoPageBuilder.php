@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
+use App\Support\BrandLinks;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -32,6 +33,11 @@ class SeoPageBuilder
         if ($guide && ($page['status'] ?? null) === 200 && ! empty($page['body'])) {
             // One sentence pointing to the matching guide on xjmu.online (config/partner_guides.php).
             $page['body'] .= '<p>'.implode('', array_map(fn ($part) => is_array($part) ? $this->link($part[1], $part[0]) : e($part), $guide)).'</p>';
+        }
+
+        // Partner names in running text link to their own sites; done here so the cached page already has them.
+        if (! empty($page['body'])) {
+            $page['body'] = BrandLinks::apply((string) $page['body']);
         }
 
         return $page;
@@ -63,6 +69,11 @@ class SeoPageBuilder
             return $this->city($m[1]) ?? $this->notFound();
         }
         if (preg_match('#^site/news/([^/]+)$#', $path, $m)) {
+            // A post whose address changed: the old address goes to the new one.
+            if ($renamed = config('seo.renamed_posts')[$m[1]] ?? null) {
+                return ['redirect' => '/site/news/'.$renamed];
+            }
+
             return $this->post($m[1]) ?? $this->notFound();
         }
 

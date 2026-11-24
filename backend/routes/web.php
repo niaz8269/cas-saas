@@ -17,6 +17,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 Route::withoutMiddleware([EncryptCookies::class, AddQueuedCookiesToResponse::class, StartSession::class, ShareErrorsFromSession::class, ValidateCsrfToken::class])->group(function () {
     Route::get('/', [SeoController::class, 'shell']);
     Route::get('/robots.txt', [SeoController::class, 'robots']);
+    Route::get('/llms.txt', [SeoController::class, 'llms']);
     Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex']);
     Route::get('/sitemaps/{name}.xml', [SeoController::class, 'sitemap']);
     Route::get('/{key}.txt', [SeoController::class, 'indexNowKey'])->where('key', '[A-Za-z0-9]{16,64}');
