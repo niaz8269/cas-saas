@@ -308,8 +308,8 @@ it("renders a tabbed university detail with programs, scholarships and deadline"
   // Programs tab.
   await user.click(screen.getByRole("button", { name: /Programs/ }))
   expect(screen.getByText("MBBS")).toBeInTheDocument()
-  // The medium of teaching is not shown on a program.
-  expect(screen.queryByText("English")).not.toBeInTheDocument()
+  // MBBS is a medical program, so its medium of instruction is shown.
+  expect(screen.getAllByText("English").length).toBeGreaterThan(0)
 
   // Scholarships tab.
   await user.click(screen.getByRole("button", { name: /Scholarships/ }))

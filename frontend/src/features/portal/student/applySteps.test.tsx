@@ -98,10 +98,9 @@ it("offers every university and city, and shows how many programs match", () => 
   expect(screen.getByText("Showing 3 of 20490 programs")).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing Normal University" })).toBeInTheDocument()
   expect(screen.getByRole("option", { name: "Beijing" })).toBeInTheDocument()
-  // The medium of teaching is not mentioned, filtered or shown anywhere in the program list.
+  // There is no language filter; the medium is only printed on a medical program (see the test below).
   expect(screen.queryByLabelText("Teaching language")).not.toBeInTheDocument()
   expect(screen.queryByRole("option", { name: "English" })).not.toBeInTheDocument()
-  expect(screen.queryByText("English")).not.toBeInTheDocument()
 })
 
 it("hands what is typed and chosen to the search", async () => {
@@ -244,4 +243,18 @@ it("removes one file and only tells the wizard when the last one is gone", async
 
   await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/documents/11"), expect.objectContaining({ method: "DELETE" })))
   expect(onRemoved).not.toHaveBeenCalled()
+})
+
+it("names the medium of instruction on a medical program, and on no other", () => {
+  renderCourse(makeSearch({
+    programs: [
+      prog(7, "MBBS (Clinical Medicine)", "Jilin Medical University", "Jilin", "English"),
+      prog(8, "Civil Engineering", "Harbin Institute of Technology", "Harbin", "English"),
+    ],
+    total: 2,
+  }))
+
+  expect(screen.getAllByText("English")).toHaveLength(1)
+  expect(screen.getByText("MBBS (Clinical Medicine)").closest("button")).toHaveTextContent("English")
+  expect(screen.getByText("Civil Engineering").closest("button")).not.toHaveTextContent("English")
 })
