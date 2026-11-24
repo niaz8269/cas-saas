@@ -208,6 +208,23 @@ class PublicCatalogController extends Controller
     }
 
     /**
+     * Every university's name, address and city in one small list, so the universities page can link to all of them
+     * (visitors and search engines reach any university in two clicks from the home page).
+     */
+    public function universityDirectory(): JsonResponse
+    {
+        $rows = cache()->remember('public.university-directory.v1', now()->addMinutes(30), fn () => University::query()
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get(['name', 'slug', 'city'])
+            ->map(fn ($u) => ['name' => $u->name, 'slug' => $u->slug, 'city' => $u->city])
+            ->values()
+            ->all());
+
+        return response()->json(['data' => $rows]);
+    }
+
+    /**
      * Attribution for the freely licensed photos used on the site. The photos
      * carry the CAS mark; their authors and licences are listed on one page.
      */

@@ -71,8 +71,8 @@ function CityProfileArticle({ profile, city }: { profile: SiteCityProfile; city:
       {profile.source_url && (
         <p className="mt-8 border-t pt-4 text-xs text-muted-foreground">
           {t("city.sourceLabel")}{" "}
-          <a href={profile.source_url} target="_blank" rel="noreferrer" className="text-cas-navy hover:underline">Wikipedia</a>
-          {" (CC BY-SA 4.0)"}
+          {"Wikipedia (CC BY-SA 4.0). "}
+          <Link to="/site/photo-credits" className="text-cas-navy hover:underline">{t("city.sourceList", { defaultValue: "Sources and credits" })}</Link>
         </p>
       )}
     </article>

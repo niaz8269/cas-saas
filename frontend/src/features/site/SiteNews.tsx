@@ -74,7 +74,7 @@ export default function SiteNews() {
 
   const posts = useQuery({
     queryKey: ["site-posts", tab, lang],
-    queryFn: () => getSitePosts({ type: tab === "all" ? undefined : tab, lang }),
+    queryFn: () => getSitePosts({ type: tab === "all" ? undefined : tab, lang, perPage: 50 }),
   })
 
   const items = posts.data?.data ?? []

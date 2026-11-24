@@ -44,7 +44,7 @@ return [
         ['guide for Bangladeshi and Nepali students', $x.'/mbbs-in-china-for-bangladeshi-nepali-students'],
         '.',
     ],
-    '/site/news/moe-approves-43-universities-english-mbbs-2026-27' => [
+    '/site/news/moe-approves-43-universities-english-mbbs-2027' => [
         'Further reading: ',
         ['the MOE list explained', $x.'/moe-listed-mbbs-universities-in-china'],
         ' by Xinjiang Medical University admissions.',

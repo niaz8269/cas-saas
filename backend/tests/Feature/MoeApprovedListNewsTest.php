@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-const MOE_NEWS_SLUG = 'moe-approves-43-universities-english-mbbs-2026-27';
+const MOE_NEWS_SLUG = 'moe-approves-43-universities-english-mbbs-2027';
 
 it('lists every MoE-approved university in the approval news post, linked and alphabetical', function () {
     University::factory()->create(['name' => 'Zhejiang University', 'slug' => 'zhejiang-university', 'city' => 'Hangzhou', 'moe_listed' => true]);

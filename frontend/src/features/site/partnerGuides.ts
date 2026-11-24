@@ -44,7 +44,7 @@ export const PARTNER_GUIDES: Record<string, GuidePart[]> = {
     ["guide for Bangladeshi and Nepali students", `${X}/mbbs-in-china-for-bangladeshi-nepali-students`],
     ".",
   ],
-  "/site/news/moe-approves-43-universities-english-mbbs-2026-27": [
+  "/site/news/moe-approves-43-universities-english-mbbs-2027": [
     "Further reading: ",
     ["the MOE list explained", `${X}/moe-listed-mbbs-universities-in-china`],
     " by Xinjiang Medical University admissions.",

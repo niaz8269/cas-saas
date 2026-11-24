@@ -209,7 +209,7 @@
     "profileLabel": "CAS University Profile"
   },
   "programs": {
-    "seoTitle": "Find Programs to Study in China",
+    "seoTitle": "Programs in China: Bachelor, Master, PhD & MBBS",
     "seoDescription": "Search programs to study in China — MBBS, engineering, business and more — across partner universities. Filter by degree level and budget.",
     "eyebrow": "Program finder",
     "title": "Find your program",
@@ -241,8 +241,8 @@
     "pageOf": "Page {{current}} of {{last}}"
   },
   "scholarships": {
-    "seoTitle": "Scholarships to Study in China",
-    "seoDescription": "Scholarships to study in China — government, provincial and university awards, full and partial. Check coverage and deadlines and apply with CAS.",
+    "seoTitle": "Scholarships in China: CSC, Provincial & University",
+    "seoDescription": "Find CSC, provincial and university scholarships for international students: what each covers, who can apply and when applications open.",
     "eyebrow": "Funding",
     "title": "Scholarships & funding",
     "subtitle": "Full and partial awards offered by our partner universities. We help you find and apply for the ones you qualify for.",
@@ -563,7 +563,7 @@
     "ctaSubtitle": "Apply for a partner account, or talk to our team first."
   },
   "services": {
-    "seoTitle": "Our Services for Students Going to China",
+    "seoTitle": "CAS Services: Admission, Visa & Scholarship Help",
     "seoDescription": "CAS services for studying in China — admission service, visa assistance, scholarship help, airport pickup and on-campus support, end to end.",
     "eyebrow": "End-to-end support",
     "title": "Our services",
@@ -635,7 +635,7 @@
     }
   },
   "whyChina": {
-    "seoTitle": "Why Study in China",
+    "seoTitle": "Why Study in China: Costs, Quality & Scholarships",
     "seoDescription": "Why study in China — world-ranked, Ministry of Education–listed universities, English-taught degrees, affordable tuition and generous scholarships.",
     "eyebrow": "A world-class education",
     "title": "Why study in China",
@@ -714,7 +714,7 @@
     }
   },
   "faq": {
-    "seoTitle": "FAQ: Studying in China",
+    "seoTitle": "Study in China FAQ: Fees, Visa, Scholarships & Apply",
     "seoDescription": "Answers to common questions about studying in China with CAS: choosing a university and program, scholarships, applying, student visas, arrival support and fees.",
     "eyebrow": "Help centre",
     "title": "Frequently asked questions",
@@ -784,7 +784,7 @@
     "notFoundBody": "This post may have been unpublished or the link is incorrect."
   },
   "news": {
-    "seoTitle": "News & Updates on Studying in China",
+    "seoTitle": "Study in China News: Deadlines, Scholarships, Guides",
     "seoDescription": "News and updates from CAS — intake deadlines, scholarship openings and partner-university announcements for studying in China.",
     "headerEyebrow": "News & resources",
     "headerTitle": "Latest from CAS",
@@ -1166,7 +1166,7 @@
       "supportLink": "Talk to us."
     },
     "seo": {
-      "title": "Apply to Chinese Universities Online",
+      "title": "Study in China: Apply to Chinese Universities Online",
       "description": "Study in China with CAS, an authorized agency since 2012. Browse Ministry of Education–listed universities, programs and scholarships, and apply online."
     },
     "hero": {
@@ -1932,7 +1932,7 @@
     }
   },
   "mbbs": {
-    "seoTitle": "MBBS in China: Approved Universities, Fees & Dates",
+    "seoTitle": "MBBS in China 2027: Approved Universities & Fees",
     "seoDescription": "The 43 universities approved by China's Ministry of Education to enrol English-taught MBBS students in 2026–27, with tuition, application windows and how to apply.",
     "eyebrow": "English-taught medicine",
     "title": "MBBS in China",

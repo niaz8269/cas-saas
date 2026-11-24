@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Post;
 use App\Services\Media\ImageService;
+use App\Support\BrandLinks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +32,7 @@ class PublicPostResource extends JsonResource
             'excerpt' => $localized['excerpt'],
             // body_translations is loaded only on the detail endpoint, so the
             // localized body resolves there; the list keeps omitting it.
-            'body' => $this->when(array_key_exists('body', $this->resource->getAttributes()), fn () => $localized['body']),
+            'body' => $this->when(array_key_exists('body', $this->resource->getAttributes()), fn () => BrandLinks::apply((string) $localized['body'])),
             'cover_image_url' => app(ImageService::class)->url($this->cover_image_path),
             'category' => $this->category,
             'published_at' => $this->published_at?->toIso8601String(),

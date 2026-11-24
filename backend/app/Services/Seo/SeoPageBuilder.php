@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Models\Scholarship;
 use App\Models\University;
 use App\Services\Media\ImageService;
+use App\Support\BrandLinks;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -32,6 +33,11 @@ class SeoPageBuilder
         if ($guide && ($page['status'] ?? null) === 200 && ! empty($page['body'])) {
             // One sentence pointing to the matching guide on xjmu.online (config/partner_guides.php).
             $page['body'] .= '<p>'.implode('', array_map(fn ($part) => is_array($part) ? $this->link($part[1], $part[0]) : e($part), $guide)).'</p>';
+        }
+
+        // Partner names in running text link to their own sites; done here so the cached page already has them.
+        if (! empty($page['body'])) {
+            $page['body'] = BrandLinks::apply((string) $page['body']);
         }
 
         return $page;
@@ -63,6 +69,11 @@ class SeoPageBuilder
             return $this->city($m[1]) ?? $this->notFound();
         }
         if (preg_match('#^site/news/([^/]+)$#', $path, $m)) {
+            // A post whose address changed: the old address goes to the new one.
+            if ($renamed = config('seo.renamed_posts')[$m[1]] ?? null) {
+                return ['redirect' => '/site/news/'.$renamed];
+            }
+
             return $this->post($m[1]) ?? $this->notFound();
         }
 
@@ -315,7 +326,7 @@ class SeoPageBuilder
             $ld[] = $postFaq;
         }
 
-        return $this->page($this->fit([$post->title]), $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['News', '/site/news'], [$post->title, $canonical]], body: $body, type: 'article');
+        return $this->page($this->wholeWords($post->title, 62), $description, $canonical, image: $image, jsonLd: $ld, crumbs: [['Home', '/'], ['News', '/site/news'], [$post->title, $canonical]], body: $body, type: 'article');
     }
 
     private function notFound(): array
@@ -364,7 +375,7 @@ class SeoPageBuilder
         $rows = University::where('status', 'active')->where('moe_listed', true)->orderBy('name')->get(['name', 'slug', 'city']);
 
         return '<h1>MBBS in China</h1>'
-            .'<p>China\'s Ministry of Education publishes an annual list of universities approved to enrol international students in English-taught MBBS (Clinical Medicine). For 2026–27 the list has '.$rows->count().' universities. Universities that are not on the list may not recruit English-taught MBBS students, so check the list before you apply.</p>'
+            .'<p>China\'s Ministry of Education publishes an annual list of universities approved to enrol international students in English-taught MBBS (Clinical Medicine). The 2027 list (academic year 2026–27) has '.$rows->count().' universities. Universities that are not on the list may not recruit English-taught MBBS students, so check the list before you apply.</p>'
             .'<h2>Approved universities</h2>'
             .$this->ul($rows->map(fn ($u) => $this->link('/site/universities/'.$u->slug, $u->name).', '.e($u->city))->all())
             .'<p>'.$this->link('/site/study-plan', 'Get a free study plan').' · '.$this->link('/site/contact', 'Talk to a counselor').'</p>';
@@ -716,6 +727,19 @@ class SeoPageBuilder
 
         // A name is never cut in the middle when the caller says so: a long title is better than a broken name.
         return $clip ? $this->clip(end($options), 54) : end($options);
+    }
+
+    /** A title kept whole up to $max characters; longer ones are cut at a word boundary, never mid-word and without an ellipsis. */
+    private function wholeWords(string $title, int $max): string
+    {
+        $title = trim(preg_replace('/\s+/u', ' ', strip_tags($title)));
+        if (mb_strlen($title) <= $max) {
+            return $title;
+        }
+        $cut = mb_substr($title, 0, $max);
+        $space = mb_strrpos($cut, ' ');
+
+        return rtrim($space ? mb_substr($cut, 0, $space) : $cut, ' ,.;:-');
     }
 
     private function clip(string $text, int $max): string

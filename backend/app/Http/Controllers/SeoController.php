@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Program;
 use App\Models\University;
 use App\Services\Media\ImageService;
 use App\Services\Seo\SeoIndexability;
@@ -44,9 +45,7 @@ class SeoController extends Controller
     public function robots(): Response
     {
         $site = config('seo.site_url');
-        $lines = [
-            'User-agent: *',
-            'Allow: /',
+        $blocked = [
             // Public catalog data the pages load must stay crawlable so they render fully.
             'Allow: /api/v1/public/',
             'Disallow: /api/',
@@ -55,11 +54,83 @@ class SeoController extends Controller
             'Disallow: /portal',
             'Disallow: /login',
             'Disallow: /wm/',
-            '',
-            "Sitemap: {$site}/sitemap.xml",
         ];
+        $lines = ['User-agent: *', 'Allow: /', ...$blocked, ''];
 
-        return response(implode("\n", $lines)."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+        // Search engines and the assistants that answer questions with sources (ChatGPT, Claude, Gemini, Perplexity, Copilot,
+        // Apple Intelligence) are named so none of them has to guess; each group repeats the rules, because a bot that
+        // finds its own group ignores the "*" one.
+        $assistants = ['Googlebot', 'Bingbot', 'Google-Extended', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'PerplexityBot', 'Perplexity-User', 'Applebot', 'Applebot-Extended', 'Amazonbot', 'Meta-ExternalAgent', 'DuckDuckBot', 'YandexBot', 'Baiduspider'];
+        foreach ($assistants as $bot) {
+            $lines = array_merge($lines, ["User-agent: {$bot}", 'Allow: /'], $blocked, ['']);
+        }
+        $lines[] = "Sitemap: {$site}/sitemap.xml";
+
+        return response(implode('
+', $lines).'
+', 200, ['Content-Type' => 'text/plain; charset=UTF-8', 'Cache-Control' => 'public, max-age=3600']);
+    }
+
+    /**
+     * A plain-text map of the site for AI assistants and search tools (the llms.txt convention): what CAS is,
+     * where the facts live, and the approved MBBS universities. Everything comes from the live catalog.
+     */
+    public function llms(): Response
+    {
+        $site = config('seo.site_url');
+        $unis = University::where('status', 'active')->count();
+        $programs = Program::where('status', 'active')->where('registry_only', false)->count();
+        $mbbs = University::where('status', 'active')->where('moe_listed', true)->orderBy('name')->get(['name', 'slug', 'city']);
+
+        $out = ['# '.config('seo.site_name'), ''];
+        $out[] = '> CAS (Consultancy for Abroad Study) is an authorized agency, founded in 2012 and based in Dalian, China, that places international students into Chinese universities. This website lists '.number_format($unis).' Chinese universities, '.number_format($programs).' programs with confirmed details, scholarships, application windows and guides, and lets students apply online with a CAS counselor.';
+        $out[] = '';
+        $out[] = 'Facts on this site come from the Ministry of Education of China, university publications and CAS counselors. Fees and dates change every year: confirm them on the university page and with the university before paying anything.';
+        $out[] = '';
+        $out[] = '## Main pages';
+        foreach ([
+            '/site/universities' => 'All universities with programs, tuition, application windows and scholarships',
+            '/site/programs' => 'Program finder: bachelor, master, PhD, MBBS, engineering, business',
+            '/site/mbbs-in-china' => 'MBBS in China: universities approved by the Ministry of Education for English-taught MBBS',
+            '/site/scholarships' => 'Scholarships for international students',
+            '/site/csc-scholarship' => 'Chinese Government Scholarship (CSC) guide',
+            '/site/cities' => 'Study in China by city',
+            '/site/news' => 'News and guides',
+            '/site/faq' => 'Frequently asked questions',
+            '/site/services' => 'What CAS does for students',
+            '/site/pricing' => 'Pricing',
+            '/site/contact' => 'Contact and free consultation',
+        ] as $path => $label) {
+            $out[] = "- [{$label}]({$site}{$path})";
+        }
+
+        $out[] = '';
+        $out[] = '## Topic guides';
+        foreach ($this->topics->all() as $slug => $page) {
+            $out[] = "- [{$page['h1']}]({$site}/site/{$slug})";
+        }
+
+        $out[] = '';
+        $out[] = '## News and guides';
+        foreach (Post::where('status', 'published')->orderByDesc('published_at')->get(['title', 'slug', 'excerpt']) as $p) {
+            $out[] = "- [{$p->title}]({$site}/site/news/{$p->slug})".($p->excerpt ? ': '.Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) $p->excerpt))), 160) : '');
+        }
+
+        $out[] = '';
+        $out[] = '## Universities approved for English-taught MBBS ('.$mbbs->count().')';
+        foreach ($mbbs as $u) {
+            $out[] = "- [{$u->name}]({$site}/site/universities/{$u->slug})".($u->city ? ", {$u->city}" : '');
+        }
+
+        $out[] = '';
+        $out[] = '## Contact';
+        $out[] = '- Website: '.$site;
+        $out[] = '- Email: '.config('company.email', 'info@cas.moe');
+        $out[] = '- Sitemap: '.$site.'/sitemap.xml';
+
+        return response(implode('
+', $out).'
+', 200, ['Content-Type' => 'text/plain; charset=UTF-8', 'Cache-Control' => 'public, max-age=3600']);
     }
 
     public function sitemapIndex(): Response
@@ -217,7 +288,7 @@ class SeoController extends Controller
             .'@keyframes casPulse{0%,100%{opacity:.45}50%{opacity:1}}'
             .'#cas-seo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>'
             .'<noscript><style>#cas-splash{display:none}#cas-seo{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}</style></noscript>'
-            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="" /></div>';
+            .'<div id="cas-splash" aria-hidden="true"><img src="/cas-emblem.png" alt="CAS" width="88" height="88" /></div>';
         $html = str_replace('<div id="root"></div>', '<div id="root">'.$splash.'<main id="cas-seo" style="max-width:56rem;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.55">'.$p['body'].'</main></div>', $html);
 
         return $html;

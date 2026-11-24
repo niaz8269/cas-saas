@@ -43,7 +43,10 @@ it("shows the city's history and places to visit, with the source credited", asy
   expect(await screen.findByText("A city with a long history.")).toBeInTheDocument()
   expect(screen.getByRole("heading", { name: "Places to visit and historic sites" })).toBeInTheDocument()
   expect(screen.getByText("West Lake is a UNESCO site.")).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: "Wikipedia" })).toHaveAttribute("href", "https://en.wikipedia.org/wiki/Hangzhou")
+  // The credit stays (CC BY-SA 4.0) but the page itself sends no visitor out to Wikipedia: the sources page lists the article.
+  expect(screen.getByText(/Wikipedia \(CC BY-SA 4\.0\)/)).toBeInTheDocument()
+  expect(screen.queryByRole("link", { name: "Wikipedia" })).not.toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "Sources and credits" })).toHaveAttribute("href", "/site/photo-credits")
 })
 
 it("filters the universities in the city by name, by program, and by MoE listing", async () => {

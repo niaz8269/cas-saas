@@ -159,6 +159,13 @@ export function getSiteCity(slug: string) {
   return siteApi<SiteCity>(`/public/cities/${encodeURIComponent(slug)}`)
 }
 
+export interface SiteDirectoryEntry { name: string; slug: string; city: string | null }
+
+/** Every university's name, address and city: the A–Z list at the bottom of the universities page. */
+export function getSiteUniversityDirectory() {
+  return siteApi<{ data: SiteDirectoryEntry[] }>("/public/university-directory")
+}
+
 export function getSitePhotoCredits() {
   return siteApi<{ data: SitePhotoCredit[] }>("/public/photo-credits")
 }
@@ -309,12 +316,13 @@ export interface SitePost {
   register_url: string | null
 }
 
-export function getSitePosts(params: { type?: string; q?: string; ids?: number[]; page?: number; lang?: string } = {}) {
+export function getSitePosts(params: { type?: string; q?: string; ids?: number[]; page?: number; perPage?: number; lang?: string } = {}) {
   const search = new URLSearchParams()
   if (params.ids?.length) search.set("ids", params.ids.join(","))
   if (params.type) search.set("type", params.type)
   if (params.q) search.set("q", params.q)
   if (params.page && params.page > 1) search.set("page", String(params.page))
+  if (params.perPage) search.set("per_page", String(params.perPage))
   if (params.lang) search.set("lang", params.lang)
   const qs = search.toString()
 
