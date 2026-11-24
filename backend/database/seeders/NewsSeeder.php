@@ -81,6 +81,7 @@ class NewsSeeder extends Seeder
                 'body' => '<p><strong>The Ministry of Education has approved 43 universities to recruit international undergraduate Clinical Medicine (English-taught MBBS) students for 2027.</strong> The approval comes from the Ministry\'s Department of International Cooperation and Exchanges. The list includes Jilin University, China Medical University and Dalian Medical University.</p>'
                     .'<h2>Key facts</h2><ul>'
                     .'<li><strong>Universities on the list:</strong> 43</li>'
+                    .'<li><strong>Period:</strong> the 2027 list, for academic year 2026&ndash;27</li>'
                     .'<li><strong>Programme:</strong> undergraduate Clinical Medicine taught in English, the degree known abroad as MBBS</li>'
                     .'<li><strong>Who approves:</strong> the Ministry of Education, Department of International Cooperation and Exchanges</li>'
                     .'<li><strong>The rule:</strong> a university that is not on the annual list may not recruit English-taught MBBS students</li>'

@@ -375,7 +375,7 @@ class SeoPageBuilder
         $rows = University::where('status', 'active')->where('moe_listed', true)->orderBy('name')->get(['name', 'slug', 'city']);
 
         return '<h1>MBBS in China</h1>'
-            .'<p>China\'s Ministry of Education publishes an annual list of universities approved to enrol international students in English-taught MBBS (Clinical Medicine). For 2026–27 the list has '.$rows->count().' universities. Universities that are not on the list may not recruit English-taught MBBS students, so check the list before you apply.</p>'
+            .'<p>China\'s Ministry of Education publishes an annual list of universities approved to enrol international students in English-taught MBBS (Clinical Medicine). The 2027 list (academic year 2026–27) has '.$rows->count().' universities. Universities that are not on the list may not recruit English-taught MBBS students, so check the list before you apply.</p>'
             .'<h2>Approved universities</h2>'
             .$this->ul($rows->map(fn ($u) => $this->link('/site/universities/'.$u->slug, $u->name).', '.e($u->city))->all())
             .'<p>'.$this->link('/site/study-plan', 'Get a free study plan').' · '.$this->link('/site/contact', 'Talk to a counselor').'</p>';
