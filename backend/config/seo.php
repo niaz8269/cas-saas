@@ -19,6 +19,8 @@ return [
     // Words that always link to a partner's own CAS microsite wherever they appear in running text.
     'brand_links' => [
         'Dalian Medical University' => 'https://dmu.cas.moe',
+        'Xinjiang Medical University' => 'https://xjmu.online',
+        'XJMU' => 'https://xjmu.online',
     ],
 
     // Posts whose address changed: old slug => new slug (the old address answers with a permanent redirect).

@@ -79,3 +79,11 @@ it('lets the news list ask for every post at once', function () {
 
     $this->getJson('/api/v1/public/posts?per_page=50')->assertOk()->assertJsonCount(30, 'data');
 });
+
+it('links XJMU and Xinjiang Medical University to xjmu.online, whole words only', function () {
+    $html = BrandLinks::apply('<p>XJMU and Xinjiang Medical University offer MBBS. The XJMUX code and Xjmu stay plain.</p>');
+
+    expect(substr_count($html, 'href="https://xjmu.online"'))->toBe(2)
+        ->and($html)->toContain('>Xinjiang Medical University</a>')
+        ->and($html)->toContain('XJMUX code');
+});

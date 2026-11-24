@@ -24,7 +24,10 @@ class BrandLinks
             return $html;
         }
 
-        $pattern = '/'.implode('|', array_map(fn ($name) => preg_quote((string) $name, '/'), array_keys($links))).'/u';
+        // Longest names first so "Xinjiang Medical University" wins over a shorter name inside it; whole words only.
+        $names = array_keys($links);
+        usort($names, fn ($a, $b) => mb_strlen((string) $b) <=> mb_strlen((string) $a));
+        $pattern = '/(?<![\p{L}\p{N}])(?:'.implode('|', array_map(fn ($name) => preg_quote((string) $name, '/'), $names)).')(?![\p{L}\p{N}])/u';
         if (! preg_match($pattern, $html)) {
             return $html;
         }
