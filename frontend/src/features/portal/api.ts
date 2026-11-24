@@ -623,6 +623,17 @@ export const submitApplication = (kind: PortalKind, applicationId: number) =>
     { method: "POST" },
   )
 
+/** Delete an application that is still a draft. */
+export const deleteApplicationDraft = (kind: PortalKind, applicationId: number) =>
+  portalApi<{ message: string }>(`/${kind}/applications/${applicationId}`, { method: "DELETE" })
+
+/** Withdraw an application that is with CAS (any time before it is accepted); it stays on record as withdrawn. */
+export const withdrawApplication = (kind: PortalKind, applicationId: number, reason?: string) =>
+  portalApi<{ data: { id: number; application_code: string; status: string } }>(
+    `/${kind}/applications/${applicationId}/withdraw`,
+    { method: "POST", body: JSON.stringify({ reason }) },
+  )
+
 export const submitStudentApplication = (applicationId: number) =>
   submitApplication("student", applicationId)
 
