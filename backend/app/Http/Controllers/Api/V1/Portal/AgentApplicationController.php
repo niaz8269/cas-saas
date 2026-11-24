@@ -98,10 +98,12 @@ class AgentApplicationController extends Controller
     protected function authorizeDraft(Request $request, Application $application): void
     {
         $agentId = $request->user()->id;
-        $application->loadMissing('student:id,agent_id');
 
+        // Asked of the database rather than loaded onto the application, so the student relation is not left
+        // half-loaded (just an id) for the code that goes on to read the student's name.
         abort_unless(
-            $application->agent_id === $agentId || ($application->agent_id === null && $application->student?->agent_id === $agentId),
+            $application->agent_id === $agentId
+                || ($application->agent_id === null && Student::whereKey($application->student_id)->where('agent_id', $agentId)->exists()),
             404,
         );
         abort_unless(in_array($application->status, ApplicationWorkflow::APPLICANT_EDITABLE, true), 409, 'This application can no longer be edited.');
