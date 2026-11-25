@@ -38,7 +38,7 @@ function PostCard({ post }: { post: SitePost }) {
     <Link to={`/site/news/${post.slug}`} className="group flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
       <div className="relative h-44 bg-cas-navy-50">
         {post.cover_image_url
-          ? <img src={post.cover_image_url} alt="" className="size-full object-cover" />
+          ? <img src={post.cover_image_url} alt={post.title} className="size-full object-cover" />
           : <div className="flex size-full items-center justify-center bg-gradient-to-br from-cas-navy-50 to-cas-red-50"><FileText className="size-10 text-cas-navy/30" /></div>}
         <span className="absolute top-3 left-3">
           <Badge variant="outline" className={cn("border-transparent capitalize", TYPE_BADGE[post.type])}>{t(`news.type.${post.type}`)}</Badge>

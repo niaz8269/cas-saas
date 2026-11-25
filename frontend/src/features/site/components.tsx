@@ -12,12 +12,12 @@ import { toneFor } from "@/features/site/tone"
  * A tinted banner area. Only real, supplied images are ever shown on the public
  * site; where there is none, this renders a plain brand tint — never stock art.
  */
-export function PhotoBanner({ src, image, className, children }: { src: string; image?: HeaderImage | null; className?: string; children?: ReactNode }) {
+export function PhotoBanner({ src, image, className, children, alt = "Study in China: university campus photo" }: { src: string; image?: HeaderImage | null; className?: string; children?: ReactNode; alt?: string }) {
   return (
     <div className={cn("relative isolate overflow-hidden bg-gradient-to-br", toneFor(src), className)}>
       {image && (
         <>
-          <img src={image.src} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={image.src} alt={alt} loading="lazy" decoding="async" className="absolute inset-0 -z-10 size-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/45 to-transparent" />
         </>
       )}
@@ -45,7 +45,7 @@ export function UniCard({ u, as: Heading = "h3" }: { u: SiteUniversityCard; /** 
               src={u.cover_thumb_url ?? cover.src}
               srcSet={u.cover_thumb_url ? `${u.cover_thumb_url} 480w, ${cover.src} 960w` : undefined}
               sizes="(min-width: 1024px) 24rem, (min-width: 640px) 45vw, 100vw"
-              alt=""
+              alt={`${u.name} campus`}
               width={480}
               height={176}
               loading="lazy"
@@ -65,9 +65,9 @@ export function UniCard({ u, as: Heading = "h3" }: { u: SiteUniversityCard; /** 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start gap-3">
           {u.emblem_url ? (
-            <img src={u.emblem_url} alt="" loading="lazy" decoding="async" className="size-12 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5" />
+            <img src={u.emblem_url} alt={`${u.name} emblem`} loading="lazy" decoding="async" className="size-12 shrink-0 rounded-full object-cover shadow-sm ring-1 ring-black/5" />
           ) : u.logo_url ? (
-            <img src={u.logo_url} alt="" loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
+            <img src={u.logo_url} alt={`${u.name} logo`} loading="lazy" decoding="async" className="h-11 w-24 shrink-0 rounded-sm border bg-white object-contain p-1 shadow-sm" />
           ) : null}
           <div className="min-w-0">
             <Heading className="font-semibold text-cas-navy transition-colors group-hover:text-cas-red-600">{u.name}</Heading>
@@ -124,7 +124,7 @@ export function SitePageHeader({ eyebrow, title, subtitle, action, image = HEADE
 }) {
   return (
     <section className="relative overflow-hidden rounded-sm bg-cas-navy p-8 text-white shadow-sm sm:p-12">
-      <img src={image.src} alt="" decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
+      <img src={image.src} alt={title} decoding="async" className="pointer-events-none absolute inset-0 size-full object-cover" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cas-navy-900/85 via-cas-navy/45 to-transparent" />
       <div className="relative flex flex-wrap items-end justify-between gap-5">
         <div>
