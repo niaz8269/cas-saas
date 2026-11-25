@@ -46,7 +46,7 @@ function HeroLogo({ emblem, name }: { emblem?: string | null; name: string }) {
   const initials = name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("")
 
   return emblem ? (
-    <img src={emblem} alt="" className="size-10 shrink-0 rounded-full bg-white object-cover ring-2 ring-white/80" />
+    <img src={emblem} alt={`${name} emblem`} className="size-10 shrink-0 rounded-full bg-white object-cover ring-2 ring-white/80" />
   ) : (
     <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-xs font-bold text-white">{initials}</span>
   )
@@ -147,7 +147,7 @@ export default function SiteHome() {
               src={photo ?? heroLg}
               srcSet={photo ? undefined : `${heroSm} 800w, ${heroMd} 1400w, ${heroLg} 2000w`}
               sizes={photo ? undefined : "(max-width: 640px) 150vw, 100vw"}
-              alt=""
+              alt="Study in China with CAS: a Chinese university campus"
               fetchPriority="high"
               decoding="async"
               className="absolute inset-0 size-full object-cover object-[center_55%]"
@@ -489,7 +489,7 @@ export default function SiteHome() {
 
       return (
         <section className="relative overflow-hidden rounded-xl bg-cas-navy p-8 text-white sm:p-12">
-          {photo && <img src={photo} alt="" loading="lazy" className="absolute inset-0 size-full object-cover opacity-30" />}
+          {photo && <img src={photo} alt="Study in China with CAS" loading="lazy" className="absolute inset-0 size-full object-cover opacity-30" />}
           <div className="relative mx-auto max-w-2xl text-center">
             {title && <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>}
             {tx(s, "body", "") && <p className="mt-3 text-sm whitespace-pre-line text-white/85 sm:text-base">{tx(s, "body", "")}</p>}

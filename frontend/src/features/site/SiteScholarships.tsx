@@ -106,7 +106,7 @@ export default function SiteScholarships() {
         {scholarships.map((s) => (
           <div key={s.id} className="flex flex-col overflow-hidden rounded-sm border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-cas-red/40 hover:shadow">
             <div className="relative h-36 bg-cas-navy">
-              {s.photo_url && <img src={s.photo_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />}
+              {s.photo_url && <img src={s.photo_url} alt={s.name} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
               <span className="absolute top-3 left-3 inline-flex size-9 items-center justify-center rounded-sm bg-white/90 text-cas-navy shadow-sm"><Award className="size-5" /></span>
               {s.type && <Badge variant="outline" className="absolute top-3 right-3 border-transparent bg-white/90 text-cas-navy capitalize shadow-sm">{s.type}</Badge>}

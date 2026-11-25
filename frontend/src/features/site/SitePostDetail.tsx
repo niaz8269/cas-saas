@@ -74,7 +74,7 @@ export default function SitePostDetail() {
           {post.excerpt && <p className="mt-3 text-lg text-muted-foreground">{post.excerpt}</p>}
 
           {post.cover_image_url && (
-            <img src={post.cover_image_url} alt="" className="mt-6 w-full rounded-sm object-cover" />
+            <img src={post.cover_image_url} alt={post.title} className="mt-6 w-full rounded-sm object-cover" />
           )}
 
           {post.type === "event" && (
