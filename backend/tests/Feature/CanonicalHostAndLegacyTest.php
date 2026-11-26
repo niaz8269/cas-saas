@@ -30,9 +30,18 @@ it('moves old-site addresses to their new page, keeping a university by name', f
     $this->get('/auth/register.php')->assertStatus(301)->assertRedirect('/portal/register');
     $this->get('/wuhan-university-of-technology.html')->assertStatus(301)->assertRedirect('/site/universities/wuhan-university-of-technology');
     $this->get('/some-old-college.html')->assertStatus(301)->assertRedirect('/site/mbbs-in-china');
+    $this->get('/about')->assertStatus(301)->assertRedirect('/site/about');
+    $this->get('/contact')->assertStatus(301)->assertRedirect('/site/contact');
+    $this->get('/refund-policy')->assertStatus(301)->assertRedirect('/site/terms');
+    $this->get('/scholarships/jlmu-merit-scholarship')->assertStatus(301)->assertRedirect('/site/scholarships');
+    $this->get('/services/chinese-language-foundation')->assertStatus(301)->assertRedirect('/site/services');
 });
 
-it('leaves real routes and unknown paths alone', function () {
+it('keeps the staff app and portals working and answers unknown addresses with a real 404', function () {
     $this->get('/portal/login')->assertSuccessful();
-    $this->get('/totally-unknown-page')->assertSuccessful(); // the app shell, noindexed (unchanged)
+    $this->get('/universities/12')->assertSuccessful(); // a staff screen, not an old public address
+    $this->get('/scholarships')->assertSuccessful();
+    $this->get('/finance/bank-accounts')->assertSuccessful();
+    $this->get('/totally-unknown-page')->assertNotFound()->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+    $this->get('/xxmu/index.php')->assertNotFound();
 });

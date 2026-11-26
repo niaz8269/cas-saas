@@ -27,8 +27,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import ServerContent from "@/components/ServerContent"
 import { AdmissionWindow } from "@/features/site/components"
-import { getSiteUniversity, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
+import { getSiteUniversity, isMissing, retryUnlessMissing, type SiteOverviewSection, type SiteRepProfessor, type SiteUniversityDetail } from "@/features/site/api"
 import ApplyButton from "@/features/site/ApplyButton"
 import EnquiryForm from "@/features/site/EnquiryForm"
 import { formatDuration } from "@/lib/duration"
@@ -61,10 +62,10 @@ export default function SiteUniversity() {
   const { t } = useTranslation()
   const { slug = "" } = useParams()
 
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["site-university", slug],
     queryFn: () => getSiteUniversity(slug),
-    retry: false,
+    retry: retryUnlessMissing,
   })
 
   const uni = data?.data
@@ -78,12 +79,13 @@ export default function SiteUniversity() {
         })
       : t("university.seoDescriptionFallback"),
     canonicalPath: `/site/universities/${slug}`,
+    keepServerHead: !uni,
   })
 
   if (isPending) return <Skeleton className="h-96 w-full rounded-sm" />
 
   if (isError || !data) {
-    return (
+    const unavailable = (
       <div className="rounded-sm border bg-card p-10 text-center shadow-sm">
         <p className="text-sm text-muted-foreground">{t("university.notAvailable")}</p>
         <Button asChild variant="secondary" size="sm" className="mt-4">
@@ -91,6 +93,9 @@ export default function SiteUniversity() {
         </Button>
       </div>
     )
+
+    // The university exists but its data did not arrive: show what the server sent, not an empty page.
+    return isMissing(error) ? unavailable : <ServerContent fallback={unavailable} />
   }
 
   const u = data.data

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router-dom"
 
-import { getSiteTopic } from "@/features/site/api"
+import ServerContent, { LoadError } from "@/components/ServerContent"
+import { getSiteTopic, isMissing, retryUnlessMissing } from "@/features/site/api"
 import { SitePageHeader } from "@/features/site/components"
 import { HEADER_IMAGES } from "@/features/site/headerImages"
 import SiteNotFound from "@/features/site/SiteNotFound"
@@ -10,19 +11,21 @@ import { useSeo } from "@/lib/seo"
 /** A landing page for one search topic (BDS in China, MBBS for Pakistani students, ...). The copy comes from the server. */
 export default function SiteTopic() {
   const { topic = "" } = useParams()
-  const { data, isError, isLoading } = useQuery({ queryKey: ["site-topic", topic], queryFn: () => getSiteTopic(topic), retry: false })
+  const { data, isError, isLoading, error } = useQuery({ queryKey: ["site-topic", topic], queryFn: () => getSiteTopic(topic), retry: retryUnlessMissing })
   const page = data?.data
 
   useSeo({
     title: page?.title ?? "",
     description: page?.description,
     canonicalPath: `/site/${topic}`,
+    keepServerHead: !page,
     jsonLd: page?.faq.length
       ? { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: page.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }
       : undefined,
   })
 
-  if (isError) return <SiteNotFound />
+  // "Not found" only when the server says so; a failed request shows the content the server sent.
+  if (isError) return isMissing(error) ? <SiteNotFound /> : <ServerContent fallback={<LoadError />} />
   if (isLoading || !page) return <div className="h-96" aria-busy="true" />
 
   return (

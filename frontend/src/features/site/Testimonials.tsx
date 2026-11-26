@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
-import { lazy, Suspense, useMemo } from "react"
+import { Suspense, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import { getSiteTestimonials } from "@/features/site/api"
 import TestimonialCard from "@/features/site/TestimonialCard"
+import { lazyOptional } from "@/lib/lazy"
 
 // The globe (and its world map) only loads when this section is rendered.
-const TestimonialGlobe = lazy(() => import("@/features/site/TestimonialGlobe"))
+const TestimonialGlobe = lazyOptional(() => import("@/features/site/TestimonialGlobe"))
 
 /**
  * What real students or partners said, shown only when there are approved ones

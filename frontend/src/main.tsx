@@ -2,11 +2,16 @@ import "./index.css"
 import "@/i18n"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { lazy, StrictMode, Suspense } from "react"
+import { StrictMode, Suspense } from "react"
 import { createRoot } from "react-dom/client"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 
+// First: keeps a copy of the content the server sent, before the app replaces it.
+import "@/lib/serverContent"
+
 import ErrorBoundary from "@/components/ErrorBoundary"
+import RouteError from "@/components/RouteError"
+import { lazyPage as lazy } from "@/lib/lazy"
 const AppShell = lazy(() => import("@/components/layout/AppShell"))
 import LoginPage from "@/features/auth/LoginPage"
 import RequireAuth from "@/features/auth/RequireAuth"
@@ -108,7 +113,10 @@ const queryClient = new QueryClient({
   },
 })
 
-const router = createBrowserRouter([
+const router = createBrowserRouter([{
+  // A page that fails to load shows the server's content or a reload prompt, never the router's crash screen.
+  errorElement: <RouteError />,
+  children: [
   // Staff/admin sign in lives at /admin; the public login/register is the
   // student/agent portal. /login stays as a redirect for old links.
   { path: "/admin", element: <LoginPage /> },
@@ -119,6 +127,9 @@ const router = createBrowserRouter([
   // Public website preview (unauthenticated) — consumes the public API
   {
     element: <SiteLayout />,
+    children: [{
+    // Inside the layout, so a failed page keeps the site header and footer.
+    errorElement: <RouteError />,
     children: [
       // The public website is the front door; /site stays as an alias for existing links.
       { path: "/", element: <SiteHome /> },
@@ -148,6 +159,7 @@ const router = createBrowserRouter([
       { path: "/site/:topic", element: <SiteTopic /> },
       { path: "/site/*", element: <SiteNotFound /> },
     ],
+    }],
   },
 
   // Mobile-first portals (agent + student) — separate token + shell (M7)
@@ -224,7 +236,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+]}])
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -32,6 +32,15 @@ async function siteApi<T>(path: string, options: RequestInit = {}): Promise<T> {
   return data as T
 }
 
+/**
+ * Retry rule for the data a public page is built from: try again (twice) unless the server said the
+ * thing does not exist. A single dropped request must not turn a real page into an error screen.
+ */
+export const retryUnlessMissing = (count: number, error: unknown): boolean => !(error instanceof SiteApiError && error.status === 404) && count < 2
+
+/** True when the server answered that the thing does not exist (as opposed to a failed request). */
+export const isMissing = (error: unknown): boolean => error instanceof SiteApiError && error.status === 404
+
 export class SiteApiError extends Error {
   readonly status: number
   readonly errors: Record<string, string[]>

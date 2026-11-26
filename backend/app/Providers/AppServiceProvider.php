@@ -44,9 +44,10 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        // Public website/catalog endpoints: generous per-IP cap.
+        // Public website/catalog endpoints: generous per-IP cap. One page view makes several of these calls, and a
+        // search engine renders many pages from one address: a refused call leaves that page without its content.
         RateLimiter::for('public', function (Request $request) {
-            return Limit::perMinute(120)->by($request->ip());
+            return Limit::perMinute((int) config('seo.public_api_per_minute', 300))->by($request->ip());
         });
 
         // Public write (enquiry form): tight per-IP cap to blunt spam.

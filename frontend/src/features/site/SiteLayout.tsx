@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, LogIn, Mail, Menu, Phone, X, Youtube } from "lucide-react"
-import { lazy, useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
+import { useEffect, useLayoutEffect, useRef, useState, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 import PartnerGuide from "@/features/site/PartnerGuide"
@@ -11,6 +11,7 @@ import casLogoWhite from "@/assets/cas-logo-white.webp"
 import { getSitePosts } from "@/features/site/api"
 import ScrollToTop from "@/features/site/ScrollToTop"
 import { WeChatGlyph, WhatsAppGlyph } from "@/features/site/brandIcons"
+import { lazyOptional } from "@/lib/lazy"
 import { loadTawkWhenIdle } from "@/lib/tawk"
 import SiteMegaMenu from "@/features/site/SiteMegaMenu"
 import { langDef } from "@/i18n/languages"
@@ -19,8 +20,8 @@ import { CONTACT } from "@/lib/contact"
 import { cn } from "@/lib/utils"
 import { usePortalAuthStore } from "@/stores/portalAuth"
 
-const SiteHelpDock = lazy(() => import("@/features/site/SiteHelpDock"))
-const SiteWhatsAppButton = lazy(() => import("@/features/site/SiteWhatsAppButton"))
+const SiteHelpDock = lazyOptional(() => import("@/features/site/SiteHelpDock"))
+const SiteWhatsAppButton = lazyOptional(() => import("@/features/site/SiteWhatsAppButton"))
 
 type NavItemT = { to: string; labelKey: string; dropdown?: [string, string][] }
 

@@ -6,7 +6,8 @@ import { Link, useParams } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSitePost, SiteApiError } from "@/features/site/api"
+import ServerContent from "@/components/ServerContent"
+import { getSitePost, isMissing, retryUnlessMissing } from "@/features/site/api"
 import { useSeo } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
@@ -26,7 +27,7 @@ export default function SitePostDetail() {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["site-post", slug, lang],
     queryFn: () => getSitePost(slug, lang),
-    retry: (count, err) => !(err instanceof SiteApiError && err.status === 404) && count < 2,
+    retry: retryUnlessMissing,
   })
   const post = data?.data
 
@@ -34,9 +35,10 @@ export default function SitePostDetail() {
     title: post ? post.title : t("news.headerTitle"),
     description: post?.excerpt ?? t("news.seoDescription"),
     canonicalPath: `/site/news/${slug}`,
+    keepServerHead: !post,
   })
 
-  const notFound = isError && error instanceof SiteApiError && error.status === 404
+  const notFound = isError && isMissing(error)
   const fmt = (iso: string) => new Date(iso).toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" })
 
   return (
@@ -59,7 +61,7 @@ export default function SitePostDetail() {
           <p className="mt-1 text-sm text-muted-foreground">{t("post.notFoundBody")}</p>
         </div>
       )}
-      {isError && !notFound && <p className="text-sm text-destructive">{t("news.loadError")}</p>}
+      {isError && !notFound && <ServerContent fallback={<p className="text-sm text-destructive">{t("news.loadError")}</p>} />}
 
       {post && (
         <article>

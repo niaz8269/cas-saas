@@ -8,7 +8,7 @@ import {
   Search,
 } from "lucide-react"
 import type { TFunction } from "i18next"
-import { lazy, Suspense, useState, type ReactNode } from "react"
+import { Suspense, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -26,14 +26,15 @@ import { DEFAULT_SECTION_ORDER, FEATURED_TAB1, FEATURED_TAB2, HIGHLIGHTS, POPULA
 import { baseLocale, sectionContent, type HomeSectionData } from "@/features/site/homeContent"
 import HomeCities from "@/features/site/HomeCities"
 import WhyApply from "@/features/site/WhyApply"
+import { lazyOptional } from "@/lib/lazy"
 import { useSeo } from "@/lib/seo"
 import PageFaqs from "@/features/site/SiteFaqs"
 import { mediumFor } from "@/lib/programLanguage"
 
 // Below the fold, or shown only later: loaded after the first screen.
-const Testimonials = lazy(() => import("@/features/site/Testimonials"))
-const TopicLinks = lazy(() => import("@/features/site/TopicLinks"))
-const HomeEnquiryPopup = lazy(() => import("@/features/site/HomeEnquiryPopup"))
+const Testimonials = lazyOptional(() => import("@/features/site/Testimonials"))
+const TopicLinks = lazyOptional(() => import("@/features/site/TopicLinks"))
+const HomeEnquiryPopup = lazyOptional(() => import("@/features/site/HomeEnquiryPopup"))
 
 
 const DOT_GRID = {

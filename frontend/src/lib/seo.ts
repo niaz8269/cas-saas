@@ -1,6 +1,8 @@
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 
+import { serverPage } from "@/lib/serverContent"
+
 const SITE_NAME = "CAS"
 const COMPANY_NAME = "CAS"
 const ALTERNATE_NAMES = ["CAS - Study in China", "CAS Study in China", "CAS-Consultancy for Abroad Study", "CAS Consultancy for Abroad Study", "Consultancy for Abroad Study"]
@@ -21,6 +23,12 @@ export interface SeoOptions {
   image?: string
   /** JSON-LD structured data object(s) for rich results. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  /**
+   * Leave the title and description the server sent in place (on the page the visitor arrived on).
+   * Set it while the page's own data is still loading or failed to load, so a page never trades its
+   * real title for a generic one that every other unloaded page shares.
+   */
+  keepServerHead?: boolean
 }
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
@@ -63,14 +71,16 @@ function removePrerendered(pathname: string, ld: string | null) {
  * Open Graph / Twitter cards and optional JSON-LD structured data. Googlebot
  * renders JS and picks these up; a prerender/SSG step makes them bulletproof.
  */
-export function useSeo({ title, description, canonicalPath, image, jsonLd }: SeoOptions) {
+export function useSeo({ title, description: ownDescription, canonicalPath, image, jsonLd, keepServerHead = false }: SeoOptions) {
   const { pathname } = useLocation()
   const ld = jsonLd ? JSON.stringify(jsonLd) : null
 
   useEffect(() => {
     const base = baseUrl()
+    const kept = keepServerHead ? serverPage(pathname) : null
+    const description = kept ? kept.description ?? ownDescription : ownDescription
     // The home page leads with the brand name, "CAS: ...": it is the name search engines show for the site.
-    const fullTitle = canonicalPath === "/" ? `${SITE_NAME} | ${title ?? "Study in China: Apply to Chinese Universities Online"}` : title ? `${title} | CAS` : SITE_NAME
+    const fullTitle = kept ? kept.title : canonicalPath === "/" ? `${SITE_NAME} | ${title ?? "Study in China: Apply to Chinese Universities Online"}` : title ? `${title} | CAS` : SITE_NAME
     const url = base + (canonicalPath ?? pathname)
     const img = image ?? `${base}/og-image.png`
 
@@ -101,7 +111,7 @@ export function useSeo({ title, description, canonicalPath, image, jsonLd }: Seo
     }
 
     return () => { script?.remove() }
-  }, [title, description, canonicalPath, image, ld, pathname])
+  }, [title, ownDescription, canonicalPath, image, ld, pathname, keepServerHead])
 }
 
 /** Organization structured data — attach to the home page. */

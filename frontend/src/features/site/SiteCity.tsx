@@ -6,7 +6,8 @@ import { Link, useParams } from "react-router-dom"
 
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getSiteCity, type SiteCityGroup, type SiteCityProfile } from "@/features/site/api"
+import ServerContent, { LoadError } from "@/components/ServerContent"
+import { getSiteCity, isMissing, retryUnlessMissing, type SiteCityGroup, type SiteCityProfile } from "@/features/site/api"
 import { SitePageHeader, SiteSection, UniCard } from "@/features/site/components"
 import SiteNotFound from "@/features/site/SiteNotFound"
 import { OverviewArticle } from "@/features/site/SiteUniversity"
@@ -83,7 +84,7 @@ function CityProfileArticle({ profile, city }: { profile: SiteCityProfile; city:
 export default function SiteCity() {
   const { t } = useTranslation()
   const { slug = "" } = useParams()
-  const { data, isPending, isError } = useQuery({ queryKey: ["site-city", slug], queryFn: () => getSiteCity(slug), retry: false })
+  const { data, isPending, isError, error } = useQuery({ queryKey: ["site-city", slug], queryFn: () => getSiteCity(slug), retry: retryUnlessMissing })
 
   const [q, setQ] = useState("")
   const [moeOnly, setMoeOnly] = useState(false)
@@ -95,6 +96,7 @@ export default function SiteCity() {
     title: data ? [t("city.seoTitle", { city: data.city }), t("city.seoTitleShort", { city: data.city, defaultValue: "Study in {{city}}: Universities & Programs" })].find((o) => o.length <= 54) ?? t("city.seoTitle", { city: data.city }) : t("city.seoTitleFallback"),
     description: data ? t("city.seoDescription", { city: data.city, count: data.universities.length }) : undefined,
     canonicalPath: `/site/cities/${slug}`,
+    keepServerHead: !data,
   })
 
   const filtered = useMemo(() => {
@@ -107,7 +109,8 @@ export default function SiteCity() {
   }, [data, q, moeOnly, sort])
 
   if (isPending) return <Skeleton className="h-96 w-full rounded-sm" />
-  if (isError || !data) return <SiteNotFound />
+  // "Not found" only when the server says so; a failed request shows the content the server sent.
+  if (isError || !data) return isMissing(error) ? <SiteNotFound /> : <ServerContent fallback={<LoadError />} />
 
   const cover = data.universities.find((u) => u.cover_url)
   const total = data.universities.length

@@ -17,7 +17,11 @@ class PublicCatalogCache
     {
         $response = $next($request);
 
-        if ($request->isMethod('GET') && ! $request->hasHeader('Authorization') && $response->getStatusCode() === 200) {
+        // Some hosts pass an empty Authorization header to PHP on every request; only a real value means "signed in".
+        // (On production that empty header kept every catalog answer private, so nothing was ever reused.)
+        $anonymous = trim((string) $request->header('Authorization')) === '';
+
+        if ($request->isMethod('GET') && $anonymous && $response->getStatusCode() === 200) {
             $response->headers->set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
         }
         $response->headers->set('Vary', trim($response->headers->get('Vary', '').', Authorization', ', '));

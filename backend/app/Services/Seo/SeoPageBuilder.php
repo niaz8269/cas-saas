@@ -85,8 +85,13 @@ class SeoPageBuilder
             return $this->notFound();
         }
 
-        // Staff app, portals and anything else that is not public: never indexed.
-        return $this->page('CAS', null, '/'.$path, noindex: true);
+        // Staff app and portals: the app shell, never indexed.
+        if (in_array(explode('/', $path)[0], (array) config('seo.app_prefixes'), true)) {
+            return $this->page('CAS', null, '/'.$path, noindex: true);
+        }
+
+        // Anything else does not exist. Answering 200 with an empty shell made search engines file these as "soft 404".
+        return $this->notFound();
     }
 
     // ------------------------------------------------------------------ pages

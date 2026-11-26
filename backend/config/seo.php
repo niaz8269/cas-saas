@@ -45,6 +45,17 @@ return [
     // A university page with at least this many Ministry-registered majors is indexed even before CAS has confirmed programs or dates.
     'min_registered_majors' => (int) env('SEO_MIN_REGISTERED_MAJORS', 12),
 
+    // Public catalog API calls allowed per minute from one address.
+    'public_api_per_minute' => (int) env('PUBLIC_API_PER_MINUTE', 300),
+
+    // First path segment of the staff app and the portals (single-page app routes). These get the app shell,
+    // never indexed. Any other address that is not a public page is answered with a real 404.
+    'app_prefixes' => [
+        'admin', 'login', 'portal', 'dashboard', 'tasks', 'leads', 'students', 'applications', 'universities', 'scholarships',
+        'finance', 'commissions', 'agent-payables', 'visa', 'reports', 'users', 'partner-requests', 'exclusives', 'content',
+        'testimonials', 'home-page', 'campaigns', 'integrations', 'error-log', 'settings',
+    ],
+
     // How long a prerendered public page is reused (0 disables). Keeps crawler bursts off the database.
     'page_cache_seconds' => env('SEO_PAGE_CACHE_SECONDS', env('APP_ENV') === 'testing' ? 0 : 900),
 
