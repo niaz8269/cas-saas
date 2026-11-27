@@ -70,3 +70,14 @@ it('returns the closest real words first, never inventing a word', function () {
         ->and($fuzzy->corrections('t1', 'qwertyuiop', $phrases))->toBe([])
         ->and($fuzzy->corrections('t1', 'ab', $phrases))->toBe([]);
 });
+
+it('finds "English Language and Literature" when the words are typed as "english literature"', function () {
+    Program::factory()->create(['university_id' => $this->harbin->id, 'name' => 'English Language and Literature', 'level' => 'master', 'registry_only' => false, 'status' => 'active']);
+    Program::factory()->create(['university_id' => $this->harbin->id, 'name' => 'Chinese Language and Literature', 'level' => 'bachelor', 'registry_only' => false, 'status' => 'active']);
+
+    $programs = collect(getJson('/api/v1/public/programs?q=english%20literature')->assertOk()->json('data'))->pluck('name')->all();
+    $universities = collect(getJson('/api/v1/public/universities?q=english%20literature')->assertOk()->json('data'))->pluck('name')->all();
+
+    expect($programs)->toBe(['English Language and Literature'])
+        ->and($universities)->toBe(['Harbin Medical University']);
+});
