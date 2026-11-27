@@ -67,7 +67,7 @@ class PublicCatalogController extends Controller
                             ->orWhereHas('programs', fn ($p) => $p
                                 ->where('status', 'active')
                                 ->where('registry_only', false)
-                                ->where(fn ($n) => $n->where('name', 'like', $term)->orWhere('name_zh', 'like', $term))));
+                                ->where(fn ($n) => $this->matchProgramName($n, $text))));
                     }
                 });
             })
@@ -342,7 +342,7 @@ class PublicCatalogController extends Controller
             ->with('university:id,name,slug,city,cover_path,cover_credit')
             ->when($terms !== [], fn ($q) => $q->where(function ($outer) use ($terms) {
                 foreach ($terms as $text) {
-                    $outer->orWhere(fn ($w) => $w->where('name', 'like', '%'.$text.'%')->orWhere('name_zh', 'like', '%'.$text.'%'));
+                    $outer->orWhere(fn ($w) => $this->matchProgramName($w, $text));
                 }
             }))
             ->when($request->filled('filter.level'), fn ($q) => $q->where('level', $request->input('filter.level')))
@@ -499,6 +499,30 @@ class PublicCatalogController extends Controller
         }
 
         return [$results, null];
+    }
+
+    /**
+     * A program name matches the typed text as a phrase, or, when several words were typed, when every
+     * word appears in it in any order: "English literature" also finds "English Language and Literature".
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<*>  $query
+     */
+    private function matchProgramName($query, string $text): void
+    {
+        $words = array_values(array_filter(
+            preg_split('/\s+/u', mb_strtolower(trim($text))) ?: [],
+            fn (string $w) => mb_strlen($w) >= 2 && ! in_array($w, ['and', 'of', 'in', 'the', 'for', 'to'], true),
+        ));
+
+        $query->where('name', 'like', '%'.$text.'%')->orWhere('name_zh', 'like', '%'.$text.'%');
+
+        if (count($words) > 1) {
+            $query->orWhere(function ($all) use ($words) {
+                foreach ($words as $word) {
+                    $all->where('name', 'like', '%'.$word.'%');
+                }
+            });
+        }
     }
 
     /** @return \Generator<int, string> */
